@@ -1,0 +1,6 @@
+{
+  "Id": "controller_0000",
+  "JAMFile": "samples/rpg/data/controller_0000/body.jam",
+  "JAMTextureFile": "samples/rpg/data/controller_0000/body.png",
+  "Radius": 0.20
+}

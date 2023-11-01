@@ -1,0 +1,10 @@
+{
+  "Id": "cast_0000",
+  "Name": "Guerrier",
+  "Promotions": [{
+    "Level": 1,
+    "AttributeMap": {
+      "ATK": 10
+    }
+  }]
+}

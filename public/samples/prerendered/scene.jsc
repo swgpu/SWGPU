@@ -1,0 +1,35 @@
+[
+  {
+    "Id": "ON_INIT",
+    "Description": "ON INIT",
+    "Calls": []
+  },
+  {
+    "Id": "NOP",
+    "Description": "NOP",
+    "Calls": [
+      {
+        "Name": "RUN",
+        "Args": []
+      }
+    ]
+  },
+  {
+    "Id": "0000",
+    "Description": "UNIT TALK",
+    "Calls": [
+      {
+        "Name": "STOP",
+        "Args": []
+      },
+      {
+        "Name": "UI_CREATE_DIALOG",
+        "Args": ["Unit :", "Bienvenue dans notre scène de démonstration."]
+      },
+      {
+        "Name": "CONTINUE",
+        "Args": []
+      }
+    ]
+  }
+]

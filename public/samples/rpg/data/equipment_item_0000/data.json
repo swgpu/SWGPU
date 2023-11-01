@@ -1,0 +1,22 @@
+{
+  "Id": "equipment_item_0000",
+  "Type": "WEAPON",
+  "SubType": "WEAPON_DAGGER",
+  "Name": "Dague royale emeraude",
+  "Description": "Dague légendaire forgé pour le rois du nord",
+  "PictureFile": "#",
+  "Soldable": false,
+  "Price": 250,
+  "Modifiers": [
+    {
+      "Type": "ADD",
+      "AttributeKey": "ATK",
+      "Value": 15
+    },
+    {
+      "Type": "SUB",
+      "AttributeKey": "DEF",
+      "Value": 2
+    }
+  ]
+}

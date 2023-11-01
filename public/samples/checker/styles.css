@@ -1,0 +1,72 @@
+/*#############################################################################################*/
+/* CORE OVERRIDES
+/*#############################################################################################*/
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI TILE
+/*---------------------------------------------------------------------------------------------*/
+.UITile {
+  position: relative;
+}
+.UITile--white {
+  background-color: #fff;
+}
+.UITile--black {
+  background-color: #000;
+}
+.UITile.u-focused {
+  background-color: red;
+}
+.UITile.u-selectable {
+  background-color: #00ffff;
+}
+.UITile-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-size: cover;
+}
+.UITile-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.UITile-actions-item {
+  display: block;
+  background-color:red;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI PIECE
+/*---------------------------------------------------------------------------------------------*/
+.UIPiece {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.UIPiece-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-size: cover;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI CHECKER BOARD
+/*---------------------------------------------------------------------------------------------*/
+.UICheckerBoard {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  position: relative;
+  padding: clamp(0.1rem, 0.47rem, 0.5rem);
+  background-color: #dcdcdc;
+}
+

@@ -1,0 +1,17 @@
+{
+  "Ident": "JAS",
+  "Animations": [
+    {
+      "Name": "DEFAULT",
+      "Frames": [
+        {
+          "X": 0,
+          "Y": 0,
+          "Width": 104,
+          "Height": 37
+        }
+      ],
+      "FrameDuration": 100
+    }
+  ]
+}

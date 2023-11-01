@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "typeRoots": [
+      "./node_modules/@webgpu/types",
+      "./node_modules/@types",
+      "./src/lib/core"
+    ],
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "moduleResolution": "Node",
+    "strict": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "skipLibCheck": true
+  },
+  "typedocOptions": {
+    "entryPoints": [
+      "src/main.js"
+    ],
+    "out": "docs"
+  },
+  "include": [
+    "src"
+  ]
+}

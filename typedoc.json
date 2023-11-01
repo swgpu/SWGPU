@@ -1,0 +1,14 @@
+{
+  "entryPointStrategy": "expand",
+  "entryPoints": [
+  ],
+  "$schema": "https://typedoc.org/schema.json",
+  "plugin": ["typedoc-plugin-markdown"],
+  "theme": "markdown",
+  "out": "docs",
+  "name": "Haiku Engine Documentation",
+  "disableSources": true,
+  "hideGenerator": true,
+  "filenameSeparator": "$",
+  "groupOrder": ["Methods", "Properties", "*", "TypeParameter"]
+}

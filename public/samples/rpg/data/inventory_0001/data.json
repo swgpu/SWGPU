@@ -1,0 +1,12 @@
+[
+  {
+    "ItemTypeName": "EquipmentItem",
+    "ItemId": "equipment_item_0000",
+    "Quantity": 20
+  },
+  {
+    "ItemTypeName": "EquipmentItem",
+    "ItemId": "equipment_item_0001",
+    "Quantity": 20
+  }
+]
