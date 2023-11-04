@@ -184,7 +184,7 @@ to build our first warm project.
 
 ## How to integrate your 3D models ?
 You can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.
-You can also simply used the [Ocarina Blender Exporter](https://github.com/jay19240/Ocarina-Blender-Exporter).
+You can also simply used the [WARM Blender Exporter](https://github.com/jay19240/WARM-Blender-Exporter).
 Important note: The Blender coordinate system and the engine don't match, see below the rule to translate.
 Don't forget to apply these changes when you export your obj file.
 ```
