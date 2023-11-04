@@ -1,0 +1,173 @@
+{
+  "Ident": "JAS",
+  "Animations": [
+    {
+      "Name": "IDLE_BACKWARD",
+      "Frames": [
+        {
+          "X": 0,
+          "Y": 0,
+          "Width": 16,
+          "Height": 16
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "RUN_BACKWARD",
+      "Frames": [
+        {
+          "X": 0,
+          "Y": 0,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 16,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 32,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 48,
+          "Width": 16,
+          "Height": 16
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "IDLE_RIGHT",
+      "Frames": [
+        {
+          "X": 0,
+          "Y": 128,
+          "Width": 16,
+          "Height": 16
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "RUN_RIGHT",
+      "Frames": [
+        {
+          "X": 0,
+          "Y": 128,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 144,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 160,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 176,
+          "Width": 16,
+          "Height": 16
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "IDLE_LEFT",
+      "Frames": [
+        {
+          "X": 0,
+          "Y": 64,
+          "Width": 16,
+          "Height": 16
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "RUN_LEFT",
+      "Frames": [
+        {
+          "X": 0,
+          "Y": 64,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 80,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 96,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 112,
+          "Width": 16,
+          "Height": 16
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "IDLE_FORWARD",
+      "Frames": [
+        {
+          "X": 0,
+          "Y": 192,
+          "Width": 16,
+          "Height": 16
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "RUN_FORWARD",
+      "Frames": [
+        {
+          "X": 0,
+          "Y": 192,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 208,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 224,
+          "Width": 16,
+          "Height": 16
+        },
+        {
+          "X": 0,
+          "Y": 240,
+          "Width": 16,
+          "Height": 16
+        }
+      ],
+      "FrameDuration": 100
+    }
+  ]
+}

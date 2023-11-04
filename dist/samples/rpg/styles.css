@@ -1,0 +1,567 @@
+/*---------------------------------------------------------------------------------------------*/
+/* UI AVATAR
+/*---------------------------------------------------------------------------------------------*/
+.UIAvatar {
+  display: block;
+  position: absolute;
+  z-index: 11;
+  opacity: 0;
+}
+
+.UIAvatar.u-middle {
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 0);
+}
+
+.UIAvatar.u-left {
+  left: 0;
+  bottom: 0;
+  transform: translate(0%, 0%);
+}
+
+.UIAvatar.u-center {
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.UIAvatar.u-right {
+  right: 0;
+  bottom: 0;
+  transform: translate(0%, 0%);
+}
+
+@keyframes ui-avatar-fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes ui-avatar-fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI BACKGROUND
+/*---------------------------------------------------------------------------------------------*/
+.UIBackground {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-size: cover;
+  z-index: 10;
+  opacity: 0;
+}
+
+@keyframes ui-background-fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes ui-background-fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI HEROES ITEM 
+/*---------------------------------------------------------------------------------------------*/
+.UIHeroesItem {
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+  width: 100%;
+}
+
+.UIHeroesItem.u-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.UIMenu.u-focused .UIHeroesItem.u-focused {
+  background-color: rgb(98, 211, 255);
+}
+
+.UIHeroesItem.u-selected {
+  background-color: rgb(98, 255, 106);
+}
+
+.UIHeroesItem-picture {
+  height: 96px;
+  margin-right: 8px;
+}
+
+.UIHeroesItem-body {
+  flex: 1;
+  line-height: 24px;
+  color: #e7e7e7;
+  text-align: left;
+}
+
+.UIHeroesItem-body-stats {
+  display: block;
+}
+
+.UIHeroesItem-body-stats-item {
+  display: flex;
+  line-height: 24px;
+  margin-right: 16px;
+}
+
+.UIHeroesItem-body-stats-item-name {
+  margin-right: 5px;
+  color: #09d6ff;
+  font-weight: bold;
+}
+
+.UIHeroesItem-body-stats-item-separator {
+  flex: 1;
+  align-self: center;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-style: dashed;
+}
+
+.UIHeroesItem-body-stats-item-value {
+  margin-left: 5px;
+  text-align: right;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* BATTLE FIGHTER
+/*---------------------------------------------------------------------------------------------*/
+.BattleAreaFighter {
+  position: absolute;
+}
+
+.BattleAreaFighter-header-name {
+  display: block;
+  text-align:center;
+  text-transform: capitalize;
+  height: 16px;
+  background-color:rgba(0, 0, 0, 0.5);
+  color:#FFF;
+}
+
+.BattleAreaFighter-header-lifebar {
+  position: relative;
+  display: block;
+  height: 16px;
+  margin-top: 10px;
+  background-color:rgba(0, 0, 0, 0.5);
+}
+
+.BattleAreaFighter-header-lifebar-progress {
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  width: 0;
+  background-color: #9eff4f;
+  transition: width 1s;
+}
+
+.BattleAreaFighter-header-seals {
+  display: flex;
+  margin-top: 10px;
+  height: 18px;
+}
+
+.BattleAreaFighter-header-seals-item {
+  margin-right: 5px;
+}
+
+.BattleAreaFighter-toast {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index:2;
+  font-size: 16px;
+  text-shadow: rgb(0 0 0) 2px 2px 2px;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI HEROES EQUIPMENT ITEM
+/*---------------------------------------------------------------------------------------------*/
+.UIHeroesEquipmentItem {
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+  width: 100%;
+}
+
+.UIHeroesEquipmentItem.u-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.UIMenu.u-focused .UIHeroesEquipmentItem.u-focused {
+  background-color: rgb(98, 211, 255);
+}
+
+.UIHeroesEquipmentItem.u-selected {
+  background-color: rgb(98, 255, 106);
+}
+
+.UIHeroesEquipmentItem-picture {
+  height: 96px;
+  margin-right: 8px;
+}
+
+.UIHeroesEquipmentItem-body {
+  flex: 1;
+  line-height: 24px;
+  color: #e7e7e7;
+  text-align: left;
+}
+
+.UIHeroesEquipmentItem-body-stats {
+  display: block;
+}
+
+.UIHeroesEquipmentItem-body-stats-item {
+  display: flex;
+  line-height: 24px;
+  margin-right: 16px;
+}
+
+.UIHeroesEquipmentItem-body-stats-item-name {
+  margin-right: 5px;
+  color: #09d6ff;
+  font-weight: bold;
+}
+
+.UIHeroesEquipmentItem-body-stats-item-separator {
+  flex: 1;
+  align-self: center;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-style: dashed;
+}
+
+.UIHeroesEquipmentItem-body-stats-item-value1 {
+  color: #fff;
+  text-align: right;
+  margin-left: 5px;
+}
+
+.UIHeroesEquipmentItem-body-stats-item-arrow {
+  line-height: 24px;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.UIHeroesEquipmentItem-body-stats-item-arrow::after {
+  content: '->';
+}
+
+.UIHeroesEquipmentItem-body-stats-item-value2 {
+  min-width: 48px;
+  line-height: 24px;
+  text-align: left;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI STATUS 
+/*---------------------------------------------------------------------------------------------*/
+.UIStatus {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px;
+  border: 10px solid;
+  border-image: url(/textures/ui_border.png) 3 fill;
+}
+
+.UIStatus-avatar {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.UIStatus-avatar-picture {
+  height: 96px;
+  margin-right: 8px;
+}
+
+.UIStatus-avatar-name {
+  display: block;
+  line-height: 24px;
+  color: #e7e7e7;
+  text-align: left;
+}
+
+.UIStatus-title {
+  display: block;
+  margin-bottom: 5px;
+  border-bottom: 2px solid;
+}
+
+.UIStatus-section {
+  margin-bottom: 15px;
+}
+
+.UIStatus-stats {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.UIStatus-stats-item {
+  line-height: 24px;
+  display: inline-flex;
+  margin-right: 16px;
+}
+
+.UIStatus-stats-item-name {
+  margin-right: 5px;
+  color: #09d6ff;
+  font-weight: bold;
+}
+
+.UIStatus-stats-item-separator {
+  flex: 1;
+  align-self: center;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-style: dashed;
+}
+
+.UIStatus-stats-item-value {
+  color: #fff;
+  margin-left: 16px;
+  text-align: right;
+}
+
+.UIStatus-stuffs {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.UIStatus-stuffs-item {
+  line-height: 24px;
+  display: inline-flex;
+  margin-right: 16px;
+}
+
+.UIStatus-stuffs-item-name {
+  margin-right: 5px;
+  color: #09d6ff;
+  font-weight: bold;
+}
+
+.UIStatus-stuffs-item-separator {
+  flex: 1;
+  align-self: center;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-style: dashed;
+}
+
+.UIStatus-stuffs-item-value {
+  color: #fff;
+  margin-left: 16px;
+  text-align: right;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI ITEMS ITEM 
+/*---------------------------------------------------------------------------------------------*/
+.UIInventoryItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  text-align: left;
+}
+
+.UIInventoryItem.u-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.UIInventoryItem.u-selected {
+  background-color: rgb(98, 255, 106);
+}
+
+UIInventoryItem-name {
+  margin-right: 10px;
+  flex: 2;
+}
+
+UIInventoryItem-quantity,
+UIInventoryItem-price {
+  display: none;
+  margin-left: 10px;
+  text-align: right;
+}
+
+.UIMenu.u-focused .UIInventoryItem.u-focused {
+  background-color: rgb(98, 211, 255);
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI BATTLE STATUS 
+/*---------------------------------------------------------------------------------------------*/
+.UIBattleStatus {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 5px;
+  padding-right: 5px;
+  border: 10px solid;
+  border-image: url(/textures/ui_border.png) 3 fill;
+}
+
+.UIBattleStatus-numTurns {
+  display: flex;
+  align-items: center;
+}
+
+.UIBattleStatus-pictures {
+  display: flex;
+  flex-direction: row;
+}
+
+.UIBattleStatus-pictures-item {
+  height: 100%;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI EFFECTS ITEM 
+/*---------------------------------------------------------------------------------------------*/
+.UIEffectsItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  text-align: left;
+}
+
+.UIEffectsItem.u-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.UIMenu.u-focused .UIEffectsItem.u-focused {
+  background-color: rgb(98, 211, 255);
+}
+
+.UIEffectsItem.u-selected {
+  background-color: rgb(98, 255, 106);
+}
+
+.UIEffectsItem-name {
+  flex: 1;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI BATTLE HEROES
+/*---------------------------------------------------------------------------------------------*/
+.UIBattleHeroesItem {
+  display: block;
+  width: 25%;
+  padding: 8px;
+}
+
+.UIBattleHeroesItem.u-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.UIBattleHeroesItem.u-selected {
+  background-color: rgb(98, 255, 106);
+}
+
+.UIBattleHeroesItem-picture {
+  display: block;
+  width: 100%;
+}
+
+.UIBattleHeroesItem-body {
+  color: #e7e7e7;
+  text-align: left;
+}
+
+.UIBattleHeroesItem-body-name {
+  margin-bottom: 10px;
+  border-bottom: 2px solid;
+}
+
+.UIBattleHeroesItem-body-stats {
+  display: block;
+}
+
+.UIBattleHeroesItem-body-stats-item {
+  position: relative;
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.UIBattleHeroesItem-body-stats-item-name {
+  line-height: 15px;
+}
+
+.UIBattleHeroesItem-body-stats-item-bar {
+  position: relative;
+  background-color: #FFF;
+  height: 15px;
+  width: 100%;
+  margin-left: 5px;
+}
+
+.UIBattleHeroesItem-body-stats-item-bar-value {
+  line-height: 15px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #000;
+  z-index: 2;
+}
+
+.UIBattleHeroesItem-body-stats-item-bar-progress {
+  position: relative;
+  display: block;
+  height: 15px;
+  background-color: rgb(117, 243, 0);
+  transition: width 1s;
+}
+
+/* specifications */
+.UIMenu.u-focused .UIBattleHeroesItem.u-focused {
+  background-color: rgb(98, 211, 255);
+}

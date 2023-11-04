@@ -1,0 +1,15 @@
+{
+  "Id": "effect_0000",
+  "Name": "Damage HP-5",
+  "Description": "Damage HP-5",
+  "Cost": 5,
+  "SpriteAnimationName": "CUT",
+  "AvailabilityType": "ALL",
+  "MechanicId": "DAMAGE",
+  "MechanicOpts": {
+    "amount": "5",
+    "element": "WHITE"
+  },
+  "TargetCharConditionId": "IS_ALIVE_OPPONENT",
+  "TargetCharConditionOpts": {}
+}

@@ -79,7 +79,7 @@ async function CREATE_CUBE(x, y, z) {
   const mesh = new Gfx3MeshJSM();
   mesh.setPosition(x, y, z);
   mesh.setScale(5, 5, 5);
-  mesh.setOccluder(true);
+  mesh.setShadowCasting(true);
   await mesh.loadFromFile('./samples/shadow/cube.jsm');
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/shadow/cube.png'),

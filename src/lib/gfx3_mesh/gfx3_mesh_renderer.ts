@@ -173,7 +173,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   drawMesh(mesh: Gfx3Mesh, matrix: mat4 | null = null): void {
     this.meshCommands.push({ mesh: mesh, matrix: matrix });
 
-    if (this.shadowEnabled && mesh.getOccluder()) {
+    if (this.shadowEnabled && mesh.getShadowCasting()) {
       gfx3MeshShadowRenderer.drawMesh(mesh, matrix);
     }
   }

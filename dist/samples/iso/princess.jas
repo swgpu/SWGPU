@@ -1,0 +1,17 @@
+{
+  "Ident": "JAS",
+  "Animations": [
+    {
+      "Name": "IDLE_LEFT",
+      "Frames": [
+        {
+          "X": 0,
+          "Y": 0,
+          "Width": 24,
+          "Height": 35
+        }
+      ],
+      "FrameDuration": 100
+    }
+  ]
+}

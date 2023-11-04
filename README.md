@@ -164,7 +164,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
         <p>3D Shadow Map</p>
     </td>
     <td>
-        <p>3D Post Rendering</p>
+        <p>Rendering filters</p>
     </td>
   </tr>
 </table>

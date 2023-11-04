@@ -1,0 +1,24 @@
+{
+  "Id": "common_item_0000",
+  "Type": "POTION",
+  "Name": "Potion de soins + I",
+  "Description": "HP +10",
+  "PictureFile": "#",
+  "Soldable": false,
+  "Price": 10,
+  "Effect": {
+    "Id": "Effect0000",
+    "Name": "Restore HP +5",
+    "Description": "Restore HP +5",
+    "Cost": 0,
+    "SpriteAnimationName": "CUT",
+    "AvailabilityType": "ALL",
+    "MechanicId": "RESTORE",
+    "MechanicOpts": {
+      "amount": "10",
+      "element": "WHITE"
+    },
+    "TargetCharConditionId": "IS_ALIVE_ALLY",
+    "TargetCharConditionOpts": {}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "TypeName": "Duel",
+  "Id": "duel_0000",
+  "DuelistIds": [
+    {
+      "TypeName": "AIDuelist",
+      "Id": "0000"
+    },
+    {
+      "TypeName": "HumanDuelist",
+      "Id": "0001"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "Id": "battle_0000",
+  "JSMFile" : "samples/rpg/data/battle_0000/map.jsm",
+  "JSMTextureFile" : "samples/rpg/data/battle_0000/map.png",
+  "CameraPosition": [0, 3, 12],
+  "CameraLookAt": [0, 0, 0],
+  "Enemies": [{
+    "EnemyId": "0000",
+    "Position": [25, 90, 0]
+  }]
+}

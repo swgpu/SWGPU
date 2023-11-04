@@ -1,0 +1,17 @@
+{
+  "Id": "equipment_item_0001",
+  "Type": "WEAPON",
+  "SubType": "WEAPON_DAGGER",
+  "Name": "Dague royale rubis",
+  "Description": "Dague légendaire forgé pour le barron du nord",
+  "PictureFile": "#",
+  "Soldable": false,
+  "Price": 250,
+  "Modifiers": [
+    {
+      "Type": "ADD",
+      "AttributeKey": "HP_MAX",
+      "Value": 15
+    }
+  ]
+}

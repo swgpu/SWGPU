@@ -1,0 +1,91 @@
+{
+  "Ident": "JAS", 
+  "Version": "0.1.3",
+  "ImageFile": "assets/sprites/effects/sprite.png",
+  "Animations": [
+    {
+      "Name": "CUT",
+      "Frames": [
+        {
+          "X": 4,
+          "Y": 241,
+          "Width": 128,
+          "Height": 112
+        },
+        {
+          "X": 140,
+          "Y": 241,
+          "Width": 128,
+          "Height": 112
+        },
+        {
+          "X": 276,
+          "Y": 241,
+          "Width": 128,
+          "Height": 112
+        },
+        {
+          "X": 412,
+          "Y": 241,
+          "Width": 128,
+          "Height": 112
+        },
+        {
+          "X": 548,
+          "Y": 241,
+          "Width": 128,
+          "Height": 112
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "BUBBLE",
+      "Frames": [
+        {
+          "X": 4,
+          "Y": 706,
+          "Width": 132,
+          "Height": 143
+        },
+        {
+          "X": 144,
+          "Y": 706,
+          "Width": 132,
+          "Height": 143
+        },
+        {
+          "X": 284,
+          "Y": 706,
+          "Width": 132,
+          "Height": 143
+        },
+        {
+          "X": 424,
+          "Y": 706,
+          "Width": 132,
+          "Height": 143
+        },
+        {
+          "X": 564,
+          "Y": 706,
+          "Width": 132,
+          "Height": 143
+        },
+        {
+          "X": 704,
+          "Y": 706,
+          "Width": 132,
+          "Height": 143
+        },
+        {
+          "X": 844,
+          "Y": 706,
+          "Width": 132,
+          "Height": 143
+        }
+      ],
+      "FrameDuration": 100
+    }
+  ]
+}
