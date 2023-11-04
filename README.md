@@ -4,9 +4,9 @@
 
 ![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.1.3-blue)
 
-**Warm** is an open source realtime 2D/3D game engine based on **WebGPU**.      
+**WARM** is an open source realtime 2D/3D game engine based on **WebGPU**.      
 It is a **complete and cross-platform solution** to build desktop/mobile games with high performance.    
-**Warm** wrap the web stack to serve one goal, make kewl games with a sweet coding style !     
+**WARM** wrap the web stack to serve one goal, make kewl games with a sweet coding style !     
 Some words about our philosophy:
 - **Simplicity:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle rendering and update loops.    
