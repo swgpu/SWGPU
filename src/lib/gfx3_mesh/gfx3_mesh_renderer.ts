@@ -1,4 +1,5 @@
 import { gfx3Manager } from '../gfx3/gfx3_manager';
+import { gfx3MeshShadowRenderer } from './gfx3_mesh_shadow_renderer';
 import { UT } from '../core/utils';
 import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
@@ -11,12 +12,15 @@ interface MeshCommand {
   matrix: mat4 | null;
 };
 
+// todo: move lvpMatrix in attribution list
+
 /**
  * The `Gfx3MeshRenderer` class is a singleton renderer responsible to display mesh in a 3D graphics system
  * and provides methods for controlling directionnal light, point light, fog and decals.
  */
 class Gfx3MeshRenderer extends Gfx3RendererAbstract {
-  texturesChanged: boolean;
+  shadowEnabled: boolean;
+  decalAtlasChanged: boolean;
   meshCommands: Array<MeshCommand>;
   grp0: Gfx3StaticGroup;
   camPos: Float32Array;
@@ -27,6 +31,8 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   decalCount: Uint32Array;
   decals: Float32Array;
   decalAtlas: Gfx3Texture;
+  shadowMap: Gfx3Texture;
+  lvpMatrix: Float32Array;
   grp1: Gfx3DynamicGroup;
   meshMatrices: Float32Array;
   meshLayer: Uint32Array;
@@ -36,7 +42,8 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    */
   constructor() {
     super('MESH_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
-    this.texturesChanged = false;
+    this.shadowEnabled = false;
+    this.decalAtlasChanged = false;
     this.meshCommands = [];
     this.grp0 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 0);
     this.camPos = this.grp0.setFloat(0, 'CAM_POS', 3);
@@ -47,12 +54,14 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.decalCount = this.grp0.setInteger(5, 'DECAL_COUNT', 1);
     this.decals = this.grp0.setFloat(6, 'DECALS', 24 * MAX_DECALS);
     this.decalAtlas = this.grp0.setTexture(7, 'DECAL_ATLAS_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.shadowMap = this.grp0.setTexture(9, 'SHADOW_MAP_TEXTURE', gfx3MeshShadowRenderer.getDepthTexture());
+    this.lvpMatrix = this.grp0.setFloat(11, 'LVP_MATRIX', 16);
     this.grp1 = gfx3Manager.createDynamicGroup('MESH_PIPELINE', 1);
     this.meshMatrices = this.grp1.setFloat(0, 'MESH_MATRICES', 16 * 3);
     this.meshLayer = this.grp1.setInteger(1, 'MESH_LAYER', 1);
 
-    this.grp1.allocate();
     this.grp0.allocate();
+    this.grp1.allocate();
   }
 
   /**
@@ -64,10 +73,15 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     const vpcMatrix = currentView.getViewProjectionClipMatrix();
     passEncoder.setPipeline(this.pipeline);
 
-    if (this.texturesChanged) {      
+    if (this.decalAtlasChanged) {
       this.grp0.setTexture(7, 'DECAL_ATLAS_TEXTURE', this.decalAtlas);
       this.grp0.allocate();
-      this.texturesChanged = false;
+      this.decalAtlasChanged = false;
+    }
+
+    if (this.shadowEnabled) {
+      this.grp0.setTexture(9, 'SHADOW_MAP_TEXTURE', gfx3MeshShadowRenderer.getDepthTexture());
+      this.grp0.allocate();
     }
 
     this.grp0.beginWrite();
@@ -78,6 +92,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.grp0.write(4, this.pointLights);
     this.grp0.write(5, this.decalCount);
     this.grp0.write(6, this.decals);
+    this.grp0.write(11, gfx3MeshShadowRenderer.getLVPMatrix());
     this.grp0.endWrite();
     passEncoder.setBindGroup(0, this.grp0.getBindGroup());
 
@@ -114,12 +129,21 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   }
 
   /**
+   * The "enableShadow" function enables or disables the shadowing projection.
+   * @param {boolean} enabled - A boolean value indicating whether the shadow should be enabled or
+   * disabled.
+   */
+  enableShadow(enabled: boolean): void {
+    this.shadowEnabled = enabled;
+  }
+
+  /**
    * The "setDecalAtlas" function sets the decal texture atlas that contains all decal sprites.
    * @param {Gfx3Texture} decalAtlas - The decal texture atlas.
    */
   setDecalAtlas(decalAtlas: Gfx3Texture): void {
     this.decalAtlas = decalAtlas;
-    this.texturesChanged = true;
+    this.decalAtlasChanged = true;
   }
 
   /**
@@ -176,6 +200,10 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    */
   drawMesh(mesh: Gfx3Mesh, matrix: mat4 | null = null): void {
     this.meshCommands.push({ mesh: mesh, matrix: matrix });
+
+    if (this.shadowEnabled) {
+      gfx3MeshShadowRenderer.drawMesh(mesh, matrix);
+    }
   }
 
   /**

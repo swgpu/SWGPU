@@ -79,6 +79,24 @@ class Gfx2Manager {
   }
 
   /**
+   * The "setFilter" function sets the filter property of a canvas element to the specified filter value.
+   * @param {string} filter - The filter parameter is a string that represents the CSS filter property.
+   * It can be used to apply various visual effects to an element, such as blur, brightness, contrast,
+   * grayscale, etc.
+   */
+  setFilter(filter: string): void {
+    this.canvas.style.filter = filter;
+  }
+
+  /**
+   * The "hasFilter" function checks if the canvas element has an active filter.
+   * @returns The boolean value.
+   */
+  hasFilter(): boolean {
+    return this.canvas.style.filter != '' && this.canvas.style.filter != 'none';
+  }
+
+  /**
    * The "findCanvasPosFromClientPos" function calculates the canvas position from the client's viewport position
    * @param {number} clientX - The `clientX` parameter represents the horizontal coordinate (in pixels) of
    * the mouse pointer relative to the client area of the browser window.

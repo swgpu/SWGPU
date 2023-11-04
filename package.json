@@ -1,7 +1,7 @@
 {
-  "name": "create-haiku",
+  "name": "create-warm",
   "description": "HTML5 Game Engine 2D & 3D written in TypeScript",
-  "homepage": "https://github.com/jay19240/Haiku#readme",
+  "homepage": "https://github.com/jay19240/Warm#readme",
   "keywords": [
     "game-engine-2d",
     "game-engine-3d",
@@ -19,7 +19,7 @@
     "doc": "typedoc src/lib/ --json docs/doc.json"
   },
   "bin": {
-    "create-haiku": "bin/create-haiku.js"
+    "create-warm": "bin/create-warm.js"
   },
   "devDependencies": {
     "pako": "^2.1.0",

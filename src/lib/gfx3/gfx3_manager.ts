@@ -115,37 +115,7 @@ class Gfx3Manager {
    * @param {number} viewIndex - The `viewIndex` parameter is the index of the view that you want to
    * begin drawing. It is used to retrieve the corresponding view object from the `views` array.
    */
-  beginDrawing(viewIndex: number): void {
-    const view = this.views[viewIndex];
-    const viewport = view.getViewport();
-    const viewportX = this.canvas.width * viewport.xFactor;
-    const viewportY = this.canvas.height * viewport.yFactor;
-    const viewportWidth = this.canvas.width * viewport.widthFactor;
-    const viewportHeight = this.canvas.height * viewport.heightFactor;
-    const viewBgColor = view.getBgColor();
-
-    const commandEncoder = this.device.createCommandEncoder();
-    const passEncoder = commandEncoder.beginRenderPass({
-      colorAttachments: [{
-        view: this.ctx.getCurrentTexture().createView(),
-        clearValue: { r: viewBgColor[0], g: viewBgColor[1], b: viewBgColor[2], a: viewBgColor[3] },
-        loadOp: 'clear',
-        storeOp: 'store'
-      }],
-      depthStencilAttachment: {
-        view: this.depthView,
-        depthClearValue: 1.0,
-        depthLoadOp: 'clear',
-        depthStoreOp: 'store'
-      }
-    });
-
-    passEncoder.setViewport(viewportX, viewportY, viewportWidth, viewportHeight, 0, 1);
-    passEncoder.setScissorRect(viewportX, viewportY, viewportWidth, viewportHeight);
-
-    this.currentView = view;
-    this.commandEncoder = commandEncoder;
-    this.passEncoder = passEncoder;
+  beginDrawing(viewIndex: number): void { // move to beginRender
   }
 
   /**
@@ -173,12 +143,45 @@ class Gfx3Manager {
     }
   }
 
+  beginRender(): void {
+    this.commandEncoder = this.device.createCommandEncoder();
+    this.lastRenderStart = Date.now();
+  }
+
   /**
-   * The "beginRender" function prepare the rendering phase.
+   * The "beginPassRender" function prepare the rendering phase.
    * Warning: You need to call this method before your render calls.
    */
-  beginRender(): void {
-    this.lastRenderStart = Date.now();
+  beginPassRender(viewIndex: number): void {
+    const view = this.views[viewIndex];
+    const viewport = view.getViewport();
+    const viewportX = this.canvas.width * viewport.xFactor;
+    const viewportY = this.canvas.height * viewport.yFactor;
+    const viewportWidth = this.canvas.width * viewport.widthFactor;
+    const viewportHeight = this.canvas.height * viewport.heightFactor;
+    const viewBgColor = view.getBgColor();
+
+    this.passEncoder = this.commandEncoder.beginRenderPass({
+      colorAttachments: [{
+        view: this.ctx.getCurrentTexture().createView(),
+        clearValue: { r: viewBgColor[0], g: viewBgColor[1], b: viewBgColor[2], a: viewBgColor[3] },
+        loadOp: 'clear',
+        storeOp: 'store'
+      }],
+      depthStencilAttachment: {
+        view: this.depthView,
+        depthClearValue: 1.0,
+        depthLoadOp: 'clear',
+        depthStoreOp: 'store'
+      }
+    });
+
+    this.passEncoder.setViewport(viewportX, viewportY, viewportWidth, viewportHeight, 0, 1);
+    this.passEncoder.setScissorRect(viewportX, viewportY, viewportWidth, viewportHeight);
+  }
+
+  endPassRender(): void {
+    this.passEncoder.end();
   }
 
   /**
@@ -187,7 +190,6 @@ class Gfx3Manager {
    * Warning: You need to call this method after your render calls.
    */
   endRender(): void {
-    this.passEncoder.end();
     this.device.queue.submit([this.commandEncoder.finish()]);
     this.lastRenderTime = Date.now() - this.lastRenderStart;
   }
@@ -394,6 +396,24 @@ class Gfx3Manager {
   }
 
   /**
+   * The "setFilter" function sets the filter property of a canvas element to the specified filter value.
+   * @param {string} filter - The filter parameter is a string that represents the CSS filter property.
+   * It can be used to apply various visual effects to an element, such as blur, brightness, contrast,
+   * grayscale, etc.
+   */
+  setFilter(filter: string): void {
+    this.canvas.style.filter = filter;
+  }
+
+  /**
+   * The "hasFilter" function checks if the canvas element has an active filter.
+   * @returns The boolean value.
+   */
+  hasFilter(): boolean {
+    return this.canvas.style.filter != '' && this.canvas.style.filter != 'none';
+  }
+
+  /**
    * The "getClientWidth" function returns the client width of the canvas.
    * @returns The client width of the canvas.
    */
@@ -439,6 +459,14 @@ class Gfx3Manager {
    */
   getDevice(): GPUDevice {
     return this.device;
+  }
+
+  /**
+   * The "getCommandEncoder" function returns the GPUCommandEncoder.
+   * @returns The WebGPU render command encoder.
+   */
+  getCommandEncoder(): GPUCommandEncoder {
+    return this.commandEncoder;
   }
 
   /**

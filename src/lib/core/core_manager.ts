@@ -89,6 +89,18 @@ class CoreManager {
       this.resHeight
     ];
   }
+
+  addClass(className: string): void {
+    this.container.classList.add(className);
+  }
+
+  removeClass(className: string): void {
+    this.container.classList.remove(className);
+  }
+
+  toggleClass(className: string): void {
+    this.container.classList.toggle(className);
+  }
 }
 
 const coreManager = new CoreManager();

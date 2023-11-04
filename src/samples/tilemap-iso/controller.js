@@ -9,8 +9,8 @@ class Controller extends Gfx2IsoDrawable {
     super();
     this.sprite = new Gfx2SpriteJAS();
     this.direction = 'FORWARD';
-    this.depth = 16;
-    this.width = 16;
+    this.depth = 20;
+    this.width = 20;
   }
 
   async load() {

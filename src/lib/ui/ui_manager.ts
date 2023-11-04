@@ -197,6 +197,14 @@ class UIManager {
   enableOverlayer(enable: boolean) {
     this.overLayer.style.opacity = (enable) ? '1' : '0';
   }
+
+  /**
+   * The "setClassName" function set classes to the root ui element.
+   * @param {string} className - A string value of space-separate list of class.
+   */
+  setClassName(className: string): void {
+    this.root.className = className;
+  }
 }
 
 export { UIManager };

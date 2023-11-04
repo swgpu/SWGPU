@@ -21,6 +21,7 @@ import { ScrollingScreen } from '../scrolling/scrolling_screen';
 import { CurveScreen } from '../curve/curve_screen';
 import { TripleTriadScreen } from '../triple-triad/triple_triad_screen';
 import { TilemapIsoScreen } from '../tilemap-iso/tilemap_iso_screen';
+import { ShadowScreen } from '../shadow/shadow_screen';
 // ---------------------------------------------------------------------------------------
 
 class BootScreen extends Screen {
@@ -31,23 +32,23 @@ class BootScreen extends Screen {
 
   async onEnter() {
     this.uiMenu.add('0', '3D Viewer');
-    this.uiMenu.add('1', 'User Interface');
+    this.uiMenu.add('1', 'UI Menu');
     this.uiMenu.add('2', '3D Pre-rendered Demo');
     this.uiMenu.add('3', '3D Iso Demo');
-    this.uiMenu.add('4', 'Visual Novel Demo');
+    this.uiMenu.add('4', '2D Visual Novel Demo');
     this.uiMenu.add('5', '2D Tilemap Demo');
     this.uiMenu.add('6', '2D Tilemap Pathfinding Demo');
-    this.uiMenu.add('7', 'Board Demo');
-    this.uiMenu.add('8', 'CCG Demo');
-    this.uiMenu.add('9', 'FPS Demo');
-    this.uiMenu.add('10', 'RPG Demo');
-    this.uiMenu.add('11', 'Perf Demo');
-    this.uiMenu.add('12', 'Particles Demo');
+    this.uiMenu.add('7', '2D Board Demo');
+    this.uiMenu.add('8', '2D CCG Demo');
+    this.uiMenu.add('9', '3D FPS Demo');
+    this.uiMenu.add('10', '3D RPG Demo');
+    this.uiMenu.add('11', '3D Perf Demo');
+    this.uiMenu.add('12', '3D Particles Demo');
     this.uiMenu.add('13', '2D Scrolling Demo');
     this.uiMenu.add('14', '3D Curve Demo');
-    this.uiMenu.add('15', 'Triple Triad Demo');
+    this.uiMenu.add('15', '2D Triple Triad Demo');
     this.uiMenu.add('16', '2D Tilemap Iso Demo');
-    this.uiMenu.add('17', '3D Post Rendering Demo');
+    this.uiMenu.add('17', '3D Shadow Map Demo');
     uiManager.addWidget(this.uiMenu, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
     eventManager.subscribe(this.uiMenu, 'E_ITEM_SELECTED', this, this.handleMenuItemSelected);
@@ -109,6 +110,9 @@ class BootScreen extends Screen {
     }
     else if (data.id == 16) {
       screenManager.requestSetScreen(new TilemapIsoScreen());
+    }
+    else if (data.id == 17) {
+      screenManager.requestSetScreen(new ShadowScreen());
     }
   }
 }

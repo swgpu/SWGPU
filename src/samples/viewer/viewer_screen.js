@@ -1,3 +1,4 @@
+import { gfx3Manager } from '../../lib/gfx3/gfx3_manager';
 import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
 import { gfx3DebugRenderer } from '../../lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
@@ -11,6 +12,7 @@ import { Gfx3MeshOBJ } from '../../lib/gfx3_mesh/gfx3_mesh_obj';
 import { Gfx3Skybox } from '../../lib/gfx3_skybox/gfx3_skybox';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
 // ---------------------------------------------------------------------------------------
+
 const CAMERA_SPEED = 0.1;
 
 class ViewerScreen extends Screen {
@@ -32,9 +34,8 @@ class ViewerScreen extends Screen {
   async onEnter() {
     this.camera.setPosition(0, 0, 10);
     this.mesh = await CREATE_CUBE();
-    this.skybox.setCubemap(await gfx3TextureManager.loadCubemapTexture('./samples/viewer/sky_', 'png'));
-
-    CREATE_UI();
+    this.skybox = await CREATE_SKYBOX();
+    uiManager.addNode(CREATE_UI_INFOBOX(), 'position:absolute; bottom:10px; right:10px');
 
     document.addEventListener('keydown', this.handleKeyDownCb);
     document.addEventListener('mousedown', this.handleMouseDownCb);
@@ -69,8 +70,9 @@ class ViewerScreen extends Screen {
       move = UT.VEC3_ADD(move, UT.VEC3_SCALE(cameraAxies[2], +CAMERA_SPEED));
     }
 
-    this.camera.translate(move[0], move[1], move[2]);
     const now = Date.now() / 10000;
+
+    this.camera.translate(move[0], move[1], move[2]);    
     this.mesh.setRotation(Math.sin(now), Math.cos(now), 0);
     this.mesh.update(ts);
   }
@@ -104,6 +106,9 @@ class ViewerScreen extends Screen {
     else if (e.key == 'd' || e.key == 'D') {
       this.mesh = await CREATE_DUCK();
     }
+    else if (e.key == 'p' || e.key == 'P') {
+      gfx3Manager.hasFilter() ? gfx3Manager.setFilter('') : gfx3Manager.setFilter('grayscale(100%)');
+    }
   }
 
   handleMouseDown(e) {
@@ -134,6 +139,12 @@ export { ViewerScreen };
 /******************************************************************* */
 // HELPFUL
 /******************************************************************* */
+
+async function CREATE_SKYBOX() {
+  const skybox = new Gfx3Skybox();
+  skybox.setCubemap(await gfx3TextureManager.loadCubemapTexture('./samples/viewer/sky_', 'png'));
+  return skybox;
+}
 
 async function CREATE_OBJ() {
   const obj = new Gfx3MeshOBJ();
@@ -202,7 +213,7 @@ async function CREATE_DUCK() {
   return mesh;
 }
 
-function CREATE_UI() {
+function CREATE_UI_INFOBOX() {
   const box = document.createElement('div');
   box.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
   box.style.padding = '10px';
@@ -242,5 +253,11 @@ function CREATE_UI() {
     ul.appendChild(li);
   }
 
-  uiManager.addNode(box, 'position:absolute; bottom:10px; right:10px');
+  {
+    const li = document.createElement('li');
+    li.textContent = '[p] => Post Processing Effect (greyscale)';
+    ul.appendChild(li);
+  }
+
+  return box;
 }

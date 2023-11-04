@@ -14,11 +14,6 @@ class Gfx2IsoDrawer {
         return 1;
       }
 
-      const deltaY = a.getPositionY() - b.getPositionY();
-      if (deltaY > accuracyMin && deltaY < accuracyMax && a.getPositionX() > b.getPositionX()) {
-        return 1;
-      }
-
       return a.getPositionY() - b.getPositionY();
     });
 

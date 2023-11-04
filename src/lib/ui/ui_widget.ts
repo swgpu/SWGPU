@@ -168,7 +168,7 @@ class UIWidget {
    * The "isEnabled" function checks if widget is enabled or not.
    * @returns A boolean value indicating if the widget is enabled or not.
    */
-    isEnabled(): boolean {
+  isEnabled(): boolean {
     return !this.node.classList.contains('u-disabled');
   }
 
