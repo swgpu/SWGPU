@@ -4,7 +4,7 @@
 
 ![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.1.3-blue)
 
-The **Warm Engine** is an open source realtime 2D/3D game engine based on **WebGPU**.      
+**Warm** is an open source realtime 2D/3D game engine based on **WebGPU**.      
 It is a **complete and cross-platform solution** to build desktop/mobile games with high performance.    
 **Warm** wrap the web stack to serve one goal, make kewl games with a sweet coding style !     
 Some words about our philosophy:
@@ -150,10 +150,10 @@ For a more concret overview on it, you can play examples [here](https://jay19240
         <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb16.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb17.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb18.png" width="150px"/>
     </td>
   </tr>
   <tr>

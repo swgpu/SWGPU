@@ -46,8 +46,6 @@ class PerfScreen extends Screen {
     const view = gfx3Manager.getView(0);
     view.setPerspectiveFar(700);
     view.setPerspectiveNear(0.1);
-
-    gfx3MeshRenderer.enableDirLight(true, [0, -1, 0.2], [1, 1, 1], [0.8, 0.6, 0.4], [0.8, 0.6, 0.4]);
     this.camera.setPosition(0, 10, 0);
 
     this.skySphere = new Gfx3MeshJSM();
@@ -112,6 +110,7 @@ class PerfScreen extends Screen {
   }
 
   draw() {
+    gfx3MeshRenderer.drawDirLight([0, -1, 0.2], [1, 1, 1], [0.8, 0.6, 0.4], [0.8, 0.6, 0.4]);
     this.skySphere.draw();
 
     if (this.mode == 0) {

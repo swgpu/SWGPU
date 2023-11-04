@@ -84,7 +84,7 @@ struct VertexOutput {
   @location(6) FragShadowPos: vec3<f32>
 }
 
-@group(0) @binding(11) var<uniform> LVP_MATRIX: mat4x4<f32>;
+@group(0) @binding(7) var<uniform> LVP_MATRIX: mat4x4<f32>;
 @group(1) @binding(0) var<uniform> MESH_MATRICES: MeshMatrices;
 
 @vertex
@@ -111,7 +111,7 @@ fn main(
 }`;
 
 export const FRAGMENT_SHADER = /* wgsl */`
-struct MaterialParams { // todo: add HAS_SHADOW
+struct MaterialParams {
   OPACITY: f32,
   NORMAL_INTENSITY: f32,
   HAS_LIGHTNING: f32,
@@ -122,6 +122,10 @@ struct MaterialParams { // todo: add HAS_SHADOW
   HAS_NORMAL_MAP: f32,
   HAS_ENV_MAP: f32,
   HAS_DECAL: f32,
+  HAS_SHADOW: f32
+}
+
+struct MaterialUvs {
   TEXTURE_SCROLL: vec2<f32>,
   TEXTURE_OFFSET: vec2<f32>,
   DISPLACEMENT_MAP_SCROLL: vec2<f32>
@@ -177,17 +181,14 @@ struct Decal {
 @group(0) @binding(4) var<uniform> POINT_LIGHTS: array<PointLight, ${MAX_POINT_LIGHTS}>;
 @group(0) @binding(5) var<uniform> DECAL_COUNT: u32;
 @group(0) @binding(6) var<uniform> DECALS: array<Decal, ${MAX_DECALS}>;
-@group(0) @binding(7) var DECAL_ATLAS_TEXTURE: texture_2d<f32>;
-@group(0) @binding(8) var DECAL_ATLAS_SAMPLER: sampler;
-@group(0) @binding(9) var SHADOW_MAP_TEXTURE: texture_depth_2d;
-@group(0) @binding(10) var SHADOW_MAP_SAMPLER: sampler_comparison;
-
-
-
+@group(0) @binding(8) var DECAL_ATLAS_TEXTURE: texture_2d<f32>;
+@group(0) @binding(9) var DECAL_ATLAS_SAMPLER: sampler;
+@group(0) @binding(10) var SHADOW_MAP_TEXTURE: texture_depth_2d;
+@group(0) @binding(11) var SHADOW_MAP_SAMPLER: sampler_comparison;
 @group(1) @binding(1) var<uniform> MESH_LAYER: f32;
 @group(2) @binding(0) var<uniform> MAT_COLORS: MaterialColors;
 @group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
-
+@group(2) @binding(2) var<uniform> MAT_UVS: MaterialUvs;
 @group(3) @binding(0) var MAT_TEXTURE: texture_2d<f32>;
 @group(3) @binding(1) var MAT_SAMPLER: sampler;
 @group(3) @binding(2) var MAT_DISPLACEMENT_TEXTURE: texture_2d<f32>;
@@ -213,7 +214,7 @@ fn main(
   var normal = normalize(FragNormal);
   var outputColor = vec4(0.0, 0.0, 0.0, 1.0);
   var texel = vec4(1.0, 1.0, 1.0, 1.0);
-  var textureUV = MAT_PARAMS.TEXTURE_SCROLL + MAT_PARAMS.TEXTURE_OFFSET + FragUV;
+  var textureUV = MAT_UVS.TEXTURE_SCROLL + MAT_UVS.TEXTURE_OFFSET + FragUV;
 
   if (MAT_PARAMS.HAS_DISPLACEMENT_MAP == 1.0)
   {
@@ -253,7 +254,12 @@ fn main(
 
   if (MAT_PARAMS.HAS_LIGHTNING == 1.0)
   {
-    var shadow = CalcShadow(FragShadowPos);
+    var shadow = 1.0;
+    
+    if (MAT_PARAMS.HAS_SHADOW == 1.0)
+    {
+      shadow = CalcShadow(FragShadowPos);
+    }
 
     if (DIR_LIGHT.ENABLED == 1.0)
     {
@@ -356,7 +362,7 @@ fn CalcEnvMap(normal: vec3<f32>, fragPos: vec3<f32>) -> vec4<f32>
 // *****************************************************************************************************************
 fn CalcDisplacementMap(fragUV: vec2<f32>) -> vec2<f32>
 {
-  var textureUV = MAT_PARAMS.DISPLACEMENT_MAP_SCROLL + fragUV;
+  var textureUV = MAT_UVS.DISPLACEMENT_MAP_SCROLL + fragUV;
   var offset = vec2(0.0, 0.0);
   var greyScale = textureSample(MAT_DISPLACEMENT_TEXTURE, MAT_DISPLACEMENT_SAMPLER, textureUV).r;
   offset.x = clamp(MAT_PARAMS.DISPLACEMENT_MAP_FACTOR * ((greyScale * 2) - 1), 0.0, 1.0);

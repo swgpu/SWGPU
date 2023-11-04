@@ -35,6 +35,7 @@ interface MATOptions {
   normalMap?: Gfx3Texture;
   envMap?: Gfx3Texture;
   decalEnabled?: boolean;
+  shadowEnabled?: boolean;
 };
 
 /**
@@ -57,6 +58,7 @@ class Gfx3Material {
   grp2: Gfx3StaticGroup;
   colors: Float32Array;
   params: Float32Array;
+  uvs: Float32Array;
   grp3: Gfx3StaticGroup;
   texture: Gfx3Texture;
   displacementMap: Gfx3Texture;
@@ -100,7 +102,7 @@ class Gfx3Material {
     this.colors[13] = options.specular ? options.specular[1] : 0.0;
     this.colors[14] = options.specular ? options.specular[2] : 0.0;
     this.colors[15] = options.specular ? options.specular[3] : 0.0;
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 16);
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 11);
     this.params[0] = options.opacity ?? 1.0;
     this.params[1] = options.normalIntensity ?? 1.0;
     this.params[2] = options.lightning ? 1.0 : 0.0;
@@ -111,12 +113,8 @@ class Gfx3Material {
     this.params[7] = options.normalMap ? 1.0 : 0.0;
     this.params[8] = options.envMap ? 1.0 : 0.0;
     this.params[9] = options.decalEnabled ? 1.0 : 0.0;
-    this.params[10] = 0.0;
-    this.params[11] = 0.0;
-    this.params[12] = 0.0;
-    this.params[13] = 0.0;
-    this.params[14] = 0.0;
-    this.params[15] = 0.0;
+    this.params[10] = options.shadowEnabled ? 1.0 : 0.0;
+    this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 6);
 
     this.grp3 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 3);
     this.texture = this.grp3.setTexture(0, 'MAT_TEXTURE', options.texture ?? gfx3Manager.createTextureFromBitmap());
@@ -178,7 +176,8 @@ class Gfx3Material {
       specularityMap: json['SpecularityMap'] ? await gfx3TextureManager.loadTexture(json['SpecularityMap']) : undefined,
       normalMap: json['NormalMap'] ? await gfx3TextureManager.loadTexture(json['NormalMap']) : undefined,
       envMap: json['EnvMap'] ? await gfx3TextureManager.loadTexture(json['EnvMap']) : undefined,
-      decalEnabled: json['DecalEnabled']
+      decalEnabled: json['DecalEnabled'],
+      shadowEnabled: json['ShadowEnabled']
     });
   }
 
@@ -196,14 +195,14 @@ class Gfx3Material {
    */
   update(ts: number): void {
     if (this.textureScrollRate != 0) {
-      this.params[10] += Math.cos(this.textureScrollAngle) * this.textureScrollRate * (ts / 1000);
-      this.params[11] += Math.sin(this.textureScrollAngle) * this.textureScrollRate * (ts / 1000);
+      this.uvs[0] += Math.cos(this.textureScrollAngle) * this.textureScrollRate * (ts / 1000);
+      this.uvs[1] += Math.sin(this.textureScrollAngle) * this.textureScrollRate * (ts / 1000);
       this.dataChanged = true;
     }
 
     if (this.displacementMapScrollRate != 0) {
-      this.params[14] += Math.cos(this.displacementMapScrollAngle) * this.displacementMapScrollRate * (ts / 1000);
-      this.params[15] += Math.sin(this.displacementMapScrollAngle) * this.displacementMapScrollRate * (ts / 1000);
+      this.uvs[4] += Math.cos(this.displacementMapScrollAngle) * this.displacementMapScrollRate * (ts / 1000);
+      this.uvs[5] += Math.sin(this.displacementMapScrollAngle) * this.displacementMapScrollRate * (ts / 1000);
       this.dataChanged = true;
     }
 
@@ -212,8 +211,8 @@ class Gfx3Material {
     }
 
     const currentFrame = this.currentAnimation.frames[this.currentAnimationFrameIndex];
-    this.params[12] = currentFrame.offsetX / this.texture.gpuTexture.width;
-    this.params[13] = currentFrame.offsetY / this.texture.gpuTexture.height;
+    this.uvs[2] = currentFrame.offsetX / this.texture.gpuTexture.width;
+    this.uvs[3] = currentFrame.offsetY / this.texture.gpuTexture.height;
     this.dataChanged = true;
 
     if (this.frameProgress >= this.currentAnimation.frameDuration) {
@@ -262,8 +261,8 @@ class Gfx3Material {
    */
   resetAnimation(): void {
     this.currentAnimation = null;
-    this.params[12] = 0.0;
-    this.params[13] = 0.0;
+    this.uvs[2] = 0.0;
+    this.uvs[3] = 0.0;
     this.dataChanged = true;
   }
 
@@ -452,6 +451,15 @@ class Gfx3Material {
   }
 
   /**
+   * The "enableShadow" function enable shadow on the material surface.
+   * @param {boolean} enabled - A boolean value indicating whether the shadow should be enabled or
+   * disabled.
+   */
+  enableShadow(enabled: boolean): void {
+    this.params[10] = enabled ? 1.0 : 0.0;
+  }
+
+  /**
    * The "getGroup02" function returns the static group index 2.
    * @returns The static group.
    */
@@ -460,6 +468,7 @@ class Gfx3Material {
       this.grp2.beginWrite();
       this.grp2.write(0, this.colors);
       this.grp2.write(1, this.params);
+      this.grp2.write(2, this.uvs);
       this.grp2.endWrite();
       this.dataChanged = false;
     }

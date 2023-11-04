@@ -12,8 +12,6 @@ interface MeshCommand {
   matrix: mat4 | null;
 };
 
-// todo: move lvpMatrix in attribution list
-
 /**
  * The `Gfx3MeshRenderer` class is a singleton renderer responsible to display mesh in a 3D graphics system
  * and provides methods for controlling directionnal light, point light, fog and decals.
@@ -30,9 +28,9 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   pointLights: Float32Array;
   decalCount: Uint32Array;
   decals: Float32Array;
+  lvpMatrix: Float32Array;
   decalAtlas: Gfx3Texture;
   shadowMap: Gfx3Texture;
-  lvpMatrix: Float32Array;
   grp1: Gfx3DynamicGroup;
   meshMatrices: Float32Array;
   meshLayer: Uint32Array;
@@ -53,9 +51,10 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.pointLights = this.grp0.setFloat(4, 'POINT_LIGHTS', 20 * MAX_POINT_LIGHTS);
     this.decalCount = this.grp0.setInteger(5, 'DECAL_COUNT', 1);
     this.decals = this.grp0.setFloat(6, 'DECALS', 24 * MAX_DECALS);
-    this.decalAtlas = this.grp0.setTexture(7, 'DECAL_ATLAS_TEXTURE', gfx3Manager.createTextureFromBitmap());
-    this.shadowMap = this.grp0.setTexture(9, 'SHADOW_MAP_TEXTURE', gfx3MeshShadowRenderer.getDepthTexture());
-    this.lvpMatrix = this.grp0.setFloat(11, 'LVP_MATRIX', 16);
+    this.lvpMatrix = this.grp0.setFloat(7, 'LVP_MATRIX', 16);
+
+    this.decalAtlas = this.grp0.setTexture(8, 'DECAL_ATLAS_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.shadowMap = this.grp0.setTexture(10, 'SHADOW_MAP_TEXTURE', gfx3MeshShadowRenderer.getDepthTexture());
     this.grp1 = gfx3Manager.createDynamicGroup('MESH_PIPELINE', 1);
     this.meshMatrices = this.grp1.setFloat(0, 'MESH_MATRICES', 16 * 3);
     this.meshLayer = this.grp1.setInteger(1, 'MESH_LAYER', 1);
@@ -74,13 +73,13 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     passEncoder.setPipeline(this.pipeline);
 
     if (this.decalAtlasChanged) {
-      this.grp0.setTexture(7, 'DECAL_ATLAS_TEXTURE', this.decalAtlas);
+      this.grp0.setTexture(8, 'DECAL_ATLAS_TEXTURE', this.decalAtlas);
       this.grp0.allocate();
       this.decalAtlasChanged = false;
     }
 
     if (this.shadowEnabled) {
-      this.grp0.setTexture(9, 'SHADOW_MAP_TEXTURE', gfx3MeshShadowRenderer.getDepthTexture());
+      this.grp0.setTexture(10, 'SHADOW_MAP_TEXTURE', gfx3MeshShadowRenderer.getDepthTexture());
       this.grp0.allocate();
     }
 
@@ -92,7 +91,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.grp0.write(4, this.pointLights);
     this.grp0.write(5, this.decalCount);
     this.grp0.write(6, this.decals);
-    this.grp0.write(11, gfx3MeshShadowRenderer.getLVPMatrix());
+    this.grp0.write(7, gfx3MeshShadowRenderer.getLVPMatrix());
     this.grp0.endWrite();
     passEncoder.setBindGroup(0, this.grp0.getBindGroup());
 
@@ -121,6 +120,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
 
     this.grp1.endWrite();
 
+    this.dirLight.fill(0);
     this.pointLightCount[0] = 0;
     this.pointLights.fill(0);
     this.decalCount[0] = 0;
@@ -144,34 +144,6 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   setDecalAtlas(decalAtlas: Gfx3Texture): void {
     this.decalAtlas = decalAtlas;
     this.decalAtlasChanged = true;
-  }
-
-  /**
-   * The "enableDirLight" function enables a directional light with specified properties.
-   * @param {boolean} enabled - A boolean value indicating whether the directional light is enabled or not.
-   * @param {vec3} direction - The direction of the directional light.
-   * @param {vec3} ambient - The ambient color of the directional light.
-   * @param {vec3} diffuse - The diffuse color of the directional light.
-   * @param {vec3} specular - The specular color of the directional light.
-   * @param {number} [intensity=1] - The strength or brightness of the directional light.
-   */
-  enableDirLight(enabled: boolean, direction: vec3, ambient: vec3, diffuse: vec3, specular: vec3, intensity: number = 1): void {
-    this.dirLight[0] = direction[0];
-    this.dirLight[1] = direction[1];
-    this.dirLight[2] = direction[2];
-    this.dirLight[3] = enabled ? 1.0 : 0.0;
-    this.dirLight[4] = ambient[0];
-    this.dirLight[5] = ambient[1];
-    this.dirLight[6] = ambient[2];
-    this.dirLight[7] = 0;
-    this.dirLight[8] = diffuse[0];
-    this.dirLight[9] = diffuse[1];
-    this.dirLight[10] = diffuse[2];
-    this.dirLight[11] = 0;
-    this.dirLight[12] = specular[0];
-    this.dirLight[13] = specular[1];
-    this.dirLight[14] = specular[2];
-    this.dirLight[15] = intensity;
   }
 
   /**
@@ -201,9 +173,36 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   drawMesh(mesh: Gfx3Mesh, matrix: mat4 | null = null): void {
     this.meshCommands.push({ mesh: mesh, matrix: matrix });
 
-    if (this.shadowEnabled) {
+    if (this.shadowEnabled && mesh.getOccluder()) {
       gfx3MeshShadowRenderer.drawMesh(mesh, matrix);
     }
+  }
+
+  /**
+   * The "drawDirLight" function enables a directional light with specified properties.
+   * @param {vec3} direction - The direction of the directional light.
+   * @param {vec3} ambient - The ambient color of the directional light.
+   * @param {vec3} diffuse - The diffuse color of the directional light.
+   * @param {vec3} specular - The specular color of the directional light.
+   * @param {number} [intensity=1] - The strength or brightness of the directional light.
+   */
+  drawDirLight(direction: vec3, ambient: vec3, diffuse: vec3, specular: vec3, intensity: number = 1): void {
+    this.dirLight[0] = direction[0];
+    this.dirLight[1] = direction[1];
+    this.dirLight[2] = direction[2];
+    this.dirLight[3] = 1.0;
+    this.dirLight[4] = ambient[0];
+    this.dirLight[5] = ambient[1];
+    this.dirLight[6] = ambient[2];
+    this.dirLight[7] = 0;
+    this.dirLight[8] = diffuse[0];
+    this.dirLight[9] = diffuse[1];
+    this.dirLight[10] = diffuse[2];
+    this.dirLight[11] = 0;
+    this.dirLight[12] = specular[0];
+    this.dirLight[13] = specular[1];
+    this.dirLight[14] = specular[2];
+    this.dirLight[15] = intensity;
   }
 
   /**

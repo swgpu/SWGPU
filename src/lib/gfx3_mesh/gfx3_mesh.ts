@@ -23,6 +23,7 @@ export interface Group {
  */
 class Gfx3Mesh extends Gfx3Drawable {
   layer: number;
+  occluder: boolean;
   material: Gfx3Material;
 
   /**
@@ -31,6 +32,7 @@ class Gfx3Mesh extends Gfx3Drawable {
   constructor() {
     super(SHADER_VERTEX_ATTR_COUNT);
     this.layer = 0;
+    this.occluder = false;
     this.material = new Gfx3Material({});
   }
 
@@ -197,6 +199,21 @@ class Gfx3Mesh extends Gfx3Drawable {
    */
   getLayer(): number {
     return this.layer;
+  }
+
+  /**
+   * The "setOccluder" function determines if object generate shadows or not.
+   * @param {boolean} occluder - The `occluder` parameter is a boolean value that determines if object generate shadows.
+   */
+  setOccluder(occluder: boolean): void {
+    this.occluder = occluder;
+  }
+
+  /**
+   * The "getOccluder" function returns a boolean value indicating whether the object generate shadows.
+   */
+  getOccluder(): boolean {
+    return this.occluder;
   }
 
   /**

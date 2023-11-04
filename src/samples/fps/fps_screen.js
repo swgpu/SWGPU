@@ -19,7 +19,6 @@ class FPSScreen extends Screen {
   async onEnter() {
     this.camera.setCenter(-1.5, 1, 2.7);
     this.camera.setRotation(0, -Math.PI / 2, 0);
-    gfx3MeshRenderer.enableDirLight(true, [0, -1, 0], [1, 1, 1], [1, 1, 1], [0, 0, 0]);
 
     await this.map.loadFromFile('./samples/fps/map.jsm');
     this.map.setMaterial(new Gfx3Material({
@@ -36,6 +35,7 @@ class FPSScreen extends Screen {
   }
 
   draw() {
+    gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [1, 1, 1], [0, 0, 0]);
     this.map.draw();
   }
 }

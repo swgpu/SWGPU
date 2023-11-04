@@ -33,8 +33,6 @@ class CurveScreen extends Screen {
   }
 
   async onEnter() {
-    gfx3MeshRenderer.enableDirLight(true, [0, -1, 0], [1, 1, 1], [1, 1, 1], [0, 0, 0]);
-
     this.obj = new Gfx3MeshOBJ();
     await this.obj.loadFromFile('./samples/curve/level.obj', './samples/curve/level.mtl');
 
@@ -62,6 +60,7 @@ class CurveScreen extends Screen {
   }
 
   draw() {
+    gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [1, 1, 1], [0, 0, 0]);
     this.obj.draw();
     this.skySphere.draw();
   }
