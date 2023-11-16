@@ -24,7 +24,7 @@ class UIMenu extends UIWidget {
   columns: number;
   multiple: boolean;
   selectable: boolean;
-  mouseEnabled: boolean;
+  togglable: boolean;
   widgets: Array<UIWidget>;
   focusedWidget: UIWidget | undefined;
   selectedWidgets: Array<UIWidget>;
@@ -33,7 +33,7 @@ class UIMenu extends UIWidget {
    * The constructor.
    * @param options - An object containing various options for configuring the behavior of the menu.
    */
-  constructor(options: { className?: string, axis?: MenuAxis, rows?: number, columns?: number, multiple?: boolean, selectable?: boolean, mouseEnabled?: boolean } = {}) {
+  constructor(options: { className?: string, axis?: MenuAxis, rows?: number, columns?: number, multiple?: boolean, selectable?: boolean, togglable?: boolean } = {}) {
     super({
       className: options.className ?? 'UIMenu'
     });
@@ -43,7 +43,7 @@ class UIMenu extends UIWidget {
     this.columns = options.columns ?? 0;
     this.multiple = options.multiple ?? false;
     this.selectable = options.selectable ?? true;
-    this.mouseEnabled = options.mouseEnabled ?? true;
+    this.togglable = options.togglable ?? true;
     this.widgets = [];
     this.selectedWidgets = [];
 
@@ -118,10 +118,8 @@ class UIMenu extends UIWidget {
       this.node.insertBefore(widgetNode, this.node.children[index]);
     }
 
-    if (this.mouseEnabled) {
-      widgetNode.addEventListener('click', () => this.handleWidgetClicked(widget));
-      widgetNode.addEventListener('mousemove', () => this.handleWidgetHover(widget));
-    }
+    widgetNode.addEventListener('click', () => this.handleWidgetClicked(widget));
+    widgetNode.addEventListener('mousemove', () => this.handleWidgetHover(widget));
   }
 
   /**
@@ -209,7 +207,7 @@ class UIMenu extends UIWidget {
       return;
     }
 
-    if (this.multiple && widget.isSelected()) {
+    if (this.multiple && this.togglable && widget.isSelected()) {
       widget.setSelected(false);
       this.selectedWidgets.splice(this.selectedWidgets.indexOf(widget), 1);
       return;
@@ -363,16 +361,6 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "getWidget" function returns the UIWidget at the specified index.
-   * @param {number} index - The index parameter is a number that represents the position of the widget
-   * in an array or collection.
-   * @returns The UIWidget at the specified index.
-   */
-  getWidget(index: number): UIWidget {
-    return this.widgets[index];
-  }
-
-  /**
    * The "onAction" function.
    */
   onAction(actionId: string) {
@@ -415,10 +403,6 @@ class UIMenu extends UIWidget {
 
   handleWidgetHover(widget: UIWidget) {
     if (!this.isFocused()) {
-      return;
-    }
-
-    if (this.focusedWidget == widget) {
       return;
     }
 
