@@ -7,6 +7,7 @@ import { DNAComponent } from './dna_component';
 class DNASystem {
   eids: Array<number>;
   requiredComponentTypenames: Set<string>;
+  paused: boolean;
 
   /**
    * The constructor.
@@ -14,6 +15,7 @@ class DNASystem {
   constructor() {
     this.eids = new Array<number>();
     this.requiredComponentTypenames = new Set<string>();
+    this.paused = false;
   }
 
   /**
@@ -21,6 +23,10 @@ class DNASystem {
    * @param {number} ts - The `ts` parameter stands for "timestep".
    */
   update(ts: number): void {
+    if (this.paused) {
+      return;
+    }
+
     this.onBeforeUpdate(ts);
 
     for (const eid of this.eids) {
@@ -130,6 +136,20 @@ class DNASystem {
     }
 
     return numMatchingComponents == numRequiredComponents;
+  }
+
+  /**
+   * The "pause" function make update loop paused.
+   */
+  pause(): void {
+    this.paused = true;
+  }
+
+  /**
+   * The "resume" function make update loop running.
+   */
+  resume(): void {
+    this.paused = true;
   }
 
   /**
