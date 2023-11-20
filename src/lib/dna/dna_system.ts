@@ -5,14 +5,14 @@ import { DNAComponent } from './dna_component';
  * components in a game or simulation system.
  */
 class DNASystem {
-  eids: Set<number>;
+  eids: Array<number>;
   requiredComponentTypenames: Set<string>;
 
   /**
    * The constructor.
    */
   constructor() {
-    this.eids = new Set<number>();
+    this.eids = new Array<number>();
     this.requiredComponentTypenames = new Set<string>();
   }
 
@@ -70,12 +70,12 @@ class DNASystem {
    * @param {number} eid - The `eid` parameter is the entity's id.
    */
   bindEntity(eid: number): void {
-    if (this.eids.has(eid)) {
+    if (this.eids.indexOf(eid) != -1) {
       throw new Error('DNASystem::bindEntity(): Entity already exist in this system');
     }
 
     this.onEntityBind(eid);
-    this.eids.add(eid);
+    this.eids.push(eid);
   }
 
   /**
@@ -83,12 +83,12 @@ class DNASystem {
    * @param {number} eid - The `eid` parameter is the entity's id.
    */
   unbindEntity(eid: number): void {
-    if (!this.eids.has(eid)) {
+    if (this.eids.indexOf(eid) == -1) {
       throw new Error('DNASystem::unbindEntity(): Entity not exist in this system');
     }
 
     this.onEntityUnbind(eid);
-    this.eids.delete(eid);
+    this.eids.splice(this.eids.indexOf(eid), 1);
   }
 
   /**
@@ -97,7 +97,7 @@ class DNASystem {
    * @returns a boolean value.
    */
   hasEntity(eid: number): boolean {
-    return this.eids.has(eid);
+    return this.eids.indexOf(eid) != -1;
   }
 
   /**
