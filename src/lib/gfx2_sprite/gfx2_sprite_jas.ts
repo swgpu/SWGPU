@@ -67,9 +67,9 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   }
 
   /**
-   * The "draw" function is rendering the sprite.
+   * The "paint" function is rendering the sprite.
    */
-  draw(): void {
+  paint(): void {
     if (!this.currentAnimation) {
       return;
     }
@@ -77,12 +77,7 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
     const ctx = gfx2Manager.getContext();
     const currentFrame = this.currentAnimation.frames[this.currentAnimationFrameIndex];
 
-    ctx.save();
-    ctx.translate(-this.offset[0], -this.offset[1]);
-    ctx.translate(this.position[0], this.position[1]);
-    ctx.rotate(this.rotation);
-    ctx.scale(this.flip[0] ? -this.scale[0] : this.scale[0], this.flip[1] ? -this.scale[1] : this.scale[1]);
-
+    ctx.scale(this.flip[0] ? -1 : 1, this.flip[1] ? -1 : 1);
     ctx.drawImage(
       this.texture,
       currentFrame.x,
@@ -94,8 +89,6 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
       currentFrame.width,
       currentFrame.height
     );
-
-    ctx.restore();
   }
 
   /**
@@ -130,6 +123,12 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
+
+    this.offset[0] = json['OffsetX'] ?? 0;
+    this.offset[1] = json['OffsetY'] ?? 0;
+
+    this.flip[0] = json['FlipX'] ?? false;
+    this.flip[1] = json['FlipY'] ?? false;
 
     this.animations = [];
     for (const obj of json['Animations']) {
