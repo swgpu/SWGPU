@@ -62,6 +62,15 @@ class DNAManager {
   }
 
   /**
+   * The "reset" function resets all resources.
+   */
+  reset(): void {
+    this.entityIndex = 0;
+    this.entities.clear();
+    this.systems = [];
+  }
+
+  /**
    * The "createEntity" function creates a new entity and returns its uid based on a incremented global index.
    * @returns The method returns the entity's id.
    */
