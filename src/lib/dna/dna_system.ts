@@ -149,7 +149,7 @@ class DNASystem {
    * The "resume" function make update loop running.
    */
   resume(): void {
-    this.paused = true;
+    this.paused = false;
   }
 
   /**
