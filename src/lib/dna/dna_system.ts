@@ -80,8 +80,8 @@ class DNASystem {
       throw new Error('DNASystem::bindEntity(): Entity already exist in this system');
     }
 
-    this.onEntityBind(eid);
     this.eids.push(eid);
+    this.onEntityBind(eid);
   }
 
   /**
@@ -93,8 +93,8 @@ class DNASystem {
       throw new Error('DNASystem::unbindEntity(): Entity not exist in this system');
     }
 
-    this.onEntityUnbind(eid);
     this.eids.splice(this.eids.indexOf(eid), 1);
+    this.onEntityUnbind(eid);
   }
 
   /**
