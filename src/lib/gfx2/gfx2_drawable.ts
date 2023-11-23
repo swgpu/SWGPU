@@ -1,3 +1,5 @@
+import { gfx2Manager } from './gfx2_manager';
+
 /**
  * The `Gfx2Drawable` class represents a drawable object in a 2D graphics system.
  */
@@ -7,6 +9,7 @@ class Gfx2Drawable {
   scale: vec2;
   offset: vec2;
   visible: boolean;
+  opacity: number;
 
   /**
    * The constructor.
@@ -17,6 +20,27 @@ class Gfx2Drawable {
     this.scale = [1, 1];
     this.offset = [0, 0];
     this.visible = true;
+    this.opacity = 1;
+  }
+
+  /**
+   * The "draw" function is responsible for rendering a visual representation on a 2DCanvas.
+   */
+  draw(): void {
+    if (!this.visible) {
+      return;
+    }
+
+    const ctx = gfx2Manager.getContext();
+
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
+    ctx.translate(-this.offset[0], -this.offset[1]);
+    ctx.translate(this.position[0], this.position[1]);
+    ctx.rotate(this.rotation);
+    ctx.scale(this.scale[0], this.scale[1]);
+    this.paint();
+    ctx.restore();
   }
 
   /**
@@ -28,9 +52,9 @@ class Gfx2Drawable {
   }
 
   /**
-   * The "draw" is a virtual method that is called during the draw phase (after transforms).
+   * The "paint" is a virtual method that is called during the draw phase (after transforms).
    */
-  draw(): void {
+  paint() {
     // virtual method called during draw phase !
   }
 
@@ -178,6 +202,40 @@ class Gfx2Drawable {
   setOffset(x: number, y: number): void {
     this.offset[0] = x;
     this.offset[1] = y;
+  }
+
+  /**
+   * The "isVisible" function returns a boolean value indicating whether an element is visible or not.
+   * @returns True if visible, false is not.
+   */
+  isVisible(): boolean {
+    return this.visible;
+  }
+
+  /**
+   * The "setVisible" function set the visibility.
+   * @param {boolean} visible - The "visible" parameter is a boolean value that determines whether an
+   * element should be visible or not.
+   */
+  setVisible(visible: boolean): void {
+    this.visible = visible;
+  }
+
+  /**
+   * The "getOpacity" function returns the opacity value.
+   * @returns The opacity value of the object.
+   */
+  getOpacity(): number {
+    return this.opacity;
+  }
+
+  /**
+   * The "opacity" function sets the opacity of an element.
+   * @param {number} opacity - The `opacity` value ranges from 0 to 1, where 0 represents completely transparent and 1
+   * represents completely opaque.
+   */
+  setOpacity(opacity: number): void {
+    this.opacity = opacity;
   }
 }
 
