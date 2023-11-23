@@ -15,7 +15,7 @@ class Gfx2SpriteJSS extends Gfx2Drawable {
   constructor() {
     super();
     this.texture = gfx2Manager.getDefaultTexture();
-    this.textureRect = [0, 0, 1, 1];
+    this.textureRect = [0, 0, 0, 0];
     this.flip = [false, false];
   }
 
@@ -116,6 +116,11 @@ class Gfx2SpriteJSS extends Gfx2Drawable {
    * @param {ImageBitmap | HTMLImageElement} texture - The sprite texture.
    */
   setTexture(texture: ImageBitmap | HTMLImageElement): void {
+    if (this.textureRect[2] == 0 && this.textureRect[3] == 0) {
+      this.textureRect[2] = texture.width;
+      this.textureRect[3] = texture.height;
+    }
+
     this.texture = texture;
   }
 
