@@ -40,6 +40,7 @@ class Gfx2Drawable {
     ctx.rotate(this.rotation);
     ctx.scale(this.scale[0], this.scale[1]);
     this.paint();
+    ctx.globalAlpha = 1.0;
     ctx.restore();
   }
 
