@@ -13,8 +13,7 @@ class TweenAbstract<T> {
 
   /**
    * The constructor.
-   * @param times - The `times` parameter is an array of numbers. It represents the time values for each
-   * corresponding value in the `values` array.
+   * @param times - The `times` parameter is an array of times intervals.
    * @param values - The `values` parameter is an array of values of type `T`. It represents the values
    * that will be associated with each time in the `times` array.
    * @param {Function} defaultFn - The `defaultFn` parameter is the default interpolate function that will be used as a
