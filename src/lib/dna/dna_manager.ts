@@ -277,7 +277,7 @@ class DNAManager {
    * @returns An array of DNASystem matching objects.
    */
   findSystems(tag: string): Array<DNASystem> {
-    return this.systems.filter(s => s.tags.indexOf(tag) != -1);
+    return this.systems.filter(s => s.hasTag(tag));
   }
 }
 
