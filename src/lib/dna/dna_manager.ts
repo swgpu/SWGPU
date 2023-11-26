@@ -262,6 +262,23 @@ class DNAManager {
 
     return components.has(typename);
   }
+
+  /**
+   * The "getSystems" function  returns the systems.
+   * @returns The `systems` property of the object.
+   */
+  getSystems(): Array<DNASystem> {
+    return this.systems;
+  }
+
+  /**
+   * The "findSystems" function returns an array of DNASystem objects that have that tag.
+   * @param {string} tag - A string representing the tag to search.
+   * @returns An array of DNASystem matching objects.
+   */
+  findSystems(tag: string): Array<DNASystem> {
+    return this.systems.filter(s => s.tags.indexOf(tag) != -1);
+  }
 }
 
 const dnaManager = new DNAManager();
