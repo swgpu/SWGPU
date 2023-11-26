@@ -163,6 +163,15 @@ class DNASystem {
   }
 
   /**
+   * The "hasTag" function checks if system has the given tag.
+   * @param {string} tag - A string representing the tag to check for.
+   * @returns a boolean value.
+   */
+  hasTag(tag: string): boolean {
+    return this.tags.indexOf(tag) != -1;
+  }
+
+  /**
    * The "onAction" is a virtual method that is called when an action occurs.
    * @param {string} actionId - The `actionId` parameter is a string that represents the unique identifier
    * of the action that occurred (see input_manager).
