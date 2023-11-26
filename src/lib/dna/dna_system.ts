@@ -8,14 +8,16 @@ class DNASystem {
   eids: Array<number>;
   requiredComponentTypenames: Set<string>;
   paused: boolean;
+  tags: Array<string>;
 
   /**
    * The constructor.
    */
-  constructor() {
+  constructor(tags = []) {
     this.eids = new Array<number>();
     this.requiredComponentTypenames = new Set<string>();
     this.paused = false;
+    this.tags = tags;
   }
 
   /**
@@ -150,6 +152,14 @@ class DNASystem {
    */
   resume(): void {
     this.paused = false;
+  }
+
+  /**
+   * The "getTags" function  returns an array of strings.
+   * @returns An array of strings.
+   */
+  getTags(): Array<string> {
+    return this.tags;
   }
 
   /**
