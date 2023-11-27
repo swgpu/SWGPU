@@ -17,7 +17,7 @@ import { FPSScreen } from '../fps/fps_screen';
 import { RPGScreen } from '../rpg/rpg_screen';
 import { PerfScreen } from '../perf/perf_screen';
 import { ParticlesScreen } from '../particles/particles_screen';
-import { ScrollingScreen } from '../scrolling/scrolling_screen';
+import { FightScreen } from '../fight/fight_screen';
 import { CurveScreen } from '../curve/curve_screen';
 import { TripleTriadScreen } from '../triple-triad/triple_triad_screen';
 import { TilemapIsoScreen } from '../tilemap-iso/tilemap_iso_screen';
@@ -44,7 +44,7 @@ class BootScreen extends Screen {
     this.uiMenu.add('10', '3D RPG Demo');
     this.uiMenu.add('11', '3D Perf Demo');
     this.uiMenu.add('12', '3D Particles Demo');
-    this.uiMenu.add('13', '2D Scrolling Demo');
+    this.uiMenu.add('13', '2D Fighting Demo');
     this.uiMenu.add('14', '3D Curve Demo');
     this.uiMenu.add('15', '2D Triple Triad Demo');
     this.uiMenu.add('16', '2D Tilemap Iso Demo');
@@ -100,7 +100,7 @@ class BootScreen extends Screen {
       screenManager.requestSetScreen(new ParticlesScreen());
     }
     else if (data.id == 13) {
-      screenManager.requestSetScreen(new ScrollingScreen());
+      screenManager.requestSetScreen(new FightScreen());
     }
     else if (data.id == 14) {
       screenManager.requestSetScreen(new CurveScreen());

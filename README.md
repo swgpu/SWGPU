@@ -32,7 +32,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
 - 🌳 **Tree** - Binary Space Partition for 2D & 3D
 - 🎨 **UI** - Component architecture to keep project clean and scalable
 - 🌆 **DNA** - Development normalized architecture
-- 🈸 **Demos** - 16 real-life samples you can used to start a project
+- 🈸 **Demos** - 18 real-life samples you can used to start a project
 
 ## Demos
 <table>

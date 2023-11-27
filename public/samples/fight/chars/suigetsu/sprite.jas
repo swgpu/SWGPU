@@ -1,0 +1,293 @@
+{
+  "Ident": "JAS",
+  "Animations": [
+    {
+      "Name": "INTRO",
+      "Frames": [
+        {
+          "X": 2,
+          "Y": 92,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 92,
+          "Y": 92,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 182,
+          "Y": 92,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 272,
+          "Y": 92,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 362,
+          "Y": 92,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 452,
+          "Y": 92,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 452,
+          "Y": 92,
+          "Width": 88,
+          "Height": 88
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "IDLE",
+      "Frames": [
+        {
+          "X": 2,
+          "Y": 92,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 92,
+          "Y": 92,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 182,
+          "Y": 92,
+          "Width": 88,
+          "Height": 88
+        }
+      ],
+      "FrameDuration": 200
+    },
+    {
+      "Name": "RUN",
+      "Frames": [
+        {
+          "X": 2,
+          "Y": 272,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 92,
+          "Y": 272,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 182,
+          "Y": 272,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 272,
+          "Y": 272,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 362,
+          "Y": 272,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 452,
+          "Y": 272,
+          "Width": 88,
+          "Height": 88
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "JUMP",
+      "Frames": [
+        {
+          "X": 92,
+          "Y": 362,
+          "Width": 88,
+          "Height": 88
+        },
+        {
+          "X": 182,
+          "Y": 362,
+          "Width": 88,
+          "Height": 88
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "FALLOF",
+      "Frames": [
+        {
+          "X": 272,
+          "Y": 362,
+          "Width": 88,
+          "Height": 88
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "PUNCH1",
+      "Frames": [
+        {
+          "X": 2,
+          "Y": 706,
+          "Width": 104,
+          "Height": 80
+        },
+        {
+          "X": 108,
+          "Y": 706,
+          "Width": 104,
+          "Height": 80
+        },
+        {
+          "X": 214,
+          "Y": 706,
+          "Width": 104,
+          "Height": 80
+        },
+        {
+          "X": 320,
+          "Y": 706,
+          "Width": 104,
+          "Height": 80
+        },
+        {
+          "X": 426,
+          "Y": 706,
+          "Width": 104,
+          "Height": 80
+        },
+        {
+          "X": 532,
+          "Y": 706,
+          "Width": 104,
+          "Height": 80
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "PAIN",
+      "Frames": [
+        {
+          "X": 2,
+          "Y": 542,
+          "Width": 80,
+          "Height": 80
+        },
+        {
+          "X": 84,
+          "Y": 542,
+          "Width": 80,
+          "Height": 80
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "PAIN_UP",
+      "Frames": [
+        {
+          "X": 412,
+          "Y": 542,
+          "Width": 80,
+          "Height": 80
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "PAIN_DOWN",
+      "Frames": [
+        {
+          "X": 658,
+          "Y": 542,
+          "Width": 80,
+          "Height": 80
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "PAIN_GROUND",
+      "Frames": [
+        {
+          "X": 494,
+          "Y": 542,
+          "Width": 80,
+          "Height": 80
+        },
+        {
+          "X": 576,
+          "Y": 542,
+          "Width": 80,
+          "Height": 80
+        },
+        {
+          "X": 2,
+          "Y": 624,
+          "Width": 80,
+          "Height": 80
+        }
+      ],
+      "FrameDuration": 100
+    },
+    {
+      "Name": "HIT",
+      "Frames": [
+        {
+          "X": 608,
+          "Y": 13,
+          "Width": 42,
+          "Height": 58
+        },
+        {
+          "X": 608,
+          "Y": 13,
+          "Width": 42,
+          "Height": 58
+        },
+        {
+          "X": 608,
+          "Y": 13,
+          "Width": 42,
+          "Height": 58
+        },
+        {
+          "X": 608,
+          "Y": 13,
+          "Width": 42,
+          "Height": 58
+        },
+        {
+          "X": 608,
+          "Y": 13,
+          "Width": 42,
+          "Height": 58
+        }
+      ],
+      "FrameDuration": 100
+    }
+  ]
+}
