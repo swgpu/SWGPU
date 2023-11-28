@@ -361,6 +361,16 @@ class UIMenu extends UIWidget {
   }
 
   /**
+   * The "getWidget" function returns the UIWidget at the specified index.
+   * @param {number} index - The index parameter is a number that represents the position of the widget
+   * in an array or collection.
+   * @returns The UIWidget at the specified index.
+   */
+  getWidget(index: number): UIWidget {
+    return this.widgets[index];
+  }
+
+  /**
    * The "onAction" function.
    */
   onAction(actionId: string) {
