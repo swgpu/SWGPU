@@ -1,4 +1,4 @@
-# WARME (Web Against Regular Modular Engine)
+# WARME (Web Against Regular Majors Engines)
 <p align="center">
     <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner.png" alt="logo"/>
 </p>
