@@ -2,7 +2,7 @@
 import { execSync } from 'child_process';
 
 const projectName = process.argv[2];
-const gitCheckoutCommand = `git clone https://github.com/jay19240/Warm.git ${projectName}`;
+const gitCheckoutCommand = `git clone https://github.com/jay19240/WARME.git ${projectName}`;
 const npmInstallCommand = `cd ${projectName} && npm install`;
 
 console.log(`Creating a new warm project called ${projectName}...`);

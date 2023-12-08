@@ -1,5 +1,5 @@
 {
-  "name": "create-warm",
+  "name": "create-warme",
   "description": "HTML5 Game Engine 2D & 3D written in TypeScript",
   "homepage": "https://github.com/jay19240/Warm#readme",
   "keywords": [
@@ -19,7 +19,7 @@
     "doc": "typedoc src/lib/ --json docs/doc.json"
   },
   "bin": {
-    "create-warm": "bin/create-warm.js"
+    "create-warme": "bin/create-warme.js"
   },
   "devDependencies": {
     "pako": "^2.1.0",
