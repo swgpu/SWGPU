@@ -22,6 +22,7 @@
     "create-warme": "bin/create-warme.js"
   },
   "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^1.0.2",
     "pako": "^2.1.0",
     "typedoc": "^0.25.1",
     "typedoc-plugin-markdown": "^3.16.0",

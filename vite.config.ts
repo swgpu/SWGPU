@@ -1,5 +1,10 @@
+import basicSsl from '@vitejs/plugin-basic-ssl'
+
 export default {
-    build: {
+   	plugins: [
+   		basicSsl()
+   	],
+	build: {
         target: 'esnext'
     }
 }
