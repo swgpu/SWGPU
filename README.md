@@ -212,9 +212,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 5. Open a Pull Request
 
 ## Roadmap
-a) Integrate AI Behavior-Tree module
-b) Use Behavior-Tree in 2D Fighting Demo
-c) Offer a Raycaster in Gfx3Manager
+a) Integrate AI Behavior-Tree module       
+b) Use Behavior-Tree in 2D Fighting Demo       
+c) Offer a Raycaster in Gfx3Manager       
 
 ## Some parts taken for this work
 - Use DOM for UI elements
