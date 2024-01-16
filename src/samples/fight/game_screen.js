@@ -230,7 +230,7 @@ async function CREATE_PLAYER2(name) {
     enemyAction: null,
     enemyMinDistance: 90,
     enemyMaxDistance: Infinity,
-    tick: 50,
+    tick: 500,
     then: 0,
     commandName: 'CMD_RUN',
     commandArgs: [],
