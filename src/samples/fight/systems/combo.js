@@ -7,8 +7,7 @@ import { Gfx2SpriteJAS } from '../../../lib/gfx2_sprite/gfx2_sprite_jas';
 import { PositionComponent } from './position';
 import { HitComponent } from './hit';
 import { DrawableComponent } from './drawable';
-import { IdleControlsComponent, IdleComponent } from './idle';
-import { SpecialAttackComponent } from './special_attack';
+import { IdleComponent } from './idle';
 // ---------------------------------------------------------------------------------------
 
 export class CASComponent extends DNAComponent {
@@ -17,14 +16,15 @@ export class CASComponent extends DNAComponent {
     this.animations = animations;
     this.texture = texture;
     this.comboComponents = comboComponents;
-    this.currentAction = [];
+    this.currentAction = '';
     this.currentActionAge = 0;
   }
 }
 
 export class ComboComponent extends DNAComponent {
-  constructor(requiredComponent = '', actions = '', animationName = '', specialAttack = null, hits = []) {
+  constructor(name = '', requiredComponent = '', actions = '', animationName = '', specialAttack = null, hits = []) {
     super('Combo');
+    this.name = name;
     this.requiredComponent = requiredComponent;
     this.actions = actions;
     this.animationName = animationName;
@@ -59,9 +59,7 @@ export class CASSystem extends DNASystem {
 
       const match = cas.currentAction.endsWith(combo.actions);
       if (match && dnaManager.hasComponent(entity, combo.requiredComponent)) {
-        dnaManager.removeComponentIfExist(entity, 'IdleControls');
         dnaManager.removeComponentIfExist(entity, 'Idle');
-        dnaManager.removeComponentIfExist(entity, 'RunControls');
         dnaManager.removeComponentIfExist(entity, 'Run');
 
         const move = dnaManager.getComponent(entity, 'Move');
@@ -108,7 +106,6 @@ export class ComboSystem extends DNASystem {
     }
 
     dnaManager.removeComponent(entity, 'Combo');
-    dnaManager.addComponent(entity, new IdleControlsComponent());
     dnaManager.addComponent(entity, new IdleComponent());
   }
 

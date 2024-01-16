@@ -3,7 +3,7 @@ import { inputManager } from '../../../lib/input/input_manager';
 import { DNASystem } from '../../../lib/dna/dna_system';
 import { DNAComponent } from '../../../lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
-import { IdleComponent, IdleControlsComponent } from './idle';
+import { IdleComponent } from './idle';
 // ---------------------------------------------------------------------------------------
 
 export class JumpControlsComponent extends DNAComponent {
@@ -80,9 +80,7 @@ export class JumpSystem extends DNASystem {
     }
 
     if (move.velocityY == 0 && gravity.onFloor) {
-      dnaManager.removeComponent(entity, 'JumpControls');
       dnaManager.removeComponent(entity, 'Jump');
-      dnaManager.addComponent(entity, new IdleControlsComponent());
       dnaManager.addComponent(entity, new IdleComponent());
     }
   }

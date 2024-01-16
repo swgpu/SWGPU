@@ -3,6 +3,7 @@ import { DNASystem } from '../../../lib/dna/dna_system';
 import { DNAComponent } from '../../../lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { IdleComponent } from './idle';
+import { DownComponent } from './down';
 // ---------------------------------------------------------------------------------------
 
 export class DamageComponent extends DNAComponent {
@@ -62,7 +63,10 @@ export class DamageSystem extends DNASystem {
       if (!dmg.airDropped) {
         dnaManager.addComponent(entity, new IdleComponent());
       }
-      
+      else {
+        dnaManager.addComponent(entity, new DownComponent());
+      }
+
       return;
     }
 

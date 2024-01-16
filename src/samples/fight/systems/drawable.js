@@ -40,12 +40,12 @@ export class DrawableSystem extends DNASystem {
 
     if (drawable.jss) {
       drawable.jss.setPosition(position.x, position.y);
-      drawable.jss.update(ts);  
+      drawable.jss.update(ts);
     }
 
     if (drawable.jas) {
       drawable.jas.setPosition(position.x, position.y);
-      drawable.jas.update(ts);  
+      drawable.jas.update(ts);
     }
   }
 

@@ -65,9 +65,7 @@ export class SpecialAttackSystem extends DNASystem {
     }
 
     this.gameScreen.resume();
-
     dnaManager.removeEntity(effectEntity);
-    
   }
 }
 

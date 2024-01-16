@@ -3,8 +3,8 @@ import { inputManager } from '../../../lib/input/input_manager';
 import { DNASystem } from '../../../lib/dna/dna_system';
 import { DNAComponent } from '../../../lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
-import { JumpComponent, JumpControlsComponent } from './jump';
-import { IdleComponent, IdleControlsComponent } from './idle';
+import { JumpComponent } from './jump';
+import { IdleComponent } from './idle';
 // ---------------------------------------------------------------------------------------
 
 export class RunControlsComponent extends DNAComponent {
@@ -43,16 +43,12 @@ export class RunControlsSystem extends DNASystem {
 
     if (inputManager.isActiveAction('UP')) {
       action = true;
-      dnaManager.removeComponent(entity, 'RunControls');
       dnaManager.removeComponent(entity, 'Run');
       dnaManager.addComponent(entity, new JumpComponent(-25, 10));
-      dnaManager.addComponent(entity, new JumpControlsComponent());
     }
 
     if (!action) {
-      dnaManager.removeComponent(entity, 'RunControls');
       dnaManager.removeComponent(entity, 'Run');
-      dnaManager.addComponent(entity, new IdleControlsComponent());
       dnaManager.addComponent(entity, new IdleComponent());
     }
   }

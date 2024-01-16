@@ -83,11 +83,8 @@ export class HitSystem extends DNASystem {
         if (UT.COLLIDE_RECT_TO_RECT(min1, max1, min2, max2)) {
           hit.marked = true;
           dnaManager.removeComponentIfExist(enemy, 'Damage');
-          dnaManager.removeComponentIfExist(enemy, 'RunControls');
           dnaManager.removeComponentIfExist(enemy, 'Run');
-          dnaManager.removeComponentIfExist(enemy, 'IdleControls');
           dnaManager.removeComponentIfExist(enemy, 'Idle');
-          dnaManager.removeComponentIfExist(enemy, 'JumpControls');
           dnaManager.removeComponentIfExist(enemy, 'Jump');
           dnaManager.addComponent(enemy, new DamageComponent(
             [hit.velocityImpact[0] * hit.direction, hit.velocityImpact[1]],

@@ -8,8 +8,8 @@ import { Config } from './config';
 import { UISystem } from './systems/ui';
 import { CameraSystem, CameraComponent } from './systems/camera';
 import { IdleControlsSystem, IdleSystem, IdleControlsComponent, IdleComponent } from './systems/idle';
-import { RunControlsSystem, RunSystem } from './systems/run';
-import { JumpControlsSystem, JumpSystem } from './systems/jump';
+import { RunControlsSystem, RunSystem, RunControlsComponent } from './systems/run';
+import { JumpControlsSystem, JumpSystem, JumpControlsComponent } from './systems/jump';
 import { CASSystem, ComboSystem, CASComponent, ComboComponent } from './systems/combo';
 import { MoveSystem, MoveComponent } from './systems/move';
 import { GravitySystem, GravityComponent } from './systems/gravity';
@@ -20,6 +20,8 @@ import { FighterSystem, FighterComponent } from './systems/fighter';
 import { SpecialAttackSystem, SpecialAttackComponent } from './systems/special_attack';
 import { PlatformComponent } from './systems/platform';
 import { PositionComponent } from './systems/position';
+import { AIComponent, AISystem } from './systems/ai';
+import { DownSystem, DownControlsComponent, DownControlsSystem } from './systems/down';
 // ---------------------------------------------------------------------------------------
 
 const FPS = 60;
@@ -41,6 +43,8 @@ class GameScreen extends Screen {
     this.systems['run'] = new RunSystem();
     this.systems['jumpCtrl'] = new JumpControlsSystem();
     this.systems['jump'] = new JumpSystem();
+    this.systems['downCtrl'] = new DownControlsSystem();
+    this.systems['down'] = new DownSystem();
     this.systems['cas'] = new CASSystem();
     this.systems['combo'] = new ComboSystem();
     this.systems['fighter'] = new FighterSystem(800, 600);
@@ -50,6 +54,7 @@ class GameScreen extends Screen {
     this.systems['damage'] = new DamageSystem();
     this.systems['specialAttack'] = new SpecialAttackSystem(this);
     this.systems['drawable'] = new DrawableSystem();
+    this.systems['ai'] = new AISystem();
 
     dnaManager.setup(Object.values(this.systems));
 
@@ -80,6 +85,8 @@ class GameScreen extends Screen {
     this.systems['run'].pause();
     this.systems['jumpCtrl'].pause();
     this.systems['jump'].pause();
+    this.systems['downCtrl'].pause();
+    this.systems['down'].pause();
     this.systems['cas'].pause();
     this.systems['combo'].pause();
     this.systems['fighter'].pause();
@@ -87,6 +94,7 @@ class GameScreen extends Screen {
     this.systems['move'].pause();
     this.systems['hit'].pause();
     this.systems['damage'].pause();
+    this.systems['ai'].pause();
   }
 
   resume() {
@@ -98,6 +106,8 @@ class GameScreen extends Screen {
     this.systems['run'].resume();
     this.systems['jumpCtrl'].resume();
     this.systems['jump'].resume();
+    this.systems['downCtrl'].pause();
+    this.systems['down'].pause();
     this.systems['cas'].resume();
     this.systems['combo'].resume();
     this.systems['fighter'].resume();
@@ -105,6 +115,7 @@ class GameScreen extends Screen {
     this.systems['move'].resume();
     this.systems['hit'].resume();
     this.systems['damage'].resume();
+    this.systems['ai'].resume();
   }
 }
 
@@ -157,6 +168,9 @@ async function CREATE_PLAYER1(name) {
   dnaManager.addComponent(player, new DrawableComponent({ jas: playerJAS, zIndex: 2 }));
   dnaManager.addComponent(player, new MoveComponent());
   dnaManager.addComponent(player, new IdleControlsComponent());
+  dnaManager.addComponent(player, new RunControlsComponent());
+  dnaManager.addComponent(player, new JumpControlsComponent());
+  dnaManager.addComponent(player, new DownControlsComponent());
   dnaManager.addComponent(player, new IdleComponent());
   dnaManager.addComponent(player, new GravityComponent(2));
   dnaManager.addComponent(player, new CASComponent(playerJAS.animations, playerJAS.texture, combos));
@@ -174,6 +188,59 @@ async function CREATE_PLAYER2(name) {
   damageJAS.setTexture(await gfx2TextureManager.loadTexture(Config.PATH_CHARS + name + '/sprite.png'));
   damageJAS.setOffset(+44, +44);
 
+  const patterns = [{
+    name: 'WAKE_UP',
+    agentHasComponent: 'Down',
+    enemyAction: null,
+    enemyMinDistance: 0,
+    enemyMaxDistance: Infinity,
+    tick: 100,
+    then: 0,
+    commandName: 'CMD_WAKEUP',
+    commandArgs: [],
+    conditionName: null,
+    conditionArgs: []
+  },{
+    name: 'COMBO1',
+    agentHasComponent: null,
+    enemyAction: null,
+    enemyMinDistance: 0,
+    enemyMaxDistance: 100,
+    tick: 6000,
+    then: 0,
+    commandName: 'CMD_COMBO',
+    commandArgs: ['PUNCH1'],
+    conditionName: null,
+    conditionArgs: []
+  },{
+    name: 'IDLE',
+    agentHasComponent: null,
+    enemyAction: null,
+    enemyMinDistance: 0,
+    enemyMaxDistance: 90,
+    tick: 50,
+    then: 0,
+    commandName: 'CMD_IDLE',
+    commandArgs: [],
+    conditionName: null,
+    conditionArgs: []
+  },{
+    name: 'RUN',
+    agentHasComponent: null,
+    enemyAction: null,
+    enemyMinDistance: 90,
+    enemyMaxDistance: Infinity,
+    tick: 50,
+    then: 0,
+    commandName: 'CMD_RUN',
+    commandArgs: [],
+    conditionName: null,
+    conditionArgs: []
+  }];
+
+  const combos = [];
+  combos.push(await CREATE_COMBO1(name));
+
   const player = dnaManager.createEntity();
   dnaManager.addComponent(player, new FighterComponent(2, 100, damageJAS, 88, 88));
   dnaManager.addComponent(player, new PositionComponent(490, 490));
@@ -181,6 +248,9 @@ async function CREATE_PLAYER2(name) {
   dnaManager.addComponent(player, new IdleComponent());
   dnaManager.addComponent(player, new MoveComponent());
   dnaManager.addComponent(player, new GravityComponent(2));
+  dnaManager.addComponent(player, new AIComponent(60, patterns));
+  dnaManager.addComponent(player, new CASComponent(playerJAS.animations, playerJAS.texture, combos));
+
   return player;
 }
 
@@ -192,9 +262,10 @@ async function CREATE_COMBO1(charName) {
   avatarJSS.setTexture(await gfx2TextureManager.loadTexture(Config.PATH_CHARS + charName + '/avatar-special-attack.png'));
 
   return new ComboComponent(
+    'PUNCH1',
     'Run', 
     'OKOK', 
-    'PUNCH1', 
+    'PUNCH1',
     new SpecialAttackComponent(
       'Special Attack 1',
       bgJSS,
