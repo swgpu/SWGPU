@@ -212,7 +212,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 5. Open a Pull Request
 
 ## Roadmap
-1. Offer a Raycaster in Gfx3Manager       
+1. Add Raycaster to Gfx3Manager       
 
 ## Some parts taken for this work
 - Use DOM for UI elements
