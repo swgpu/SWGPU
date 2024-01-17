@@ -26,34 +26,48 @@ export class AISystem extends DNASystem {
 
     this.commandRegister['CMD_WAKEUP'] = function(entity) {
       if (!dnaManager.hasComponent(entity, 'Down')) {
-        return;
+        return false;
       }
 
       dnaManager.removeComponent(entity, 'Down');
       dnaManager.addComponent(entity, new IdleComponent());
+      return true;
     }
 
     this.commandRegister['CMD_JUMP'] = function(entity) {
       if (dnaManager.hasComponent(entity, 'Combo')) {
-        return;
+        return false;
       }
 
       if (dnaManager.hasComponent(entity, 'Jump')) {
-        return;
+        return false;
+      }
+
+      if (dnaManager.hasComponent(entity, 'Damage')) {
+        return false;
       }
 
       dnaManager.removeComponentIfExist(entity, 'Idle');
       dnaManager.removeComponentIfExist(entity, 'Run');
       dnaManager.addComponent(entity, new JumpComponent(-25, 10));
+      return true;
     }
 
     this.commandRegister['CMD_RUN'] = function(entity, enemyEntity) {
       if (dnaManager.hasComponent(entity, 'Combo')) {
-        return;
+        return false;
       }
 
       if (dnaManager.hasComponent(entity, 'Jump')) {
-        return;
+        return false;
+      }
+
+      if (dnaManager.hasComponent(entity, 'Down')) {
+        return false;
+      }
+
+      if (dnaManager.hasComponent(entity, 'Damage')) {
+        return false;
       }
 
       const position = dnaManager.getComponent(entity, 'Position');
@@ -71,29 +85,39 @@ export class AISystem extends DNASystem {
       dnaManager.removeComponentIfExist(entity, 'Idle');
       dnaManager.removeComponentIfExist(entity, 'Run');
       dnaManager.addComponent(entity, new RunComponent(6, 0));
+      return true;
     }
 
     this.commandRegister['CMD_IDLE'] = function(entity) {
       if (dnaManager.hasComponent(entity, 'Combo')) {
-        return;
+        return false;
       }
 
       if (dnaManager.hasComponent(entity, 'Idle')) {
-        return;
+        return false;
+      }
+
+      if (dnaManager.hasComponent(entity, 'Damage')) {
+        return false;
       }
 
       dnaManager.removeComponentIfExist(entity, 'Run');
       dnaManager.removeComponentIfExist(entity, 'Idle');
       dnaManager.addComponent(entity, new IdleComponent());
+      return true;
     }
 
     this.commandRegister['CMD_COMBO'] = function(entity, enemyEntity, comboName) {
       if (dnaManager.hasComponent(entity, 'Combo')) {
-        return;
+        return false;
       }
 
       if (dnaManager.hasComponent(enemyEntity, 'Down')) {
-        return;
+        return false;
+      }
+
+      if (dnaManager.hasComponent(entity, 'Damage')) {
+        return false;
       }
 
       const move = dnaManager.getComponent(entity, 'Move');
@@ -107,6 +131,7 @@ export class AISystem extends DNASystem {
         dnaManager.removeComponentIfExist(entity, 'Idle');
         dnaManager.removeComponentIfExist(entity, 'Run');
         dnaManager.addComponent(entity, combo);
+        return true;
       }
     }
 
@@ -162,8 +187,7 @@ export class AISystem extends DNASystem {
       }
 
       const cmd = this.commandRegister[pattern.commandName];
-      if (cmd) {
-        cmd.apply(this, [entity, enemyEntity, ...pattern.commandArgs]);
+      if (cmd && cmd.apply(this, [entity, enemyEntity, ...pattern.commandArgs])) {
         pattern.then = 0;
         break;
       }
