@@ -37,7 +37,7 @@ class ShadowScreen extends Screen {
   }
 
   draw() {
-    gfx3MeshRenderer.drawPointLight([-30, 70, -100], [0.8, 0.8, 0.8], [1, 1, 1], [0, 0, 0]);
+    gfx3MeshRenderer.drawDirLight([100, -100, 0], [0.8, 0.8, 0.8], [1, 1, 1], [0, 0, 0]);
     this.skySphere.draw();
     this.floor.draw();
     this.cube.draw();
@@ -57,8 +57,6 @@ async function CREATE_FLOOR(x, y, z) {
   floor.setMaterial(new Gfx3Material({
     lightning: true,
     texture: await gfx3TextureManager.loadTexture('./samples/shadow/floor.jpg'),
-    normalMap: await gfx3TextureManager.loadTexture('./samples/shadow/floor_normal_map.jpg'),
-    specularityMap: await gfx3TextureManager.loadTexture('./samples/shadow/floor_specularity_map.jpg'),
     shadowEnabled: true
   }));
 
@@ -78,11 +76,11 @@ async function CREATE_SKYSPHERE() {
 async function CREATE_CUBE(x, y, z) {
   const mesh = new Gfx3MeshJSM();
   mesh.setPosition(x, y, z);
-  mesh.setScale(5, 5, 5);
+  mesh.setScale(10, 10, 10);
   mesh.setShadowCasting(true);
-  await mesh.loadFromFile('./samples/shadow/cube.jsm');
+  await mesh.loadFromFile('./samples/viewer/duck.jsm');
   mesh.setMaterial(new Gfx3Material({
-    texture: await gfx3TextureManager.loadTexture('./samples/shadow/cube.png'),
+    texture: await gfx3TextureManager.loadTexture('./samples/viewer/duck.png'),
     lightning: true
   }));
 
