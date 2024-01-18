@@ -5,6 +5,7 @@ body {
   margin: 0;
   background-image: url(/textures/bg.jpeg);
   background-size: cover;
+  height: 100vh;
 }
 
 *,
