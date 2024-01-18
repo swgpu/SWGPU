@@ -159,6 +159,8 @@ export class AISystem extends DNASystem {
       }
     }
 
+    const rand = Math.random();
+
     for (const pattern of ai.patterns) {
       if (pattern.then < pattern.tick) {
         continue;
@@ -183,6 +185,11 @@ export class AISystem extends DNASystem {
 
       const cas = dnaManager.getComponent(enemyEntity, 'CAS');
       if (pattern.enemyAction && cas.currentAction.search(new RegExp(pattern.enemyAction + '$')) == -1) {
+        continue;
+      }
+
+      if (rand > (pattern.percentSuccess / 100)) {
+        pattern.then = 0;
         continue;
       }
 
