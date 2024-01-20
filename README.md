@@ -177,7 +177,7 @@ to build our first WARME project.
 
 ```
 // create your awesome game project
-# npx create-WARME your_project_name
+# npx create-warme your_project_name
 
 // now, you can start with
 # npm run dev
