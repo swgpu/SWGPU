@@ -4,7 +4,8 @@ import re
 
 docs_file = "docs.json"
 docs_json = ""
-welcome_page =""
+welcome_page = ""
+
 
 def search_by_property_recursive(data, property_name, property_value):
     if isinstance(data, list):
@@ -59,6 +60,7 @@ def get_class_description(obj):
         pass
     return description
 
+
 def get_class_hierarchy(warme_class):
     hierarchy = ""
     try:
@@ -78,6 +80,7 @@ def get_class_hierarchy(warme_class):
     except KeyError as e:
         pass
     return hierarchy
+
 
 def get_class_table_of_contents(warme_class):
     table_of_contents = ""
@@ -104,14 +107,16 @@ def get_group_title(group):
         pass
     return group_title
 
+
 def get_function_name(function):
     function_name = ""
     try:
-        #function_name += "*** " + function["name"] + "\n"
+        # function_name += "*** " + function["name"] + "\n"
         function_name += "- " + "''" + function["signatures"][0]["name"] + "''"
     except KeyError as e:
         pass
     return function_name
+
 
 def get_function_parameters(function):
     function_parameters = ""
@@ -136,6 +141,7 @@ def get_function_parameters(function):
         function_parameters = "()"
     return function_parameters
 
+
 def get_function_return_type(function):
     function_return_type = ""
     try:
@@ -146,6 +152,7 @@ def get_function_return_type(function):
         function_return_type = "~\n"
     return function_return_type
 
+
 def get_function_description(function):
     function_description = ""
     try:
@@ -155,6 +162,7 @@ def get_function_description(function):
     except KeyError as e:
         pass
     return function_description
+
 
 def get_function_parameters_table(function):
     function_parameters_table = ""
@@ -177,6 +185,7 @@ def get_function_parameters_table(function):
     except KeyError as e:
         pass
     return function_parameters_table
+
 
 def get_function_parameters_list(function):
     function_parameters_list = ""
@@ -201,6 +210,7 @@ def get_function_parameters_list(function):
             function_parameters_list += "~\n"
     return function_parameters_list
 
+
 def get_function_return_info(function):
     function_return_info = ""
     try:
@@ -215,22 +225,31 @@ def get_function_return_info(function):
         function_return_info += "~\n"
     return function_return_info
 
+
 def get_class_group_function_content(id):
     function = search_by_property(docs_file, "id", id)
     function_content = ""
     if function != None:
         if function["signatures"][0]["name"].startswith("$"):
             return ""
+        try:
+            test = function["signatures"][0]["inheritedFrom"]
+            print("Inherited " + function["signatures"][0]["name"])
+            print(test)
+            return ""
+        except KeyError as e:
+            pass
         function_content += get_function_name(function)
         function_content += get_function_parameters(function)
         function_content += get_function_return_type(function)
         function_content += get_function_description(function)
-        #function_content += get_function_parameters_table(function)
+        # function_content += get_function_parameters_table(function)
         function_content += get_function_parameters_list(function)
-        #function_content += get_function_return_info(function)
+        # function_content += get_function_return_info(function)
     else:
         pass
     return function_content
+
 
 def get_class_groups_content(warme_class):
     class_groups_content = ""
@@ -242,9 +261,9 @@ def get_class_groups_content(warme_class):
                 class_groups_content += get_group_title(group)
             if group["title"] in ["Constructors", "Methods"]:
                 for id in group["children"]:
-                    if i >= 1:
-                        class_groups_content += "~\n"
                     function_content = get_class_group_function_content(id)
+                    if i >= 1 and function_content != "":
+                        class_groups_content += "~\n"
                     class_groups_content += function_content
                     if i == 0 and function_content != "":
                         i += 1
@@ -254,12 +273,13 @@ def get_class_groups_content(warme_class):
         pass
     return class_groups_content
 
+
 def create_class_page(warme_class):
     out = ""
     out += get_class_title(warme_class)
     out += get_class_description(warme_class)
     out += get_class_hierarchy(warme_class)
-    #out += get_class_table_of_contents(warme_class)
+    # out += get_class_table_of_contents(warme_class)
     out += get_class_groups_content(warme_class)
     return out
 
@@ -299,7 +319,7 @@ def create_modules_pages():
                         warme_class = search_by_property(docs_file, "id", id)
                         print(warme_class["name"])
                         class_page = create_class_page(warme_class)
-                        page_path = result_path / (warme_class["name"].encode().hex().upper()+".txt")
+                        page_path = result_path / (warme_class["name"].encode().hex().upper() + ".txt")
                         page_path.write_text(class_page)
                         with module_file.open("a") as f:
                             f.write("- [[" + warme_class["name"] + "]]~\n")
