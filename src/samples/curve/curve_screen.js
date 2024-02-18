@@ -1,26 +1,14 @@
 import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
 import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
+import { Curve } from '../../lib/core/curve';
 import { UT } from '../../lib/core/utils';
-import { TweenVEC3 } from '../../lib/core/tween';
 import { Screen } from '../../lib/screen/screen';
 import { Gfx3Camera } from '../../lib/gfx3_camera/gfx3_camera';
 import { Gfx3MeshOBJ } from '../../lib/gfx3_mesh/gfx3_mesh_obj';
 import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
+import { gfx3DebugRenderer } from '../../lib/gfx3/gfx3_debug_renderer';
 // ---------------------------------------------------------------------------------------
-
-const CAMERA_POINTS = [
-  [24, 1, -14],
-  [24, 1, -14],
-  [17, 1, -14],
-  [12, 1, -10],
-  [16, 1, -6],
-  [19, 1, -1],
-  [17, 1,  6],
-  [13, 1, 10],
-  [9,  1, 10],
-  [9,  1, 10],
-];
 
 class CurveScreen extends Screen {
   constructor() {
@@ -29,7 +17,10 @@ class CurveScreen extends Screen {
     this.skySphere = null;
     this.lookAtTween = null;
     this.camera = new Gfx3Camera(0);
-    this.t = 0;
+    this.curveInterpolator = null;
+    this.curveVertices = [];
+    this.curveVertexCount = 0;
+    this.t = 0.1;
   }
 
   async onEnter() {
@@ -42,24 +33,34 @@ class CurveScreen extends Screen {
       texture: await gfx3TextureManager.loadTexture('./samples/curve/sky_sphere.jpg')
     }));
 
-    this.lookAtTween = new TweenVEC3([0, CAMERA_POINTS.length - 3], [[0, 0, 0], [-10, 0, 18]]);
+    this.curveInterpolator = await Curve.createInterpolatorFromFile('./samples/curve/curve.json');
+
+    for (let t = 0; t <= 0.99; t += 0.01) {
+      const p0 = this.curveInterpolator.getPointAt(t);
+      const p1 = this.curveInterpolator.getPointAt(t + 0.01);
+      this.curveVertices.push(p0[0], p0[1], p0[2], 1, 1, 1);
+      this.curveVertices.push(p1[0], p1[1], p1[2], 1, 1, 1);
+      this.curveVertexCount += 2;
+    }
   }
 
   update(ts) {
     this.obj.update(ts);
     this.skySphere.update(ts);
 
-    if (this.t <= CAMERA_POINTS.length - 3) {
-      const position = UT.CATMULL_ROM_VEC3(CAMERA_POINTS, this.t);
-      this.camera.setPosition(position[0], position[1], position[2]);
-      this.t += ts / 1000;
-    }
+    if (this.t < 0.99) {
+      const position = this.curveInterpolator.getPointAt(this.t);
+      this.camera.setPosition(position[0], position[1] + 0.1, position[2]);
 
-    const target = this.lookAtTween.interpolate(this.t);
-    this.camera.lookAt(target[0], target[1], target[2]);
+      const tangent = UT.VEC3_NORMALIZE(this.curveInterpolator.getTangentAt(this.t));
+      this.camera.lookAt(position[0] + tangent[0], position[1] + tangent[1], position[2] + tangent[2]);
+
+      this.t += ts / 10000;
+    }
   }
 
   draw() {
+    gfx3DebugRenderer.drawVertices(this.curveVertices, this.curveVertexCount, UT.MAT4_IDENTITY());
     gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [1, 1, 1], [0, 0, 0]);
     this.obj.draw();
     this.skySphere.draw();

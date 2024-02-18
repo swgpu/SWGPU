@@ -1,0 +1,68 @@
+* Class: Gfx3Camera
+
+The `Gfx3Camera` class represents a camera in a 3D graphics system and provides methods for setting
+its position, rotation, scale, and view, as well as for performing translations, rotations, zooming,
+and looking at specific coordinates.
+- inherit from: Gfx3Transformable~
+** Methods
+- ''changeView''(viewIndex: number): void~
+The "changeView" function attach camera to another view.~
+-- ''viewIndex'': The index of the view you want to change to.~
+~
+- ''getCameraMatrix''(): mat4~
+The "getCameraMatrix" function returns the camera matrix of the view.~
+~
+- ''getLocalAxies''()~
+The "getLocalAxies" function returns an array of three vectors representing the local axes of an
+object based on its transformation matrix.~
+~
+- ''lookAt''(x: number, y: number, z: number): void~
+The "lookAt" function sets the camera matrix to position the camera at the specified coordinates and
+look towards them.~
+-- ''x'': The x-coordinate of the target position that the camera should look at.~
+-- ''y'': The y-coordinate of the target position that the camera should look at.~
+-- ''z'': The z-coordinate of the target position that the camera should look at.~
+~
+- ''rotate''(x: number, y: number, z: number): void~
+The "rotate" function add rotation values to Euler angles.~
+-- ''x'': The rotation angle on x-axis in radians.~
+-- ''y'': The rotation angle on y-axis in radians.~
+-- ''z'': The rotation angle on z-axis in radians.~
+~
+- ''setPosition''(x: number, y: number, z: number): void~
+The "setPosition" function set the position with the given x, y and z coordinates.~
+-- ''x'': The X coordinate of the position.~
+-- ''y'': The Y coordinate of the position.~
+-- ''z'': The Z coordinate of the position.~
+~
+- ''setRotation''(x: number, y: number, z: number): void~
+The "setRotation" function sets rotation Euler angles (in radians).~
+-- ''x'': The rotation angle on x-axis in radians.~
+-- ''y'': The rotation angle on y-axis in radians.~
+-- ''z'': The rotation angle on z-axis in radians.~
+~
+- ''setRotationQuaternion''(quaternion: vec4): void~
+The "setRotationQuaternion" function sets the rotation using Quaternion.~
+-- ''quaternion'': The quaternion.~
+~
+- ''setScale''(x: number, y: number, z: number): void~
+The "setScale" function sets the scale with the given x, y and z factors.~
+-- ''x'': The x factor in the x-axis direction.~
+-- ''y'': The y factor in the y-axis direction.~
+-- ''z'': The z factor in the z-axis direction.~
+~
+- ''translate''(x: number, y: number, z: number): void~
+The "translate" function translate the position.~
+-- ''x'': The amount of translation in the x-axis direction.~
+-- ''y'': The amount of translation in the y-axis direction.~
+-- ''z'': The amount of translation in the z-axis direction.~
+~
+- ''zoom''(x: number, y: number, z: number): void~
+The "zoom" function add scale values.~
+-- ''x'': The x factor in the x-axis direction.~
+-- ''y'': The y factor in the y-axis direction.~
+-- ''z'': The z factor in the z-axis direction.~
+** Constructors
+- ''new Gfx3Camera''(viewIndex: number): Gfx3Camera~
+The constructor.~
+-- ''viewIndex'': The `viewIndex` is the index of the view you want to bind the camera.~

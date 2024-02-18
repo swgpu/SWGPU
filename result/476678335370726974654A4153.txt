@@ -1,0 +1,43 @@
+* Class: Gfx3SpriteJAS
+
+The `Gfx3SpriteJAS` is a subclass of `Gfx3Sprite` that represents a animated sprite.
+- inherit from: Gfx3Sprite~
+** Methods
+- ''getAnimations''()~
+The "getAnimations" function returns an array of animation descriptors.~
+~
+- ''getCurrentAnimation''()~
+The "getCurrentAnimation" function returns the current animation or null if there is no current
+animation.~
+~
+- ''getCurrentAnimationFrameIndex''(): number~
+The "getCurrentAnimationFrameIndex" function returns the current animation frame index.~
+~
+- ''loadFromFile''(path: string): Promise~
+The "loadFromFile" function asynchronously loads animated sprite data from a json file (jas).~
+-- ''path'': The `path` parameter is the file path.~
+~
+- ''play''(animationName: string, looped: boolean, preventSameAnimation: boolean): void~
+The "play" function is used to start playing a specific animation, with options for looping and
+preventing the same animation from being played again.~
+-- ''animationName'': The name of the animation to be played.~
+-- ''looped'': The `looped` parameter is a boolean that determines whether
+the animation should loop or not.~
+-- ''preventSameAnimation'': The `preventSameAnimation` parameter is a boolean
+flag that determines whether the same animation should be prevented from playing again.~
+~
+- ''setAnimations''(animations: JASAnimation[]): void~
+The "setAnimations" function sets the animations property.~
+-- ''animations'': The `animations` parameter is an array of animation descriptors.~
+~
+- ''setOffsetNormalized''(offsetXFactor: number, offsetYFactor: number): void~
+The "setOffsetNormalized" function sets the normalized origin offset value.~
+-- ''offsetXFactor'': The offsetXFactor represent the normalized x-coordinate offset value.~
+-- ''offsetYFactor'': The offsetYFactor represent the normalized y-coordinate offset value.~
+~
+- ''update''(ts: number): void~
+The "update" function.~
+-- ''ts''~
+** Constructors
+- ''new Gfx3SpriteJAS''(): Gfx3SpriteJAS~
+The constructor.~

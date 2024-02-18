@@ -1,0 +1,44 @@
+* Class: UISprite
+
+The `UISprite` is a subclass of `UIWidget` that represents a sprite with animations in the
+user-interface system context.
+- inherit from: UIWidget~
+** Methods
+- ''getAnimations''()~
+The "getAnimations" function returns an array of animation descriptors.~
+~
+- ''getCurrentAnimation''()~
+The "getCurrentAnimation" function returns the current animation or null if there is no current
+animation.~
+~
+- ''getCurrentAnimationFrameIndex''(): number~
+The "getCurrentAnimationFrameIndex" function returns the current animation frame index.~
+~
+- ''loadFromFile''(path: string): Promise~
+The "loadFromFile" function asynchronously loads sprite data from a json file (jas).~
+-- ''path'': The `path` parameter is the file path.~
+~
+- ''loadTexture''(imageFile: string): Promise~
+The "loadTexture" function asynchronously loads an spritesheet image file.~
+-- ''imageFile'': The `imageFile` parameter is a string that represents the file path or
+URL of the image that you want to load as a texture.~
+~
+- ''play''(animationName: string, isLooped: boolean, preventSameAnimation: boolean): void~
+The "play" function is used to start playing a specific animation, with options for looping and
+preventing the same animation from being played again.~
+-- ''animationName'': The name of the animation to be played.~
+-- ''isLooped''~
+-- ''preventSameAnimation'': The `preventSameAnimation` parameter is a boolean
+flag that determines whether the same animation should be prevented from playing again.~
+~
+- ''setAnimations''(animations: JASAnimation[]): void~
+The "setAnimations" function sets the animations property.~
+-- ''animations'': The `animations` parameter is an array of animation descriptors.~
+~
+- ''update''(ts: number): void~
+The "update" function.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+** Constructors
+- ''new UISprite''(options): UISprite~
+The constructor.~
+-- ''options'': An object containing optionnal className override.~

@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import re
 
-docs_file = "docs.json"
+docs_file = "docs/doc.json"
 docs_json = ""
 welcome_page = ""
 

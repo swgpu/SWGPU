@@ -1,0 +1,10 @@
+* Class: TweenVEC2
+
+The `TweenVEC2` class is a shortcut subclass of "TweenAbstract" that handles tweening of vec2 values using
+linear interpolation.
+- inherit from: TweenAbstract~
+** Methods
+** Constructors
+- ''new TweenVEC2''(times: number[], values: vec2[]): TweenVEC2~
+-- ''times''~
+-- ''values''~

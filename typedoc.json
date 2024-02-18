@@ -3,12 +3,10 @@
   "entryPoints": [
   ],
   "$schema": "https://typedoc.org/schema.json",
-  "plugin": ["typedoc-plugin-markdown"],
-  "theme": "markdown",
+  "theme": "default",
   "out": "docs",
   "name": "Warm Engine Documentation",
   "disableSources": true,
   "hideGenerator": true,
-  "filenameSeparator": "$",
   "groupOrder": ["Methods", "Properties", "*", "TypeParameter"]
 }

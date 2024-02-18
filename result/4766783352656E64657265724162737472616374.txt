@@ -1,0 +1,11 @@
+* Class: Gfx3RendererAbstract
+
+The `Gfx3RendererAbstract` is an abstract class for all gfx3 renderer.
+- parent of: Gfx3DebugRenderer, Gfx3FlareRenderer, Gfx3MeshRenderer, Gfx3ParticlesRenderer, Gfx3SkyboxRenderer, Gfx3SpriteRenderer~
+** Constructors
+- ''new Gfx3RendererAbstract''(pipelineName: string, vertexShader: string, fragmentShader: string, pipelineDesc: GPURenderPipelineDescriptor): Gfx3RendererAbstract~
+The constructor.~
+-- ''pipelineName''~
+-- ''vertexShader''~
+-- ''fragmentShader''~
+-- ''pipelineDesc''~

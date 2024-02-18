@@ -1,0 +1,22 @@
+* Class: AIPathGraphSolver
+
+The `AIPathGraphSolver` class implements the A* algorithm to find the shortest path between two
+nodes in a graph.
+** Methods
+- ''heuristic''(graph: AIPathGraph, nodeA: AIPathNode, nodeB: AIPathNode): number~
+The "heuristic" function calculates the distance between two nodes in a graph.~
+-- ''graph'': The graph data structure used for pathfinding. It contains information about the nodes and edges in the graph.~
+-- ''nodeA'': The starting node for calculating the distance between two nodes in the graph.~
+-- ''nodeB'': The ending node.~
+~
+- ''solve''(graph: AIPathGraph, startNode: AIPathNode, endNode: AIPathNode)~
+The "solve" function uses the A* algorithm to find the shortest path between a start node and an end
+node in a given graph.~
+-- ''graph'': A graph data structure used for pathfinding. It contains nodes and edges that define the connections
+between them.~
+-- ''startNode'': The `startNode` parameter is the node from which the pathfinding algorithm will
+start searching for a path. It represents the starting point of the path.~
+-- ''endNode'': The `endNode` parameter in the `solve` function represents the destination node in
+the graph. It is the node where the pathfinding algorithm is trying to reach from the `startNode`.~
+** Constructors
+- ''new AIPathGraphSolver''(): AIPathGraphSolver~

@@ -1,0 +1,31 @@
+* Class: UIMenuText
+
+The `UIMenuText` class is a subclass of UIMenu that provides methods for adding, setting, and removing
+text items from a UI menu.
+- inherit from: UIMenu~
+** Methods
+- ''add''(id: string, text: string): void~
+The "add" function creates a new UIMenuTextItem with the given id and text, and adds it to the menu.~
+-- ''id'': The "id" parameter is a string that represents the unique identifier for the
+menu item. It is used to distinguish between different menu items.~
+-- ''text'': The "text" parameter is a string that represents the text content of the menu
+item. It is the text that will be displayed on the menu item when it is rendered.~
+~
+- ''getSelectedId''()~
+The "getSelectedId" function returns the selected widget ID as a string or null.~
+~
+- ''remove''(id: string): void~
+The "remove" function removes a widget from the menu.~
+-- ''id'': The `id` parameter is a string that represents the unique identifier of the
+widget that needs to be removed.~
+~
+- ''set''(id: string, text: string): void~
+The "set" function sets the text of a UIMenuTextItem identified by its id.~
+-- ''id'': The `id` parameter is a string that represents the unique identifier of the
+widget. It is used to find the widget in the `widgets` array.~
+-- ''text'': The `text` parameter is a string that represents the new text value that you
+want to set for the `UIMenuTextItem`.~
+** Constructors
+- ''new UIMenuText''(options): UIMenuText~
+The constructor.~
+-- ''options'': An object containing various options for configuring the behavior of the menu.~

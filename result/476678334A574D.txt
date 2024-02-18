@@ -1,0 +1,41 @@
+* Class: Gfx3JWM
+
+The `Gfx3JWM` is a class that represents a walkmesh and provides methods for loading
+data, updating and drawing, adding and moving walkers, and clearing walkers.
+In collision case, the collision response sliding along the edges of the walkmesh to keep a good
+feeling for the player.
+- inherit from: Gfx3Transformable~
+** Methods
+- ''addWalker''(id: string, x: number, z: number, radius: number): Walker~
+The "addWalker" function adds a new walker identified by a unique identifier of your choice.
+A walker is the representation of a moving entity inside a walkmesh context. It is a square
+of `radius` size moving along the floor.~
+-- ''id'': A unique identifier for the walker.~
+-- ''x'': The x-coordinate of the walker's starting position.~
+-- ''z'': The z-coordinate of the walker's starting position.~
+-- ''radius'': The radius parameter represents the size of the walker.~
+~
+- ''clearWalkers''(): void~
+The "clearWalkers" function remove all walker instances.~
+~
+- ''draw''(): void~
+The "draw" function.~
+~
+- ''loadFromFile''(path: string): Promise~
+The "loadFromFile" function asynchronously loads walkmesh data from a json file (jwm).~
+-- ''path'': The `path` parameter is the file path.~
+~
+- ''moveWalker''(id: string, mx: number, mz: number): vec3~
+The "moveWalker" function move the specified walker based on the provided movement values.~
+-- ''id'': The `id` parameter is a string that represents the unique identifier of the
+walker.~
+-- ''mx'': The parameter `mx` represents the movement in the x-axis (horizontal movement)
+for the walker.~
+-- ''mz'': The parameter `mz` represents the movement in the z-axis (vertical movement)
+for the walker.~
+~
+- ''update''(): void~
+The "update" function.~
+** Constructors
+- ''new Gfx3JWM''(): Gfx3JWM~
+The constructor.~

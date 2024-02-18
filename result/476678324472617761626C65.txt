@@ -1,0 +1,96 @@
+* Class: Gfx2Drawable
+
+The `Gfx2Drawable` class represents a drawable object in a 2D graphics system.
+- parent of: Gfx2IsoDrawable, Gfx2IsoTileMapLayer, Gfx2Particles, Gfx2SpriteJAS, Gfx2SpriteJSS, Gfx2TileMapLayer~
+** Methods
+- ''draw''(): void~
+The "draw" function is responsible for rendering a visual representation on a 2DCanvas.~
+~
+- ''getOffset''(): vec2~
+The "getOffset" function returns the origin offset.~
+~
+- ''getOffsetX''(): number~
+The "getOffsetX" function returns the offset in x-axis direction.~
+~
+- ''getOffsetY''(): number~
+The "getOffsetY" function returns the offset in y-axis direction.~
+~
+- ''getOpacity''(): number~
+The "getOpacity" function returns the opacity value.~
+~
+- ''getPosition''(): vec2~
+The "getPosition" function returns the position.~
+~
+- ''getPositionX''(): number~
+The "getPositionX" function returns the x-coordinate of the position.~
+~
+- ''getPositionY''(): number~
+The "getPositionY" function returns the y-coordinate of the position.~
+~
+- ''getRotation''(): number~
+The "getRotation" function returns the rotation.~
+~
+- ''getScale''(): vec2~
+The "getScale" function returns the scale as a 2D vector.~
+~
+- ''getScaleX''(): number~
+The "getScaleX" function returns the scale factor on x-axis.~
+~
+- ''getScaleY''(): number~
+The "getScaleY" function returns the scale factor on y-axis.~
+~
+- ''isVisible''(): boolean~
+The "isVisible" function returns a boolean value indicating whether an element is visible or not.~
+~
+- ''paint''(): void~
+The "paint" is a virtual method that is called during the draw phase (after transforms).~
+~
+- ''rotate''(a: number): void~
+The "rotate" function add rotation value to current angle.~
+-- ''a'': The rotation angle to add in radians.~
+~
+- ''setOffset''(x: number, y: number): void~
+The "setOffset" function set the origin offset value.~
+-- ''x'': The x-offset.~
+-- ''y'': The y-offset.~
+~
+- ''setOpacity''(opacity: number): void~
+The "opacity" function sets the opacity of an element.~
+-- ''opacity'': The `opacity` value ranges from 0 to 1, where 0 represents completely transparent and 1
+represents completely opaque.~
+~
+- ''setPosition''(x: number, y: number): void~
+The "setPosition" function set the position with the given x and y coordinates.~
+-- ''x'': The X coordinate of the position.~
+-- ''y'': The Y coordinate of the position.~
+~
+- ''setRotation''(rotation: number): void~
+The "setRotation" function sets the rotation angle (in radians).~
+-- ''rotation'': The `rotation` parameter is the rotation angle in radians.~
+~
+- ''setScale''(x: number, y: number): void~
+The "setScale" function sets the scale with the given x and y factors.~
+-- ''x'': The x factor in the x-axis direction.~
+-- ''y'': The y factor in the y-axis direction.~
+~
+- ''setVisible''(visible: boolean): void~
+The "setVisible" function set the visibility.~
+-- ''visible'': The "visible" parameter is a boolean value that determines whether an
+element should be visible or not.~
+~
+- ''translate''(x: number, y: number): void~
+The "translate" function translate the position.~
+-- ''x'': The amount of translation in the x-axis direction.~
+-- ''y'': The amount of translation in the y-axis direction.~
+~
+- ''update''(ts: number): void~
+The "update" is a virtual method used for the update phase.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+~
+- ''zoom''(x: number, y: number): void~
+The "zoom" function add scale values.~
+-- ''x'': The x factor in the x-axis direction.~
+-- ''y'': The y factor in the y-axis direction.~
+** Constructors
+- ''new Gfx2Drawable''(): Gfx2Drawable~
+The constructor.~

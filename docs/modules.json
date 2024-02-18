@@ -1,0 +1,12 @@
+{
+    "AI": "Module AI",
+    "Core": "Module Core",
+    "DNA": "Module DNA",
+    "Gfx2": "Module Gfx2",
+    "Gfx3": "Module Gfx3",
+    "Input": "Module Input",
+    "Screen": "Module Screen",
+    "Script": "Module Script",
+    "Sound": "Module Sound",
+    "UI": "Module UI"
+}

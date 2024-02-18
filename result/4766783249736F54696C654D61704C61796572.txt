@@ -1,0 +1,31 @@
+* Class: Gfx2IsoTileMapLayer
+
+The `Gfx2Drawable` class represents a drawable object in a 2D graphics system.
+- inherit from: Gfx2Drawable~
+** Methods
+- ''draw''(): void~
+The "draw" function is responsible for rendering a visual representation on a 2DCanvas.~
+~
+- ''getTiles''()~
+~
+- ''loadFromTileMap''(tilemap: Gfx2TileMap, layerIndex: number): void~
+-- ''tilemap''~
+-- ''layerIndex''~
+~
+- ''placeTile''(tileId: number, row: number, col: number): void~
+-- ''tileId''~
+-- ''row''~
+-- ''col''~
+~
+- ''removeTileAt''(row: number, col: number): void~
+-- ''row''~
+-- ''col''~
+~
+- ''setShowDebug''(showDebug: boolean): void~
+-- ''showDebug''~
+~
+- ''update''(ts: number): void~
+The "update" is a virtual method used for the update phase.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+** Constructors
+- ''new Gfx2IsoTileMapLayer''(): Gfx2IsoTileMapLayer~

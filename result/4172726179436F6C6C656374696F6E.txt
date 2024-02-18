@@ -1,0 +1,50 @@
+* Class: ArrayCollection
+
+The `ArrayCollection` class is a generic class that represents a collection of items and provides
+event-based methods for adding, removing, and checking the presence of items in the collection.
+** Methods
+- ''clear''(): void~
+The "clear" function removes all items from the collection.~
+~
+- ''getItems''()~
+The "getItems" function returns an array of type T.~
+~
+- ''has''(item: T): boolean~
+The "has" function checks if an item is present in the collection.~
+-- ''item'': The parameter "item" is of type T, which means it can be any type. It is used to
+check if the given item exists in the "items" array.~
+~
+- ''pop''(emit: boolean)~
+The "pop" function removes and returns the last item from the collection, and emits an event if specified.~
+-- ''emit'': The `emit` parameter is a boolean flag that determines whether an
+event should be emitted when an item is removed from the list. If `emit` is set to `true`, an event
+with the name 'E_ITEM_REMOVED' will be emitted.~
+~
+- ''push''(item: T, emit: boolean): number~
+The "push" function adds an item to the collection and emits an event if specified.~
+-- ''item'': The `item` parameter represents the item that you want to push into the `items`
+array. It can be of any type (`T`).~
+-- ''emit'': The `emit` parameter is a boolean flag that determines whether an
+event should be emitted after pushing the item to the array. If `emit` is set to `true`, an event
+with the name 'E_ITEM_ADDED' will be emitted.~
+~
+- ''remove''(item: T, emit: boolean): number~
+The "remove" function removes an item from the collection and emits an event if specified.~
+-- ''item'': The `item` parameter is the element that you want to remove from the `items`
+array.~
+-- ''emit'': The `emit` parameter is a boolean flag that determines whether an
+event should be emitted after removing the item. If `emit` is set to `true`, an event with the name
+'E_ITEM_REMOVED' will be emitted.~
+~
+- ''removeAt''(index: number, emit: boolean): T~
+The "removeAt" function removes an item at a specified index from the collection and optionally emits an
+event.~
+-- ''index'': The index parameter specifies the position of the item to be removed from
+the items array. It is of type number and represents the zero-based index of the item to be removed.~
+-- ''emit'': The `emit` parameter is a boolean value that determines whether an
+event should be emitted after removing an item from the `items` array. If `emit` is set to `true`,
+an event with the name 'E_ITEM_REMOVED' will be emitted.~
+** Constructors
+- ''new ArrayCollection''(items: T[]): ArrayCollection~
+The constructor.~
+-- ''items'': The `items` underlying collection's data.~

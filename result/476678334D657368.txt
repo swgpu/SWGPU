@@ -1,0 +1,66 @@
+* Class: Gfx3Mesh
+
+The `Gfx3Mesh` class is a subclass of `Gfx3Drawable` and represents a mesh object in a 3D graphics engine, with methods for building
+vertices, updating and drawing the mesh, and managing its layer and material.
+- inherit from: Gfx3Drawable~
+- parent of: Gfx3MeshJAM, Gfx3MeshJSM, Gfx3MeshOBJ~
+** Methods
+- ''clone''(transformMatrix: mat4): Gfx3Mesh~
+The "clone" function creates a new `Gfx3Mesh` object by applying a transformation matrix to each
+vertex of the original mesh.~
+-- ''transformMatrix'': The `transformMatrix` parameter is a 4x4 matrix that represents a
+transformation. It is used to transform the vertices of the mesh. The default value is the identity
+matrix, which means no transformation is applied if no matrix is provided.~
+~
+- ''delete''(keepMat: boolean): void~
+The "delete" function free all resources.
+Warning: you need to call this method to free allocation for this object.~
+-- ''keepMat''~
+~
+- ''draw''(): void~
+The "draw" function.~
+~
+- ''getLayer''(): number~
+The "getLayer" function returns the layer number.~
+~
+- ''getMaterial''(): Gfx3Material~
+The "getMaterial" function returns the material.~
+~
+- ''getShadowCasting''(): boolean~
+The "getShadowCasting" function returns a boolean value indicating whether the object cast shadows.~
+~
+- ''setLayer''(layer: number): void~
+The "setLayer" function sets the layer property.~
+-- ''layer'': The "layer" parameter is a number that represents the layer identifier.
+It is used to easily categorized and identified group of drawables.
+Ex: allow decals for wall only, for character only, etc...~
+~
+- ''setMaterial''(material: Gfx3Material, keepMat: boolean): void~
+The "setMaterial" function sets a new material.~
+-- ''material'': The new material.~
+-- ''keepMat'': The `keepMat` parameter is a boolean flag that determines whether
+to keep the current material or delete it before assigning the new material.
+Warning: If keepMat is to `false` then the current material is definitly destroy (included if others
+drawables potentially used it).~
+~
+- ''setShadowCasting''(shadowCasting: boolean): void~
+The "setShadowCasting" function determines if object cast shadows or not.~
+-- ''shadowCasting'': The `shadowCasting` parameter is a boolean value that determines if object cast shadows.~
+~
+- ''update''(ts: number): void~
+The "update" function.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+~
+- ''buildVertices''(vertexCount: number, coords: number[], texcoords: number[], colors: number[], normals: number[], groups: Group[])~
+The "buildVertices" function takes various vertex data and returns an array
+of vertices with calculated normals, tangents, and binormals in the engine format.~
+-- ''vertexCount'': The total number of vertices in the mesh.~
+-- ''coords'': An array of vertex coordinates.~
+-- ''texcoords'': An optional array of vertex texture coordinates.~
+-- ''colors'': An optional array of vertex color.~
+-- ''normals'': An optional array of vertex normal.~
+-- ''groups'': An optional array of vertex group.~
+** Accessors
+** Constructors
+- ''new Gfx3Mesh''(): Gfx3Mesh~
+The constructor.~

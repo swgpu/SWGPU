@@ -1,0 +1,26 @@
+* Class: TreePartition
+
+The `TreePartition` class represents a generic partition binary tree data structure.
+- parent of: Gfx2TreePartition, Gfx3TreePartition~
+** Methods
+- ''addChild''(object: T): void~
+The "addChild" function adds an object as a child to the tree.~
+-- ''object'': The parameter `object` is of type T, which means it can be any type.~
+~
+- ''getMaxChildren''(): number~
+The "getMaxChildren" function returns the maximum number of children per nodes.~
+~
+- ''getMaxDepth''(): number~
+The "getMaxDepth" function returns the maximum depth of the partition tree.~
+** Constructors
+- ''new TreePartition''(maxChildren: number, maxDepth: number, method: ITreePartitionMethod): TreePartition~
+The constructor initializes a TreePartition object with the specified maximum number of children,
+maximum depth, and partition method.~
+-- ''maxChildren'': The `maxChildren` parameter specifies the maximum number of children
+that a node in the tree can have. This parameter determines the branching factor of the tree, i.e.,
+the number of child nodes that can be created from a parent node.~
+-- ''maxDepth'': The `maxDepth` parameter specifies the maximum depth or level of the tree
+partition. It determines how deep the tree can be divided into smaller partitions.~
+-- ''method'': The `method` parameter is an instance of the `ITreePartitionMethod<T>` interface.
+This interface defines a method that is responsible for partitioning the tree nodes. The `T`
+represents the type of data that the tree nodes hold.~

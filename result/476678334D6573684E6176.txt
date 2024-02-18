@@ -1,0 +1,30 @@
+* Class: Gfx3MeshNav
+
+The `Gfx3MeshNav` class is responsible for controlling the navigation and collisions in a static mesh.
+In collision case, the collision response sliding along the polygon of the map to keep a good
+feeling for the player.
+** Methods
+- ''getLift''(): number~
+The "getLift" function returns the value of the "lift" property.~
+~
+- ''loadFromJSM''(mesh: Gfx3Mesh): void~
+The "loadFromJSM" function creates a binary tree partition based on the vertices of a given mesh.~
+-- ''mesh''~
+~
+- ''move''(center: vec3, size: vec3, move: vec3): NavInfo~
+The "move" function calculates the movement of an object in a 3D space, taking into account
+collisions with walls and floors.~
+-- ''center'': The `center` parameter is a 3D vector representing the center point of the
+object or entity that is being moved.~
+-- ''size'': The `size` parameter represents the dimensions of the object's bounding box. It
+is a `vec3` vector that contains the width, height, and depth of the object.~
+-- ''move'': The `move` parameter is a 3D vector that represents the desired movement of an
+object. It specifies how much the object should move along the x, y, and z axes.~
+~
+- ''setLift''(lift: number): void~
+The "setLift" function sets the value of the "lift" property.~
+-- ''lift'': The lift is used to elevate the virtual bounding box to let
+passing over little step or micro obstacles on the floor.~
+** Constructors
+- ''new Gfx3MeshNav''(): Gfx3MeshNav~
+The constructor.~

@@ -1,0 +1,11 @@
+* Class: UIText
+
+The `UIText` class is a subclass of `UIWidget` that represents a pretty simple text element widget.
+- inherit from: UIWidget~
+** Methods
+- ''setText''(text: string): void~
+The "setText" function sets the text content.~
+-- ''text'': The `text` property.~
+** Constructors
+- ''new UIText''(): UIText~
+The constructor.~

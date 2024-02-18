@@ -1,0 +1,73 @@
+* Class: Gfx3MeshRenderer
+
+The `Gfx3MeshRenderer` class is a singleton renderer responsible to display mesh in a 3D graphics system
+and provides methods for controlling directionnal light, point light, fog and decals.
+- inherit from: Gfx3RendererAbstract~
+** Methods
+- ''drawDecal''(layer: number, sx: number, sy: number, sw: number, sh: number, position: vec3, orientationX: vec3, orientationY: vec3, orientationZ: vec3, size: vec3, opacity: number): void~
+The "drawDecal" function is used to sets a decal projector and draw texture over meshes
+with the specified layer.~
+-- ''layer'': The layer target.~
+-- ''sx'': The x-coordinate of the decal sprite in the atlas texture.~
+-- ''sy'': The y-coordinate of the decal sprite in the atlas texture.~
+-- ''sw'': The width of the decal sprite in the atlas texture.~
+-- ''sh'': The height of the decal sprite in the atlas texture.~
+-- ''position'': The position of projector (center).~
+-- ''orientationX'': The x-axis orientation of the projector.~
+-- ''orientationY'': The y-axis orientation of the projector.~
+-- ''orientationZ'': The z-axis orientation of the projector.~
+-- ''size'': The size (width, height, depth) of the projector.~
+-- ''opacity'': The opacity or transparency of the decal.~
+~
+- ''drawDirLight''(direction: vec3, ambient: vec3, diffuse: vec3, specular: vec3, intensity: number): void~
+The "drawDirLight" function enables a directional light with specified properties.~
+-- ''direction'': The direction of the directional light.~
+-- ''ambient'': The ambient color of the directional light.~
+-- ''diffuse'': The diffuse color of the directional light.~
+-- ''specular'': The specular color of the directional light.~
+-- ''intensity'': The strength or brightness of the directional light.~
+~
+- ''drawMesh''(mesh: Gfx3Mesh, matrix): void~
+The "drawMesh" function draw a mesh.~
+-- ''mesh'': The mesh.~
+-- ''matrix'': The `matrix` parameter is an optional parameter that represents
+a transformation 4x4 matrix.~
+~
+- ''drawPointLight''(position: vec3, ambient: vec3, diffuse: vec3, specular: vec3, intensity: number, constant: number, linear: number, exp: number): void~
+The "drawPointLight" function adds a point light with specified properties.~
+-- ''position'': The position of the point light in 3D space.~
+-- ''ambient'': The ambient color of the point light.~
+-- ''diffuse'': The diffuse color of the point light.~
+-- ''specular'': The specular color of the point light.~
+-- ''intensity'': The brightness or strength of the point light.~
+-- ''constant'': The constant parameter represents the constant attenuation factor of
+the point light. It determines how quickly the light intensity diminishes with distance from the
+light source. A higher constant value will result in a slower decrease in intensity.~
+-- ''linear'': The "linear" parameter represents the linear attenuation factor of the
+point light. It determines how the intensity of the light decreases as the distance from the light
+source increases. A higher linear value will cause the light to attenuate more quickly, resulting in
+a shorter range of influence.~
+-- ''exp'': The "exp" parameter represents the exponent of the attenuation equation
+for the point light.~
+~
+- ''enableFog''(enabled: boolean, color: vec3, near: number, far: number): void~
+The "enableFog" function enables the fog with specified properties.~
+-- ''enabled'': A boolean value indicating whether the fog is enabled or not.~
+-- ''color'': The fog color.~
+-- ''near'': The distance from the camera at which the fog starts to appear.~
+-- ''far'': The distance from the camera at which the fog effect should start to fade out.~
+~
+- ''enableShadow''(enabled: boolean): void~
+The "enableShadow" function enables or disables the shadowing projection.~
+-- ''enabled'': A boolean value indicating whether the shadow should be enabled or
+disabled.~
+~
+- ''render''(): void~
+The "render" function.~
+~
+- ''setDecalAtlas''(decalAtlas: Gfx3Texture): void~
+The "setDecalAtlas" function sets the decal texture atlas that contains all decal sprites.~
+-- ''decalAtlas'': The decal texture atlas.~
+** Constructors
+- ''new Gfx3MeshRenderer''(): Gfx3MeshRenderer~
+The constructor.~

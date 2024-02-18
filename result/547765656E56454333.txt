@@ -1,0 +1,10 @@
+* Class: TweenVEC3
+
+The `TweenVEC3` class is a shortcut subclass of "TweenAbstract" that handles tweening of vec3 values using
+linear interpolation.
+- inherit from: TweenAbstract~
+** Methods
+** Constructors
+- ''new TweenVEC3''(times: number[], values: vec3[]): TweenVEC3~
+-- ''times''~
+-- ''values''~

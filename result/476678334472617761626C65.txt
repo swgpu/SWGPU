@@ -1,0 +1,63 @@
+* Class: Gfx3Drawable
+
+The `Gfx3Drawable` class represents a drawable object in a 3D graphics system.
+- inherit from: Gfx3Transformable~
+- parent of: Gfx3Flare, Gfx3Mesh, Gfx3Particles, Gfx3Skybox, Gfx3Sprite~
+** Methods
+- ''beginVertices''(vertexCount: number): void~
+The "beginVertices" function prepare your vertex buffer to write process.
+Warning: You need to call this method before define your vertices.~
+-- ''vertexCount'': The parameter `vertexCount` represents the number of vertices that
+will be stored in the vertex buffer.~
+~
+- ''defineVertex''(v: number[]): void~
+The "defineVertex" function takes in an array of numbers representing a vertex.~
+-- ''v'': An array of numbers representing the attributes of vertex.~
+~
+- ''delete''(): void~
+The "delete" function free all resources.
+Warning: you need to call this method to free allocation for this object.~
+~
+- ''draw''(): void~
+The "draw" is a virtual method used for the draw phase.~
+~
+- ''endVertices''(): void~
+The "endVertices" function writes vertex data to the vertex buffer and calculates the bounding box
+based on the vertices.~
+~
+- ''getBoundingBox''(): Gfx3BoundingBox~
+The "getBoundingBox" function returns the bounding box.~
+~
+- ''getVertexCount''(): number~
+The "getVertexCount" function returns the number of vertices.~
+~
+- ''getVertexSubBufferOffset''(): number~
+The "getVertexSubBufferOffset" function returns the offset of the vertex sub-buffer.
+Nota bene: All vertices are stored in one global vertex buffer handled by "Gfx3Manager".
+SubBuffer is just a reference offset/size pointing to the big one buffer.~
+~
+- ''getVertexSubBufferSize''(): number~
+The "getVertexSubBufferSize" function returns the byte length of the vertex sub buffer.
+Nota bene: All vertices are stored in one global vertex buffer handled by "Gfx3Manager".
+SubBuffer is just a reference offset/size pointing to the big one buffer.~
+~
+- ''getVertices''()~
+The "getVertices" function returns an array of numbers representing vertices.~
+~
+- ''getWorldBoundingBox''(): Gfx3BoundingBox~
+The "getWorldBoundingBox" function returns the world bounding box by transforming its
+local bounding box using its transform matrix.~
+~
+- ''setVertices''(vertices: number[]): void~
+The "setVertices" function sets the vertices in one pass.~
+-- ''vertices'': An array of numbers representing the vertices of a shape.~
+~
+- ''update''(ts: number): void~
+The "update" is a virtual method used for the update phase.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+** Constructors
+- ''new Gfx3Drawable''(vertexStride: number): Gfx3Drawable~
+The constructor.~
+-- ''vertexStride'': The `vertexStride` parameter is a number that represents the number of
+attributes for each vertex. It is used to determine the spacing between consecutive vertices in the vertex
+buffer.~

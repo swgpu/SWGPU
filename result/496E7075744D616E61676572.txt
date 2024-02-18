@@ -1,0 +1,78 @@
+* Class: InputManager
+
+The `InputManager` class is a singleton responsible for managing input from various sources such as keyboard and
+gamepad, registering actions, and emitting events based on user input.
+** Methods
+- ''addPad''(pad: Pad): void~
+The "addPad" function adds a pad to the manager.
+It update the pads' status every 50ms.~
+-- ''pad'': The new pad.~
+~
+- ''findActionIds''(inputSource: string, eventKey: string)~
+The "findActionIds" function takes an input source and an event key, and returns an array of action
+IDs that match the given input source and event key.~
+-- ''inputSource'': The `inputSource` parameter is a string that represents the source of
+the input. It could be a device, such as a keyboard or mouse, or any other input source.~
+-- ''eventKey'': The `eventKey` parameter is a string that represents the key of the
+event. It is used to filter the actions based on the event key.~
+~
+- ''getPad''(index: number)~
+The "getPad" function returns the specified Pad.~
+-- ''index'': The `index` parameter is a number that represents the index of the pad we
+want to retrieve.~
+~
+- ''handleGamePadConnected''(e: GamepadEvent): void~
+The "handleGamePadConnected" function.
+It adds a gamepad to the system when it is connected.~
+-- ''e'': GamepadEvent - The event object that is triggered when a gamepad is
+connected.~
+~
+- ''handleGamePadDisconnected''(e: GamepadEvent): void~
+The "handleGamePadDisconnected" function.
+It removes a gamepad from the system when it is disconnected.~
+-- ''e'': GamepadEvent - This is an event object that contains information about the
+gamepad that was disconnected.~
+~
+- ''handleKeyDown''(e: KeyboardEvent): boolean~
+The "handleKeyDown" function.
+It handles keydown events by emitting action events and updating the keymap and actionmap.~
+-- ''e'': The parameter "e" is of type KeyboardEvent, which represents a keyboard
+event that occurs when a key is pressed or released.~
+~
+- ''handleKeyUp''(e: KeyboardEvent): void~
+The "handleKeyUp" function.
+It handles key up events by emitting an action released event and updating the keymap and
+actionmap.~
+-- ''e'': KeyboardEvent - The event object that contains information about the
+keyboard event that occurred.~
+~
+- ''isActiveAction''(actionId: string)~
+The "isActiveAction" function checks if an action is currently active.~
+-- ''actionId'': A string representing the ID of the action.~
+~
+- ''registerAction''(inputSource: string, eventKey: string, actionId: string): void~
+The "registerAction" function registers an action with a unique ID, input source, and event key, and
+adds it to the action register if it doesn't already exist.~
+-- ''inputSource'': The input source refers to the device or method from which the input
+is received. It could be a keyboard, mouse, gamepad, or any other input device.~
+-- ''eventKey'': The `eventKey` parameter represents the key or button that triggers the
+action. It could be a keyboard key, a mouse button, or a gamepad button.~
+-- ''actionId'': The `actionId` parameter is a string that represents the unique
+identifier for the action being registered.~
+~
+- ''removePad''(id: string): void~
+The "removePad" function removes a pad from the manager.~
+-- ''id'': The `id` parameter is a string that represents the unique identifier of the pad
+that needs to be removed.~
+~
+- ''unregisterAction''(inputSource: string, eventKey: string, actionId: string): void~
+The "unregisterAction" function removes an action for the specific input source and event key.~
+-- ''inputSource'': The input source refers to the device or method from which the input
+is received. It could be a keyboard, mouse, touch screen, or any other input device.~
+-- ''eventKey'': The eventKey parameter is a string that represents the key or event that
+triggers the action. It could be a keyboard key, a mouse button, or any other input event.~
+-- ''actionId'': The `actionId` parameter is a string that represents the unique
+identifier of the action that needs to be unregistered.~
+** Constructors
+- ''new InputManager''(): InputManager~
+The constructor.~

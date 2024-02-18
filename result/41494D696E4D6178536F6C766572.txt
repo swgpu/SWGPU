@@ -1,0 +1,26 @@
+* Class: AIMinMaxSolver
+
+The `AIMinMaxSolver` class solves an AI MinMax tree by generating values for each node and finding
+the child node with the maximum value from a scored graph.
+** Methods
+- ''generateValues''(parentNode: AIMinMaxTreeAbstract, isMaxPlayer: boolean, alpha: number, beta: number): AIMinMaxTreeAbstract~
+The "generateValues" function generates values for nodes in a minimax tree, considering whether the current player is
+maximizing or minimizing, and using alpha-beta pruning to optimize the search.~
+-- ''parentNode'': The scored graph.~
+-- ''isMaxPlayer'': A boolean value indicating whether the current player is the
+maximizing player or not. If it is true, then the current player is the maximizing player. If it is
+false, then the current player is the minimizing player.~
+-- ''alpha'': The alpha parameter is used in the alpha-beta pruning algorithm. It
+represents the best value that the maximizing player (isMaxPlayer = true) has found so far.
+Initially, it is set to negative infinity.~
+-- ''beta'': The parameter "beta" represents the upper bound for the minimax algorithm. It
+is used to prune branches of the tree that are guaranteed to not affect the final decision. If the
+value of a node exceeds or equals beta during the evaluation, the algorithm can stop evaluating
+further children of that node, as~
+~
+- ''solve''(node: AIMinMaxNode): AIMinMaxTreeAbstract~
+The "solve" function solves an AI MinMax tree by generating values for each node, finding the child node
+with the maximum value, and returning it.~
+-- ''node'': The scored graph.~
+** Constructors
+- ''new AIMinMaxSolver''(): AIMinMaxSolver~

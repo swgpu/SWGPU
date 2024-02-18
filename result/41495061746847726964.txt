@@ -1,0 +1,24 @@
+* Class: AIPathGrid
+
+- parent of: AIPathGrid2D, AIPathGrid3D~
+** Methods
+- ''getDirections''(a: T, b: T)~
+-- ''a''~
+-- ''b''~
+~
+- ''getValue''(pos: T): number~
+-- ''pos''~
+~
+- ''isInside''(pos: T): boolean~
+-- ''pos''~
+~
+- ''isSame''(a: T, b: T): boolean~
+-- ''a''~
+-- ''b''~
+~
+- ''loadFromFile''(path: string): Promise~
+-- ''path''~
+** Constructors
+- ''new AIPathGrid''(size: T, grid: number[]): AIPathGrid~
+-- ''size''~
+-- ''grid''~

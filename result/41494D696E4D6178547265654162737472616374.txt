@@ -1,0 +1,20 @@
+* Class: AIMinMaxTreeAbstract
+
+- parent of: AIMinMaxLeaf, AIMinMaxNode~
+** Methods
+- ''getData''(): any~
+~
+- ''getValue''(): number~
+~
+- ''isVisited''(): boolean~
+~
+- ''setData''(data: any): void~
+-- ''data''~
+~
+- ''setValue''(value: number): void~
+-- ''value''~
+~
+- ''setVisited''(visited: boolean): void~
+-- ''visited''~
+** Constructors
+- ''new AIMinMaxTreeAbstract''(): AIMinMaxTreeAbstract~

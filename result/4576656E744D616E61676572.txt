@@ -1,0 +1,50 @@
+* Class: EventManager
+
+The `EventManager` class is a singleton for managing subscribing to and emitting events.
+** Methods
+- ''emit''(emitter: any, type: string, data: any): Promise~
+The "emit" function notifies subscribers of an event and returns a promise that
+resolves when all subscriber callbacks have been executed.~
+-- ''emitter'': The `emitter` parameter is an object that emits events. It could be any object.~
+-- ''type'': The `type` parameter is a string that represents the type of event or message
+that you want to wait for. It is used to filter the events emitted by the `emitter` object.~
+-- ''data'': The `data` parameter is an optional parameter of type `any` which represents the
+data that will be passed to the callback function of each subscriber.~
+~
+- ''subscribe''(emitter: any, type: string, listener: any, cb: Function): void~
+The "subscribe" function adds a new subscriber to a list of subscribers.~
+-- ''emitter'': The `emitter` parameter is an object that emits events. It could be any object.~
+-- ''type'': The `type` parameter is a string that represents the type of event or message
+that you want to wait for. It is used to filter the events emitted by the `emitter` object.~
+-- ''listener'': The `listener` parameter is the object that is subscribed to the event and usually the context of the callback function.~
+-- ''cb'': The `cb` parameter is a callback function that will be executed when the
+event is triggered.~
+~
+- ''subscribeOnce''(emitter: any, type: string, listener: any, cb: Function): void~
+The "subscribeOnce" function adds a new subscriber to a list of subscribers and delete self after the first event trigger.~
+-- ''emitter'': The `emitter` parameter is an object that emits events. It could be any object.~
+-- ''type'': The `type` parameter is a string that represents the type of event or message
+that you want to wait for. It is used to filter the events emitted by the `emitter` object.~
+-- ''listener'': The `listener` parameter is the object that is subscribed to the event and usually the context of the callback function.~
+-- ''cb'': The `cb` parameter is a callback function that will be executed when the
+event is triggered.~
+~
+- ''unsubscribe''(emitter: any, type: string, listener: any): void~
+The "unsubscribe" function removes a specific listener from the list of subscribers for a given
+emitter and event type.~
+-- ''emitter'': The `emitter` parameter is an object that emits events. It could be any object.~
+-- ''type'': The `type` parameter is a string that represents the type of event or message
+that you want to wait for. It is used to filter the events emitted by the `emitter` object.~
+-- ''listener'': The `listener` parameter is the object that is subscribed to the event and usually the context of the callback function.~
+~
+- ''unsubscribeAll''(): void~
+The "unsubscribeAll" function clears all subscribers from the "subscribers" array.~
+~
+- ''wait''(emitter: any, type: string): Promise~
+The "wait" function returns a promise that resolves when a specific event is emitted.~
+-- ''emitter'': The `emitter` parameter is an object that emits events. It could be any object.~
+-- ''type'': The `type` parameter is a string that represents the type of event or message
+that you want to wait for. It is used to filter the events emitted by the `emitter` object.~
+** Constructors
+- ''new EventManager''(): EventManager~
+The constructor.~

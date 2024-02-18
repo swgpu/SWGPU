@@ -103,8 +103,9 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
    * @param {boolean} closed - A boolean value indicating whether the cylinder should be closed or not.
    * If set to true, the top and bottom faces of the cylinder will be included. If set to false, only the
    * side faces will be drawn.
+   * @param {vec3} color - The color of cylinder.
    */
-  drawCylinder(matrix: mat4, radius: number, height: number, step: number, closed: boolean): void {
+  drawCylinder(matrix: mat4, radius: number, height: number, step: number, closed: boolean, color: vec3 = [1, 1, 1]): void {
     let vertexCount = 0;
     const vertices: Array<number> = [];
     const angleStep = (Math.PI * 2) / step;
@@ -132,19 +133,19 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
       const t2y = height;
       const t2z = radius * Math.sin(angle + angleStep) * -1;
 
-      vertices.push(b1x, b1y, b1z, 1, 1, 1);
-      vertices.push(t1x, t1y, t1z, 1, 1, 1);
-      vertices.push(b1x, b1y, b1z, 1, 1, 1);
-      vertices.push(b2x, b2y, b2z, 1, 1, 1);
-      vertices.push(t1x, t1y, t1z, 1, 1, 1);
-      vertices.push(t2x, t2y, t2z, 1, 1, 1);
+      vertices.push(b1x, b1y, b1z, color[0], color[1], color[2]);
+      vertices.push(t1x, t1y, t1z, color[0], color[1], color[2]);
+      vertices.push(b1x, b1y, b1z, color[0], color[1], color[2]);
+      vertices.push(b2x, b2y, b2z, color[0], color[1], color[2]);
+      vertices.push(t1x, t1y, t1z, color[0], color[1], color[2]);
+      vertices.push(t2x, t2y, t2z, color[0], color[1], color[2]);
       vertexCount += 6;
 
       if (closed) {
-        vertices.push(cbx, cby, cbz, 1, 1, 1);
-        vertices.push(b1x, b1y, b1z, 1, 1, 1);
-        vertices.push(ctx, cty, ctz, 1, 1, 1);
-        vertices.push(t1x, t1y, t1z, 1, 1, 1);
+        vertices.push(cbx, cby, cbz, color[0], color[1], color[2]);
+        vertices.push(b1x, b1y, b1z, color[0], color[1], color[2]);
+        vertices.push(ctx, cty, ctz, color[0], color[1], color[2]);
+        vertices.push(t1x, t1y, t1z, color[0], color[1], color[2]);
         vertexCount += 4;
       }
     }
@@ -167,8 +168,9 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
    * each direction (total of 49 cells).
    * @param {number} [spacing=1] - The `spacing` parameter determines the distance between each grid
    * line. It specifies how far apart each line should be from each other.
+   * @param {vec3} color - The color of grid.
    */
-  drawGrid(matrix: mat4, extend: number = 3, spacing: number = 1): void {
+  drawGrid(matrix: mat4, extend: number = 3, spacing: number = 1, color: vec3 = [1, 1, 1]): void {
     let vertexCount: number = 0;
     const vertices: Array<number> = [];
     const nbCells = extend * 2;
@@ -189,10 +191,10 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
       const hLineDestX = left + gridSize;
       const hLineDestY = top + (i * spacing);
       const hLineDestZ = 0;
-      vertices.push(vLineFromX, vLineFromY, vLineFromZ, 1, 1, 1);
-      vertices.push(vLineDestX, vLineDestY, vLineDestZ, 1, 1, 1);
-      vertices.push(hLineFromX, hLineFromY, hLineFromZ, 1, 1, 1);
-      vertices.push(hLineDestX, hLineDestY, hLineDestZ, 1, 1, 1);
+      vertices.push(vLineFromX, vLineFromY, vLineFromZ, color[0], color[1], color[2]);
+      vertices.push(vLineDestX, vLineDestY, vLineDestZ, color[0], color[1], color[2]);
+      vertices.push(hLineFromX, hLineFromY, hLineFromZ, color[0], color[1], color[2]);
+      vertices.push(hLineDestX, hLineDestY, hLineDestZ, color[0], color[1], color[2]);
       vertexCount += 4;
     }
 
@@ -242,8 +244,9 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
    * @param {number} [step=4] - The `step` parameter determines the number of segments or points used to
    * approximate the circle. The higher the value of "step", the smoother and more detailed the circle
    * will appear.
+   * @param {vec3} color - The color of circle.
    */
-  drawCircle(matrix: mat4, radius: number = 1, step: number = 4): void {
+  drawCircle(matrix: mat4, radius: number = 1, step: number = 4, color: vec3 = [1, 1, 1]): void {
     let vertexCount = 0;
     const vertices: Array<number> = [];
     const angleStep = (Math.PI * 2) / step;
@@ -256,8 +259,8 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
       const y2 = Math.sin((i + 1) * angleStep) * radius;
       const z2 = 0;
 
-      vertices.push(x1, y1, z1, 1, 1, 1);
-      vertices.push(x2, y2, z2, 1, 1, 1);
+      vertices.push(x1, y1, z1, color[0], color[1], color[2]);
+      vertices.push(x2, y2, z2, color[0], color[1], color[2]);
       vertexCount += 2;
     }
 
@@ -276,8 +279,9 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
    * position, rotation, and scale of the bounding rectangle in 3D space.
    * @param {vec2} min - The `min` parameter is the minimum point of the bounding rectangle.
    * @param {vec2} max - The `max` parameter is the maximum point of the bounding rectangle.
+   * @param {vec3} color - The color of bounding rectangle.
    */
-  drawBoundingRect(matrix: mat4, min: vec2, max: vec2): void {
+  drawBoundingRect(matrix: mat4, min: vec2, max: vec2, color: vec3 = [1, 1, 1]): void {
     let vertexCount = 0;
     const vertices: Array<number> = [];
     const a = [min[0], min[1], 0];
@@ -285,20 +289,20 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
     const c = [max[0], min[1], 0];
     const d = [max[0], max[1], 0];
 
-    vertices.push(a[0], a[1], a[2], 1, 1, 1);
-    vertices.push(b[0], b[1], b[2], 1, 1, 1);
+    vertices.push(a[0], a[1], a[2], color[0], color[1], color[2]);
+    vertices.push(b[0], b[1], b[2], color[0], color[1], color[2]);
     vertexCount += 2;
 
-    vertices.push(b[0], b[1], b[2], 1, 1, 1);
-    vertices.push(d[0], d[1], d[2], 1, 1, 1);
+    vertices.push(b[0], b[1], b[2], color[0], color[1], color[2]);
+    vertices.push(d[0], d[1], d[2], color[0], color[1], color[2]);
     vertexCount += 2;
 
-    vertices.push(d[0], d[1], d[2], 1, 1, 1);
-    vertices.push(c[0], c[1], c[2], 1, 1, 1);
+    vertices.push(d[0], d[1], d[2], color[0], color[1], color[2]);
+    vertices.push(c[0], c[1], c[2], color[0], color[1], color[2]);
     vertexCount += 2;
 
-    vertices.push(c[0], c[1], c[2], 1, 1, 1);
-    vertices.push(a[0], a[1], a[2], 1, 1, 1);
+    vertices.push(c[0], c[1], c[2], color[0], color[1], color[2]);
+    vertices.push(a[0], a[1], a[2], color[0], color[1], color[2]);
     vertexCount += 2;
 
     this.commands.push({
@@ -321,8 +325,9 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
    * sphere. It represents the number of divisions or segments along the latitude and longitude lines of
    * the sphere. The higher the value of "step", the more segments there will be and the smoother the
    * sphere will appear.
+   * @param {vec3} color - The color of sphere.
    */
-  drawSphere(matrix: mat4, radius: number = 1, step: number = 4): void {
+  drawSphere(matrix: mat4, radius: number = 1, step: number = 4, color: vec3 = [1, 1, 1]): void {
     let vertexCount = 0;
     const vertices: Array<number> = [];
     const points: Array<[number, number, number]> = [];
@@ -348,8 +353,8 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
     }
 
     for (let i = 0; i < points.length - 1; i++) {
-      vertices.push(points[i][0], points[i][1], points[i][2], 1, 1, 1);
-      vertices.push(points[i + 1][0], points[i + 1][1], points[i + 1][2], 1, 1, 1);
+      vertices.push(points[i][0], points[i][1], points[i][2], color[0], color[1], color[2]);
+      vertices.push(points[i + 1][0], points[i + 1][1], points[i + 1][2], color[0], color[1], color[2]);
       vertexCount += 2;
     }
 
@@ -368,8 +373,9 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
    * position, rotation, and scale of the bounding box in 3D space.
    * @param {vec3} min - The `min` parameter represents the minimum point of the bounding box.
    * @param {vec3} max - The `max` parameter represents the maximum point of the bounding box.
+   * @param {vec3} color - The color of bounding box.
    */
-  drawBoundingBox(matrix: mat4, min: vec3, max: vec3): void {
+  drawBoundingBox(matrix: mat4, min: vec3, max: vec3, color: vec3 = [1, 1, 1]): void {
     let vertexCount = 0;
     const vertices: Array<number> = [];
     const a = [min[0], min[1], min[2]];
@@ -381,40 +387,40 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
     const g = [max[0], min[1], max[2]];
     const h = [min[0], min[1], max[2]];
 
-    vertices.push(a[0], a[1], a[2], 1, 1, 1);
-    vertices.push(b[0], b[1], b[2], 1, 1, 1);
-    vertices.push(h[0], h[1], h[2], 1, 1, 1);
-    vertices.push(g[0], g[1], g[2], 1, 1, 1);
+    vertices.push(a[0], a[1], a[2], color[0], color[1], color[2]);
+    vertices.push(b[0], b[1], b[2], color[0], color[1], color[2]);
+    vertices.push(h[0], h[1], h[2], color[0], color[1], color[2]);
+    vertices.push(g[0], g[1], g[2], color[0], color[1], color[2]);
     vertexCount += 4;
 
-    vertices.push(d[0], d[1], d[2], 1, 1, 1);
-    vertices.push(c[0], c[1], c[2], 1, 1, 1);
-    vertices.push(e[0], e[1], e[2], 1, 1, 1);
-    vertices.push(f[0], f[1], f[2], 1, 1, 1);
+    vertices.push(d[0], d[1], d[2], color[0], color[1], color[2]);
+    vertices.push(c[0], c[1], c[2], color[0], color[1], color[2]);
+    vertices.push(e[0], e[1], e[2], color[0], color[1], color[2]);
+    vertices.push(f[0], f[1], f[2], color[0], color[1], color[2]);
     vertexCount += 4;
 
-    vertices.push(a[0], a[1], a[2], 1, 1, 1);
-    vertices.push(d[0], d[1], d[2], 1, 1, 1);
-    vertices.push(h[0], h[1], h[2], 1, 1, 1);
-    vertices.push(e[0], e[1], e[2], 1, 1, 1);
+    vertices.push(a[0], a[1], a[2], color[0], color[1], color[2]);
+    vertices.push(d[0], d[1], d[2], color[0], color[1], color[2]);
+    vertices.push(h[0], h[1], h[2], color[0], color[1], color[2]);
+    vertices.push(e[0], e[1], e[2], color[0], color[1], color[2]);
     vertexCount += 4;
 
-    vertices.push(b[0], b[1], b[2], 1, 1, 1);
-    vertices.push(c[0], c[1], c[2], 1, 1, 1);
-    vertices.push(g[0], g[1], g[2], 1, 1, 1);
-    vertices.push(f[0], f[1], f[2], 1, 1, 1);
+    vertices.push(b[0], b[1], b[2], color[0], color[1], color[2]);
+    vertices.push(c[0], c[1], c[2], color[0], color[1], color[2]);
+    vertices.push(g[0], g[1], g[2], color[0], color[1], color[2]);
+    vertices.push(f[0], f[1], f[2], color[0], color[1], color[2]);
     vertexCount += 4;
 
-    vertices.push(d[0], d[1], d[2], 1, 1, 1);
-    vertices.push(e[0], e[1], e[2], 1, 1, 1);
-    vertices.push(c[0], c[1], c[2], 1, 1, 1);
-    vertices.push(f[0], f[1], f[2], 1, 1, 1);
+    vertices.push(d[0], d[1], d[2], color[0], color[1], color[2]);
+    vertices.push(e[0], e[1], e[2], color[0], color[1], color[2]);
+    vertices.push(c[0], c[1], c[2], color[0], color[1], color[2]);
+    vertices.push(f[0], f[1], f[2], color[0], color[1], color[2]);
     vertexCount += 4;
 
-    vertices.push(a[0], a[1], a[2], 1, 1, 1);
-    vertices.push(h[0], h[1], h[2], 1, 1, 1);
-    vertices.push(b[0], b[1], b[2], 1, 1, 1);
-    vertices.push(g[0], g[1], g[2], 1, 1, 1);
+    vertices.push(a[0], a[1], a[2], color[0], color[1], color[2]);
+    vertices.push(h[0], h[1], h[2], color[0], color[1], color[2]);
+    vertices.push(b[0], b[1], b[2], color[0], color[1], color[2]);
+    vertices.push(g[0], g[1], g[2], color[0], color[1], color[2]);
     vertexCount += 4;
 
     this.commands.push({

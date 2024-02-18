@@ -1,0 +1,17 @@
+* Class: Gfx2IsoDrawable
+
+The `Gfx2Drawable` class represents a drawable object in a 2D graphics system.
+- inherit from: Gfx2Drawable~
+- parent of: Gfx2IsoTile~
+** Methods
+- ''getElevation''(): number~
+~
+- ''getPositionZ''(): number~
+~
+- ''setElevation''(elevation: number): void~
+-- ''elevation''~
+~
+- ''setPositionZ''(z: number): void~
+-- ''z''~
+** Constructors
+- ''new Gfx2IsoDrawable''(): Gfx2IsoDrawable~

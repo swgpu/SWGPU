@@ -1,0 +1,14 @@
+* Class: Gfx3SkyboxRenderer
+
+The `Gfx3SkyboxRenderer` class is a singleton renderer responsible to display skybox.
+- inherit from: Gfx3RendererAbstract~
+** Methods
+- ''draw''(skybox: Gfx3Skybox): void~
+The "draw" function draw a skybox.~
+-- ''skybox'': The skybox.~
+~
+- ''render''(): void~
+The "render" function.~
+** Constructors
+- ''new Gfx3SkyboxRenderer''(): Gfx3SkyboxRenderer~
+The constructor.~

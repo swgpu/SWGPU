@@ -228,6 +228,17 @@ class Gfx3Transformable {
   }
 
   /**
+   * The "lookAt" function sets the transform matrix to the specified coordinates and look towards them.
+   * @param {number} x - The x-coordinate of the target position that the transformable should look at.
+   * @param {number} y - The y-coordinate of the target position that the transformable should look at.
+   * @param {number} z - The z-coordinate of the target position that the transformable should look at.
+   */
+  // lookAt(x: number, y: number, z:number): void {
+  //   UT.MAT4_LOOKAT(this.position, [x, y, z], [0, 1, 0], this.transformMatrix);
+  //   UT.MAT4_MULTIPLY(this.transformMatrix, UT.MAT4_SCALE(this.scale[0], this.scale[1], this.scale[2]), this.transformMatrix);
+  // }
+
+  /**
    * The "getLocalAxies" function returns an array of three vectors representing the local axes of an
    * object based on its transformation matrix.
    * @returns The three axis vector.

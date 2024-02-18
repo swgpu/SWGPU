@@ -1,0 +1,120 @@
+* Class: UIMenu
+
+The `UIMenu` class represents a menu UI widget with customizable options
+such as axis, rows, columns, disabled item, multiple selection, and selectable items.
+It support both mouse and keys navigation.
+It emit 'E_ITEM_FOCUSED', 'E_ITEM_UNFOCUSED', 'E_ITEM_SELECTED', 'E_ITEM_UNSELECTED' and E_UNSELECTED events.
+- inherit from: UIWidget~
+- parent of: UIMenuListView, UIMenuText~
+** Methods
+- ''addWidget''(widget: UIWidget, index: number): void~
+The "addWidget" function adds a UI widget item to the menu.~
+-- ''widget'': The `widget` item.~
+-- ''index'': The `index` parameter is an optional parameter of type `number` that
+specifies the position at which the widget should be inserted in the menu. If no index is
+provided (default value is -1), the widget will be added at the end of the menu.~
+~
+- ''clear''(): void~
+The "clear" function remove all widget items.~
+~
+- ''delete''(): void~
+The "delete" function free all resources.
+Warning: you need to call this method to free allocation for this object.~
+~
+- ''focus''(focusIndex: MenuFocus): void~
+The "focus" function.~
+-- ''focusIndex''~
+~
+- ''focusWidget''(index: number, preventScroll: boolean, emit: boolean): void~
+The "focusWidget" function is used to focus on a specific widget item, scroll to it if necessary, and
+emit an 'E_ITEM_FOCUSED' event.~
+-- ''index'': The index position of the widget that you want to focus on.~
+-- ''preventScroll'': A boolean value indicating whether to prevent scrolling to
+the focused widget if it is not currently visible within the viewport.~
+-- ''emit'': The `emit` parameter is a boolean value that determines whether an
+event should be emitted after focusing the widget.~
+~
+- ''getFocusedWidgetId''()~
+The "getFocusedWidgetId" function returns the ID of the focused widget, or null if there is no
+focused widget.~
+~
+- ''getFocusedWidgetIndex''(): number~
+The "getFocusedWidgetIndex" function returns the index position of the focused widget item, or -1 if no widget is
+focused.~
+~
+- ''getSelectedWidgetId''()~
+The "getSelectedWidgetId" function returns the ID of the first selected widget, or null if no widget
+is selected.~
+~
+- ''getSelectedWidgetIds''()~
+The "getSelectedWidgetIds" function returns an array of string IDs of selected widget items.~
+~
+- ''getSelectedWidgetIndex''(): number~
+The "getSelectedWidgetIndex" function returns the index position of the first selected widget item or -1 if no
+widget is selected.~
+~
+- ''getSelectedWidgetIndexes''()~
+The "getSelectedWidgetIndexes" function returns an array of index position of selected widget items.~
+~
+- ''getWidget''(index: number): UIWidget~
+The "getWidget" function returns the UIWidget at the specified index.~
+-- ''index'': The index parameter is a number that represents the position of the widget
+in an array or collection.~
+~
+- ''getWidgets''()~
+The "getWidgets" function returns the widgets property.~
+~
+- ''handleWidgetClicked''(widget: UIWidget): void~
+-- ''widget''~
+~
+- ''handleWidgetHover''(widget: UIWidget): void~
+-- ''widget''~
+~
+- ''onAction''(actionId: string): void~
+The "onAction" function.~
+-- ''actionId''~
+~
+- ''removeWidget''(index: number): void~
+The "removeWidget" function removes a UI widget item from the menu.~
+-- ''index'': The index parameter is the position of the widget in the menu to removed.~
+~
+- ''selectWidget''(index: number, emit: boolean): void~
+The "selectWidget" function selects a specific widget item and emits an 'E_ITEM_SELECTED' event.~
+-- ''index'': The index position of the widget that you want to select on.~
+-- ''emit'': The `emit` parameter is a boolean value that determines whether an
+event should be emitted after selecting the widget.~
+~
+- ''setEnabledWidget''(index: number, enabled: boolean): void~
+The "setEnabledWidget" function sets the enabled state of a specific widget item.~
+-- ''index'': The index position of the widget that you want to enabled on.~
+-- ''enabled'': The "enabled" parameter is a boolean value that determines whether the
+widget should be enabled or disabled.~
+~
+- ''setEnabledWidgets''(enabled: boolean): void~
+The "setEnabledWidgets" function sets the enabled state of all widget items.~
+-- ''enabled'': The "enabled" parameter is a boolean value that determines whether the
+widgets should be enabled or disabled.~
+~
+- ''unfocusWidget''(emit: boolean): void~
+The "unfocusWidget" function unfocuses widgets, and emits an 'E_ITEM_UNFOCUSED' event.~
+-- ''emit'': The `emit` parameter is a boolean value that determines whether an
+event should be emitted after focusing the widget.~
+~
+- ''unselectWidget''(index: number, emit: boolean): void~
+The "unselectWidget" function unselects a specific widget item and emits an 'E_ITEM_UNSELECTED' event.~
+-- ''index'': The index position of the widget that you want to unselect on.~
+-- ''emit'': The `emit` parameter is a boolean value that determines whether an
+event should be emitted after unselecting the widget.~
+~
+- ''unselectWidgets''(emit: boolean): void~
+The "unselectWidgets" function deselects all widgets and emits an 'E_UNSELECTED' event.~
+-- ''emit'': The `emit` parameter is a boolean value that determines whether an
+event should be emitted after unselecting all widgets.~
+~
+- ''update''(ts: number): void~
+The "update" function.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+** Constructors
+- ''new UIMenu''(options): UIMenu~
+The constructor.~
+-- ''options'': An object containing various options for configuring the behavior of the menu.~

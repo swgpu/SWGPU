@@ -1,0 +1,12 @@
+* Class: UIMenuTextItem
+
+The `UIMenuTextItem` is a class that represents a text item in a UI menu and provides
+a method to set the text content of the item.
+- inherit from: UIWidget~
+** Methods
+- ''setText''(text: string): void~
+The "setText" function sets the text property.~
+-- ''text'': The `text` content.~
+** Constructors
+- ''new UIMenuTextItem''(): UIMenuTextItem~
+The constructor.~

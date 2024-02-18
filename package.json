@@ -16,14 +16,14 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "doc": "typedoc src/lib/ --json docs/doc.json"
+    "doc": "typedoc src/lib/ --json docs/doc.json",
+    "pukiwiki": "python3 bin/converter-typedoc-to-pukiwiki.py"
   },
   "bin": {
     "create-warme": "bin/create-warme.js"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.0.2",
-    "blueshell": "^5.1.0",
     "pako": "^2.1.0",
     "typedoc": "^0.25.1",
     "typedoc-plugin-markdown": "^3.16.0",
@@ -31,6 +31,7 @@
     "vite": "^3.1.0"
   },
   "dependencies": {
-    "@webgpu/types": "^0.1.21"
+    "@webgpu/types": "^0.1.21",
+    "curve-interpolator": "^3.3.1"
   }
 }

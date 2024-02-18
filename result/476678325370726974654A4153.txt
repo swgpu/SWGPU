@@ -1,0 +1,59 @@
+* Class: Gfx2SpriteJAS
+
+The `Gfx2SpriteJAS` is a subclass of `Gfx2Drawable` that represents a sprite with animations.
+- inherit from: Gfx2Drawable~
+** Methods
+- ''getAnimations''()~
+The "getAnimations" function returns an array of animation descriptors.~
+~
+- ''getCurrentAnimation''()~
+The "getCurrentAnimation" function returns the current animation or null if there is no current
+animation.~
+~
+- ''getCurrentAnimationFrameIndex''(): number~
+The "getCurrentAnimationFrameIndex" function returns the current animation frame index.~
+~
+- ''getFlip''()~
+The "getFlip" function returns two booleans, first is the x-axis flip flag, second is the y-axis flip flag.~
+~
+- ''getTexture''()~
+The "getTexture" function returns the sprite texture.~
+~
+- ''loadFromFile''(path: string): Promise~
+The "loadFromFile" function asynchronously loads sprite data from a json file (jas).~
+-- ''path'': The `path` parameter is the file path.~
+~
+- ''paint''(): void~
+The "paint" function is rendering the sprite.~
+~
+- ''play''(animationName: string, looped: boolean, preventSameAnimation: boolean): void~
+The "play" function is used to start playing a specific animation, with options for looping and
+preventing the same animation from being played again.~
+-- ''animationName'': The name of the animation to be played.~
+-- ''looped'': The `looped` parameter is a boolean that determines whether
+the animation should loop or not.~
+-- ''preventSameAnimation'': The `preventSameAnimation` parameter is a boolean
+flag that determines whether the same animation should be prevented from playing again.~
+~
+- ''setAnimations''(animations: JASAnimation[]): void~
+The "setAnimations" function sets the animations property.~
+-- ''animations'': The `animations` parameter is an array of animation descriptors.~
+~
+- ''setFlipX''(x: boolean): void~
+The "setFlipX" function sets the value of the flipX property to the provided boolean value.~
+-- ''x'': The x-axis flip flag.~
+~
+- ''setFlipY''(y: boolean): void~
+The "setFlipY" function sets the value of the flipY property to the provided boolean value.~
+-- ''y'': The y-axis flip flag.~
+~
+- ''setTexture''(texture: ImageBitmap): void~
+The "setTexture" function sets the sprite texture.~
+-- ''texture'': The sprite texture.~
+~
+- ''update''(ts: number): void~
+The "update" function.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+** Constructors
+- ''new Gfx2SpriteJAS''(): Gfx2SpriteJAS~
+The constructor.~

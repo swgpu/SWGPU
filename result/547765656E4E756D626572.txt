@@ -1,0 +1,10 @@
+* Class: TweenNumber
+
+The `TweenNumber` class is a shortcut subclass of "TweenAbstract" that handles tweening of number values using
+linear interpolation.
+- inherit from: TweenAbstract~
+** Methods
+** Constructors
+- ''new TweenNumber''(times: number[], values: number[]): TweenNumber~
+-- ''times''~
+-- ''values''~

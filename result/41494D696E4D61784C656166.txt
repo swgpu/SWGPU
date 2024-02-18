@@ -1,0 +1,7 @@
+* Class: AIMinMaxLeaf
+
+- inherit from: AIMinMaxTreeAbstract~
+** Methods
+** Constructors
+- ''new AIMinMaxLeaf''(value: number): AIMinMaxLeaf~
+-- ''value''~

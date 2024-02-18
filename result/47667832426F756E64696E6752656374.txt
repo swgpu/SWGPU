@@ -1,0 +1,70 @@
+* Class: Gfx2BoundingRect
+
+The `Gfx2BoundingRect` class represents a bounding rectangle in a 2D graphics system and provides
+various methods for manipulating and calculating properties of the rectangle.
+** Methods
+- ''fromVertices''(vertices: number[]): void~
+The "fromVertices" function takes an array of vertices and calculates the new minimum and maximum values.~
+-- ''vertices'': The `vertices` parameter is an array of numbers representing the coordinates of
+the points of a shape. Each pair of numbers represents the x and y coordinates of a point.~
+~
+- ''getCenter''(): vec2~
+The "getCenter" function calculates the center point of the rectangle.~
+~
+- ''getPerimeter''(): number~
+The "getPerimeter" function calculates and returns the perimeter of the rectangle.~
+~
+- ''getRadius''(): number~
+The "getRadius" function calculates the radius of a circumscribed circle to the rectangle.~
+~
+- ''getSize''(): vec2~
+The "getSize" function calculates and returns the width and height of the rectangle.~
+~
+- ''getVolume''(): number~
+The "getVolume" function calculates the volume of a the rectangle.~
+~
+- ''intersectBoundingRect''(aabr: Gfx2BoundingRect): boolean~
+The "intersectBoundingRect" function checks if two bounding rectangles intersect.~
+-- ''aabr'': The parameter "aabr" is the rect to check for intersection.~
+~
+- ''isPointInside''(x: number, y: number): boolean~
+The "isPointInside" function checks if a given point is inside the rectangle.~
+-- ''x'': The x-coordinate of the point.~
+-- ''y'': The y-coordinate of the point.~
+~
+- ''merge''(rect: Gfx2BoundingRect): Gfx2BoundingRect~
+The "merge" function takes a `Gfx2BoundingRect` object as input and returns a new `Gfx2BoundingRect`
+that represents the union of the two rectangles.~
+-- ''rect'': The `rect` parameter is the rect to merge.~
+~
+- ''transform''(matrix: mat3): Gfx2BoundingRect~
+The "transform" function takes a matrix and transforms the bounding rectangle
+points, returning a new transformed bounding rectangle.~
+-- ''matrix'': The `matrix` parameter is a 3x3 transformation matrix. It is used to
+transform the points of a bounding rectangle.~
+~
+- ''createFrom''(minx: number, miny: number, maxx: number, maxy: number): Gfx2BoundingRect~
+The "createFrom" is a static method that creates a new instance of "Gfx2BoundingRect".~
+-- ''minx'': The minimum x-coordinate of the bounding rectangle.~
+-- ''miny'': The minimum y-coordinate of the bounding rectangle.~
+-- ''maxx'': The maximum x-coordinate of the bounding rectangle.~
+-- ''maxy'': The maximum y-coordinate of the bounding rectangle.~
+~
+- ''createFromCenter''(x: number, y: number, w: number, h: number): Gfx2BoundingRect~
+The "createFromCenter" is a static method that creates a new instance of "Gfx2BoundingRect".~
+-- ''x'': The x-coordinate of the center of the bounding rectangle.~
+-- ''y'': The y-coordinate of the center of the bounding rectangle.~
+-- ''w'': The width of the bounding rectangle.~
+-- ''h'': The height of the bounding rectangle.~
+~
+- ''createFromCoord''(x: number, y: number, w: number, h: number): Gfx2BoundingRect~
+The "createFromCoord" is a static method that creates a new instance of "Gfx2BoundingRect".~
+-- ''x'': The x-coordinate of the top-left corner of the bounding rectangle.~
+-- ''y'': The y-coordinate of the top-left corner of the bounding rectangle.~
+-- ''w'': The width of the bounding rectangle.~
+-- ''h'': The height of the bounding rectangle.~
+** Constructors
+- ''new Gfx2BoundingRect''(min: vec2, max: vec2): Gfx2BoundingRect~
+The constructor.~
+-- ''min'': The minimum point of the bounding rectangle.~
+-- ''max'': The maximum point of the bounding rectangle.~

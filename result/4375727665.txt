@@ -1,0 +1,14 @@
+* Class: Curve
+
+The `Curve` class represent a cubic curve interpolator.
+** Methods
+- ''createInterpolator''(points: vec_any[], options: CurveOptions): default~
+The "createInterpolator" function create a curve interpolator used to create curve from a list of control points.~
+-- ''points'': Control points~
+-- ''options'': Interpolator options~
+~
+- ''createInterpolatorFromFile''(path: string): Promise~
+The "createInterpolatorFromFile" function asynchronously loads curve data from a json file and return a curve interpolator.~
+-- ''path'': The `path` parameter is the file path.~
+** Constructors
+- ''new Curve''(): Curve~

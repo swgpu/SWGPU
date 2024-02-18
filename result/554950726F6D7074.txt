@@ -1,0 +1,47 @@
+* Class: UIPrompt
+
+The `UIPrompt` class represents a user interface prompt with a text content and a menu of actions.
+- inherit from: UIWidget~
+** Methods
+- ''addAction''(id: string, text: string): void~
+The "addAction" function adds a new menu button.~
+-- ''id'': A string representing the unique identifier for the action. This is used to
+identify the action when it is selected or triggered.~
+-- ''text'': The "text" parameter is a string that represents the text or label for the
+action that you want to add to the UI menu.~
+~
+- ''clearActions''(): void~
+The "clearActions" function remove all menu buttons.~
+~
+- ''delete''(): void~
+The "delete" function free all resources.
+Warning: you need to call this method to free allocation for this object.~
+~
+- ''focus''(): void~
+The "focus" function.~
+~
+- ''handleMenuItemSelected''(data: any): void~
+The "handleMenuItemSelected" function.
+It emits an 'E_ITEM_SELECTED' event with the data passed as a parameter.~
+-- ''data'': The `data` parameter is of type `any`, which means it can be any data type. It
+represents the data associated with the selected menu item.~
+~
+- ''removeAction''(id: string): void~
+The "removeAction" function remove the specified menu button.~
+-- ''id'': The `id` parameter is a string that represents the unique identifier of the
+action to be removed from the UI menu.~
+~
+- ''setText''(text: string): void~
+The "setText" function sets the text message.~
+-- ''text'': The `text` parameter is a string that represents the text content that you
+want to set.~
+~
+- ''unfocus''(): void~
+The "unfocus" function.~
+~
+- ''update''(ts: number): void~
+The "update" function.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+** Constructors
+- ''new UIPrompt''(): UIPrompt~
+The constructor.~

@@ -1,0 +1,48 @@
+* Class: ScriptMachine
+
+The `ScriptMachine` is a class that represents a script machine for executing script blocks and commands.
+It let you create your game scene scripting with methods to execute a sequences of asynchronous commands and
+handle derivation story with block jumping.
+** Methods
+- ''clearCommandRegister''(): void~
+The "clearCommandRegister" function flush the command register.~
+~
+- ''isEnabled''(): boolean~
+The "isEnabled" function returns the enabled property.~
+~
+- ''jump''(blockId: string): void~
+The "jump" function sets the script machine on the specified commands block.~
+-- ''blockId'': The `blockId` parameter is a string that represents the ID of a block.~
+~
+- ''loadFromFile''(path: string): Promise~
+The "loadFromFile" function asynchronously loads script data from a json file (jsc).~
+-- ''path'': The `path` parameter is the file path.~
+~
+- ''registerCommand''(key: string, commandFunc: Function): void~
+The "registerCommand" function registers a command with a unique key and associates it with a
+function.~
+-- ''key'': The `key` parameter is a string that represents the unique identifier for the
+command. It is used to register and retrieve the command function from the command register.~
+-- ''commandFunc'': The `commandFunc` parameter is a function that represents the
+command to be registered. It can be any valid JavaScript function that will be executed when the
+registered command is called.~
+~
+- ''runCommand''(key: string, args: any[])~
+The "runCommand" function executes a registered command with the given key and arguments, and
+returns the result.~
+-- ''key'': A string representing the key of the command to be executed.~
+-- ''args'': An array of arguments that will be passed to the command function and coming from
+the script file.~
+~
+- ''setEnabled''(enabled: boolean): void~
+The "setEnabled" function sets the enabled property indicating whether the script machine is enabled or
+disabled.~
+-- ''enabled'': A boolean value indicating whether the script machine is enabled or
+disabled.~
+~
+- ''update''(ts: number): void~
+The "update" function.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+** Constructors
+- ''new ScriptMachine''(): ScriptMachine~
+The constructor.~

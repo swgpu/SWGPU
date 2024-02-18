@@ -1,0 +1,28 @@
+* Class: Gfx2Particles
+
+The `Gfx2Particles` class is a subclass of `Gfx2Drawable` that responsible for updating and
+rendering a particle system onto a canvas with various properties such as position,
+velocity, size, opacity, acceleration, angle, and age.
+- inherit from: Gfx2Drawable~
+** Methods
+- ''createParticle''(): Particle~
+The "createParticle" function creates a particle with various properties such as position, velocity, size, opacity,
+acceleration, angle, and age.~
+~
+- ''draw''(): void~
+The "draw" function is rendering the particles cloud.~
+~
+- ''getTexture''()~
+The "getTexture" function returns the particle texture.~
+~
+- ''setTexture''(texture): void~
+The "setTexture" function sets the particle texture.~
+-- ''texture'': The texture.~
+~
+- ''update''(ts: number): void~
+The "update" function.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+** Constructors
+- ''new Gfx2Particles''(options: Partial): Gfx2Particles~
+The constructor.~
+-- ''options'': An object containing various options for configuring the behavior of the particles cloud.~

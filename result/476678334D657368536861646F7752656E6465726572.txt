@@ -1,0 +1,39 @@
+* Class: Gfx3MeshShadowRenderer
+
+** Methods
+- ''beginPassRender''(): void~
+The "beginPassRender" function.
+Initialize the pass.~
+~
+- ''drawMesh''(mesh: Gfx3Mesh, matrix): void~
+The "drawMesh" function draw a mesh.~
+-- ''mesh'': The mesh.~
+-- ''matrix'': The `matrix` parameter is an optional parameter that represents
+a transformation 4x4 matrix.~
+~
+- ''endPassRender''(): void~
+The "endPassRender" function.
+Close the pass.~
+~
+- ''getDepthTexture''(): Gfx3Texture~
+The "getDepthTexture" function returns the depth texture.~
+~
+- ''getLVPMatrix''(): Float32Array~
+The "getLVPMatrix" function returns the light view projection matrix (LVP).~
+~
+- ''render''(): void~
+The "render" function.~
+~
+- ''setDepthTextureSize''(depthTextureSize: number): void~
+The "setDepthTextureSize" function sets the size of a the shadow map depth texture.~
+-- ''depthTextureSize'': The `depthTextureSize` parameter represents the size of the depth texture.~
+~
+- ''setShadowProjection''(position: vec3, target: vec3, size: number, depth: number): void~
+The "setShadowProjection" function sets up a shadow projection matrix based on the given position, target, size, and
+depth.~
+-- ''position'': The `position` parameter representing the position of the light source in the scene.~
+-- ''target'': The `target` parameter is used to determine the direction in which the shadow is pointing.~
+-- ''size'': The `size` parameter is used to determines the size of the shadow map that will be generated.~
+-- ''depth'': The `depth` parameter is used to determines how far the shadow projection extends in the scene.~
+** Constructors
+- ''new Gfx3MeshShadowRenderer''(): Gfx3MeshShadowRenderer~

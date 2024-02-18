@@ -1,0 +1,75 @@
+* Class: Gfx2TileMap
+
+The `Gfx2TileMap` class represents a tilemap in a game and provides methods for loading tilemap data, accessing
+tilemap properties, and manipulating tiles.
+** Methods
+- ''findTileLayer''(name: string)~
+The "findTileLayer" function searches for a tile layer with a given name and returns it if found,
+otherwise it returns undefined.~
+-- ''name'': The name of the tile layer that you want to find.~
+~
+- ''getColumns''(): number~
+The "getColumns" function returns the number of columns.~
+~
+- ''getHeight''(): number~
+The "getHeight" function returns the map height in pixels.~
+~
+- ''getLocationCol''(x: number): number~
+The "getLocationCol" function returns the column number of a given x-coordinate.~
+-- ''x'': The parameter `x` represents the x-coordinate of a point.~
+~
+- ''getLocationFromIso''(x: number, y: number): vec2~
+The "getLocationFromIso" function takes in coordinates (x, y) and returns the corresponding location in a grid based on
+the tile width and height.~
+-- ''x'': The x parameter represents the x-coordinate of a point on a grid.~
+-- ''y'': The `y` parameter represents the vertical position or coordinate of a point on a
+grid or map.~
+~
+- ''getLocationRow''(y: number): number~
+The "getLocationRow" function returns the row number of a given y-coordinate.~
+-- ''y'': The parameter `y` represents the y-coordinate of a point.~
+~
+- ''getPositionIso''(row: number, col: number): vec2~
+The "getPositionIso" function calculates the position of a tile in an isometric grid based on its
+row and column indices.~
+-- ''row'': The row parameter represents the row index of a tile in a grid.~
+-- ''col'': The `col` parameter represents the column index of a tile in a grid.~
+~
+- ''getPositionX''(col: number): number~
+The "getPositionX" function returns the x-coordinate of a column on a grid.
+Origin is given at the top-left corner.~
+-- ''col'': The parameter `col` represents the column number.~
+~
+- ''getPositionY''(row: number): number~
+The "getPositionY" function returns the y-coordinate of a row on a grid.
+Origin is given at the top-left corner.~
+-- ''row'': The parameter `row` represents the column number.~
+~
+- ''getRows''(): number~
+The "getRows" function returns the number of rows.~
+~
+- ''getTileHeight''(): number~
+The "getTileHeight" function returns the height of a tile.~
+~
+- ''getTileLayer''(index: number): Gfx2TileLayer~
+The "getTileLayer" function returns the tile layer at the specified index.~
+-- ''index'': The index of the tile layer.~
+~
+- ''getTileLayers''()~
+The "getTileLayers" function returns all tile layers.~
+~
+- ''getTileWidth''(): number~
+The "getTileWidth" function returns the width of a tile.~
+~
+- ''getTileset''(): Gfx2Tileset~
+The "getTileset" function returns the tileset.~
+~
+- ''getWidth''(): number~
+The "getWidth" function returns the width map in pixels.~
+~
+- ''loadFromFile''(path: string): Promise~
+The "loadFromFile" function asynchronously loads map data from a json file.~
+-- ''path'': The `path` parameter is the file path.~
+** Constructors
+- ''new Gfx2TileMap''(): Gfx2TileMap~
+The constructor.~

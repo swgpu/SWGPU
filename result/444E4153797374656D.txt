@@ -1,0 +1,101 @@
+* Class: DNASystem
+
+The `DNASystem` class is a base class that provides functionality for managing entities and their
+components in a game or simulation system.
+** Methods
+- ''action''(actionId: string): void~
+The "action" function iterates over a list of entities and calls the virtual method `onAction` for each entity with a
+given actionId.~
+-- ''actionId'': The `actionId` parameter is a string that represents the identifier of
+the action to be performed (see input_manager).~
+~
+- ''actionOnce''(actionId: string): void~
+The "actionOnce" function iterates over a list of entities and calls the virtual method `onActionOnce`
+for each entity with a given actionId.~
+-- ''actionId'': The `actionId` parameter is a string that represents the identifier of
+the action to be performed (see input_manager).~
+~
+- ''addRequiredComponentTypename''(typename: string): void~
+The "addRequiredComponentTypename" function adds a typename to a set of required component
+typenames, throwing an error if the typename is already present.~
+-- ''typename'': The `typename` parameter is a string that represents
+the name of a component type.~
+~
+- ''bindEntity''(eid: number): void~
+The "bindEntity" function checks if an entity already exists in the system and throws an error if it
+does, otherwise it adds the entity to the system.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''draw''(): void~
+The "draw" function iterates over a collection of entities and calls the virtual method `onEntityDraw` for
+each entity.~
+~
+- ''getTags''()~
+The "getTags" function  returns an array of strings.~
+~
+- ''hasEntity''(eid: number): boolean~
+The "hasEntity" function checks if a given entity exists in this system.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''hasTag''(tag: string): boolean~
+The "hasTag" function checks if system has the given tag.~
+-- ''tag'': A string representing the tag to check for.~
+~
+- ''isMatchingComponentRequirements''(components: IterableIterator): boolean~
+The "isMatchingComponentRequirements" function checks if a given set of components matches the required component typenames.~
+-- ''components'': An iterable component list.~
+~
+- ''onAction''(actionId: string, eid: number): void~
+The "onAction" is a virtual method that is called when an action occurs.~
+-- ''actionId'': The `actionId` parameter is a string that represents the unique identifier
+of the action that occurred (see input_manager).~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''onActionOnce''(actionId: string, eid: number): void~
+The "onActionOnce" is a virtual method that is called when a specific action occurs once.~
+-- ''actionId'': The `actionId` parameter is a string that represents the unique identifier
+of the action that occurred (see input_manager).~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''onAfterUpdate''(ts: number): void~
+The "onAfterUpdate" is a virtual method that is called after the entities update phase.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+~
+- ''onBeforeUpdate''(ts: number): void~
+The "onBeforeUpdate" is a virtual method that is called before the entities update phase.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+~
+- ''onEntityBind''(eid: number): void~
+The "onEntityBind" is a virtual method that is called during entity binding.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''onEntityDraw''(eid: number): void~
+The "onEntityDraw" is a virtual method that is called for each entity during the draw phase.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''onEntityUnbind''(eid: number): void~
+The "onEntityUnbind" is a virtual method that is called during entity unbinding.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''onEntityUpdate''(ts: number, eid: number): void~
+The "onEntityUpdate" is a virtual method that is called for each entity during the update phase.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''pause''(): void~
+The "pause" function make update loop paused.~
+~
+- ''resume''(): void~
+The "resume" function make update loop running.~
+~
+- ''unbindEntity''(eid: number): void~
+The "unbindEntity" function unbinds an entity from the system if it exists, otherwise it throws an error.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''update''(ts: number): void~
+The "update" function iterates over entities and calls the virtual method `onEntityUpdate` for each entity.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+** Constructors
+- ''new DNASystem''(tags: never[]): DNASystem~
+The constructor.~
+-- ''tags''~

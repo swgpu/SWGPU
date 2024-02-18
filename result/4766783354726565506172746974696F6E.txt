@@ -1,0 +1,13 @@
+* Class: Gfx3TreePartition
+
+The `Gfx3TreePartition` class implements a binary tree space partition in 3D graphics system.
+- inherit from: TreePartition~
+** Methods
+** Constructors
+- ''new Gfx3TreePartition''(maxChildren: number, maxDepth: number, aabb: Gfx3BoundingBox): Gfx3TreePartition~
+The constructor.~
+-- ''maxChildren'': The `maxChildren` parameter specifies the maximum number of children
+that a node in the tree can have before it needs to be split into multiple nodes.~
+-- ''maxDepth'': The `maxDepth` parameter specifies the maximum depth of the tree. It
+determines how many levels the tree can have.~
+-- ''aabb'': The top bounding box of the tree partition space.~

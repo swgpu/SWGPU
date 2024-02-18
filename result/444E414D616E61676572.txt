@@ -1,0 +1,85 @@
+* Class: DNAManager
+
+The `DNAManager` is a singleton class responsible for managing entities and components in a pure ecs implementation, allowing for entity
+creation, component addition and removal, and system updates.
+** Methods
+- ''addComponent''(eid: number, component: DNAComponent): void~
+The "addComponent" function adds a DNAComponent to an entity. This entity is binded to all matching DNASystem.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+-- ''component'': The `component` parameter is the component to add.~
+~
+- ''createEntity''(): number~
+The "createEntity" function creates a new entity and returns its uid based on a incremented global index.~
+~
+- ''draw''(): void~
+The "draw" function draw all systems.~
+~
+- ''findEntities''(componentTypeName: string)~
+The "findEntities" function takes a component typename and returns an array of entity
+ids that have that component.~
+-- ''componentTypeName'': The parameter `componentTypeName` is a string that represents
+the name of a component type.~
+~
+- ''findEntity''(componentTypeName: string): number~
+The "findEntity" function retrieves the first entity that has a specific component type and returns its
+entity's id.~
+-- ''componentTypeName'': The `componentTypeName` parameter is a string that represents
+the name of a component type.~
+~
+- ''findSystems''(tag: string)~
+The "findSystems" function returns an array of DNASystem objects that have that tag.~
+-- ''tag'': A string representing the tag to search.~
+~
+- ''getComponent''(eid: number, typename: string): DNAComponent~
+The "getComponent" function retrieves a specific component from an entity.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+-- ''typename'': The `typename` parameter is a string that represents
+the name of a component type.~
+~
+- ''getComponents''(eid: number): Map~
+The "getComponents" function retrieves components from an entity.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''getSystems''()~
+The "getSystems" function  returns the systems.~
+~
+- ''hasComponent''(eid: number, typename: string): boolean~
+The function checks if an entity has a specific component.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+-- ''typename'': The `typename` parameter is a string that represents
+the name of a component type.~
+~
+- ''hasEntity''(id: number): boolean~
+The "hasEntity" function checks if an entity exists.~
+-- ''id'': The `id` parameter is the entity's id.~
+~
+- ''removeComponent''(eid: number, typename: string): void~
+The "removeComponent" function removes a DNAComponent to an entity. This entity is unbinded from all unmatching DNASystem.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+-- ''typename'': The `typename` parameter is a string that represents
+the name of a component type.~
+~
+- ''removeComponentIfExist''(eid: number, typename: string): boolean~
+The "removeComponentIfExist" function removes a component from an entity if it exists and returns true, otherwise it returns
+false.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+-- ''typename'': The `typename` parameter is a string that represents
+the name of a component type.~
+~
+- ''removeEntity''(eid: number): void~
+The "removeEntity" function removes entity.~
+-- ''eid'': The `eid` parameter is the entity's id.~
+~
+- ''reset''(): void~
+The "reset" function resets all resources.~
+~
+- ''setup''(systems: DNASystem[]): void~
+The "setup" function initialize the manager and sets all systems ready to run.~
+-- ''systems'': An array of DNASystem objects.~
+~
+- ''update''(ts: number): void~
+The "update" function update all systems.~
+-- ''ts'': The `ts` parameter stands for "timestep".~
+** Constructors
+- ''new DNAManager''(): DNAManager~
+The constructor.~

@@ -1,0 +1,10 @@
+* Class: Gfx2IsoTile
+
+The `Gfx2Drawable` class represents a drawable object in a 2D graphics system.
+- inherit from: Gfx2IsoDrawable~
+** Methods
+- ''draw''(): void~
+The "draw" function is responsible for rendering a visual representation on a 2DCanvas.~
+** Constructors
+- ''new Gfx2IsoTile''(options: Gfx2TileOptions): Gfx2IsoTile~
+-- ''options''~

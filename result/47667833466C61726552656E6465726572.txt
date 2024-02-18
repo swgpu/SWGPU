@@ -1,0 +1,16 @@
+* Class: Gfx3FlareRenderer
+
+The `Gfx3FlareRenderer` class is a singleton renderer responsible to display texture on the screen
+very quickly. It is ideal for lens-flare effect, rain, snow or every effect on the screen focal.
+Nota bene: The top-left corner is at coordinates 0, 0 on the screen.
+- inherit from: Gfx3RendererAbstract~
+** Methods
+- ''drawFlare''(flare: Gfx3Flare): void~
+The "drawFlare" function draw a flare object.~
+-- ''flare'': The flare object.~
+~
+- ''render''(): void~
+The "render" function.~
+** Constructors
+- ''new Gfx3FlareRenderer''(): Gfx3FlareRenderer~
+The constructor.~

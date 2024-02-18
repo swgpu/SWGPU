@@ -1,0 +1,537 @@
+* Class: UT
+
+** Methods
+- ''CLAMP''(value: number, min: number, max: number): number~
+-- ''value''~
+-- ''min''~
+-- ''max''~
+~
+- ''COLLIDE_BOX_TO_BOX''(min1: vec3, max1: vec3, min2: vec3, max2: vec3): boolean~
+-- ''min1''~
+-- ''max1''~
+-- ''min2''~
+-- ''max2''~
+~
+- ''COLLIDE_CIRCLE''(c1: vec2, r1: number, c2: vec2, r2: number, outVelocity: vec2): boolean~
+***********************************************************************~
+-- ''c1''~
+-- ''r1''~
+-- ''c2''~
+-- ''r2''~
+-- ''outVelocity''~
+~
+- ''COLLIDE_CYLINDER''(c1: vec3, r1: number, h1: number, c2: vec3, r2: number, h2: number, outVelocity: vec2): boolean~
+-- ''c1''~
+-- ''r1''~
+-- ''h1''~
+-- ''c2''~
+-- ''r2''~
+-- ''h2''~
+-- ''outVelocity''~
+~
+- ''COLLIDE_LINE_TO_LINE''(p1: vec2, q1: vec2, p2: vec2, q2: vec2): boolean~
+-- ''p1''~
+-- ''q1''~
+-- ''p2''~
+-- ''q2''~
+~
+- ''COLLIDE_POINT_TO_BOX''(p: vec3, min: vec3, max: vec3): boolean~
+-- ''p''~
+-- ''min''~
+-- ''max''~
+~
+- ''COLLIDE_POINT_TO_RECT''(p: vec2, min: vec2, max: vec2): boolean~
+-- ''p''~
+-- ''min''~
+-- ''max''~
+~
+- ''COLLIDE_RECT_TO_RECT''(min1: vec2, max1: vec2, min2: vec2, max2: vec2): boolean~
+-- ''min1''~
+-- ''max1''~
+-- ''min2''~
+-- ''max2''~
+~
+- ''DEG_TO_RAD''(deg: number): number~
+-- ''deg''~
+~
+- ''EASE_IN_OUT_QUAD''(t: number, b: number, e: number, d: number): number~
+-- ''t''~
+-- ''b''~
+-- ''e''~
+-- ''d''~
+~
+- ''EASE_IN_QUAD''(t: number, b: number, e: number, d: number): number~
+-- ''t''~
+-- ''b''~
+-- ''e''~
+-- ''d''~
+~
+- ''EASE_OUT_QUAD''(t: number, b: number, e: number, d: number): number~
+-- ''t''~
+-- ''b''~
+-- ''e''~
+-- ''d''~
+~
+- ''EULER_FROM_MAT3''(matrix: mat3, out: vec3): vec3~
+-- ''matrix''~
+-- ''out''~
+~
+- ''EULER_FROM_QUATERNION''(quaternion: vec4, out: vec3): vec3~
+***********************************************************************~
+-- ''quaternion''~
+-- ''out''~
+~
+- ''FAIL''(message: string): void~
+-- ''message''~
+~
+- ''GET_RANDOM_FLOAT''(min: number, max: number): number~
+-- ''min''~
+-- ''max''~
+~
+- ''GET_RANDOM_INT''(min: number, max: number): number~
+-- ''min''~
+-- ''max''~
+~
+- ''LERP''(a: number, b: number, t: number): number~
+-- ''a''~
+-- ''b''~
+-- ''t''~
+~
+- ''LINEAR''(t: number, b: number, e: number, d: number): number~
+***********************************************************************~
+-- ''t''~
+-- ''b''~
+-- ''e''~
+-- ''d''~
+~
+- ''LINEAR_VEC2''(t: number, b: vec2, e: vec2, d: number): vec2~
+-- ''t''~
+-- ''b''~
+-- ''e''~
+-- ''d''~
+~
+- ''LINEAR_VEC3''(t: number, b: vec3, e: vec3, d: number): vec3~
+-- ''t''~
+-- ''b''~
+-- ''e''~
+-- ''d''~
+~
+- ''MAT3_COPY''(src: mat3, out: mat3): mat3~
+-- ''src''~
+-- ''out''~
+~
+- ''MAT3_CREATE''(): Float32Array~
+***********************************************************************~
+~
+- ''MAT3_FROM_ROTATION_QUATERNION''(quaternion: vec4, out: mat3): mat3~
+-- ''quaternion''~
+-- ''out''~
+~
+- ''MAT3_IDENTITY''(out: mat3): mat3~
+-- ''out''~
+~
+- ''MAT3_INVERT''(a: mat3, out: mat3): mat3~
+-- ''a''~
+-- ''out''~
+~
+- ''MAT3_MULTIPLY''(a: mat3, b: mat3, out: mat3): mat3~
+-- ''a''~
+-- ''b''~
+-- ''out''~
+~
+- ''MAT3_MULTIPLY_BY_VEC3''(a: mat3, v: vec3, out: vec3): vec3~
+-- ''a''~
+-- ''v''~
+-- ''out''~
+~
+- ''MAT3_PROJECTION''(w: number, h: number, out: mat3): mat3~
+-- ''w''~
+-- ''h''~
+-- ''out''~
+~
+- ''MAT3_ROTATE''(a: number, out: mat3): mat3~
+-- ''a''~
+-- ''out''~
+~
+- ''MAT3_SCALE''(x: number, y: number, out: mat3): mat3~
+-- ''x''~
+-- ''y''~
+-- ''out''~
+~
+- ''MAT3_TRANSLATE''(x: number, y: number, out: mat3): mat3~
+-- ''x''~
+-- ''y''~
+-- ''out''~
+~
+- ''MAT4_COMPUTE''(matrices: mat4[]): mat4~
+-- ''matrices''~
+~
+- ''MAT4_COPY''(src: mat4, out: mat4): mat4~
+-- ''src''~
+-- ''out''~
+~
+- ''MAT4_CREATE''(): Float32Array~
+***********************************************************************~
+~
+- ''MAT4_IDENTITY''(out: mat4): mat4~
+-- ''out''~
+~
+- ''MAT4_INVERT''(a: mat4, out: mat4): mat4~
+-- ''a''~
+-- ''out''~
+~
+- ''MAT4_LOOKAT''(position: vec3, target: vec3, vertical: vec3, out: mat4): mat4~
+-- ''position''~
+-- ''target''~
+-- ''vertical''~
+-- ''out''~
+~
+- ''MAT4_MULTIPLY''(a: mat4, b: mat4, out: mat4): mat4~
+-- ''a''~
+-- ''b''~
+-- ''out''~
+~
+- ''MAT4_MULTIPLY_BY_VEC4''(a: mat4, v: vec4, out: vec4): vec4~
+-- ''a''~
+-- ''v''~
+-- ''out''~
+~
+- ''MAT4_ORTHO''(left: number, right: number, bottom: number, top: number, near: number, far: number, out: mat4): mat4~
+-- ''left''~
+-- ''right''~
+-- ''bottom''~
+-- ''top''~
+-- ''near''~
+-- ''far''~
+-- ''out''~
+~
+- ''MAT4_ORTHOGRAPHIC''(width: number, height: number, depth: number, out: mat4): mat4~
+-- ''width''~
+-- ''height''~
+-- ''depth''~
+-- ''out''~
+~
+- ''MAT4_PERSPECTIVE''(fov: number, ar: number, near: number, far: number, out: mat4): mat4~
+-- ''fov''~
+-- ''ar''~
+-- ''near''~
+-- ''far''~
+-- ''out''~
+~
+- ''MAT4_ROTATE_X''(a: number, out: mat4): mat4~
+-- ''a''~
+-- ''out''~
+~
+- ''MAT4_ROTATE_Y''(a: number, out: mat4): mat4~
+-- ''a''~
+-- ''out''~
+~
+- ''MAT4_ROTATE_Z''(a: number, out: mat4): mat4~
+-- ''a''~
+-- ''out''~
+~
+- ''MAT4_SCALE''(x: number, y: number, z: number, out: mat4): mat4~
+-- ''x''~
+-- ''y''~
+-- ''z''~
+-- ''out''~
+~
+- ''MAT4_TRANSFORM''(position: vec3, rotation: vec3, scale: vec3, out: mat4): mat4~
+-- ''position''~
+-- ''rotation''~
+-- ''scale''~
+-- ''out''~
+~
+- ''MAT4_TRANSLATE''(x: number, y: number, z: number, out: mat4): mat4~
+-- ''x''~
+-- ''y''~
+-- ''z''~
+-- ''out''~
+~
+- ''MAT4_TRANSPOSE''(a: mat4, out: mat4): mat4~
+-- ''a''~
+-- ''out''~
+~
+- ''QUATERNION_CREATE''(x: number, y: number, z: number, w: number): Float32Array~
+***********************************************************************~
+-- ''x''~
+-- ''y''~
+-- ''z''~
+-- ''w''~
+~
+- ''QUATERNION_FROM_EULER''(euler: vec3, order, out: vec4): vec4~
+-- ''euler''~
+-- ''order''~
+-- ''out''~
+~
+- ''RANDARRAY''(min: number, max: number)~
+-- ''min''~
+-- ''max''~
+~
+- ''RANGE_ARRAY''(start: number, stop: number, step: number)~
+-- ''start''~
+-- ''stop''~
+-- ''step''~
+~
+- ''RAY_BOX''(origin: vec3, dir: vec3, min: vec3, max: vec3, outIntersectPoint: vec3): boolean~
+-- ''origin''~
+-- ''dir''~
+-- ''min''~
+-- ''max''~
+-- ''outIntersectPoint''~
+~
+- ''RAY_PLAN''(origin: vec3, dir: vec3, a: vec3, n: vec3, culling: boolean, outIntersectPoint: vec3): boolean~
+-- ''origin''~
+-- ''dir''~
+-- ''a''~
+-- ''n''~
+-- ''culling''~
+-- ''outIntersectPoint''~
+~
+- ''RAY_TRIANGLE''(origin: vec3, dir: vec3, a: vec3, b: vec3, c: vec3, culling: boolean, outIntersectPoint: vec3): boolean~
+***********************************************************************~
+-- ''origin''~
+-- ''dir''~
+-- ''a''~
+-- ''b''~
+-- ''c''~
+-- ''culling''~
+-- ''outIntersectPoint''~
+~
+- ''SHUFFLE''(arr: any[])~
+-- ''arr''~
+~
+- ''SPREAD''(base: number, spread: number): number~
+-- ''base''~
+-- ''spread''~
+~
+- ''TO_FIXED_NUMBER''(num: number, digits: number, base: number): number~
+-- ''num''~
+-- ''digits''~
+-- ''base''~
+~
+- ''TRI2_POINT_INSIDE''(p: vec2, a: vec2, b: vec2, c: vec2): number~
+***********************************************************************~
+-- ''p''~
+-- ''a''~
+-- ''b''~
+-- ''c''~
+~
+- ''TRI3_NORMAL''(a: vec3, b: vec3, c: vec3, out: vec3): vec3~
+-- ''a''~
+-- ''b''~
+-- ''c''~
+-- ''out''~
+~
+- ''TRI3_POINT_ELEVATION''(p: vec2, a: vec3, b: vec3, c: vec3): number~
+-- ''p''~
+-- ''a''~
+-- ''b''~
+-- ''c''~
+~
+- ''TRI3_POINT_INSIDE''(p: vec3, a: vec3, b: vec3, c: vec3, n: vec3): boolean~
+-- ''p''~
+-- ''a''~
+-- ''b''~
+-- ''c''~
+-- ''n''~
+~
+- ''VEC1_COPY''(src: number, out: vec1): vec1~
+***********************************************************************~
+-- ''src''~
+-- ''out''~
+~
+- ''VEC2_2D_TO_ISO''(p: vec2): vec2~
+-- ''p''~
+~
+- ''VEC2_ADD''(a: vec2, b: vec2, out: vec2): vec2~
+-- ''a''~
+-- ''b''~
+-- ''out''~
+~
+- ''VEC2_ANGLE''(a: vec2): number~
+-- ''a''~
+~
+- ''VEC2_ANGLE_BETWEEN''(a: vec2, b: vec2): number~
+-- ''a''~
+-- ''b''~
+~
+- ''VEC2_COPY''(src: vec2, out: vec2): vec2~
+-- ''src''~
+-- ''out''~
+~
+- ''VEC2_CREATE''(x: number, y: number): Float32Array~
+***********************************************************************~
+-- ''x''~
+-- ''y''~
+~
+- ''VEC2_CROSS''(a: vec2, b: vec2): number~
+-- ''a''~
+-- ''b''~
+~
+- ''VEC2_DISTANCE''(a: vec2, b: vec2): number~
+-- ''a''~
+-- ''b''~
+~
+- ''VEC2_DOT''(a: vec2, b: vec2): number~
+-- ''a''~
+-- ''b''~
+~
+- ''VEC2_ISEQUAL''(a: vec2, b: vec2): boolean~
+-- ''a''~
+-- ''b''~
+~
+- ''VEC2_ISO_CARDINAL_POINTS''(direction: string, depth: number, width: number)~
+-- ''direction''~
+-- ''depth''~
+-- ''width''~
+~
+- ''VEC2_ISO_TO_2D''(p: vec2): vec2~
+-- ''p''~
+~
+- ''VEC2_LENGTH''(a: vec2): number~
+-- ''a''~
+~
+- ''VEC2_MULTIPLY''(a: vec2, b: vec2, out: vec2): vec2~
+-- ''a''~
+-- ''b''~
+-- ''out''~
+~
+- ''VEC2_NORMALIZE''(a: vec2, out: vec2): vec2~
+-- ''a''~
+-- ''out''~
+~
+- ''VEC2_OPPOSITE''(a: vec2, out: vec2): vec2~
+-- ''a''~
+-- ''out''~
+~
+- ''VEC2_ORIENTATION''(p: vec2, q: vec2, r: vec2): number~
+-- ''p''~
+-- ''q''~
+-- ''r''~
+~
+- ''VEC2_PARSE''(str: string, separator: string, out: vec2): vec2~
+-- ''str''~
+-- ''separator''~
+-- ''out''~
+~
+- ''VEC2_PROJECTION_COS''(a: vec2, b: vec2, out: vec2): vec2~
+-- ''a''~
+-- ''b''~
+-- ''out''~
+~
+- ''VEC2_QUADRATIC_BEZIER''(p0: vec2, p1: vec2, p2: vec2, t: number, out: vec2): vec2~
+-- ''p0''~
+-- ''p1''~
+-- ''p2''~
+-- ''t''~
+-- ''out''~
+~
+- ''VEC2_SCALE''(a: vec2, scale: number, out: vec2): vec2~
+-- ''a''~
+-- ''scale''~
+-- ''out''~
+~
+- ''VEC2_SPREAD''(base: vec2, spread: vec2): vec2~
+-- ''base''~
+-- ''spread''~
+~
+- ''VEC2_SUBSTRACT''(a: vec2, b: vec2, out: vec2): vec2~
+-- ''a''~
+-- ''b''~
+-- ''out''~
+~
+- ''VEC3_ADD''(a: vec3, b: vec3, out: vec3): vec3~
+-- ''a''~
+-- ''b''~
+-- ''out''~
+~
+- ''VEC3_COPY''(src: vec3, out: vec3): vec3~
+-- ''src''~
+-- ''out''~
+~
+- ''VEC3_CREATE''(x: number, y: number, z: number): Float32Array~
+***********************************************************************~
+-- ''x''~
+-- ''y''~
+-- ''z''~
+~
+- ''VEC3_CROSS''(a: vec3, b: vec3, out: vec3): vec3~
+-- ''a''~
+-- ''b''~
+-- ''out''~
+~
+- ''VEC3_DISTANCE''(a: vec3, b: vec3): number~
+-- ''a''~
+-- ''b''~
+~
+- ''VEC3_DOT''(a: vec3, b: vec3): number~
+-- ''a''~
+-- ''b''~
+~
+- ''VEC3_ISEQUAL''(a: vec3, b: vec3): boolean~
+-- ''a''~
+-- ''b''~
+~
+- ''VEC3_LENGTH''(a: vec3): number~
+-- ''a''~
+~
+- ''VEC3_MULTIPLY''(a: vec3, b: vec3, out: vec3): vec3~
+-- ''a''~
+-- ''b''~
+-- ''out''~
+~
+- ''VEC3_NORMALIZE''(a: vec3, out: vec3): vec3~
+-- ''a''~
+-- ''out''~
+~
+- ''VEC3_OPPOSITE''(a: vec3, out: vec3): vec3~
+-- ''a''~
+-- ''out''~
+~
+- ''VEC3_PARSE''(str: string, separator: string, out: vec3): vec3~
+-- ''str''~
+-- ''separator''~
+-- ''out''~
+~
+- ''VEC3_QUADRATIC_BEZIER''(p0: vec3, p1: vec3, p2: vec3, t: number, out: vec3): vec3~
+-- ''p0''~
+-- ''p1''~
+-- ''p2''~
+-- ''t''~
+-- ''out''~
+~
+- ''VEC3_SCALE''(a: vec3, scale: number, out: vec3): vec3~
+-- ''a''~
+-- ''scale''~
+-- ''out''~
+~
+- ''VEC3_SPREAD''(base: vec3, spread: vec3): vec3~
+-- ''base''~
+-- ''spread''~
+~
+- ''VEC3_SUBSTRACT''(a: vec3, b: vec3, out: vec3): vec3~
+-- ''a''~
+-- ''b''~
+-- ''out''~
+~
+- ''VEC4_COPY''(src: vec4, out: vec4): vec4~
+-- ''src''~
+-- ''out''~
+~
+- ''VEC4_CREATE''(x: number, y: number, z: number, w: number): Float32Array~
+***********************************************************************~
+-- ''x''~
+-- ''y''~
+-- ''z''~
+-- ''w''~
+~
+- ''VEC4_PARSE''(str: string, separator: string, out: vec4): vec4~
+-- ''str''~
+-- ''separator''~
+-- ''out''~
+~
+- ''WAIT''(ms: number): Promise~
+-- ''ms''~
+** Constructors
+- ''new UT''(): UT~
