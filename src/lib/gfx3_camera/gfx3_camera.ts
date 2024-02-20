@@ -1,3 +1,4 @@
+import Quaternion from 'quaternion';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { UT } from '../core/utils';
 import { Gfx3View } from '../gfx3/gfx3_view';
@@ -46,8 +47,8 @@ class Gfx3Camera extends Gfx3Transformable {
    * The "setRotationQuaternion" function sets the rotation using Quaternion.
    * @param {vec4} quaternion - The quaternion.
    */
-  setRotationQuaternion(quaternion: vec4) : void {
-    super.setRotationQuaternion(quaternion);
+  setQuaternion(quaternion: Quaternion) : void {
+    super.setQuaternion(quaternion);
     this.view.setCameraMatrix(this.getTransformMatrix());
   }
 
@@ -110,9 +111,9 @@ class Gfx3Camera extends Gfx3Transformable {
    * @param {number} y - The y-coordinate of the target position that the camera should look at.
    * @param {number} z - The z-coordinate of the target position that the camera should look at.
    */
-  lookAt(x: number, y: number, z:number): void {
+  lookAt(x: number, y: number, z:number, up: vec3 = [0, 1, 0]): void {
     const matrix = this.view.getCameraMatrix();
-    UT.MAT4_LOOKAT(this.position, [x, y, z], [0, 1, 0], matrix);
+    UT.MAT4_LOOKAT(this.position, [x, y, z], up, matrix);
     UT.MAT4_MULTIPLY(matrix, UT.MAT4_SCALE(this.scale[0], this.scale[1], this.scale[2]), matrix);
     this.view.setCameraMatrix(matrix);
   }

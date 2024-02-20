@@ -1,3 +1,5 @@
+import { Quaternion } from './quaternion';
+
 class UT {
   static DEG_TO_RAD_RATIO = Math.PI / 180;
   static EPSILON = 0.0000001;
@@ -425,137 +427,6 @@ class UT {
   }
 
   /**************************************************************************/
-  /* EULER */
-  /**************************************************************************/
-
-  static EULER_FROM_QUATERNION(quaternion: vec4, out: vec3 = [0, 0, 0]): vec3 {
-    const x = quaternion[0], y = quaternion[1], z = quaternion[2], w = quaternion[3];
-    const x2 = x + x, y2 = y + y, z2 = z + z;
-    const xx = x * x2, xy = x * y2, xz = x * z2;
-    const yy = y * y2, yz = y * z2, zz = z * z2;
-    const wx = w * x2, wy = w * y2, wz = w * z2;
-
-    out[0] = (1 - (yy + zz)) * 1.0;
-    out[1] = (xy + wz) * 1.0;
-    out[2] = (xz - wy) * 1.0;
-
-    out[3] = (xy - wz) * 1.0;
-    out[4] = (1 - (xx + zz)) * 1.0;
-    out[5] = (yz + wx) * 1.0;
-
-    out[6] = (xz + wy) * 1.0;
-    out[7] = (yz - wx) * 1.0;
-    out[8] = (1 - (xx + yy)) * 1.0;
-
-    const m11 = (1 - (yy + zz)) * 1.0, m13 = (xz + wy) * 1.0;
-    const m21 = (xy + wz) * 1.0, m22 = (1 - (xx + zz)) * 1.0, m23 = (yz - wx) * 1.0;
-    const m31 = (xz - wy) * 1.0, m33 = (1 - (xx + yy)) * 1.0;
-
-    out[0] = Math.asin(-UT.CLAMP(m23, -1, 1));
-
-    if (Math.abs(m23) < 0.9999999) {
-      out[1] = Math.atan2(m13, m33);
-      out[2] = Math.atan2(m21, m22);
-    }
-    else {
-      out[1] = Math.atan2(-m31, m11);
-      out[2] = 0;
-    }
-
-    return out;
-  }
-
-  static EULER_FROM_MAT3(matrix: mat3, out: vec3 = [0, 0, 0]): vec3 {
-    // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
-    const te = matrix;
-    const m11 = te[0], m13 = te[6];
-    const m21 = te[1], m22 = te[4], m23 = te[7];
-    const m31 = te[2], m33 = te[8];
-
-    out[0] = Math.asin(-UT.CLAMP(m23, -1, 1));
-
-    if (Math.abs(m23) < 0.9999999) {
-      out[1] = Math.atan2(m13, m33);
-      out[2] = Math.atan2(m21, m22);
-    }
-    else {
-      out[1] = Math.atan2(-m31, m11);
-      out[2] = 0;
-    }
-
-    return out;
-  }
-
-  /**************************************************************************/
-  /* QUATERNION */
-  /**************************************************************************/
-
-  static QUATERNION_CREATE(x: number = 0, y: number = 0, z: number = 0, w: number = 1): Float32Array {
-    const out = new Float32Array(4);
-    out[0] = x;
-    out[1] = y;
-    out[2] = z;
-    out[3] = w;
-    return out;
-  }
-
-  static QUATERNION_FROM_EULER(euler: vec3, order: 'XYZ' | 'XZY' | 'YXZ' | 'YZX' | 'ZXY' | 'ZYX', out: vec4 = [0, 0, 0, 1]): vec4 {
-    // http://www.mathworks.com/matlabcentral/fileexchange/
-    // 	20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/
-    //	content/SpinCalc.m
-    const x = euler[0], y = euler[1], z = euler[2];
-    const c1 = Math.cos(x / 2);
-    const c2 = Math.cos(y / 2);
-    const c3 = Math.cos(z / 2);
-    const s1 = Math.sin(x / 2);
-    const s2 = Math.sin(y / 2);
-    const s3 = Math.sin(z / 2);
-
-    switch (order) {
-      case 'XYZ':
-        out[0] = s1 * c2 * c3 + c1 * s2 * s3;
-        out[1] = c1 * s2 * c3 - s1 * c2 * s3;
-        out[2] = c1 * c2 * s3 + s1 * s2 * c3;
-        out[3] = c1 * c2 * c3 - s1 * s2 * s3;
-        break;
-      case 'YXZ':
-        out[0] = s1 * c2 * c3 + c1 * s2 * s3;
-        out[1] = c1 * s2 * c3 - s1 * c2 * s3;
-        out[2] = c1 * c2 * s3 - s1 * s2 * c3;
-        out[3] = c1 * c2 * c3 + s1 * s2 * s3;
-        break;
-      case 'ZXY':
-        out[0] = s1 * c2 * c3 - c1 * s2 * s3;
-        out[1] = c1 * s2 * c3 + s1 * c2 * s3;
-        out[2] = c1 * c2 * s3 + s1 * s2 * c3;
-        out[3] = c1 * c2 * c3 - s1 * s2 * s3;
-        break;
-      case 'ZYX':
-        out[0] = s1 * c2 * c3 - c1 * s2 * s3;
-        out[1] = c1 * s2 * c3 + s1 * c2 * s3;
-        out[2] = c1 * c2 * s3 - s1 * s2 * c3;
-        out[3] = c1 * c2 * c3 + s1 * s2 * s3;
-        break;
-      case 'YZX':
-        out[0] = s1 * c2 * c3 + c1 * s2 * s3;
-        out[1] = c1 * s2 * c3 + s1 * c2 * s3;
-        out[2] = c1 * c2 * s3 - s1 * s2 * c3;
-        out[3] = c1 * c2 * c3 - s1 * s2 * s3;
-        break;
-      case 'XZY':
-        out[0] = s1 * c2 * c3 - c1 * s2 * s3;
-        out[1] = c1 * s2 * c3 - s1 * c2 * s3;
-        out[2] = c1 * c2 * s3 + s1 * s2 * c3;
-        out[3] = c1 * c2 * c3 + s1 * s2 * s3;
-        break;
-      default:
-        throw new Error('UT.QUATERNION_FROM_EULER(): unknown euler order ' + order);
-    }
-
-    return out;
-  }
-
-  /**************************************************************************/
   /* MAT3 */
   /**************************************************************************/
 
@@ -583,28 +454,6 @@ class UT {
     out[6] = src[6];
     out[7] = src[7];
     out[8] = src[8];
-    return out;
-  }
-
-  static MAT3_FROM_ROTATION_QUATERNION(quaternion: vec4, out: mat3 = UT.MAT3_IDENTITY()) {
-    const x = quaternion[0], y = quaternion[1], z = quaternion[2], w = quaternion[3];
-    const x2 = x + x, y2 = y + y, z2 = z + z;
-    const xx = x * x2, xy = x * y2, xz = x * z2;
-    const yy = y * y2, yz = y * z2, zz = z * z2;
-    const wx = w * x2, wy = w * y2, wz = w * z2;
-
-    out[0] = (1 - (yy + zz)) * 1.0;
-    out[1] = (xy + wz) * 1.0;
-    out[2] = (xz - wy) * 1.0;
-
-    out[3] = (xy - wz) * 1.0;
-    out[4] = (1 - (xx + zz)) * 1.0;
-    out[5] = (yz + wx) * 1.0;
-
-    out[6] = (xz + wy) * 1.0;
-    out[7] = (yz - wx) * 1.0;
-    out[8] = (1 - (xx + yy)) * 1.0;
-
     return out;
   }
 
@@ -1121,8 +970,9 @@ class UT {
     return out;
   }
 
-  static MAT4_TRANSFORM(position: vec3, rotation: vec3, scale: vec3, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
+  static MAT4_TRANSFORM(position: vec3, rotation: vec3, scale: vec3, quaternion: Quaternion, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     UT.MAT4_TRANSLATE(position[0], position[1], position[2], out);
+    UT.MAT4_MULTIPLY(out, quaternion.toMatrix4(false), out);
     UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_Y(rotation[1]), out);
     UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_X(rotation[0]), out); // y -> x -> z
     UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_Z(rotation[2]), out);

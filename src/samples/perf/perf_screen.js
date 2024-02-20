@@ -2,6 +2,7 @@ import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
 import { gfx3Manager } from '../../lib/gfx3/gfx3_manager';
 import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
 import { UT } from '../../lib/core/utils';
+import { Quaternion } from '../../lib/core/quaternion';
 import { Screen } from '../../lib/screen/screen';
 import { Gfx3Camera } from '../../lib/gfx3_camera/gfx3_camera';
 import { SHADER_VERTEX_ATTR_COUNT } from '../../lib/gfx3_mesh/gfx3_mesh_shader';
@@ -19,6 +20,7 @@ class Transform {
     this.p = p;
     this.a = a;
     this.s = s;
+    this.q = new Quaternion();
     this.m = UT.MAT4_IDENTITY();
   }
 }
@@ -74,7 +76,7 @@ class PerfScreen extends Screen {
       }
     }
 
-    const bigMeshMatrices = this.transformations.map(t => UT.MAT4_TRANSFORM(t.p, t.a, t.s));
+    const bigMeshMatrices = this.transformations.map(t => UT.MAT4_TRANSFORM(t.p, t.a, t.s, t.q));
     this.bigMesh = DUPE(this.obj, bigMeshMatrices);
 
     document.addEventListener('mousedown', this.handleMouseDownCb);
@@ -102,7 +104,7 @@ class PerfScreen extends Screen {
       t.a[0] += ts / 500.0;
       t.a[2] += ts / 1000.0;
       t.p[1] = Math.sin(n + this.colFac) * 3;
-      UT.MAT4_TRANSFORM(t.p, t.a, t.s, t.m);
+      UT.MAT4_TRANSFORM(t.p, t.a, t.s, t.q, t.m);
       n += r;
     }
 

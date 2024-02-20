@@ -1,5 +1,6 @@
 import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
 import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
+import { gfx3DebugRenderer } from '../../lib/gfx3/gfx3_debug_renderer';
 import { Curve } from '../../lib/core/curve';
 import { UT } from '../../lib/core/utils';
 import { Screen } from '../../lib/screen/screen';
@@ -7,7 +8,6 @@ import { Gfx3Camera } from '../../lib/gfx3_camera/gfx3_camera';
 import { Gfx3MeshOBJ } from '../../lib/gfx3_mesh/gfx3_mesh_obj';
 import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
-import { gfx3DebugRenderer } from '../../lib/gfx3/gfx3_debug_renderer';
 // ---------------------------------------------------------------------------------------
 
 class CurveScreen extends Screen {
@@ -50,11 +50,9 @@ class CurveScreen extends Screen {
 
     if (this.t < 0.99) {
       const position = this.curveInterpolator.getPointAt(this.t);
-      this.camera.setPosition(position[0], position[1] + 0.1, position[2]);
-
       const tangent = UT.VEC3_NORMALIZE(this.curveInterpolator.getTangentAt(this.t));
+      this.camera.setPosition(position[0], position[1] + 0.1, position[2]);
       this.camera.lookAt(position[0] + tangent[0], position[1] + tangent[1], position[2] + tangent[2]);
-
       this.t += ts / 10000;
     }
   }

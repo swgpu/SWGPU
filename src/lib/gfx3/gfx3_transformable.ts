@@ -1,3 +1,4 @@
+import Quaternion from 'quaternion';
 import { UT } from '../core/utils';
 
 /**
@@ -8,8 +9,8 @@ class Gfx3Transformable {
   position: vec3;
   rotation: vec3;
   scale: vec3;
+  quaternion: Quaternion;
   transformMatrix: mat4;
-  isTransformMatrixDirty: boolean;
 
   /**
    * The constructor.
@@ -18,8 +19,8 @@ class Gfx3Transformable {
     this.position = [0.0, 0.0, 0.0];
     this.rotation = [0.0, 0.0, 0.0];
     this.scale = [1.0, 1.0, 1.0];
+    this.quaternion = new Quaternion();
     this.transformMatrix = UT.MAT4_IDENTITY();
-    this.isTransformMatrixDirty = true;
   }
 
   /**
@@ -64,7 +65,6 @@ class Gfx3Transformable {
     this.position[0] = x;
     this.position[1] = y;
     this.position[2] = z;
-    this.isTransformMatrixDirty = true;
   }
 
   /**
@@ -77,7 +77,6 @@ class Gfx3Transformable {
     this.position[0] += x;
     this.position[1] += y;
     this.position[2] += z;
-    this.isTransformMatrixDirty = true;
   }
 
   /**
@@ -113,19 +112,19 @@ class Gfx3Transformable {
   }
 
   /**
-   * The "setRotationQuaternion" function sets the rotation using Quaternion.
-   * @param {vec4} quaternion - The quaternion.
+   * The "setQuaternion" function sets the Quaternion.
+   * @param {Quaternion} quaternion - The quaternion.
    */
-  setRotationQuaternion(quaternion: vec4) : void {
-    this.rotation = UT.EULER_FROM_QUATERNION(quaternion);
+  setQuaternion(quaternion: Quaternion) : void {
+    this.quaternion = quaternion.clone();
   }
 
   /**
-   * The "getRotationQuaternion" function returns the Quaternion based on the Euler angles provided.
+   * The "getQuaternion" function returns the Quaternion.
    * @returns A quaternion.
    */
-  getRotationQuaternion(): vec4 {
-    return UT.QUATERNION_FROM_EULER(this.rotation, 'YXZ');
+  getQuaternion(): Quaternion {
+    return this.quaternion;
   }
 
   /**
@@ -138,7 +137,6 @@ class Gfx3Transformable {
     this.rotation[0] = x;
     this.rotation[1] = y;
     this.rotation[2] = z;
-    this.isTransformMatrixDirty = true;
   }
 
   /**
@@ -151,7 +149,6 @@ class Gfx3Transformable {
     this.rotation[0] += x;
     this.rotation[1] += y;
     this.rotation[2] += z;
-    this.isTransformMatrixDirty = true;
   }
 
   /**
@@ -196,7 +193,6 @@ class Gfx3Transformable {
     this.scale[0] = x;
     this.scale[1] = y;
     this.scale[2] = z;
-    this.isTransformMatrixDirty = true;
   }
 
   /**
@@ -209,7 +205,6 @@ class Gfx3Transformable {
     this.scale[0] += x;
     this.scale[1] += y;
     this.scale[2] += z;
-    this.isTransformMatrixDirty = true;
   }
 
   /**
@@ -217,13 +212,7 @@ class Gfx3Transformable {
    * @returns The transform matrix.
    */
   getTransformMatrix(): mat4 {
-    if (!this.isTransformMatrixDirty) {
-      return this.transformMatrix;
-    }
-
-    UT.MAT4_IDENTITY(this.transformMatrix);
-    UT.MAT4_TRANSFORM(this.position, this.rotation, this.scale, this.transformMatrix);
-    this.isTransformMatrixDirty = false;
+    UT.MAT4_TRANSFORM(this.position, this.rotation, this.scale, this.quaternion, this.transformMatrix);
     return this.transformMatrix;
   }
 
@@ -233,10 +222,10 @@ class Gfx3Transformable {
    * @param {number} y - The y-coordinate of the target position that the transformable should look at.
    * @param {number} z - The z-coordinate of the target position that the transformable should look at.
    */
-  // lookAt(x: number, y: number, z:number): void {
-  //   UT.MAT4_LOOKAT(this.position, [x, y, z], [0, 1, 0], this.transformMatrix);
-  //   UT.MAT4_MULTIPLY(this.transformMatrix, UT.MAT4_SCALE(this.scale[0], this.scale[1], this.scale[2]), this.transformMatrix);
-  // }
+  lookAt(x: number, y: number, z:number, up: vec3 = [0, 1, 0]): void {
+    UT.MAT4_LOOKAT(this.position, [x, y, z], up, this.transformMatrix);
+    UT.MAT4_MULTIPLY(this.transformMatrix, UT.MAT4_SCALE(this.scale[0], this.scale[1], this.scale[2]), this.transformMatrix);
+  }
 
   /**
    * The "getLocalAxies" function returns an array of three vectors representing the local axes of an
