@@ -211,7 +211,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 4. Push to the Branch (git push origin new_feature)
 5. Open a Pull Request
 
-## Contributors list
+## Contributors
 1. Crisxzu - Contribute to the Wiki and typedoc converter.
 2. Zuda - Contribute to Triple Triad demo.
 
