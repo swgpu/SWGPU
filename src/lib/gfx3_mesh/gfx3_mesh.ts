@@ -154,6 +154,8 @@ class Gfx3Mesh extends Gfx3Drawable {
   /**
    * Free all resources.
    * Warning: You need to call this method to free allocation for this object.
+   *
+   * @param {boolean} keepMat - Determines if the material is deleted or not.
    */
   delete(keepMat: boolean = false): void {
     if (!keepMat) {
