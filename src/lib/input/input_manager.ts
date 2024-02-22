@@ -89,7 +89,7 @@ class InputManager {
   }
 
   /**
-   * Register an action mapping.
+   * Add an action mapping.
    * 
    * @param {string} inputSource - The device from which the input is received.
    * @param {string} eventKey - The key or button that triggers the action.
@@ -114,7 +114,7 @@ class InputManager {
   }
 
   /**
-   * UnRegister an action mapping.
+   * Remove an action mapping.
    * 
    * @param {string} inputSource - The device from which the input is received.
    * @param {string} eventKey - The key or button that triggers the action.
