@@ -214,6 +214,8 @@ If you have a suggestion that would make this better, please fork the repo and c
 ## Contributors
 1. Crisxzu - Contribute to the Wiki and typedoc converter.
 2. Zuda - Contribute to Triple Triad demo.
+3. luciedefraiteur - Contribute to the fog.
+4. thetinyspark - Contribute to the binary space partition.
 
 ## Some parts taken for this work
 - Use DOM for UI elements
