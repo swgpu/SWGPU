@@ -13,26 +13,23 @@ const DEFAULT_GROUP_ID = 'default';
 const DEFAULT_GROUP = { id: DEFAULT_GROUP_ID, muted: false, volume: 1 };
 
 /**
- * The `SoundManager` class is a singleton responsible for managing, loading, caching and playing
- * sounds.
+ * Singleton sound manager.
  */
 class SoundManager {
   sounds: Map<string, Sound>;
   soundGroups: Array<SoundGroup>;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.sounds = new Map<string, Sound>();
     this.soundGroups = [DEFAULT_GROUP];
   }
 
   /**
-   * The "loadSound" function asynchronously loads a sound from a given path and returns it as an
-   * `Sound`, caching it for future use.
-   * @param {string} path - The file path or URL of the sound that you want to load.
-   * @returns a Promise that resolves when sound is loaded.
+   * Load asynchronously a sound from a given path and returns it as an `Sound`, caching it for future use.
+   * Note: Use group for categorize your sounds and manage them easily.
+   * 
+   * @param {string} path - The file path.
+   * @param {string} groupId - The group identifier.
    */
   async loadSound(path: string, groupId: string = DEFAULT_GROUP_ID): Promise<Sound> {
     return new Promise(resolve => {
@@ -49,8 +46,9 @@ class SoundManager {
   }
 
   /**
-   * The "deleteSound" function deletes a sound if it exists, otherwise it throws an error.
-   * @param {string} path - The path to the sound file.
+   * Deletes a sound if it exists, otherwise it throws an error.
+   * 
+   * @param {string} path - The file path.
    */
   deleteSound(path: string): void {
     if (!this.sounds.has(path)) {
@@ -63,9 +61,10 @@ class SoundManager {
   }
 
   /**
-   * The "playSound" function plays a sound file if it exists, otherwise it throws an error.
-   * @param {string} path - The `path` parameter is a string that represents the file path of the sound
-   * file that you want to play.
+   * Plays a sound if it exists, otherwise it throws an error.
+   * 
+   * @param {string} path - The file path.
+   * @param {boolean} looped - Determine if sound play in loop or not.
    */
   playSound(path: string, looped: boolean = false): Promise<void> {
     if (!this.sounds.has(path)) {
@@ -78,9 +77,9 @@ class SoundManager {
   }
 
   /**
-   * The "pauseSound" function pause a sound file if it exists, otherwise it throws an error.
-   * @param {string} path - The path parameter is a string that represents the location or path of the
-   * sound file that you want to pause.
+   * Pause a sound if it exists, otherwise it throws an error.
+   * 
+   * @param {string} path - The file path.
    */
   pauseSound(path: string): void {
     if (!this.sounds.has(path)) {
@@ -92,7 +91,7 @@ class SoundManager {
   }
 
   /**
-   * The "releaseSounds" function deletes all stored sounds.
+   * Deletes all stored sounds.
    */
   releaseSounds() {
     for (const path of this.sounds.keys()) {
@@ -103,9 +102,10 @@ class SoundManager {
   }
 
   /**
-   * The "mute" function mute/demute audio.
-   * @param {boolean} muted - The `muted` parameter is a boolean value that determines whether the sounds
-   * should be muted or not.
+   * Mute or demute a group.
+   * 
+   * @param {boolean} muted - Determines whether the sounds should be muted or not.
+   * @param {string} groupId - The group identifier.
    */
   mute(muted: boolean, groupId: string = DEFAULT_GROUP_ID): void {
     const group = this.soundGroups.find(g => g.id == groupId);
@@ -123,8 +123,10 @@ class SoundManager {
   }
 
   /**
-   * The "setVolume" function sets the audio volume.
-   * @param {number} volume - The volume parameter is a number that represents the desired volume level.
+   * Set the audio volume of a group.
+   * 
+   * @param {number} volume - The desired volume level.
+   * @param {string} groupId - The group identifier.
    */
   setVolume(volume: number, groupId: string = DEFAULT_GROUP_ID): void {
     const group = this.soundGroups.find(g => g.id == groupId);
@@ -142,9 +144,7 @@ class SoundManager {
   }
 
   /**
-   * The "isMuted" function returns a boolean value indicating whether the object is currently muted or
-   * not.
-   * @returns The muted flag.
+   * Check if the group is currently muted or not.
    */
   isMuted(groupId: string = DEFAULT_GROUP_ID): boolean {
     const group = this.soundGroups.find(g => g.id == groupId);

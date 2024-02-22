@@ -1,8 +1,7 @@
 import { UT } from '../core/utils';
 
 /**
- * The `Gfx2Manager` class is a singleton responsible for managing 2D canvas for drawing and provides
- * functions for camera manipulation and coordinate conversions.
+ * Singleton 2D renderer.
  */
 class Gfx2Manager {
   canvas: HTMLCanvasElement;
@@ -13,9 +12,6 @@ class Gfx2Manager {
   cameraPosition: vec2;
   bgColor: vec4;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.canvas = <HTMLCanvasElement>document.getElementById('CANVAS_2D')!;
     this.ctx = this.canvas.getContext('2d')!;
@@ -32,8 +28,9 @@ class Gfx2Manager {
   }
 
   /**
-   * The "update" function is called during the update phase.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (this.canvas.width != this.canvas.clientWidth || this.canvas.height != this.canvas.clientHeight) {
@@ -43,8 +40,7 @@ class Gfx2Manager {
   }
 
   /**
-   * The "beginDrawing" function prepares the canvas for drawing by restoring the context, clearing the
-   * canvas, setting the background color, and applying camera transformations.
+   * Begin the draw phase. Prepares the canvas for drawing.
    * Warning: You need to call this method before any draw calls.
    */
   beginDrawing(): void {
@@ -62,14 +58,15 @@ class Gfx2Manager {
   }
 
   /**
-   * The "endDrawing" function restores the previous state of the canvas context.
+   * End the draw phase.
    */
   endDrawing() {
     this.ctx.restore();
   }
 
   /**
-   * The "moveCamera" function move the camera.
+   * Move the camera.
+   * 
    * @param {number} x - The move in x-axis direction.
    * @param {number} y - The move in y-axis direction.
    */
@@ -79,8 +76,9 @@ class Gfx2Manager {
   }
 
   /**
-   * The "setFilter" function sets the filter property of a canvas element to the specified filter value.
-   * @param {string} filter - The filter parameter is a string that represents the CSS filter property.
+   * Sets the css filter property of the canvas.
+   * 
+   * @param {string} filter - The filter parameter is a string that represents the CSS filter property's value.
    * It can be used to apply various visual effects to an element, such as blur, brightness, contrast,
    * grayscale, etc.
    */
@@ -89,20 +87,17 @@ class Gfx2Manager {
   }
 
   /**
-   * The "hasFilter" function checks if the canvas element has an active filter.
-   * @returns The boolean value.
+   * Checks if the canvas element has an active filter.
    */
   hasFilter(): boolean {
     return this.canvas.style.filter != '' && this.canvas.style.filter != 'none';
   }
 
   /**
-   * The "findCanvasPosFromClientPos" function calculates the canvas position from the client's viewport position
-   * @param {number} clientX - The `clientX` parameter represents the horizontal coordinate (in pixels) of
-   * the mouse pointer relative to the client area of the browser window.
-   * @param {number} clientY - The `clientY` parameter represents the vertical coordinate (in pixels) of
-   * the mouse pointer relative to the client area of the browser window.
-   * @returns an array of two numbers, representing the x and y coordinates on the canvas.
+   * Returns canvas-space position from the the client-space position.
+   * 
+   * @param {number} clientX - The horizontal client coordinate.
+   * @param {number} clientY - The vertical client coordinate.
    */
   findCanvasPosFromClientPos(clientX: number, clientY: number): vec2 {
     const rect = this.canvas.getBoundingClientRect();
@@ -112,13 +107,10 @@ class Gfx2Manager {
   }
 
   /**
-   * The "findWorldPosFromClientPos" function calculates the world position from the client's viewport position by
-   * taking care of the canvas dimensions and camera position.
-   * @param {number} clientX - The clientX parameter represents the x-coordinate of the mouse or touch
-   * event relative to the client area of the browser window.
-   * @param {number} clientY - The `clientY` parameter represents the vertical coordinate (in pixels) of
-   * the mouse pointer relative to the client area of the browser window.
-   * @returns an array of two numbers, representing the x and y coordinates on the canvas.
+   * Returns the world-space position from the client-space position.
+   * 
+   * @param {number} clientX - The horizontal client coordinate.
+   * @param {number} clientY - The vertical client coordinate.
    */
   findWorldPosFromClientPos(clientX: number, clientY: number): vec2 {
     const rect = this.canvas.getBoundingClientRect();
@@ -128,64 +120,59 @@ class Gfx2Manager {
   }
 
   /**
-   * The "getClientWidth" function returns the client width of the canvas.
-   * @returns The client width of the canvas element.
+   * Returns the client width of the canvas.
    */
   getClientWidth(): number {
     return this.canvas.clientWidth;
   }
 
   /**
-   * The "getClientHeight" function returns the client height of the canvas.
-   * @returns The client height of the canvas.
+   * Returns the client height of the canvas.
    */
   getClientHeight(): number {
     return this.canvas.clientHeight;
   }
 
   /**
-   * The "getWidth" function returns the width of the canvas.
-   * @returns The width of the canvas element.
+   * Returns the internal width of the canvas.
    */
   getWidth(): number {
     return this.canvas.width;
   }
 
   /**
-   * The "getHeight" function returns the height of the canvas.
-   * @returns The height of the canvas.
+   * Returns the internal height of the canvas.
    */
   getHeight(): number {
     return this.canvas.height;
   }
 
   /**
-   * The "getContext" function returns the 2D rendering context of the canvas element.
-   * @returns the CanvasRenderingContext2D object.
+   * Returns the 2D rendering context of the canvas element.
    */
   getContext(): CanvasRenderingContext2D {
     return this.ctx;
   }
 
   /**
-   * The "setCameraTransform" function add transformation matrix to the camera (before position/rotation/scale).
-   * @param {mat3} cameraTransform - The `cameraTransform` parameter is a 3x3 matrix (mat3) that represents
-   * the transformation applied to the camera.
+   * Set the camera transformation matrix (before position/rotation/scale).
+   * 
+   * @param {mat3} cameraTransform - The transformation matrix.
    */
   setCameraTransform(cameraTransform: mat3): void {
     this.cameraTransform = cameraTransform;
   }
 
   /**
-   * The "getCameraTransform" function returns the transformation matrix apply to the camera.
-   * @returns a mat3, which is a 3x3 matrix representing a transform matrix.
+   * Returns the camera transformation matrix.
    */
   getCameraTransform(): mat3 {
     return this.cameraTransform;
   }
 
   /**
-   * The "setCameraPosition" function sets the camera position.
+   * Sets the camera position.
+   * 
    * @param {number} x - The x-coordinate.
    * @param {number} y - The y-coordinate.
    */
@@ -195,33 +182,31 @@ class Gfx2Manager {
   }
 
   /**
-   * The "getCameraPosition" function returns the camera position.
-   * @returns The camera position.
+   * Returns the camera position.
    */
   getCameraPosition(): vec2 {
     return this.cameraPosition;
   }
 
   /**
-   * The "getCameraPositionX" function returns the X coordinate of the camera position.
-   * @returns The X position of the camera.
+   * Returns the X coordinate of the camera position.
    */
   getCameraPositionX(): number {
     return this.cameraPosition[0];
   }
 
   /**
-   * The "getCameraPositionY" function returns the Y coordinate of the camera position.
-   * @returns The Y position of the camera.
+   * Returns the Y coordinate of the camera position.
    */
   getCameraPositionY(): number {
     return this.cameraPosition[1];
   }
 
   /**
-   * The "setCameraScale" function sets the camera scale.
-   * @param {number} x - The `x` parameter represents the scale factor for the camera in the x-axis.
-   * @param {number} y - The `y` parameter represents the scale factor for the camera in the y-axis.
+   * Sets the camera scale.
+   * 
+   * @param {number} x - The scale factor for the camera in the x-axis.
+   * @param {number} y - The scale factor for the camera in the y-axis.
    */
   setCameraScale(x: number, y: number): void {
     this.cameraScale[0] = x;
@@ -229,51 +214,49 @@ class Gfx2Manager {
   }
 
   /**
-   * The "getCameraScale" function returns the camera scale.
-   * @returns The camera scale.
+   * Returns the camera scale.
    */
   getCameraScale(): vec2 {
     return this.cameraScale;
   }
 
   /**
-   * The "getCameraScaleX" function returns the camera scale factor on x-axis.
-   * @returns The x-axis camera scale factor.
+   * Returns the camera scale factor on x-axis.
    */
   getCameraScaleX(): number {
     return this.cameraScale[0];
   }
 
   /**
-   * The "getCameraScaleY" function returns the camera scale factor on y-axis.
-   * @returns The y-axis camera scale factor.
+   * Returns the camera scale factor on y-axis.
    */
   getCameraScaleY(): number {
     return this.cameraScale[1];
   }
 
   /**
-   * The "setCameraRotation" function sets the rotation of the camera.
-   * @param {number} cameraRotation - The `cameraRotation` parameter is the camera rotation angle in radians.
+   * Sets the rotation of the camera.
+   * 
+   * @param {number} cameraRotation - The camera rotation angle in radians.
    */
   setCameraRotation(cameraRotation: number): void {
     this.cameraRotation = cameraRotation;
   }
 
   /**
-   * The "getCameraRotation" function returns the camera rotation angle in radians.
-   * @returns The camera rotation angle in radians.
+   * Returns the camera rotation angle in radians.
    */
   getCameraRotation(): number {
     return this.cameraRotation;
   }
 
   /**
-   * The "setBgColor" function sets the background color using the provided RGBA values (0 - 255).
-   * @param {number} r - The parameter "r" represents the red component.
-   * @param {number} g - The parameter "g" represents the green component.
-   * @param {number} b - The parameter "b" represents the blue component.
-   * @param {number} a - The parameter "a" represents the alpha value.
+   * Sets the background color using the provided RGBA values (0 - 255).
+   * 
+   * @param {number} r - The red component.
+   * @param {number} g - The green component.
+   * @param {number} b - The blue component.
+   * @param {number} a - The alpha value.
    */
   setBgColor(r: number, g: number, b: number, a: number): void {
     this.bgColor[0] = r;
@@ -283,16 +266,14 @@ class Gfx2Manager {
   }
 
   /**
-   * The "getBgColor" function returns the background color.
-   * @returns The background color.
+   * Returns the background color.
    */
   getBgColor(): vec4 {
     return this.bgColor;
   }
 
   /**
-   * The "getDefaultTexture" function returns a default HTMLImageElement.
-   * @returns an HTMLImageElement.
+   * Returns a default HTMLImageElement.
    */
   getDefaultTexture(): HTMLImageElement {
     const image = new Image();

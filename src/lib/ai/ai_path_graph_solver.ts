@@ -1,24 +1,18 @@
 import { AIPathGraph, AIPathNode } from './ai_path_graph';
 
 /**
- * The `AIPathGraphSolver` class implements the A* algorithm to find the shortest path between two
- * nodes in a graph.
+ * Implements the A* algorithm to find the shortest path between two nodes in a graph.
  * @typeParam T - The coord type: vec2 or vec3.
  */
 class AIPathGraphSolver<T extends vec2 | vec3> {
   /**
-   * The "solve" function uses the A* algorithm to find the shortest path between a start node and an end
-   * node in a given graph.
-   * @param graph - A graph data structure used for pathfinding. It contains nodes and edges that define the connections
-   * between them.
-   * @param startNode - The `startNode` parameter is the node from which the pathfinding algorithm will
-   * start searching for a path. It represents the starting point of the path.
-   * @param endNode - The `endNode` parameter in the `solve` function represents the destination node in
-   * the graph. It is the node where the pathfinding algorithm is trying to reach from the `startNode`.
-   * @returns an array of AIPathNode<T> objects, representing the path from the startNode to the endNode
-   * in the given graph.
+   * Find the shortest path between a start node and an end node in a given graph and returns the path.
+   * 
+   * @param graph - The path graph.
+   * @param startNode - The starting node of the path.
+   * @param endNode - The destination node.
    */
-  solve(graph: AIPathGraph<T>, startNode: AIPathNode<T>, endNode: AIPathNode<T>) {
+  solve(graph: AIPathGraph<T>, startNode: AIPathNode<T>, endNode: AIPathNode<T>): Array<AIPathNode<T>> {
     const openList = new Array<AIPathNode<T>>();
     const closeList = new Array<AIPathNode<T>>();
     let currentNode: AIPathNode<T> | null = null;
@@ -89,11 +83,11 @@ class AIPathGraphSolver<T extends vec2 | vec3> {
   }
 
   /**
-   * The "heuristic" function calculates the distance between two nodes in a graph.
-   * @param graph - The graph data structure used for pathfinding. It contains information about the nodes and edges in the graph.
-   * @param nodeA - The starting node for calculating the distance between two nodes in the graph.
-   * @param nodeB - The ending node.
-   * @returns the distance between nodeA and nodeB in the given graph.
+   * Calculates the distance between two nodes in a graph.
+   * 
+   * @param graph - The path graph.
+   * @param nodeA - The node A.
+   * @param nodeB - The node B.
    */
   heuristic(graph: AIPathGraph<T>, nodeA: AIPathNode<T>, nodeB: AIPathNode<T>): number {
     return graph.getDistance(nodeA, nodeB);

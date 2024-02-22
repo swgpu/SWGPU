@@ -6,7 +6,7 @@ import { Gfx3Particles } from './gfx3_particles';
 import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_particles_shader';
 
 /**
- * The `Gfx3ParticlesRenderer` class is a singleton renderer responsible to display particles.
+ * Singleton particules renderer.
  */
 class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
   particlesList: Array<Gfx3Particles>;
@@ -15,9 +15,6 @@ class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
   grp1: Gfx3DynamicGroup;
   mvpcMatrix: Float32Array;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super('PARTICLES_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.particlesList = [];
@@ -31,7 +28,7 @@ class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "render" function.
+   * The render function.
    */
   render(): void {
     const currentView = gfx3Manager.getCurrentView();
@@ -67,8 +64,9 @@ class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawParticles" function draw a particles cloud.
-   * @param {Gfx3Particles} particles - The particles cloud.
+   * Draw a particles.
+   * 
+   * @param {Gfx3Particles} particles - The particles.
    */
   drawParticles(particles: Gfx3Particles): void {
     this.particlesList.push(particles);

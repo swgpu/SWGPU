@@ -15,8 +15,7 @@ interface JASAnimation {
 };
 
 /**
- * The `UISprite` is a subclass of `UIWidget` that represents a sprite with animations in the
- * user-interface system context.
+ * A UI widget displaying a sprite with animations.
  */
 class UISprite extends UIWidget {
   animations: Array<JASAnimation>;
@@ -26,8 +25,7 @@ class UISprite extends UIWidget {
   timeElapsed: number;
 
   /**
-   * The constructor.
-   * @param options - An object containing optionnal className override.
+   * @param options - Contains only class name.
    */
   constructor(options: { className?: string } = {}) {
     super({
@@ -42,8 +40,9 @@ class UISprite extends UIWidget {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (!this.currentAnimation) {
@@ -73,9 +72,9 @@ class UISprite extends UIWidget {
   }
 
   /**
-   * The "loadTexture" function asynchronously loads an spritesheet image file.
-   * @param {string} imageFile - The `imageFile` parameter is a string that represents the file path or
-   * URL of the image that you want to load as a texture.
+   * Load asynchronously an image file.
+   * 
+   * @param {string} imageFile - The file path.
    */
   async loadTexture(imageFile: string): Promise<void> {
     return new Promise(resolve => {
@@ -89,8 +88,9 @@ class UISprite extends UIWidget {
   }
 
   /**
-   * The "loadFromFile" function asynchronously loads sprite data from a json file (jas).
-   * @param {string} path - The `path` parameter is the file path.
+   * Load asynchronously sprite data from a json file (jas).
+   * 
+   * @param {string} path - The file path.
    */
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
@@ -117,13 +117,11 @@ class UISprite extends UIWidget {
   }
 
   /**
-   * The "play" function is used to start playing a specific animation, with options for looping and
-   * preventing the same animation from being played again.
+   * Play a specific animation.
+   * 
    * @param {string} animationName - The name of the animation to be played.
-   * @param {boolean} [looped=false] - The `looped` parameter is a boolean that determines whether
-   * the animation should loop or not.
-   * @param {boolean} [preventSameAnimation=false] - The `preventSameAnimation` parameter is a boolean
-   * flag that determines whether the same animation should be prevented from playing again.
+   * @param {boolean} [looped=false] - Determines whether the animation should loop or not.
+   * @param {boolean} [preventSameAnimation=false] - Determines whether the same animation should be prevented from playing again.
    */
   play(animationName: string, isLooped: boolean = false, preventSameAnimation: boolean = false): void {
     if (preventSameAnimation && this.currentAnimation && animationName == this.currentAnimation.name) {
@@ -142,33 +140,30 @@ class UISprite extends UIWidget {
   }
 
   /**
-   * The "getAnimations" function returns an array of animation descriptors.
-   * @returns An array of animation descriptors.
+   * Returns the list of animation descriptors.
    */
   getAnimations(): Array<JASAnimation> {
     return this.animations;
   }
 
   /**
-   * The "setAnimations" function sets the animations property.
-   * @param animations - The `animations` parameter is an array of animation descriptors.
+   * Set the animations.
+   * 
+   * @param animations - The animations.
    */
   setAnimations(animations: Array<JASAnimation>): void {
     this.animations = animations;
   }
 
   /**
-   * The "getCurrentAnimation" function returns the current animation or null if there is no current
-   * animation.
-   * @returns The current animation or null.
+   * Returns the current animation or null if there is no current animation.
    */
   getCurrentAnimation(): JASAnimation | null {
     return this.currentAnimation;
   }
 
   /**
-   * The "getCurrentAnimationFrameIndex" function returns the current animation frame index.
-   * @returns The current animation frame index.
+   * Returns the current animation frame index.
    */
   getCurrentAnimationFrameIndex(): number {
     return this.currentAnimationFrameIndex;

@@ -1,0 +1,21 @@
+* Class: AIPathGrid2D
+
+- inherit from: AIPathGrid~
+** Constructors
+- ''new AIPathGrid2D''(size: vec2, grid: number[]): AIPathGrid2D~
+-- ''size''~
+-- ''grid''~
+** Methods
+- ''getDirections''(a: vec2, b: vec2)~
+-- ''a''~
+-- ''b''~
+~
+- ''getValue''(pos: vec2): number~
+-- ''pos''~
+~
+- ''isInside''(pos: vec2): boolean~
+-- ''pos''~
+~
+- ''isSame''(a: vec2, b: vec2): boolean~
+-- ''a''~
+-- ''b''~

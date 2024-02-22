@@ -1,20 +1,17 @@
-import Quaternion from 'quaternion';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
+import { Quaternion } from '../core/quaternion';
 import { UT } from '../core/utils';
 import { Gfx3View } from '../gfx3/gfx3_view';
 import { Gfx3Transformable } from '../gfx3/gfx3_transformable';
 
 /**
- * The `Gfx3Camera` class represents a camera in a 3D graphics system and provides methods for setting
- * its position, rotation, scale, and view, as well as for performing translations, rotations, zooming,
- * and looking at specific coordinates.
+ * A 3D camera object.
  */
 class Gfx3Camera extends Gfx3Transformable {
   view: Gfx3View;
 
   /**
-   * The constructor.
-   * @param {number} viewIndex - The `viewIndex` is the index of the view you want to bind the camera.
+   * @param {number} viewIndex - The view you want to bind the camera.
    */
   constructor(viewIndex: number) {
     super();
@@ -22,7 +19,8 @@ class Gfx3Camera extends Gfx3Transformable {
   }
 
   /**
-   * The "setPosition" function set the position with the given x, y and z coordinates.
+   * Set the position with the given x, y and z coordinates.
+   * 
    * @param {number} x - The X coordinate of the position.
    * @param {number} y - The Y coordinate of the position.
    * @param {number} z - The Z coordinate of the position.
@@ -33,7 +31,8 @@ class Gfx3Camera extends Gfx3Transformable {
   }
 
   /**
-   * The "translate" function translate the position.
+   * Translate the position.
+   * 
    * @param {number} x - The amount of translation in the x-axis direction.
    * @param {number} y - The amount of translation in the y-axis direction.
    * @param {number} z - The amount of translation in the z-axis direction.
@@ -44,16 +43,8 @@ class Gfx3Camera extends Gfx3Transformable {
   }
 
   /**
-   * The "setRotationQuaternion" function sets the rotation using Quaternion.
-   * @param {vec4} quaternion - The quaternion.
-   */
-  setQuaternion(quaternion: Quaternion) : void {
-    super.setQuaternion(quaternion);
-    this.view.setCameraMatrix(this.getTransformMatrix());
-  }
-
-  /**
-   * The "setRotation" function sets rotation Euler angles (in radians).
+   * Set euler rotation in radians.
+   * 
    * @param {number} x - The rotation angle on x-axis in radians.
    * @param {number} y - The rotation angle on y-axis in radians.
    * @param {number} z - The rotation angle on z-axis in radians.
@@ -64,7 +55,8 @@ class Gfx3Camera extends Gfx3Transformable {
   }
 
   /**
-   * The "rotate" function add rotation values to Euler angles.
+   * Add euler rotation in radians.
+   * 
    * @param {number} x - The rotation angle on x-axis in radians.
    * @param {number} y - The rotation angle on y-axis in radians.
    * @param {number} z - The rotation angle on z-axis in radians.
@@ -75,7 +67,18 @@ class Gfx3Camera extends Gfx3Transformable {
   }
 
   /**
-   * The "setScale" function sets the scale with the given x, y and z factors.
+   * Set the Quaternion rotation.
+   * 
+   * @param {vec4} quaternion - The quaternion.
+   */
+  setQuaternion(quaternion: Quaternion) : void {
+    super.setQuaternion(quaternion);
+    this.view.setCameraMatrix(this.getTransformMatrix());
+  }
+
+  /**
+   * Set the scale with the given x, y and z factors.
+   * 
    * @param {number} x - The x factor in the x-axis direction.
    * @param {number} y - The y factor in the y-axis direction.
    * @param {number} z - The z factor in the z-axis direction.
@@ -86,7 +89,8 @@ class Gfx3Camera extends Gfx3Transformable {
   }
 
   /**
-   * The "zoom" function add scale values.
+   * Add scale values.
+   * 
    * @param {number} x - The x factor in the x-axis direction.
    * @param {number} y - The y factor in the y-axis direction.
    * @param {number} z - The z factor in the z-axis direction.
@@ -97,19 +101,20 @@ class Gfx3Camera extends Gfx3Transformable {
   }
 
   /**
-   * The "changeView" function attach camera to another view.
-   * @param {number} viewIndex - The index of the view you want to change to.
+   * Change the view attached to the camera.
+   * @param {number} viewIndex - The view specified by its index.
    */
   changeView(viewIndex: number): void {
     this.view = gfx3Manager.getView(viewIndex);
   }
 
   /**
-   * The "lookAt" function sets the camera matrix to position the camera at the specified coordinates and
-   * look towards them.
-   * @param {number} x - The x-coordinate of the target position that the camera should look at.
-   * @param {number} y - The y-coordinate of the target position that the camera should look at.
-   * @param {number} z - The z-coordinate of the target position that the camera should look at.
+   * Rotate to look at the specified coordinates.
+   * Note: Avoid euler rotation and quaternion rotation.
+   * 
+   * @param {number} x - The x-coordinate of the target position that the transformable should look at.
+   * @param {number} y - The y-coordinate of the target position that the transformable should look at.
+   * @param {number} z - The z-coordinate of the target position that the transformable should look at.
    */
   lookAt(x: number, y: number, z:number, up: vec3 = [0, 1, 0]): void {
     const matrix = this.view.getCameraMatrix();
@@ -119,17 +124,14 @@ class Gfx3Camera extends Gfx3Transformable {
   }
 
   /**
-   * The "getCameraMatrix" function returns the camera matrix of the view.
-   * @returns The camera matrix.
+   * Returns the camera matrix.
    */
   getCameraMatrix(): mat4 {
     return this.view.getCameraMatrix();
   }
 
   /**
-   * The "getLocalAxies" function returns an array of three vectors representing the local axes of an
-   * object based on its transformation matrix.
-   * @returns The three axis vector.
+   * Returns the three local axes of the transformable.
    */
   getLocalAxies(): Array<vec3> {
     const matrix = this.view.getCameraMatrix();

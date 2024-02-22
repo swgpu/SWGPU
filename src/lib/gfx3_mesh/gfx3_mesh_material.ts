@@ -39,9 +39,7 @@ interface MATOptions {
 };
 
 /**
- * The `Gfx3Material` class represents the material of a surface and provides method for controlling
- * texture, light reflection, uv animation, texture scrolling, texture displacement, environment reflection
- * and opacity of a surface. It used the phong illumination model for a full-artistic freedom.
+ * The material of a surface.
  */
 class Gfx3Material {
   animations: Array<MATAnimation>;
@@ -67,9 +65,7 @@ class Gfx3Material {
   envMap: Gfx3Texture;
 
   /**
-   * The constructor.
-   * @param {MATOptions} options - The `options` parameter is an object that contains various properties
-   * for configuring the material.
+   * @param {MATOptions} options - The options to configuring the material.
    */
   constructor(options: MATOptions) {
     this.animations = options.animations ?? [];
@@ -128,8 +124,9 @@ class Gfx3Material {
   }
 
   /**
-   * The "createFromFile" is a static function asynchronously loads and create material from a json file (mat).
-   * @param {string} path - The `path` parameter is the file path.
+   * Load asynchronously data and create material from a json file (mat).
+   * 
+   * @param {string} path - The file path.
    */
   static async createFromFile(path: string): Promise<Gfx3Material> {
     const response = await fetch(path);
@@ -182,16 +179,16 @@ class Gfx3Material {
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
-    this.grp2.destroy();
-    this.grp3.destroy();
+    this.grp2.delete();
+    this.grp3.delete();
   }
 
   /**
-   * The "update" function.
+   * The update function.
    */
   update(ts: number): void {
     if (this.textureScrollRate != 0) {
@@ -232,13 +229,11 @@ class Gfx3Material {
   }
 
   /**
-   * The "playAnimation" function is used to start playing a specific uv animation, with options for looping and
-   * preventing the same animation from being played again.
+   * Play a specific animation.
+   * 
    * @param {string} animationName - The name of the animation to be played.
-   * @param {boolean} [looped=false] - The `looped` parameter is a boolean that determines whether
-   * the animation should loop or not.
-   * @param {boolean} [preventSameAnimation=false] - The `preventSameAnimation` parameter is a boolean
-   * flag that determines whether the same animation should be prevented from playing again.
+   * @param {boolean} [looped=false] - Determines whether the animation should loop or not.
+   * @param {boolean} [preventSameAnimation=false] - Determines whether the same animation should be prevented from playing again.
    */
   playAnimation(animationName: string, looped: boolean = false, preventSameAnimation: boolean = false): void {
     if (preventSameAnimation && this.currentAnimation && animationName == this.currentAnimation.name) {
@@ -257,7 +252,7 @@ class Gfx3Material {
   }
 
   /**
-   * The "resetAnimation" function stop animation and set current animation to null.
+   * Stop animation and set current animation to null.
    */
   resetAnimation(): void {
     this.currentAnimation = null;
@@ -267,9 +262,9 @@ class Gfx3Material {
   }
 
   /**
-   * The "setOpacity" function sets the opacity of the material surface.
-   * @param {number} opacity - The "opacity" determines how transparent or opaque the material should be.
-   * The value ranges from 0 (completely transparent) to 1 (completely opaque).
+   * Sets the opacity value.
+   * 
+   * @param {number} opacity - The opacity (from 0 to 1).
    */
   setOpacity(opacity: number): void {
     this.params[0] = opacity;
@@ -277,8 +272,9 @@ class Gfx3Material {
   }
 
   /**
-   * The "setNormalIntensity" function sets the normal bumping intensity of the material surface.
-   * @param {number} normalIntensity - The `normalIntensity` increase or decrease the bumping effect.
+   * Set the normal bumping intensity.
+   * 
+   * @param {number} normalIntensity - The normal intensity.
    */
   setNormalIntensity(normalIntensity: number): void {
     this.params[1] = normalIntensity;
@@ -286,9 +282,9 @@ class Gfx3Material {
   }
 
   /**
-   * The "setLightning" function sets the lightning boolean flag of the material surface.
-   * @param {boolean} lightning - The "lightning" parameter is a boolean value that indicates if light is applied
-   * or not to the material.
+   * Set the lightning flag.
+   * 
+   * @param {boolean} lightning - Indicates if light is applied or not to the material.
    */
   setLightning(lightning: boolean): void {
     this.params[2] = lightning ? 1.0 : 0.0;
@@ -296,11 +292,12 @@ class Gfx3Material {
   }
 
   /**
-   * The "setEmissive" function sets the emissive color of the material surface.
+   * Set the emissive color.
    * It is the color that the object emit.
-   * @param {number} r - The parameter "r" represents the red component.
-   * @param {number} g - The parameter "g" represents the green component.
-   * @param {number} b - The parameter "b" represents the blue component.
+   * 
+   * @param {number} r - The red component.
+   * @param {number} g - The green component.
+   * @param {number} b - The blue component.
    */
   setEmissive(r: number, g: number, b: number): void {
     this.colors[0] = r;
@@ -310,11 +307,12 @@ class Gfx3Material {
   }
 
   /**
-   * The "setAmbient" function sets the ambient color of the material surface.
+   * Set the ambient color (see phong).
    * It is the color of the object on it's shadow parts.
-   * @param {number} r - The parameter "r" represents the red component.
-   * @param {number} g - The parameter "g" represents the green component.
-   * @param {number} b - The parameter "b" represents the blue component.
+   * 
+   * @param {number} r - The red component.
+   * @param {number} g - The green component.
+   * @param {number} b - The blue component.
    */
   setAmbient(r: number, g: number, b: number): void {
     this.colors[4] = r;
@@ -324,11 +322,12 @@ class Gfx3Material {
   }
 
   /**
-   * The "setDiffuse" function sets the diffuse color of the material surface.
+   * Set the diffuse color (see phong).
    * It is the color of the object on it's lightning parts.
-   * @param {number} r - The parameter "r" represents the red component.
-   * @param {number} g - The parameter "g" represents the green component.
-   * @param {number} b - The parameter "b" represents the blue component.
+   * 
+   * @param {number} r - The red component.
+   * @param {number} g - The green component.
+   * @param {number} b - The blue component.
    */
   setDiffuse(r: number, g: number, b: number): void {
     this.colors[8] = r;
@@ -338,11 +337,12 @@ class Gfx3Material {
   }
 
   /**
-   * The "setSpecular" function sets the specular color of the material surface.
+   * Set the specular color (see phong).
    * It is the color of the object on it's lightning and eye-oriented parts.
-   * @param {number} r - The parameter "r" represents the red component.
-   * @param {number} g - The parameter "g" represents the green component.
-   * @param {number} b - The parameter "b" represents the blue component.
+   * 
+   * @param {number} r - The red component.
+   * @param {number} g - The green component.
+   * @param {number} b - The blue component.
    */
   setSpecular(r: number, g: number, b: number): void {
     this.colors[12] = r;
@@ -352,11 +352,10 @@ class Gfx3Material {
   }
 
   /**
-   * The "setSpecularity" function sets the specular intensity of the material surface.
-   * It determines how much light is reflected off the surface and can range
-   * from 0 (no specularity) to 1 (maximum specularity).
-   * @param {number} specularity - The specularity parameter is a number that represents the level of
-   * specularity or shininess of the surface.
+   * Set the specular intensity.
+   * It determines how much light is reflected off the surface (from 0 to 1).
+   * 
+   * @param {number} specularity - The level of specularity or shininess.
    */
   setSpecularity(specularity: number): void {
     this.colors[15] = specularity;
@@ -364,12 +363,11 @@ class Gfx3Material {
   }
 
   /**
-   * The "setTexture" function sets the texture, texture scroll angle, and texture scroll rate of the material surface.
-   * @param {Gfx3Texture} texture - The texture that will be applied to the material surface.
-   * @param {number} [angle=0] - The `angle` parameter represents the angle at which the texture will be
-   * scrolled. It is measured in radians.
-   * @param {number} [rate=0] - The `rate` is used to specify the scrolling rate of the texture.
-   * It determines how fast the texture will scroll when applied to a surface.
+   * Set the texture.
+   * 
+   * @param {Gfx3Texture} texture - The texture.
+   * @param {number} [angle=0] - The angle at which the texture will be scrolled (in radians).
+   * @param {number} [rate=0] - The scrolling rate of the texture.
    */
   setTexture(texture: Gfx3Texture, angle: number = 0, rate: number = 0): void {
     this.texture = texture;
@@ -381,20 +379,16 @@ class Gfx3Material {
   }
 
   /**
-   * The "setDisplacementMap" function sets the displacement texture map, scroll angle, scroll rate, and factor
-   * for the graphics effect. It is used to displace pixels of the texture base. It is ideal for water shallow effect, magma etc...
+   * Set the displacement texture map.
+   * It is used to displace pixels of the texture base. It is ideal for water shallow effect, magma etc...
    * 1. White pixel of this texture force pixel of the albedo texture to move in the top-left direction.
    * 2. Grey don't move pixels.
    * 3. Black pixel of this texture force pixel of the albedo texture to move in the bottom-right direction.
-   * @param {Gfx3Texture} displacementMap - The displacementMap texture.
-   * @param {number} [angle=0] - The `angle` parameter represents the angle at which the texture will be
-   * scrolled. It is measured in radians.
-   * @param {number} [rate=0] - The `rate` is used to specify the scrolling rate of the texture.
-   * It determines how fast the texture will scroll when applied to a surface.
-   * @param {number} [factor=0] - The `factor` parameter in the setDisplacementMap function is used to
-   * control the strength or intensity of the displacement effect. It determines how much the pixels of
-   * the displacement map will affect the corresponding pixels of the target image. A higher factor value
-   * will result in a more pronounced displacement effect.
+   * 
+   * @param {Gfx3Texture} displacementMap - The displacement map texture.
+   * @param {number} [angle=0] - The angle at which the texture will be scrolled (in radians).
+   * @param {number} [rate=0] - The scrolling rate of the texture.
+   * @param {number} [factor=0] - The strength or intensity of the displacement effect.
    */
   setDisplacementMap(displacementMap: Gfx3Texture, angle: number = 0, rate: number = 0, factor: number = 0): void {
     this.displacementMap = displacementMap;
@@ -407,9 +401,9 @@ class Gfx3Material {
   }
 
   /**
-   * The "setSpecularityMap" function sets the specularity map texture of the material surface.
-   * @param {Gfx3Texture} specularityMap - The specularityMap is a texture used for
-   * controlling the specularity (shininess) of a material surface.
+   * Set the specularity texture map.
+   * 
+   * @param {Gfx3Texture} specularityMap - The specularity texture map.
    */
   setSpecularityMap(specularityMap: Gfx3Texture): void {
     this.specularityMap = specularityMap;
@@ -419,9 +413,9 @@ class Gfx3Material {
   }
 
   /**
-   * The "setNormalMap" function sets a normal map texture of the material surface.
-   * @param {Gfx3Texture} normalMap - The normalMap is a texture used for controlling
-   * the texture granularity and orientations by adding normals informations on it.
+   * Set a normal texture map.
+   * 
+   * @param {Gfx3Texture} normalMap - The normal texture map.
    */
   setNormalMap(normalMap: Gfx3Texture): void {
     this.normalMap = normalMap;
@@ -431,8 +425,9 @@ class Gfx3Material {
   }
 
   /**
-   * The "setEnvMap" function sets the environment map texture of the material surface.
-   * @param {Gfx3Texture} envMap - The envMap texture is used to set the environment reflection on the material surface.
+   * Set the environment texture map.
+   * 
+   * @param {Gfx3Texture} envMap - The env texture map.
    */
   setEnvMap(envMap: Gfx3Texture): void {
     this.envMap = envMap;
@@ -442,26 +437,25 @@ class Gfx3Material {
   }
 
   /**
-   * The "enableDecal" function enable decals on the material surface.
-   * @param {boolean} enabled - A boolean value indicating whether the decal should be enabled or
-   * disabled.
+   * Enable decals on the material surface.
+   * 
+   * @param {boolean} enabled - Indicating whether decals should be enabled or disabled.
    */
   enableDecal(enabled: boolean): void {
     this.params[9] = enabled ? 1.0 : 0.0;
   }
 
   /**
-   * The "enableShadow" function enable shadow on the material surface.
-   * @param {boolean} enabled - A boolean value indicating whether the shadow should be enabled or
-   * disabled.
+   * Enable shadow on the material surface.
+   * 
+   * @param {boolean} enabled - Indicating whether the shadow should be enabled or disabled.
    */
   enableShadow(enabled: boolean): void {
     this.params[10] = enabled ? 1.0 : 0.0;
   }
 
   /**
-   * The "getGroup02" function returns the static group index 2.
-   * @returns The static group.
+   * Returns the bindgroup(2).
    */
   getGroup02(): Gfx3StaticGroup {
     if (this.dataChanged) {
@@ -477,8 +471,7 @@ class Gfx3Material {
   }
 
   /**
-   * The "getGroup03" function returns the static group index 3.
-   * @returns The static group.
+   * Returns the bingroup(3).
    */
   getGroup03(): Gfx3StaticGroup {
     if (this.texturesChanged) {
@@ -495,40 +488,35 @@ class Gfx3Material {
   }
  
   /**
-   * The "getTexture" function returns the albedo texture.
-   * @returns The albedo texture.
+   * Returns the albedo texture.
    */
   getTexture(): Gfx3Texture {
     return this.texture;
   }
 
   /**
-   * The "getDisplacementMap" function returns the displacement map texture.
-   * @returns The displacement map texture.
+   * Returns the displacement texture map.
    */
   getDisplacementMap(): Gfx3Texture {
     return this.displacementMap;
   }
 
   /**
-   * The "getSpecularityMap" function returns the specularity map texture.
-   * @returns The specularity map texture.
+   * Returns the specularity texture map.
    */
   getSpecularityMap(): Gfx3Texture {
     return this.specularityMap;
   }
 
   /**
-   * The "getNormalMap" function returns the normal map texture.
-   * @returns The normal map texture.
+   * Returns the normal texture map.
    */
   getNormalMap(): Gfx3Texture {
     return this.normalMap;
   }
 
   /**
-   * The "getEnvMap" function returns the environment map texture.
-   * @returns The environment map texture.
+   * Returns the environment texture map.
    */
   getEnvMap(): Gfx3Texture {
     return this.envMap;

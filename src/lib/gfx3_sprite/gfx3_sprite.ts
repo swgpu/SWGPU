@@ -7,7 +7,7 @@ import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_sprite_shader';
 
 /**
- * The `Gfx3Sprite` is a subclass of `Gfx2Drawable` that represents a sprite base (abstract) class.
+ * A 3D base sprite object.
  */
 class Gfx3Sprite extends Gfx3Drawable {
   textureChanged: boolean;
@@ -18,9 +18,6 @@ class Gfx3Sprite extends Gfx3Drawable {
   grp1: Gfx3StaticGroup;
   texture: Gfx3Texture;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super(SHADER_VERTEX_ATTR_COUNT);
     this.textureChanged = false;
@@ -34,25 +31,23 @@ class Gfx3Sprite extends Gfx3Drawable {
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
-    this.grp1.destroy();
+    this.grp1.delete();
     super.delete();
   }
 
   /**
-   * The "draw" function.
+   * The draw function.
    */
   draw(): void {
     gfx3SpriteRenderer.drawSprite(this);
   }
 
   /**
-   * The "getTransformMatrix" function returns the transform matrix from position, rotation, scale, origin offset
-   * and pixel per unit values.
-   * @returns The transform matrix.
+   * Returns the transformation matrix.
    */
   getTransformMatrix(): mat4 {
     const matrix = UT.MAT4_IDENTITY();
@@ -67,31 +62,29 @@ class Gfx3Sprite extends Gfx3Drawable {
   }
 
   /**
-   * The "getOffset" function returns the origin offset.
-   * @returns The offset.
+   * Returns the origin offset.
    */
   getOffset(): vec2 {
     return this.offset;
   }
 
   /**
-   * The "getOffsetX" function returns the offset in x-axis direction.
-   * @returns The x-offset value.
+   * Returns the offset in x-axis direction.
    */
   getOffsetX(): number {
     return this.offset[0];
   }
 
   /**
-   * The "getOffsetY" function returns the offset in y-axis direction.
-   * @returns The y-offset value.
+   * Returns the offset in y-axis direction.
    */
   getOffsetY(): number {
     return this.offset[1];
   }
 
   /**
-   * The "setOffset" function set the origin offset value.
+   * Set the origin offset value.
+   * 
    * @param {number} offsetX - The x-offset.
    * @param {number} offsetY - The y-offset.
    */
@@ -100,23 +93,24 @@ class Gfx3Sprite extends Gfx3Drawable {
   }
 
   /**
-   * The "getFlip" function returns two booleans, first is the x-axis flip flag, second is the y-axis flip flag.
-   * @returns The flip property.
+   * Returns two booleans, first is the x-axis flip flag, second is the y-axis flip flag.
    */
   getFlip(): [boolean, boolean] {
     return this.flip;
   }
 
   /**
-   * The "setFlipX" function sets the value of the flipX property to the provided boolean value.
+   * Set flipX.
+   * 
    * @param {boolean} x - The x-axis flip flag.
    */
   setFlipX(x: boolean): void {
     this.flip[0] = x;
   }
 
-  /**
-   * The "setFlipY" function sets the value of the flipY property to the provided boolean value.
+ /**
+   * Set flipY.
+   * 
    * @param {boolean} y - The y-axis flip flag.
    */
   setFlipY(y: boolean): void {
@@ -124,34 +118,32 @@ class Gfx3Sprite extends Gfx3Drawable {
   }
 
   /**
-   * The "getPixelsPerUnit" function get the pixelsPerUnit property.
-   * @returns - The pixelsPerUnit property.
+   * Returns the pixels per unit value.
    */
   getPixelsPerUnit(): number {
     return this.pixelsPerUnit;
   }
 
   /**
-   * The "setPixelsPerUnit" function sets the number of pixels per unit.
-   * @param {number} pixelsPerUnit - The `pixelsPerUnit` parameter is a number that represents the number
-   * of pixels per unit of measurement. It is used to determine the scale or resolution at which
-   * the sprite is displayed.
+   * Set the number of pixels per unit.
+   * 
+   * @param {number} pixelsPerUnit - Determine the scale or resolution at which the sprite is displayed.
    */
   setPixelsPerUnit(pixelsPerUnit: number): void {
     this.pixelsPerUnit = pixelsPerUnit;
   }
 
   /**
-   * The "getBillboardMode" function returns the billboardMode property.
-   * @returns The billboardMode property.
+   * Returns the billboard mode.
    */
   getBillboardMode(): boolean {
     return this.billboardMode;
   }
 
   /**
-   * The "setBillboardMode" function sets the billboard mode to either true or false.
-   * @param {boolean} billboardMode - A boolean value that determines whether the object should be
+   * Set the billboard mode.
+   * 
+   * @param {boolean} billboardMode - Determines whether the object should be
    * displayed as a billboard, meaning it always faces the camera regardless of its orientation.
    */
   setBillboardMode(billboardMode: boolean): void {
@@ -159,7 +151,8 @@ class Gfx3Sprite extends Gfx3Drawable {
   }
 
   /**
-   * The "setTexture" function sets the sprite texture.
+   * Set the sprite texture.
+   * 
    * @param {Gfx3Texture} texture - The sprite texture.
    */
   setTexture(texture: Gfx3Texture): void {
@@ -168,16 +161,14 @@ class Gfx3Sprite extends Gfx3Drawable {
   }
 
   /**
-   * The "getTexture" function returns the sprite texture.
-   * @returns The sprite texture.
+   * Returns the sprite texture.
    */
   getTexture(): Gfx3Texture {
     return this.texture;
   }
 
   /**
-   * The "getGroup01" function returns the static group index 1.
-   * @returns The static group.
+   * Returns the bindgroup(1).
    */
   getGroup01(): Gfx3StaticGroup {
     if (this.textureChanged) {

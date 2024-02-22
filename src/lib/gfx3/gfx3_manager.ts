@@ -12,7 +12,7 @@ export interface VertexSubBuffer {
 };
 
 /**
- * The `Gfx3Manager` class is a singleton responsible for render all graphics stuff in a 3D graphics system.
+ * Singleton 3D graphics manager.
  */
 class Gfx3Manager {
   adapter: GPUAdapter;
@@ -32,9 +32,6 @@ class Gfx3Manager {
   lastRenderStart: number;
   lastRenderTime: number;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.adapter = {} as GPUAdapter;
     this.device = {} as GPUDevice;
@@ -55,9 +52,7 @@ class Gfx3Manager {
   }
 
   /**
-   * The "initialize" function initializes the WebGPU rendering context, checks for browser support,
-   * requests the adapter and device, configures the canvas, creates a depth texture and vertex buffer,
-   * and subscribes to a window resize event.
+   * Initializes the WebGPU rendering context (internal use only).
    */
   async initialize() {
     if (!navigator.gpu) {
@@ -106,20 +101,17 @@ class Gfx3Manager {
     this.depthView = this.depthTexture.createView();
     this.vertexBuffer = this.device.createBuffer({ size: 0, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST });
 
-    eventManager.subscribe(coreManager, 'E_RESIZE', this, this.handleWindowResize);
+    eventManager.subscribe(coreManager, 'E_RESIZE', this, this.$handleWindowResize);
   }
 
   /**
-   * The "beginDrawing" function prepare the rendering environment for a specific view.
+   * Prepare the draw process.
    * Warning: You need to call this method before your draw calls.
-   * @param {number} viewIndex - The `viewIndex` parameter is the index of the view that you want to
-   * begin drawing. It is used to retrieve the corresponding view object from the `views` array.
    */
-  beginDrawing(viewIndex: number): void { // move to beginRender
-  }
+  beginDrawing(): void {}
 
   /**
-   * The "endDrawing" function close the drawing phase.
+   * Close the draw process.
    * Warning: You need to call this method after your draw calls.
    */
   endDrawing() {
@@ -143,14 +135,18 @@ class Gfx3Manager {
     }
   }
 
+  /**
+   * Prepare the render process.
+   * Warning: You need to call this method before your render calls.
+   */
   beginRender(): void {
     this.commandEncoder = this.device.createCommandEncoder();
     this.lastRenderStart = Date.now();
   }
 
   /**
-   * The "beginPassRender" function prepare the rendering phase.
-   * Warning: You need to call this method before your render calls.
+   * Prepare a render pass.
+   * Warning: You need to call this method before the render calls you want include in this pass.
    */
   beginPassRender(viewIndex: number): void {
     const view = this.views[viewIndex];
@@ -176,17 +172,21 @@ class Gfx3Manager {
       }
     });
 
+    this.currentView = view;
     this.passEncoder.setViewport(viewportX, viewportY, viewportWidth, viewportHeight, 0, 1);
     this.passEncoder.setScissorRect(viewportX, viewportY, viewportWidth, viewportHeight);
   }
 
+  /**
+   * Close a render pass.
+   * Warning: You need to call this method after the render calls you want include in this pass.
+   */
   endPassRender(): void {
     this.passEncoder.end();
   }
 
   /**
-   * The "endRender" function ends the rendering process, submits the command encoder to the device
-   * queue, and calculates the time taken for the rendering.
+   * Close the render process.
    * Warning: You need to call this method after your render calls.
    */
   endRender(): void {
@@ -195,18 +195,12 @@ class Gfx3Manager {
   }
 
   /**
-   * The "loadPipeline" function creates and returns a GPU render pipeline using the provided vertex and
-   * fragment shaders, and caches it for future use.
+   * Creates and returns a GPU render pipeline using the provided vertex and fragment shaders, and caches it for future use.
+   * 
    * @param {string} id - A unique identifier for the render pipeline.
-   * @param {string} vertexShader - The `vertexShader` parameter is a string that represents the code for
-   * the vertex shader.
-   * @param {string} fragmentShader - The `fragmentShader` parameter is a string that represents the code
-   * for the fragment shader.
-   * @param {GPURenderPipelineDescriptor} pipelineDesc - The `pipelineDesc` parameter is of type
-   * `GPURenderPipelineDescriptor` and it represents the description of the render pipeline that you want
-   * to create. It contains various properties that define the configuration of the pipeline, such as the
-   * vertex and fragment shaders, the color and depth formats, the primitive topology
-   * @returns The GPU render pipeline.
+   * @param {string} vertexShader - The code for the vertex shader.
+   * @param {string} fragmentShader - The code for the fragment shader.
+   * @param {GPURenderPipelineDescriptor} pipelineDesc - The configuration of the pipeline, such as the vertex and fragment shaders, the color and depth formats, the primitive topology
    */
   loadPipeline(id: string, vertexShader: string, fragmentShader: string, pipelineDesc: GPURenderPipelineDescriptor): GPURenderPipeline {
     if (this.pipelines.has(id)) {
@@ -231,10 +225,9 @@ class Gfx3Manager {
   }
 
   /**
-   * The "getPipeline" function returns a GPU render pipeline based on the provided ID, throwing an error
-   * if the pipeline is not found.
-   * @param {string} id - A string representing the ID of the pipeline to retrieve.
-   * @returns The GPU render pipeline.
+   * Returns a GPU render pipeline.
+   * 
+   * @param {string} id - The identifier of the pipeline.
    */
   getPipeline(id: string): GPURenderPipeline {
     if (!this.pipelines.has(id)) {
@@ -245,11 +238,10 @@ class Gfx3Manager {
   }
 
   /**
-   * The "createVertexBuffer" function creates a vertex sub-buffer of a specified size and returns it.
-   * Nota bene: A sub-buffer is just a reference offset/size pointing to the big one vertex buffer.
-   * @param {number} size - The `size` parameter represents the number of vertices that will be stored
-   * in the vertex sub-buffer.
-   * @returns The vertex sub-buffer.
+   * Creates a vertex sub-buffer and returns it.
+   * Note: A sub-buffer is just a reference offset/size pointing to the big one vertex buffer.
+   * 
+   * @param {number} size - The number of vertices.
    */
   createVertexBuffer(size: number): VertexSubBuffer {
     const sub: VertexSubBuffer = {
@@ -264,7 +256,8 @@ class Gfx3Manager {
   }
 
   /**
-   * The "destroyVertexBuffer" function removes a given vertex sub-buffer.
+   * Removes a vertex sub-buffer.
+   * 
    * @param {VertexSubBuffer} sub - The vertex sub-buffer.
    */
   destroyVertexBuffer(sub: VertexSubBuffer): void {
@@ -281,9 +274,10 @@ class Gfx3Manager {
   }
 
   /**
-   * The "writeVertexBuffer" function takes a vertex sub-buffer and write on it.
+   * Write data on vertex sub-buffer.
+   * 
    * @param {VertexSubBuffer} sub - The vertex sub-buffer.
-   * @param vertices - The `vertices` parameter is an array of numbers representing the vertex data.
+   * @param vertices - The vertex data.
    */
   writeVertexBuffer(sub: VertexSubBuffer, vertices: Array<number>): void {
     sub.vertices = new Float32Array(vertices);
@@ -291,36 +285,31 @@ class Gfx3Manager {
   }
 
   /**
-   * The "createStaticGroup" function creates a static group for a given pipeline and group index.
-   * @param {string} pipelineId - The pipelineId is a string that represents the unique identifier of
-   * a pipeline.
-   * @param {number} groupIndex - The `groupIndex` parameter is the index of the uniform group in the shader.
-   * @returns A new instance of Gfx3StaticGroup.
+   * Creates a static group for a given pipeline and group index.
+   * 
+   * @param {string} pipelineId - The unique identifier of a pipeline.
+   * @param {number} groupIndex - The uniform group index in the shader.
    */
   createStaticGroup(pipelineId: string, groupIndex: number): Gfx3StaticGroup {
     return new Gfx3StaticGroup(this.device, this.getPipeline(pipelineId), groupIndex);
   }
 
   /**
-   * The "createDynamicGroup" function creates a dynamic group for a given pipeline and group index.
-   * @param {string} pipelineId - The pipelineId is a string that represents the unique identifier of
-   * a pipeline.
-   * @param {number} groupIndex - The `groupIndex` parameter is the index of the uniform group in the shader.
-   * @returns A new instance of Gfx3DynamicGroup.
+   * Creates a dynamic group for a given pipeline and group index.
+   * 
+   * @param {string} pipelineId - The unique identifier of a pipeline.
+   * @param {number} groupIndex - The uniform group index in the shader.
    */
   createDynamicGroup(pipelineId: string, groupIndex: number): Gfx3DynamicGroup {
     return new Gfx3DynamicGroup(this.device, this.getPipeline(pipelineId), groupIndex);
   }
 
   /**
-   * The "createTextureFromBitmap" function creates a GPU texture from a given bitmap image or canvas element.
-   * @param {ImageBitmap | HTMLCanvasElement} [bitmap] - The `bitmap` parameter can be either an
-   * `ImageBitmap` or an `HTMLCanvasElement`. It represents the source image from which the texture will
-   * be created.
-   * @param {boolean} [is8bit=false] - The `is8bit` parameter is a boolean flag that indicates whether
-   * the texture should be treated as an 8-bit texture or not.
+   * Creates a GPU texture from a given bitmap image or canvas element.
+   * 
+   * @param {ImageBitmap | HTMLCanvasElement} [bitmap] - The source image.
+   * @param {boolean} [is8bit=false] - Indicates whether the texture should be treated as an 8-bit texture or not.
    * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
-   * @returns The Gfx3Texture.
    */
   createTextureFromBitmap(bitmap?: ImageBitmap | HTMLCanvasElement, is8bit: boolean = false, samplerDescriptor: GPUSamplerDescriptor = {}): Gfx3Texture {
     if (!bitmap) {
@@ -350,12 +339,9 @@ class Gfx3Manager {
   }
 
   /**
-   * The "createCubeMapFromBitmap" function creates a cube map texture from an array of bitmaps or canvas
-   * elements.
-   * @param [bitmaps] - The `bitmaps` parameter is an array of `ImageBitmap` or `HTMLCanvasElement`
-   * objects. These objects represent the six faces of a cube map texture. Each face should have the same
-   * size.
-   * @returns The Gfx3Texture.
+   * Creates a cubemap texture from a list of bitmaps or canvas elements.
+   * 
+   * @param [bitmaps] - The list of six bitmaps.
    */
   createCubeMapFromBitmap(bitmaps?: Array<ImageBitmap | HTMLCanvasElement>): Gfx3Texture {
     if (!bitmaps || bitmaps.length == 0) {
@@ -396,8 +382,9 @@ class Gfx3Manager {
   }
 
   /**
-   * The "setFilter" function sets the filter property of a canvas element to the specified filter value.
-   * @param {string} filter - The filter parameter is a string that represents the CSS filter property.
+   * Sets the css filter property of the canvas.
+   * 
+   * @param {string} filter - The filter parameter is a string that represents the CSS filter property's value.
    * It can be used to apply various visual effects to an element, such as blur, brightness, contrast,
    * grayscale, etc.
    */
@@ -406,97 +393,86 @@ class Gfx3Manager {
   }
 
   /**
-   * The "hasFilter" function checks if the canvas element has an active filter.
-   * @returns The boolean value.
+   * Checks if the canvas element has an active filter.
    */
   hasFilter(): boolean {
     return this.canvas.style.filter != '' && this.canvas.style.filter != 'none';
   }
 
   /**
-   * The "getClientWidth" function returns the client width of the canvas.
-   * @returns The client width of the canvas.
+   * Returns the client width of the canvas.
    */
   getClientWidth(): number {
     return this.canvas.clientWidth;
   }
 
   /**
-   * The "getClientHeight" function returns the client height of the canvas.
-   * @returns The client height of the canvas.
+   * Returns the client height of the canvas.
    */
   getClientHeight(): number {
     return this.canvas.clientHeight;
   }
 
   /**
-   * The "getWidth" function returns the width of the canvas.
-   * @returns The width of the canvas.
+   * Returns the width of the canvas.
    */
   getWidth(): number {
     return this.canvas.width;
   }
 
   /**
-   * The "getHeight" function returns the height of the canvas.
-   * @returns The height of the canvas.
+   * Returns the height of the canvas.
    */
   getHeight(): number {
     return this.canvas.height;
   }
 
   /**
-   * The "getContext" function returns the GPUCanvasContext object.
-   * @returns The WebGPU canvas context.
+   * Returns the GPUCanvasContext object.
    */
   getContext(): GPUCanvasContext {
     return this.ctx;
   }
 
   /**
-   * The "getDevice" function returns the GPU device.
-   * @returns The WebGPU device.
+   * Returns the GPU device.
    */
   getDevice(): GPUDevice {
     return this.device;
   }
 
   /**
-   * The "getCommandEncoder" function returns the GPUCommandEncoder.
-   * @returns The WebGPU render command encoder.
+   * Returns the GPUCommandEncoder.
    */
   getCommandEncoder(): GPUCommandEncoder {
     return this.commandEncoder;
   }
 
   /**
-   * The "getPassEncoder" function returns the GPURenderPassEncoder.
-   * @returns The WebGPU render pass encoder.
+   * Returns the current WebGPU render pass encoder.
    */
   getPassEncoder(): GPURenderPassEncoder {
     return this.passEncoder;
   }
 
   /**
-   * The "getView" function returns the Gfx3View at the specified index.
-   * @param {number} index - The position of the view in views array.
-   * @returns The Gfx3View.
+   * Returns the view at the specified index.
+   * 
+   * @param {number} index - The index.
    */
   getView(index: number): Gfx3View {
     return this.views[index];
   }
 
   /**
-   * The "getNumViews" function returns the number of views.
-   * @returns The number of views.
+   * Returns the number of views.
    */
   getNumViews(): number {
     return this.views.length;
   }
 
   /**
-   * The "createView" function creates a new `Gfx3View` object.
-   * @returns A new instance of `Gfx3View`.
+   * Create a new view and return it.
    */
   createView(): Gfx3View {
     const view = new Gfx3View();
@@ -506,8 +482,9 @@ class Gfx3Manager {
   }
 
   /**
-   * The "changeView" function change the view at a specified index in views array.
-   * @param {number} index - The position in the views array where the view should be changed.
+   * Change the view at a specified index.
+   * 
+   * @param {number} index - The index of the view should be changed.
    * @param {Gfx3View} view - The view.
    */
   changeView(index: number, view: Gfx3View): void {
@@ -515,7 +492,8 @@ class Gfx3Manager {
   }
 
   /**
-   * The "removeView" function removes a specified view in views array.
+   * Removes a view.
+   * 
    * @param {Gfx3View} view - The view.
    */
   removeView(view: Gfx3View): void {
@@ -523,42 +501,40 @@ class Gfx3Manager {
   }
 
   /**
-   * The "releaseViews" function delete all views.
+   * Removes a view at specified index.
+   * 
+   * @param {number} index - The index of the view.
    */
-  releaseViews(): void {
-    this.views = [];
+  removeViewAt(index: number): void {
+    this.views.splice(index, 1);
   }
 
   /**
-   * The "getCurrentView" function returns the current view.
-   * Nota bene: current view is set by the "beginDraw" function. 
-   * @returns The current view.
+   * Returns the current view.
+   * Note: Current view is set by the "begin" function.
    */
   getCurrentView(): Gfx3View {
     return this.currentView;
   }
 
   /**
-   * The "getVertexBuffer" function returns the big one vertex buffer.
-   * @returns The global vertex buffer.
+   * Returns the big one vertex buffer.
    */
   getVertexBuffer(): GPUBuffer {
     return this.vertexBuffer;
   }
 
   /**
-   * The "getLastRenderTime" function returns the last render time.
-   * @returns The last render time.
+   * Returns the last render time.
    */
   getLastRenderTime() {
     return this.lastRenderTime;
   }
 
   /**
-   * The "handleWindowResize" function resizes the canvas, recreates the depth texture and view, and
-   * updates the screen size for each view.
+   * Resizes the canvas, recreates the depth texture and view, and updates the screen size for each view.
    */
-  handleWindowResize(): void {
+  $handleWindowResize(): void {
     const devicePixelRatio = window.devicePixelRatio || 1;
     this.canvas.width = this.canvas.clientWidth * devicePixelRatio;
     this.canvas.height = this.canvas.clientHeight * devicePixelRatio;

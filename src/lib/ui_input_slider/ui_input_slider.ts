@@ -2,8 +2,7 @@ import { eventManager } from '../core/event_manager';
 import { UIWidget } from '../ui/ui_widget';
 
 /**
- * The `UIInputSlider` is a class that represents a slider input widget with methods to
- * set the value, minimum and maximum values, and step value.
+ * A UI widget displaying a slider input.
  * It emit 'E_VALUE_CHANGED' when value changed.
  */
 class UIInputSlider extends UIWidget {
@@ -12,9 +11,6 @@ class UIInputSlider extends UIWidget {
   max: number;
   step: number;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super({
       className: 'UIInputSlider',
@@ -30,8 +26,9 @@ class UIInputSlider extends UIWidget {
   }
 
   /**
-   * The "setValue" function sets the input value.
-   * @param {number} value - The `value` parameter is a number that represents the new value to be set.
+   * Set the input value.
+   * 
+   * @param {number} value - The value.
    */
   setValue(value: number): void {
     if (value == this.value) {
@@ -44,8 +41,9 @@ class UIInputSlider extends UIWidget {
   }
 
   /**
-   * The "setMin" function sets the minimum value for the range input.
-   * @param {number} min - The `min` parameter is a number that represents the minimum value for the range input.
+   * Set the minimum value for the range input.
+   * 
+   * @param {number} min - The minimum value.
    */
   setMin(min: number): void {
     this.node.querySelector<any>('.js-range').min = min;
@@ -53,8 +51,9 @@ class UIInputSlider extends UIWidget {
   }
 
   /**
-   * The "setMax" function sets the maximum value for the range input.
-   * @param {number} max - The `max` parameter is a number that represents the maximum value for the range input.
+   * Set the maximum value for the range input.
+   * 
+   * @param {number} max - The maximum value.
    */
   setMax(max: number): void {
     this.node.querySelector<any>('.js-range').max = max;
@@ -62,9 +61,9 @@ class UIInputSlider extends UIWidget {
   }
 
   /**
-   * The "setStep" function sets the step value for the range input.
-   * @param {number} step - The `step` parameter is a number that represents the increment or decrement
-   * value for the range input.
+   * Set the step value.
+   * 
+   * @param {number} step - The increment or decrement value for the range input.
    */
   setStep(step: number): void {
     this.node.querySelector<any>('.js-range').step = step;
@@ -72,8 +71,8 @@ class UIInputSlider extends UIWidget {
   }
 
   /**
-   * The "onAction" function.
-   * It emits an event with the name 'E_VALUE_CHANGED' if the actionId is 'LEFT' or 'RIGHT'.
+   * The onAction function.
+   * It emits an 'E_VALUE_CHANGED' event if the action is 'LEFT' or 'RIGHT'.
    */
   onAction(actionId: string): void {
     if (actionId == 'LEFT' && this.value - this.step >= this.min) {

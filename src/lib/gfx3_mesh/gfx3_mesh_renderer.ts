@@ -13,8 +13,7 @@ interface MeshCommand {
 };
 
 /**
- * The `Gfx3MeshRenderer` class is a singleton renderer responsible to display mesh in a 3D graphics system
- * and provides methods for controlling directionnal light, point light, fog and decals.
+ * Singleton mesh renderer.
  */
 class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   shadowEnabled: boolean;
@@ -35,9 +34,6 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   meshMatrices: Float32Array;
   meshLayer: Uint32Array;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super('MESH_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.shadowEnabled = false;
@@ -64,7 +60,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "render" function.
+   * The render function.
    */
   render(): void {
     const currentView = gfx3Manager.getCurrentView();
@@ -129,16 +125,17 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "enableShadow" function enables or disables the shadowing projection.
-   * @param {boolean} enabled - A boolean value indicating whether the shadow should be enabled or
-   * disabled.
+   * Enable the shadowing projection.
+   * 
+   * @param {boolean} enabled - Indicating whether the shadow should be enabled or disabled.
    */
   enableShadow(enabled: boolean): void {
     this.shadowEnabled = enabled;
   }
 
   /**
-   * The "setDecalAtlas" function sets the decal texture atlas that contains all decal sprites.
+   * Set the decal texture atlas.
+   * 
    * @param {Gfx3Texture} decalAtlas - The decal texture atlas.
    */
   setDecalAtlas(decalAtlas: Gfx3Texture): void {
@@ -147,8 +144,9 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "enableFog" function enables the fog with specified properties.
-   * @param {boolean} enabled - A boolean value indicating whether the fog is enabled or not.
+   * Enable the fog.
+   * 
+   * @param {boolean} enabled - Indicating whether the fog is enabled or not.
    * @param {vec3} color - The fog color.
    * @param {number} [near=3.0] - The distance from the camera at which the fog starts to appear.
    * @param {number} [far=15.0] - The distance from the camera at which the fog effect should start to fade out.
@@ -165,10 +163,10 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawMesh" function draw a mesh.
+   * Draw a mesh.
+   * 
    * @param {Gfx3Mesh} mesh - The mesh.
-   * @param {mat4 | null} [matrix=null] - The `matrix` parameter is an optional parameter that represents
-   * a transformation 4x4 matrix.
+   * @param {mat4 | null} [matrix=null] - The transformation matrix.
    */
   drawMesh(mesh: Gfx3Mesh, matrix: mat4 | null = null): void {
     this.meshCommands.push({ mesh: mesh, matrix: matrix });
@@ -179,12 +177,13 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawDirLight" function enables a directional light with specified properties.
-   * @param {vec3} direction - The direction of the directional light.
-   * @param {vec3} ambient - The ambient color of the directional light.
-   * @param {vec3} diffuse - The diffuse color of the directional light.
-   * @param {vec3} specular - The specular color of the directional light.
-   * @param {number} [intensity=1] - The strength or brightness of the directional light.
+   * Draw a directional light.
+   * 
+   * @param {vec3} direction - The direction.
+   * @param {vec3} ambient - The ambient color.
+   * @param {vec3} diffuse - The diffuse color.
+   * @param {vec3} specular - The specular color.
+   * @param {number} [intensity=1] - The strength or brightness.
    */
   drawDirLight(direction: vec3, ambient: vec3, diffuse: vec3, specular: vec3, intensity: number = 1): void {
     this.dirLight[0] = direction[0];
@@ -206,21 +205,16 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawPointLight" function adds a point light with specified properties.
-   * @param {vec3} position - The position of the point light in 3D space.
-   * @param {vec3} ambient - The ambient color of the point light.
-   * @param {vec3} diffuse - The diffuse color of the point light.
-   * @param {vec3} specular - The specular color of the point light.
-   * @param {number} [intensity=1] - The brightness or strength of the point light.
-   * @param {number} [constant=1] - The constant parameter represents the constant attenuation factor of
-   * the point light. It determines how quickly the light intensity diminishes with distance from the
-   * light source. A higher constant value will result in a slower decrease in intensity.
-   * @param {number} [linear=0] - The "linear" parameter represents the linear attenuation factor of the
-   * point light. It determines how the intensity of the light decreases as the distance from the light
-   * source increases. A higher linear value will cause the light to attenuate more quickly, resulting in
-   * a shorter range of influence.
-   * @param {number} [exp=0] - The "exp" parameter represents the exponent of the attenuation equation
-   * for the point light.
+   * Draw a point light.
+   * 
+   * @param {vec3} position - The position.
+   * @param {vec3} ambient - The ambient color.
+   * @param {vec3} diffuse - The diffuse color.
+   * @param {vec3} specular - The specular color.
+   * @param {number} [intensity=1] - The brightness or strength.
+   * @param {number} [constant=1] - The constant attenuation factor of the point light.
+   * @param {number} [linear=0] - The linear attenuation factor of the point light.
+   * @param {number} [exp=0] - The exponent of the attenuation equation for the point light.
    */
   drawPointLight(position: vec3, ambient: vec3, diffuse: vec3, specular: vec3, intensity: number = 1, constant: number = 1, linear: number = 0, exp: number = 0): void {
     const count = this.pointLightCount[0];
@@ -252,8 +246,8 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawDecal" function is used to sets a decal projector and draw texture over meshes
-   * with the specified layer.
+   * Draw a decal.
+   * 
    * @param {number} layer - The layer target.
    * @param {number} sx - The x-coordinate of the decal sprite in the atlas texture.
    * @param {number} sy - The y-coordinate of the decal sprite in the atlas texture.

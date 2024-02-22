@@ -1,22 +1,17 @@
 /**
- * The `Gfx2TextureManager` class is a singleton responsible for managing, loading, caching, and deleting
- * textures represented as `ImageBitmap` objects.
+ * Singleton textures manager.
  */
 class Gfx2TextureManager {
   textures: Map<string, ImageBitmap>;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.textures = new Map<string, ImageBitmap>();
   }
 
   /**
-   * The "loadTexture" function asynchronously loads an image from a given path and returns it as an
-   * `ImageBitmap`, caching it for future use.
-   * @param {string} path - The file path or URL of the image that you want to load as a texture.
-   * @returns a Promise that resolves when texture is loaded.
+   * Loads asynchronously an image from a given path, caching it for future use and returns it as an `ImageBitmap`.
+   * 
+   * @param {string} path - The file path.
    */
   async loadTexture(path: string): Promise<ImageBitmap> {
     if (this.textures.has(path)) {
@@ -31,8 +26,9 @@ class Gfx2TextureManager {
   }
 
   /**
-   * The "deleteTexture" function deletes a texture if it exists, otherwise it throws an error.
-   * @param {string} path - The path to the texture file.
+   * Deletes a texture if it exists, otherwise it throws an error.
+   * 
+   * @param {string} path - The file path.
    */
   deleteTexture(path: string): void {
     if (!this.textures.has(path)) {
@@ -43,10 +39,9 @@ class Gfx2TextureManager {
   }
 
   /**
-   * The "getTexture" function returns an `ImageBitmap` object for a given texture path, or throws an
-   * error if the texture doesn't exist.
-   * @param {string} path - The path to the texture file.
-   * @returns an ImageBitmap.
+   * Returns an `ImageBitmap` object for a given texture path, or throws an error if the texture doesn't exist.
+   * 
+   * @param {string} path - The file path.
    */
   getTexture(path: string): ImageBitmap {
     if (!this.textures.has(path)) {
@@ -57,16 +52,16 @@ class Gfx2TextureManager {
   }
 
   /**
-   * The "hasTexture" function checks if a texture exists in the manager.
-   * @param {string} path - The path of the texture file.
-   * @returns A boolean value indicating if the texture is found or not.
+   * Checks if texture exists.
+   * 
+   * @param {string} path - The file path.
    */
   hasTexture(path: string): boolean {
     return this.textures.has(path);
   }
 
   /**
-   * The "releaseTextures" function deletes all the textures stored in the manager.
+   * Deletes all stored textures.
    */
   releaseTextures(): void {
     for (const path of this.textures.keys()) {

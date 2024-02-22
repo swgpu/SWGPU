@@ -11,7 +11,7 @@ interface MeshCommand {
 };
 
 /*
- * The `Gfx3MeshShadowRenderer` class is a singleton renderer responsible to display shadow in a 3D graphics system.
+ * Singleton shadow renderer.
  */
 class Gfx3MeshShadowRenderer {
   pipeline: GPURenderPipeline;
@@ -46,8 +46,8 @@ class Gfx3MeshShadowRenderer {
   }
 
   /**
-   * The "beginPassRender" function.
-   * Initialize the pass.
+   * Prepare a render pass.
+   * Warning: You need to call this method before the render calls you want include in this pass.
    */
   beginPassRender(): void {
     const commandEncoder = gfx3Manager.getCommandEncoder();
@@ -63,7 +63,7 @@ class Gfx3MeshShadowRenderer {
   }
 
   /**
-   * The "render" function.
+   * The render function.
    */
   render(): void {
     this.passEncoder.setPipeline(this.pipeline);
@@ -89,30 +89,30 @@ class Gfx3MeshShadowRenderer {
   }
 
   /**
-   * The "endPassRender" function.
-   * Close the pass.
+   * Close a render pass.
+   * Warning: You need to call this method after the render calls you want include in this pass.
    */
   endPassRender(): void {
     this.passEncoder.end();
   }
 
   /**
-   * The "drawMesh" function draw a mesh.
+   * Draw a mesh.
+   * 
    * @param {Gfx3Mesh} mesh - The mesh.
-   * @param {mat4 | null} [matrix=null] - The `matrix` parameter is an optional parameter that represents
-   * a transformation 4x4 matrix.
+   * @param {mat4 | null} [matrix=null] - The transformation matrix.
    */
   drawMesh(mesh: Gfx3Mesh, matrix: mat4 | null = null): void {
     this.meshCommands.push({ mesh: mesh, matrix: matrix });
   }
 
   /**
-   * The "setShadowProjection" function sets up a shadow projection matrix based on the given position, target, size, and
-   * depth.
-   * @param {vec3} position - The `position` parameter representing the position of the light source in the scene.
-   * @param {vec3} target - The `target` parameter is used to determine the direction in which the shadow is pointing.
-   * @param {number} [size=600] - The `size` parameter is used to determines the size of the shadow map that will be generated.
-   * @param {number} [depth=200] - The `depth` parameter is used to determines how far the shadow projection extends in the scene.
+   * Set a shadow projection.
+   * 
+   * @param {vec3} position - The position of shadow coming from.
+   * @param {vec3} target - Determine the direction in which the shadow is pointing.
+   * @param {number} [size=600] - Determines the size of the shadow map that will be generated.
+   * @param {number} [depth=200] - Determines how far the shadow projection extends in the scene.
    */
   setShadowProjection(position: vec3, target: vec3, size: number = 600, depth: number = 200): void {
     const lightProjectionMatrix = UT.MAT4_ORTHOGRAPHIC(size, size, depth);
@@ -121,8 +121,10 @@ class Gfx3MeshShadowRenderer {
   }
 
   /**
-   * The "setDepthTextureSize" function sets the size of a the shadow map depth texture.
-   * @param {number} depthTextureSize - The `depthTextureSize` parameter represents the size of the depth texture.
+   * Set the size of a the shadow map depth texture.
+   * More resolution is hight, more shadow is precise.
+   * 
+   * @param {number} depthTextureSize - The size.
    */
   setDepthTextureSize(depthTextureSize: number): void {
     this.depthTexture = gfx3Manager.getDevice().createTexture({
@@ -137,16 +139,14 @@ class Gfx3MeshShadowRenderer {
   }
 
   /**
-   * The "getDepthTexture" function returns the depth texture.
-   * @returns The depth texture.
+   * Returns the depth texture.
    */
   getDepthTexture(): Gfx3Texture {
     return { gpuTexture: this.depthTexture, gpuSampler: this.depthTextureSampler };
   }
 
   /**
-   * The "getLVPMatrix" function returns the light view projection matrix (LVP).
-   * @returns The light view projection matrix.
+   * Returns the light view projection matrix (LVP).
    */
   getLVPMatrix(): Float32Array {
     return this.lvpMatrix;

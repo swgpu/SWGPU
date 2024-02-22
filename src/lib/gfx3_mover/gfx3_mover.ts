@@ -4,7 +4,7 @@ import { UT } from '../core/utils';
 import { Gfx3Transformable } from '../gfx3/gfx3_transformable';
 
 /**
- * The `Gfx3Mover` class represents a mover object that can move a transformable target along a series of points.
+ * Is a 3D path that can move a transformable target along a series of points.
  */
 class Gfx3Mover {
   points: Array<vec3>;
@@ -16,9 +16,6 @@ class Gfx3Mover {
   currentPointIndex: number;
   finished: boolean;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.points = [];
     this.speed = 1;
@@ -31,10 +28,22 @@ class Gfx3Mover {
   }
 
   /**
-   * The "loadFromData" function asynchronously loads mover data from a object.
-   * @param {string} data - The `data` parameter is the data object.
+   * Load asynchronously mover data from a json file.
+   * 
+   * @param {string} path - The file path.
    */
-  async loadFromData(data: any): Promise<void> {
+  async loadFromFile(path: string): Promise<void> {
+    let response = await fetch(path);
+    let json = await response.json();
+    this.loadFromData(json);
+  }
+
+  /**
+   * Load mover data from a data object.
+   * 
+   * @param {any} data - The data object.
+   */
+  loadFromData(data: any): void {
     this.points = [];
     for (const point of data['Points']) {
       this.points.push(point);
@@ -59,8 +68,9 @@ class Gfx3Mover {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (!this.target || this.finished) {
@@ -88,14 +98,14 @@ class Gfx3Mover {
   }
 
   /**
-   * The "draw" function.
+   * The draw function.
    */
   draw(): void {
     gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount, UT.MAT4_IDENTITY());
   }
 
   /**
-   * The "play" function start moving the transformable target across the points.
+   * Start moving the transformable target along the path.
    */
   play(): void {
     if (this.points.length < 2) {
@@ -111,7 +121,8 @@ class Gfx3Mover {
   }
 
   /**
-   * The "setTarget" function sets the transformable moving target.
+   * Set the target.
+   * 
    * @param {Gfx3Transformable} target - The target.
    */
   setTarget(target: Gfx3Transformable): void {

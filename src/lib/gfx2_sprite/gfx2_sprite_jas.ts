@@ -16,7 +16,7 @@ interface JASAnimation {
 }
 
 /**
- * The `Gfx2SpriteJAS` is a subclass of `Gfx2Drawable` that represents a sprite with animations.
+ * A 2D sprite with animations.
  */
 class Gfx2SpriteJAS extends Gfx2Drawable {
   flip: [boolean, boolean];
@@ -27,9 +27,6 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   looped: boolean;
   frameProgress: number;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super();
     this.flip = [false, false];
@@ -42,8 +39,9 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (!this.currentAnimation) {
@@ -67,7 +65,7 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   }
 
   /**
-   * The "paint" function is rendering the sprite.
+   * The paint function.
    */
   paint(): void {
     if (!this.currentAnimation) {
@@ -92,13 +90,11 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   }
 
   /**
-   * The "play" function is used to start playing a specific animation, with options for looping and
-   * preventing the same animation from being played again.
+   * Play a specific animation.
+   * 
    * @param {string} animationName - The name of the animation to be played.
-   * @param {boolean} [looped=false] - The `looped` parameter is a boolean that determines whether
-   * the animation should loop or not.
-   * @param {boolean} [preventSameAnimation=false] - The `preventSameAnimation` parameter is a boolean
-   * flag that determines whether the same animation should be prevented from playing again.
+   * @param {boolean} [looped=false] - Determines whether the animation should loop or not.
+   * @param {boolean} [preventSameAnimation=false] - Determines whether the same animation should be prevented from playing again.
    */
   play(animationName: string, looped: boolean = false, preventSameAnimation: boolean = false): void {
     if (preventSameAnimation && this.currentAnimation && animationName == this.currentAnimation.name) {
@@ -117,8 +113,9 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   }
 
   /**
-   * The "loadFromFile" function asynchronously loads sprite data from a json file (jas).
-   * @param {string} path - The `path` parameter is the file path.
+   * Loads asynchronously sprite data from a json file (jas).
+   * 
+   * @param {string} path - The file path.
    */
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
@@ -156,15 +153,15 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   }
 
   /**
-   * The "getFlip" function returns two booleans, first is the x-axis flip flag, second is the y-axis flip flag.
-   * @returns The flip property.
+   * Returns two booleans, first is the x-axis flip flag, second is the y-axis flip flag.
    */
   getFlip(): [boolean, boolean] {
     return this.flip;
   }
 
   /**
-   * The "setFlipX" function sets the value of the flipX property to the provided boolean value.
+   * Set flipX.
+   * 
    * @param {boolean} x - The x-axis flip flag.
    */
   setFlipX(x: boolean): void {
@@ -172,7 +169,8 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   }
 
   /**
-   * The "setFlipY" function sets the value of the flipY property to the provided boolean value.
+   * Set flipY.
+   * 
    * @param {boolean} y - The y-axis flip flag.
    */
   setFlipY(y: boolean): void {
@@ -180,48 +178,45 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   }
 
   /**
-   * The "getAnimations" function returns an array of animation descriptors.
-   * @returns An array of animation descriptors.
+   * Returns the list of animation descriptors.
    */
   getAnimations(): Array<JASAnimation> {
     return this.animations;
   }
 
   /**
-   * The "setAnimations" function sets the animations property.
-   * @param animations - The `animations` parameter is an array of animation descriptors.
+   * Set the animations.
+   * 
+   * @param animations - The animations.
    */
   setAnimations(animations: Array<JASAnimation>): void {
     this.animations = animations;
   }
 
   /**
-   * The "getCurrentAnimation" function returns the current animation or null if there is no current
-   * animation.
-   * @returns The current animation or null.
+   * Returns the current animation or null if there is no current animation.
    */
   getCurrentAnimation(): JASAnimation | null {
     return this.currentAnimation;
   }
 
   /**
-   * The "getCurrentAnimationFrameIndex" function returns the current animation frame index.
-   * @returns The current animation frame index.
+   * Returns the current animation frame index.
    */
   getCurrentAnimationFrameIndex(): number {
     return this.currentAnimationFrameIndex;
   }
 
   /**
-   * The "getTexture" function returns the sprite texture.
-   * @returns The sprite texture.
+   * Returns the sprite texture.
    */
   getTexture(): ImageBitmap | HTMLImageElement {
     return this.texture;
   }
 
   /**
-   * The "setTexture" function sets the sprite texture.
+   * Set the sprite texture.
+   * 
    * @param {ImageBitmap} texture - The sprite texture.
    */
   setTexture(texture: ImageBitmap): void {

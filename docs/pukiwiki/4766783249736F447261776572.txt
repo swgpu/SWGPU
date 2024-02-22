@@ -1,0 +1,9 @@
+* Class: Gfx2IsoDrawer
+
+The isometric drawables renderer.
+** Constructors
+- ''new Gfx2IsoDrawer''(): Gfx2IsoDrawer~
+** Methods
+- '''static''' ''draw''(drawables: Gfx2IsoDrawable[]): void~
+Sort a list of drawable objects by elevation/position and draw them.~
+-- ''drawables'': The list of drawables.~

@@ -1,0 +1,21 @@
+* Class: Gfx2IsoDrawable
+
+A 2D isometric drawable.
+- inherit from: Gfx2Drawable~
+- parent of: Gfx2IsoTile~
+** Constructors
+- ''new Gfx2IsoDrawable''(): Gfx2IsoDrawable~
+** Methods
+- ''getElevation''(): number~
+Returns the elevation.~
+~
+- ''getPositionZ''(): number~
+Returns the z-depth value.~
+~
+- ''setElevation''(elevation: number): void~
+Set the elevation.~
+-- ''elevation'': The elevation value.~
+~
+- ''setPositionZ''(z: number): void~
+Set the z-depth value.~
+-- ''z'': The z-depth value.~

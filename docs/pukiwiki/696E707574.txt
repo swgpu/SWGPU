@@ -1,0 +1,3 @@
+* Input
+User input stuff stuff like '''action mapping''', '''events''', '''real-time checking''', '''gamepad & keyboard support'''.~
+- [[InputManager]]~

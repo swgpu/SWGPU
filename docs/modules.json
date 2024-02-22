@@ -1,12 +1,12 @@
 {
-    "AI": "Module AI",
-    "Core": "Module Core",
-    "DNA": "Module DNA",
-    "Gfx2": "Module Gfx2",
-    "Gfx3": "Module Gfx3",
-    "Input": "Module Input",
-    "Screen": "Module Screen",
-    "Script": "Module Script",
-    "Sound": "Module Sound",
-    "UI": "Module UI"
+    "AI": "Artificial intelligence related stuff like '''a-star for 2D/3D with graph and grid''', '''minmax with alpha-beta pruning'''.",
+    "Core": "Contains all common stuff like '''math''', '''events''', '''top-container'''.",
+    "DNA": "An ECS (Entity Component System) architecture implementation.",
+    "Gfx2": "2D graphics related stuff like '''static sprite''', '''animated sprite''', '''isometric tilemap''', '''orthographic tilemap''', '''particles system'''.",
+    "Gfx3": "3D graphics related stuff like '''debug mesh''', '''walkmesh''', '''navmesh''', '''material''', '''static mesh''', '''animated mesh''', '''static sprite''', '''animated sprite''', '''billboarding''', '''cubemaps skybox''', '''mover''', '''particules system''', '''flares''', '''fog''', '''vertex colorization''', '''decals''', '''shadow map''', '''pooling'''.",
+    "Input": "User input stuff stuff like '''action mapping''', '''events''', '''real-time checking''', '''gamepad & keyboard support'''.",
+    "Screen": "The way to navigate between different part of your game.",
+    "Script": "Powerful script machine implementation stuff.",
+    "Sound": "Sound related stuff, simple ;).",
+    "UI": "A component based user-interface stuff."
 }

@@ -2,10 +2,7 @@ import { eventManager } from '../core/event_manager';
 import { inputManager } from '../input/input_manager';
 
 /**
- * The `UIWidget` class represents a UI element base class with various properties and
- * methods for managing its behavior and appearance.
- * It contains methods to set focus, visibility, enabled flag, selected flag, position, animation and
- * capture action events.
+ * Is a ui element base.
  */
 class UIWidget {
   id: string;
@@ -14,7 +11,7 @@ class UIWidget {
   node: HTMLDivElement;
 
   /**
-   * The constructor.
+   * @param options - The options like id, class and the most important, template code !
    */
   constructor(options: { id?: string, className?: string, template?: string } = {}) {
     this.id = options.id ?? '';
@@ -28,16 +25,15 @@ class UIWidget {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * Virtual update function.
+   * 
+   * @param {number} ts - The timestep.
    */
-  update(ts: number): void {
-    // virtual method called during update phase !
-  }
+  update(ts: number): void {}
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
     this.node.remove();
@@ -45,16 +41,16 @@ class UIWidget {
   }
 
   /**
-   * The "getId" function returns the `ìd` property.
-   * @returns The `ìd`property.
+   * Returns the id.
    */
   getId(): string {
     return this.id;
   }
 
   /**
-   * The "setId" function sets the id property.
-   * @param {string} id - A string representing the unique identifier to be set.
+   * Set the id value.
+   * 
+   * @param {string} id - The unique identifier of a widget.
    */
   setId(id: string): void {
     this.id = id;
@@ -62,42 +58,42 @@ class UIWidget {
   }
 
   /**
-   * The "getNode" function returns the root `node` HTMLElement of the widget.
-   * @returns The `node` property.
+   * Returns the root HTMLElement of the widget.
    */
   getNode(): HTMLDivElement {
     return this.node;
   }
 
   /**
-   * The "appendChild" function appends a given HTML element as a child to the widget node.
-   * @param {HTMLElement} child - The `child` parameter is an instance of the `HTMLElement` class. It
-   * represents an HTML element that you want to append to the widget node.
+   * Appends a child element to the root of the widget.
+   * 
+   * @param {HTMLElement} child - The child element.
    */
   appendChild(child: HTMLElement): void {
     this.node.appendChild(child);
   }
 
   /**
-   * The "removeChild" function removes a child element from the widget node.
-   * @param {number} index - The index parameter is the position of the child element that you want to
-   * remove from the widget node.
+   * Removes a child element from the root of the widget.
+   * 
+   * @param {number} index - The position of the child element.
    */
   removeChild(index: number): void {
     this.node.removeChild(this.node.children[index]);
   }
   
   /**
-   * The "appendStyles" function appends CSS styles to the `node` HTMLElement.
-   * @param {string} styles - The `styles` parameter is a string that represents CSS styles that you want
-   * to append to the `cssText` property of the `node` object.
+   * Appends CSS styles to the root of the widget.
+   * 
+   * @param {string} styles - The CSS styles.
    */
   appendStyles(styles: string): void {
     this.node.style.cssText += styles;
   }
 
   /**
-   * The "focus" function adds `u-focused` class to the `node` HTMLElement.
+   * Focus on.
+   * It set 'u-focused' class to the root of the widget.
    * It emits a 'E_FOCUSED' event and subscribes to input action event.
    */
   focus(): void {
@@ -107,7 +103,8 @@ class UIWidget {
   }
 
   /**
-   * The "unfocus" function removes the `u-focused` class from the `node` HTMLElement.
+   * Focus off.
+   * It unset 'u-focused' class to the root of the widget.
    * It emits an 'E_UNFOCUSED' event and unsubscribes the inputManager from input action event.
    */
   unfocus(): void {
@@ -117,19 +114,17 @@ class UIWidget {
   }
 
   /**
-   * The "isFocused" function checks if widget is focused.
-   * @returns A boolean value indicating if widget is focused or not.
+   * Checks if widget is focused.
    */
   isFocused(): boolean {
     return this.node.classList.contains('u-focused');
   }
 
   /**
-   * The "setVisible" function sets the visibility state.
-   * Nota bene: toggle the `u-hidden` class on `node`.
-   * @param {boolean} visible - The `visible` parameter is a boolean value that determines whether the
-   * element should be visible or hidden. If `visible` is true, the element will be displayed, otherwise
-   * it will be hidden.
+   * Set the visibility state.
+   * It toggle the `u-hidden` class to the root of the widget.
+   * 
+   * @param {boolean} visible - Determines whether the element should be visible or hidden.
    */
   setVisible(visible: boolean): void {
     if (visible) {
@@ -141,19 +136,17 @@ class UIWidget {
   }
 
   /**
-   * The "isVisible" function checks if the widget is visible.
-   * @returns A boolean value indicating if widget is visible or not.
+   * Checks if the widget is visible.
    */
   isVisible(): boolean {
     return !this.node.classList.contains('u-hidden');
   }
 
   /**
-   * The "setEnabled" function sets the enabled state flag.
-   * It is just to expose a convenient option to the user, this flag has not effect on the UI manager.
-   * Nota bene: toggle the `u-disabled` class on `node`.
-   * @param {boolean} enabled - The `enabled` parameter is a boolean value that determines whether the
-   * widget is enabled or disabled.
+   * Set the enabled state flag.
+   * It toggle the 'u-disabled' class to the root of the widget.
+   * 
+   * @param {boolean} enabled - Determines whether the widget is enabled or disabled.
    */
   setEnabled(enabled: boolean): void {
     if (enabled) {
@@ -165,19 +158,17 @@ class UIWidget {
   }
 
   /**
-   * The "isEnabled" function checks if widget is enabled or not.
-   * @returns A boolean value indicating if the widget is enabled or not.
+   * Checks if widget is enabled or not.
    */
   isEnabled(): boolean {
     return !this.node.classList.contains('u-disabled');
   }
 
   /**
-   * The "setSelected" function sets the selected state flag.
-   * It is just to expose a convenient option to the user, this flag has not effect on the UI manager.
-   * Nota bene: toggle the `u-selected` class on `node`.
-   * @param {boolean} selected - The `selected` parameter is a boolean value that indicates whether the
-   * element should be selected or not.
+   * Set the selected state flag.
+   * It toggle the 'u-selected' class to the root of the widget.
+   * 
+   * @param {boolean} selected - Indicates whether the element should be selected or not.
    */
   setSelected(selected: boolean): void {
     if (selected) {
@@ -189,17 +180,14 @@ class UIWidget {
   }
 
   /**
-   * The "isSelected" function checks if widget is selected or not.
-   * @returns A boolean value indicating if the widget is selected or not.
+   * Checks if widget is selected or not.
    */
   isSelected(): boolean {
     return this.node.classList.contains('u-selected');
   }
 
   /**
-   * The "getScreenPosition" function returns the left and top coordinates of the widget `node` HTMLElement on
-   * the screen.
-   * @returns The screen position.
+   * Returns the left and top client-coordinates of the widget on the screen.
    */
   getScreenPosition(): vec2 {
     let rect = this.node.getBoundingClientRect();
@@ -207,8 +195,7 @@ class UIWidget {
   }
 
   /**
-   * The "getPosition" function returns the relative x and y coordinates of the widget `node` HTMLElement.
-   * @returns The x and y coordinates of the node's position.
+   * Returns the relative x and y coordinates of the widget.
    */
   getPosition(): vec2 {
     const x = parseInt(this.node.style.left);
@@ -217,8 +204,9 @@ class UIWidget {
   }
 
   /**
-   * The "setPosition" function sets the left and top position to the widget `node` HTMLElement.
-   * Nota bene: works only if position is `absolute`.
+   * Set the left and top position to the widget.
+   * Note: Works only if position is absolute.
+   * 
    * @param {number} x - The horizontal position of the element on the page.
    * @param {number} y - The vertical position of the element on the page.
    */
@@ -228,22 +216,20 @@ class UIWidget {
   }
 
   /**
-   * The "animate" function trigger animation to the widget `node` HTMLElement.
-   * @param {string} animation - The `animation` parameter is a string that represents the name of the
-   * animation to be applied to the `node` HTMLElement.
+   * Trigger animation to the widget root element.
+   * 
+   * @param {string} animation - The name of the animation.
    */
   animate(animation: string): void {
     this.node.style.animation = animation;
   }
 
   /**
-   * The "onAction" function is a virtual method that is called when input action event is emitted.
-   * @param {string} actionId - The `actionId` parameter is a string that represents the identifier of the
-   * action being performed.
+   * Virtual method that is called when input action event is emitted.
+   * 
+   * @param {string} actionId - The action identifier.
    */
-  onAction(actionId: string): void {
-    // virtual method.
-  }
+  onAction(actionId: string): void {}
 }
 
 export { UIWidget };

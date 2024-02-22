@@ -1,0 +1,38 @@
+* Class: Gfx3SpriteJAS
+
+A 3D animated sprite.
+- inherit from: Gfx3Sprite~
+** Constructors
+- ''new Gfx3SpriteJAS''(): Gfx3SpriteJAS~
+** Methods
+- ''getAnimations''()~
+Returns the list of animation descriptors.~
+~
+- ''getCurrentAnimation''()~
+Returns the current animation or null if there is no current animation.~
+~
+- ''getCurrentAnimationFrameIndex''(): number~
+Returns the current animation frame index.~
+~
+- ''loadFromFile''(path: string): Promise~
+Load asynchronously animated sprite data from a json file (jas).~
+-- ''path'': The file path.~
+~
+- ''play''(animationName: string, looped: boolean, preventSameAnimation: boolean): void~
+Play a specific animation.~
+-- ''animationName'': The name of the animation to be played.~
+-- ''looped'': Determines whether the animation should loop or not.~
+-- ''preventSameAnimation'': Determines whether the same animation should be prevented from playing again.~
+~
+- ''setAnimations''(animations: JASAnimation[]): void~
+Set the animations.~
+-- ''animations'': The animations.~
+~
+- ''setOffsetNormalized''(offsetXFactor: number, offsetYFactor: number): void~
+Set the normalized offset value.~
+-- ''offsetXFactor'': The offsetXFactor represent the normalized x-coordinate offset value.~
+-- ''offsetYFactor'': The offsetYFactor represent the normalized y-coordinate offset value.~
+~
+- ''update''(ts: number): void~
+The update function.~
+-- ''ts'': The timestep.~

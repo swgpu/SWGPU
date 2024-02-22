@@ -6,23 +6,16 @@ interface Visited<T> {
 };
 
 /**
- * The `AIPathGridSolver` class uses the A* algorithm to find the shortest path between a start
- * coordinate and an end coordinate on a grid.
+ * Implements the A* algorithm to find the shortest path between a start coordinate and an end coordinate on a grid.
  * @typeParam T - The coord type: vec2 or vec3.
  */
 class AIPathGridSolver<T extends vec2 | vec3> {
   /**
-   * The "solve" function uses the A* algorithm to find the shortest path between a start coordinate and
-   * an end coordinate on a grid.
-   * @param {AIPathGrid<T>} grid - A grid representing the pathfinding area. It contains information
-   * about the obstacles and the values of each cell (empty = 0, obstacle = 1).
-   * @param {T} startCoord - The `startCoord` parameter represents the starting coordinate of the path.
-   * It is the coordinate from where the pathfinding algorithm will begin searching for a path.
-   * @param {T} endCoord - The `endCoord` parameter represents the coordinates of the destination or end
-   * point in the grid. It is the position that the algorithm is trying to reach from the `startCoord`
-   * position.
-   * @returns The array of coordinates representing the path from the `startCoord` to the `endCoord`.
-   * If no path is found, it returns `null`.
+   * Find the shortest path between a start node and an end node in a given grid and returns the path.
+   * 
+   * @param grid -  A grid representing the pathfinding area. It contains information about the obstacles and the values of each cell (empty = 0, obstacle = 1).
+   * @param startCoord - The starting position in the grid.
+   * @param endCoord - The destination position in the grid.
    */
   solve(grid: AIPathGrid<T>, startCoord: T, endCoord: T): Array<T> | null {
     const visitedMap = new Map<string, Visited<T>>();
@@ -70,13 +63,11 @@ class AIPathGridSolver<T extends vec2 | vec3> {
   }
 
   /**
-   * The "heuristic" function returns an array of directions to move from point A to point B on a given
-   * grid.
-   * @param grid - The `grid` parameter is an instance of the `AIPathGrid` class, which represents a grid
-   * used for pathfinding. It contains information about the obstacles and walkable areas in the grid.
-   * @param {T} a - The parameter "a" represents the starting position in the grid.
-   * @param {T} b - The parameter "b" represents the destination position in the grid.
-   * @returns An array of directions from point a to point b.
+   * Returns an array of more closest to least close directions to move from point A to point B on a given grid.
+   *
+   * @param grid - The grid.
+   * @param {T} a - The starting position in the grid.
+   * @param {T} b - The destination position in the grid.
    */
   heuristic(grid: AIPathGrid<T>, a: T, b: T): Array<T> {
     return grid.getDirections(a, b);

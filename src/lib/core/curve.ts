@@ -11,12 +11,13 @@ interface CurveOptions {
 };
 
 /**
- * The `Curve` class represent a cubic curve interpolator.
+ * A cubic curve.
  */
 class Curve {
   /**
-   * The "createInterpolatorFromFile" function asynchronously loads curve data from a json file and return a curve interpolator.
-   * @param {string} path - The `path` parameter is the file path.
+   * Create a curve interpolator from asynchronously loads curve data from a json file and return it.
+   * 
+   * @param {string} path - The file path.
    */
   static async createInterpolatorFromFile(path: string): Promise<CurveInterpolator> {
     let response = await fetch(path);
@@ -39,9 +40,10 @@ class Curve {
   }
 
   /**
-   * The "createInterpolator" function create a curve interpolator used to create curve from a list of control points.
-   * @param {Array<vec_any>} points - Control points
-   * @param {CurveOptions} options - Interpolator options
+   * Create and returns a curve interpolator.
+   * 
+   * @param {Array<vec_any>} points - Control points.
+   * @param {CurveOptions} options - Interpolator options.
    */
   static createInterpolator(points: Array<vec_any>, options: CurveOptions): CurveInterpolator {
     return new CurveInterpolator(points, {

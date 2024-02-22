@@ -1,0 +1,31 @@
+* Class: Gfx2IsoTileMapLayer
+
+A Isometric tilemap layer.
+- inherit from: Gfx2Drawable~
+** Constructors
+- ''new Gfx2IsoTileMapLayer''(): Gfx2IsoTileMapLayer~
+** Methods
+- ''draw''(): void~
+The draw function.~
+~
+- ''getTiles''()~
+~
+- ''loadFromTileMap''(tilemap: Gfx2TileMap, layerIndex: number): void~
+-- ''tilemap''~
+-- ''layerIndex''~
+~
+- ''placeTile''(tileId: number, row: number, col: number): void~
+-- ''tileId''~
+-- ''row''~
+-- ''col''~
+~
+- ''removeTileAt''(row: number, col: number): void~
+-- ''row''~
+-- ''col''~
+~
+- ''setShowDebug''(showDebug: boolean): void~
+-- ''showDebug''~
+~
+- ''update''(ts: number): void~
+The update function.~
+-- ''ts'': The timestep.~

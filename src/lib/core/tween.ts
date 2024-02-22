@@ -1,8 +1,7 @@
 import { UT } from './utils';
 
 /**
- * The `TweenAbstract` class is generic class that provides methods for interpolating values based
- * on given times and values.
+ * Generic values interpolator.
  * @typeParam T - The interpolate value type.
  */
 class TweenAbstract<T> {
@@ -12,13 +11,10 @@ class TweenAbstract<T> {
   defaultFn: Function;
 
   /**
-   * The constructor.
-   * @param times - The `times` parameter is an array of times intervals.
-   * @param values - The `values` parameter is an array of values of type `T`. It represents the values
-   * that will be associated with each time in the `times` array.
-   * @param {Function} defaultFn - The `defaultFn` parameter is the default interpolate function that will be used as a
-   * fallback if none of the functions in the `fns` array match the given time.
-   * @param fns - The `fns` parameter is an optional array of interpolate functions.
+   * @param {Array<number>} times - Times intervals.
+   * @param {Array<T>} values - Values that will be associated with each time values.
+   * @param {Function} defaultFn - The interpolate function that will be used as a fallback if none of the functions in the `fns` array match the given time.
+   * @param {Array<Function>} fns - Interpolate functions that will be associated with each time values.
    */
   constructor(times: Array<number>, values: Array<T>, defaultFn: Function, fns: Array<Function> = []) {
     this.times = times;
@@ -28,10 +24,9 @@ class TweenAbstract<T> {
   }
 
   /**
-   * The "interpolate" function takes a time value and returns the interpolated value based on the given
-   * times and values.
-   * @param {number} t - t is a number representing the time at which we want to interpolate a value.
-   * @returns The method is returing a value of type T.
+   * Returns the interpolated value based on the given times and values.
+   * 
+   * @param {number} t - The time (0 - 1).
    */
   interpolate(t: number): T {
     let i = 0;
@@ -54,8 +49,7 @@ class TweenAbstract<T> {
   }
 
   /**
-   * The "isEmpty" function checks if the `times` and `values` arrays are empty and returns a boolean value.
-   * @returns A boolean value indicate is it is empty or not.
+   * Checks if the times and values variables are empty.
    */
   isEmpty(): boolean {
     return this.times.length == 0 || this.values.length == 0;
@@ -63,32 +57,47 @@ class TweenAbstract<T> {
 }
 
 /**
- * The `TweenNumber` class is a shortcut subclass of "TweenAbstract" that handles tweening of number values using
- * linear interpolation.
+ * Interpolate number values.
  */
 class TweenNumber extends TweenAbstract<number> {
-  constructor(times: Array<number> = [], values: Array<number> = []) {
-    super(times, values, UT.LINEAR);
+  /**
+   * @param {Array<number>} times - Times intervals.
+   * @param {Array<number>} values - Values that will be associated with each time values.
+   * @param {Function} defaultFn - The interpolate function that will be used as a fallback if none of the functions in the `fns` array match the given time.
+   * @param {Array<Function>} fns - Interpolate functions that will be associated with each time values.
+   */
+  constructor(times: Array<number> = [], values: Array<number> = [], fns: Array<Function> = []) {
+    super(times, values, UT.LINEAR, fns);
   }
 }
 
 /**
- * The `TweenVEC2` class is a shortcut subclass of "TweenAbstract" that handles tweening of vec2 values using
- * linear interpolation.
+ * Interpolate vec2 values.
  */
 class TweenVEC2 extends TweenAbstract<vec2> {
-  constructor(times: Array<number> = [], values: Array<vec2> = []) {
-    super(times, values, UT.LINEAR_VEC2);
+  /**
+   * @param {Array<number>} times - Times intervals.
+   * @param {Array<vec2>} values - Values that will be associated with each time values.
+   * @param {Function} defaultFn - The interpolate function that will be used as a fallback if none of the functions in the `fns` array match the given time.
+   * @param {Array<Function>} fns - Interpolate functions that will be associated with each time values.
+   */
+  constructor(times: Array<number> = [], values: Array<vec2> = [], fns: Array<Function> = []) {
+    super(times, values, UT.LINEAR_VEC2, fns);
   }
 }
 
 /**
- * The `TweenVEC3` class is a shortcut subclass of "TweenAbstract" that handles tweening of vec3 values using
- * linear interpolation.
+ * Interpolate vec3 values.
  */
 class TweenVEC3 extends TweenAbstract<vec3> {
-  constructor(times: Array<number> = [], values: Array<vec3> = []) {
-    super(times, values, UT.LINEAR_VEC3);
+  /**
+   * @param {Array<number>} times - Times intervals.
+   * @param {Array<vec3>} values - Values that will be associated with each time values.
+   * @param {Function} defaultFn - The interpolate function that will be used as a fallback if none of the functions in the `fns` array match the given time.
+   * @param {Array<Function>} fns - Interpolate functions that will be associated with each time values.
+   */
+  constructor(times: Array<number> = [], values: Array<vec3> = [], fns: Array<Function> = []) {
+    super(times, values, UT.LINEAR_VEC3, fns);
   }
 }
 

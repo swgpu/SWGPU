@@ -2,7 +2,9 @@ import { eventManager } from '../core/event_manager';
 import { UIWidget } from '../ui/ui_widget';
 
 /**
- * The `UIMessage` class represents a bottom fixed dialog widget with picture, text and author name.
+ * A UI widget displaying a bottom fixed dialog widget with picture, text and author name.
+ * It emit 'E_PRINT_FINISHED' when print is finish.
+ * It emit 'E_OK' when action is 'OK' and text is finished.
  */
 class UIMessage extends UIWidget {
   text: string;
@@ -11,9 +13,6 @@ class UIMessage extends UIWidget {
   timeElapsed: number;
   finished: boolean;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super({
       className: 'UIMessage',
@@ -34,12 +33,13 @@ class UIMessage extends UIWidget {
     this.timeElapsed = 0;
     this.finished = false;
 
-    this.node.addEventListener('click', () => this.handleClick());
+    this.node.addEventListener('click', () => this.$handleClick());
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (this.finished) {
@@ -67,24 +67,26 @@ class UIMessage extends UIWidget {
   }
 
   /**
-   * The "setPicture" function sets the dialog author avatar's.
-   * @param {string} pictureFile - The `pictureFile` parameter is a string that represents the file path
-   * or URL of the picture that you want to set.
+   * Set the dialog author avatar's.
+   * 
+   * @param {string} pictureFile - The file path of the picture that you want to set.
    */
   setPicture(pictureFile: string): void {
     this.node.querySelector<HTMLElement>('.js-picture')!.innerHTML = '<img class="UIMessage-picture-img" src="' + pictureFile + '">';
   }
 
   /**
-   * The "setAuthor" function sets the dialog author name's.
-   * @param {string} author - The `author` parameter is a string that represents the name of the author.
+   * Set the dialog author name's.
+   * 
+   * @param {string} author - The name of the author.
    */
   setAuthor(author: string): void {
     this.node.querySelector<HTMLElement>('.js-author')!.textContent = author;
   }
 
   /**
-   * The "setText" function sets the dialog text.
+   * Set the dialog text.
+   * 
    * @param {string} text - The dialog text.
    */
   setText(text: string): void {
@@ -95,17 +97,17 @@ class UIMessage extends UIWidget {
   }
 
   /**
-   * The "setStepDuration" function sets the text speed.
-   * @param {number} stepDuration - The `stepDuration` parameter is a number that represents the duration of
-   * a text update. Smaller is that value faster text will be displayed.
+   * Set the text speed.
+   * 
+   * @param {number} stepDuration - The duration of a text update.
    */
   setStepDuration(stepDuration: number): void {
     this.stepDuration = stepDuration;
   }
 
   /**
-   * The "onAction" function.
-   * It emits an event with the name 'E_OK' if the actionId is 'OK'.
+   * The onAction function.
+   * Note: It emits an 'E_OK' event if the actionId is 'OK' and text is finished.
    */
   onAction(actionId: string): void {
     if (actionId == 'OK' && this.finished) {
@@ -113,11 +115,7 @@ class UIMessage extends UIWidget {
     }
   }
 
-  /**
-   * The "handleClick" function.
-   * It emits an event with the name 'E_OK' if text is finished and mouse click fired.
-   */
-  handleClick(): void {
+  $handleClick(): void {
     if (this.isFocused() && this.finished) {
       eventManager.emit(this, 'E_OK');
     }

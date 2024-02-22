@@ -6,16 +6,13 @@ import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_skybox_shader';
 
 /**
- * The `Gfx3Skybox` class represents a skybox in a 3D graphics system.
+ * A cubemap skybox.
  */
 class Gfx3Skybox extends Gfx3Drawable {
   cubemapChanged: boolean;
   grp1: Gfx3StaticGroup;
   cubemap: Gfx3Texture;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super(SHADER_VERTEX_ATTR_COUNT);
     this.cubemapChanged = false;
@@ -35,23 +32,24 @@ class Gfx3Skybox extends Gfx3Drawable {
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
-    this.grp1.destroy();
+    this.grp1.delete();
     super.delete();
   }
 
   /**
-   * The "draw" function.
+   * The draw function.
    */
   draw(): void {
     gfx3SkyboxRenderer.draw(this);
   }
 
   /**
-   * The "setCubemap" function sets the cubemap texture.
+   * Set the cubemap texture.
+   * 
    * @param {Gfx3Texture} cubemap - The cubemap texture.
    */
   setCubemap(cubemap: Gfx3Texture): void {
@@ -60,16 +58,14 @@ class Gfx3Skybox extends Gfx3Drawable {
   }
 
   /**
-   * The "getCubemap" function returns a cubemap texture.
-   * @returns The cubemap texture.
+   * Returns the cubemap texture.
    */
   getCubemap(): Gfx3Texture {
     return this.cubemap;
   }
 
   /**
-   * The "getGroup01" function returns the static group index 1.
-   * @returns The static group.
+   * Returns the bindgroup(1).
    */
   getGroup01(): Gfx3StaticGroup {
     if (this.cubemapChanged) {

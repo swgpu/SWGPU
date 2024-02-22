@@ -3,7 +3,7 @@ import { Gfx3Transformable } from './gfx3_transformable';
 import { Gfx3BoundingBox } from './gfx3_bounding_box';
 
 /**
- * The `Gfx3Drawable` class represents a drawable object in a 3D graphics system.
+ * A 3D drawable object.
  */
 class Gfx3Drawable extends Gfx3Transformable {
   vertexSubBuffer: VertexSubBuffer;
@@ -13,10 +13,7 @@ class Gfx3Drawable extends Gfx3Transformable {
   boundingBox: Gfx3BoundingBox;
 
   /**
-   * The constructor.
-   * @param {number} vertexStride - The `vertexStride` parameter is a number that represents the number of
-   * attributes for each vertex. It is used to determine the spacing between consecutive vertices in the vertex
-   * buffer.
+   * @param {number} vertexStride - The number of attributes for each vertex.
    */
   constructor(vertexStride: number) {
     super();
@@ -28,33 +25,30 @@ class Gfx3Drawable extends Gfx3Transformable {
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
     gfx3Manager.destroyVertexBuffer(this.vertexSubBuffer);
   }
 
   /**
-   * The "update" is a virtual method used for the update phase.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * Virtual update function.
+   * 
+   * @param {number} ts - The timestep.
    */
-  update(ts: number): void {
-    // virtual method called during update phase !
-  }
+  update(ts: number): void {}
 
   /**
-   * The "draw" is a virtual method used for the draw phase.
+   * Virtual draw function.
    */
-  draw(): void {
-    // virtual method called during draw phase !
-  }
+  draw(): void {}
 
   /**
-   * The "beginVertices" function prepare your vertex buffer to write process.
+   * Prepare your vertex buffer to write process.
    * Warning: You need to call this method before define your vertices.
-   * @param {number} vertexCount - The parameter `vertexCount` represents the number of vertices that
-   * will be stored in the vertex buffer.
+   * 
+   * @param {number} vertexCount - The number of vertices.
    */
   beginVertices(vertexCount: number): void {
     gfx3Manager.destroyVertexBuffer(this.vertexSubBuffer);
@@ -65,24 +59,26 @@ class Gfx3Drawable extends Gfx3Transformable {
   }
 
   /**
-   * The "defineVertex" function takes in an array of numbers representing a vertex.
-   * @param v - An array of numbers representing the attributes of vertex.
+   * Add a vertex.
+   * 
+   * @param v - The attributes data of the vertex.
    */
   defineVertex(...v: Array<number>) {
     this.vertices.push(...v);
   }
 
   /**
-   * The "setVertices" function sets the vertices in one pass.
-   * @param vertices - An array of numbers representing the vertices of a shape.
+   * Set vertices.
+   * 
+   * @param vertices - The list of vertices.
    */
   setVertices(vertices: Array<number>) {
     this.vertices = vertices;
   }
 
   /**
-   * The "endVertices" function writes vertex data to the vertex buffer and calculates the bounding box
-   * based on the vertices.
+   * Close your vertex buffer to write process.
+   * Note: The boundingbox is up to date from here.
    */
   endVertices(): void {
     gfx3Manager.writeVertexBuffer(this.vertexSubBuffer, this.vertices);
@@ -90,53 +86,44 @@ class Gfx3Drawable extends Gfx3Transformable {
   }
 
   /**
-   * The "getVertexSubBufferOffset" function returns the offset of the vertex sub-buffer.
+   * Returns the vertex sub-buffer offset in the global vertex buffer.
    * Nota bene: All vertices are stored in one global vertex buffer handled by "Gfx3Manager".
    * SubBuffer is just a reference offset/size pointing to the big one buffer.
-   * @returns The offset of the vertex sub-buffer.
    */
   getVertexSubBufferOffset(): number {
     return this.vertexSubBuffer.offset;
   }
 
   /**
-   * The "getVertexSubBufferSize" function returns the byte length of the vertex sub buffer.
-   * Nota bene: All vertices are stored in one global vertex buffer handled by "Gfx3Manager".
-   * SubBuffer is just a reference offset/size pointing to the big one buffer.
-   * @returns The byte length of the vertex sub buffer.
+   * Returns the byte length of the vertex sub buffer.
    */
   getVertexSubBufferSize(): number {
     return this.vertexSubBuffer.vertices.byteLength;
   }
 
   /**
-   * The "getVertices" function returns an array of numbers representing vertices.
-   * @returns The vertices property.
+   * Returns vertices.
    */
   getVertices(): Array<number> {
     return this.vertices;
   }
 
   /**
-   * The "getVertexCount" function returns the number of vertices.
-   * @returns The number of vertices.
+   * Returns the number of vertices.
    */
   getVertexCount(): number {
     return this.vertexCount;
   }
 
   /**
-   * The "getBoundingBox" function returns the bounding box.
-   * @returns The bounding box.
+   * Returns the bounding box.
    */
   getBoundingBox(): Gfx3BoundingBox {
     return this.boundingBox;
   }
 
   /**
-   * The "getWorldBoundingBox" function returns the world bounding box by transforming its
-   * local bounding box using its transform matrix.
-   * @returns The world bounding box.
+   * Returns the bounding box in the world space coordinates.
    */
   getWorldBoundingBox(): Gfx3BoundingBox {
     return this.boundingBox.transform(this.getTransformMatrix());

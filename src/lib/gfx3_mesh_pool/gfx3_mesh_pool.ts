@@ -6,9 +6,17 @@ interface MeshInstance {
   used: boolean;
 };
 
+/**
+ * Manage a pool of mesh instances, it take a original mesh and make numInstances clones.
+ * Note: You can perfectly do without pool but for some cases it is used to keep performance stables.
+ */
 class Gfx3MeshPool {
   instances: Array<MeshInstance>;
 
+  /**
+   * @param {Gfx3Mesh} originMesh - The original mesh.
+   * @param {number} numInstances - The number of allocated instances.
+   */
   constructor(originMesh: Gfx3Mesh, numInstances: number) {
     this.instances = [];
 
@@ -19,8 +27,8 @@ class Gfx3MeshPool {
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
     for (const instance of this.instances) {
@@ -29,8 +37,9 @@ class Gfx3MeshPool {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     for (const instance of this.instances) {
@@ -39,7 +48,7 @@ class Gfx3MeshPool {
   }
 
   /**
-   * The "draw" function.
+   * The draw function.
    */
   draw(): void {
     for (const instance of this.instances) {
@@ -48,9 +57,7 @@ class Gfx3MeshPool {
   }
 
   /**
-   * The "acquire" function returns an available `MeshInstance` from a list of instances, setting its
-   * position, scale, and rotation to zero and marking it as used.
-   * @returns The `MeshInstance` or `null`.
+   * Returns a not used instance, or null if all instance are used.
    */
   acquire(): MeshInstance | null {
     for (const instance of this.instances) {
@@ -67,8 +74,9 @@ class Gfx3MeshPool {
   }
 
   /**
-   * The "dispose" function marks a MeshInstance as unused.
-   * @param {MeshInstance} instance - The `instance` parameter is the instance to dispose.
+   * Marks an instance as unused.
+   * 
+   * @param {MeshInstance} instance - The instance to dispose.
    */
   dispose(instance: MeshInstance): void {
     const found = this.instances.find(i => i == instance);
@@ -80,10 +88,9 @@ class Gfx3MeshPool {
   }
 
   /**
-   * The "find" function returns a MeshInstance object with a specific id or undefined if no matching
-   * object is found.
-   * @param {number} id - The `id` parameter is instance id.
-   * @returns The mesh instance or undefined.
+   * Returns an instance with the specified id or undefined if no matching object is found.
+   * 
+   * @param {number} id - The instance identifier.
    */
   find(id: number): MeshInstance | undefined {
     return this.instances.find(i => i.id == id);

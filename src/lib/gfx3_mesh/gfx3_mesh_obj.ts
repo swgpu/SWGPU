@@ -31,7 +31,9 @@ class OBJObject {
 }
 
 /**
- * The `Gfx3MeshOBJ` class is a subclass of Gfx3Mesh that represents a 3D mesh object loaded from an OBJ wavefront file.
+ * A 3D obj wavefront mesh object.
+ * Note: In fact this mesh is composed by multiple sub-meshes, one by "object".
+ * So, you can choose to manipulate them individually or together with that top-level mesh.
  *
  * OBJ Options:
  * - Multiple meshes.
@@ -60,9 +62,6 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   debugVertices: Array<number>;
   debugVertexCount: number;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super();
     this.coords = new Array<number>();
@@ -77,8 +76,8 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete() {
     for (const mesh of this.meshes.values()) {
@@ -93,8 +92,9 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     for (const mesh of this.meshes.values()) {
@@ -103,7 +103,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
-   * The "draw" function.
+   * The draw function.
    */
   draw(): void {
     for (const mesh of this.meshes.values()) {
@@ -117,9 +117,10 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
-   * The "loadFromFile" function asynchronously loads `obj` and `mtl` files.
-   * @param {string} objPath - The `obj` file path.
-   * @param {string} mtlPath - The `mtl` file path.
+   * Load asynchronously data from obj and mtl files and build the mesh.
+   * 
+   * @param {string} objPath - The obj file path.
+   * @param {string} mtlPath - The mtl file path.
    */
   async loadFromFile(objPath: string, mtlPath: string) {
     await this.$loadMaterials(mtlPath);
@@ -128,7 +129,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
-   * The "getVertexCount" function override `getVertexCount` from `Gfx3Mesh`.
+   * Returns the vertex count.
    */
   getVertexCount(): number {
     let vertexCount = 0;
@@ -140,7 +141,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
-   * The "getVertices" function override `getVertices` from `Gfx3Mesh`.
+   * Returns the vertices.
    */
   getVertices(): Array<number> {
     let vertices = new Array<number>();
@@ -152,10 +153,9 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
-   * The "getMesh" function returns a `Gfx3Mesh` object with the specified name, or throws an error if
-   * the object doesn't exist.
-   * @param {string} name - A string representing the name of the mesh object that you want to retrieve.
-   * @returns The mesh.
+   * Returns mesh object with the specified name, or throws an error if the object doesn't exist.
+   * 
+   * @param {string} name - The name.
    */
   getMesh(name: string): Gfx3Mesh {
     if (!this.meshes.has(name)) {
@@ -166,18 +166,16 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
-   * The "getMeshes" function returns all `Gfx3Mesh` objects.
-   * @returns An iterable of Gfx3Mesh objects.
+   * Returns all mesh objects.
    */
   getMeshes(): IterableIterator<Gfx3Mesh> {
     return this.meshes.values();
   }
 
   /**
-   * The "getObject" function returns a `OBJObject` object with the specified name, or throws an error if
-   * the object doesn't exist.
-   * @param {string} name - A string representing the name of the object that you want to retrieve.
-   * @returns The object data.
+   * Returns data object with the specified name, or throws an error if the object doesn't exist.
+   * 
+   * @param {string} name - The name.
    */
   getObject(name: string): OBJObject {
     if (!this.objects.has(name)) {
@@ -188,8 +186,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
-   * The "getBoundingBox" function returns the bounding box.
-   * @returns The bounding box.
+   * Returns the bounding box.
    */
   getBoundingBox(): Gfx3BoundingBox {
     const boxes = new Array<Gfx3BoundingBox>();
@@ -202,8 +199,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
-   * The "getWorldBoundingBox" function returns the world bounding box.
-   * @returns The world bounding box.
+   * Returns the bounding box in the world space coordinates.
    */
   getWorldBoundingBox(): Gfx3BoundingBox {
     const boxes = new Array<Gfx3BoundingBox>();

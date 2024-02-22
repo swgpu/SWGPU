@@ -1,0 +1,18 @@
+* Class: Gfx2TileMapLayer
+
+A tilelayer drawable.
+- inherit from: Gfx2Drawable~
+** Constructors
+- ''new Gfx2TileMapLayer''(): Gfx2TileMapLayer~
+** Methods
+- ''draw''(): void~
+The draw function.~
+~
+- ''loadFromTileMap''(tilemap: Gfx2TileMap, layerIndex: number): void~
+Load data from tilemap and layer index.~
+-- ''tilemap'': The tilemap.~
+-- ''layerIndex'': The index of the tilelayer.~
+~
+- ''update''(ts: number): void~
+The update function.~
+-- ''ts'': The timestep.~

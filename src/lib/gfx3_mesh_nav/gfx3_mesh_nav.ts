@@ -46,7 +46,7 @@ class Frag extends Gfx3BoundingBox {
 }
 
 /**
- * The `Gfx3MeshNav` class is responsible for controlling the navigation and collisions in a static mesh.
+ * Controlling navigation and collisions responses in a static mesh.
  * In collision case, the collision response sliding along the polygon of the map to keep a good
  * feeling for the player.
  */
@@ -55,9 +55,6 @@ class Gfx3MeshNav {
   frags: Array<Frag>;
   lift: number;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.btree = new Gfx3TreePartition(20, 10);
     this.frags = [];
@@ -65,8 +62,9 @@ class Gfx3MeshNav {
   }
 
   /**
-   * The "loadFromJSM" function creates a binary tree partition based on the vertices of a given mesh.
-   * @param {Gfx3MeshJSM} jsm - The static mesh in a specific format (JSM).
+   * Load a static mesh as a nav-mesh.
+   * 
+   * @param {Gfx3MeshJSM} mesh - The static mesh.
    */
   loadFromJSM(mesh: Gfx3Mesh): void {
     this.btree = new Gfx3TreePartition(20, 10, mesh.getBoundingBox());
@@ -80,16 +78,10 @@ class Gfx3MeshNav {
   }
 
   /**
-   * The "move" function calculates the movement of an object in a 3D space, taking into account
-   * collisions with walls and floors.
-   * @param {vec3} center - The `center` parameter is a 3D vector representing the center point of the
-   * object or entity that is being moved.
-   * @param {vec3} size - The `size` parameter represents the dimensions of the object's bounding box. It
-   * is a `vec3` vector that contains the width, height, and depth of the object.
-   * @param {vec3} move - The `move` parameter is a 3D vector that represents the desired movement of an
-   * object. It specifies how much the object should move along the x, y, and z axes.
-   * @returns The NavInfo object.
-   * It contains the response collision move, a boolean to check wall collide and a boolean to check floor collide.
+   * Move the virtual box and returns response collision move, a boolean to check wall collide and a boolean to check floor collide.
+   * @param {vec3} center - The center point of the box.
+   * @param {vec3} size - The size of the box.
+   * @param {vec3} move - The movement.
    */
   move(center: vec3, size: vec3, move: vec3): NavInfo {
     const aabb = Gfx3BoundingBox.createFromCenter(center[0], center[1], center[2], size[0], size[1], size[2]);
@@ -158,17 +150,16 @@ class Gfx3MeshNav {
   }
 
   /**
-   * The "setLift" function sets the value of the "lift" property.
-   * @param {number} lift - The lift is used to elevate the virtual bounding box to let
-   * passing over little step or micro obstacles on the floor.
+   * Set the lift.
+   * 
+   * @param {number} lift - The lift is used to elevate the virtual bounding box to let passing over little step or micro obstacles on the floor.
    */
   setLift(lift: number): void {
     this.lift = lift;
   }
 
   /**
-   * The "getLift" function returns the value of the "lift" property.
-   * @returns The lift property.
+   * Returns the lift.
    */
   getLift(): number {
     return this.lift;

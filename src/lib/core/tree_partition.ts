@@ -11,8 +11,8 @@ export interface ITreePartitionMethod<T> {
 }
 
 /**
- * The `TreePartition` class represents a generic partition binary tree data structure.
- * @typeParam T - The object type.
+ * The root partition binary tree.
+ * @typeParam T - The type of data that the tree nodes hold.
  */
 class TreePartition<T> {
   maxChildren: number;
@@ -20,16 +20,9 @@ class TreePartition<T> {
   root: TreePartitionNode<T>;
 
   /**
-   * The constructor initializes a TreePartition object with the specified maximum number of children,
-   * maximum depth, and partition method.
-   * @param {number} maxChildren - The `maxChildren` parameter specifies the maximum number of children
-   * that a node in the tree can have. This parameter determines the branching factor of the tree, i.e.,
-   * the number of child nodes that can be created from a parent node.
-   * @param {number} maxDepth - The `maxDepth` parameter specifies the maximum depth or level of the tree
-   * partition. It determines how deep the tree can be divided into smaller partitions.
-   * @param method - The `method` parameter is an instance of the `ITreePartitionMethod<T>` interface.
-   * This interface defines a method that is responsible for partitioning the tree nodes. The `T`
-   * represents the type of data that the tree nodes hold.
+   * @param {number} maxChildren - The maximum number of children that a node in the tree can have. It determines the branching factor of the tree, i.e.
+   * @param {number} maxDepth - The maximum depth or level of the tree partition. It determines how deep the tree can be divided into smaller partitions.
+   * @param method - Defines a method that is responsible for partitioning the tree nodes.
    */
   constructor(maxChildren: number, maxDepth: number, method: ITreePartitionMethod<T>) {
     this.maxChildren = maxChildren;
@@ -38,24 +31,23 @@ class TreePartition<T> {
   }
 
   /**
-   * The "addChild" function adds an object as a child to the tree.
-   * @param {T} object - The parameter `object` is of type T, which means it can be any type.
+   * Adds an object.
+   * 
+   * @param {T} object - The object.
    */
   addChild(object: T): void {
     this.root.addChild(object);
   }
 
   /**
-   * The "getMaxChildren" function returns the maximum number of children per nodes.
-   * @returns The method is returning the value of the property "maxChildren", which is a number.
+   * Returns the maximum number of children per nodes.
    */
   getMaxChildren(): number {
     return this.maxChildren;
   }
 
   /**
-   * The "getMaxDepth" function returns the maximum depth of the partition tree.
-   * @returns The method is returning the value of the variable "maxDepth", which is of type number.
+   * Returns the maximum depth of the partition tree.
    */
   getMaxDepth(): number {
     return this.maxDepth;
@@ -63,9 +55,8 @@ class TreePartition<T> {
 }
 
 /**
- * The `TreePartitionNode` class represents a generic node in a binary tree partition data structure, which can be used
- * to organize and search for objects of type T.
- * @typeParam T - The object type.
+ * The node in a binary tree partition data structure.
+ * @typeParam T - The type of data that the tree nodes hold.
  */
 class TreePartitionNode<T> {
   tree: TreePartition<T>;
@@ -77,14 +68,9 @@ class TreePartitionNode<T> {
   children: Array<T> = [];
 
   /**
-   * This is a constructor.
-   * @param tree - The `tree` parameter is an instance of the `TreePartition` class, which represents a
-   * partitioned tree data structure. It contains the data and structure of the tree.
-   * @param {number} depth - The "depth" parameter represents the maximum depth of the tree partition. It
-   * determines how many levels the tree will have.
-   * @param method - The `method` parameter is an object that implements the `ITreePartitionMethod`
-   * interface. This interface defines a method for partitioning a tree. The `method` object is used to
-   * determine how the tree should be partitioned at each level of the tree.
+   * @param tree - The root partition binary tree.
+   * @param {number} depth - The depth of that node.
+   * @param method - Defines a method that is responsible for partitioning the tree nodes.
    */
   constructor(tree: TreePartition<T>, depth: number, method: ITreePartitionMethod<T>) {
     this.reset();
@@ -94,16 +80,17 @@ class TreePartitionNode<T> {
   }
 
  /**
-  * The search function call the search's method and return matching objects.
-  * @param {any[]} params - The `params` parameter in the `search` method.
-  * @returns An array of type T.
+  * Search and return all objects that intersect with the target.
+  * 
+  * @param {T} target - The target object.
+  * @param {Array<T>} results - All matching objects.
   */
-  search(...params: any[]): Array<T> {
-    return this.method.search(this, ...params);
+  search(target: T, results: Array<T> = []): Array<T> {
+    return this.method.search(this, target, results);
   }
 
   /**
-   * The "reset" function clear the node.
+   * Removes all nodes.
    */
   reset(): void {
     this.children = [];
@@ -112,9 +99,74 @@ class TreePartitionNode<T> {
   }
 
   /**
-   * The "createSubNodes" function split and move children in two sub-nodes.
+   * Adds an object.
+   * 
+   * @param {T} object - The object.
    */
-  createSubNodes(): void {
+  addChild(object: T): void {
+    if (this.children.length >= this.tree.getMaxChildren() && this.depth < this.tree.getMaxDepth()) {
+      this.$createSubNodes();
+    }
+
+    if (this.left === null && this.right === null) {
+      this.children.push(object);
+    }
+    else {
+      const results = this.method.split([object]);
+      if (this.left && results.left.length > 0) {
+        this.left.addChild(results.left[0]);
+      }
+
+      if (this.right && results.right.length > 0) {
+        this.right.addChild(results.right[0]);
+      }
+    }
+  }
+
+  /**
+   * Returns children.
+   */
+  getChildren(): Array<T> {
+    return this.children;
+  }
+
+  /**
+   * Returns the partition method object.
+   */
+  getMethod(): ITreePartitionMethod<T> {
+    return this.method;
+  }
+
+  /**
+   * Returns the left node or null.
+   */
+  getLeft(): TreePartitionNode<T> | null {
+    return this.left;
+  }
+
+  /**
+   * Returns the right node or null.
+   */
+  getRight(): TreePartitionNode<T> | null {
+    return this.right;
+  }
+
+  /**
+   * Returns the depth value.
+   */
+  getDepth(): number {
+    return this.depth;
+  }
+
+  /**
+   * Set depth value.
+   * @param {number} depth - The depth value.
+   */
+  setDepth(depth: number): void {
+    this.depth = depth;
+  }
+
+  $createSubNodes(): void {
     const results = this.method.split(this.children);
 
     this.left = new TreePartitionNode(
@@ -134,78 +186,6 @@ class TreePartitionNode<T> {
     this.left.parent = this;
     this.right.parent = this;
     this.children = [];
-  }
-
-  /**
-   * The "getChildren" function returns children of the node.
-   * @returns An array of type T, which represents the children of the node.
-   */
-  getChildren(): Array<T> {
-    return this.children;
-  }
-
-  /**
-   * The "addChild" function adds an object to the tree node's children, creating subnodes if maxChildren is exceeded.
-   * @param {T} object - The parameter "object" is of type T, which means it can be any type of object.
-   */
-  addChild(object: T): void {
-    if (this.children.length >= this.tree.getMaxChildren() && this.depth < this.tree.getMaxDepth()) {
-      this.createSubNodes();
-    }
-
-    if (this.left === null && this.right === null) {
-      this.children.push(object);
-    }
-    else {
-      const results = this.method.split([object]);
-      if (this.left && results.left.length > 0) {
-        this.left.addChild(results.left[0]);
-      }
-
-      if (this.right && results.right.length > 0) {
-        this.right.addChild(results.right[0]);
-      }
-    }
-  }
-
-  /**
-   * The "getMethod" function returns the tree partition method used.
-   * @returns The method being returned is of type ITreePartitionMethod<T>.
-   */
-  getMethod(): ITreePartitionMethod<T> {
-    return this.method;
-  }
-
-  /**
-   * The "getLeft" function returns the left node.
-   * @returns The method is returning the left node or null.
-   */
-  getLeft(): TreePartitionNode<T> | null {
-    return this.left;
-  }
-
-  /**
-   * The "getRight" function returns the right node.
-   * @returns The method is returning the right node or null.
-   */
-  getRight(): TreePartitionNode<T> | null {
-    return this.right;
-  }
-
-  /**
-   * The "getDepth" function returns the depth of the node.
-   * @returns The depth.
-   */
-  getDepth(): number {
-    return this.depth;
-  }
-
-  /**
-   * The "setDepth" function sets the depth node to a specified value.
-   * @param {number} depth - The depth parameter is a number that represents the depth of the node.
-   */
-  setDepth(depth: number): void {
-    this.depth = depth;
   }
 }
 

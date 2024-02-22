@@ -2,25 +2,20 @@ import { gfx3Manager } from './gfx3_manager';
 import { Gfx3Texture } from './gfx3_texture';
 
 /**
- * The `Gfx3TextureManager` class is a singleton responsible for managing, loading, caching, and deleting
- * textures represented as `Gfx3Texture` objects.
+ * Singleton 3D textures manager.
  */
 class Gfx3TextureManager {
   textures: Map<string, Gfx3Texture>;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.textures = new Map<string, Gfx3Texture>();
   }
 
   /**
-   * The "loadTexture" function asynchronously loads an image from a given path and returns it as an
-   * `Gfx3Texture`, caching it for future use.
-   * @param {string} path - The file path or URL of the image that you want to load as a texture.
+   * Loads asynchronously an image from a given path and returns it as a texture, caching it for future use.
+   * 
+   * @param {string} path - The file path.
    * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
-   * @returns a Promise that resolves when texture is loaded.
    */
   async loadTexture(path: string, samplerDescriptor: GPUSamplerDescriptor = {}): Promise<Gfx3Texture> {
     if (this.textures.has(path)) {
@@ -37,11 +32,10 @@ class Gfx3TextureManager {
   }
 
   /**
-   * The "loadTexture8bit" function asynchronously loads an image from a given path and returns it as an
-   * 8bits `Gfx3Texture`, caching it for future use.
-   * @param {string} path - The file path or URL of the image that you want to load as a texture.
+   * Load asynchronously an image from a given path and returns it as an 8bits texture, caching it for future use.
+   * 
+   * @param {string} path - The file path.
    * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
-   * @returns a Promise that resolves when texture is loaded.
    */
   async loadTexture8bit(path: string, samplerDescriptor: GPUSamplerDescriptor = {}): Promise<Gfx3Texture> {
     if (this.textures.has(path)) {
@@ -57,12 +51,10 @@ class Gfx3TextureManager {
   }
 
   /**
-   * The "loadCubemapTexture" function asynchronously loads an cubemap image from a given path and returns it as an
-   * `Gfx3Texture`, caching it for future use.
-   * These objects represent the six faces of a cube map texture. Each face should have the same
-   * size.
-   * @param {string} path - The file path or URL of the cubemap image that you want to load as a texture.
-   * @returns a Promise that resolves when texture is loaded.
+   * Load asynchronously a list of cubemap images from a given path and returns it as an texture, caching it for future use.
+   * Note: Six images are required, each names postfixed by: right, left, top, bottom, front and back.
+   * 
+   * @param {string} path - The file path excluding directions postfix.
    */
   async loadCubemapTexture(path: string, extension: string): Promise<Gfx3Texture> {
     if (this.textures.has(path)) {
@@ -85,8 +77,9 @@ class Gfx3TextureManager {
   }
 
   /**
-   * The "deleteTexture" function deletes a texture if it exists, otherwise it throws an error.
-   * @param {string} path - The path to the texture file.
+   * Deletes a texture if it exists, otherwise it throws an error.
+   * 
+   * @param {string} path - The file path.
    */
   deleteTexture(path: string): void {
     if (!this.textures.has(path)) {
@@ -99,10 +92,9 @@ class Gfx3TextureManager {
   }
 
   /**
-   * The "getTexture" function returns an `ImageBitmap` object for a given texture path, or throws an
-   * error if the texture doesn't exist.
-   * @param {string} path - The path to the texture file.
-   * @returns an ImageBitmap.
+   * Returns a texture or throws an error if doesn't exist.
+   * 
+   * @param {string} path - The file path.
    */
   getTexture(path: string): Gfx3Texture {
     if (!this.textures.has(path)) {
@@ -113,16 +105,16 @@ class Gfx3TextureManager {
   }
 
   /**
-   * The "hasTexture" function checks if a texture exists in the manager.
-   * @param {string} path - The path of the texture file.
-   * @returns A boolean value indicating if the texture is found or not.
+   * Checks if a texture exists.
+   * 
+   * @param {string} path - The path file.
    */
   hasTexture(path: string): boolean {
     return this.textures.has(path);
   }
 
   /**
-   * The "releaseTextures" function deletes all the textures stored in the manager.
+   * Deletes all stored textures.
    */
   releaseTextures(): void {
     for (const path of this.textures.keys()) {

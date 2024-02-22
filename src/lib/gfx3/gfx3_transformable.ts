@@ -1,9 +1,8 @@
-import Quaternion from 'quaternion';
 import { UT } from '../core/utils';
+import { Quaternion } from '../core/quaternion';
 
 /**
- * The `Gfx3Transformable` class represents an object with position, rotation, and scale properties, and
- * provides methods for manipulating and retrieving these properties.
+ * A transformable object with position, rotation, scale and more.
  */
 class Gfx3Transformable {
   position: vec3;
@@ -12,9 +11,6 @@ class Gfx3Transformable {
   quaternion: Quaternion;
   transformMatrix: mat4;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.position = [0.0, 0.0, 0.0];
     this.rotation = [0.0, 0.0, 0.0];
@@ -24,39 +20,36 @@ class Gfx3Transformable {
   }
 
   /**
-   * The "getPosition" function returns the position.
-   * @returns The position.
+   * Returns the position.
    */
   getPosition(): vec3 {
     return this.position;
   }
 
   /**
-   * The "getPositionX" function returns the x-coordinate of the position.
-   * @returns The X coordinate.
+   * Returns the x-coordinate of the position.
    */
   getPositionX(): number {
     return this.position[0];
   }
 
   /**
-   * The "getPositionY" function returns the y-coordinate of the position.
-   * @returns The Y coordinate.
+   * Returns the y-coordinate of the position.
    */
   getPositionY(): number {
     return this.position[1];
   }
 
   /**
-   * The "getPositionZ" function returns the z-coordinate of the position.
-   * @returns The Z coordinate.
+   * Returns the z-coordinate of the position.
    */
   getPositionZ(): number {
     return this.position[2];
   }
 
  /**
-   * The "setPosition" function set the position with the given x, y and z coordinates.
+   * Set the position with the given x, y and z coordinates.
+   * 
    * @param {number} x - The X coordinate of the position.
    * @param {number} y - The Y coordinate of the position.
    * @param {number} z - The Z coordinate of the position.
@@ -68,7 +61,8 @@ class Gfx3Transformable {
   }
 
   /**
-   * The "translate" function translate the position.
+   * Translate the position.
+   * 
    * @param {number} x - The amount of translation in the x-axis direction.
    * @param {number} y - The amount of translation in the y-axis direction.
    * @param {number} z - The amount of translation in the z-axis direction.
@@ -80,55 +74,36 @@ class Gfx3Transformable {
   }
 
   /**
-   * The "getRotation" function returns the rotation as Euler angles.
-   * @returns The rotation Euler angles (radians).
+   * Returns the euler rotation in radians.
    */
   getRotation(): vec3 {
     return this.rotation;
   }
 
   /**
-   * The "getRotationX" function returns the rotation angle on x-axis.
-   * @returns The rotation angle on x-axis.
+   * Returns the euler rotation on x-axis in radians.
    */
   getRotationX(): number {
     return this.rotation[0];
   }
 
   /**
-   * The "getRotationY" function returns the rotation angle on y-axis.
-   * @returns The rotation angle on y-axis.
+   * Returns the euler rotation on y-axis in radians.
    */
   getRotationY(): number {
     return this.rotation[1];
   }
 
   /**
-   * The "getRotationZ" function returns the rotation angle on z-axis.
-   * @returns The rotation angle on z-axis.
+   * Returns the euler rotation on z-axis in radians.
    */
   getRotationZ(): number {
     return this.rotation[2];
   }
 
   /**
-   * The "setQuaternion" function sets the Quaternion.
-   * @param {Quaternion} quaternion - The quaternion.
-   */
-  setQuaternion(quaternion: Quaternion) : void {
-    this.quaternion = quaternion.clone();
-  }
-
-  /**
-   * The "getQuaternion" function returns the Quaternion.
-   * @returns A quaternion.
-   */
-  getQuaternion(): Quaternion {
-    return this.quaternion;
-  }
-
-  /**
-   * The "setRotation" function sets rotation Euler angles (in radians).
+   * Set euler rotation angles in radians.
+   * 
    * @param {number} x - The rotation angle on x-axis in radians.
    * @param {number} y - The rotation angle on y-axis in radians.
    * @param {number} z - The rotation angle on z-axis in radians.
@@ -140,7 +115,8 @@ class Gfx3Transformable {
   }
 
   /**
-   * The "rotate" function add rotation values to Euler angles.
+   * Add euler rotation values in radians.
+   * 
    * @param {number} x - The rotation angle on x-axis in radians.
    * @param {number} y - The rotation angle on y-axis in radians.
    * @param {number} z - The rotation angle on z-axis in radians.
@@ -152,39 +128,52 @@ class Gfx3Transformable {
   }
 
   /**
-   * The "getScale" function returns the scale as a 3D vector.
-   * @returns The scale.
+   * Sets the Quaternion rotation.
+   * 
+   * @param {Quaternion} quaternion - The quaternion.
+   */
+  setQuaternion(quaternion: Quaternion) : void {
+    this.quaternion = quaternion.clone();
+  }
+
+  /**
+   * Returns the Quaternion rotation.
+   */
+  getQuaternion(): Quaternion {
+    return this.quaternion;
+  }
+
+  /**
+   * Returns the scale.
    */
   getScale(): vec3 {
     return this.scale;
   }
 
   /**
-   * The "getScaleX" function returns the scale factor on x-axis.
-   * @returns The x-axis scale factor.
+   * Returns the scale factor on x-axis.
    */
   getScaleX(): number {
     return this.scale[0];
   }
 
   /**
-   * The "getScaleY" function returns the scale factor on y-axis.
-   * @returns The y-axis scale factor.
+   * Returns the scale factor on y-axis.
    */
   getScaleY(): number {
     return this.scale[1];
   }
 
   /**
-   * The "getScaleZ" function returns the scale factor on z-axis.
-   * @returns The z-axis scale factor.
+   * Returns the scale factor on z-axis.
    */
   getScaleZ(): number {
     return this.scale[2];
   }
 
   /**
-   * The "setScale" function sets the scale with the given x, y and z factors.
+   * Set the scale with the given x, y and z factors.
+   * 
    * @param {number} x - The x factor in the x-axis direction.
    * @param {number} y - The y factor in the y-axis direction.
    * @param {number} z - The z factor in the z-axis direction.
@@ -196,7 +185,8 @@ class Gfx3Transformable {
   }
 
   /**
-   * The "zoom" function add scale values.
+   * Add scale values.
+   * 
    * @param {number} x - The x factor in the x-axis direction.
    * @param {number} y - The y factor in the y-axis direction.
    * @param {number} z - The z factor in the z-axis direction.
@@ -208,8 +198,7 @@ class Gfx3Transformable {
   }
 
   /**
-   * The "getTransformMatrix" function returns the transform matrix from position, rotation and scale values.
-   * @returns The transform matrix.
+   * Returns the transformation matrix from position, rotation, scale and quaternion values.
    */
   getTransformMatrix(): mat4 {
     UT.MAT4_TRANSFORM(this.position, this.rotation, this.scale, this.quaternion, this.transformMatrix);
@@ -217,7 +206,9 @@ class Gfx3Transformable {
   }
 
   /**
-   * The "lookAt" function sets the transform matrix to the specified coordinates and look towards them.
+   * Rotate to look at the specified coordinates.
+   * Note: Avoid euler rotation and quaternion rotation.
+   * 
    * @param {number} x - The x-coordinate of the target position that the transformable should look at.
    * @param {number} y - The y-coordinate of the target position that the transformable should look at.
    * @param {number} z - The z-coordinate of the target position that the transformable should look at.
@@ -228,9 +219,7 @@ class Gfx3Transformable {
   }
 
   /**
-   * The "getLocalAxies" function returns an array of three vectors representing the local axes of an
-   * object based on its transformation matrix.
-   * @returns The three axis vector.
+   * Returns the three local axes of the transformable.
    */
   getLocalAxies(): Array<vec3> {
     const matrix = this.getTransformMatrix();

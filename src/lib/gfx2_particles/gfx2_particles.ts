@@ -13,6 +13,9 @@ enum PositionStyle {
   CIRCLE = 'CIRCLE'
 };
 
+/**
+ * A 2D particle.
+ */
 class Particle {
   position: vec2;
   velocity: vec2; // units per second
@@ -44,6 +47,11 @@ class Particle {
     this.alive = 0;
   }
 
+  /**
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
+   */
   update(ts: number) {
     this.position = UT.VEC2_ADD(this.position, UT.VEC2_SCALE(this.velocity, ts / 1000.0));
     this.velocity = UT.VEC2_ADD(this.velocity, UT.VEC2_SCALE(this.acceleration, ts / 1000.0));
@@ -100,9 +108,7 @@ interface ParticlesOptions {
 };
 
 /**
- * The `Gfx2Particles` class is a subclass of `Gfx2Drawable` that responsible for updating and
- * rendering a particle system onto a canvas with various properties such as position,
- * velocity, size, opacity, acceleration, angle, and age.
+ * The particles diffuser.
  */
 class Gfx2Particles extends Gfx2Drawable {
   positionStyle: PositionStyle;
@@ -141,8 +147,7 @@ class Gfx2Particles extends Gfx2Drawable {
   texture: ImageBitmap | HTMLImageElement;
 
   /**
-   * The constructor.
-   * @param options - An object containing various options for configuring the behavior of the particles cloud.
+   * @param options - Various options for configuring the behavior of the particles cloud.
    */
   constructor(options: Partial<ParticlesOptions>) {
     super();
@@ -182,13 +187,14 @@ class Gfx2Particles extends Gfx2Drawable {
     this.texture = options.texture ?? gfx2Manager.getDefaultTexture();
 
     for (let i = 0; i < this.particleQuantity; i++) {
-      this.particleArray[i] = this.createParticle();
+      this.particleArray[i] = this.$createParticle();
     }
   }
 
   /**
    * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     const recycleIndices = [];
@@ -224,7 +230,7 @@ class Gfx2Particles extends Gfx2Drawable {
 
     for (let i = 0; i < recycleIndices.length; i++) { // if any particles have died while the emitter is still running, we imediately recycle them
       const idx = recycleIndices[i];
-      this.particleArray[idx] = this.createParticle();
+      this.particleArray[idx] = this.$createParticle();
       this.particleArray[idx].alive = 1.0; // activate right away
       this.particleAlivedCount++;
     }
@@ -237,7 +243,7 @@ class Gfx2Particles extends Gfx2Drawable {
   }
 
   /**
-   * The "draw" function is rendering the particles cloud.
+   * The draw function.
    */
   draw(): void {
     const ctx = gfx2Manager.getContext();
@@ -267,11 +273,25 @@ class Gfx2Particles extends Gfx2Drawable {
   }
 
   /**
-   * The "createParticle" function creates a particle with various properties such as position, velocity, size, opacity,
-   * acceleration, angle, and age.
-   * @returns a Particle object.
+   * Set the particle texture.
+   * 
+   * @param {ImageBitmap | HTMLImageElement} texture - The texture.
    */
-  createParticle(): Particle {
+  setTexture(texture: ImageBitmap | HTMLImageElement): void {
+    this.texture = texture;
+  }
+
+  /**
+   * Returns the particle texture.
+   */
+  getTexture(): ImageBitmap | HTMLImageElement | null {
+    return this.texture;
+  }
+
+  /**
+   * Creates a particle with various properties such as position, velocity, size, opacity, acceleration, angle, and age.
+   */
+  $createParticle(): Particle {
     const particle = new Particle();
 
     if (this.positionStyle == PositionStyle.SQUARE) {
@@ -304,22 +324,6 @@ class Gfx2Particles extends Gfx2Drawable {
     particle.age = 0;
     particle.alive = 0;
     return particle;
-  }
-
-  /**
-   * The "setTexture" function sets the particle texture.
-   * @param {ImageBitmap | HTMLImageElement} texture - The texture.
-   */
-  setTexture(texture: ImageBitmap | HTMLImageElement): void {
-    this.texture = texture;
-  }
-
-  /**
-   * The "getTexture" function returns the particle texture.
-   * @returns The texture.
-   */
-  getTexture(): ImageBitmap | HTMLImageElement | null {
-    return this.texture;
   }
 }
 

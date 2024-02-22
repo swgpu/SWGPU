@@ -13,8 +13,7 @@ interface Gfx3Viewport {
 };
 
 /**
- * The `Gfx3View` class represents a view in a 3D graphics application, providing methods to manipulate
- * camera settings, projection mode, background color, and calculate screen positions of 3D points.
+ * A 3D view. Used to manipulate camera, viewport, projection mode, background color and more.
  */
 class Gfx3View {
   cameraMatrix: mat4;
@@ -29,9 +28,6 @@ class Gfx3View {
   bgColor: vec4;
   screenSize: vec2;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.cameraMatrix = UT.MAT4_IDENTITY();
     this.clipOffset = [0.0, 0.0];
@@ -47,8 +43,7 @@ class Gfx3View {
   }
 
   /**
-   * The "getCameraPosition" function returns the position of the camera.
-   * @returns The position of camera.
+   * Returns the position of the camera.
    */
   getCameraPosition(): vec3 {
     return [
@@ -59,31 +54,29 @@ class Gfx3View {
   }
 
   /**
-   * The "getClipOffset" function returns the clip offset.
-   * @returns The clip offset.
+   * Returns the clip offset.
    */
   getClipOffset(): vec2 {
     return this.clipOffset;
   }
 
   /**
-   * The "getClipOffsetX" function returns the x-coordinate of the clip offset.
-   * @returns The X coordinate of clip offset.
+   * Returns the x-coordinate of the clip offset.
    */
   getClipOffsetX(): number {
     return this.clipOffset[0];
   }
 
   /**
-   * The "getClipOffsetY" function returns the y-coordinate of the clip offset.
-   * @returns The Y coordinate of clip offset.
+   * Returns the y-coordinate of the clip offset.
    */
   getClipOffsetY(): number {
     return this.clipOffset[1];
   }
 
   /**
-   * The "setClipOffset" function set the clip offset with the given x and y coordinates.
+   * Set the clip offset with the given x and y coordinates.
+   * 
    * @param {number} x - The X coordinate of the clip offset.
    * @param {number} y - The Y coordinate of the clip offset.
    */
@@ -93,50 +86,47 @@ class Gfx3View {
   }
 
   /**
-   * The "getCameraMatrix" function returns the camera matrix.
-   * @returns The camera matrix.
+   * Returns the camera matrix.
    */
   getCameraMatrix(): mat4 {
     return this.cameraMatrix;
   }
 
   /**
-   * The "setCameraMatrix" function sets the camera matrix.
-   * @param {mat4} cameraMatrix - The cameraMatrix parameter is a 4x4 matrix that represents the
-   * transformation applied to the camera. It is typically used to define the position, orientation, and
-   * scale of the camera in the scene.
+   * Set the camera matrix.
+   * 
+   * @param {mat4} cameraMatrix - The camera transformation matrix.
    */
   setCameraMatrix(cameraMatrix: mat4): void {
     this.cameraMatrix = cameraMatrix;
   }
 
   /**
-   * The "getViewport" function returns the viewport of the view.
-   * @returns The viewport property.
+   * Returns the viewport.
    */
   getViewport(): Gfx3Viewport {
     return this.viewport;
   }
 
   /**
-   * The "setViewport" function sets the viewport of the view.
-   * @param {Gfx3Viewport} viewport - The `viewport` parameter represents
-   * the dimensions and position of the viewport on canvas.
+   * Set the viewport.
+   * 
+   * @param {Gfx3Viewport} viewport - The viewport.
    */
   setViewport(viewport: Gfx3Viewport): void {
     this.viewport = viewport;
   }
 
   /**
-   * The "getProjectionMode" function returns the current projection mode.
-   * @returns The projection mode property.
+   * Returns the projection mode.
    */
   getProjectionMode(): ProjectionMode {
     return this.projectionMode;
   }
 
   /**
-   * The "setProjectionMode" function sets the projection mode property.
+   * Set the projection mode.
+   * 
    * @param {ProjectionMode} projectionMode - The projection mode.
    */
   setProjectionMode(projectionMode: ProjectionMode): void {
@@ -144,101 +134,95 @@ class Gfx3View {
   }
 
   /**
-   * The "getPerspectiveFovy" function returns the fovy angle (perspective eye-angle).
-   * @returns The fovy angle.
+   * Returns the fovy angle (perspective eye-angle).
    */
   getPerspectiveFovy(): number {
     return this.perspectiveFovy;
   }
 
   /**
-   * The "setPerspectiveFovy" function sets the fovy angle property.
-   * @param {number} perspectiveFovy - The `perspectiveFovy` parameter represents
-   * the field of view angle in the vertical direction for a perspective projection.
+   * Set the fovy angle.
+   * 
+   * @param {number} perspectiveFovy - The fovy angle.
    */
   setPerspectiveFovy(perspectiveFovy: number): void {
     this.perspectiveFovy = perspectiveFovy;
   }
 
   /**
-   * The "getPerspectiveNear" function returns the perspective near property.
-   * @returns The perspective near property.
+   * Returns the near limit.
    */
   getPerspectiveNear(): number {
     return this.perspectiveNear;
   }
 
   /**
-   * The "setPerspectiveNear" function sets the value of the perspectiveNear property.
-   * @param {number} perspectiveNear - The parameter `perspectiveNear` represents the
-   * distance to the near clipping plane of a perspective projection.
+   * Set the near limit.
+   * 
+   * @param {number} perspectiveNear - The distance to the near clipping plane of a perspective projection.
    */
   setPerspectiveNear(perspectiveNear: number): void {
     this.perspectiveNear = perspectiveNear;
   }
 
   /**
-   * The "getPerspectiveFar" function returns the value of the perspectiveFar property.
-   * @returns The perspective far property.
+   * Returns the far limit.
    */
   getPerspectiveFar(): number {
     return this.perspectiveFar;
   }
 
   /**
-   * The "setPerspectiveFar" function sets the value of the perspectiveFar property.
-   * @param {number} perspectiveFar - The parameter `perspectiveFar` is the far
-   * clipping plane of a perspective projection. It determines the maximum distance from the camera at
-   * which objects will be rendered.
+   * Set the far limit.
+   * 
+   * @param {number} perspectiveFar - The maximum distance from the camera at which objects will be rendered.
    */
   setPerspectiveFar(perspectiveFar: number): void {
     this.perspectiveFar = perspectiveFar;
   }
 
   /**
-   * The "getOrthographicSize" function returns the value of the "orthographicSize" property.
-   * @returns The orthographic size property.
+   * Returns the orthographic size.
    */
   getOrthographicSize(): number {
     return this.orthographicSize;
   }
 
   /**
-   * The  "setOrthographicSize" function sets the `orthographicSize` property.
-   * @param {number} orthographicSize - The orthographicSize parameter is the
-   * size of the orthographic camera view. It determines how much of the scene is visible within the
-   * camera's view frustum.
+   * Set orthographic size.
+   * 
+   * @param {number} orthographicSize - Determines how much of the scene is visible within the camera's view frustum.
    */
   setOrthographicSize(orthographicSize: number): void {
     this.orthographicSize = orthographicSize;
   }
 
   /**
-   * The "getOrthographicDepth" function returns the `orthographicDepth`property.
-   * @returns The orthographic depth property.
+   * Returns the orthographic depth.
    */
   getOrthographicDepth(): number {
     return this.orthographicDepth;
   }
 
   /**
-   * The "setOrthographicDepth" function sets the `orthographicDepth`property.
-   * @param {number} orthographicDepth - The `orthographicDepth` parameter is the depth of the orthographic view.
+   * Set orthographic depth.
+   * 
+   * @param {number} orthographicDepth - The depth of the orthographic view.
    */
   setOrthographicDepth(orthographicDepth: number): void {
     this.orthographicDepth = orthographicDepth;
   }
 
   /**
-   * The "getBgColor" function returns the background color.
-   * @returns The `bgColor` property, which is the background color.
+   * Returns the background color.
    */
   getBgColor(): vec4 {
     return this.bgColor;
   }
 
   /**
-   * The "setBgColor" function sets the background color ranging from 0 to 1.
+   * Set the background color (from 0 to 1).
+   * 
    * @param {number} r - The parameter "r" represents the red component.
    * @param {number} g - The parameter "g" represents the green component.
    * @param {number} b - The parameter "b" represents the blue component.
@@ -252,15 +236,17 @@ class Gfx3View {
   }
 
   /**
-   * The "getScreenSize" function returns the screen size property.
-   * @returns The screen size property.
+   * Returns the screen size.
    */
   getScreenSize(): vec2 {
     return this.screenSize;
   }
 
   /**
-   * The "setScreenSize" function sets the screen width and height property.
+   * Set the screen width and height (internal use).
+   * Warning: Don't change the screen size here please, use CoreManager instead.
+   * It's method is automatically updated by Gfx3Manager::$handleWindowResize.
+   * 
    * @param {number} width - The width of the screen size.
    * @param {number} height - The height of the screen size.
    */
@@ -270,8 +256,7 @@ class Gfx3View {
   }
 
   /**
-   * The "getViewportSize" function calculates and returns the size of the viewport in pixels.
-   * @returns The size of the viewport in pixels.
+   * Returns the size of the viewport in pixels.
    */
   getViewportSize(): vec2 {
     const w = this.screenSize[0] * this.viewport.widthFactor;
@@ -280,8 +265,7 @@ class Gfx3View {
   }
 
   /**
-   * The "getViewportClientSize" function calculates the size of the viewport in client coordinates space.
-   * @returns The size of the viewport client area.
+   * Returns the size of the viewport in client coordinates space.
    */
   getViewportClientSize(): vec2 {
     const cw = (this.screenSize[0] * this.viewport.widthFactor) / window.devicePixelRatio;
@@ -290,8 +274,7 @@ class Gfx3View {
   }
 
   /**
-   * The "getProjectionMatrix" function returns a projection matrix based on the current projection mode.
-   * @returns The projection matrix.
+   * Returns a projection matrix.
    */
   getProjectionMatrix(): mat4 {
     const matrix = UT.MAT4_IDENTITY();
@@ -310,24 +293,21 @@ class Gfx3View {
   }
 
   /**
-   * The "getClipMatrix" function returns a the clip matrix.
-   * @returns The clip matrix.
+   * Returns the clip matrix.
    */
   getClipMatrix(): mat4 {
     return UT.MAT4_INVERT(UT.MAT4_TRANSLATE(this.clipOffset[0], this.clipOffset[1], 0));
   }
 
   /**
-   * The "getCameraViewMatrix" function returns the camera view matrix (inverted camera matrix).
-   * @returns The camera view matrix.
+   * Returns the camera view matrix (nothing else than an inverted camera matrix).
    */
   getCameraViewMatrix(): mat4 {
     return UT.MAT4_INVERT(this.cameraMatrix);
   }
 
   /**
-   * The "getProjectionClipMatrix" function returns the result of multiplying the clip matrix and the projection matrix.
-   * @returns The result of multiplying the clip matrix and the projection matrix together.
+   * Returns the result of multiplying the clip matrix and the projection matrix.
    */
   getProjectionClipMatrix(): mat4 {
     const matrix = UT.MAT4_IDENTITY();
@@ -337,9 +317,7 @@ class Gfx3View {
   }
 
   /**
-   * The "getViewProjectionClipMatrix" function returns the result of multiplying the clip matrix,
-   * projection matrix, and camera view matrix together.
-   * @returns The result of multiplying the clip matrix, projection matrix and camera view matrix together.
+   * Returns the result of multiplying the clip matrix, projection matrix, and camera view matrix together.
    */
   getViewProjectionClipMatrix(): mat4 {
     const matrix = UT.MAT4_IDENTITY();
@@ -350,12 +328,11 @@ class Gfx3View {
   }
 
   /**
-   * The "getClientScreenPosition" function calculates the client screen position of a 3D point given its world
-   * coordinates.
+   * Returns the client screen position of a 3D point given its world coordinates.
+   * 
    * @param {number} x - The x world coordinate.
    * @param {number} y - The y world coordinate.
    * @param {number} z - The z world coordinate.
-   * @returns The client screen position.
    */
   getClientScreenPosition(x: number, y: number, z: number): vec2 {
     const matrix = UT.MAT4_IDENTITY();
@@ -374,12 +351,11 @@ class Gfx3View {
   }
 
   /**
-   * The "getScreenNormalizedPosition" function calculates the normalized screen position of a 3D point given its world
-   * coordinates.
+   * The normalized screen position of a 3D point given its world coordinates.
+   * 
    * @param {number} x - The x world coordinate.
    * @param {number} y - The y world coordinate.
    * @param {number} z - The z world coordinate.
-   * @returns The normalized screen position.
    */
   getScreenNormalizedPosition(x: number, y: number, z: number): vec2 {
     const matrix = UT.MAT4_IDENTITY();

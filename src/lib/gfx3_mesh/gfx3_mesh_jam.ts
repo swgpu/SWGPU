@@ -14,8 +14,7 @@ interface JAMAnimation {
 };
 
 /**
- * The `Gfx3MeshJAM` class is a subclass of `Gfx3Mesh` that represents an animated mesh and provides
- * methods for loading, updating, and playing animations.
+ * A 3D animated mesh.
  */
 class Gfx3MeshJAM extends Gfx3Mesh {
   numVertices: number;
@@ -27,9 +26,6 @@ class Gfx3MeshJAM extends Gfx3Mesh {
   currentFrameIndex: number;
   frameProgress: number;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super();
     this.numVertices = 0;
@@ -43,8 +39,9 @@ class Gfx3MeshJAM extends Gfx3Mesh {
   }
 
   /**
-   * The "loadFromFile" function asynchronously loads animated mesh data from a json file (jam).
-   * @param {string} path - The `path` parameter is the file path.
+   * Load asynchronously animated mesh data from a json file (jam).
+   * 
+   * @param {string} path - The file path.
    */
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
@@ -84,8 +81,9 @@ class Gfx3MeshJAM extends Gfx3Mesh {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (!this.currentAnimation) {
@@ -188,15 +186,12 @@ class Gfx3MeshJAM extends Gfx3Mesh {
   }
 
   /**
-   * The "play" function is used to start playing a specific animation, with options for looping and
-   * preventing the same animation from being played again.
+   * Play a specific animation.
+   * 
    * @param {string} animationName - The name of the animation to be played.
-   * @param {boolean} [looped=false] - The `looped` parameter is a boolean that determines whether
-   * the animation should loop or not.
-   * @param {boolean} [preventSameAnimation=false] - The `preventSameAnimation` parameter is a boolean
-   * flag that determines whether the same animation should be prevented from playing again.
-   * @param {boolean} [interpolationEnabled=true] - The `ìnterpolationEnabled` is a boolean that determines
-   * whether the animation interpolation is enabled or not.
+   * @param {boolean} [looped=false] - Determines whether the animation should loop or not.
+   * @param {boolean} [preventSameAnimation=false] - Determines whether the same animation should be prevented from playing again.
+   * @param {boolean} [interpolationEnabled=true] - Determines whether the animation interpolation is enabled or not.
    */
   play(animationName: string, looped: boolean = false, preventSameAnimation: boolean = false, interpolationEnabled: boolean = true): void {
     if (preventSameAnimation && this.currentAnimation && this.currentAnimation.name == animationName) {
@@ -216,41 +211,35 @@ class Gfx3MeshJAM extends Gfx3Mesh {
   }
 
   /**
-   * The "getInterpolationEnabled" function returns the value of the interpolationEnabled property.
-   * @returns The `interpolationEnabled` property.
+   * Check if interpolation is enabled.
    */
   getInterpolationEnabled(): boolean {
     return this.interpolationEnabled;
   }
 
   /**
-   * The "getLooped" function returns the value of the looped property.
-   * @returns The `looped`property.
+   * Check if animation is looped.
    */
   getLooped(): boolean {
     return this.looped;
   }
 
   /**
-   * The "getCurrentAnimation" function returns the current animation or null if there is no current
-   * animation.
-   * @returns The current animation object or null.
+   * Returns the current animation or null if there is no current animation.
    */
   getCurrentAnimation(): JAMAnimation | null {
     return this.currentAnimation;
   }
 
   /**
-   * The "getCurrentFrameIndex" function returns the current frame index as a number.
-   * @returns The current frame index.
+   * Returns the current frame index.
    */
   getCurrentFrameIndex(): number {
     return this.currentFrameIndex;
   }
 
   /**
-   * The "getFrameProgress" function returns the current frame progress as a number.
-   * @returns The current frame progress.
+   * Returns the current frame progress.
    */
   getFrameProgress(): number {
     return this.frameProgress;

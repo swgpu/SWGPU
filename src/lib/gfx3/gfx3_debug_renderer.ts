@@ -11,7 +11,7 @@ interface Command {
 };
 
 /**
- * The `Gfx3DebugRenderer` class is a singleton renderer responsible for debug informations shapes.
+ * Singleton debug renderer.
  */
 class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   device: GPUDevice;
@@ -22,9 +22,6 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   grp0: Gfx3DynamicGroup;
   mvpcMatrix: Float32Array;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super('DEBUG_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.device = gfx3Manager.getDevice();
@@ -38,7 +35,7 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "render" function.
+   * The render function.
    */
   render(): void {
     if (!this.showDebug) {
@@ -74,13 +71,11 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawVertices" draw a set of vertices in line-list topology.
-   * @param vertices - An array of numbers representing the vertices of a shape. Each vertex is
-   * represented by three consecutive numbers, representing its x, y, and z coordinates.
-   * @param {number} vertexCount - The `vertexCount` parameter represents the number of vertices in the
-   * array "vertices".
-   * @param {mat4} matrix - The `matrix` parameter is a 4x4 matrix used to translate, rotate, or scale the
-   * vertices before they are drawn.
+   * Draw a set of vertices in line-list topology.
+   * 
+   * @param vertices - A list of vertices.
+   * @param {number} vertexCount - The number of vertices.
+   * @param {mat4} matrix - The transformation matrix.
    */
   drawVertices(vertices: Array<number>, vertexCount: number, matrix: mat4): void {
     this.commands.push({
@@ -93,17 +88,14 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawCylinder" function draw a debug cylinder shape.
-   * @param {mat4} matrix - The `matrix` parameter is a 4x4 transformation matrix that represents the
-   * position, rotation, and scale of the cylinder in 3D space.
-   * @param {number} radius - The "radius" parameter represents the radius of the cylinder.
-   * @param {number} height - The "height" parameter represents the height of the cylinder.
-   * @param {number} step - The "step" parameter determines the number of divisions or segments in the
-   * cylinder.
-   * @param {boolean} closed - A boolean value indicating whether the cylinder should be closed or not.
-   * If set to true, the top and bottom faces of the cylinder will be included. If set to false, only the
-   * side faces will be drawn.
-   * @param {vec3} color - The color of cylinder.
+   * Draw a wireframe cylinder.
+   * 
+   * @param {mat4} matrix - The transformation matrix.
+   * @param {number} radius - The radius of the cylinder.
+   * @param {number} height - The height of the cylinder.
+   * @param {number} step - The number of divisions or segments in the cylinder.
+   * @param {boolean} closed - Indicating whether the cylinder should be closed or not.
+   * @param {vec3} color - The color of the cylinder.
    */
   drawCylinder(matrix: mat4, radius: number, height: number, step: number, closed: boolean, color: vec3 = [1, 1, 1]): void {
     let vertexCount = 0;
@@ -160,15 +152,13 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawGrid" function draw a debug grid.
-   * @param {mat4} matrix - The `matrix` parameter is a 4x4 transformation matrix that represents the
-   * position, rotation, and scale of the grid in 3D space.
-   * @param {number} [extend=3] - The `extend` parameter determines the number of cells in each direction
-   * from the center of the grid. For example, if `extend` is set to 3, then there will be 7 cells in
-   * each direction (total of 49 cells).
-   * @param {number} [spacing=1] - The `spacing` parameter determines the distance between each grid
-   * line. It specifies how far apart each line should be from each other.
-   * @param {vec3} color - The color of grid.
+   * Draw a wireframe grid.
+   * 
+   * @param {mat4} matrix - The transformation matrix.
+   * @param {number} [extend=3] - The number of cells in each direction from the center of the grid.
+   * For example, if `extend` is set to 3, then there will be 7 cells in each direction (total of 49 cells).
+   * @param {number} [spacing=1] - The distance between each grid line.
+   * @param {vec3} color - The color of the grid.
    */
   drawGrid(matrix: mat4, extend: number = 3, spacing: number = 1, color: vec3 = [1, 1, 1]): void {
     let vertexCount: number = 0;
@@ -208,11 +198,10 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawGizmo" function draw a debug gizmo.
-   * @param {mat4} matrix - The `matrix` parameter is a 4x4 transformation matrix that represents the
-   * position, rotation, and scale of the gizmo in 3D space.
-   * @param {number} [size=1] - The `size` parameter is a number that determines the length of each axis
-   * of the gizmo. It is optional and has a default value of 1.
+   * Draw a gizmo.
+   * 
+   * @param {mat4} matrix - The transformation matrix.
+   * @param {number} [size=1] - The length of each axis of the gizmo.
    */
   drawGizmo(matrix: mat4, size: number = 1): void {
     let vertexCount = 0;
@@ -236,15 +225,12 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawCircle" function draw a debug circle shape.
-   * @param {mat4} matrix - The `matrix` parameter is a 4x4 transformation matrix that represents the
-   * position, rotation, and scale of the circle in 3D space.
-   * @param {number} [radius=1] - The `radius` parameter represents the radius of the circle that will be
-   * drawn. It determines the size of the circle.
-   * @param {number} [step=4] - The `step` parameter determines the number of segments or points used to
-   * approximate the circle. The higher the value of "step", the smoother and more detailed the circle
-   * will appear.
-   * @param {vec3} color - The color of circle.
+   * Draw a wireframe circle.
+   * 
+   * @param {mat4} matrix - The transformation matrix.
+   * @param {number} [radius=1] - The radius of the circle that will be drawn.
+   * @param {number} [step=4] - The level of detail or smoothness of the circle.
+   * @param {vec3} color - The color of the circle.
    */
   drawCircle(matrix: mat4, radius: number = 1, step: number = 4, color: vec3 = [1, 1, 1]): void {
     let vertexCount = 0;
@@ -274,12 +260,12 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawBoundingRect" function draw a debug rectangle shape.
-   * @param {mat4} matrix - The `matrix` parameter is a 4x4 transformation matrix that represents the
-   * position, rotation, and scale of the bounding rectangle in 3D space.
-   * @param {vec2} min - The `min` parameter is the minimum point of the bounding rectangle.
-   * @param {vec2} max - The `max` parameter is the maximum point of the bounding rectangle.
-   * @param {vec3} color - The color of bounding rectangle.
+   * Draw a wireframe rectangle.
+   * 
+   * @param {mat4} matrix - The transformation matrix.
+   * @param {vec2} min - The minimum point of the bounding rectangle.
+   * @param {vec2} max - The maximum point of the bounding rectangle.
+   * @param {vec3} color - The color of the bounding rectangle.
    */
   drawBoundingRect(matrix: mat4, min: vec2, max: vec2, color: vec3 = [1, 1, 1]): void {
     let vertexCount = 0;
@@ -315,16 +301,11 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawSphere" function draw a debug sphere.
-   * @param {mat4} matrix - The `matrix` parameter is a 4x4 transformation matrix that represents the
-   * position, rotation, and scale of the sphere in 3D space.
-   * @param {number} [radius=1] - The `radius` parameter represents the radius of the sphere. It
-   * determines the size of the sphere. The default value is 1, but you can provide a different value if
-   * you want a larger or smaller sphere.
-   * @param {number} [step=4] - The "step" parameter determines the level of detail or smoothness of the
-   * sphere. It represents the number of divisions or segments along the latitude and longitude lines of
-   * the sphere. The higher the value of "step", the more segments there will be and the smoother the
-   * sphere will appear.
+   * Draw a wireframe sphere.
+   * 
+   * @param {mat4} matrix - The transformation matrix.
+   * @param {number} [radius=1] - The radius of the sphere.
+   * @param {number} [step=4] - The level of detail or smoothness of the sphere.
    * @param {vec3} color - The color of sphere.
    */
   drawSphere(matrix: mat4, radius: number = 1, step: number = 4, color: vec3 = [1, 1, 1]): void {
@@ -368,12 +349,12 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawBoundingBox" function draw a debug bounding box.
-   * @param {mat4} matrix - The `matrix` parameter is a 4x4 transformation matrix that represents the
-   * position, rotation, and scale of the bounding box in 3D space.
-   * @param {vec3} min - The `min` parameter represents the minimum point of the bounding box.
-   * @param {vec3} max - The `max` parameter represents the maximum point of the bounding box.
-   * @param {vec3} color - The color of bounding box.
+   * Draw a wireframe bounding box.
+   * 
+   * @param {mat4} matrix - The transformation matrix.
+   * @param {vec3} min - The minimum point of the bounding box.
+   * @param {vec3} max - The maximum point of the bounding box.
+   * @param {vec3} color - The color of the bounding box.
    */
   drawBoundingBox(matrix: mat4, min: vec3, max: vec3, color: vec3 = [1, 1, 1]): void {
     let vertexCount = 0;
@@ -433,16 +414,16 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "isShowDebug" function returns if debug information should be displayed.
-   * @returns The showDebug property.
+   * Check if debug display is enabled.
    */
   isShowDebug(): boolean {
     return this.showDebug;
   }
 
   /**
-   * The "setShowDebug" function sets the value of the showDebug property.
-   * @param {boolean} showDebug - Enable or not to show debug information.
+   * Set the show debug flag.
+   * 
+   * @param {boolean} showDebug - The showDebug flag.
    */
   setShowDebug(showDebug: boolean): void {
     this.showDebug = showDebug;

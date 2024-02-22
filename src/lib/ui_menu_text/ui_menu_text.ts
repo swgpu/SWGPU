@@ -3,13 +3,12 @@ import { MenuAxis } from '../ui_menu/ui_menu';
 import { UIMenuTextItem } from './ui_menu_text_item';
 
 /**
- * The `UIMenuText` class is a subclass of UIMenu that provides methods for adding, setting, and removing
- * text items from a UI menu.
+ * A UI widget displaying a simple text menu.
+ * It send same events as UIMenu.
  */
 class UIMenuText extends UIMenu {
   /**
-   * The constructor.
-   * @param options - An object containing various options for configuring the behavior of the menu.
+   * @param options - Various options for configuring the behavior of the menu.
    */
   constructor(options: { axis?: MenuAxis, className?: string } = {}) {
     super(Object.assign(options, {
@@ -18,11 +17,10 @@ class UIMenuText extends UIMenu {
   }
 
   /**
-   * The "add" function creates a new UIMenuTextItem with the given id and text, and adds it to the menu.
-   * @param {string} id - The "id" parameter is a string that represents the unique identifier for the
-   * menu item. It is used to distinguish between different menu items.
-   * @param {string} text - The "text" parameter is a string that represents the text content of the menu
-   * item. It is the text that will be displayed on the menu item when it is rendered.
+   * Add text item.
+   * 
+   * @param {string} id - The unique identifier of the item.
+   * @param {string} text - The text content.
    */
   add(id: string, text: string): void {
     const item = new UIMenuTextItem();
@@ -32,11 +30,10 @@ class UIMenuText extends UIMenu {
   }
 
   /**
-   * The "set" function sets the text of a UIMenuTextItem identified by its id.
-   * @param {string} id - The `id` parameter is a string that represents the unique identifier of the
-   * widget. It is used to find the widget in the `widgets` array.
-   * @param {string} text - The `text` parameter is a string that represents the new text value that you
-   * want to set for the `UIMenuTextItem`.
+   * Set the text of a menu item.
+   * 
+   * @param {string} id - The unique identifier of the item.
+   * @param {string} text - The text content.
    */
   set(id: string, text: string): void {
     const item = this.widgets.find(w => w.getId() == id) as UIMenuTextItem;
@@ -48,9 +45,9 @@ class UIMenuText extends UIMenu {
   }
 
   /**
-   * The "remove" function removes a widget from the menu.
-   * @param {string} id - The `id` parameter is a string that represents the unique identifier of the
-   * widget that needs to be removed.
+   * Removes an item.
+   * 
+   * @param {string} id - The unique identifier of the item.
    */
   remove(id: string): void {
     const widgetIndex = this.widgets.findIndex(w => w.getId() == id);
@@ -62,8 +59,7 @@ class UIMenuText extends UIMenu {
   }
 
   /**
-   * The "getSelectedId" function returns the selected widget ID as a string or null.
-   * @returns a string or null value.
+   * Returns the selected widget ID as a string or null.
    */
   getSelectedId(): string | null {
     return this.getSelectedWidgetId();

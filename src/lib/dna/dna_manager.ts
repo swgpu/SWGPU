@@ -4,17 +4,13 @@ import { DNAComponent } from './dna_component';
 import { DNASystem } from './dna_system';
 
 /**
- * The `DNAManager` is a singleton class responsible for managing entities and components in a pure ecs implementation, allowing for entity
- * creation, component addition and removal, and system updates.
+ * Singleton pure ECS manager.
  */
 class DNAManager {
   entityIndex: number;
   entities: Map<number, Map<string, DNAComponent>>;
   systems: Array<DNASystem>;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.entityIndex = 0;
     this.entities = new Map<number, Map<string, DNAComponent>>();
@@ -34,8 +30,9 @@ class DNAManager {
   }
 
   /**
-   * The "update" function update all systems.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     for (const system of this.systems) {
@@ -44,7 +41,7 @@ class DNAManager {
   }
 
   /**
-   * The "draw" function draw all systems.
+   * The draw function.
    */
   draw(): void {
     for (const system of this.systems) {
@@ -53,16 +50,17 @@ class DNAManager {
   }
 
   /**
-   * The "setup" function initialize the manager and sets all systems ready to run.
-   * @param systems - An array of DNASystem objects.
+   * Setup your systems here.
+   * @param systems - A list of systems.
    */
   setup(systems: Array<DNASystem>): void {
+    this.entityIndex = 0;
     this.entities.clear();
     this.systems = systems;
   }
 
   /**
-   * The "reset" function resets all resources.
+   * Resets all.
    */
   reset(): void {
     this.entityIndex = 0;
@@ -71,8 +69,7 @@ class DNAManager {
   }
 
   /**
-   * The "createEntity" function creates a new entity and returns its uid based on a incremented global index.
-   * @returns The method returns the entity's id.
+   * Creates a new entity and returns its uid.
    */
   createEntity(): number {
     this.entities.set(this.entityIndex, new Map<string, DNAComponent>());
@@ -80,8 +77,9 @@ class DNAManager {
   }
 
   /**
-   * The "removeEntity" function removes entity.
-   * @param {number} eid - The `eid` parameter is the entity's id.
+   * Removes entity.
+   * 
+   * @param {number} eid - The entity's id.
    */
   removeEntity(eid: number): void {
     const found = this.entities.get(eid);
@@ -99,20 +97,18 @@ class DNAManager {
   }
 
   /**
-   * The "hasEntity" function checks if an entity exists.
-   * @param {number} id - The `id` parameter is the entity's id.
-   * @returns The method returns a boolean value indicating whether or not the entity exist in collection.
+   * Checks if an entity exists.
+   * 
+   * @param {number} id - The entity's id.
    */
   hasEntity(id: number): boolean {
     return this.entities.has(id);
   }
 
   /**
-   * The "findEntities" function takes a component typename and returns an array of entity
-   * ids that have that component.
-   * @param {string} componentTypeName - The parameter `componentTypeName` is a string that represents
-   * the name of a component type.
-   * @returns The method returns an array of entity ids.
+   * Find entities having that component.
+   * 
+   * @param {string} componentTypeName - The component typename.
    */
   findEntities(componentTypeName: string): Array<number> {
     const eids = Array<number>();
@@ -127,11 +123,9 @@ class DNAManager {
   }
 
   /**
-   * The "findEntity" function retrieves the first entity that has a specific component type and returns its
-   * entity's id.
-   * @param {string} componentTypeName - The `componentTypeName` parameter is a string that represents
-   * the name of a component type.
-   * @returns The method returns a entity's id. If no matching component is found, it returns -1.
+   * Find the first entity having that component. If no match is found, it returns -1.
+   * 
+   * @param {string} componentTypeName - The component typename.
    */
   findEntity(componentTypeName: string): number {
     for (let [eid, components] of this.entities) {
@@ -144,9 +138,10 @@ class DNAManager {
   }
 
   /**
-   * The "addComponent" function adds a DNAComponent to an entity. This entity is binded to all matching DNASystem.
-   * @param {number} eid - The `eid` parameter is the entity's id.
-   * @param {DNAComponent} component - The `component` parameter is the component to add.
+   * Adds component to an entity.
+   * 
+   * @param {number} eid - The entity's id.
+   * @param {DNAComponent} component - The component.
    */
   addComponent(eid: number, component: DNAComponent): void {
     const components = this.entities.get(eid);
@@ -169,10 +164,10 @@ class DNAManager {
   }
 
   /**
-   * The "removeComponent" function removes a DNAComponent to an entity. This entity is unbinded from all unmatching DNASystem.
-   * @param {number} eid - The `eid` parameter is the entity's id.
-   * @param {string} typename - The `typename` parameter is a string that represents
-   * the name of a component type.
+   * Removes component to an entity.
+   * 
+   * @param {number} eid - The entity's id.
+   * @param {string} typename - The component typename.
    */
   removeComponent(eid: number, typename: string): void {
     const components = this.entities.get(eid);
@@ -195,13 +190,10 @@ class DNAManager {
   }
 
   /**
-   * The "removeComponentIfExist" function removes a component from an entity if it exists and returns true, otherwise it returns
-   * false.
-   * @param {number} eid - The `eid` parameter is the entity's id.
-   * @param {string} typename - The `typename` parameter is a string that represents
-   * the name of a component type.
-   * @returns a boolean value. It returns true if the component exists on the entity and is successfully
-   * removed, and false if the component does not exist.
+   * Removes a component from an entity if it exists and returns true, otherwise it returns false.
+   * 
+   * @param {number} eid - The entity's id.
+   * @param {string} typename - The component typename.
    */
   removeComponentIfExist(eid: number, typename: string): boolean {
     if (this.hasComponent(eid, typename)) {
@@ -213,11 +205,10 @@ class DNAManager {
   }
 
   /**
-   * The "getComponent" function retrieves a specific component from an entity.
-   * @param {number} eid - The `eid` parameter is the entity's id.
-   * @param {string} typename - The `typename` parameter is a string that represents
-   * the name of a component type.
-   * @returns a DNAComponent.
+   * Returns component from an entity.
+   * 
+   * @param {number} eid - The entity's id.
+   * @param {string} typename - The component typename.
    */
   getComponent(eid: number, typename: string): DNAComponent {
     const components = this.entities.get(eid);
@@ -234,9 +225,8 @@ class DNAManager {
   }
 
   /**
-   * The "getComponents" function retrieves components from an entity.
-   * @param {number} eid - The `eid` parameter is the entity's id.
-   * @returns The method returns the entity's component list.
+   * Returns all components from an entity.
+   * @param {number} eid - The entity's id.
    */
   getComponents(eid: number): Map<string, DNAComponent> {
     const found = this.entities.get(eid);
@@ -248,11 +238,10 @@ class DNAManager {
   }
 
   /**
-   * The function checks if an entity has a specific component.
-   * @param {number} eid - The `eid` parameter is the entity's id.
-   * @param {string} typename - The `typename` parameter is a string that represents
-   * the name of a component type.
-   * @returns a boolean value.
+   * Check if an entity has a specific component.
+   * 
+   * @param {number} eid - The entity's id.
+   * @param {string} typename - The component typename.
    */
   hasComponent(eid: number, typename: string): boolean {
     const components = this.entities.get(eid);
@@ -264,17 +253,15 @@ class DNAManager {
   }
 
   /**
-   * The "getSystems" function  returns the systems.
-   * @returns The `systems` property of the object.
+   * Returns the list of systems.
    */
   getSystems(): Array<DNASystem> {
     return this.systems;
   }
 
   /**
-   * The "findSystems" function returns an array of DNASystem objects that have that tag.
-   * @param {string} tag - A string representing the tag to search.
-   * @returns An array of DNASystem matching objects.
+   * Returns all systems that have specific tag.
+   * @param {string} tag - The tag to search.
    */
   findSystems(tag: string): Array<DNASystem> {
     return this.systems.filter(s => s.hasTag(tag));

@@ -3,7 +3,10 @@ import { UIWidget } from '../ui/ui_widget';
 import { UIMenuText } from '../ui_menu_text/ui_menu_text';
 
 /**
- * The `UIBubble` class represents a floating dialog widget (looking as a bubble) with text and optional actions.
+ * A floating dialog widget (looking as a bubble) with text and optional actions.
+ * It emit 'E_PRINT_FINISHED' when print is finish.
+ * It emit 'E_MENU_ITEM_SELECTED' when menu item is selected.
+ * It emit 'E_OK' when action is 'OK' and text is finished.
  */
 class UIBubble extends UIWidget {
   uiMenu: UIMenuText;
@@ -16,9 +19,6 @@ class UIBubble extends UIWidget {
   timeElapsed: number;
   finished: boolean;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super({
       className: 'UIBubble',
@@ -42,12 +42,13 @@ class UIBubble extends UIWidget {
     this.finished = false;
 
     this.node.querySelector<HTMLElement>('.js-menu')!.replaceWith(this.uiMenu.getNode());
-    eventManager.subscribe(this.uiMenu, 'E_ITEM_SELECTED', this, this.handleMenuItemSelected);
+    eventManager.subscribe(this.uiMenu, 'E_ITEM_SELECTED', this, this.$handleMenuItemSelected);
   }
 
   /**
    * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     this.uiMenu.update(ts);
@@ -86,8 +87,8 @@ class UIBubble extends UIWidget {
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
     eventManager.unsubscribe(this.uiMenu, 'E_ITEM_SELECTED', this);
@@ -96,8 +97,8 @@ class UIBubble extends UIWidget {
   }
 
   /**
-   * The "focus" function.
-   * It focus `menu` too if actions is set.
+   * Focus on.
+   * Note: It focus `menu` too if actions is set.
    */
   focus(): void {
     if (this.actions.length > 0) {
@@ -108,8 +109,8 @@ class UIBubble extends UIWidget {
   }
 
   /**
-   * The "unfocus" function.
-   * It unfocus `menu` too if actions is set.
+   * Focus off.
+   * Note: It unfocus `menu` too if actions is set.
    */
   unfocus(): void {
     if (this.actions.length > 0) {
@@ -120,32 +121,35 @@ class UIBubble extends UIWidget {
   }
 
   /**
-   * The "setPicture" function sets the dialog author avatar's.
-   * @param {string} pictureFile - The `pictureFile` parameter is a string that represents the file path
-   * or URL of the picture that you want to set.
+   * Set the dialog author avatar's.
+   * 
+   * @param {string} pictureFile - The file path of the picture.
    */
   setPicture(pictureFile: string): void {
     this.node.querySelector<HTMLImageElement>('.js-picture')!.src = pictureFile;
   }
 
   /**
-   * The "setAuthor" function sets the dialog author name's.
-   * @param {string} author - The `author` parameter is a string that represents the name of the author.
+   * Set the dialog author name's.
+   * 
+   * @param {string} author - The name of the author.
    */
   setAuthor(author: string): void {
     this.node.querySelector<HTMLElement>('.js-author')!.textContent = author;
   }
 
   /**
-   * The "setWidth" function sets the width of the bubble.
-   * @param {number} width - The width parameter is a number that represents the desired width in pixels.
+   * Set the width of the bubble.
+   * 
+   * @param {number} width - The width in pixels.
    */
   setWidth(width: number): void {
     this.node.style.width = width + 'px';
   }
 
   /**
-   * The "setText" function sets the dialog text.
+   * Set the dialog text.
+   * 
    * @param {string} text - The dialog text.
    */
   setText(text: string): void {
@@ -155,8 +159,9 @@ class UIBubble extends UIWidget {
   }
 
   /**
-   * The "setActions" function sets the actions menu.
-   * @param actions - The `actions` parameter is an array of strings that represents a list of actions.
+   * Set the actions menu.
+   * 
+   * @param actions - The list of actions.
    */
   setActions(actions: Array<string>): void {
     this.actions = actions;
@@ -167,9 +172,9 @@ class UIBubble extends UIWidget {
   }
 
   /**
-   * The "setStepDuration" function sets the text speed.
-   * @param {number} stepDuration - The `stepDuration` parameter is a number that represents the duration of
-   * a text update. Smaller is that value faster text will be displayed.
+   * Set the text speed.
+   * 
+   * @param {number} stepDuration - The duration of a text update.
    */
   setStepDuration(stepDuration: number): void {
     this.stepDuration = stepDuration;
@@ -177,7 +182,7 @@ class UIBubble extends UIWidget {
 
   /**
    * The "onAction" function.
-   * It emits an event with the name 'E_OK' if the actionId is 'OK'.
+   * Note: It emits an 'E_OK' event if the actionId is 'OK' and text is finished.
    */
   onAction(actionId: string): void {
     if (actionId == 'OK' && this.finished) {
@@ -185,11 +190,7 @@ class UIBubble extends UIWidget {
     }
   }
 
-  /**
-   * The "handleMenuItemSelected" function.
-   * It emits an event 'E_MENU_ITEM_SELECTED' when a menu item is selected.
-   */
-  handleMenuItemSelected(data: any): void {
+  $handleMenuItemSelected(data: any): void {
     eventManager.emit(this, 'E_MENU_ITEM_SELECTED', data);
   }
 }

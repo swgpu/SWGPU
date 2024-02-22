@@ -31,10 +31,8 @@ interface Walker {
 };
 
 /**
- * The `Gfx3JWM` is a class that represents a walkmesh and provides methods for loading
- * data, updating and drawing, adding and moving walkers, and clearing walkers.
- * In collision case, the collision response sliding along the edges of the walkmesh to keep a good
- * feeling for the player.
+ * A 3D walkmesh.
+ * In collision case, the collision response sliding along the edges of the walkmesh to keep a good feeling for the player.
  */
 class Gfx3JWM extends Gfx3Transformable {
   sectors: Array<Sector>;
@@ -44,9 +42,6 @@ class Gfx3JWM extends Gfx3Transformable {
   debugVertices: Array<number>;
   debugVertexCount: number;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super();
     this.sectors = [];
@@ -58,8 +53,9 @@ class Gfx3JWM extends Gfx3Transformable {
   }
 
   /**
-   * The "loadFromFile" function asynchronously loads walkmesh data from a json file (jwm).
-   * @param {string} path - The `path` parameter is the file path.
+   * Load asynchronously walkmesh data from a json file (jwm).
+   * 
+   * @param {string} path - The file path.
    */
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
@@ -96,7 +92,7 @@ class Gfx3JWM extends Gfx3Transformable {
   }
 
   /**
-   * The "update" function.
+   * The update function.
    */
   update(): void {
     this.debugVertices = [];
@@ -126,21 +122,20 @@ class Gfx3JWM extends Gfx3Transformable {
   }
 
   /**
-   * The "draw" function.
+   * The draw function.
    */
   draw(): void {
     gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount, this.getTransformMatrix());
   }
 
   /**
-   * The "addWalker" function adds a new walker identified by a unique identifier of your choice.
-   * A walker is the representation of a moving entity inside a walkmesh context. It is a square
-   * of `radius` size moving along the floor.
-   * @param {string} id - A unique identifier for the walker.
+   * Add a new walker.
+   * Note: A walker is the representation of a moving entity inside a walkmesh context. It is a square moving along the floor.
+   * 
+   * @param {string} id - A unique identifier.
    * @param {number} x - The x-coordinate of the walker's starting position.
    * @param {number} z - The z-coordinate of the walker's starting position.
-   * @param {number} radius - The radius parameter represents the size of the walker.
-   * @returns a Walker object.
+   * @param {number} radius - The size.
    */
   addWalker(id: string, x: number, z: number, radius: number): Walker {
     if (this.walkers.find(w => w.id == id)) {
@@ -163,14 +158,11 @@ class Gfx3JWM extends Gfx3Transformable {
   }
 
   /**
-   * The "moveWalker" function move the specified walker based on the provided movement values.
-   * @param {string} id - The `id` parameter is a string that represents the unique identifier of the
-   * walker.
-   * @param {number} mx - The parameter `mx` represents the movement in the x-axis (horizontal movement)
-   * for the walker.
-   * @param {number} mz - The parameter `mz` represents the movement in the z-axis (vertical movement)
-   * for the walker.
-   * @returns The projected move if walker collide on edges of the walkmesh, otherwise simply the original move.
+   * Move a walker.
+   * 
+   * @param {string} id - The unique identifier of the walker.
+   * @param {number} mx - The movement in the x-axis.
+   * @param {number} mz - The movement in the z-axis.
    */
   moveWalker(id: string, mx: number, mz: number): vec3 {
     const walker = this.walkers.find(w => w.id == id);
@@ -265,7 +257,7 @@ class Gfx3JWM extends Gfx3Transformable {
   }
 
   /**
-   * The "clearWalkers" function remove all walker instances.
+   * Delete all walkers.
    */
   clearWalkers(): void {
     this.walkers = [];

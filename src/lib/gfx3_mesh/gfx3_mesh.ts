@@ -18,17 +18,13 @@ export interface Group {
 };
 
 /**
- * The `Gfx3Mesh` class is a subclass of `Gfx3Drawable` and represents a mesh object in a 3D graphics engine, with methods for building
- * vertices, updating and drawing the mesh, and managing its layer and material.
+ * A 3D base mesh object.
  */
 class Gfx3Mesh extends Gfx3Drawable {
   layer: number;
   shadowCasting: boolean;
   material: Gfx3Material;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super(SHADER_VERTEX_ATTR_COUNT);
     this.layer = 0;
@@ -37,15 +33,14 @@ class Gfx3Mesh extends Gfx3Drawable {
   }
 
   /**
-   * The "buildVertices" function takes various vertex data and returns an array
-   * of vertices with calculated normals, tangents, and binormals in the engine format.
+   * Useful function takes various vertex data and returns vertices with calculated normals, tangents, and binormals in the engine format.
+   * 
    * @param {number} vertexCount - The total number of vertices in the mesh.
-   * @param coords - An array of vertex coordinates.
-   * @param [texcoords] - An optional array of vertex texture coordinates.
-   * @param [colors] - An optional array of vertex color.
-   * @param [normals] - An optional array of vertex normal.
-   * @param [groups] - An optional array of vertex group.
-   * @returns The final array of vertices data.
+   * @param coords - A list of vertex coordinates.
+   * @param [texcoords] - A list of vertex texture coordinates.
+   * @param [colors] - A list of vertex color.
+   * @param [normals] - A list of vertex normal.
+   * @param [groups] - A list of vertex group.
    */
   static buildVertices(vertexCount: number, coords: Array<number>, texcoords?: Array<number>, colors?: Array<number>, normals?: Array<number>, groups?: Array<Group>): Array<number> {
     const vertices = new Array<number>();
@@ -157,8 +152,8 @@ class Gfx3Mesh extends Gfx3Drawable {
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(keepMat: boolean = false): void {
     if (!keepMat) {
@@ -169,60 +164,59 @@ class Gfx3Mesh extends Gfx3Drawable {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     this.material.update(ts);
   }
 
   /**
-   * The "draw" function.
+   * The draw function.
    */
   draw(): void {
     gfx3MeshRenderer.drawMesh(this);
   }
 
   /**
-   * The "setLayer" function sets the layer property.
-   * @param {number} layer - The "layer" parameter is a number that represents the layer identifier.
-   * It is used to easily categorized and identified group of drawables.
-   * Ex: allow decals for wall only, for character only, etc...
+   * Set the layer.
+   * Mesh layer is used to easily categorized and identified group of meshes, actually it is only used for decals.
+   * 
+   * @param {number} layer - The layer.
    */
   setLayer(layer: number): void {
     this.layer = layer;
   }
 
   /**
-   * The "getLayer" function returns the layer number.
-   * @returns The layer number is being returned.
+   * Returns the layer.
    */
   getLayer(): number {
     return this.layer;
   }
 
   /**
-   * The "setShadowCasting" function determines if object cast shadows or not.
-   * @param {boolean} shadowCasting - The `shadowCasting` parameter is a boolean value that determines if object cast shadows.
+   * Set the shadow casting.
+   * 
+   * @param {boolean} shadowCasting - Determines if object cast shadows.
    */
   setShadowCasting(shadowCasting: boolean): void {
     this.shadowCasting = shadowCasting;
   }
 
   /**
-   * The "getShadowCasting" function returns a boolean value indicating whether the object cast shadows.
+   * Check if shadow casting is enable or not.
    */
   getShadowCasting(): boolean {
     return this.shadowCasting;
   }
 
   /**
-   * The "setMaterial" function sets a new material.
-   * @param {Gfx3Material} material - The new material.
-   * @param {boolean} [keepMat=true] - The `keepMat` parameter is a boolean flag that determines whether
-   * to keep the current material or delete it before assigning the new material.
-   * Warning: If keepMat is to `false` then the current material is definitly destroy (included if others
-   * drawables potentially used it).
+   * Set a material.
+   * 
+   * @param {Gfx3Material} material - The material.
+   * @param {boolean} [keepMat=true] - Determines whether to keep the current material or delete it before assigning the new material.
    */
   setMaterial(material: Gfx3Material, keepMat: boolean = true): void {
     if (!keepMat) {
@@ -233,20 +227,16 @@ class Gfx3Mesh extends Gfx3Drawable {
   }
 
   /**
-   * The "getMaterial" function returns the material.
-   * @returns The material.
+   * Returns the material.
    */
   getMaterial(): Gfx3Material {
     return this.material;
   }
 
   /**
-   * The "clone" function creates a new `Gfx3Mesh` object by applying a transformation matrix to each
-   * vertex of the original mesh.
-   * @param {mat4} transformMatrix - The `transformMatrix` parameter is a 4x4 matrix that represents a
-   * transformation. It is used to transform the vertices of the mesh. The default value is the identity
-   * matrix, which means no transformation is applied if no matrix is provided.
-   * @returns a new instance of the Gfx3Mesh class.
+   * Creates a clone of the mesh.
+   * 
+   * @param {mat4} transformMatrix - The transformation matrix.
    */
   clone(transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3Mesh {
     const mesh = new Gfx3Mesh();
@@ -264,8 +254,7 @@ class Gfx3Mesh extends Gfx3Drawable {
   }
 
   /**
-   * The "mat" getter returns the Gfx3Material property named "mat".
-   * @returns The material as a shortcut.
+   * Returns the material.
    */
   get mat(): Gfx3Material {
     return this.material;

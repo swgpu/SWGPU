@@ -61,6 +61,11 @@ class Particle {
     this.alive = 0;
   }
 
+  /**
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
+   */
   update(ts: number) {
     this.position = UT.VEC3_ADD(this.position, UT.VEC3_SCALE(this.velocity, ts / 1000.0));
     this.velocity = UT.VEC3_ADD(this.velocity, UT.VEC3_SCALE(this.acceleration, ts / 1000.0));
@@ -125,9 +130,7 @@ interface ParticlesOptions {
 };
 
 /**
- * The `Gfx3Particles` class is a subclass of `Gfx2Drawable` that responsible for updating and
- * rendering a particle system in 3D space with various properties such as position,
- * velocity, size, opacity, acceleration, color, angle, and age.
+ * The 3D particles diffuser.
  */
 class Gfx3Particles extends Gfx3Drawable {
   textureChanged: boolean;
@@ -171,8 +174,7 @@ class Gfx3Particles extends Gfx3Drawable {
   texture: Gfx3Texture;
 
   /**
-   * The constructor.
-   * @param options - An object containing various options for configuring the behavior of the particles cloud.
+   * @param options - Various options for configuring the behavior of the particles cloud.
    */
   constructor(options: Partial<ParticlesOptions>) {
     super(SHADER_VERTEX_ATTR_COUNT);
@@ -217,35 +219,69 @@ class Gfx3Particles extends Gfx3Drawable {
     this.texture = this.grp2.setTexture(0, 'TEXTURE', options.texture ?? gfx3Manager.createTextureFromBitmap());
 
     for (let i = 0; i < this.particleQuantity; i++) {
-      this.particleArray[i] = this.createParticle();
+      this.particleArray[i] = this.$createParticle();
     }
 
     this.grp2.allocate();
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
-    this.grp2.destroy();
+    this.grp2.delete();
     super.delete();
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
-    this.updateLifeCycle(ts);
-    this.updateGeometry(ts);
+    this.$updateLifeCycle(ts);
+    this.$updateGeometry(ts);
   }
 
   /**
-   * The "updateLifeCycle" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The draw function.
    */
-  updateLifeCycle(ts: number): void {
+  draw(): void {
+    gfx3ParticlesRenderer.drawParticles(this);
+  }
+
+  /**
+   * Set the particle texture.
+   * 
+   * @param {Gfx3Texture} texture - The texture.
+   */
+  setTexture(texture: Gfx3Texture): void {
+    this.texture = texture;
+    this.textureChanged = true;
+  }
+
+  /**
+   * Returns the particle texture.
+   */
+  getTexture(): Gfx3Texture | null {
+    return this.texture;
+  }
+
+  /**
+   * Returns the bindgroup(2).
+   */
+  getGroup02(): Gfx3StaticGroup {
+    if (this.textureChanged) {
+      this.grp2.setTexture(0, 'TEXTURE', this.texture);
+      this.grp2.allocate();
+      this.textureChanged = false;
+    }
+
+    return this.grp2;
+  }
+
+  $updateLifeCycle(ts: number): void {
     const recycleIndices = [];
 
     for (let i = 0; i < this.particleQuantity; i++) {
@@ -279,7 +315,7 @@ class Gfx3Particles extends Gfx3Drawable {
 
     for (let i = 0; i < recycleIndices.length; i++) { // if any particles have died while the emitter is still running, we imediately recycle them
       const idx = recycleIndices[i];
-      this.particleArray[idx] = this.createParticle();
+      this.particleArray[idx] = this.$createParticle();
       this.particleArray[idx].alive = 1.0; // activate right away
       this.particleAlivedCount++;
     }
@@ -290,11 +326,7 @@ class Gfx3Particles extends Gfx3Drawable {
     }
   }
 
-  /**
-   * The "updateGeometry" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
-   */
-  updateGeometry(ts: number): void {
+  $updateGeometry(ts: number): void {
     this.beginVertices(this.particleAlivedCount * 6);
 
     for (let i = 0; i < this.particleQuantity; i++) {
@@ -317,19 +349,7 @@ class Gfx3Particles extends Gfx3Drawable {
     this.endVertices();
   }
 
-  /**
-   * The "draw" function.
-   */
-  draw(): void {
-    gfx3ParticlesRenderer.drawParticles(this);
-  }
-
-  /**
-   * The "createParticle" function creates a particle with various properties such as position, velocity, size, opacity,
-   * acceleration, color, angle, and age.
-   * @returns a Particle object.
-   */
-  createParticle(): Particle {
+  $createParticle(): Particle {
     const particle = new Particle();
 
     if (this.positionStyle == PositionStyle.CUBE) {
@@ -366,37 +386,6 @@ class Gfx3Particles extends Gfx3Drawable {
     particle.age = 0;
     particle.alive = 0;
     return particle;
-  }
-
-  /**
-   * The "setTexture" function sets the particle texture.
-   * @param {Gfx3Texture} texture - The texture.
-   */
-  setTexture(texture: Gfx3Texture): void {
-    this.texture = texture;
-    this.textureChanged = true;
-  }
-
-  /**
-   * The "getTexture" function returns the particle texture.
-   * @returns The texture.
-   */
-  getTexture(): Gfx3Texture | null {
-    return this.texture;
-  }
-
-  /**
-   * The "getGroup02" function returns the static group index 2.
-   * @returns The static group.
-   */
-  getGroup02(): Gfx3StaticGroup {
-    if (this.textureChanged) {
-      this.grp2.setTexture(0, 'TEXTURE', this.texture);
-      this.grp2.allocate();
-      this.textureChanged = false;
-    }
-
-    return this.grp2;
   }
 }
 

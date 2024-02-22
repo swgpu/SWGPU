@@ -1,11 +1,13 @@
 import json
 from pathlib import Path
 import re
+import argparse
 
-docs_file = "docs/doc.json"
+docs_file = "docs.json"
 docs_json = ""
 welcome_page = ""
-
+modules_file = "./docs/modules.json"
+output_dir = "./docs/pukiwiki"
 
 def search_by_property_recursive(data, property_name, property_value):
     if isinstance(data, list):
@@ -27,16 +29,6 @@ def search_by_property(json_file, property_name, property_value):
     with open(json_file, 'r', encoding="utf-8") as f:
         data = json.load(f)
     return search_by_property_recursive(data, property_name, property_value)
-
-
-'''
-# Exemple d'utilisation :
-result = search_by_property('docs.json', 'id', 10)
-if result:
-    print(json.dumps(result, indent=4, sort_keys=True))
-else:
-    print("Aucun objet trouvé avec cette propriété.")
-'''
 
 
 def get_class_title(warme_class):
@@ -112,7 +104,12 @@ def get_function_name(function):
     function_name = ""
     try:
         # function_name += "*** " + function["name"] + "\n"
-        function_name += "- " + "''" + function["signatures"][0]["name"] + "''"
+        try:
+            f_is_static = function["flags"]["isStatic"]
+            if f_is_static == True:
+                function_name = "- " + "'''" + "static" + "''' " + "''" + function["signatures"][0]["name"] + "''"
+        except KeyError as e:
+            function_name += "- " + "''" + function["signatures"][0]["name"] + "''"
     except KeyError as e:
         pass
     return function_name
@@ -158,6 +155,7 @@ def get_function_description(function):
     try:
         for txt_obj in function["signatures"][0]["comment"]["summary"]:
             function_description += txt_obj["text"]
+        function_description.replace("\n", "~\n")
         function_description += "~\n"
     except KeyError as e:
         pass
@@ -257,7 +255,7 @@ def get_class_groups_content(warme_class):
     try:
         for group in warme_class["groups"]:
             i = 0
-            if group["title"] != "Properties":
+            if group["title"] not in ["Properties", "Accessors"]:
                 class_groups_content += get_group_title(group)
             if group["title"] in ["Constructors", "Methods"]:
                 for id in group["children"]:
@@ -284,34 +282,51 @@ def create_class_page(warme_class):
     return out
 
 
-def create_modules_pages():
+def create_pukiwiki_pages():
     modules_already_added = []
     welcome_page = "* Welcome to WARME ENGINE\n"
-    result_path = Path("./result")
-    if not result_path.exists():
-        result_path.mkdir()
+    pukiwiki_pages_path = Path(output_dir)
+
+    # If PukiWiki pages directory doesn't exist, create it !
+    if not pukiwiki_pages_path.exists():
+        pukiwiki_pages_path.mkdir()
+    # Else delete old PukiWiki pages
     else:
-        for child in result_path.iterdir():
+        for child in pukiwiki_pages_path.iterdir():
             child.unlink()
+    # For each module, do that
     for warme_module in docs_modules:
         modules_groups = []
         try:
+            # If there are any modules, everything go well
             if len(warme_module["children"]) > 0:
                 modules_groups = warme_module["groups"]
+            # Else, stop everything !
             else:
                 break
+
+            # Search module name
             module_name = ""
             matches = re.search(".+(?=/.+)", warme_module["name"])
+            # If you find something, get it !
             if matches:
                 if "_" in matches[0]:
                     module_name = matches[0].split("_")[0]
                 else:
                     module_name = matches[0]
+            # If module name is not empty, create his page
             if module_name != "":
-                module_file = result_path / (module_name.encode().hex().upper() + ".txt")
+                module_file = pukiwiki_pages_path / (module_name.encode().hex().upper() + ".txt")
                 if not module_file.exists():
-                    module_file_content = "* " + module_name.capitalize() + "\n\n"
+                    module_file_content = "* " + module_name.capitalize() + "\n"
+                    with open(modules_file, "r", encoding="utf-8") as f:
+                        modules_json = json.load(f)
+                        for name in modules_json:
+                            if name.lower() == module_name:
+                                module_file_content += modules_json[name] + "~\n"
+                                break
                     module_file.write_text(module_file_content)
+            # For each class of module, create a page
             for group in modules_groups:
                 if group["title"] == "Classes":
                     for id in group["children"]:
@@ -319,51 +334,40 @@ def create_modules_pages():
                         warme_class = search_by_property(docs_file, "id", id)
                         print(warme_class["name"])
                         class_page = create_class_page(warme_class)
-                        page_path = result_path / (warme_class["name"].encode().hex().upper() + ".txt")
+                        page_path = pukiwiki_pages_path / (warme_class["name"].encode().hex().upper() + ".txt")
                         page_path.write_text(class_page)
                         with module_file.open("a") as f:
                             f.write("- [[" + warme_class["name"] + "]]~\n")
+            # If you didn't add this module to welcome page, add it !
             if module_name not in modules_already_added:
                 welcome_page += "- " + "[[" + module_name.capitalize() + ">" + module_name + "]]" + "\n"
                 modules_already_added.append(module_name)
             print(modules_already_added)
         except KeyError:
             continue
-    welcome_page_path = result_path / ("WARME Index".encode().hex().upper() + ".txt")
+    # Create Welcome page !
+    welcome_page_path = pukiwiki_pages_path / ("WARME Index".encode().hex().upper() + ".txt")
     welcome_page_path.write_text(welcome_page)
 
+# Main Function
+if __name__ == "__main__":
+    # Management of script's arguments
+    parser = argparse.ArgumentParser(description="Convert TypeDoc JSON to PukiWiki Files")
+    parser.add_argument("--json", "-j", help="Path to the JSON file")
+    parser.add_argument("--output", "-o", help="Path to the Folder where PukiWiki will be generated")
+    args = parser.parse_args()
 
-'''
-for warme_module in docs_modules:
-    modules_groups = []
-    try:
-        if len(warme_module["children"]) > 0:
-            modules_groups = warme_module["children"]
-        else:
-            break
+    if args.json != None:
+        if Path(args.json).is_file():
+            docs_file = args.json
+    if args.output != None:
+        if Path(args.json).is_dir():
+            output_dir = args.json
 
-        for class_child in warme_module["children"]:
-            out += "* Class" + class_child["name"] + "\n"
-            out += "\n"
-            for txt_obj in class_child["comment"]["summary"]:
-                out += "" + txt_obj["text"]
-            out += "\n"
-            out += "\n"
-            out += "** Table of Contents\n"
-            for content_group in modules_groups:
-                out += "*** " + content_group["title"]
-                for id in content_group["children"]:
-                    print()
-                    object = search_by_property(docs_file, "id", id)
-                    out += "- " + object["name"]
-            break
-        print(out)
-        break
-    except KeyError:
-        continue
-'''
+    # Get data from JSON File
+    with open(docs_file, "r", encoding="utf-8") as f:
+        docs_json = json.load(f)
 
-with open(docs_file, "r", encoding="utf-8") as f:
-    docs_json = json.load(f)
-docs_modules = docs_json["children"]
-create_modules_pages()
+    # Create PukiWiki Pages
+    docs_modules = docs_json["children"]
+    create_pukiwiki_pages()

@@ -6,9 +6,7 @@ import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_flare_shader';
 
 /**
- * The `Gfx3Flare` class represents a drawable flare object in a graphics system, with properties such as
- * position, scale, rotation, color, and texture.
- * It is Ideal for lens-flare effect, rain, snow or every effect on the screen focal.
+ * A flare drawable object.
  */
 class Gfx3Flare extends Gfx3Drawable {
   textureChanged: boolean;
@@ -21,9 +19,6 @@ class Gfx3Flare extends Gfx3Drawable {
   grp2: Gfx3StaticGroup;
   texture: Gfx3Texture;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super(SHADER_VERTEX_ATTR_COUNT);
     this.textureChanged = false;
@@ -49,24 +44,25 @@ class Gfx3Flare extends Gfx3Drawable {
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
-    this.grp2.destroy();
+    this.grp2.delete();
     super.delete();
   }
 
   /**
-   * The "draw" function.
+   * The draw function.
    */
   draw(): void {
     gfx3FlareRenderer.drawFlare(this);
   }
 
   /**
-   * The "setPosition2D" function sets the position in screen coordinates.
+   * Set the position in screen coordinates.
    * Top-left corner is at coordinates 0;0.
+   * 
    * @param {number} x - The X coordinate of the position.
    * @param {number} y - The Y coordinate of the position.
    */
@@ -76,16 +72,16 @@ class Gfx3Flare extends Gfx3Drawable {
   }
 
   /**
-   * The "getPosition2D" function returns the position in screen coordinates.
+   * Returns the position in screen coordinates.
    * Top-left corner is at coordinates 0;0.
-   * @returns The position in screen coordinates.
    */
   getPosition2D(): vec2 {
     return this.position2D;
   }
 
   /**
-   * The "setScale2D" function sets the scale with the given x and y factors.
+   * Set the scale with the given x and y factors.
+   * 
    * @param {number} x - The x factor in the x-axis direction.
    * @param {number} y - The y factor in the y-axis direction.
    */
@@ -95,32 +91,32 @@ class Gfx3Flare extends Gfx3Drawable {
   }
 
   /**
-   * The "getScale2D" function returns the scale as a 2D vector.
-   * @returns The scale.
+   * Returns the scale.
    */
   getScale2D(): vec2 {
     return this.scale2D;
   }
 
   /**
-   * The "setRotation2D" function sets the rotation angle (in radians).
-   * @param {number} angle - The `angle` parameter is the rotation angle in radians.
+   * Set the rotation angle (in radians).
+   * 
+   * @param {number} angle - The rotation angle in radians.
    */
   setRotation2D(angle: number): void {
     this.rotation2D = angle;
   }
 
   /**
-   * The "getRotation2D" function returns the value of the "rotation2D" angle property (in radians).
-   * @returns The rotation angle exprimed in radians.
+   * Returns the rotation angle (in radians).
    */
   getRotation2D(): number {
     return this.rotation2D;
   }
 
   /**
-   * The "setOffset2D" function sets the origin offset.
+   * Set the origin offset in pixel.
    * Default origin is top-left corner. Ex: An offset of 10;10 set the origin of the flare to 10;10.
+   * 
    * @param {number} x - The x offset.
    * @param {number} y - The y offset.
    */
@@ -130,15 +126,15 @@ class Gfx3Flare extends Gfx3Drawable {
   }
 
   /**
-   * The "getOffset2D" function returns the origin offset as a 2D vector.
-   * @returns The origin offset.
+   * Returns the origin offset in pixel.
    */
   getOffset2D(): vec2 {
     return this.offset2D;
   }
 
   /**
-   * The "setColor" function sets the color overlay ranging from 0 to 1.
+   * Set the color blend (from 0 to 1).
+   * 
    * @param {number} r - The parameter "r" represents the red component.
    * @param {number} g - The parameter "g" represents the green component.
    * @param {number} b - The parameter "b" represents the blue component.
@@ -152,15 +148,15 @@ class Gfx3Flare extends Gfx3Drawable {
   }
 
   /**
-   * The "getColor" function returns the color overlay.
-   * @returns The color overlay.
+   * Returns the color blend.
    */
   getColor(): vec4 {
     return this.color;
   }
 
   /**
-   * The "setTexture" function sets the texture of the flare.
+   * Set the texture.
+   * 
    * @param {Gfx3Texture} texture - The texture of the flare.
    */
   setTexture(texture: Gfx3Texture): void {
@@ -171,25 +167,24 @@ class Gfx3Flare extends Gfx3Drawable {
   }
 
   /**
-   * The "getTexture" function returns the texture of the flare.
-   * @returns The texture of the flare.
+   * Returns the texture.
    */
   getTexture(): Gfx3Texture {
     return this.texture;
   }
 
   /**
-   * The "getSize2D" function returns the size of the flare on the screen.
-   * @returns The size of the texture on the screen in pixels.
+   * Returns the size in pixels.
    */
   getSize2D(): vec2 {
     return this.size2D;
   }
 
   /**
-   * The "setSize2D" function sets the size of the flare on the screen.
-   * @param {number} w - The parameter "w" represents the width of the flare.
-   * @param {number} h - The parameter "h" represents the height of the flare.
+   * Set the size in pixels.
+   * 
+   * @param {number} w - The width of the flare.
+   * @param {number} h - The height of the flare.
    */
   setSize2D(w: number, h: number): void {
     this.size2D[0] = w;
@@ -197,8 +192,7 @@ class Gfx3Flare extends Gfx3Drawable {
   }
 
   /**
-   * The "getGroup02" function returns the bindgroup index 2 after setting its texture if it has changed.
-   * @returns The Gfx3StaticGroup index 2.
+   * Returns the bindgroup(2).
    */
   getGroup02(): Gfx3StaticGroup {
     if (this.textureChanged) {

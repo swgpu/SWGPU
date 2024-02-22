@@ -2,8 +2,10 @@ import { eventManager } from '../core/event_manager';
 import { UIWidget } from '../ui/ui_widget';
 
 /**
- * The `UIPrint` class represents a full screen dialog widget with text.
+ * A UI widget displaying a full screen dialog print with text.
  * It is ideal for long-text reading.
+ * It emit 'E_PRINT_FINISHED' when print is finish.
+ * It emit 'E_OK' when action is 'OK' and text is finished.
  */
 class UIPrint extends UIWidget {
   text: string;
@@ -12,9 +14,6 @@ class UIPrint extends UIWidget {
   timeElapsed: number;
   finished: boolean;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super({
       className: 'UIPrint',
@@ -31,12 +30,13 @@ class UIPrint extends UIWidget {
     this.timeElapsed = 0;
     this.finished = false;
 
-    this.node.addEventListener('click', () => this.handleClick());
+    this.node.addEventListener('click', () => this.$handleClick());
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (this.finished) {
@@ -64,7 +64,8 @@ class UIPrint extends UIWidget {
   }
 
   /**
-   * The "setText" function sets the dialog text.
+   * Set the dialog text.
+   * 
    * @param {string} text - The dialog text.
    */
   setText(text: string): void {
@@ -75,17 +76,17 @@ class UIPrint extends UIWidget {
   }
 
   /**
-   * The "setStepDuration" function sets the text speed.
-   * @param {number} stepDuration - The `stepDuration` parameter is a number that represents the duration of
-   * a text update. Smaller is that value faster text will be displayed.
+   * Set the text speed.
+   * 
+   * @param {number} stepDuration - The duration of a text update.
    */
   setStepDuration(stepDuration: number): void {
     this.stepDuration = stepDuration;
   }
 
   /**
-   * The "onAction" function.
-   * It emits an event with the name 'E_OK' if the actionId is 'OK'.
+   * The onAction function.
+   * Note: It emits an 'E_OK' event if the actionId is 'OK' and text is finished.
    */
   onAction(actionId: string) {
     if (actionId === 'OK' && this.finished) {
@@ -93,11 +94,7 @@ class UIPrint extends UIWidget {
     }
   }
 
-  /**
-   * The "handleClick" function.
-   * It emits an event with the name 'E_OK' if text is finished and mouse click fired.
-   */
-  handleClick(): void {
+  $handleClick(): void {
     if (this.isFocused() && this.finished) {
       eventManager.emit(this, 'E_OK');
     }

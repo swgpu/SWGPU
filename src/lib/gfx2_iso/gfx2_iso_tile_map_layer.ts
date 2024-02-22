@@ -3,6 +3,9 @@ import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2TileMap } from '../gfx2_tile/gfx2_tile_map';
 import { Gfx2IsoTile } from './gfx2_iso_tile';
 
+/**
+ * A Isometric tilemap layer.
+ */
 class Gfx2IsoTileMapLayer extends Gfx2Drawable {
   tilemap: Gfx2TileMap;
   layerIndex: number;
@@ -44,6 +47,11 @@ class Gfx2IsoTileMapLayer extends Gfx2Drawable {
     }
   }
 
+  /**
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
+   */
   update(ts: number): void {
     const tileset = this.tilemap.getTileset();
     const tilelayer = this.tilemap.getTileLayer(this.layerIndex);
@@ -67,6 +75,9 @@ class Gfx2IsoTileMapLayer extends Gfx2Drawable {
     this.frameProgress += ts;
   }
 
+  /**
+   * The draw function.
+   */
   draw(): void {
     const tilelayer = this.tilemap.getTileLayer(this.layerIndex);
     if (!tilelayer) {

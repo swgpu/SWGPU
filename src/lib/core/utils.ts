@@ -23,18 +23,27 @@ class UT {
   static VEC3_UP: vec3 = [0, 1, 0];
   static VEC3_DOWN: vec3 = [0, -1, 0];
 
+  /**
+   * @ignore
+   */
   static FAIL(message: string) {
     const elem = document.querySelector<HTMLDivElement>('#APP_FAIL')!;
     elem.classList.add('SHOW');
     elem.textContent = message;
   }
 
+  /**
+   * @param ms - Time to wait (in milliseconds).
+   */
   static WAIT(ms: number): Promise<any> {
     return new Promise((resolve: Function) => {
       window.setTimeout(() => resolve(), ms);
     });
   }
 
+  /**
+   * @param arr - The array to shuffle.
+   */
   static SHUFFLE(arr: Array<any>): Array<any> {
     const res = arr.slice();
     let tmp, cur, tp = res.length;
@@ -50,10 +59,19 @@ class UT {
     return res;
   }
 
+  /**
+   * @param start - The start value.
+   * @param stop - The stop value.
+   * @param step - Increment step.
+   */
   static RANGE_ARRAY(start: number, stop: number, step: number = 0) {
     return Array.from({ length: (stop - start) / step + 1 }, (value, index) => start + index * step);
   }
 
+  /**
+   * @param min - The min.
+   * @param max - The max.
+   */
   static RANDARRAY(min: number, max: number): Array<number> {
     const arr = [];
     for (let i = min; i <= max; i++) {
@@ -63,50 +81,80 @@ class UT {
     return UT.SHUFFLE(arr);
   }
 
+  /**
+   * @param base - The origin value.
+   * @param spread - The spread value.
+   */
   static SPREAD(base: number, spread: number): number {
     return base + spread * (Math.random() - 0.5);
   }
 
+  /**
+   * @param min - The min.
+   * @param max - The max.
+   */
   static GET_RANDOM_INT(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
+  /**
+   * @param min - The min.
+   * @param max - The max.
+   */
   static GET_RANDOM_FLOAT(min: number, max: number): number {
     return (Math.random() * (max - min)) + min;
   }
 
+  /**
+   * @param value - The value to clamp.
+   * @param min - The min.
+   * @param max - The max.
+   */
   static CLAMP(value: number, min: number, max: number): number {
     return Math.max(min, Math.min(max, value));
   }
 
+  /**
+   * @param deg - Angle in degrees.
+   */
   static DEG_TO_RAD(deg: number): number {
     return deg * (Math.PI / 180);
   }
 
+  /**
+   * @param a - The begin.
+   * @param b - The end.
+   * @param t - The time.
+   */
   static LERP(a: number, b: number, t: number): number {
     return a + (b - a) * t;
   }
 
+  /**
+   * @param num - The number.
+   * @param digits - The number after float.
+   * @param base - The numeric base.
+   */
   static TO_FIXED_NUMBER(num: number, digits: number, base: number = 10): number {
     const pow = Math.pow(base, digits);
     return Math.round(num * pow) / pow;
   }
 
-  /**************************************************************************/
-  /* VEC1 */
-  /**************************************************************************/
-
+  /**
+   * @param src - Number.
+   * @param out - Vector one.
+   */
   static VEC1_COPY(src: number, out: vec1 = [0]): vec1 {
     out[0] = src;
     return out;
   }
 
-  /**************************************************************************/
-  /* VEC2 */
-  /**************************************************************************/
-
+  /**
+   * @param x - The first component.
+   * @param y - The second component.
+   */
   static VEC2_CREATE(x: number = 0, y: number = 0): Float32Array {
     const out = new Float32Array(2);
     out[0] = x;
@@ -114,6 +162,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param str - The string.
+   * @param separator - The token separator between components.
+   * @param out - The vector.
+   */
   static VEC2_PARSE(str: string, separator: string = ' ', out: vec2 = [0, 0]): vec2 {
     const a = str.split(separator);
     out[0] = parseFloat(a[0]);
@@ -121,33 +174,56 @@ class UT {
     return out;
   }
 
+  /**
+   * @param src - The source vector.
+   * @param out - The destination vector.
+   */
   static VEC2_COPY(src: vec2, out: vec2 = [0, 0]): vec2 {
     out[0] = src[0];
     out[1] = src[1];
     return out;
   }
 
+  /**
+   * @param base - The base vector.
+   * @param spread - The spread vector.
+   */
   static VEC2_SPREAD(base: vec2, spread: vec2): vec2 {
     const rand2 = UT.VEC2_CREATE(Math.random() - 0.5, Math.random() - 0.5);
     return UT.VEC2_ADD(base, UT.VEC2_MULTIPLY(spread, rand2));
   }
 
+  /**
+   * @param a - The source vector.
+   * @param out - The opposite vector.
+   */
   static VEC2_OPPOSITE(a: vec2, out: vec2 = [0, 0]): vec2 {
     out[0] = -a[0];
     out[1] = -a[1];
     return out;
   }
 
+  /**
+   * @param a - The first point.
+   * @param b - The second point.
+   */
   static VEC2_DISTANCE(a: vec2, b: vec2): number {
     const x = b[0] - a[0];
     const y = b[1] - a[1];
     return Math.sqrt((x * x) + (y * y));
   }
 
+  /**
+   * @param a - The source vector.
+   */
   static VEC2_LENGTH(a: vec2): number {
     return Math.sqrt(a[0] * a[0] + a[1] * a[1]);
   }
 
+  /**
+   * @param a - The source vector.
+   * @param out - The normalized vector.
+   */
   static VEC2_NORMALIZE(a: vec2, out: vec2 = [0, 0]): vec2 {
     const len = UT.VEC2_LENGTH(a);
     if (len > 0) {
@@ -158,25 +234,49 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   */
   static VEC2_DOT(a: vec2, b: vec2): number {
     return a[0] * b[0] + a[1] * b[1];
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   */
   static VEC2_CROSS(a: vec2, b: vec2): number {
     return a[0] * b[1] - a[1] * b[0];
   }
 
+  /**
+   * @param p - The first point.
+   * @param q - The second point.
+   * @param r - The third point.
+   */
   static VEC2_ORIENTATION(p: vec2, q: vec2, r: vec2): number {
     const val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
     if (val == 0) return 0; // collinear
     return (val > 0) ? 1 : 2; // clock or counterclock wise
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The result vector.
+   */
   static VEC2_ADD(a: vec2, b: vec2, out: vec2 = [0, 0]): vec2 {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
     return out;
   }
+
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The result vector.
+   */
 
   static VEC2_SUBSTRACT(a: vec2, b: vec2, out: vec2 = [0, 0]): vec2 {
     out[0] = a[0] - b[0];
@@ -184,31 +284,57 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The result vector.
+   */
   static VEC2_MULTIPLY(a: vec2, b: vec2, out: vec2 = [0, 0]): vec2 {
     out[0] = a[0] * b[0];
     out[1] = a[1] * b[1];
     return out;
   }
 
+  /**
+   * @param a - The first vector.
+   * @param scale - The scale value.
+   * @param out - The result vector.
+   */
   static VEC2_SCALE(a: vec2, scale: number, out: vec2 = [0, 0]): vec2 {
     out[0] = a[0] * scale;
     out[1] = a[1] * scale;
     return out;
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   */
   static VEC2_ANGLE_BETWEEN(a: vec2, b: vec2): number {
     return Math.acos(UT.VEC2_DOT(a, b) / (UT.VEC2_LENGTH(a) * UT.VEC2_LENGTH(b)));
   }
 
+  /**
+   * @param a - The vector.
+   */
   static VEC2_ANGLE(a: vec2): number {
     const angle = Math.atan2(a[1], a[0]);
     return (angle > 0) ? angle : (angle + Math.PI * 2);
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   */
   static VEC2_ISEQUAL(a: vec2, b: vec2): boolean {
     return a[0] == b[0] && a[1] == b[1];
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The projection vector.
+   */
   static VEC2_PROJECTION_COS(a: vec2, b: vec2, out: vec2 = [0, 0]): vec2 {
     const bLength = Math.sqrt((b[0] * b[0]) + (b[1] * b[1]));
     const scale = ((a[0] * b[0]) + (a[1] * b[1])) / (bLength * bLength);
@@ -217,6 +343,13 @@ class UT {
     return out;
   }
 
+  /**
+   * @param p0 - The start point.
+   * @param p1 - The inter point.
+   * @param p2 - The end point.
+   * @param t - The time.
+   * @param out - The result point.
+   */
   static VEC2_QUADRATIC_BEZIER(p0: vec2, p1: vec2, p2: vec2, t: number, out: vec2 = [0, 0]): vec2 {
     const pax = p0[0] + ((p1[0] - p0[0]) * t);
     const pay = p0[1] + ((p1[1] - p0[1]) * t);
@@ -229,18 +362,30 @@ class UT {
     return out;
   }
 
+  /**
+   * @param p - The iso point.
+   */
   static VEC2_ISO_TO_2D(p: vec2): vec2 {
     let x = (2 * p[1] + p[0]) * 0.5;
     let y = (2 * p[1] - p[0]) * 0.5;
     return [x, y];
   }
 
+  /**
+   * @param p - The ortho point.
+   */
   static VEC2_2D_TO_ISO(p: vec2): vec2 {
     let x = (p[0] - p[1]);
     let y = (p[0] + p[1]) * 0.5;
     return [x, y];
   }
 
+  /**
+   * 
+   * @param direction - The direction (FORWARD, BACKWARD, LEFT, RIGHT)
+   * @param depth - The depth of shape.
+   * @param width - The width of shape.
+   */
   static VEC2_ISO_CARDINAL_POINTS(direction: string, depth: number, width: number): {f: vec2, l: vec2, r: vec2, b: vec2} {
     if (direction == 'FORWARD') {
       const f = UT.VEC2_2D_TO_ISO([-depth * 0.5, 0]);
@@ -277,10 +422,11 @@ class UT {
     return { f: [0, 0], l: [0, 0], r: [0, 0], b: [0, 0] };
   }
 
-  /**************************************************************************/
-  /* VEC3 */
-  /**************************************************************************/
-
+  /**
+   * @param x - The first component.
+   * @param y - The second component.
+   * @param z - The third component.
+   */
   static VEC3_CREATE(x: number = 0, y: number = 0, z: number = 0): Float32Array {
     const out = new Float32Array(3);
     out[0] = x;
@@ -289,6 +435,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param str - The string.
+   * @param separator - The token separator between components.
+   * @param out - The vector.
+   */
   static VEC3_PARSE(str: string, separator: string = ' ', out: vec3 = [0, 0, 0]): vec3 {
     const a = str.split(separator);
     out[0] = parseFloat(a[0]);
@@ -297,6 +448,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param src - The source vector.
+   * @param out - The destination vector.
+   */
   static VEC3_COPY(src: vec3, out: vec3 = [0, 0, 0]): vec3 {
     out[0] = src[0];
     out[1] = src[1];
@@ -304,11 +459,19 @@ class UT {
     return out;
   }
 
+  /**
+   * @param base - The base vector.
+   * @param spread - The spread vector.
+   */
   static VEC3_SPREAD(base: vec3, spread: vec3): vec3 {
     const rand3 = UT.VEC3_CREATE(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
     return UT.VEC3_ADD(base, UT.VEC3_MULTIPLY(spread, rand3));
   }
 
+  /**
+   * @param a - The origin vector.
+   * @param out - The opposite vector.
+   */
   static VEC3_OPPOSITE(a: vec3, out: vec3 = [0, 0, 0]): vec3 {
     out[0] = -a[0];
     out[1] = -a[1];
@@ -316,6 +479,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first point.
+   * @param b - The second point.
+   */
   static VEC3_DISTANCE(a: vec3, b: vec3): number {
     const x = b[0] - a[0];
     const y = b[1] - a[1];
@@ -323,10 +490,17 @@ class UT {
     return Math.sqrt((x * x) + (y * y) + (z * z));
   }
 
+  /**
+   * @param a - The vector.
+   */
   static VEC3_LENGTH(a: vec3): number {
     return Math.sqrt((a[0] * a[0]) + (a[1] * a[1]) + (a[2] * a[2]));
   }
 
+  /**
+   * @param a - The origin vector.
+   * @param out - The normalized vector.
+   */
   static VEC3_NORMALIZE(a: vec3, out: vec3 = [0, 0, 0]): vec3 {
     const len = UT.VEC3_LENGTH(a);
     if (len > 0) {
@@ -338,10 +512,19 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   */
   static VEC3_DOT(a: vec3, b: vec3): number {
     return (a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]);
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The cross vector.
+   */
   static VEC3_CROSS(a: vec3, b: vec3, out: vec3 = [0, 0, 0]): vec3 {
     out[0] = (a[1] * b[2]) - (a[2] * b[1]);
     out[1] = (a[2] * b[0]) - (a[0] * b[2]);
@@ -349,6 +532,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The result vector.
+   */
   static VEC3_ADD(a: vec3, b: vec3, out: vec3 = [0, 0, 0]): vec3 {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
@@ -356,6 +544,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The result vector.
+   */
   static VEC3_SUBSTRACT(a: vec3, b: vec3, out: vec3 = [0, 0, 0]): vec3 {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
@@ -363,6 +556,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The result vector.
+   */
   static VEC3_MULTIPLY(a: vec3, b: vec3, out: vec3 = [0, 0, 0]): vec3 {
     out[0] = a[0] * b[0];
     out[1] = a[1] * b[1];
@@ -370,6 +568,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first vector.
+   * @param scale - The scale value.
+   * @param out - The result vector.
+   */
   static VEC3_SCALE(a: vec3, scale: number, out: vec3 = [0, 0, 0]): vec3 {
     out[0] = a[0] * scale;
     out[1] = a[1] * scale;
@@ -377,10 +580,21 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   */
   static VEC3_ISEQUAL(a: vec3, b: vec3): boolean {
     return a[0] == b[0] && a[1] == b[1] && a[2] == b[2];
   }
 
+  /**
+   * @param p0 - The start point.
+   * @param p1 - The inter point.
+   * @param p2 - The end point.
+   * @param t - The time.
+   * @param out - The result point.
+   */
   static VEC3_QUADRATIC_BEZIER(p0: vec3, p1: vec3, p2: vec3, t: number, out: vec3 = [0, 0, 0]): vec3 {
     const pax = p0[0] + ((p1[0] - p0[0]) * t);
     const pay = p0[1] + ((p1[1] - p0[1]) * t);
@@ -396,10 +610,12 @@ class UT {
     return out;
   }
 
-  /**************************************************************************/
-  /* VEC4 */
-  /**************************************************************************/
-
+  /**
+   * @param x - The first component.
+   * @param y - The second component.
+   * @param z - The third component.
+   * @param w - The fourth component.
+   */
   static VEC4_CREATE(x: number = 0, y: number = 0, z: number = 0, w: number = 0): Float32Array {
     const out = new Float32Array(4);
     out[0] = x;
@@ -409,6 +625,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param str - The string.
+   * @param separator - The token separator between components.
+   * @param out - The vector.
+   */
   static VEC4_PARSE(str: string, separator: string = ' ', out: vec4 = [0, 0, 0, 0]): vec4 {
     const a = str.split(separator);
     out[0] = parseFloat(a[0]);
@@ -418,6 +639,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param src - The source vector.
+   * @param out - The destination vector.
+   */
   static VEC4_COPY(src: vec4, out: vec4 = [0, 0, 0, 0]): vec4 {
     out[0] = src[0];
     out[1] = src[1];
@@ -425,10 +650,6 @@ class UT {
     out[3] = src[3];
     return out;
   }
-
-  /**************************************************************************/
-  /* MAT3 */
-  /**************************************************************************/
 
   static MAT3_CREATE(): Float32Array {
     const out = new Float32Array(9);
@@ -444,6 +665,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param src - The source matrix.
+   * @param out - The destination matrix.
+   */
   static MAT3_COPY(src: mat3, out: mat3): mat3 {
     out[0] = src[0];
     out[1] = src[1];
@@ -457,6 +682,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The matrix.
+   * @param v - The vector.
+   * @param out - The result transformed vector.
+   */
   static MAT3_MULTIPLY_BY_VEC3(a: mat3, v: vec3, out: vec3 = [0, 0, 0]): vec3 {
     const a00 = a[0];
     const a01 = a[1];
@@ -477,6 +707,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first matrix.
+   * @param b - The second matrix.
+   * @param out - The result matrix.
+   */
   static MAT3_MULTIPLY(a: mat3, b: mat3, out: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]): mat3 {
     const a00 = a[0];
     const a01 = a[1];
@@ -521,6 +756,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The matrix.
+   * @param out - The inverted matrix.
+   */
   static MAT3_INVERT(a: mat3, out: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]): mat3 {
     const a00 = a[0];
     const a01 = a[1];
@@ -566,6 +805,9 @@ class UT {
     return out;
   }
 
+  /**
+   * @param out - The identity matrix.
+   */
   static MAT3_IDENTITY(out: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]): mat3 {
     out[0] = 1;
     out[1] = 0;
@@ -579,6 +821,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param x - The x-scale.
+   * @param y - The y-scale.
+   * @param out - The result matrix.
+   */
   static MAT3_SCALE(x: number, y: number, out: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]): mat3 {
     out[0] = x;
     out[1] = 0;
@@ -592,6 +839,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The angle.
+   * @param out - The result matrix.
+   */
   static MAT3_ROTATE(a: number, out: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]): mat3 {
     const c = Math.cos(a);
     const s = Math.sin(a);
@@ -607,6 +858,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param x - The x-translation.
+   * @param y - The y-translation.
+   * @param out - The result matrix.
+   */
   static MAT3_TRANSLATE(x: number, y: number, out: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]): mat3 {
     out[0] = 1;
     out[1] = 0;
@@ -620,6 +876,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param w - The width;
+   * @param h - The height;
+   * @param out - The result matrix.
+   */
   static MAT3_PROJECTION(w: number, h: number, out: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]): mat3 {
     out[0] = 2 / w;
     out[1] = 0;
@@ -632,10 +893,6 @@ class UT {
     out[8] = 1;
     return out;
   }
-
-  /**************************************************************************/
-  /* MAT4 */
-  /**************************************************************************/
 
   static MAT4_CREATE(): Float32Array {
     const out = new Float32Array(16);
@@ -658,6 +915,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param src - The source matrix.
+   * @param out - The destination matrix.
+   */
   static MAT4_COPY(src: mat4, out: mat4): mat4 {
     out[0] = src[0];
     out[1] = src[1];
@@ -678,6 +939,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The matrix.
+   * @param v - The vector.
+   * @param out - The result vector.
+   */
   static MAT4_MULTIPLY_BY_VEC4(a: mat4, v: vec4, out: vec4 = [0, 0, 0, 0]): vec4 {
     const a00 = a[0];
     const a01 = a[1];
@@ -707,6 +973,11 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The first matrix.
+   * @param b - The second matrix.
+   * @param out - The result matrix.
+   */
   static MAT4_MULTIPLY(a: mat4, b: mat4, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     const a00 = a[0];
     const a01 = a[1];
@@ -760,6 +1031,9 @@ class UT {
     return out;
   }
 
+  /**
+   * @param matrices - The list of matrix to multiply.
+   */
   static MAT4_COMPUTE(...matrices: Array<mat4>): mat4 {
     for (let i = 0; i < matrices.length - 1; i++) {
       matrices[i + 1] = UT.MAT4_MULTIPLY(matrices[i], matrices[i + 1]);
@@ -768,6 +1042,10 @@ class UT {
     return matrices[matrices.length - 1];
   }
 
+  /**
+   * @param a - The origin matrix.
+   * @param out - The inverted matrix.
+   */
   static MAT4_INVERT(a: mat4, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     const a00 = a[0];
     const a01 = a[1];
@@ -844,6 +1122,9 @@ class UT {
     return out;
   }
 
+  /**
+   * @param out - The matrix identity.
+   */
   static MAT4_IDENTITY(out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     out[0] = 1;
     out[1] = 0;
@@ -864,6 +1145,12 @@ class UT {
     return out;
   }
 
+  /**
+   * @param x - The x-scale.
+   * @param y - The y-scale.
+   * @param z - The z-scale.
+   * @param out - The result matrix.
+   */
   static MAT4_SCALE(x: number, y: number, z: number, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     out[0] = x;
     out[1] = 0;
@@ -884,6 +1171,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The x-angle.
+   * @param out - The result matrix.
+   */
   static MAT4_ROTATE_X(a: number, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     const c = Math.cos(a);
     const s = Math.sin(a);
@@ -906,6 +1197,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The y-angle.
+   * @param out - The result matrix.
+   */
   static MAT4_ROTATE_Y(a: number, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     const c = Math.cos(a);
     const s = Math.sin(a);
@@ -928,6 +1223,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The z-angle.
+   * @param out - The result matrix.
+   */
   static MAT4_ROTATE_Z(a: number, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     const c = Math.cos(a);
     const s = Math.sin(a);
@@ -950,6 +1249,12 @@ class UT {
     return out;
   }
 
+  /**
+   * @param x - The x-translation.
+   * @param y - The y-translation.
+   * @param z - The z-translation.
+   * @param out - The result matrix.
+   */
   static MAT4_TRANSLATE(x: number, y: number, z: number, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     out[0] = 1;
     out[1] = 0;
@@ -970,9 +1275,16 @@ class UT {
     return out;
   }
 
+  /**
+   * @param position - The position vector.
+   * @param rotation - The rotation vector (y -> x -> z).
+   * @param scale - The scale vector.
+   * @param quaternion - The rotation quaternion.
+   * @param out - The result matrix.
+   */
   static MAT4_TRANSFORM(position: vec3, rotation: vec3, scale: vec3, quaternion: Quaternion, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     UT.MAT4_TRANSLATE(position[0], position[1], position[2], out);
-    UT.MAT4_MULTIPLY(out, quaternion.toMatrix4(false), out);
+    UT.MAT4_MULTIPLY(out, quaternion.toMatrix4(), out);
     UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_Y(rotation[1]), out);
     UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_X(rotation[0]), out); // y -> x -> z
     UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_Z(rotation[2]), out);
@@ -980,6 +1292,12 @@ class UT {
     return out;
   }
 
+  /**
+   * @param width - The width.
+   * @param height - The height.
+   * @param depth - The depth.
+   * @param out - The result matrix.
+   */
   static MAT4_ORTHOGRAPHIC(width: number, height: number, depth: number, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 { // @todo: add width & height
     out[0] = 2 / width;
     out[1] = 0;
@@ -1000,6 +1318,15 @@ class UT {
     return out;
   }
 
+  /**
+   * @param left - The left limit.
+   * @param right - The right limit.
+   * @param bottom - The bottom limit.
+   * @param top - The top limit.
+   * @param near - The near limit.
+   * @param far - The far limit.
+   * @param out - The result matrix.
+   */
   static MAT4_ORTHO(left: number, right: number, bottom: number, top: number, near: number, far: number, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     out[0] = 2 / (right - left);
     out[1] = 0;
@@ -1020,6 +1347,13 @@ class UT {
     return out;
   }
 
+  /**
+   * @param fov - The fovy angle.
+   * @param ar - The aspect-ratio.
+   * @param near - The near value.
+   * @param far - The far value.
+   * @param out - The result matrix.
+   */
   static MAT4_PERSPECTIVE(fov: number, ar: number, near: number, far: number, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     out[0] = (1 / (Math.tan(fov / 2) * ar));
     out[1] = 0;
@@ -1040,6 +1374,12 @@ class UT {
     return out;
   }
 
+  /**
+   * @param position - The position.
+   * @param target - The target.
+   * @param vertical - The up vector.
+   * @param out - The result matrix.
+   */
   static MAT4_LOOKAT(position: vec3, target: vec3, vertical: vec3 = UT.VEC3_UP, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     const axeZ = UT.VEC3_NORMALIZE(UT.VEC3_SUBSTRACT(position, target));
     const axeX = UT.VEC3_CROSS(vertical, axeZ);
@@ -1063,6 +1403,10 @@ class UT {
     return out;
   }
 
+  /**
+   * @param a - The source matrix.
+   * @param out - The transposed matrix.
+   */
   static MAT4_TRANSPOSE(a: mat4, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     const a00 = a[0];
     const a01 = a[1];
@@ -1099,10 +1443,13 @@ class UT {
     return out;
   }
 
-  /**************************************************************************/
-  /* COLLIDE */
-  /**************************************************************************/
-
+  /**
+   * @param c1 - center of circle 1.
+   * @param r1 - radius of circle 1.
+   * @param c2 - center of circle 2.
+   * @param r2 - radius of circle 2.
+   * @param outVelocity - The out elastic collision velocity.
+   */
   static COLLIDE_CIRCLE(c1: vec2, r1: number, c2: vec2, r2: number, outVelocity: vec2 = [0, 0]): boolean {
     const delta = UT.VEC2_SUBSTRACT(c1, c2);
     const distance = UT.VEC2_LENGTH(delta);
@@ -1118,6 +1465,15 @@ class UT {
     return true;
   }
 
+  /**
+   * @param c1 - The center of cylinder 1.
+   * @param r1 - The radius of cylinder 1.
+   * @param h1 - The height of cylinder 1.
+   * @param c2 - The center of cylinder 2.
+   * @param r2 - The radius of cylinder 2.
+   * @param h2 - The height of cylinder 2.
+   * @param outVelocity - The out elastic collision velocity.
+   */
   static COLLIDE_CYLINDER(c1: vec3, r1: number, h1: number, c2: vec3, r2: number, h2: number, outVelocity: vec2 = [0, 0]): boolean {
     let isCollide = UT.COLLIDE_CIRCLE([c1[0], c1[2]], r1, [c2[0], c2[2]], r2, outVelocity);
     if (!isCollide) {
@@ -1131,6 +1487,11 @@ class UT {
     return min1 <= max2 && max1 >= min2;
   }
 
+  /**
+   * @param p - The point.
+   * @param min - The min of rect.
+   * @param max - The max of rect.
+   */
   static COLLIDE_POINT_TO_RECT(p: vec2, min: vec2, max: vec2): boolean {
     return (
       (p[0] >= min[0] && p[0] <= max[0]) &&
@@ -1138,6 +1499,12 @@ class UT {
     );
   }
 
+  /**
+   * @param min1 - The min rect 1.
+   * @param max1 - The max rect 1.
+   * @param min2 - The min rect 2.
+   * @param max2 - The max rect 2.
+   */
   static COLLIDE_RECT_TO_RECT(min1: vec2, max1: vec2, min2: vec2, max2: vec2): boolean {
     return (
       (min1[0] <= max2[0] && max1[0] >= min2[0]) &&
@@ -1145,6 +1512,11 @@ class UT {
     );
   }
 
+  /**
+   * @param p - The point.
+   * @param min - The min point of box.
+   * @param max - The max point of box.
+   */
   static COLLIDE_POINT_TO_BOX(p: vec3, min: vec3, max: vec3): boolean {
     return (
       (p[0] >= min[0] && p[0] <= max[0]) &&
@@ -1153,6 +1525,12 @@ class UT {
     );
   }
 
+  /**
+   * @param min1 - The min of box 1.
+   * @param max1 - The max of box 1.
+   * @param min2 - The min of box 2.
+   * @param max2 - The max of box 2.
+   */
   static COLLIDE_BOX_TO_BOX(min1: vec3, max1: vec3, min2: vec3, max2: vec3): boolean {
     return (
       (min1[0] <= max2[0] && max1[0] >= min2[0]) &&
@@ -1161,6 +1539,12 @@ class UT {
     );
   }
 
+  /**
+   * @param p1 - The start line 1.
+   * @param q1 - The end line 1.
+   * @param p2 - The start line 2.
+   * @param q2 - The end line 2.
+   */
   static COLLIDE_LINE_TO_LINE(p1: vec2, q1: vec2, p2: vec2, q2: vec2): boolean {
     let o1 = UT.VEC2_ORIENTATION(p1, q1, p2);
     let o2 = UT.VEC2_ORIENTATION(p1, q1, q2);
@@ -1169,10 +1553,12 @@ class UT {
     return o1 != o2 && o3 != o4;
   }
 
-  /**************************************************************************/
-  /* TRI */
-  /**************************************************************************/
-
+  /**
+   * @param p - The point.
+   * @param a - The first triangle point.
+   * @param b - The second triangle point.
+   * @param c - The third triangle point.
+   */
   static TRI2_POINT_INSIDE(p: vec2, a: vec2, b: vec2, c: vec2): number {
     const ab = UT.VEC2_SUBSTRACT(b, a);
     const bc = UT.VEC2_SUBSTRACT(c, b);
@@ -1199,12 +1585,25 @@ class UT {
     return 1;
   }
 
+  /**
+   * @param a - The first triangle point.
+   * @param b - The second triangle point.
+   * @param c - The third triangle point.
+   * @param out - The normal vector.
+   */
   static TRI3_NORMAL(a: vec3, b: vec3, c: vec3, out: vec3 = [0, 0, 0]): vec3 {
     const ab = UT.VEC3_SUBSTRACT(b, a);
     const ac = UT.VEC3_SUBSTRACT(c, a);
     return UT.VEC3_CROSS(ab, ac, out);
   }
 
+  /**
+   * @param p - The point.
+   * @param a - The first triangle point.
+   * @param b - The second triangle point.
+   * @param c - The third triangle point.
+   * @param n - The normal vector.
+   */
   static TRI3_POINT_INSIDE(p: vec3, a: vec3, b: vec3, c: vec3, n?: vec3): boolean {
     if (!n) {
       n = UT.TRI3_NORMAL(a, b, c);
@@ -1235,6 +1634,12 @@ class UT {
     return true;
   }
 
+  /**
+   * @param p - The point.
+   * @param a - The first triangle point.
+   * @param b - The second triangle point.
+   * @param c - The third triangle point.
+   */
   static TRI3_POINT_ELEVATION(p: vec2, a: vec3, b: vec3, c: vec3): number {
     const ab = UT.VEC3_CREATE(b[0] - a[0], 0, b[2] - a[2]);
     const ca = UT.VEC3_CREATE(a[0] - c[0], 0, a[2] - c[2]);
@@ -1257,10 +1662,15 @@ class UT {
     return elev;
   }
 
-  /**************************************************************************/
-  /* RAY */
-  /**************************************************************************/
-
+  /**
+   * @param origin - The origin ray.
+   * @param dir - The direction ray.
+   * @param a - The first triangle point.
+   * @param b - The second triangle point.
+   * @param c - The third triangle point.
+   * @param culling - Culling enabled flag.
+   * @param outIntersectPoint - The intersection point.
+   */
   static RAY_TRIANGLE(origin: vec3, dir: vec3, a: vec3, b: vec3, c: vec3, culling: boolean = false, outIntersectPoint: vec3 = [0, 0, 0]): boolean {
     const n = UT.TRI3_NORMAL(a, b, c);
     if (!UT.RAY_PLAN(origin, dir, a, n, culling, outIntersectPoint)) {
@@ -1270,6 +1680,14 @@ class UT {
     return UT.TRI3_POINT_INSIDE(outIntersectPoint, a, b, c, n);
   }
 
+  /**
+   * @param origin - The origin ray.
+   * @param dir - The direction ray.
+   * @param a - The plan corner.
+   * @param n - The plan normal.
+   * @param culling - Culling enabled flag.
+   * @param outIntersectPoint - The intersection point.
+   */
   static RAY_PLAN(origin: vec3, dir: vec3, a: vec3, n: vec3, culling: boolean, outIntersectPoint: vec3 = [0, 0, 0]): boolean {
     const s = UT.VEC3_DOT(dir, n);
     if (culling && s >= 0) {
@@ -1290,6 +1708,13 @@ class UT {
     return true;
   }
 
+  /**
+   * @param origin - The origin ray.
+   * @param dir - The direction ray.
+   * @param min - The min box.
+   * @param max - The max box.
+   * @param outIntersectPoint - The intersection point.
+   */
   static RAY_BOX(origin: vec3, dir: vec3, min: vec3, max: vec3, outIntersectPoint: vec3 = [0, 0, 0]): boolean {
     for (let i = 0; i < 3; i++) {
       if (origin[i] < min[i]) {
@@ -1321,37 +1746,67 @@ class UT {
     return false;
   }
 
-  /**************************************************************************/
-  /* QUADRATIC EASING */
-  /* t: current time, b: beginning value, e: endding value, d: duration */
-  /* t and d can be in frames or seconds/milliseconds */
-  /**************************************************************************/
-
+  /**
+   * @param t - The time.
+   * @param b - The begin.
+   * @param e - The end.
+   * @param d - The divide.
+   */
   static LINEAR(t: number, b: number, e: number, d: number = 1): number {
     return b + (e - b) * t / d;
   }
 
+  /**
+   * @param t - The time.
+   * @param b - The begin.
+   * @param e - The end.
+   * @param d - The divide.
+   */
   static EASE_IN_QUAD(t: number, b: number, e: number, d: number = 1): number {
     return (e - b) * (t /= d) * t + b;
   }
 
+  /**
+   * @param t - The time.
+   * @param b - The begin.
+   * @param e - The end.
+   * @param d - The divide.
+   */
   static EASE_OUT_QUAD(t: number, b: number, e: number, d: number = 1): number {
     const c = e - b;
     return -c * (t /= d) * (t - 2) + b;
   }
 
+  /**
+   * @param t - The time.
+   * @param b - The begin.
+   * @param e - The end.
+   * @param d - The divide.
+   */
   static EASE_IN_OUT_QUAD(t: number, b: number, e: number, d: number = 1): number {
     const c = e - b;
     if ((t /= d / 2) < 1) return c / 2 * t * t + b;
     return -c / 2 * ((--t) * (t - 2) - 1) + b;
   }
 
+  /**
+   * @param t - The time.
+   * @param b - The begin vector.
+   * @param e - The end vector.
+   * @param d - The divide.
+   */
   static LINEAR_VEC2(t: number, b: vec2, e: vec2, d: number = 1): vec2 {
     const c = UT.VEC2_SUBSTRACT(e, b);
     const p = t / d;
     return [b[0] + c[0] * p, b[1] + c[1] * p];
   }
 
+  /**
+   * @param t - The time.
+   * @param b - The begin.
+   * @param e - The end.
+   * @param d - The divide.
+   */
   static LINEAR_VEC3(t: number, b: vec3, e: vec3, d: number = 1): vec3 {
     const c = UT.VEC3_SUBSTRACT(e, b);
     const p = t / d;

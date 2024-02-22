@@ -1,8 +1,7 @@
 import { DNAComponent } from './dna_component';
 
 /**
- * The `DNASystem` class is a base class that provides functionality for managing entities and their
- * components in a game or simulation system.
+ * A system in a pure ECS data-driven implementation.
  */
 class DNASystem {
   eids: Array<number>;
@@ -11,7 +10,7 @@ class DNASystem {
   tags: Array<string>;
 
   /**
-   * The constructor.
+   * @param {Array<string>} tags - A list of tags.
    */
   constructor(tags = []) {
     this.eids = new Array<number>();
@@ -21,8 +20,9 @@ class DNASystem {
   }
 
   /**
-   * The "update" function iterates over entities and calls the virtual method `onEntityUpdate` for each entity.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (this.paused) {
@@ -39,8 +39,7 @@ class DNASystem {
   }
 
   /**
-   * The "draw" function iterates over a collection of entities and calls the virtual method `onEntityDraw` for
-   * each entity.
+   * The draw function.
    */
   draw(): void {
     for (const eid of this.eids) {
@@ -49,10 +48,9 @@ class DNASystem {
   }
 
   /**
-   * The "action" function iterates over a list of entities and calls the virtual method `onAction` for each entity with a
-   * given actionId.
-   * @param {string} actionId - The `actionId` parameter is a string that represents the identifier of
-   * the action to be performed (see input_manager).
+   * Call "onAction" for each entity (for internal use).
+   * 
+   * @param {string} actionId - The identifier of the action (see input_manager).
    */
   action(actionId: string): void {
     for (const eid of this.eids) {
@@ -61,10 +59,9 @@ class DNASystem {
   }
 
   /**
-   * The "actionOnce" function iterates over a list of entities and calls the virtual method `onActionOnce`
-   * for each entity with a given actionId.
-   * @param {string} actionId - The `actionId` parameter is a string that represents the identifier of
-   * the action to be performed (see input_manager).
+   * Call "onActionOnce" for each entity (for internal use).
+   * 
+   * @param {string} actionId - The identifier of the action (see input_manager).
    */
   actionOnce(actionId: string): void {
     for (const eid of this.eids) {
@@ -73,9 +70,9 @@ class DNASystem {
   }
 
   /**
-   * The "bindEntity" function checks if an entity already exists in the system and throws an error if it
-   * does, otherwise it adds the entity to the system.
-   * @param {number} eid - The `eid` parameter is the entity's id.
+   * Add entity to the system.
+   * 
+   * @param {number} eid - The entity's id.
    */
   bindEntity(eid: number): void {
     if (this.eids.indexOf(eid) != -1) {
@@ -87,8 +84,9 @@ class DNASystem {
   }
 
   /**
-   * The "unbindEntity" function unbinds an entity from the system if it exists, otherwise it throws an error.
-   * @param {number} eid - The `eid` parameter is the entity's id.
+   * Remove entity from the system.
+   * 
+   * @param {number} eid - The entity's id.
    */
   unbindEntity(eid: number): void {
     if (this.eids.indexOf(eid) == -1) {
@@ -100,19 +98,19 @@ class DNASystem {
   }
 
   /**
-   * The "hasEntity" function checks if a given entity exists in this system.
-   * @param {number} eid - The `eid` parameter is the entity's id.
-   * @returns a boolean value.
+   * Checks if a given entity exists in the system.
+   * 
+   * @param {number} eid - The entity's id.
    */
   hasEntity(eid: number): boolean {
     return this.eids.indexOf(eid) != -1;
   }
 
   /**
-   * The "addRequiredComponentTypename" function adds a typename to a set of required component
-   * typenames, throwing an error if the typename is already present.
-   * @param {string} typename - The `typename` parameter is a string that represents
-   * the name of a component type.
+   * Adds a component requirements.
+   * When you add a component to an entity, the manager will automatically bind this entity to systems that match these components list.
+   * 
+   * @param {string} typename - The component typename.
    */
   addRequiredComponentTypename(typename: string): void {
     if (this.requiredComponentTypenames.has(typename)) {
@@ -123,9 +121,9 @@ class DNASystem {
   }
 
   /**
-   * The "isMatchingComponentRequirements" function checks if a given set of components matches the required component typenames.
-   * @param components - An iterable component list.
-   * @returns a boolean value.
+   * Checks if a given set of components matches the system component requirements.
+   * 
+   * @param components - A list of component.
    */
   isMatchingComponentRequirements(components: IterableIterator<DNAComponent>): boolean {
     let numRequiredComponents = this.requiredComponentTypenames.size;
@@ -141,104 +139,93 @@ class DNASystem {
   }
 
   /**
-   * The "pause" function make update loop paused.
+   * Make the update loop paused.
    */
   pause(): void {
     this.paused = true;
   }
 
   /**
-   * The "resume" function make update loop running.
+   * Make the update loop running.
    */
   resume(): void {
     this.paused = false;
   }
 
   /**
-   * The "getTags" function  returns an array of strings.
-   * @returns An array of strings.
+   * Returns the list of tags.
    */
   getTags(): Array<string> {
     return this.tags;
   }
 
   /**
-   * The "hasTag" function checks if system has the given tag.
-   * @param {string} tag - A string representing the tag to check for.
-   * @returns a boolean value.
+   * Checks if system has the given tag.
+   * 
+   * @param {string} tag - The tag.
    */
   hasTag(tag: string): boolean {
     return this.tags.indexOf(tag) != -1;
   }
 
   /**
-   * The "onAction" is a virtual method that is called when an action occurs.
-   * @param {string} actionId - The `actionId` parameter is a string that represents the unique identifier
-   * of the action that occurred (see input_manager).
-   * @param {number} eid - The `eid` parameter is the entity's id.
+   * Virtual method that is called when an action occurs.
+   * 
+   * @param {string} actionId - The identifier of the action (see input_manager).
+   * @param {number} eid - The entity's id.
    */
-  onAction(actionId: string, eid: number): void {
-    // virtual method called when action occured !
-  }
+  onAction(actionId: string, eid: number): void {}
 
   /**
-   * The "onActionOnce" is a virtual method that is called when a specific action occurs once.
-   * @param {string} actionId - The `actionId` parameter is a string that represents the unique identifier
-   * of the action that occurred (see input_manager).
-   * @param {number} eid - The `eid` parameter is the entity's id.
+   * Virtual method that is called when a specific action occurs once.
+   * 
+   * @param {string} actionId - The identifier of the action (see input_manager).
+   * @param {number} eid - The entity's id.
    */
-  onActionOnce(actionId: string, eid: number): void {
-    // virtual method called when action occured once !
-  }
+  onActionOnce(actionId: string, eid: number): void {}
 
   /**
-   * The "onBeforeUpdate" is a virtual method that is called before the entities update phase.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * Virtual method that is called before the entities update phase.
+   * 
+   * @param {number} ts - The timestep.
    */
-  onBeforeUpdate(ts: number): void {
-    // virtual method called during before update phase !
-  }
+  onBeforeUpdate(ts: number): void {}
 
   /**
-   * The "onEntityUpdate" is a virtual method that is called for each entity during the update phase.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
-   * @param {number} eid - The `eid` parameter is the entity's id.
+   * Virtual method that is called for each entity during the update phase.
+   * 
+   * @param {number} ts - The timestep.
+   * @param {number} eid - The entity's id.
    */
-  onEntityUpdate(ts:number, eid: number): void {
-    // virtual method called during update phase !
-  }
+  onEntityUpdate(ts:number, eid: number): void {}
 
   /**
-   * The "onAfterUpdate" is a virtual method that is called after the entities update phase.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * Virtual method that is called after the entities update phase.
+   * 
+   * @param {number} ts - The timestep.
    */
-  onAfterUpdate(ts: number): void {
-    // virtual method called during after update phase !
-  }
+  onAfterUpdate(ts: number): void {}
 
   /**
-   * The "onEntityDraw" is a virtual method that is called for each entity during the draw phase.
-   * @param {number} eid - The `eid` parameter is the entity's id.
+   * Virtual method that is called for each entity during the draw phase.
+   * 
+   * @param {number} eid - The entity's id.
    */
-  onEntityDraw(eid: number): void {
-    // virtual method called during draw phase !
-  }
+  onEntityDraw(eid: number): void {}
 
   /**
-   * The "onEntityBind" is a virtual method that is called during entity binding.
-   * @param {number} eid - The `eid` parameter is the entity's id.
+   * Virtual method that is called during entity binding.
+   * 
+   * @param {number} eid - The entity's id.
    */
-  onEntityBind(eid: number): void {
-    // virtual method called during entity binding !
-  }
+  onEntityBind(eid: number): void {}
 
   /**
-   * The "onEntityUnbind" is a virtual method that is called during entity unbinding.
-   * @param {number} eid - The `eid` parameter is the entity's id.
+   * Virtual method that is called during entity unbinding.
+   * 
+   * @param {number} eid - The entity's id.
    */
-  onEntityUnbind(eid: number): void {
-    // virtual method called during entity unbinding !
-  }
+  onEntityUnbind(eid: number): void {}
 }
 
 export { DNASystem };

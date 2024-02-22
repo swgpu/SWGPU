@@ -1,13 +1,9 @@
 import { UIWidget } from '../ui/ui_widget';
 
 /**
- * The `UIMenuTextItem` is a class that represents a text item in a UI menu and provides
- * a method to set the text content of the item.
+ * A UI widget displaying a simple menu text item.
  */
 class UIMenuTextItem extends UIWidget {
-  /**
-   * The constructor.
-   */
   constructor() {
     super({
       className: 'UIMenuTextItem'
@@ -15,8 +11,9 @@ class UIMenuTextItem extends UIWidget {
   }
 
   /**
-   * The "setText" function sets the text property.
-   * @param {string} text - The `text` content.
+   * Set the text.
+   * 
+   * @param {string} text - The text.
    */
   setText(text: string): void {
     this.node.textContent = text;

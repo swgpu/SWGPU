@@ -6,16 +6,13 @@ import { Gfx3Skybox } from './gfx3_skybox';
 import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_skybox_shader';
 
 /**
- * The `Gfx3SkyboxRenderer` class is a singleton renderer responsible to display skybox.
+ * Singleton skybox renderer.
  */
 class Gfx3SkyboxRenderer extends Gfx3RendererAbstract {
   skybox: Gfx3Skybox | null;
   grp0: Gfx3StaticGroup;
   vpcInverseMatrix: Float32Array;  
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super('SKYBOX_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.skybox = null;
@@ -25,7 +22,7 @@ class Gfx3SkyboxRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "render" function.
+   * The render function.
    */
   render(): void {
     if (!this.skybox) {
@@ -53,7 +50,8 @@ class Gfx3SkyboxRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "draw" function draw a skybox.
+   * Draw a skybox.
+   * 
    * @param {Gfx3Skybox} skybox - The skybox.
    */
   draw(skybox: Gfx3Skybox): void {

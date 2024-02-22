@@ -2,15 +2,12 @@ import { TreePartition, TreePartitionNode, ITreePartitionMethod, SplitResult } f
 import { Gfx2BoundingRect } from './gfx2_bounding_rect';
 
 /**
- * The `Gfx2TreePartition` class implements a binary tree space partition in 2D graphics system.
+ * A 2D binary tree space partition.
  */
 class Gfx2TreePartition extends TreePartition<Gfx2BoundingRect> {
   /**
-   * The constructor.
-   * @param {number} maxChildren - The `maxChildren` parameter specifies the maximum number of children
-   * that a node in the tree can have before it needs to be split into multiple nodes.
-   * @param {number} maxDepth - The `maxDepth` parameter specifies the maximum depth of the tree. It
-   * determines how many levels the tree can have.
+   * @param {number} maxChildren - The maximum number of children that a node in the tree can have. It determines the branching factor of the tree, i.e.
+   * @param {number} maxDepth - The maximum depth or level of the tree partition. It determines how deep the tree can be divided into smaller partitions.
    * @param {Gfx2BoundingRect} rect - The top bounding rectangle of the tree partition space.
    */
   constructor(maxChildren: number, maxDepth: number, rect: Gfx2BoundingRect = new Gfx2BoundingRect([0, 0], [0, 0])) {
@@ -19,32 +16,27 @@ class Gfx2TreePartition extends TreePartition<Gfx2BoundingRect> {
 }
 
 /**
- * The `Gfx2TreePartitionMethod` class implements a binary tree space partition method for quick search intersections
- * in a 2D graphics system.
+ * A 2D binary tree space partition method for quick search intersections.
  */
 class Gfx2TreePartitionMethod implements ITreePartitionMethod<Gfx2BoundingRect> {
   rect: Gfx2BoundingRect;
   axis: 'x' | 'y';
 
   /**
-   * The constructor.
-   * @param {Gfx2BoundingRect} rect - The position and size of the partition rectangle.
-   * @param {'x' | 'y'} axis - The split axis of the partition.
+   * @param {Gfx2BoundingRect} rect - The partition rectangle.
+   * @param {'x' | 'y'} axis - The partition split axis.
    */
   constructor(rect: Gfx2BoundingRect, axis: 'x' | 'y') {
     this.rect = rect;
     this.axis = axis;
   }
 
-  /**
-   * The "search" function takes a target bounding rectangle and recursively searches in a binary tree partition
-   * to find all intersecting bounding rectangles, adding them to the results array.
-   * @param node - The binary tree partition.
-   * @param {Gfx2BoundingRect} target - The bounding rectangle that we want to search for in the tree.
-   * @param results - The `results` parameter is an array of `Gfx2BoundingRect` objects. It is used to
-   * store the search results.
-   * @returns all bounding rectangle that intersect with the target.
-   */
+ /**
+  * Search and return all objects that intersect with the target.
+  * 
+  * @param {Gfx2BoundingRect} target - The target object.
+  * @param {Array<Gfx2BoundingRect>} results - All matching objects.
+  */
   search(node: TreePartitionNode<Gfx2BoundingRect>, target: Gfx2BoundingRect, results: Array<Gfx2BoundingRect> = []): Array<Gfx2BoundingRect> {
     const method = node.getMethod() as Gfx2TreePartitionMethod;
     const nodeBox = method.rect;
@@ -73,10 +65,9 @@ class Gfx2TreePartitionMethod implements ITreePartitionMethod<Gfx2BoundingRect> 
   }
 
   /**
-   * The "split" function takes an array of bounding rectangle and splits them into left and right based on a
-   * specified axis, finally it creating new partition methods for each side.
-   * @param objects - An array of Gfx2BoundingRect.
-   * @returns an object with the properties `left`, `right`, `leftMethod`, and `rightMethod`.
+   * Splits objects into left and right based on a specified axis, finally it returns new partition methods for each side.
+   * 
+   * @param {Array<Gfx2BoundingRect>} objects - A list of bounding rectangle.
    */
   split(objects: Array<Gfx2BoundingRect>): SplitResult<Gfx2BoundingRect> {
     const left = [];

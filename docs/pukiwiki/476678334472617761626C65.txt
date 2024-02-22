@@ -1,0 +1,56 @@
+* Class: Gfx3Drawable
+
+A 3D drawable object.
+- inherit from: Gfx3Transformable~
+- parent of: Gfx3Flare, Gfx3Mesh, Gfx3Particles, Gfx3Skybox, Gfx3Sprite~
+** Constructors
+- ''new Gfx3Drawable''(vertexStride: number): Gfx3Drawable~
+-- ''vertexStride'': The number of attributes for each vertex.~
+** Methods
+- ''beginVertices''(vertexCount: number): void~
+Prepare your vertex buffer to write process.
+Warning: You need to call this method before define your vertices.~
+-- ''vertexCount'': The number of vertices.~
+~
+- ''defineVertex''(v: number[]): void~
+Add a vertex.~
+-- ''v'': The attributes data of the vertex.~
+~
+- ''delete''(): void~
+Free all resources.
+Warning: You need to call this method to free allocation for this object.~
+~
+- ''draw''(): void~
+Virtual draw function.~
+~
+- ''endVertices''(): void~
+Close your vertex buffer to write process.
+Note: The boundingbox is up to date from here.~
+~
+- ''getBoundingBox''(): Gfx3BoundingBox~
+Returns the bounding box.~
+~
+- ''getVertexCount''(): number~
+Returns the number of vertices.~
+~
+- ''getVertexSubBufferOffset''(): number~
+Returns the vertex sub-buffer offset in the global vertex buffer.
+Nota bene: All vertices are stored in one global vertex buffer handled by "Gfx3Manager".
+SubBuffer is just a reference offset/size pointing to the big one buffer.~
+~
+- ''getVertexSubBufferSize''(): number~
+Returns the byte length of the vertex sub buffer.~
+~
+- ''getVertices''()~
+Returns vertices.~
+~
+- ''getWorldBoundingBox''(): Gfx3BoundingBox~
+Returns the bounding box in the world space coordinates.~
+~
+- ''setVertices''(vertices: number[]): void~
+Set vertices.~
+-- ''vertices'': The list of vertices.~
+~
+- ''update''(ts: number): void~
+Virtual update function.~
+-- ''ts'': The timestep.~

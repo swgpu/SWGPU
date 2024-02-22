@@ -13,9 +13,7 @@ enum MenuAxis {
 };
 
 /**
- * The `UIMenu` class represents a menu UI widget with customizable options
- * such as axis, rows, columns, disabled item, multiple selection, and selectable items.
- * It support both mouse and keys navigation.
+ * A UI widget displaying a menu UI with customizable options.
  * It emit 'E_ITEM_FOCUSED', 'E_ITEM_UNFOCUSED', 'E_ITEM_SELECTED', 'E_ITEM_UNSELECTED' and E_UNSELECTED events.
  */
 class UIMenu extends UIWidget {
@@ -30,8 +28,7 @@ class UIMenu extends UIWidget {
   selectedWidgets: Array<UIWidget>;
 
   /**
-   * The constructor.
-   * @param options - An object containing various options for configuring the behavior of the menu.
+   * @param options - Various options for configuring the behavior of the menu.
    */
   constructor(options: { className?: string, axis?: MenuAxis, rows?: number, columns?: number, multiple?: boolean, selectable?: boolean, togglable?: boolean } = {}) {
     super({
@@ -66,8 +63,8 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "delete" function free all resources.
-   * Warning: you need to call this method to free allocation for this object.
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
     for (const widget of this.widgets) {
@@ -78,8 +75,9 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     for (const widget of this.widgets) {
@@ -88,7 +86,9 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "focus" function.
+   * Focus on.
+   * 
+   * @param {number} focusIndex - If MenuFocus.AUTO then refocus the child widget too.
    */
   focus(focusIndex = MenuFocus.AUTO): void {
     if (this.widgets.length > 0 && focusIndex == MenuFocus.AUTO) {
@@ -100,10 +100,10 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "addWidget" function adds a UI widget item to the menu.
-   * @param {UIWidget} widget - The `widget` item.
-   * @param {number} index - The `index` parameter is an optional parameter of type `number` that
-   * specifies the position at which the widget should be inserted in the menu. If no index is
+   * Add a UI widget item.
+   * 
+   * @param {UIWidget} widget - The widget.
+   * @param {number} index - The position at which the widget should be inserted in the menu. If no index is
    * provided (default value is -1), the widget will be added at the end of the menu.
    */
   addWidget(widget: UIWidget, index: number = -1): void {
@@ -118,13 +118,14 @@ class UIMenu extends UIWidget {
       this.node.insertBefore(widgetNode, this.node.children[index]);
     }
 
-    widgetNode.addEventListener('click', () => this.handleWidgetClicked(widget));
-    widgetNode.addEventListener('mousemove', () => this.handleWidgetHover(widget));
+    widgetNode.addEventListener('click', () => this.$handleWidgetClicked(widget));
+    widgetNode.addEventListener('mousemove', () => this.$handleWidgetHover(widget));
   }
 
   /**
-   * The "removeWidget" function removes a UI widget item from the menu.
-   * @param {number} index - The index parameter is the position of the widget in the menu to removed.
+   * Remove a UI widget item.
+   * 
+   * @param {number} index - The position of the widget.
    */
   removeWidget(index: number): void {
     const widget = this.widgets[index];
@@ -145,13 +146,12 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "focusWidget" function is used to focus on a specific widget item, scroll to it if necessary, and
-   * emit an 'E_ITEM_FOCUSED' event.
-   * @param {number} index - The index position of the widget that you want to focus on.
-   * @param {boolean} [preventScroll=false] - A boolean value indicating whether to prevent scrolling to
-   * the focused widget if it is not currently visible within the viewport.
-   * @param {boolean} [emit=true] - The `emit` parameter is a boolean value that determines whether an
-   * event should be emitted after focusing the widget.
+   * Focus on widget item.
+   * It emit an 'E_ITEM_FOCUSED' event.
+   * 
+   * @param {number} index - The index position of the widget.
+   * @param {boolean} [preventScroll=false] - Indicating whether to prevent scrolling to the focused widget.
+   * @param {boolean} [emit=true] - Determines whether an event should be emitted after focusing the widget.
    */
   focusWidget(index: number, preventScroll: boolean = false, emit: boolean = true): void {
     const widget = this.widgets[index];
@@ -179,9 +179,10 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "unfocusWidget" function unfocuses widgets, and emits an 'E_ITEM_UNFOCUSED' event.
-   * @param {boolean} [emit=true] - The `emit` parameter is a boolean value that determines whether an
-   * event should be emitted after focusing the widget.
+   * Focus off widget item (if exist).
+   * It emits an 'E_ITEM_UNFOCUSED' event.
+   * 
+   * @param {boolean} [emit=true] - Determines whether an event should be emitted after unfocusing the widget.
    */
   unfocusWidget(emit: boolean = true): void {
     this.widgets.forEach(w => w.unfocus());
@@ -193,10 +194,11 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "selectWidget" function selects a specific widget item and emits an 'E_ITEM_SELECTED' event.
-   * @param {number} index - The index position of the widget that you want to select on.
-   * @param {boolean} [emit=true] - The `emit` parameter is a boolean value that determines whether an
-   * event should be emitted after selecting the widget.
+   * Select a widget item.
+   * It emits an 'E_ITEM_SELECTED' event.
+   * 
+   * @param {number} index - The index position of the widget.
+   * @param {boolean} [emit=true] - Determines whether an event should be emitted after selecting the widget.
    */
   selectWidget(index: number, emit: boolean = true): void {
     const widget = this.widgets[index];
@@ -227,10 +229,11 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "unselectWidget" function unselects a specific widget item and emits an 'E_ITEM_UNSELECTED' event.
-   * @param {number} index - The index position of the widget that you want to unselect on.
-   * @param {boolean} [emit=true] - The `emit` parameter is a boolean value that determines whether an
-   * event should be emitted after unselecting the widget.
+   * Unselects a widget item.
+   * It emits an 'E_ITEM_UNSELECTED' event.
+   * 
+   * @param {number} index - The index position of the widget.
+   * @param {boolean} [emit=true] - Determines whether an event should be emitted after unselecting the widget.
    */
   unselectWidget(index: number, emit: boolean = true): void {
     const widget = this.widgets[index];
@@ -250,9 +253,10 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "unselectWidgets" function deselects all widgets and emits an 'E_UNSELECTED' event.
-   * @param {boolean} [emit=true] - The `emit` parameter is a boolean value that determines whether an
-   * event should be emitted after unselecting all widgets.
+   * Unselect all widget items.
+   * It emits an 'E_UNSELECTED' event.
+   * 
+   * @param {boolean} [emit=true] - Determines whether an event should be emitted after unselecting all widgets.
    */
   unselectWidgets(emit: boolean = true): void {
     this.widgets.forEach(w => w.setSelected(false));
@@ -264,10 +268,10 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "setEnabledWidget" function sets the enabled state of a specific widget item.
-   * @param {number} index - The index position of the widget that you want to enabled on.
-   * @param {boolean} enabled - The "enabled" parameter is a boolean value that determines whether the
-   * widget should be enabled or disabled.
+   * Set enabled flag of a widget item.
+   * 
+   * @param {number} index - The index position of the widget.
+   * @param {boolean} enabled - Determines whether the widget should be enabled or disabled.
    */
   setEnabledWidget(index: number, enabled: boolean): void {
     const widget = this.widgets[index];
@@ -279,16 +283,16 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "setEnabledWidgets" function sets the enabled state of all widget items.
-   * @param {boolean} enabled - The "enabled" parameter is a boolean value that determines whether the
-   * widgets should be enabled or disabled.
+   * Set the enabled flag of all widget items.
+   * 
+   * @param {boolean} enabled - Determines whether the widgets should be enabled or disabled.
    */
   setEnabledWidgets(enabled: boolean): void {
     this.widgets.forEach(w => w.setEnabled(enabled));
   }
 
   /**
-   * The "clear" function remove all widget items.
+   * Remove all widget items.
    */
   clear(): void {
     this.widgets.forEach(w => w.delete());
@@ -299,79 +303,65 @@ class UIMenu extends UIWidget {
   }
 
   /**
-   * The "getFocusedWidgetId" function returns the ID of the focused widget, or null if there is no
-   * focused widget.
-   * @returns the ID of the focused widget if it exists, otherwise it returns null.
+   * Returns the ID of the focused widget, or null if there is no focused widget.
    */
   getFocusedWidgetId(): string | null {
     return this.focusedWidget ? this.focusedWidget.getId() : null;
   }
 
   /**
-   * The "getFocusedWidgetIndex" function returns the index position of the focused widget item, or -1 if no widget is
-   * focused.
-   * @returns The index position of the focused widget item in the menu.
-   * If there is no focused widget, it returns -1.
+   * Returns the index position of the focused widget item, or -1 if no widget is focused.
    */
   getFocusedWidgetIndex(): number {
     return this.focusedWidget ? this.widgets.indexOf(this.focusedWidget) : -1;
   }
 
   /**
-   * The "getSelectedWidgetId" function returns the ID of the first selected widget, or null if no widget
-   * is selected.
-   * @returns The widget id value if there is a selected widget, otherwise it returns null.
+   * Returns the ID of the first selected widget, or null if no widget is selected.
    */
   getSelectedWidgetId(): string | null {
     return this.selectedWidgets[0] ? this.selectedWidgets[0].getId() : null;
   }
 
   /**
-   * The "getSelectedWidgetIndex" function returns the index position of the first selected widget item or -1 if no
-   * widget is selected.
-   * @returns The index position of the selected widget item in the menu.
-   * If there is no selected widget, it returns -1.
+   * Returns the index position of the first selected widget item or -1 if no widget is selected.
    */
   getSelectedWidgetIndex(): number {
     return this.selectedWidgets[0] ? this.widgets.indexOf(this.selectedWidgets[0]) : -1;
   }
 
   /**
-   * The "getSelectedWidgetIds" function returns an array of string IDs of selected widget items.
-   * @returns An array of string values representing the IDs of the selected widget items.
+   * Returns a list of IDs of selected widget items.
    */
   getSelectedWidgetIds(): Array<string> {
     return this.selectedWidgets.map(w => w.getId());
   }
 
   /**
-   * The "getSelectedWidgetIndexes" function returns an array of index position of selected widget items.
-   * @returns An array of index position of the selected widget items.
+   * Returns a list of index position of selected widget items.
    */
   getSelectedWidgetIndexes(): Array<number> {
     return this.selectedWidgets.map(w => this.widgets.indexOf(w));
   }
 
   /**
-   * The "getWidgets" function returns the widgets property.
-   * @returns The `widgets` property.
+   * Returns all widgets.
    */
   getWidgets() {
     return this.widgets;
   }
 
   /**
-   * The "getWidget" function returns the UIWidget at the specified index.
-   * @param {number} index - The index parameter is a number that represents the position of the widget
-   * in an array or collection.
-   * @returns The UIWidget at the specified index.
+   * Returns the widget at the specified index.
+   * 
+   * @param {number} index - The index position of the widget.
    */
   getWidget(index: number): UIWidget {
     return this.widgets[index];
   }
 
   /**
-   * The "onAction" function.
+   * The onAction function.
    */
   onAction(actionId: string) {
     if (actionId == 'BACK') {
@@ -403,7 +393,7 @@ class UIMenu extends UIWidget {
     }
   }
 
-  handleWidgetClicked(widget: UIWidget) {
+  $handleWidgetClicked(widget: UIWidget) {
     if (!this.isFocused()) {
       return;
     }
@@ -411,7 +401,7 @@ class UIMenu extends UIWidget {
     this.selectWidget(this.widgets.indexOf(widget), true);
   }
 
-  handleWidgetHover(widget: UIWidget) {
+  $handleWidgetHover(widget: UIWidget) {
     if (!this.isFocused()) {
       return;
     }

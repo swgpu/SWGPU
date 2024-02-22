@@ -11,9 +11,6 @@ import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3MeshOBJ } from '../../lib/gfx3_mesh/gfx3_mesh_obj';
 import { Gfx3Skybox } from '../../lib/gfx3_skybox/gfx3_skybox';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
-import { Quaternion } from '../../lib/core/quaternion';
-
-import { quat } from 'gl-matrix';
 // ---------------------------------------------------------------------------------------
 
 const CAMERA_SPEED = 0.1;

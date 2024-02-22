@@ -1,0 +1,55 @@
+* Class: Gfx3Mesh
+
+A 3D base mesh object.
+- inherit from: Gfx3Drawable~
+- parent of: Gfx3MeshJAM, Gfx3MeshJSM, Gfx3MeshOBJ~
+** Constructors
+- ''new Gfx3Mesh''(): Gfx3Mesh~
+** Methods
+- ''clone''(transformMatrix: mat4): Gfx3Mesh~
+Creates a clone of the mesh.~
+-- ''transformMatrix'': The transformation matrix.~
+~
+- ''delete''(keepMat: boolean): void~
+Free all resources.
+Warning: You need to call this method to free allocation for this object.~
+-- ''keepMat''~
+~
+- ''draw''(): void~
+The draw function.~
+~
+- ''getLayer''(): number~
+Returns the layer.~
+~
+- ''getMaterial''(): Gfx3Material~
+Returns the material.~
+~
+- ''getShadowCasting''(): boolean~
+Check if shadow casting is enable or not.~
+~
+- ''setLayer''(layer: number): void~
+Set the layer.
+Mesh layer is used to easily categorized and identified group of meshes, actually it is only used for decals.~
+-- ''layer'': The layer.~
+~
+- ''setMaterial''(material: Gfx3Material, keepMat: boolean): void~
+Set a material.~
+-- ''material'': The material.~
+-- ''keepMat'': Determines whether to keep the current material or delete it before assigning the new material.~
+~
+- ''setShadowCasting''(shadowCasting: boolean): void~
+Set the shadow casting.~
+-- ''shadowCasting'': Determines if object cast shadows.~
+~
+- ''update''(ts: number): void~
+The update function.~
+-- ''ts'': The timestep.~
+~
+- '''static''' ''buildVertices''(vertexCount: number, coords: number[], texcoords: number[], colors: number[], normals: number[], groups: Group[])~
+Useful function takes various vertex data and returns vertices with calculated normals, tangents, and binormals in the engine format.~
+-- ''vertexCount'': The total number of vertices in the mesh.~
+-- ''coords'': A list of vertex coordinates.~
+-- ''texcoords'': A list of vertex texture coordinates.~
+-- ''colors'': A list of vertex color.~
+-- ''normals'': A list of vertex normal.~
+-- ''groups'': A list of vertex group.~

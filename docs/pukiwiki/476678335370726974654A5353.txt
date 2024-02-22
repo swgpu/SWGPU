@@ -1,0 +1,24 @@
+* Class: Gfx3SpriteJSS
+
+A 3D static sprite (without animations).
+- inherit from: Gfx3Sprite~
+** Constructors
+- ''new Gfx3SpriteJSS''(): Gfx3SpriteJSS~
+** Methods
+- ''getTextureRect''(): vec4~
+Returns the texture rectangle.~
+~
+- ''setOffsetNormalized''(offsetXFactor: number, offsetYFactor: number): void~
+Set the normalized offset value.~
+-- ''offsetXFactor'': The normalized x-coordinate offset value.~
+-- ''offsetYFactor'': The normalized y-coordinate offset value.~
+~
+- ''setTextureRect''(left: number, top: number, width: number, height: number): void~
+Set the texture rectangle.~
+-- ''left'': The x-coordinate of the top-left texture rectangle corner.~
+-- ''top'': The y-coordinate of the top-left texture rectangle corner.~
+-- ''width'': The width of the texture rectangle.~
+-- ''height'': The height of the texture rectangle.~
+~
+- ''update''(): void~
+The update function.~

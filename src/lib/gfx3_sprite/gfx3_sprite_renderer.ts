@@ -6,16 +6,13 @@ import { Gfx3Sprite } from './gfx3_sprite';
 import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_sprite_shader';
 
 /**
- * The `Gfx3SpriteRenderer` class is a singleton renderer responsible to display sprite.
+ * Singleton sprite renderer.
  */
 class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
   sprites: Array<Gfx3Sprite>;
   grp0: Gfx3DynamicGroup;
   mvpcMatrix: Float32Array;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super('SPRITE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.sprites = [];
@@ -25,7 +22,7 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "render" function.
+   * The render function.
    */
   render(): void {
     const currentView = gfx3Manager.getCurrentView();
@@ -69,7 +66,8 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawSprite" function draw a sprite.
+   * Draw a sprite.
+   * 
    * @param {Gfx3Sprite} sprite - The sprite.
    */
   drawSprite(sprite: Gfx3Sprite): void {

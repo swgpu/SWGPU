@@ -1,0 +1,14 @@
+* Ai
+Artificial intelligence related stuff like '''a-star for 2D/3D with graph and grid''', '''minmax with alpha-beta pruning'''.~
+- [[AIMinMaxSolver]]~
+- [[AIMinMaxLeaf]]~
+- [[AIMinMaxNode]]~
+- [[AIMinMaxTreeAbstract]]~
+- [[AIPathGraph]]~
+- [[AIPathGraph2D]]~
+- [[AIPathGraph3D]]~
+- [[AIPathGraphSolver]]~
+- [[AIPathGrid]]~
+- [[AIPathGrid2D]]~
+- [[AIPathGrid3D]]~
+- [[AIPathGridSolver]]~

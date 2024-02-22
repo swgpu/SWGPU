@@ -3,8 +3,7 @@ import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2TileMap } from './gfx2_tile_map';
 
 /**
- * The `Gfx2TileMapLayer` class is a subclass of `Gfx2Drawable` that responsible for updating and
- * rendering a tile layer onto a canvas.
+ * A tilelayer drawable.
  */
 class Gfx2TileMapLayer extends Gfx2Drawable {
   tilemap: Gfx2TileMap;
@@ -12,9 +11,6 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
   frameIndex: number;
   frameProgress: number;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super();
     this.tilemap = new Gfx2TileMap();
@@ -23,6 +19,12 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
     this.frameProgress = 0;
   }
 
+  /**
+   * Load data from tilemap and layer index.
+   * 
+   * @param {Gfx2TileMap} tilemap - The tilemap.
+   * @param {number} layerIndex - The index of the tilelayer.
+   */
   loadFromTileMap(tilemap: Gfx2TileMap, layerIndex: number): void {
     this.tilemap = tilemap;
     this.layerIndex = layerIndex;
@@ -31,8 +33,9 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     const tilelayer = this.tilemap.getTileLayer(this.layerIndex);
@@ -49,7 +52,7 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
   }
 
   /**
-   * The "draw" function is rendering the tilemap layer.
+   * The draw function.
    */
   draw(): void {
     const tilelayer = this.tilemap.getTileLayer(this.layerIndex);

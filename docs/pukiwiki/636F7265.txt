@@ -1,0 +1,14 @@
+* Core
+Contains all common stuff like '''math''', '''events''', '''top-container'''.~
+- [[ArrayCollection]]~
+- [[CoreManager]]~
+- [[Curve]]~
+- [[CurveInterpolator]]~
+- [[EventManager]]~
+- [[Quaternion]]~
+- [[TreePartition]]~
+- [[TreePartitionNode]]~
+- [[TweenNumber]]~
+- [[TweenVEC2]]~
+- [[TweenVEC3]]~
+- [[UT]]~

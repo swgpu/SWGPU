@@ -1,0 +1,37 @@
+* Class: ScriptMachine
+
+Is a script machine that parse and execute blocks from a JSON file.
+** Constructors
+- ''new ScriptMachine''(): ScriptMachine~
+** Methods
+- ''clearCommandRegister''(): void~
+Flush the command register.~
+~
+- ''isEnabled''(): boolean~
+Check if the script machine is enabled or not.~
+~
+- ''jump''(blockId: string): void~
+Jump to the specified script file block.~
+-- ''blockId'': The block identifier.~
+~
+- ''loadFromFile''(path: string): Promise~
+Load asynchronously script data from a json file (jsc).~
+-- ''path'': The file path.~
+~
+- ''registerCommand''(key: string, commandFunc: Function): void~
+Registers a command.~
+-- ''key'': The unique identifier for the command (aka the command name).~
+-- ''commandFunc'': The command function to be registered.~
+~
+- ''runCommand''(key: string, args: any[])~
+Executes a registered command and returns the block to jump.~
+-- ''key'': The command identifier.~
+-- ''args'': A list of arguments that will be passed to the command function.~
+~
+- ''setEnabled''(enabled: boolean): void~
+Set the enable flag.~
+-- ''enabled'': Indicating whether the script machine is enabled or disabled.~
+~
+- ''update''(ts: number): void~
+The update function.~
+-- ''ts'': The timestep.~

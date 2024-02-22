@@ -8,8 +8,8 @@ enum SizeMode {
 };
 
 /**
- * The `CoreManager` class is a singleton responsible for managing the size and resolution of the top-level
- * HTMLElement container.
+ * Singleton core manager.
+ * Used to set the size and resolution of the top-level HTMLElement container.
  */
 class CoreManager {
   container: HTMLElement;
@@ -17,9 +17,6 @@ class CoreManager {
   resHeight: number;
   sizeMode: SizeMode;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.container = document.getElementById('APP')!;
     
@@ -34,13 +31,11 @@ class CoreManager {
   }
 
   /**
-   * The "setSize" function adjusts the size of a container element based on the specified width and
-   * height, and applies different scaling and positioning transformations based on the specified size
-   * mode.
-   * It emit a 'E_RESIZE' event.
+   * Set the size strategy of the container. It emit a 'E_RESIZE' event.
+   * 
    * @param {number} resWidth - The width of the container in pixels.
    * @param {number} resHeight - The height of the container in pixels.
-   * @param sizeMode - SizeMode is an optional parameter that determines how the container fit the browser window
+   * @param sizeMode - Determines how the container fit the browser window (in some cases, there is desynchro between container size and resolution size).
    */
   setSize(resWidth: number, resHeight: number, sizeMode = SizeMode.FIXED): void {
     this.container.style.width = resWidth + 'px';
@@ -69,8 +64,7 @@ class CoreManager {
   }
 
   /**
-   * The "getSize" function returns the client-width and client-height of the container element.
-   * @returns An array containing the width and height of the container.
+   * Returns the client-width and client-height of the container element.
    */
   getSize(): vec2 {
     return [
@@ -80,8 +74,7 @@ class CoreManager {
   }
 
   /**
-   * The "getResolution" function returns the size resolution of the game.
-   * @returns An array containing the resolution width and resolution height.
+   * Returns the resolution size.
    */
   getResolution(): vec2 {
     return [
@@ -90,14 +83,29 @@ class CoreManager {
     ];
   }
 
+  /**
+   * Adds a class to the container element.
+   * 
+   * @param {string} className - The class name.
+   */
   addClass(className: string): void {
     this.container.classList.add(className);
   }
 
+  /**
+   * Removes a class from the container element.
+   * 
+   * @param {string} className - The class name.
+   */
   removeClass(className: string): void {
     this.container.classList.remove(className);
   }
 
+  /**
+   * Toggles the presence of a class on the container element.
+   * 
+   * @param {string} className - The class name.
+   */
   toggleClass(className: string): void {
     this.container.classList.toggle(className);
   }

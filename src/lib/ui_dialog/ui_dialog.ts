@@ -2,7 +2,10 @@ import { eventManager } from '../core/event_manager.js';
 import { UIWidget } from '../ui/ui_widget.js';
 
 /**
- * The `UIDialog` class represents a bottom fixed dialog widget with text and author name.
+ * A UI widget for displaying a bottom fixed dialog box with text and author name.
+ * It emit 'E_PRINT_FINISHED' when print is finish.
+ * It emit 'E_MENU_ITEM_SELECTED' when menu item is selected.
+ * It emit 'E_OK' when action is 'OK' and text is finished.
  */
 class UIDialog extends UIWidget {
   text: string;
@@ -11,9 +14,6 @@ class UIDialog extends UIWidget {
   timeElapsed: number;
   finished: boolean;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super({
       className: 'UIDialog',
@@ -31,12 +31,13 @@ class UIDialog extends UIWidget {
     this.timeElapsed = 0;
     this.finished = false;
 
-    this.node.addEventListener('click', () => this.handleClick());
+    this.node.addEventListener('click', () => this.$handleClick());
   }
 
   /**
    * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (this.finished) {
@@ -64,15 +65,17 @@ class UIDialog extends UIWidget {
   }
 
   /**
-   * The "setAuthor" function sets the dialog author name's.
-   * @param {string} author - The `author` parameter is a string that represents the name of the author.
+   * Set the dialog author name's.
+   * 
+   * @param {string} author - The name of the author.
    */
   setAuthor(author: string): void {
     this.node.querySelector<any>('.UIDialog-author').textContent = author;
   }
 
   /**
-   * The "setText" function sets the dialog text.
+   * Set the dialog text.
+   * 
    * @param {string} text - The dialog text.
    */
   setText(text: string): void {
@@ -83,17 +86,17 @@ class UIDialog extends UIWidget {
   }
 
   /**
-   * The "setStepDuration" function sets the text speed.
-   * @param {number} stepDuration - The `stepDuration` parameter is a number that represents the duration of
-   * a text update. Smaller is that value faster text will be displayed.
+   * Set the text speed.
+   * 
+   * @param {number} stepDuration - The duration of a text update.
    */
   setStepDuration(stepDuration: number): void {
     this.stepDuration = stepDuration;
   }
 
   /**
-   * The "onAction" function.
-   * It emits an event with the name 'E_OK' if text is finished and the actionId is 'OK'.
+   * The onAction function.
+   * It emits an 'E_OK' event if the actionId is 'OK' and text is finished.
    */
   onAction(actionId: string): void {
     if (actionId == 'OK' && this.finished) {
@@ -101,11 +104,7 @@ class UIDialog extends UIWidget {
     }
   }
 
-  /**
-   * The "handleClick" function.
-   * It emits an event with the name 'E_OK' if text is finished and mouse click fired.
-   */
-  handleClick(): void {
+  $handleClick(): void {
     if (this.isFocused() && this.finished) {
       eventManager.emit(this, 'E_OK');
     }

@@ -15,7 +15,7 @@ interface JASAnimation {
 };
 
 /**
- * The `Gfx3SpriteJAS` is a subclass of `Gfx3Sprite` that represents a animated sprite.
+ * A 3D animated sprite.
  */
 class Gfx3SpriteJAS extends Gfx3Sprite {
   animations: Array<JASAnimation>;
@@ -26,9 +26,6 @@ class Gfx3SpriteJAS extends Gfx3Sprite {
   offsetXFactor: number;
   offsetYFactor: number;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super();
     this.animations = [];
@@ -41,8 +38,9 @@ class Gfx3SpriteJAS extends Gfx3Sprite {
   }
 
   /**
-   * The "loadFromFile" function asynchronously loads animated sprite data from a json file (jas).
-   * @param {string} path - The `path` parameter is the file path.
+   * Load asynchronously animated sprite data from a json file (jas).
+   * 
+   * @param {string} path - The file path.
    */
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
@@ -78,7 +76,9 @@ class Gfx3SpriteJAS extends Gfx3Sprite {
   }
 
   /**
-   * The "update" function.
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (!this.currentAnimation || !this.texture) {
@@ -130,13 +130,11 @@ class Gfx3SpriteJAS extends Gfx3Sprite {
   }
 
   /**
-   * The "play" function is used to start playing a specific animation, with options for looping and
-   * preventing the same animation from being played again.
+   * Play a specific animation.
+   * 
    * @param {string} animationName - The name of the animation to be played.
-   * @param {boolean} [looped=false] - The `looped` parameter is a boolean that determines whether
-   * the animation should loop or not.
-   * @param {boolean} [preventSameAnimation=false] - The `preventSameAnimation` parameter is a boolean
-   * flag that determines whether the same animation should be prevented from playing again.
+   * @param {boolean} [looped=false] - Determines whether the animation should loop or not.
+   * @param {boolean} [preventSameAnimation=false] - Determines whether the same animation should be prevented from playing again.
    */
   play(animationName: string, looped: boolean = false, preventSameAnimation: boolean = false): void {
     if (preventSameAnimation && this.currentAnimation && animationName == this.currentAnimation.name) {
@@ -155,40 +153,38 @@ class Gfx3SpriteJAS extends Gfx3Sprite {
   }
 
   /**
-   * The "getAnimations" function returns an array of animation descriptors.
-   * @returns An array of animation descriptors.
+   * Returns the list of animation descriptors.
    */
   getAnimations(): Array<JASAnimation> {
     return this.animations;
   }
 
   /**
-   * The "setAnimations" function sets the animations property.
-   * @param animations - The `animations` parameter is an array of animation descriptors.
+   * Set the animations.
+   * 
+   * @param animations - The animations.
    */
   setAnimations(animations: Array<JASAnimation>): void {
     this.animations = animations;
   }
 
   /**
-   * The "getCurrentAnimation" function returns the current animation or null if there is no current
-   * animation.
-   * @returns The current animation or null.
+   * Returns the current animation or null if there is no current animation.
    */
   getCurrentAnimation(): JASAnimation | null {
     return this.currentAnimation;
   }
 
   /**
-   * The "getCurrentAnimationFrameIndex" function returns the current animation frame index.
-   * @returns The current animation frame index.
+   * Returns the current animation frame index.
    */
   getCurrentAnimationFrameIndex(): number {
     return this.currentAnimationFrameIndex;
   }
 
   /**
-   * The "setOffsetNormalized" function sets the normalized origin offset value.
+   * Set the normalized offset value.
+   * 
    * @param {number} offsetXFactor - The offsetXFactor represent the normalized x-coordinate offset value.
    * @param {number} offsetYFactor - The offsetYFactor represent the normalized y-coordinate offset value.
    */

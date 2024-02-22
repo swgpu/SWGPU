@@ -1,20 +1,17 @@
 import { Gfx3Mesh } from './gfx3_mesh';
 
 /**
- * The `Gfx3MeshJSM` class is a subclass of `Gfx3Mesh` that represents a static mesh and provides
- * methods for loading and updating.
+ * A 3D static mesh.
  */
 class Gfx3MeshJSM extends Gfx3Mesh {
-  /**
-   * The constructor.
-   */
   constructor() {
     super();
   }
 
   /**
-   * The "loadFromFile" function asynchronously loads static mesh data from a json file (jsm).
-   * @param {string} path - The `path` parameter is the file path.
+   * Load asynchronously static mesh data from a json file (jsm).
+   * 
+   * @param {string} path - The file path.
    */
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);

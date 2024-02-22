@@ -16,8 +16,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "doc": "typedoc src/lib/ --json docs/doc.json",
-    "pukiwiki": "python3 bin/converter-typedoc-to-pukiwiki.py"
+    "doc": "typedoc --entryPointStrategy Expand src/lib/ --json docs/doc.json --out docs/html --exclude \"quaternion.ts\"",
+    "pukiwiki": "python3 bin/converter-typedoc-to-pukiwiki.py --json docs/doc.json --output docs/pukiwiki"
   },
   "bin": {
     "create-warme": "bin/create-warme.js"
@@ -32,7 +32,6 @@
   },
   "dependencies": {
     "@webgpu/types": "^0.1.21",
-    "curve-interpolator": "^3.3.1",
-    "quaternion": "^1.5.1"
+    "curve-interpolator": "^3.3.1"
   }
 }

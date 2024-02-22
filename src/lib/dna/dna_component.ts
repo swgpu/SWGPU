@@ -1,21 +1,18 @@
 /**
- * The `DNAComponent` class represents a component in a pure ECS data-driven implementation.
+ * A component in a pure ECS data-driven implementation.
  */
 class DNAComponent {
   typename: string;
 
   /**
-   * The constructor.
-   * @param {string} typename - The typename parameter is a string that represents the type of object
-   * being created. It is used to easily retrieve a specific component inside an entity.
+   * @param {string} typename - The component identifier.
    */
   constructor(typename: string) {
     this.typename = typename;
   }
 
   /**
-   * The "getTypename" function returns the typename as a string.
-   * @returns The method is returning string that represents the name of a component type.
+   * Returns the typename.
    */
   getTypename(): string {
     return this.typename;

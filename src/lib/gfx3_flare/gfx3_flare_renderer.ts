@@ -6,9 +6,9 @@ import { Gfx3Flare } from './gfx3_flare';
 import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_flare_shader';
 
 /**
- * The `Gfx3FlareRenderer` class is a singleton renderer responsible to display texture on the screen
- * very quickly. It is ideal for lens-flare effect, rain, snow or every effect on the screen focal.
- * Nota bene: The top-left corner is at coordinates 0, 0 on the screen.
+ * Singleton flare renderer.
+ * It is ideal for lens-flare effect, rain, snow or every effect on the screen focal.
+ * Note: The top-left corner is at coordinates 0, 0 on the screen.
  */
 class Gfx3FlareRenderer extends Gfx3RendererAbstract {
   flares: Array<Gfx3Flare>;
@@ -22,9 +22,6 @@ class Gfx3FlareRenderer extends Gfx3RendererAbstract {
   offset: Float32Array;
   color: Float32Array;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     super('FLARE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.flares = [];
@@ -43,7 +40,7 @@ class Gfx3FlareRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "render" function.
+   * The render function.
    */
   render(): void {
     const currentView = gfx3Manager.getCurrentView();
@@ -83,7 +80,8 @@ class Gfx3FlareRenderer extends Gfx3RendererAbstract {
   }
 
   /**
-   * The "drawFlare" function draw a flare object.
+   * Draw a flare object.
+   * 
    * @param {Gfx3Flare} flare - The flare object.
    */
   drawFlare(flare: Gfx3Flare): void {

@@ -1,0 +1,30 @@
+* Class: Gfx3MeshPool
+
+Manage a pool of mesh instances, it take a original mesh and make numInstances clones.
+Note: You can perfectly do without pool but for some cases it is used to keep performance stables.
+** Constructors
+- ''new Gfx3MeshPool''(originMesh: Gfx3Mesh, numInstances: number): Gfx3MeshPool~
+-- ''originMesh'': The original mesh.~
+-- ''numInstances'': The number of allocated instances.~
+** Methods
+- ''acquire''()~
+Returns a not used instance, or null if all instance are used.~
+~
+- ''delete''(): void~
+Free all resources.
+Warning: You need to call this method to free allocation for this object.~
+~
+- ''dispose''(instance: MeshInstance): void~
+Marks an instance as unused.~
+-- ''instance'': The instance to dispose.~
+~
+- ''draw''(): void~
+The draw function.~
+~
+- ''find''(id: number)~
+Returns an instance with the specified id or undefined if no matching object is found.~
+-- ''id'': The instance identifier.~
+~
+- ''update''(ts: number): void~
+The update function.~
+-- ''ts'': The timestep.~

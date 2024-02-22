@@ -10,9 +10,7 @@ interface JSCBlockCall {
 }
 
 /**
- * The `ScriptMachine` is a class that represents a script machine for executing script blocks and commands.
- * It let you create your game scene scripting with methods to execute a sequences of asynchronous commands and
- * handle derivation story with block jumping.
+ * Is a script machine that parse and execute blocks from a JSON file.
  */
 class ScriptMachine {
   blocks: Array<JSCBlock>;
@@ -25,9 +23,6 @@ class ScriptMachine {
   onBeforeCommandExec: (command: Function) => void;
   onAfterCommandExec: (command: Function) => void;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.blocks = [];
     this.commandRegister = new Map<string, Function>();
@@ -41,8 +36,9 @@ class ScriptMachine {
   }
 
   /**
-   * The "update" function.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
    */
   update(ts: number): void {
     if (!this.enabled) {
@@ -79,8 +75,9 @@ class ScriptMachine {
   }
 
   /**
-   * The "loadFromFile" function asynchronously loads script data from a json file (jsc).
-   * @param {string} path - The `path` parameter is the file path.
+   * Load asynchronously script data from a json file (jsc).
+   * 
+   * @param {string} path - The file path.
    */
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
@@ -101,29 +98,10 @@ class ScriptMachine {
   }
 
   /**
-   * The "registerCommand" function registers a command with a unique key and associates it with a
-   * function.
-   * @param {string} key - The `key` parameter is a string that represents the unique identifier for the
-   * command. It is used to register and retrieve the command function from the command register.
-   * @param {Function} commandFunc - The `commandFunc` parameter is a function that represents the
-   * command to be registered. It can be any valid JavaScript function that will be executed when the
-   * registered command is called.
-   */
-  registerCommand(key: string, commandFunc: Function) {
-    if (this.commandRegister.has(key)) {
-      throw new Error('ScriptMachine::registerCommand: key already exist !')
-    }
-
-    this.commandRegister.set(key, commandFunc);
-  }
-
-  /**
-   * The "runCommand" function executes a registered command with the given key and arguments, and
-   * returns the result.
-   * @param {string} key - A string representing the key of the command to be executed.
-   * @param args - An array of arguments that will be passed to the command function and coming from
-   * the script file.
-   * @returns The block identifier to jump.
+   * Executes a registered command and returns the block to jump.
+   * 
+   * @param {string} key - The command identifier.
+   * @param args - A list of arguments that will be passed to the command function.
    */
   runCommand(key: string, args: Array<any> = []): string | undefined {
     const command = this.commandRegister.get(key);
@@ -138,37 +116,50 @@ class ScriptMachine {
   }
 
   /**
-   * The "clearCommandRegister" function flush the command register.
+   * Registers a command.
+   * 
+   * @param {string} key - The unique identifier for the command (aka the command name).
+   * @param {Function} commandFunc - The command function to be registered.
+   */
+  registerCommand(key: string, commandFunc: Function) {
+    if (this.commandRegister.has(key)) {
+      throw new Error('ScriptMachine::registerCommand: key already exist !')
+    }
+
+    this.commandRegister.set(key, commandFunc);
+  }
+
+  /**
+   * Flush the command register.
    */
   clearCommandRegister(): void {
     this.commandRegister.clear();
   }
 
   /**
-   * The "isEnabled" function returns the enabled property.
-   * @returns The `enabled`property.
+   * Jump to the specified script file block.
+   * 
+   * @param {string} blockId - The block identifier.
+   */
+  jump(blockId: string) {
+    this.currentBlockId = blockId;
+    this.currentCallIndex = 0;
+  }
+
+  /**
+   * Check if the script machine is enabled or not.
    */
   isEnabled(): boolean {
     return this.enabled;
   }
 
   /**
-   * The "setEnabled" function sets the enabled property indicating whether the script machine is enabled or
-   * disabled.
-   * @param {boolean} enabled - A boolean value indicating whether the script machine is enabled or
-   * disabled.
+   * Set the enable flag.
+   * 
+   * @param {boolean} enabled - Indicating whether the script machine is enabled or disabled.
    */
   setEnabled(enabled: boolean): void {
     this.enabled = enabled;
-  }
-
-  /**
-   * The "jump" function sets the script machine on the specified commands block.
-   * @param {string} blockId - The `blockId` parameter is a string that represents the ID of a block.
-   */
-  jump(blockId: string) {
-    this.currentBlockId = blockId;
-    this.currentCallIndex = 0;
   }
 }
 

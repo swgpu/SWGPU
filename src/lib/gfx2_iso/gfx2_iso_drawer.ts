@@ -1,10 +1,15 @@
 import { Gfx2IsoDrawable } from './gfx2_iso_drawable';
 
 /**
- * The `Gfx2IsoDrawer` class is a singleton manager responsible to display isometric drawables.
+ * The isometric drawables renderer.
  */
 class Gfx2IsoDrawer {
-  static draw(drawables: Array<Gfx2IsoDrawable>, accuracyMin: number = -3, accuracyMax: number = 3): void {
+  /**
+   * Sort a list of drawable objects by elevation/position and draw them.
+   * 
+   * @param drawables - The list of drawables.
+   */
+  static draw(drawables: Array<Gfx2IsoDrawable>): void {
     drawables.sort((a, b) => {
       if (a.getElevation() < b.getElevation()) {
         return -1;

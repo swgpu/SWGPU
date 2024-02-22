@@ -1,7 +1,7 @@
 import { gfx2Manager } from './gfx2_manager';
 
 /**
- * The `Gfx2Drawable` class represents a drawable object in a 2D graphics system.
+ * A 2D drawable object.
  */
 class Gfx2Drawable {
   position: vec2;
@@ -11,9 +11,6 @@ class Gfx2Drawable {
   visible: boolean;
   opacity: number;
 
-  /**
-   * The constructor.
-   */
   constructor() {
     this.position = [0, 0];
     this.rotation = 0;
@@ -24,7 +21,7 @@ class Gfx2Drawable {
   }
 
   /**
-   * The "draw" function is responsible for rendering a visual representation on a 2DCanvas.
+   * The draw function.
    */
   draw(): void {
     if (!this.visible) {
@@ -45,46 +42,41 @@ class Gfx2Drawable {
   }
 
   /**
-   * The "update" is a virtual method used for the update phase.
-   * @param {number} ts - The `ts` parameter stands for "timestep".
+   * Virtual update function.
+   * 
+   * @param {number} ts - The timestep.
    */
-  update(ts: number): void {
-    // virtual method called during update phase !
-  }
+  update(ts: number): void {}
 
   /**
-   * The "paint" is a virtual method that is called during the draw phase (after transforms).
+   * Virtual method that is called during the draw phase (after transforms).
    */
-  paint() {
-    // virtual method called during draw phase !
-  }
+  paint() {}
 
   /**
-   * The "getPosition" function returns the position.
-   * @returns The position as a 2D vector.
+   * Returns the position.
    */
   getPosition(): vec2 {
     return this.position;
   }
 
   /**
-   * The "getPositionX" function returns the x-coordinate of the position.
-   * @returns The X coordinate.
+   * Returns the x-coordinate of the position.
    */
   getPositionX(): number {
     return this.position[0];
   }
 
   /**
-   * The "getPositionY" function returns the y-coordinate of the position.
-   * @returns The Y coordinate.
+   * Returns the y-coordinate of the position.
    */
   getPositionY(): number {
     return this.position[1];
   }
 
   /**
-   * The "setPosition" function set the position with the given x and y coordinates.
+   * Set the position with the given x and y coordinates.
+   * 
    * @param {number} x - The X coordinate of the position.
    * @param {number} y - The Y coordinate of the position.
    */
@@ -94,7 +86,8 @@ class Gfx2Drawable {
   }
 
   /**
-   * The "translate" function translate the position.
+   * Translate the position.
+   * 
    * @param {number} x - The amount of translation in the x-axis direction.
    * @param {number} y - The amount of translation in the y-axis direction.
    */
@@ -104,23 +97,24 @@ class Gfx2Drawable {
   }
 
   /**
-   * The "getRotation" function returns the rotation.
-   * @returns The rotation.
+   * Returns the rotation.
    */
   getRotation(): number {
     return this.rotation;
   }
 
   /**
-   * The "setRotation" function sets the rotation angle (in radians).
-   * @param {number} rotation - The `rotation` parameter is the rotation angle in radians.
+   * Sets the rotation angle (in radians).
+   * 
+   * @param {number} rotation - The rotation angle in radians.
    */
   setRotation(rotation: number): void {
     this.rotation = rotation;
   }
 
   /**
-   * The "rotate" function add rotation value to current angle.
+   * Add rotation value to current angle.
+   * 
    * @param {number} a - The rotation angle to add in radians.
    */
   rotate(a: number): void {
@@ -128,31 +122,29 @@ class Gfx2Drawable {
   }
 
   /**
-   * The "getScale" function returns the scale as a 2D vector.
-   * @returns The scale.
+   * Returns the scale as a 2D vector.
    */
   getScale(): vec2 {
     return this.scale;
   }
 
   /**
-   * The "getScaleX" function returns the scale factor on x-axis.
-   * @returns The x-axis scale factor.
+   * Returns the scale factor on x-axis.
    */
   getScaleX(): number {
     return this.scale[0];
   }
 
   /**
-   * The "getScaleY" function returns the scale factor on y-axis.
-   * @returns The y-axis scale factor.
+   * Returns the scale factor on y-axis.
    */
   getScaleY(): number {
     return this.scale[1];
   }
 
   /**
-   * The "setScale" function sets the scale with the given x and y factors.
+   * Sets the scale with the given x and y factors.
+   * 
    * @param {number} x - The x factor in the x-axis direction.
    * @param {number} y - The y factor in the y-axis direction.
    */
@@ -162,7 +154,8 @@ class Gfx2Drawable {
   }
 
   /**
-   * The "zoom" function add scale values.
+   * Add scale values.
+   * 
    * @param {number} x - The x factor in the x-axis direction.
    * @param {number} y - The y factor in the y-axis direction.
    */
@@ -172,31 +165,29 @@ class Gfx2Drawable {
   }
 
   /**
-   * The "getOffset" function returns the origin offset.
-   * @returns The offset.
+   * Returns the origin offset.
    */
   getOffset(): vec2 {
     return this.offset;
   }
 
   /**
-   * The "getOffsetX" function returns the offset in x-axis direction.
-   * @returns The x-offset value.
+   * Returns the offset in x-axis direction.
    */
   getOffsetX(): number {
     return this.offset[0];
   }
 
   /**
-   * The "getOffsetY" function returns the offset in y-axis direction.
-   * @returns The y-offset value.
+   * Returns the offset in y-axis direction.
    */
   getOffsetY(): number {
     return this.offset[1];
   }
 
   /**
-   * The "setOffset" function set the origin offset value.
+   * Set the origin offset value.
+   * 
    * @param {number} x - The x-offset.
    * @param {number} y - The y-offset.
    */
@@ -206,34 +197,32 @@ class Gfx2Drawable {
   }
 
   /**
-   * The "isVisible" function returns a boolean value indicating whether an element is visible or not.
-   * @returns True if visible, false is not.
+   * Check if is visible or not.
    */
   isVisible(): boolean {
     return this.visible;
   }
 
   /**
-   * The "setVisible" function set the visibility.
-   * @param {boolean} visible - The "visible" parameter is a boolean value that determines whether an
-   * element should be visible or not.
+   * Set the visibility.
+   * 
+   * @param {boolean} visible - The visibility.
    */
   setVisible(visible: boolean): void {
     this.visible = visible;
   }
 
   /**
-   * The "getOpacity" function returns the opacity value.
-   * @returns The opacity value of the object.
+   * Returns the opacity value.
    */
   getOpacity(): number {
     return this.opacity;
   }
 
   /**
-   * The "opacity" function sets the opacity of an element.
-   * @param {number} opacity - The `opacity` value ranges from 0 to 1, where 0 represents completely transparent and 1
-   * represents completely opaque.
+   * Sets the opacity.
+   * 
+   * @param {number} opacity - The opacity value.
    */
   setOpacity(opacity: number): void {
     this.opacity = opacity;
