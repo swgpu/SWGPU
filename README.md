@@ -13,8 +13,7 @@ Some words about our philosophy:
 - **Flexibility:** Create your own renderers. Handle rendering and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
 
-You can check the documentation [here](https://github.com/jay19240/WARME/wiki).      
-For sharing your work, asking questions or purpose new features you can join our discord community [here](https://discord.gg/6hNHZzBA).      
+You can check the documentation [here](http://warme-engine.com/).          
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
 
 ## General features
