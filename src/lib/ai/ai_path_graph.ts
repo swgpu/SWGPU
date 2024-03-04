@@ -236,6 +236,9 @@ class AIPathGraph2D extends AIPathGraph<vec2> {
  * Three-dimensions path graph.
  */
 class AIPathGraph3D extends AIPathGraph<vec3> {
+  /**
+   * @param nodes - The graph data.
+   */
   constructor(nodes: Map<string, AIPathNode<vec3>>) {
     super(nodes);
   }

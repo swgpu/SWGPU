@@ -22,6 +22,7 @@ import { CurveScreen } from '../curve/curve_screen';
 import { TripleTriadScreen } from '../triple-triad/triple_triad_screen';
 import { TilemapIsoScreen } from '../tilemap-iso/tilemap_iso_screen';
 import { ShadowScreen } from '../shadow/shadow_screen';
+import { BgIsoScreen } from '../bg-iso/bg_iso_screen';
 // ---------------------------------------------------------------------------------------
 
 class BootScreen extends Screen {
@@ -49,6 +50,7 @@ class BootScreen extends Screen {
     this.uiMenu.add('15', '2D Triple Triad Demo');
     this.uiMenu.add('16', '2D Tilemap Iso Demo');
     this.uiMenu.add('17', '3D Shadow Map Demo');
+    this.uiMenu.add('18', '2D Background Iso');
     uiManager.addWidget(this.uiMenu, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
     eventManager.subscribe(this.uiMenu, 'E_ITEM_SELECTED', this, this.handleMenuItemSelected);
@@ -113,6 +115,9 @@ class BootScreen extends Screen {
     }
     else if (data.id == 17) {
       screenManager.requestSetScreen(new ShadowScreen());
+    }
+    else if (data.id == 18) {
+      screenManager.requestSetScreen(new BgIsoScreen());
     }
   }
 }

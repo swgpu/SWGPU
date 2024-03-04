@@ -10,6 +10,8 @@ class Gfx2Drawable {
   offset: vec2;
   visible: boolean;
   opacity: number;
+  z: number;
+  elevation: number;
 
   constructor() {
     this.position = [0, 0];
@@ -18,6 +20,8 @@ class Gfx2Drawable {
     this.offset = [0, 0];
     this.visible = true;
     this.opacity = 1;
+    this.z = 0;
+    this.elevation = 0;
   }
 
   /**
@@ -226,6 +230,38 @@ class Gfx2Drawable {
    */
   setOpacity(opacity: number): void {
     this.opacity = opacity;
+  }
+
+  /**
+   * Set the z-depth value.
+   * 
+   * @param {number} z - The z-depth value.
+   */
+  setPositionZ(z: number): void {
+    this.z = z;
+  }
+
+  /**
+   * Returns the z-depth value.
+   */
+  getPositionZ(): number {
+    return this.z;
+  }
+
+  /**
+   * Set the elevation.
+   * 
+   * @param {number} elevation - The elevation value.
+   */
+  setElevation(elevation: number): void {
+    this.elevation = elevation;
+  }
+
+  /**
+   * Returns the elevation.
+   */
+  getElevation(): number {
+    return this.elevation;
   }
 }
 

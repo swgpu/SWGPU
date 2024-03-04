@@ -41,8 +41,19 @@ body {
 /* CORE ENGINE CLASS
 /*#############################################################################################*/
 
+#METRICS {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  padding: 10px;
+  background-color: #0000009e;
+  color: white;
+  width: 200px;
+}
+
 #APP {
   position: relative;
+  top: 20px;
   overflow: hidden;
   width: 600px;
   height: 600px;
@@ -51,6 +62,14 @@ body {
   font-size: 10px;
   transform-origin: top left;
   user-select: none;
+  box-sizing: content-box;
+  border: 60px solid #1a1a1a;
+  border-top-width: 45px;
+  border-bottom-width: 45px;
+  border-left-width: 65px;
+  border-right-width: 65px;
+  border-image: url(../textures/frame.png) 100 135 / 90px round;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3), 0 0 10px 0 rgba(0, 0, 0, 0.18);
 }
 
 #APP_FAIL {

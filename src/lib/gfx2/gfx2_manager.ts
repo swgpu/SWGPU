@@ -1,7 +1,7 @@
 import { UT } from '../core/utils';
 
 /**
- * Singleton 2D renderer.
+ * Singleton 2D graphics manager.
  */
 class Gfx2Manager {
   canvas: HTMLCanvasElement;

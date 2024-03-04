@@ -1,6 +1,6 @@
 * Class: Gfx2Manager
 
-Singleton 2D renderer.
+Singleton 2D graphics manager.
 ** Constructors
 - ''new Gfx2Manager''(): Gfx2Manager~
 ** Methods

@@ -3,7 +3,7 @@ import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2TileMap } from './gfx2_tile_map';
 
 /**
- * A tilelayer drawable.
+ * A tilemap layer drawable.
  */
 class Gfx2TileMapLayer extends Gfx2Drawable {
   tilemap: Gfx2TileMap;
@@ -30,6 +30,10 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
     this.layerIndex = layerIndex;
     this.frameIndex = 0;
     this.frameProgress = 0;
+
+    const tilelayer = tilemap.getTileLayer(layerIndex);
+    this.offset[0] = tilelayer.getOffsetX();
+    this.offset[1] = tilelayer.getOffsetY();
   }
 
   /**
@@ -52,9 +56,9 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
   }
 
   /**
-   * The draw function.
+   * The paint function.
    */
-  draw(): void {
+  paint(): void {
     const tilelayer = this.tilemap.getTileLayer(this.layerIndex);
     if (!tilelayer) {
       return;
@@ -66,15 +70,13 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
     const ctx = gfx2Manager.getContext();
     const tileset = this.tilemap.getTileset();
 
-    ctx.save();
-    ctx.translate(-this.offset[0], -this.offset[1]);
-    ctx.translate(this.position[0], this.position[1]);
-    ctx.rotate(this.rotation);
-    ctx.scale(this.scale[0], this.scale[1]);
-
     for (let i = 0; i < tilelayer.getRows(); i++) {
       for (let j = 0; j < tilelayer.getColumns(); j++) {
         let tileId = tilelayer.getTile(j, i);
+        if (tileId < 0) {
+          continue;
+        }
+
         const animation = tileset.getAnimation(tileId);
         if (animation) {
           tileId = animation[this.frameIndex % animation.length];
@@ -93,8 +95,6 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
         );
       }
     }
-
-    ctx.restore();
   }
 }
 

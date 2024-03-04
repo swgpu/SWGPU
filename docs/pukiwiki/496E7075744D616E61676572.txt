@@ -20,7 +20,7 @@ Checks if an action is currently active.~
 -- ''actionId'': The action identifier.~
 ~
 - ''registerAction''(inputSource: string, eventKey: string, actionId: string): void~
-Register an action mapping.~
+Add an action mapping.~
 -- ''inputSource'': The device from which the input is received.~
 -- ''eventKey'': The key or button that triggers the action.~
 -- ''actionId'': The unique action identifier.~
@@ -30,7 +30,7 @@ Removes a pad.~
 -- ''id'': The unique identifier of the pad~
 ~
 - ''unregisterAction''(inputSource: string, eventKey: string, actionId: string): void~
-UnRegister an action mapping.~
+Remove an action mapping.~
 -- ''inputSource'': The device from which the input is received.~
 -- ''eventKey'': The key or button that triggers the action.~
 -- ''actionId'': The unique action identifier.~

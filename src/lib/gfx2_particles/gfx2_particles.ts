@@ -192,7 +192,7 @@ class Gfx2Particles extends Gfx2Drawable {
   }
 
   /**
-   * The "update" function.
+   * The update function.
    * 
    * @param {number} ts - The timestep.
    */

@@ -192,6 +192,8 @@ class Gfx2TileMap {
 class Gfx2TileLayer {
   name: string;
   rows: number;
+  offsetX: number;
+  offsetY: number;
   columns: number;
   visible: boolean;
   frameDuration: number;
@@ -201,6 +203,8 @@ class Gfx2TileLayer {
     this.name = '';
     this.rows = 0;
     this.columns = 0;
+    this.offsetX = 0;
+    this.offsetY = 0;
     this.visible = true;
     this.frameDuration = 0;
     this.grid = [];
@@ -215,8 +219,10 @@ class Gfx2TileLayer {
     this.name = data['Name'];
     this.rows = data['Rows'];
     this.columns = data['Columns'];
-    this.visible = data['Visible'];
-    this.frameDuration = data['FrameDuration'];
+    this.offsetX = data['OffsetX'] ?? 0;
+    this.offsetY = data['OffsetY'] ?? 0;
+    this.visible = data['Visible'] ?? true;
+    this.frameDuration = data['FrameDuration'] ?? 0;
     this.grid = data['Grid'];
   }
 
@@ -242,6 +248,20 @@ class Gfx2TileLayer {
    */
   getRows(): number {
     return this.rows;
+  }
+
+  /**
+   * Returns the x-coordinates offset.
+   */
+  getOffsetX(): number {
+    return this.offsetX;
+  }
+
+  /**
+   * Returns the y-coordiantes offset.
+   */
+  getOffsetY(): number {
+    return this.offsetY;
   }
 
   /**

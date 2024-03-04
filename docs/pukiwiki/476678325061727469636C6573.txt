@@ -17,5 +17,5 @@ Set the particle texture.~
 -- ''texture'': The texture.~
 ~
 - ''update''(ts: number): void~
-The "update" function.~
+The update function.~
 -- ''ts'': The timestep.~

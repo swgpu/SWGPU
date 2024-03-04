@@ -13,7 +13,7 @@ class AIPathGridSolver<T extends vec2 | vec3> {
   /**
    * Find the shortest path between a start node and an end node in a given grid and returns the path.
    * 
-   * @param grid -  A grid representing the pathfinding area. It contains information about the obstacles and the values of each cell (empty = 0, obstacle = 1).
+   * @param grid - A grid representing the pathfinding area. It contains information about the obstacles and the values of each cell (empty = 0, obstacle = 1).
    * @param startCoord - The starting position in the grid.
    * @param endCoord - The destination position in the grid.
    */

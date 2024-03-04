@@ -1,12 +1,15 @@
 * Class: Gfx2Drawable
 
 A 2D drawable object.
-- parent of: Gfx2IsoDrawable, Gfx2IsoTileMapLayer, Gfx2Particles, Gfx2SpriteJAS, Gfx2SpriteJSS, Gfx2TileMapLayer~
+- parent of: Gfx2IsoTile, Gfx2IsoTileMapLayer, Gfx2Particles, Gfx2SpriteJAS, Gfx2SpriteJSS, Gfx2TileMapLayer~
 ** Constructors
 - ''new Gfx2Drawable''(): Gfx2Drawable~
 ** Methods
 - ''draw''(): void~
 The draw function.~
+~
+- ''getElevation''(): number~
+Returns the elevation.~
 ~
 - ''getOffset''(): vec2~
 Returns the origin offset.~
@@ -28,6 +31,9 @@ Returns the x-coordinate of the position.~
 ~
 - ''getPositionY''(): number~
 Returns the y-coordinate of the position.~
+~
+- ''getPositionZ''(): number~
+Returns the z-depth value.~
 ~
 - ''getRotation''(): number~
 Returns the rotation.~
@@ -51,6 +57,10 @@ Virtual method that is called during the draw phase (after transforms).~
 Add rotation value to current angle.~
 -- ''a'': The rotation angle to add in radians.~
 ~
+- ''setElevation''(elevation: number): void~
+Set the elevation.~
+-- ''elevation'': The elevation value.~
+~
 - ''setOffset''(x: number, y: number): void~
 Set the origin offset value.~
 -- ''x'': The x-offset.~
@@ -64,6 +74,10 @@ Sets the opacity.~
 Set the position with the given x and y coordinates.~
 -- ''x'': The X coordinate of the position.~
 -- ''y'': The Y coordinate of the position.~
+~
+- ''setPositionZ''(z: number): void~
+Set the z-depth value.~
+-- ''z'': The z-depth value.~
 ~
 - ''setRotation''(rotation: number): void~
 Sets the rotation angle (in radians).~

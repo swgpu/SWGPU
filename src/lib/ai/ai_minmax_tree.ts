@@ -65,6 +65,9 @@ abstract class AIMinMaxTreeAbstract {
  * The MinMax leaf node.
  */
 class AIMinMaxLeaf extends AIMinMaxTreeAbstract {
+  /**
+   * @param value - The value of the leaf.
+   */
 	constructor(value: number) {
 		super();
     this.value = value;
@@ -77,6 +80,9 @@ class AIMinMaxLeaf extends AIMinMaxTreeAbstract {
 class AIMinMaxNode extends AIMinMaxTreeAbstract {
   children: Array<AIMinMaxTreeAbstract>;
 
+  /**
+   * @param children - The children's node.
+   */
 	constructor(children: Array<AIMinMaxTreeAbstract> = []) {
 		super();
     this.children = children;

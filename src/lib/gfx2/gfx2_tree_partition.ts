@@ -102,7 +102,7 @@ class Gfx2TreePartitionMethod implements ITreePartitionMethod<Gfx2BoundingRect> 
   }
 }
 
-export { Gfx2TreePartition };
+export { Gfx2TreePartition, Gfx2TreePartitionMethod };
 
 // -------------------------------------------------------------------------------------------
 // HELPFUL

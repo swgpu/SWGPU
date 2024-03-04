@@ -16,6 +16,12 @@ Returns the map layer's grid.~
 - ''getName''(): string~
 Returns the name.~
 ~
+- ''getOffsetX''(): number~
+Returns the x-coordinates offset.~
+~
+- ''getOffsetY''(): number~
+Returns the y-coordiantes offset.~
+~
 - ''getRows''(): number~
 Returns the number of rows.~
 ~

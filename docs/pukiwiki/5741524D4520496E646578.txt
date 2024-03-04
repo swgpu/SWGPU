@@ -5,6 +5,7 @@
 - [[Gfx2>gfx2]]
 - [[Gfx3>gfx3]]
 - [[Input>input]]
+- [[Motion>motion]]
 - [[Screen>screen]]
 - [[Script>script]]
 - [[Sound>sound]]

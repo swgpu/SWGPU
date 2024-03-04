@@ -2,9 +2,9 @@ import { gfx2Manager } from '../../lib/gfx2/gfx2_manager';
 import { gfx2TextureManager } from '../../lib/gfx2/gfx2_texture_manager';
 import { UT } from '../../lib/core/utils';
 import { Gfx2SpriteJAS } from '../../lib/gfx2_sprite/gfx2_sprite_jas';
-import { Gfx2IsoDrawable } from '../../lib/gfx2_iso/gfx2_iso_drawable';
+import { Gfx2Drawable } from '../../lib/gfx2/gfx2_drawable';
 
-class Controller extends Gfx2IsoDrawable {
+class Controller extends Gfx2Drawable {
   constructor() {
     super();
     this.sprite = new Gfx2SpriteJAS();

@@ -1,10 +1,10 @@
 * Class: Gfx2IsoTile
 
-A 2D isometric drawable.
-- inherit from: Gfx2IsoDrawable~
+A 2D isometric tile drawable.
+- inherit from: Gfx2Drawable~
 ** Constructors
 - ''new Gfx2IsoTile''(options: Gfx2TileOptions): Gfx2IsoTile~
--- ''options''~
+-- ''options'': The configuration options.~
 ** Methods
-- ''draw''(): void~
-The draw function.~
+- ''paint''(): void~
+The paint function.~

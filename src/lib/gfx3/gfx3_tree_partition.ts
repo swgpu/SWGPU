@@ -123,7 +123,7 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
   }
 }
 
-export { Gfx3TreePartition };
+export { Gfx3TreePartition, Gfx3TreePartitionMethod };
 
 // -------------------------------------------------------------------------------------------
 // HELPFUL
