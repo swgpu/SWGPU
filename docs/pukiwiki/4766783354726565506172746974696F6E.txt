@@ -1,6 +1,6 @@
 * Class: Gfx3TreePartition
 
-A 3D binary tree space partition.
+A 3D binary tree space partition.~
 - inherit from: TreePartition~
 ** Constructors
 - ''new Gfx3TreePartition''(maxChildren: number, maxDepth: number, aabb: Gfx3BoundingBox): Gfx3TreePartition~

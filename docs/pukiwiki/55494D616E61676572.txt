@@ -1,6 +1,6 @@
 * Class: UIManager
 
-Singleton UI manager.
+Singleton UI manager.~
 ** Constructors
 - ''new UIManager''(): UIManager~
 ** Methods

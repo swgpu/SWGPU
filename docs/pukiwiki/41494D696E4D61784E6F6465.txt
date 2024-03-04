@@ -1,6 +1,6 @@
 * Class: AIMinMaxNode
 
-The MinMax node.
+The MinMax node.~
 - inherit from: AIMinMaxTreeAbstract~
 ** Constructors
 - ''new AIMinMaxNode''(children: AIMinMaxTreeAbstract[]): AIMinMaxNode~

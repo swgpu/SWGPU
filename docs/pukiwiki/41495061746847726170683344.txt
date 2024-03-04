@@ -1,6 +1,6 @@
 * Class: AIPathGraph3D
 
-Three-dimensions path graph.
+Three-dimensions path graph.~
 - inherit from: AIPathGraph~
 ** Constructors
 - ''new AIPathGraph3D''(nodes: Map): AIPathGraph3D~

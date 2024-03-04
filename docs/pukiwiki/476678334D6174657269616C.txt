@@ -1,6 +1,6 @@
 * Class: Gfx3Material
 
-The material of a surface.
+The material of a surface.~
 ** Constructors
 - ''new Gfx3Material''(options: MATOptions): Gfx3Material~
 -- ''options'': The options to configuring the material.~

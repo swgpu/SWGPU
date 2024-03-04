@@ -1,6 +1,6 @@
 * Class: Gfx3View
 
-A 3D view. Used to manipulate camera, viewport, projection mode, background color and more.
+A 3D view. Used to manipulate camera, viewport, projection mode, background color and more.~
 ** Constructors
 - ''new Gfx3View''(): Gfx3View~
 ** Methods

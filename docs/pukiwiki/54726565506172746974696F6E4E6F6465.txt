@@ -1,6 +1,6 @@
 * Class: TreePartitionNode
 
-The node in a binary tree partition data structure.
+The node in a binary tree partition data structure.~
 ** Constructors
 - ''new TreePartitionNode''(tree: TreePartition, depth: number, method: ITreePartitionMethod): TreePartitionNode~
 -- ''tree'': The root partition binary tree.~

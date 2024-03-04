@@ -1,6 +1,6 @@
 * Class: UIText
 
-A UI widget displaying a simple text.
+A UI widget displaying a simple text.~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UIText''(): UIText~

@@ -1,6 +1,6 @@
 * Class: Gfx3ParticlesRenderer
 
-Singleton particules renderer.
+Singleton particules renderer.~
 - inherit from: Gfx3RendererAbstract~
 ** Constructors
 - ''new Gfx3ParticlesRenderer''(): Gfx3ParticlesRenderer~

@@ -1,6 +1,6 @@
 * Class: AIPathGraph
 
-A Generic abstract path graph.
+A Generic abstract path graph.~
 - parent of: AIPathGraph2D, AIPathGraph3D~
 ** Constructors
 - ''new AIPathGraph''(nodes: Map): AIPathGraph~

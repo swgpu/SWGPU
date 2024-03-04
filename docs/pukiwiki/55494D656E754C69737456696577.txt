@@ -1,7 +1,7 @@
 * Class: UIMenuListView
 
 A UI widget displaying a menu that make update automatically when a datasource changed.
-Note: It send same event than UIMenu.
+Note: It send same event than UIMenu.~
 - inherit from: UIMenu~
 ** Constructors
 - ''new UIMenuListView''(options): UIMenuListView~

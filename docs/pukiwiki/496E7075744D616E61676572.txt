@@ -1,7 +1,7 @@
 * Class: InputManager
 
 Singleton input manager.
-Handle various sources such as keyboard and gamepad.
+Handle various sources such as keyboard and gamepad.~
 ** Constructors
 - ''new InputManager''(): InputManager~
 ** Methods

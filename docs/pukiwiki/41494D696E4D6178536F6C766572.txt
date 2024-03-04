@@ -1,6 +1,6 @@
 * Class: AIMinMaxSolver
 
-Solves an MinMax tree.
+Solves an MinMax tree.~
 ** Constructors
 - ''new AIMinMaxSolver''(): AIMinMaxSolver~
 ** Methods

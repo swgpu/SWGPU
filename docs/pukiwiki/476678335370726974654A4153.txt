@@ -1,6 +1,6 @@
 * Class: Gfx3SpriteJAS
 
-A 3D animated sprite.
+A 3D animated sprite.~
 - inherit from: Gfx3Sprite~
 ** Constructors
 - ''new Gfx3SpriteJAS''(): Gfx3SpriteJAS~

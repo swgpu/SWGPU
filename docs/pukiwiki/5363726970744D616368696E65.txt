@@ -1,6 +1,6 @@
 * Class: ScriptMachine
 
-Is a script machine that parse and execute blocks from a JSON file.
+Is a script machine that parse and execute blocks from a JSON file.~
 ** Constructors
 - ''new ScriptMachine''(): ScriptMachine~
 ** Methods

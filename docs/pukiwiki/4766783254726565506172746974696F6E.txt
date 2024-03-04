@@ -1,6 +1,6 @@
 * Class: Gfx2TreePartition
 
-A 2D binary tree space partition.
+A 2D binary tree space partition.~
 - inherit from: TreePartition~
 ** Constructors
 - ''new Gfx2TreePartition''(maxChildren: number, maxDepth: number, rect: Gfx2BoundingRect): Gfx2TreePartition~

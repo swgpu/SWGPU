@@ -1,6 +1,6 @@
 * Class: EventManager
 
-Singleton managing subscribing to and emitting events.
+Singleton managing subscribing to and emitting events.~
 ** Constructors
 - ''new EventManager''(): EventManager~
 ** Methods

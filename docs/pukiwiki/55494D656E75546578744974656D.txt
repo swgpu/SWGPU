@@ -1,6 +1,6 @@
 * Class: UIMenuTextItem
 
-A UI widget displaying a simple menu text item.
+A UI widget displaying a simple menu text item.~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UIMenuTextItem''(): UIMenuTextItem~

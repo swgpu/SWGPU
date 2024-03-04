@@ -1,6 +1,6 @@
 * Class: DNAManager
 
-Singleton pure ECS manager.
+Singleton pure ECS manager.~
 ** Constructors
 - ''new DNAManager''(): DNAManager~
 ** Methods

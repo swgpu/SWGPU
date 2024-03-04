@@ -1,7 +1,7 @@
 * Class: UIInputSlider
 
 A UI widget displaying a slider input.
-It emit 'E_VALUE_CHANGED' when value changed.
+It emit 'E_VALUE_CHANGED' when value changed.~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UIInputSlider''(): UIInputSlider~

@@ -1,6 +1,6 @@
 * Class: AIPathGraph2D
 
-Two-dimensions path graph.
+Two-dimensions path graph.~
 - inherit from: AIPathGraph~
 ** Constructors
 - ''new AIPathGraph2D''(nodes: Map): AIPathGraph2D~

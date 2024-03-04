@@ -1,6 +1,6 @@
 * Class: Gfx3DebugRenderer
 
-Singleton debug renderer.
+Singleton debug renderer.~
 - inherit from: Gfx3RendererAbstract~
 ** Constructors
 - ''new Gfx3DebugRenderer''(): Gfx3DebugRenderer~

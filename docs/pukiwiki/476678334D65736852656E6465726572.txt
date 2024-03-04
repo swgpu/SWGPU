@@ -1,6 +1,6 @@
 * Class: Gfx3MeshRenderer
 
-Singleton mesh renderer.
+Singleton mesh renderer.~
 - inherit from: Gfx3RendererAbstract~
 ** Constructors
 - ''new Gfx3MeshRenderer''(): Gfx3MeshRenderer~

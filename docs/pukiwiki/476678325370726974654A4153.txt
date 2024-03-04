@@ -1,6 +1,6 @@
 * Class: Gfx2SpriteJAS
 
-A 2D sprite with animations.
+A 2D sprite with animations.~
 - inherit from: Gfx2Drawable~
 ** Constructors
 - ''new Gfx2SpriteJAS''(): Gfx2SpriteJAS~

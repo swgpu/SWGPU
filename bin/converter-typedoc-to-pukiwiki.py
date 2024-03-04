@@ -47,7 +47,8 @@ def get_class_description(obj):
         summary = obj["comment"]["summary"]
         for txt_obj in summary:
             description += "" + txt_obj["text"]
-        description += "\n"
+        description.replace("\n", "~\n")
+        description += "~\n"
     except KeyError as e:
         pass
     return description
@@ -335,7 +336,7 @@ def create_pukiwiki_pages():
                         print(warme_class["name"])
                         class_page = create_class_page(warme_class)
                         page_path = pukiwiki_pages_path / (warme_class["name"].encode().hex().upper() + ".txt")
-                        page_path.write_text(class_page)
+                        page_path.write_text(class_page, encoding="utf-8")
                         with module_file.open("a") as f:
                             f.write("- [[" + warme_class["name"] + "]]~\n")
             # If you didn't add this module to welcome page, add it !

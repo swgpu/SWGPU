@@ -1,6 +1,6 @@
 * Class: Gfx3Particles
 
-The 3D particles diffuser.
+The 3D particles diffuser.~
 - inherit from: Gfx3Drawable~
 ** Constructors
 - ''new Gfx3Particles''(options: Partial): Gfx3Particles~

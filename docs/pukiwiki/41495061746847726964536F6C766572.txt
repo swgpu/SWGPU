@@ -1,6 +1,6 @@
 * Class: AIPathGridSolver
 
-Implements the A* algorithm to find the shortest path between a start coordinate and an end coordinate on a grid.
+Implements the A* algorithm to find the shortest path between a start coordinate and an end coordinate on a grid.~
 ** Constructors
 - ''new AIPathGridSolver''(): AIPathGridSolver~
 ** Methods

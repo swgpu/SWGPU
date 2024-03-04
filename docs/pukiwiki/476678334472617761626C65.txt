@@ -1,6 +1,6 @@
 * Class: Gfx3Drawable
 
-A 3D drawable object.
+A 3D drawable object.~
 - inherit from: Gfx3Transformable~
 - parent of: Gfx3Flare, Gfx3Mesh, Gfx3Particles, Gfx3Skybox, Gfx3Sprite~
 ** Constructors

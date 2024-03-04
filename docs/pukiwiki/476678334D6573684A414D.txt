@@ -1,6 +1,6 @@
 * Class: Gfx3MeshJAM
 
-A 3D animated mesh.
+A 3D animated mesh.~
 - inherit from: Gfx3Mesh~
 ** Constructors
 - ''new Gfx3MeshJAM''(): Gfx3MeshJAM~

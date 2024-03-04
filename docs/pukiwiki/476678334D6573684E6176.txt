@@ -2,7 +2,7 @@
 
 Controlling navigation and collisions responses in a static mesh.
 In collision case, the collision response sliding along the polygon of the map to keep a good
-feeling for the player.
+feeling for the player.~
 ** Constructors
 - ''new Gfx3MeshNav''(): Gfx3MeshNav~
 ** Methods

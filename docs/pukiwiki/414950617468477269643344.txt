@@ -1,6 +1,6 @@
 * Class: AIPathGrid3D
 
-A 3D grid representation.
+A 3D grid representation.~
 - inherit from: AIPathGrid~
 ** Constructors
 - ''new AIPathGrid3D''(size: vec3, grid: number[]): AIPathGrid3D~

@@ -1,6 +1,6 @@
 * Class: Gfx2Tileset
 
-The tileset.
+The tileset.~
 ** Constructors
 - ''new Gfx2Tileset''(): Gfx2Tileset~
 ** Methods

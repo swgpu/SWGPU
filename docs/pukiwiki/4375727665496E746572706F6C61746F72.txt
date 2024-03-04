@@ -1,6 +1,6 @@
 * Class: CurveInterpolator
 
-Cubic curve interpolator
+Cubic curve interpolator~
 ** Constructors
 - ''new CurveInterpolator''(points: Vector[], options: CurveInterpolatorOptions): default~
 Create a new interpolator instance~

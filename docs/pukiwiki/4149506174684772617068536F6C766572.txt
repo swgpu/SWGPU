@@ -1,6 +1,6 @@
 * Class: AIPathGraphSolver
 
-Implements the A* algorithm to find the shortest path between two nodes in a graph.
+Implements the A* algorithm to find the shortest path between two nodes in a graph.~
 ** Constructors
 - ''new AIPathGraphSolver''(): AIPathGraphSolver~
 ** Methods

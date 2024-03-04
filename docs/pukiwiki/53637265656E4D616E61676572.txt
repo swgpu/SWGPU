@@ -1,7 +1,7 @@
 * Class: ScreenManager
 
 Singleton screen manager.
-Note: requestPush, requestSet and requestPop are all asynchronously method and will be executed safely in the update loop.
+Note: requestPush, requestSet and requestPop are all asynchronously method and will be executed safely in the update loop.~
 ** Constructors
 - ''new ScreenManager''(): ScreenManager~
 ** Methods

@@ -1,6 +1,6 @@
 * Class: Gfx3Flare
 
-A flare drawable object.
+A flare drawable object.~
 - inherit from: Gfx3Drawable~
 ** Constructors
 - ''new Gfx3Flare''(): Gfx3Flare~

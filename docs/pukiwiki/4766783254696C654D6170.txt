@@ -1,6 +1,6 @@
 * Class: Gfx2TileMap
 
-The tilemap.
+The tilemap.~
 ** Constructors
 - ''new Gfx2TileMap''(): Gfx2TileMap~
 ** Methods

@@ -1,6 +1,6 @@
 * Class: SoundManager
 
-Singleton sound manager.
+Singleton sound manager.~
 ** Constructors
 - ''new SoundManager''(): SoundManager~
 ** Methods

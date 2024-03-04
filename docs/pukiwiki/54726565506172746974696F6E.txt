@@ -1,6 +1,6 @@
 * Class: TreePartition
 
-The root partition binary tree.
+The root partition binary tree.~
 - parent of: Gfx2TreePartition, Gfx3TreePartition~
 ** Constructors
 - ''new TreePartition''(maxChildren: number, maxDepth: number, method: ITreePartitionMethod): TreePartition~

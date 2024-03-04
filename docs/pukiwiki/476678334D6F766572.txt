@@ -1,6 +1,6 @@
 * Class: Gfx3Mover
 
-Is a 3D path that can move a transformable target along a series of points.
+Is a 3D path that can move a transformable target along a series of points.~
 ** Constructors
 - ''new Gfx3Mover''(): Gfx3Mover~
 ** Methods

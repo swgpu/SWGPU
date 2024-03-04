@@ -1,6 +1,6 @@
 * Class: DNASystem
 
-A system in a pure ECS data-driven implementation.
+A system in a pure ECS data-driven implementation.~
 ** Constructors
 - ''new DNASystem''(tags: never[]): DNASystem~
 -- ''tags'': A list of tags.~

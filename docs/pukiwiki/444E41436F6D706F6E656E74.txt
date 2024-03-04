@@ -1,6 +1,6 @@
 * Class: DNAComponent
 
-A component in a pure ECS data-driven implementation.
+A component in a pure ECS data-driven implementation.~
 ** Constructors
 - ''new DNAComponent''(typename: string): DNAComponent~
 -- ''typename'': The component identifier.~

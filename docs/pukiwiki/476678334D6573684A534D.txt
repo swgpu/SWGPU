@@ -1,6 +1,6 @@
 * Class: Gfx3MeshJSM
 
-A 3D static mesh.
+A 3D static mesh.~
 - inherit from: Gfx3Mesh~
 ** Constructors
 - ''new Gfx3MeshJSM''(): Gfx3MeshJSM~

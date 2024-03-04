@@ -1,6 +1,6 @@
 * Class: Gfx3Mesh
 
-A 3D base mesh object.
+A 3D base mesh object.~
 - inherit from: Gfx3Drawable~
 - parent of: Gfx3MeshJAM, Gfx3MeshJSM, Gfx3MeshOBJ~
 ** Constructors

@@ -1,7 +1,7 @@
 * Class: Gfx3StaticGroup
 
 Interface to bind the uniform buffer and textures to the GPU pipeline.
-Note: Used for one bind group.
+Note: Used for one bind group.~
 ** Constructors
 - ''new Gfx3StaticGroup''(device: GPUDevice, pipeline: GPURenderPipeline, groupIndex: number): Gfx3StaticGroup~
 -- ''device'': The GPU device.~

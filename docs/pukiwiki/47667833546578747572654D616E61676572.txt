@@ -1,6 +1,6 @@
 * Class: Gfx3TextureManager
 
-Singleton 3D textures manager.
+Singleton 3D textures manager.~
 ** Constructors
 - ''new Gfx3TextureManager''(): Gfx3TextureManager~
 ** Methods

@@ -1,6 +1,6 @@
 * Class: Curve
 
-A cubic curve.
+A cubic curve.~
 ** Constructors
 - ''new Curve''(): Curve~
 ** Methods

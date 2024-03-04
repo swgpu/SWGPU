@@ -1,6 +1,6 @@
 * Class: Gfx2Particles
 
-The particles diffuser.
+The particles diffuser.~
 - inherit from: Gfx2Drawable~
 ** Constructors
 - ''new Gfx2Particles''(options: Partial): Gfx2Particles~

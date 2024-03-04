@@ -1,6 +1,6 @@
 * Class: AIMinMaxTreeAbstract
 
-The MinMax node abstract class.
+The MinMax node abstract class.~
 - parent of: AIMinMaxLeaf, AIMinMaxNode~
 ** Constructors
 - ''new AIMinMaxTreeAbstract''(): AIMinMaxTreeAbstract~

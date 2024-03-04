@@ -1,6 +1,6 @@
 * Class: Gfx3BoundingBox
 
-A 3D bounding box.
+A 3D bounding box.~
 ** Constructors
 - ''new Gfx3BoundingBox''(min: vec3, max: vec3): Gfx3BoundingBox~
 -- ''min'': The minimum point of the bounding box.~

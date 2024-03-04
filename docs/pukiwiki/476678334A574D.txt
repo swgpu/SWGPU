@@ -1,7 +1,7 @@
 * Class: Gfx3JWM
 
 A 3D walkmesh.
-In collision case, the collision response sliding along the edges of the walkmesh to keep a good feeling for the player.
+In collision case, the collision response sliding along the edges of the walkmesh to keep a good feeling for the player.~
 - inherit from: Gfx3Transformable~
 ** Constructors
 - ''new Gfx3JWM''(): Gfx3JWM~

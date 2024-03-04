@@ -1,6 +1,6 @@
 * Class: Gfx3SpriteRenderer
 
-Singleton sprite renderer.
+Singleton sprite renderer.~
 - inherit from: Gfx3RendererAbstract~
 ** Constructors
 - ''new Gfx3SpriteRenderer''(): Gfx3SpriteRenderer~

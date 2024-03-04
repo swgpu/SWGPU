@@ -1,7 +1,7 @@
 * Class: Screen
 
 A screen in a game like "start-screen", "menu-screen", "game-screen" or "pause-screen.
-It is your top-level classes with methods for updating, drawing, entering, exiting.
+It is your top-level classes with methods for updating, drawing, entering, exiting.~
 ** Constructors
 - ''new Screen''(): Screen~
 ** Methods

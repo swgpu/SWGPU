@@ -1,6 +1,6 @@
 * Class: AIPathGrid
 
-A general grid representation.
+A general grid representation.~
 - parent of: AIPathGrid2D, AIPathGrid3D~
 ** Constructors
 - ''new AIPathGrid''(size: T, grid: number[]): AIPathGrid~

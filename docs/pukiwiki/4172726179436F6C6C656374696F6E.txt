@@ -1,6 +1,6 @@
 * Class: ArrayCollection
 
-Generic class that represents a collection of items and provides event-based features.
+Generic class that represents a collection of items and provides event-based features.~
 ** Constructors
 - ''new ArrayCollection''(items: T[]): ArrayCollection~
 -- ''items'': The `items` underlying collection's data.~

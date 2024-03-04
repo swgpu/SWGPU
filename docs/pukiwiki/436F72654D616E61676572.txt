@@ -1,7 +1,7 @@
 * Class: CoreManager
 
 Singleton core manager.
-Used to set the size and resolution of the top-level HTMLElement container.
+Used to set the size and resolution of the top-level HTMLElement container.~
 ** Constructors
 - ''new CoreManager''(): CoreManager~
 ** Methods

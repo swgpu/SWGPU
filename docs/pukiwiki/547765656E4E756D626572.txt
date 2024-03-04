@@ -1,6 +1,6 @@
 * Class: TweenNumber
 
-Interpolate number values.
+Interpolate number values.~
 - inherit from: TweenAbstract~
 ** Constructors
 - ''new TweenNumber''(times: number[], values: number[], fns: Function[]): TweenNumber~

@@ -1,6 +1,6 @@
 * Class: Gfx2Drawer
 
-The 2D drawables renderer.
+The 2D drawables renderer.~
 ** Constructors
 - ''new Gfx2Drawer''(): Gfx2Drawer~
 ** Methods

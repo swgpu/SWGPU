@@ -1,7 +1,7 @@
 * Class: UIInputKeyboard
 
 A UI widget displaying a virtual keyboard.
-It emit 'E_VALUE_CHANGED' when value changed.
+It emit 'E_VALUE_CHANGED' when value changed.~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UIInputKeyboard''(): UIInputKeyboard~

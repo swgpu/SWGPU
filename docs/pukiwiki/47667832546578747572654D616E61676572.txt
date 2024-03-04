@@ -1,6 +1,6 @@
 * Class: Gfx2TextureManager
 
-Singleton textures manager.
+Singleton textures manager.~
 ** Constructors
 - ''new Gfx2TextureManager''(): Gfx2TextureManager~
 ** Methods

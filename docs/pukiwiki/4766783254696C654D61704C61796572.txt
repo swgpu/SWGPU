@@ -1,6 +1,6 @@
 * Class: Gfx2TileMapLayer
 
-A tilemap layer drawable.
+A tilemap layer drawable.~
 - inherit from: Gfx2Drawable~
 ** Constructors
 - ''new Gfx2TileMapLayer''(): Gfx2TileMapLayer~

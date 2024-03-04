@@ -1,6 +1,6 @@
 * Class: AIPathGrid2D
 
-A 2D grid representation.
+A 2D grid representation.~
 - inherit from: AIPathGrid~
 ** Constructors
 - ''new AIPathGrid2D''(size: vec2, grid: number[]): AIPathGrid2D~

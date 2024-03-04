@@ -1,6 +1,6 @@
 * Class: Gfx2TileLayer
 
-The tile layer.
+The tile layer.~
 ** Constructors
 - ''new Gfx2TileLayer''(): Gfx2TileLayer~
 ** Methods

@@ -1,6 +1,6 @@
 * Class: UIWidget
 
-Is a ui element base.
+Is a ui element base.~
 - parent of: UIBubble, UIDescriptionList, UIDialog, UIInputKeyboard, UIInputSlider, UIMenu, UIMenuTextItem, UIMessage, UIPrint, UIPrompt, UISprite, UIText~
 ** Constructors
 - ''new UIWidget''(options): UIWidget~

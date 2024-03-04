@@ -1,7 +1,7 @@
 * Class: UIPrompt
 
 A UI widget displaying prompt with a text content and a menu of actions.
-It emits an 'E_ITEM_SELECTED'.
+It emits an 'E_ITEM_SELECTED'.~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UIPrompt''(): UIPrompt~

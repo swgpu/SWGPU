@@ -1,6 +1,6 @@
 * Class: Gfx3Camera
 
-A 3D camera object.
+A 3D camera object.~
 - inherit from: Gfx3Transformable~
 ** Constructors
 - ''new Gfx3Camera''(viewIndex: number): Gfx3Camera~

@@ -1,6 +1,6 @@
 * Class: Gfx2BoundingRect
 
-A 2D bounding rectangle.
+A 2D bounding rectangle.~
 ** Constructors
 - ''new Gfx2BoundingRect''(min: vec2, max: vec2): Gfx2BoundingRect~
 -- ''min'': The minimum point of the bounding rectangle.~

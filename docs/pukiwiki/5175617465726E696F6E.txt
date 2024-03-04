@@ -2,7 +2,7 @@
 
 A quaternion.
 This class is a fork from Quaternion.js.
-Thanks to
+Thanks to~
 ** Constructors
 - ''new Quaternion''(w: number, x: number, y: number, z: number): Quaternion~
 -- ''w'': real~

@@ -1,6 +1,6 @@
 * Class: Gfx3TreePartitionMethod
 
-A 3D binary tree partition method for quick search intersections.
+A 3D binary tree partition method for quick search intersections.~
 ** Constructors
 - ''new Gfx3TreePartitionMethod''(box: Gfx3BoundingBox, axis): Gfx3TreePartitionMethod~
 -- ''box'': The position and size of the partition box.~

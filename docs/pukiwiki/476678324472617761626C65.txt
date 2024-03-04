@@ -1,6 +1,6 @@
 * Class: Gfx2Drawable
 
-A 2D drawable object.
+A 2D drawable object.~
 - parent of: Gfx2IsoTile, Gfx2IsoTileMapLayer, Gfx2Particles, Gfx2SpriteJAS, Gfx2SpriteJSS, Gfx2TileMapLayer~
 ** Constructors
 - ''new Gfx2Drawable''(): Gfx2Drawable~

@@ -18,7 +18,7 @@ MTL Options:
 - d  => Opacity
 - map_Kd => Albedo map
 - map_Ns => Specularity map
-- map_Bump => Normal map
+- map_Bump => Normal map~
 - inherit from: Gfx3Mesh~
 ** Constructors
 - ''new Gfx3MeshOBJ''(): Gfx3MeshOBJ~

@@ -1,6 +1,6 @@
 * Class: UIDescriptionList
 
-A UI widget for displaying a list of items with labels and values.
+A UI widget for displaying a list of items with labels and values.~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UIDescriptionList''(): UIDescriptionList~

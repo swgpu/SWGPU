@@ -1,6 +1,6 @@
 * Class: Gfx3Skybox
 
-A cubemap skybox.
+A cubemap skybox.~
 - inherit from: Gfx3Drawable~
 ** Constructors
 - ''new Gfx3Skybox''(): Gfx3Skybox~

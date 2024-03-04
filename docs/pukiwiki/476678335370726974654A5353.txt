@@ -1,6 +1,6 @@
 * Class: Gfx3SpriteJSS
 
-A 3D static sprite (without animations).
+A 3D static sprite (without animations).~
 - inherit from: Gfx3Sprite~
 ** Constructors
 - ''new Gfx3SpriteJSS''(): Gfx3SpriteJSS~

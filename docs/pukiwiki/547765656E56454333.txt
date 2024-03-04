@@ -1,6 +1,6 @@
 * Class: TweenVEC3
 
-Interpolate vec3 values.
+Interpolate vec3 values.~
 - inherit from: TweenAbstract~
 ** Constructors
 - ''new TweenVEC3''(times: number[], values: vec3[], fns: Function[]): TweenVEC3~

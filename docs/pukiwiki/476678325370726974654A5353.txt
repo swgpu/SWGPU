@@ -1,6 +1,6 @@
 * Class: Gfx2SpriteJSS
 
-A 2D static sprite (without animations).
+A 2D static sprite (without animations).~
 - inherit from: Gfx2Drawable~
 ** Constructors
 - ''new Gfx2SpriteJSS''(): Gfx2SpriteJSS~

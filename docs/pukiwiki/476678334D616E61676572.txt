@@ -1,6 +1,6 @@
 * Class: Gfx3Manager
 
-Singleton 3D graphics manager.
+Singleton 3D graphics manager.~
 ** Constructors
 - ''new Gfx3Manager''(): Gfx3Manager~
 ** Methods

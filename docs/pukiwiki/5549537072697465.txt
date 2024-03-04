@@ -1,6 +1,6 @@
 * Class: UISprite
 
-A UI widget displaying a sprite with animations.
+A UI widget displaying a sprite with animations.~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UISprite''(options): UISprite~

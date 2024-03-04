@@ -1,6 +1,6 @@
 * Class: Gfx3Sprite
 
-A 3D base sprite object.
+A 3D base sprite object.~
 - inherit from: Gfx3Drawable~
 - parent of: Gfx3SpriteJAS, Gfx3SpriteJSS~
 ** Constructors

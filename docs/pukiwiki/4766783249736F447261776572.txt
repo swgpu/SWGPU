@@ -1,6 +1,6 @@
 * Class: Gfx2IsoDrawer
 
-The isometric drawables renderer.
+The isometric drawables renderer.~
 ** Constructors
 - ''new Gfx2IsoDrawer''(): Gfx2IsoDrawer~
 ** Methods

@@ -1,7 +1,7 @@
 * Class: UIMenuText
 
 A UI widget displaying a simple text menu.
-It send same events as UIMenu.
+It send same events as UIMenu.~
 - inherit from: UIMenu~
 ** Constructors
 - ''new UIMenuText''(options): UIMenuText~

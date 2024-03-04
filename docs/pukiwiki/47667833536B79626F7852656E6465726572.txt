@@ -1,6 +1,6 @@
 * Class: Gfx3SkyboxRenderer
 
-Singleton skybox renderer.
+Singleton skybox renderer.~
 - inherit from: Gfx3RendererAbstract~
 ** Constructors
 - ''new Gfx3SkyboxRenderer''(): Gfx3SkyboxRenderer~
