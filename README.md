@@ -1,13 +1,13 @@
-# WARME (Web Against Regular Majors Engines)
+# WARME Engine (Web Against Regular Majors Engines)
 <p align="center">
     <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner.png" alt="logo"/>
 </p>
 
 ![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.0-blue)
 
-**WARME** is an open source realtime 2D/3D game engine based on **WebGPU**.      
+**WARME Engine** is an open source realtime 2D/3D game engine based on **WebGPU**.      
 It is a **complete and cross-platform solution** to build desktop/mobile games with high performance.    
-**WARME** wrap the web stack to serve one goal, make kewl games with a sweet coding style !     
+**WARME Engine** wrap the web stack to serve one goal, make kewl games with a sweet coding style !     
 Some words about our philosophy:
 - **Simplicity:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle rendering and update loops.    
@@ -31,7 +31,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
 - 🌳 **Tree** - Binary Space Partition for 2D & 3D
 - 🎨 **UI** - Component architecture to keep project clean and scalable
 - 🌆 **DNA** - Development normalized architecture
-- 🈸 **Demos** - 18 real-life samples you can used to start a project
+- 🈸 **Demos** - 19 real-life samples you can used to start a project
 
 ## Demos
 <table>
@@ -76,7 +76,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
         <p>Visual Novel</p>
     </td>
    <td>
-       <p>2D Top-view</p>
+       <p>2D Ortho Tiles</p>
    </td>
   </tr>
   <tr>
@@ -91,7 +91,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
    </td>
   </tr>
   <tr>
-    <td> 
+    <td>
         <p>Boarding Game</p>
     </td>
     <td>
@@ -139,7 +139,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
         <p>3D Particles</p>
     </td>
     <td>
-        <p>3D Map OBJ</p>
+        <p>3D Curve</p>
     </td>
     <td>
         <p>Triple Triad</p>
@@ -158,13 +158,23 @@ For a more concret overview on it, you can play examples [here](https://jay19240
   </tr>
   <tr>
     <td>
-        <p>2D Isometric Scene</p>
+        <p>2D Isometric Tiles</p>
     </td>
     <td>
         <p>3D Shadow Map</p>
     </td>
     <td>
         <p>Rendering filters</p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb19.png" width="150px"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <p>2D Background Isometric</p>
     </td>
   </tr>
 </table>
