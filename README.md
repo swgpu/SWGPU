@@ -174,7 +174,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
   </tr>
   <tr>
     <td>
-        <p>2D Background Isometric</p>
+        <p>2D Isometric Background</p>
     </td>
   </tr>
 </table>
