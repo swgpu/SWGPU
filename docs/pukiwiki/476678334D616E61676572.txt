@@ -5,16 +5,16 @@ Singleton 3D graphics manager.~
 - ''new Gfx3Manager''(): Gfx3Manager~
 ** Methods
 - ''beginDrawing''(): void~
-Prepare the draw process.
+Prepare the draw process.~
 Warning: You need to call this method before your draw calls.~
 ~
 - ''beginPassRender''(viewIndex: number): void~
-Prepare a render pass.
+Prepare a render pass.~
 Warning: You need to call this method before the render calls you want include in this pass.~
 -- ''viewIndex''~
 ~
 - ''beginRender''(): void~
-Prepare the render process.
+Prepare the render process.~
 Warning: You need to call this method before your render calls.~
 ~
 - ''changeView''(index: number, view: Gfx3View): void~
@@ -43,7 +43,7 @@ Creates a GPU texture from a given bitmap image or canvas element.~
 -- ''samplerDescriptor'': The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.~
 ~
 - ''createVertexBuffer''(size: number): VertexSubBuffer~
-Creates a vertex sub-buffer and returns it.
+Creates a vertex sub-buffer and returns it.~
 Note: A sub-buffer is just a reference offset/size pointing to the big one vertex buffer.~
 -- ''size'': The number of vertices.~
 ~
@@ -55,15 +55,15 @@ Removes a vertex sub-buffer.~
 -- ''sub'': The vertex sub-buffer.~
 ~
 - ''endDrawing''(): void~
-Close the draw process.
+Close the draw process.~
 Warning: You need to call this method after your draw calls.~
 ~
 - ''endPassRender''(): void~
-Close a render pass.
+Close a render pass.~
 Warning: You need to call this method after the render calls you want include in this pass.~
 ~
 - ''endRender''(): void~
-Close the render process.
+Close the render process.~
 Warning: You need to call this method after your render calls.~
 ~
 - ''getClientHeight''(): number~
@@ -79,7 +79,7 @@ Returns the GPUCommandEncoder.~
 Returns the GPUCanvasContext object.~
 ~
 - ''getCurrentView''(): Gfx3View~
-Returns the current view.
+Returns the current view.~
 Note: Current view is set by the "begin" function.~
 ~
 - ''getDevice''(): GPUDevice~

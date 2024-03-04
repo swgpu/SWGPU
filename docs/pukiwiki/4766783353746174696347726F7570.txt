@@ -1,6 +1,6 @@
 * Class: Gfx3StaticGroup
 
-Interface to bind the uniform buffer and textures to the GPU pipeline.
+Interface to bind the uniform buffer and textures to the GPU pipeline.~
 Note: Used for one bind group.~
 ** Constructors
 - ''new Gfx3StaticGroup''(device: GPUDevice, pipeline: GPURenderPipeline, groupIndex: number): Gfx3StaticGroup~
@@ -12,11 +12,11 @@ Note: Used for one bind group.~
 Creates a bind group with the provided uniforms and textures entries.~
 ~
 - ''beginWrite''(): void~
-Prepare to write process.
+Prepare to write process.~
 Warning: You need to call this method before write your data.~
 ~
 - ''delete''(): void~
-Destroys the GPU buffer.
+Destroys the GPU buffer.~
 Warning: you need to call this method to free allocation for this object.~
 ~
 - ''endWrite''(): void~

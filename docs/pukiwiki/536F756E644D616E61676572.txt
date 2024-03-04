@@ -13,7 +13,7 @@ Check if the group is currently muted or not.~
 -- ''groupId''~
 ~
 - ''loadSound''(path: string, groupId: string): Promise~
-Load asynchronously a sound from a given path and returns it as an `Sound`, caching it for future use.
+Load asynchronously a sound from a given path and returns it as an `Sound`, caching it for future use.~
 Note: Use group for categorize your sounds and manage them easily.~
 -- ''path'': The file path.~
 -- ''groupId'': The group identifier.~

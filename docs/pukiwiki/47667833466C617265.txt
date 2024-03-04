@@ -6,7 +6,7 @@ A flare drawable object.~
 - ''new Gfx3Flare''(): Gfx3Flare~
 ** Methods
 - ''delete''(): void~
-Free all resources.
+Free all resources.~
 Warning: You need to call this method to free allocation for this object.~
 ~
 - ''draw''(): void~
@@ -22,7 +22,7 @@ Returns the bindgroup(2).~
 Returns the origin offset in pixel.~
 ~
 - ''getPosition2D''(): vec2~
-Returns the position in screen coordinates.
+Returns the position in screen coordinates.~
 Top-left corner is at coordinates 0;0.~
 ~
 - ''getRotation2D''(): number~
@@ -45,13 +45,13 @@ Set the color blend (from 0 to 1).~
 -- ''a'': The parameter "a" represents the alpha value.~
 ~
 - ''setOffset2D''(x: number, y: number): void~
-Set the origin offset in pixel.
+Set the origin offset in pixel.~
 Default origin is top-left corner. Ex: An offset of 10;10 set the origin of the flare to 10;10.~
 -- ''x'': The x offset.~
 -- ''y'': The y offset.~
 ~
 - ''setPosition2D''(x: number, y: number): void~
-Set the position in screen coordinates.
+Set the position in screen coordinates.~
 Top-left corner is at coordinates 0;0.~
 -- ''x'': The X coordinate of the position.~
 -- ''y'': The Y coordinate of the position.~

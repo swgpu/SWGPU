@@ -1,6 +1,6 @@
 * Class: UIInputKeyboard
 
-A UI widget displaying a virtual keyboard.
+A UI widget displaying a virtual keyboard.~
 It emit 'E_VALUE_CHANGED' when value changed.~
 - inherit from: UIWidget~
 ** Constructors
@@ -10,7 +10,7 @@ It emit 'E_VALUE_CHANGED' when value changed.~
 Focus on.~
 ~
 - ''onAction''(actionId: string): void~
-The onAction function.
+The onAction function.~
 It emits an 'E_VALUE_CHANGED' event when the action is 'OK'.~
 -- ''actionId''~
 ~

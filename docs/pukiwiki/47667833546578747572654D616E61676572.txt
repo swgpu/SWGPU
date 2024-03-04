@@ -17,7 +17,7 @@ Checks if a texture exists.~
 -- ''path'': The path file.~
 ~
 - ''loadCubemapTexture''(path: string, extension: string): Promise~
-Load asynchronously a list of cubemap images from a given path and returns it as an texture, caching it for future use.
+Load asynchronously a list of cubemap images from a given path and returns it as an texture, caching it for future use.~
 Note: Six images are required, each names postfixed by: right, left, top, bottom, front and back.~
 -- ''path'': The file path excluding directions postfix.~
 -- ''extension''~

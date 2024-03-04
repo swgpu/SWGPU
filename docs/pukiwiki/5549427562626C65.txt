@@ -1,23 +1,23 @@
 * Class: UIBubble
 
-A floating dialog widget (looking as a bubble) with text and optional actions.
-It emit 'E_PRINT_FINISHED' when print is finish.
-It emit 'E_MENU_ITEM_SELECTED' when menu item is selected.
+A floating dialog widget (looking as a bubble) with text and optional actions.~
+It emit 'E_PRINT_FINISHED' when print is finish.~
+It emit 'E_MENU_ITEM_SELECTED' when menu item is selected.~
 It emit 'E_OK' when action is 'OK' and text is finished.~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UIBubble''(): UIBubble~
 ** Methods
 - ''delete''(): void~
-Free all resources.
+Free all resources.~
 Warning: You need to call this method to free allocation for this object.~
 ~
 - ''focus''(): void~
-Focus on.
+Focus on.~
 Note: It focus `menu` too if actions is set.~
 ~
 - ''onAction''(actionId: string): void~
-The "onAction" function.
+The "onAction" function.~
 Note: It emits an 'E_OK' event if the actionId is 'OK' and text is finished.~
 -- ''actionId''~
 ~
@@ -46,7 +46,7 @@ Set the width of the bubble.~
 -- ''width'': The width in pixels.~
 ~
 - ''unfocus''(): void~
-Focus off.
+Focus off.~
 Note: It unfocus `menu` too if actions is set.~
 ~
 - ''update''(ts: number): void~

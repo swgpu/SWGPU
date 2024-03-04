@@ -1,8 +1,8 @@
 * Class: Gfx2IsoTileMapLayer
 
-A isometric tilemap layer drawable.
-Note: You can draw the layer or get all tiles and draw them in Gfx2IsoDrawer.
-It depends of your usage.
+A isometric tilemap layer drawable.~
+Note: You can draw the layer or get all tiles and draw them in Gfx2IsoDrawer.~
+It depends of your usage.~
 Warning: Don't forget to call the update function in both cases to handle animations.~
 - inherit from: Gfx2Drawable~
 ** Constructors

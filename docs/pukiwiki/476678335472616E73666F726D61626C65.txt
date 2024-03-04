@@ -51,7 +51,7 @@ Returns the scale factor on z-axis.~
 Returns the transformation matrix from position, rotation, scale and quaternion values.~
 ~
 - ''lookAt''(x: number, y: number, z: number, up: vec3): void~
-Rotate to look at the specified coordinates.
+Rotate to look at the specified coordinates.~
 Note: Avoid euler rotation and quaternion rotation.~
 -- ''x'': The x-coordinate of the target position that the transformable should look at.~
 -- ''y'': The y-coordinate of the target position that the transformable should look at.~

@@ -1,7 +1,7 @@
 * Class: Quaternion
 
-A quaternion.
-This class is a fork from Quaternion.js.
+A quaternion.~
+This class is a fork from Quaternion.js.~
 Thanks to~
 ** Constructors
 - ''new Quaternion''(w: number, x: number, y: number, z: number): Quaternion~
@@ -51,7 +51,7 @@ Calculates the natural exponentiation of the quaternion~
 Returns the imaginary part of the quaternion as a 3D vector / array~
 ~
 - ''inverse''(): Quaternion~
-Calculates the inverse of a quat for non-normalized quats such that
+Calculates the inverse of a quat for non-normalized quats such that~
 Q^-1 * Q = 1 and Q * Q^-1 = 1~
 ~
 - ''isFinite''(): boolean~
@@ -64,7 +64,7 @@ Checks if any of the parts of the quaternion is not a number~
 Calculates the natural logarithm of the quaternion~
 ~
 - ''mul''(w: number, x: number, y: number, z: number): Quaternion~
-Calculates the Hamilton product of two quaternions
+Calculates the Hamilton product of two quaternions~
 Leaving out the imaginary part results in just scaling the quat~
 -- ''w'': real~
 -- ''x'': imag~
@@ -81,7 +81,7 @@ Calculates the length/modulus/magnitude or the norm of a quaternion~
 Calculates the squared length/modulus/magnitude or the norm of a quaternion~
 ~
 - ''normalize''(): Quaternion~
-Normalizes the quaternion to have |Q| = 1 as long as the norm is not zero
+Normalizes the quaternion to have |Q| = 1 as long as the norm is not zero~
 Alternative names are the signum, unit or versor~
 ~
 - ''real''(): number~

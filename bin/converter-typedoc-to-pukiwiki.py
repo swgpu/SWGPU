@@ -47,7 +47,7 @@ def get_class_description(obj):
         summary = obj["comment"]["summary"]
         for txt_obj in summary:
             description += "" + txt_obj["text"]
-        description.replace("\n", "~\n")
+        description = description.replace("\n", "~\n")
         description += "~\n"
     except KeyError as e:
         pass
@@ -156,7 +156,7 @@ def get_function_description(function):
     try:
         for txt_obj in function["signatures"][0]["comment"]["summary"]:
             function_description += txt_obj["text"]
-        function_description.replace("\n", "~\n")
+        function_description = function_description.replace("\n", "~\n")
         function_description += "~\n"
     except KeyError as e:
         pass

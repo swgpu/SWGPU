@@ -1,6 +1,6 @@
 * Class: UIMenuListView
 
-A UI widget displaying a menu that make update automatically when a datasource changed.
+A UI widget displaying a menu that make update automatically when a datasource changed.~
 Note: It send same event than UIMenu.~
 - inherit from: UIMenu~
 ** Constructors
@@ -8,15 +8,15 @@ Note: It send same event than UIMenu.~
 -- ''options'': Various options for configuring the behavior of the menu.~
 ** Methods
 - ''addItem''(item: T, enabled: boolean, index: number): void~
-Virtual method called when data is added to the collection.
-Usually, it create the wanted widget item and add it to the menu.
+Virtual method called when data is added to the collection.~
+Usually, it create the wanted widget item and add it to the menu.~
 Warning: please don't forget to overwrite this method otherwise list-view will stay empty ;)~
 -- ''item'': The added item coming from the data-source collection.~
 -- ''enabled'': Determines whether the item should be enabled or disabled.~
 -- ''index'': The index position at which the item should be added in the list.~
 ~
 - ''delete''(): void~
-Free all resources.
+Free all resources.~
 Warning: You need to call this method to free allocation for this object.~
 ~
 - ''getFocusedItem''(): T~

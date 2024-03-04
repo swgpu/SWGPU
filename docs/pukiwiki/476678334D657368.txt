@@ -11,7 +11,7 @@ Creates a clone of the mesh.~
 -- ''transformMatrix'': The transformation matrix.~
 ~
 - ''delete''(keepMat: boolean): void~
-Free all resources.
+Free all resources.~
 Warning: You need to call this method to free allocation for this object.~
 -- ''keepMat'': Determines if the material is deleted or not.~
 ~
@@ -28,7 +28,7 @@ Returns the material.~
 Check if shadow casting is enable or not.~
 ~
 - ''setLayer''(layer: number): void~
-Set the layer.
+Set the layer.~
 Mesh layer is used to easily categorized and identified group of meshes, actually it is only used for decals.~
 -- ''layer'': The layer.~
 ~

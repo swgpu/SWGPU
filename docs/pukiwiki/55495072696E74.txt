@@ -1,15 +1,15 @@
 * Class: UIPrint
 
-A UI widget displaying a full screen dialog print with text.
-It is ideal for long-text reading.
-It emit 'E_PRINT_FINISHED' when print is finish.
+A UI widget displaying a full screen dialog print with text.~
+It is ideal for long-text reading.~
+It emit 'E_PRINT_FINISHED' when print is finish.~
 It emit 'E_OK' when action is 'OK' and text is finished.~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UIPrint''(): UIPrint~
 ** Methods
 - ''onAction''(actionId: string): void~
-The onAction function.
+The onAction function.~
 Note: It emits an 'E_OK' event if the actionId is 'OK' and text is finished.~
 -- ''actionId''~
 ~

@@ -1,6 +1,6 @@
 * Class: Gfx3DynamicGroup
 
-Interface to bind the uniform buffer and textures to the GPU pipeline.
+Interface to bind the uniform buffer and textures to the GPU pipeline.~
 Note: Used for multiple bind groups.~
 ** Constructors
 - ''new Gfx3DynamicGroup''(device: GPUDevice, pipeline: GPURenderPipeline, groupIndex: number): Gfx3DynamicGroup~
@@ -13,11 +13,11 @@ Creates multiple bind groups with the provided uniforms entries.~
 -- ''size'': The number of bind groups to allocate/duplicate.~
 ~
 - ''beginWrite''(): void~
-Prepare to write process.
+Prepare to write process.~
 Warning: You need to call this method before write your data.~
 ~
 - ''delete''(): void~
-Destroys the GPU buffer.
+Destroys the GPU buffer.~
 Warning: you need to call this method to free allocation for this object.~
 ~
 - ''endWrite''(): void~

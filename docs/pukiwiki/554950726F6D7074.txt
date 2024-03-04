@@ -1,6 +1,6 @@
 * Class: UIPrompt
 
-A UI widget displaying prompt with a text content and a menu of actions.
+A UI widget displaying prompt with a text content and a menu of actions.~
 It emits an 'E_ITEM_SELECTED'.~
 - inherit from: UIWidget~
 ** Constructors
@@ -15,7 +15,7 @@ Add a new menu button.~
 Remove all menu buttons.~
 ~
 - ''delete''(): void~
-Free all resources.
+Free all resources.~
 Warning: You need to call this method to free allocation for this object.~
 ~
 - ''focus''(): void~

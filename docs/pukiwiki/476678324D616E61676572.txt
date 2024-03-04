@@ -5,7 +5,7 @@ Singleton 2D graphics manager.~
 - ''new Gfx2Manager''(): Gfx2Manager~
 ** Methods
 - ''beginDrawing''(): void~
-Begin the draw phase. Prepares the canvas for drawing.
+Begin the draw phase. Prepares the canvas for drawing.~
 Warning: You need to call this method before any draw calls.~
 ~
 - ''endDrawing''(): void~

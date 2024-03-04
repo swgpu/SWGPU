@@ -8,7 +8,7 @@ A 3D drawable object.~
 -- ''vertexStride'': The number of attributes for each vertex.~
 ** Methods
 - ''beginVertices''(vertexCount: number): void~
-Prepare your vertex buffer to write process.
+Prepare your vertex buffer to write process.~
 Warning: You need to call this method before define your vertices.~
 -- ''vertexCount'': The number of vertices.~
 ~
@@ -17,14 +17,14 @@ Add a vertex.~
 -- ''v'': The attributes data of the vertex.~
 ~
 - ''delete''(): void~
-Free all resources.
+Free all resources.~
 Warning: You need to call this method to free allocation for this object.~
 ~
 - ''draw''(): void~
 Virtual draw function.~
 ~
 - ''endVertices''(): void~
-Close your vertex buffer to write process.
+Close your vertex buffer to write process.~
 Note: The boundingbox is up to date from here.~
 ~
 - ''getBoundingBox''(): Gfx3BoundingBox~
@@ -34,8 +34,8 @@ Returns the bounding box.~
 Returns the number of vertices.~
 ~
 - ''getVertexSubBufferOffset''(): number~
-Returns the vertex sub-buffer offset in the global vertex buffer.
-Nota bene: All vertices are stored in one global vertex buffer handled by "Gfx3Manager".
+Returns the vertex sub-buffer offset in the global vertex buffer.~
+Nota bene: All vertices are stored in one global vertex buffer handled by "Gfx3Manager".~
 SubBuffer is just a reference offset/size pointing to the big one buffer.~
 ~
 - ''getVertexSubBufferSize''(): number~

@@ -4,7 +4,7 @@
 - ''new Gfx3MeshShadowRenderer''(): Gfx3MeshShadowRenderer~
 ** Methods
 - ''beginPassRender''(): void~
-Prepare a render pass.
+Prepare a render pass.~
 Warning: You need to call this method before the render calls you want include in this pass.~
 ~
 - ''drawMesh''(mesh: Gfx3Mesh, matrix): void~
@@ -13,7 +13,7 @@ Draw a mesh.~
 -- ''matrix'': The transformation matrix.~
 ~
 - ''endPassRender''(): void~
-Close a render pass.
+Close a render pass.~
 Warning: You need to call this method after the render calls you want include in this pass.~
 ~
 - ''getDepthTexture''(): Gfx3Texture~
@@ -26,7 +26,7 @@ Returns the light view projection matrix (LVP).~
 The render function.~
 ~
 - ''setDepthTextureSize''(depthTextureSize: number): void~
-Set the size of a the shadow map depth texture.
+Set the size of a the shadow map depth texture.~
 More resolution is hight, more shadow is precise.~
 -- ''depthTextureSize'': The size.~
 ~

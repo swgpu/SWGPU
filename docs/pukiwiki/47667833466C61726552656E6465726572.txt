@@ -1,7 +1,7 @@
 * Class: Gfx3FlareRenderer
 
-Singleton flare renderer.
-It is ideal for lens-flare effect, rain, snow or every effect on the screen focal.
+Singleton flare renderer.~
+It is ideal for lens-flare effect, rain, snow or every effect on the screen focal.~
 Note: The top-left corner is at coordinates 0, 0 on the screen.~
 - inherit from: Gfx3RendererAbstract~
 ** Constructors

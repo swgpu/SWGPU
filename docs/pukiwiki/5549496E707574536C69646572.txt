@@ -1,13 +1,13 @@
 * Class: UIInputSlider
 
-A UI widget displaying a slider input.
+A UI widget displaying a slider input.~
 It emit 'E_VALUE_CHANGED' when value changed.~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UIInputSlider''(): UIInputSlider~
 ** Methods
 - ''onAction''(actionId: string): void~
-The onAction function.
+The onAction function.~
 It emits an 'E_VALUE_CHANGED' event if the action is 'LEFT' or 'RIGHT'.~
 -- ''actionId''~
 ~

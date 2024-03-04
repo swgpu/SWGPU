@@ -37,7 +37,7 @@ Fade out the screen.~
 -- ''cb'': The callback function that will be executed after the fade-out is complete.~
 ~
 - ''focus''(widget: UIWidget): void~
-Give the focuses to a widget and unfocuses the currently focused (if any).
+Give the focuses to a widget and unfocuses the currently focused (if any).~
 It emit 'E_FOCUSED' event.~
 -- ''widget'': The widget.~
 ~
@@ -57,7 +57,7 @@ Set class to the root ui element.~
 -- ''className'': The list of classes.~
 ~
 - ''unfocus''(): void~
-Remove focus from the currently focused widget (if any).
+Remove focus from the currently focused widget (if any).~
 It emit 'E_UNFOCUSED' event.~
 ~
 - ''update''(ts: number): void~

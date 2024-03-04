@@ -14,7 +14,7 @@ Call "onActionOnce" for each entity (for internal use).~
 -- ''actionId'': The identifier of the action (see input_manager).~
 ~
 - ''addRequiredComponentTypename''(typename: string): void~
-Adds a component requirements.
+Adds a component requirements.~
 When you add a component to an entity, the manager will automatically bind this entity to systems that match these components list.~
 -- ''typename'': The component typename.~
 ~

@@ -1,6 +1,6 @@
 * Class: InputManager
 
-Singleton input manager.
+Singleton input manager.~
 Handle various sources such as keyboard and gamepad.~
 ** Constructors
 - ''new InputManager''(): InputManager~
@@ -11,7 +11,7 @@ Returns the action list that match the given input source and event key.~
 -- ''eventKey'': The key or button that triggers the action.~
 ~
 - ''getPad''(index: number)~
-Returns a pad or undefined if not found.
+Returns a pad or undefined if not found.~
 Note: Pads are automatically added on plug-in.~
 -- ''index'': The index of the pad.~
 ~

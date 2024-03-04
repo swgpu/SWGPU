@@ -1,6 +1,6 @@
 * Class: UIMenu
 
-A UI widget displaying a menu UI with customizable options.
+A UI widget displaying a menu UI with customizable options.~
 It emit 'E_ITEM_FOCUSED', 'E_ITEM_UNFOCUSED', 'E_ITEM_SELECTED', 'E_ITEM_UNSELECTED' and E_UNSELECTED events.~
 - inherit from: UIWidget~
 - parent of: UIMenuListView, UIMenuText~
@@ -18,7 +18,7 @@ provided (default value is -1), the widget will be added at the end of the menu.
 Remove all widget items.~
 ~
 - ''delete''(): void~
-Free all resources.
+Free all resources.~
 Warning: You need to call this method to free allocation for this object.~
 ~
 - ''focus''(focusIndex: MenuFocus): void~
@@ -26,7 +26,7 @@ Focus on.~
 -- ''focusIndex'': If MenuFocus.AUTO then refocus the child widget too.~
 ~
 - ''focusWidget''(index: number, preventScroll: boolean, emit: boolean): void~
-Focus on widget item.
+Focus on widget item.~
 It emit an 'E_ITEM_FOCUSED' event.~
 -- ''index'': The index position of the widget.~
 -- ''preventScroll'': Indicating whether to prevent scrolling to the focused widget.~
@@ -66,7 +66,7 @@ Remove a UI widget item.~
 -- ''index'': The position of the widget.~
 ~
 - ''selectWidget''(index: number, emit: boolean): void~
-Select a widget item.
+Select a widget item.~
 It emits an 'E_ITEM_SELECTED' event.~
 -- ''index'': The index position of the widget.~
 -- ''emit'': Determines whether an event should be emitted after selecting the widget.~
@@ -81,18 +81,18 @@ Set the enabled flag of all widget items.~
 -- ''enabled'': Determines whether the widgets should be enabled or disabled.~
 ~
 - ''unfocusWidget''(emit: boolean): void~
-Focus off widget item (if exist).
+Focus off widget item (if exist).~
 It emits an 'E_ITEM_UNFOCUSED' event.~
 -- ''emit'': Determines whether an event should be emitted after unfocusing the widget.~
 ~
 - ''unselectWidget''(index: number, emit: boolean): void~
-Unselects a widget item.
+Unselects a widget item.~
 It emits an 'E_ITEM_UNSELECTED' event.~
 -- ''index'': The index position of the widget.~
 -- ''emit'': Determines whether an event should be emitted after unselecting the widget.~
 ~
 - ''unselectWidgets''(emit: boolean): void~
-Unselect all widget items.
+Unselect all widget items.~
 It emits an 'E_UNSELECTED' event.~
 -- ''emit'': Determines whether an event should be emitted after unselecting all widgets.~
 ~

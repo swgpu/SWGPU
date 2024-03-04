@@ -6,7 +6,7 @@ The material of a surface.~
 -- ''options'': The options to configuring the material.~
 ** Methods
 - ''delete''(): void~
-Free all resources.
+Free all resources.~
 Warning: You need to call this method to free allocation for this object.~
 ~
 - ''enableDecal''(enabled: boolean): void~
@@ -48,24 +48,24 @@ Play a specific animation.~
 Stop animation and set current animation to null.~
 ~
 - ''setAmbient''(r: number, g: number, b: number): void~
-Set the ambient color (see phong).
+Set the ambient color (see phong).~
 It is the color of the object on it's shadow parts.~
 -- ''r'': The red component.~
 -- ''g'': The green component.~
 -- ''b'': The blue component.~
 ~
 - ''setDiffuse''(r: number, g: number, b: number): void~
-Set the diffuse color (see phong).
+Set the diffuse color (see phong).~
 It is the color of the object on it's lightning parts.~
 -- ''r'': The red component.~
 -- ''g'': The green component.~
 -- ''b'': The blue component.~
 ~
 - ''setDisplacementMap''(displacementMap: Gfx3Texture, angle: number, rate: number, factor: number): void~
-Set the displacement texture map.
-It is used to displace pixels of the texture base. It is ideal for water shallow effect, magma etc...
-1. White pixel of this texture force pixel of the albedo texture to move in the top-left direction.
-2. Grey don't move pixels.
+Set the displacement texture map.~
+It is used to displace pixels of the texture base. It is ideal for water shallow effect, magma etc...~
+1. White pixel of this texture force pixel of the albedo texture to move in the top-left direction.~
+2. Grey don't move pixels.~
 3. Black pixel of this texture force pixel of the albedo texture to move in the bottom-right direction.~
 -- ''displacementMap'': The displacement map texture.~
 -- ''angle'': The angle at which the texture will be scrolled (in radians).~
@@ -73,7 +73,7 @@ It is used to displace pixels of the texture base. It is ideal for water shallow
 -- ''factor'': The strength or intensity of the displacement effect.~
 ~
 - ''setEmissive''(r: number, g: number, b: number): void~
-Set the emissive color.
+Set the emissive color.~
 It is the color that the object emit.~
 -- ''r'': The red component.~
 -- ''g'': The green component.~
@@ -100,14 +100,14 @@ Sets the opacity value.~
 -- ''opacity'': The opacity (from 0 to 1).~
 ~
 - ''setSpecular''(r: number, g: number, b: number): void~
-Set the specular color (see phong).
+Set the specular color (see phong).~
 It is the color of the object on it's lightning and eye-oriented parts.~
 -- ''r'': The red component.~
 -- ''g'': The green component.~
 -- ''b'': The blue component.~
 ~
 - ''setSpecularity''(specularity: number): void~
-Set the specular intensity.
+Set the specular intensity.~
 It determines how much light is reflected off the surface (from 0 to 1).~
 -- ''specularity'': The level of specularity or shininess.~
 ~

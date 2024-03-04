@@ -120,8 +120,8 @@ Set the projection mode.~
 -- ''projectionMode'': The projection mode.~
 ~
 - ''setScreenSize''(width: number, height: number): void~
-Set the screen width and height (internal use).
-Warning: Don't change the screen size here please, use CoreManager instead.
+Set the screen width and height (internal use).~
+Warning: Don't change the screen size here please, use CoreManager instead.~
 It's method is automatically updated by Gfx3Manager::$handleWindowResize.~
 -- ''width'': The width of the screen size.~
 -- ''height'': The height of the screen size.~
