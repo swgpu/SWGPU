@@ -57,7 +57,6 @@ body {
   overflow: hidden;
   width: 600px;
   height: 600px;
-  background-color: #000;
   color: #FFF;
   font-size: 10px;
   transform-origin: top left;
@@ -66,10 +65,9 @@ body {
   border: 60px solid #1a1a1a;
   border-top-width: 45px;
   border-bottom-width: 45px;
-  border-left-width: 65px;
-  border-right-width: 65px;
+  border-left-width: 55px;
+  border-right-width: 55px;
   border-image: url(../textures/frame.png) 100 135 / 90px round;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3), 0 0 10px 0 rgba(0, 0, 0, 0.18);
 }
 
 #APP_FAIL {

@@ -15,8 +15,8 @@ import { AIPathGridSolver } from '../../lib/ai/ai_path_grid_solver';
 import { Controller } from './controller';
 // ---------------------------------------------------------------------------------------
 
-const CAMERA_FOLLOW_LIMITS_X = 150;
-const CAMERA_FOLLOW_LIMITS_Y = 20;
+const CAMERA_FOLLOW_BEGIN_X = 150;
+const CAMERA_FOLLOW_BEGIN_Y = 20;
 
 class BgIsoScreen extends Screen {
   constructor() {
@@ -69,7 +69,6 @@ class BgIsoScreen extends Screen {
 
   update(ts) {
     this.controller.update(ts);
-
     this.moveCamera(this.controller.getPosition());
   }
 
@@ -110,17 +109,17 @@ class BgIsoScreen extends Screen {
   moveCamera(follower) {
     const cameraPos = gfx2Manager.getCameraPosition();
 
-		if (follower[0] - cameraPos[0] > CAMERA_FOLLOW_LIMITS_X) {
+		if (follower[0] - cameraPos[0] > CAMERA_FOLLOW_BEGIN_X) {
       gfx2Manager.moveCamera(1, 0);
 		}
-		else if (follower[0] - cameraPos[0] < -CAMERA_FOLLOW_LIMITS_X) {
+		else if (follower[0] - cameraPos[0] < -CAMERA_FOLLOW_BEGIN_X) {
       gfx2Manager.moveCamera(-1, 0);
 		}
 
-		if (follower[1] - cameraPos[1] > CAMERA_FOLLOW_LIMITS_Y) {
+		if (follower[1] - cameraPos[1] > CAMERA_FOLLOW_BEGIN_Y) {
       gfx2Manager.moveCamera(0, 1);
 		}
-		else if (follower[1] - cameraPos[1] < -CAMERA_FOLLOW_LIMITS_Y) {
+		else if (follower[1] - cameraPos[1] < -CAMERA_FOLLOW_BEGIN_Y) {
       gfx2Manager.moveCamera(0, -1);
 		}
 	}
@@ -137,7 +136,7 @@ class BgIsoScreen extends Screen {
 
     const positions = path.map(([col, row]) => {
       const pos = this.tilemap.getPositionIso(row, col);
-      return [pos[0], pos[1]];
+      return [pos[0], 0, pos[1]];
     });
 
     const elevations = path.map(([col, row]) => {
@@ -146,12 +145,12 @@ class BgIsoScreen extends Screen {
       return layer.getOffsetY();
     });
 
-    this.controller.moveAlong(positions, elevations, (currentIndex, current) => {
-      const i = current > 0.5 ? Math.min(currentIndex + 1, path.length - 1) : currentIndex;
+    this.controller.moveAlong(positions, elevations, (currentIndex, t) => {
+      const i = t > 0.5 ? Math.min(currentIndex + 1, path.length - 1) : currentIndex;
       const tileId = this.gridIds[path[i][1]][path[i][0]];
       this.controller.setPositionZ(tileId == 2 ? 1 : 3);
-      this.controllerRow = path[currentIndex][1];
-      this.controllerCol = path[currentIndex][0];
+      this.controllerRow = path[i][1];
+      this.controllerCol = path[i][0];
     });
   }
 

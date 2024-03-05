@@ -45,10 +45,10 @@ class TilemapPathfindingScreen extends Screen {
   }
 
   update(ts) {
-    let cameraMinX = gfx2Manager.getWidth() * 0.5;
-    let cameraMaxX = this.tileMap.getWidth() - gfx2Manager.getWidth() * 0.5;
-    let cameraMinY = gfx2Manager.getHeight() * 0.5;
-    let cameraMaxY = this.tileMap.getHeight() - gfx2Manager.getHeight() * 0.5;
+    const cameraMinX = gfx2Manager.getWidth() * 0.5;
+    const cameraMaxX = this.tileMap.getWidth() - gfx2Manager.getWidth() * 0.5;
+    const cameraMinY = gfx2Manager.getHeight() * 0.5;
+    const cameraMaxY = this.tileMap.getHeight() - gfx2Manager.getHeight() * 0.5;
 
     gfx2Manager.setCameraPosition(
       UT.CLAMP(this.controller.getPositionX(), cameraMinX, cameraMaxX),
@@ -71,32 +71,33 @@ class TilemapPathfindingScreen extends Screen {
   }
 
   movePlayer(endX, endY) {
-    let startX = this.collisionMap.getLocationCol(this.controller.getPositionX());
-    let startY = this.collisionMap.getLocationRow(this.controller.getPositionY());
+    const startX = this.collisionMap.getLocationCol(this.controller.getPositionX());
+    const startY = this.collisionMap.getLocationRow(this.controller.getPositionY());
 
-    let collisionLayer = this.collisionMap.getTileLayer(0);
-    let pathfinderGrid = new AIPathGrid2D([collisionLayer.getColumns(), collisionLayer.getRows()], collisionLayer.getGrid());
+    const collisionLayer = this.collisionMap.getTileLayer(0);
+    const pathfinderGrid = new AIPathGrid2D([collisionLayer.getColumns(), collisionLayer.getRows()], collisionLayer.getGrid());
 
-    let path = this.pathfinder.solve(pathfinderGrid, [startX, startY], [endX, endY]);
+    const path = this.pathfinder.solve(pathfinderGrid, [startX, startY], [endX, endY]);
     if (path) {
       this.controller.moveAlong(path.map(([col, row]) => [
         this.collisionMap.getPositionX(col + 0.5),
+        0,
         this.collisionMap.getPositionY(row + 0.5)
       ]));
     }
   }
 
   handleMouseMove(e) {
-    let position = gfx2Manager.findWorldPosFromClientPos(e.clientX, e.clientY);
-    let x = this.collisionMap.getPositionX(this.collisionMap.getLocationCol(position[0]));
-    let y = this.collisionMap.getPositionY(this.collisionMap.getLocationRow(position[1]));
+    const position = gfx2Manager.findWorldPosFromClientPos(e.clientX, e.clientY);
+    const x = this.collisionMap.getPositionX(this.collisionMap.getLocationCol(position[0]));
+    const y = this.collisionMap.getPositionY(this.collisionMap.getLocationRow(position[1]));
     this.selectionRect.setPosition(x, y);
   }
 
   handleMouseClick() {
-    let col = this.collisionMap.getLocationCol(this.selectionRect.getPositionX());
-    let row = this.collisionMap.getLocationRow(this.selectionRect.getPositionY());
-    let collisionLayer = this.collisionMap.getTileLayer(0);
+    const col = this.collisionMap.getLocationCol(this.selectionRect.getPositionX());
+    const row = this.collisionMap.getLocationRow(this.selectionRect.getPositionY());
+    const collisionLayer = this.collisionMap.getTileLayer(0);
     if (collisionLayer.getTile(col, row) == 1) {
       return;
     }

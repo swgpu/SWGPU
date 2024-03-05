@@ -44,7 +44,7 @@ class ScreenManager {
 
   /**
    * Pushes a new screen to the stack, throwing an error if the screen is already present.
-   * Note: The screen is pushed just after the onEnter method done his job.
+   * Note: The screen is pushed just after the onEnter method done the job.
    * 
    * @param {Screen} newScreen - The screen.
    * @param {any} args - Arguments that are passed to the new screen onEnter method.
@@ -65,7 +65,7 @@ class ScreenManager {
 
   /**
    * Set a new and unique screen to the stack (all screens are removed).
-   * Note: The screen is pushed just after the onEnter method done his job.
+   * Note: The screen is pushed just after the onEnter method done the job.
    * 
    * @param {Screen} newScreen - The screen.
    * @param {any} args - Arguments that are passed to the new screen onEnter method.

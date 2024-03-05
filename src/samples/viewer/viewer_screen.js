@@ -217,6 +217,7 @@ function CREATE_UI_INFOBOX() {
   const box = document.createElement('div');
   box.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
   box.style.padding = '10px';
+  box.style.backdropFilter = 'blur(3px)';
 
   const ul = document.createElement('ul');
   ul.style.listStyle = 'none';

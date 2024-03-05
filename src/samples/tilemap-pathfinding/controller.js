@@ -1,8 +1,7 @@
-import { gfx2TextureManager} from '../../lib/gfx2/gfx2_texture_manager';
-import { Gfx2Drawable} from '../../lib/gfx2/gfx2_drawable';
-import { Gfx2SpriteJAS} from '../../lib/gfx2_sprite/gfx2_sprite_jas';
-// ---------------------------------------------------------------------------------------
-import { MotionInterpolation} from './motion_interpolation';
+import { gfx2TextureManager } from '../../lib/gfx2/gfx2_texture_manager';
+import { Gfx2Drawable } from '../../lib/gfx2/gfx2_drawable';
+import { Gfx2SpriteJAS } from '../../lib/gfx2_sprite/gfx2_sprite_jas';
+import { Motion } from '../../lib/motion/motion';
 // ---------------------------------------------------------------------------------------
 
 class Controller extends Gfx2Drawable {
@@ -10,10 +9,10 @@ class Controller extends Gfx2Drawable {
     super();
     this.jas = new Gfx2SpriteJAS();
     this.direction = 'FORWARD';
-    this.speed = 3;
+    this.speed = 50;
     this.width = 0;
     this.height = 0;
-    this.motion = null;
+    this.motion = new Motion();
   }
 
   async loadFromFile(path) {
@@ -28,29 +27,31 @@ class Controller extends Gfx2Drawable {
   }
 
   update(ts) {
-    let prevPosition = this.position;
+    const prev = this.motion.getPrevPoint();
+    const next = this.motion.getNextPoint();
 
-    if (this.motion?.isOngoing()) {
-      this.position = this.motion.getPosition(ts);
+    if (this.motion.isRunning()) {
+      this.position[0] = this.motion.getCurrentPositionX();
+      this.position[1] = this.motion.getCurrentPositionZ();
     }
 
-    if (prevPosition[0] > this.position[0]) {
+    if (prev[0] > next[0]) {
       this.direction = 'LEFT';
     }
-    else if (prevPosition[0] < this.position[0]) {
+    else if (prev[0] < next[0]) {
       this.direction = 'RIGHT';
     }
-    else if (prevPosition[1] > this.position[1]) {
+    else if (prev[2] > next[2]) {
       this.direction = 'FORWARD';
     }
-    else if (prevPosition[1] < this.position[1]) {
+    else if (prev[2] < next[2]) {
       this.direction = 'BACKWARD';
     }
 
     this.jas.setPosition(this.position[0], this.position[1]);
-    this.jas.play(this.motion?.isOngoing() ? 'RUN_' + this.direction : 'IDLE_' + this.direction, true, true);
+    this.jas.play(this.motion.isRunning() ? 'RUN_' + this.direction : 'IDLE_' + this.direction, true, true);
     this.jas.update(ts);
-    this.motion?.update(ts);
+    this.motion.update(ts);
   }
 
   draw() {
@@ -58,7 +59,8 @@ class Controller extends Gfx2Drawable {
   }
 
   moveAlong(path) {
-    this.motion = new MotionInterpolation(path, this.speed);
+    this.motion = new Motion(path, this.speed);
+    this.motion.run();
   }
 }
 
