@@ -18,7 +18,7 @@
 <h1>Variable FRAGMENT_SHADER<code class="tsd-tag ts-flagConst">Const</code> </h1></div>
 <div class="tsd-signature"><span class="tsd-kind-variable">FRAGMENT_<wbr/>SHADER</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;\n@group(2) @binding(0) var TEXTURE: texture_2d&lt;f32&gt;;\n@group(2) @binding(1) var SAMPLER: sampler;\n\n@fragment\nfn main(\n  @builtin(position) Position: vec4&lt;f32&gt;,\n  @location(0) FragUV: vec2&lt;f32&gt;,\n  @location(1) Color: vec4&lt;f32&gt;,\n  @location(2) Angle: f32\n) -&gt; @location(0) vec4&lt;f32&gt; {\n  var c = cos(Angle);\n  var s = sin(Angle);\n\n  var rotatedUV = vec2(\n    c * (FragUV.x - 0.5) + s * (FragUV.y - 0.5) + 0.5,\n    c * (FragUV.y - 0.5) - s * (FragUV.x - 0.5) + 0.5\n  );\n\n  return textureSample(TEXTURE, SAMPLER, rotatedUV) * Color;\n}&quot;</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Engine/blob/aee8195/src/lib/gfx3_particules/gfx3_particles_shader.ts#L117">src/lib/gfx3_particules/gfx3_particles_shader.ts:117</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Engine/blob/6b8bb23/src/lib/gfx3_particules/gfx3_particles_shader.ts#L117">src/lib/gfx3_particules/gfx3_particles_shader.ts:117</a></li></ul></aside></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

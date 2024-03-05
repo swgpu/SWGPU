@@ -2,7 +2,7 @@ import { eventManager } from '../core/event_manager';
 import { UT } from '../core/utils';
 
 /**
- * A path that can move along a serie of points.
+ * Is used to move along a serie of points.
  */
 class Motion {
   points: Array<vec3>;

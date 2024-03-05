@@ -18,7 +18,7 @@
 <h1>Variable VERTEX_SHADER<code class="tsd-tag ts-flagConst">Const</code> </h1></div>
 <div class="tsd-signature"><span class="tsd-kind-variable">VERTEX_<wbr/>SHADER</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;\n@group(0) @binding(0) var&lt;uniform&gt; MVPC_MATRIX: mat4x4&lt;f32&gt;;\n\nstruct VertexOutput {\n  @builtin(position) Position: vec4&lt;f32&gt;,\n  @location(0) FragUV: vec2&lt;f32&gt;\n};\n\n@vertex\nfn main(\n  @location(0) Position : vec4&lt;f32&gt;,\n  @location(1) TexUV : vec2&lt;f32&gt;\n) -&gt; VertexOutput {\n  var output : VertexOutput;\n  output.Position = MVPC_MATRIX * Position;\n  output.FragUV = TexUV;\n  return output;\n}&quot;</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Engine/blob/aee8195/src/lib/gfx3_sprite/gfx3_sprite_shader.ts#L51">src/lib/gfx3_sprite/gfx3_sprite_shader.ts:51</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Engine/blob/6b8bb23/src/lib/gfx3_sprite/gfx3_sprite_shader.ts#L51">src/lib/gfx3_sprite/gfx3_sprite_shader.ts:51</a></li></ul></aside></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

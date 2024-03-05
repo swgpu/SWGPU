@@ -1,6 +1,6 @@
 * Class: Motion
 
-A path that can move along a serie of points.~
+Is used to move along a serie of points.~
 ** Constructors
 - ''new Motion''(points: vec3[], speed: number, looped: boolean): Motion~
 -- ''points'': The serie of points.~
