@@ -18,7 +18,7 @@
 <h1>Variable FRAGMENT_SHADER<code class="tsd-tag ts-flagConst">Const</code> </h1></div>
 <div class="tsd-signature"><span class="tsd-kind-variable">FRAGMENT_<wbr/>SHADER</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;\n@group(1) @binding(0) var TEXTURE: texture_2d&lt;f32&gt;;\n@group(1) @binding(1) var SAMPLER: sampler;\n\n@fragment\nfn main(\n  @location(0) FragUV: vec2&lt;f32&gt;\n) -&gt; @location(0) vec4&lt;f32&gt; {\n  var textureColor:vec4&lt;f32&gt; = (textureSample(TEXTURE, SAMPLER, FragUV));\n  if (textureColor.a == 0)\n  {\n    discard;\n  }\n\n  return textureColor;\n}&quot;</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME/blob/8c6ab0c/src/lib/gfx3_sprite/gfx3_sprite_shader.ts#L70">src/lib/gfx3_sprite/gfx3_sprite_shader.ts:70</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Engine/blob/aee8195/src/lib/gfx3_sprite/gfx3_sprite_shader.ts#L70">src/lib/gfx3_sprite/gfx3_sprite_shader.ts:70</a></li></ul></aside></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

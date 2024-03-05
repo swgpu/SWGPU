@@ -1,6 +1,6 @@
 * Class: UIMenu
 
-A UI widget displaying a menu UI with customizable options.~
+A UI widget displaying a menu with customizable options.~
 It emit 'E_ITEM_FOCUSED', 'E_ITEM_UNFOCUSED', 'E_ITEM_SELECTED', 'E_ITEM_UNSELECTED' and E_UNSELECTED events.~
 - inherit from: UIWidget~
 - parent of: UIMenuListView, UIMenuText~
