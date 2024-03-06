@@ -3,7 +3,7 @@
     <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner.png" alt="logo"/>
 </p>
 
-![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.0-blue)
+![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.2-blue)
 
 **WARME Engine** is an open source realtime 2D/3D game engine based on **WebGPU**.      
 It is a **complete and cross-platform solution** to build desktop/mobile games with high performance.    
