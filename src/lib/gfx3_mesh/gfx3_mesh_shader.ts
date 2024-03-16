@@ -111,6 +111,17 @@ fn main(
 }`;
 
 export const FRAGMENT_SHADER = /* wgsl */`
+const pixelation = 1;
+const widthPixelation = 140.001;
+const heightPixelation = 140.001;
+
+struct MaterialColors {
+  EMISSIVE: vec3<f32>,
+  AMBIENT: vec3<f32>,
+  DIFFUSE: vec3<f32>,
+  SPECULAR: vec4<f32>
+}
+
 struct MaterialParams {
   OPACITY: f32,
   NORMAL_INTENSITY: f32,
@@ -131,11 +142,8 @@ struct MaterialUvs {
   DISPLACEMENT_MAP_SCROLL: vec2<f32>
 }
 
-struct MaterialColors {
-  EMISSIVE: vec3<f32>,
-  AMBIENT: vec3<f32>,
-  DIFFUSE: vec3<f32>,
-  SPECULAR: vec4<f32>
+struct MaterialPSX {
+  S: vec2<f32>
 }
 
 struct PointLight {
@@ -189,6 +197,7 @@ struct Decal {
 @group(2) @binding(0) var<uniform> MAT_COLORS: MaterialColors;
 @group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
 @group(2) @binding(2) var<uniform> MAT_UVS: MaterialUvs;
+@group(2) @binding(3) var<uniform> MAT_PSX: vec2<f32>;
 @group(3) @binding(0) var MAT_TEXTURE: texture_2d<f32>;
 @group(3) @binding(1) var MAT_SAMPLER: sampler;
 @group(3) @binding(2) var MAT_DISPLACEMENT_TEXTURE: texture_2d<f32>;
@@ -215,6 +224,11 @@ fn main(
   var outputColor = vec4(0.0, 0.0, 0.0, 1.0);
   var texel = vec4(1.0, 1.0, 1.0, 1.0);
   var textureUV = MAT_UVS.TEXTURE_SCROLL + MAT_UVS.TEXTURE_OFFSET + FragUV;
+
+  // textureUV.x = floor(textureUV.x * widthPixelation) / widthPixelation;
+  // textureUV.y = floor(textureUV.y * heightPixelation) / heightPixelation;
+
+  var s = MAT_PSX;
 
   if (MAT_PARAMS.HAS_DISPLACEMENT_MAP == 1.0)
   {

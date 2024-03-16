@@ -305,6 +305,31 @@ class Gfx3Manager {
   }
 
   /**
+   * Creates an empty GPU texture with the given size.
+   * 
+   * @param {number} width - The texture width.
+   * @param {number} height - The texture height.
+   * @param {boolean} [is8bit=false] - Indicates whether the texture should be treated as an 8-bit texture or not.
+   * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
+   */
+  createEmptyTexture(width: number, height: number, is8bit: boolean = false, samplerDescriptor: GPUSamplerDescriptor = {}): Gfx3Texture {
+    const gpuTexture = this.device.createTexture({
+      size: [width, height],
+      format: is8bit ? 'r8unorm' : 'rgba8unorm',
+      usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
+    });
+
+    const gpuSampler = this.device.createSampler({
+      magFilter: samplerDescriptor.magFilter ?? 'linear',
+      minFilter: samplerDescriptor.minFilter ?? 'linear',
+      addressModeU: samplerDescriptor.addressModeU ?? 'repeat',
+      addressModeV: samplerDescriptor.addressModeV ?? 'repeat'
+    });
+
+    return { gpuTexture: gpuTexture, gpuSampler: gpuSampler };
+  }
+
+  /**
    * Creates a GPU texture from a given bitmap image or canvas element.
    * 
    * @param {ImageBitmap | HTMLCanvasElement} [bitmap] - The source image.
@@ -322,7 +347,7 @@ class Gfx3Manager {
 
     const gpuTexture = this.device.createTexture({
       size: [bitmap.width, bitmap.height],
-      format: is8bit ? "r8unorm" : 'rgba8unorm',
+      format: is8bit ? 'r8unorm' : 'rgba8unorm',
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
     });
 

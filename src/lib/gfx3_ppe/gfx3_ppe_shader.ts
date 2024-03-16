@@ -1,7 +1,7 @@
-export const SHADER_VERTEX_ATTR_COUNT = 5;
+export const SHADER_VERTEX_ATTR_COUNT = 2;
 
 export const PIPELINE_DESC: any = {
-  label: 'Sprite pipeline',
+  label: 'PPE pipeline',
   layout: 'auto',
   vertex: {
     entryPoint: 'main',
@@ -10,7 +10,7 @@ export const PIPELINE_DESC: any = {
       attributes: [{
         shaderLocation: 0, /*position*/
         offset: 0,
-        format: 'float32x3'
+        format: 'float32x2'
       }, {
         shaderLocation: 1, /*uv*/
         offset: 3 * 4,
@@ -49,37 +49,35 @@ export const PIPELINE_DESC: any = {
 };
 
 export const VERTEX_SHADER = /* wgsl */`
-@group(0) @binding(0) var<uniform> MVPC_MATRIX: mat4x4<f32>;
-
 struct VertexOutput {
-  @builtin(position) Position: vec4<f32>,
+  @builtin(position) Position: vec2<f32>,
   @location(0) FragUV: vec2<f32>
 };
 
 @vertex
 fn main(
-  @location(0) Position : vec4<f32>,
+  @location(0) Position : vec2<f32>,
   @location(1) TexUV : vec2<f32>
 ) -> VertexOutput {
   var output : VertexOutput;
-  output.Position = MVPC_MATRIX * Position;
+  output.Position = vec4(Position, 0.0, 1.0);
   output.FragUV = TexUV;
   return output;
 }`;
 
 export const FRAGMENT_SHADER = /* wgsl */`
-@group(1) @binding(0) var TEXTURE: texture_2d<f32>;
-@group(1) @binding(1) var SAMPLER: sampler;
+@group(0) @binding(0) var TEXTURE: texture_2d<f32>;
+@group(0) @binding(1) var SAMPLER: sampler;
 
 @fragment
 fn main(
   @location(0) FragUV: vec2<f32>
 ) -> @location(0) vec4<f32> {
-  var textureColor:vec4<f32> = textureSample(TEXTURE, SAMPLER, FragUV);
-  if (textureColor.a == 0)
-  {
-    discard;
-  }
+  var screenTexel:vec4<f32> = textureSample(TEXTURE, SAMPLER, FragUV);
 
-  return textureColor;
+  screenTexel.r *= 1.2;
+  screenTexel.g *= 0.8;
+  screenTexel.b *= 0.8;
+
+  return screenTexel;
 }`;
