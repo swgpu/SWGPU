@@ -17,10 +17,10 @@ You can check the documentation [here](http://warme-engine.com/).
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
 
 ## General features
-- 🧱 **Core** - Maths, tweening, events manager, container manager
+- 🧱 **Core** - Maths, tweening, events manager, container manager, curves, quaternions
 - 👾 **2D** - Sprite, isometric tilemap, orthographic tilemap, particles system, rendering filters
-- 🧊 **3D** - Debug shapes, mesh, animated-mesh, sprite, billboard, skybox, multiple-camera, mover, particules, flares, fog, vertex colorization, decals, shadow map, mesh pooling, rendering filters
-- 📐 **Physics** - Walkmesh, nav-mesh, raytest, circle-circle, cylinder-cylinder, line-line, point-rect, rect-rect, point-box, box-box
+- 🧊 **3D** - Debug shapes, mesh, animated-mesh, sprite, billboard, skybox, multiple-camera, mover, particules, flares, fog, vertex colorization, decals, shadow map, mesh pooling, rendering filters, post-processing effects
+- 📐 **Physics** - Walkmesh, navmesh, raytest, circle-circle, cylinder-cylinder, line-line, point-rect, rect-rect, point-box, box-box
 - 💥 **Material** - Phong, displacement-texture-mapping, normal-mapping, env-mapping, specularity-mapping, texture-scrolling, uv-animations
 - 🌞 **Light** - Directional light, multiple point lights
 - 🎮 **Input** - Action mapper for keyboard and gamepad
