@@ -48,7 +48,6 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.decalCount = this.grp0.setInteger(5, 'DECAL_COUNT', 1);
     this.decals = this.grp0.setFloat(6, 'DECALS', 24 * MAX_DECALS);
     this.lvpMatrix = this.grp0.setFloat(7, 'LVP_MATRIX', 16);
-
     this.decalAtlas = this.grp0.setTexture(8, 'DECAL_ATLAS_TEXTURE', gfx3Manager.createTextureFromBitmap());
     this.shadowMap = this.grp0.setTexture(10, 'SHADOW_MAP_TEXTURE', gfx3MeshShadowRenderer.getDepthTexture());
     this.grp1 = gfx3Manager.createDynamicGroup('MESH_PIPELINE', 1);

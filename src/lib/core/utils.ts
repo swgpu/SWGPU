@@ -1292,6 +1292,16 @@ class UT {
     return out;
   }
 
+  // static MAT4_TRANSFORM_AROUND(position: vec3, rotation: vec3, scale: vec3, quaternion: Quaternion, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
+  //   UT.MAT4_TRANSLATE(position[0], position[1], position[2], out);
+  //   UT.MAT4_MULTIPLY(out, quaternion.toMatrix4(), out);
+  //   UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_Y(rotation[1]), out);
+  //   UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_X(rotation[0]), out); // y -> x -> z
+  //   UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_Z(rotation[2]), out);
+  //   UT.MAT4_MULTIPLY(out, UT.MAT4_SCALE(scale[0], scale[1], scale[2]), out);
+  //   return out;
+  // }
+
   /**
    * @param width - The width.
    * @param height - The height.

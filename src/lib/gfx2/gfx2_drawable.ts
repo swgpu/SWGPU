@@ -250,6 +250,7 @@ class Gfx2Drawable {
 
   /**
    * Set the elevation.
+   * Only used for rendering 2D isometric tiles.
    * 
    * @param {number} elevation - The elevation value.
    */
@@ -259,6 +260,7 @@ class Gfx2Drawable {
 
   /**
    * Returns the elevation.
+   * Only used for rendering 2D isometric tiles.
    */
   getElevation(): number {
     return this.elevation;

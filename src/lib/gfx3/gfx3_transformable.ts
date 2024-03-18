@@ -127,6 +127,8 @@ class Gfx3Transformable {
     this.rotation[2] += z;
   }
 
+  rotateAround()
+
   /**
    * Sets the Quaternion rotation.
    * 

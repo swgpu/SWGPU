@@ -9,7 +9,6 @@ import { gfx3ParticlesRenderer } from './lib/gfx3_particules/gfx3_particles_rend
 import { gfx2Manager } from './lib/gfx2/gfx2_manager';
 import { screenManager } from './lib/screen/screen_manager';
 import { uiManager } from './lib/ui/ui_manager';
-
 import { gfx3PPERenderer } from './lib/gfx3_ppe/gfx3_ppe_renderer';
 // ---------------------------------------------------------------------------------------
 import { BootScreen } from './samples/boot/boot_screen';
@@ -22,6 +21,7 @@ class GameManager {
 
   startup() {
     gfx3DebugRenderer.setShowDebug(true);
+    gfx3PPERenderer.setEnabled(false);
     this.run(0);
   }
 
@@ -29,24 +29,22 @@ class GameManager {
     const ts = timeStamp - this.then;
     this.then = timeStamp;
 
+    // update phase
     gfx2Manager.update(ts);
     uiManager.update(ts);
     screenManager.update(ts);
 
+    // draw phase
     gfx3Manager.beginDrawing();
     gfx2Manager.beginDrawing();
     screenManager.draw();
     gfx2Manager.endDrawing();
     gfx3Manager.endDrawing();
 
-
-
+    // render phase
     gfx3Manager.beginRender();
     gfx3MeshShadowRenderer.render();
-
-    // gfx3Manager.setDestinationTexture(gfx3PPERenderer.getSourceTexture());
-
-
+    gfx3Manager.setDestinationTexture(gfx3PPERenderer.getSourceTexture());
     gfx3Manager.beginPassRender(0);
     gfx3SkyboxRenderer.render();
     gfx3DebugRenderer.render();
@@ -55,9 +53,7 @@ class GameManager {
     gfx3ParticlesRenderer.render();
     gfx3FlareRenderer.render();
     gfx3Manager.endPassRender();
-
-    // gfx3PPERenderer.render(gfx3Manager.getCurrentRenderingTexture());
-
+    gfx3PPERenderer.render(gfx3Manager.getCurrentRenderingTexture());
     gfx3Manager.endRender();
 
     document.getElementById('fps').innerHTML = (1000 / ts).toFixed(2);

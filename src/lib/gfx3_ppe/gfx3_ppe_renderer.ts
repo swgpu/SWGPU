@@ -7,12 +7,13 @@ import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER, SHADER_VERTEX_ATTR_COUNT } from './gfx3_ppe_shader';
 
 /**
- * Post-processing effects renderer.
+ * Singleton post-processing effects renderer.
  */
 class Gfx3PPERenderer extends Gfx3RendererAbstract {
   device: GPUDevice;
   vertexBuffer: GPUBuffer;
   grp0: Gfx3StaticGroup;
+  params: Float32Array;
   sourceTexture: Gfx3Texture;
 
   constructor() {
@@ -21,7 +22,18 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.vertexBuffer = this.device.createBuffer({ size: 6 * SHADER_VERTEX_ATTR_COUNT * 4, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC });
 
     this.grp0 = gfx3Manager.createStaticGroup('PPE_PIPELINE', 0);
-    this.sourceTexture = this.grp0.setTexture(0, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
+    this.params = this.grp0.setFloat(0, 'PARAMS', 10);
+    this.params[0] = 1.0;
+    this.params[1] = gfx3Manager.getWidth();
+    this.params[2] = gfx3Manager.getHeight();
+    this.params[3] = 300.0;
+    this.params[4] = 300.0;
+    this.params[5] = 16.0;
+    this.params[6] = 0.0;
+    this.params[7] = 1.0;
+    this.params[8] = 1.0;
+    this.params[9] = 1.0;
+    this.sourceTexture = this.grp0.setTexture(1, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
     this.grp0.allocate();
 
     this.device.queue.writeBuffer(this.vertexBuffer, 0, new Float32Array([
@@ -50,6 +62,9 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     });
 
     passEncoder.setPipeline(this.pipeline);
+    this.grp0.beginWrite();
+    this.grp0.write(0, this.params);
+    this.grp0.endWrite();
     passEncoder.setBindGroup(0, this.grp0.getBindGroup());
     passEncoder.setVertexBuffer(0, this.vertexBuffer);
     passEncoder.draw(6);
@@ -57,8 +72,87 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
   }
 
   /**
+   * Enable post-process effects.
+   * 
+   * @param {boolean} enabled - Indicating whether ppe should be enabled or disable.
+   */
+  setEnabled(enabled: boolean): void {
+    this.params[0] = enabled ? 1.0 : 0.0;
+  }
+
+  /**
+   * Set the horizontal pixelation value.
+   * Low value for stronger effect.
+   * 
+   * @param {number} widthPixelation - The x-pixelation value.
+   */
+  setWidthPixelation(widthPixelation: number): void {
+    this.params[3] = widthPixelation;
+  }
+
+  /**
+   * Set the vertical pixelation value.
+   * Low value for stronger effect.
+   * 
+   * @param {number} heightPixelation - The y-pixelation value.
+   */
+  setHeightPixelation(heightPixelation: number): void {
+    this.params[4] = heightPixelation;
+  }
+  
+  /**
+   * Set the color precision.
+   * It determines how much color is limited.
+   * 
+   * @param {number} colorPrecision - The color precision.
+   */
+  setColorPrecision(colorPrecision: number): void {
+    this.params[5] = colorPrecision;
+  }
+
+  /**
+   * Set the dither pattern.
+   * You have choise between 5 different patterns (from 0 to 4).
+   * 
+   * @param {number} ditherPattern - The pattern index.
+   */
+  setDitherPattern(ditherPattern: number): void {
+    this.params[6] = ditherPattern;
+  }
+
+  /**
+   * Set the dither threshold.
+   * It determines a threshold value from what the dither is triggered.
+   * 
+   * @param {number} ditherThreshold - The threshold.
+   */
+  setDitherThreshold(ditherThreshold: number): void {
+    this.params[7] = ditherThreshold;
+  }
+
+  /**
+   * Set the dither x-scale.
+   * High value for strong effect.
+   * 
+   * @param {number} ditherScaleX - The x-scale.
+   */
+  setDitherScaleX(ditherScaleX: number): void {
+    this.params[8] = ditherScaleX;
+  }
+
+  /**
+   * Set the dither y-scale.
+   * High value for strong effect.
+   * 
+   * @param {number} ditherScaleY - The y-scale.
+   */
+  setDitherScaleY(ditherScaleY: number): void {
+    this.params[9] = ditherScaleY;
+  }
+
+  /**
    * Returns the source texture.
-   * Note: PPE is responsible to create the source texture used to rendering the previous pass.
+   * Note: This instance is responsible to create the source texture used to rendering the previous pass.
    * This way, it is easy to chain multiple effects.
    */
   getSourceTexture(): GPUTexture {
@@ -66,6 +160,8 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
   }
 
   $handleWindowResize(): void {
+    this.params[1] = gfx3Manager.getWidth();
+    this.params[2] = gfx3Manager.getHeight();
     this.sourceTexture.gpuTexture.destroy();
     this.sourceTexture = this.grp0.setTexture(0, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
     this.grp0.allocate();
