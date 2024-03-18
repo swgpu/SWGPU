@@ -256,7 +256,7 @@ function CREATE_UI_INFOBOX() {
 
   {
     const li = document.createElement('li');
-    li.textContent = '[p] => Post Processing Effect (greyscale)';
+    li.textContent = '[p] => Post Filtering (greyscale)';
     ul.appendChild(li);
   }
 

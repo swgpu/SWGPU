@@ -15,11 +15,10 @@ interface MeshCommand {
  */
 class Gfx3MeshShadowRenderer {
   pipeline: GPURenderPipeline;
-  passEncoder: GPURenderPassEncoder;
   depthTextureSize: number;
-  depthTexture:GPUTexture
-  depthTextureSampler:GPUSampler;
-  depthTextureView:GPUTextureView;
+  depthTexture: GPUTexture
+  depthTextureSampler: GPUSampler;
+  depthTextureView: GPUTextureView;
   meshCommands: Array<MeshCommand>;
   grp0: Gfx3DynamicGroup;
   lvpMatrix: Float32Array;
@@ -27,7 +26,6 @@ class Gfx3MeshShadowRenderer {
 
   constructor() {
     this.pipeline = gfx3Manager.loadPipeline('MESH_SHADOW_PIPELINE', MESH_SHADOW_VERTEX_SHADER, '', MESH_SHADOW_PIPELINE_DESC);
-    this.passEncoder = {} as GPURenderPassEncoder;
 
     this.depthTextureSize = 1024.0;
     this.depthTexture = gfx3Manager.getDevice().createTexture({
@@ -46,12 +44,11 @@ class Gfx3MeshShadowRenderer {
   }
 
   /**
-   * Prepare a render pass.
-   * Warning: You need to call this method before the render calls you want include in this pass.
+   * The render function.
    */
-  beginPassRender(): void {
+  render(): void {
     const commandEncoder = gfx3Manager.getCommandEncoder();
-    this.passEncoder = commandEncoder.beginRenderPass({
+    const passEncoder = commandEncoder.beginRenderPass({
       colorAttachments: [],
       depthStencilAttachment: {
         view: this.depthTextureView,
@@ -60,13 +57,8 @@ class Gfx3MeshShadowRenderer {
         depthStoreOp: 'store',
       },
     });
-  }
 
-  /**
-   * The render function.
-   */
-  render(): void {
-    this.passEncoder.setPipeline(this.pipeline);
+    passEncoder.setPipeline(this.pipeline);
 
     if (this.grp0.getSize() < this.meshCommands.length) {
       this.grp0.allocate(this.meshCommands.length);
@@ -79,21 +71,15 @@ class Gfx3MeshShadowRenderer {
       const mMatrix = command.matrix ? command.matrix : command.mesh.getTransformMatrix();
       this.grp0.write(0, this.lvpMatrix);
       this.grp0.write(1, UT.MAT4_COPY(mMatrix, this.mMatrix) as Uint32Array);
-      this.passEncoder.setBindGroup(0, this.grp0.getBindGroup(i));
-      this.passEncoder.setVertexBuffer(0, gfx3Manager.getVertexBuffer(), command.mesh.getVertexSubBufferOffset(), command.mesh.getVertexSubBufferSize());
-      this.passEncoder.draw(command.mesh.getVertexCount());
+      passEncoder.setBindGroup(0, this.grp0.getBindGroup(i));
+      passEncoder.setVertexBuffer(0, gfx3Manager.getVertexBuffer(), command.mesh.getVertexSubBufferOffset(), command.mesh.getVertexSubBufferSize());
+      passEncoder.draw(command.mesh.getVertexCount());
     }
 
     this.grp0.endWrite();
     this.meshCommands = [];
-  }
 
-  /**
-   * Close a render pass.
-   * Warning: You need to call this method after the render calls you want include in this pass.
-   */
-  endPassRender(): void {
-    this.passEncoder.end();
+    passEncoder.end();
   }
 
   /**

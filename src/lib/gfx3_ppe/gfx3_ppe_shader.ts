@@ -1,4 +1,4 @@
-export const SHADER_VERTEX_ATTR_COUNT = 2;
+export const SHADER_VERTEX_ATTR_COUNT = 4;
 
 export const PIPELINE_DESC: any = {
   label: 'PPE pipeline',
@@ -13,7 +13,7 @@ export const PIPELINE_DESC: any = {
         format: 'float32x2'
       }, {
         shaderLocation: 1, /*uv*/
-        offset: 3 * 4,
+        offset: 2 * 4,
         format: 'float32x2'
       }]
     }]
@@ -21,36 +21,17 @@ export const PIPELINE_DESC: any = {
   fragment: {
     entryPoint: 'main',
     targets: [{
-      format: navigator.gpu.getPreferredCanvasFormat(),
-      blend: {
-        color: {
-          srcFactor: 'src-alpha',
-          dstFactor: 'one-minus-src-alpha',
-          operation: 'add'
-        },
-        alpha: {
-          srcFactor: 'one',
-          dstFactor: 'one-minus-src-alpha',
-          operation: 'add'
-        }
-      }
+      format: navigator.gpu.getPreferredCanvasFormat()
     }]
   },
   primitive: {
-    topology: 'triangle-list',
-    cullMode: 'back',
-    frontFace: 'ccw'
-  },
-  depthStencil: {
-    depthWriteEnabled: true,
-    depthCompare: 'less',
-    format: 'depth24plus'
+    topology: 'triangle-list'
   }
 };
 
 export const VERTEX_SHADER = /* wgsl */`
 struct VertexOutput {
-  @builtin(position) Position: vec2<f32>,
+  @builtin(position) Position: vec4<f32>,
   @location(0) FragUV: vec2<f32>
 };
 
@@ -66,18 +47,16 @@ fn main(
 }`;
 
 export const FRAGMENT_SHADER = /* wgsl */`
-@group(0) @binding(0) var TEXTURE: texture_2d<f32>;
-@group(0) @binding(1) var SAMPLER: sampler;
+@group(0) @binding(0) var SOURCE_TEXTURE: texture_2d<f32>;
+@group(0) @binding(1) var SOURCE_SAMPLER: sampler;
 
 @fragment
 fn main(
   @location(0) FragUV: vec2<f32>
 ) -> @location(0) vec4<f32> {
-  var screenTexel:vec4<f32> = textureSample(TEXTURE, SAMPLER, FragUV);
-
-  screenTexel.r *= 1.2;
-  screenTexel.g *= 0.8;
-  screenTexel.b *= 0.8;
-
-  return screenTexel;
+  var sourceTexel:vec4<f32> = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, FragUV);
+  sourceTexel.r *= 1.2;
+  sourceTexel.g *= 0.8;
+  sourceTexel.b *= 0.8;
+  return sourceTexel;
 }`;
