@@ -28,7 +28,7 @@ import { BgIsoScreen } from '../bg-iso/bg_iso_screen';
 class BootScreen extends Screen {
   constructor() {
     super();
-    this.uiMenu = new UIMenuText();
+    this.uiMenu = new UIMenuText({ className: 'UIMenuText UIBootMenu' });
   }
 
   async onEnter() {

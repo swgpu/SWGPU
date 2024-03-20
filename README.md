@@ -5,9 +5,7 @@
 
 ![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.2-blue)
 
-**WARME Engine** is an open source realtime 2D/3D game engine based on **WebGPU**.      
-It is a **complete and cross-platform solution** to build desktop/mobile games with high performance.    
-**WARME Engine** wrap the web stack to serve one goal, make kewl games with a sweet coding style !     
+**WARME Engine** is a **2D/3D** game engine based on **WebGPU** and the first **fully packed** engine dedicated to **de-make games** on the web !      
 Some words about our philosophy:
 - **Simplicity:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle rendering and update loops.    
@@ -17,10 +15,10 @@ You can check the documentation [here](http://warme-engine.com/).
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
 
 ## General features
-- 🧱 **Core** - Maths, tweening, events manager, container manager
+- 🧱 **Core** - Maths, tweening, events manager, container manager, curves, quaternions
 - 👾 **2D** - Sprite, isometric tilemap, orthographic tilemap, particles system, rendering filters
-- 🧊 **3D** - Debug shapes, mesh, animated-mesh, sprite, billboard, skybox, multiple-camera, mover, particules, flares, fog, vertex colorization, decals, shadow map, mesh pooling, rendering filters
-- 📐 **Physics** - Walkmesh, nav-mesh, raytest, circle-circle, cylinder-cylinder, line-line, point-rect, rect-rect, point-box, box-box
+- 🧊 **3D** - Debug shapes, mesh, animated-mesh, sprite, billboard, skybox, multiple-camera, mover, particules, flares, fog, vertex colorization, decals, shadow map, mesh pooling, rendering filters, psx post-processing effects
+- 📐 **Physics** - Walkmesh, navmesh, raytest, circle-circle, cylinder-cylinder, line-line, point-rect, rect-rect, point-box, box-box
 - 💥 **Material** - Phong, displacement-texture-mapping, normal-mapping, env-mapping, specularity-mapping, texture-scrolling, uv-animations
 - 🌞 **Light** - Directional light, multiple point lights
 - 🎮 **Input** - Action mapper for keyboard and gamepad
@@ -171,10 +169,22 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     <td align="center"> 
         <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb19.png" width="150px"/>
     </td>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
+    </td>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
+    </td>
   </tr>
   <tr>
     <td>
         <p>2D Isometric Background</p>
+    </td>
+    <td>
+        <p>Tutorial 2D</p>
+    </td>
+    <td>
+        <p>Tutorial 3D</p>
     </td>
   </tr>
 </table>

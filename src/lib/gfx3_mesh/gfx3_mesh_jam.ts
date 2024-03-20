@@ -1,4 +1,5 @@
 import { eventManager } from '../core/event_manager';
+import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 import { Gfx3Mesh } from './gfx3_mesh';
 import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_mesh_shader';
 
@@ -25,6 +26,7 @@ class Gfx3MeshJAM extends Gfx3Mesh {
   currentAnimation: JAMAnimation | null;
   currentFrameIndex: number;
   frameProgress: number;
+  boundingBoxes: Array<Gfx3BoundingBox>;
 
   constructor() {
     super();
@@ -36,6 +38,7 @@ class Gfx3MeshJAM extends Gfx3Mesh {
     this.currentAnimation = null;
     this.currentFrameIndex = 0;
     this.frameProgress = 0;
+    this.boundingBoxes = [];
   }
 
   /**
@@ -60,6 +63,18 @@ class Gfx3MeshJAM extends Gfx3Mesh {
       this.frames.push({
         vertices: Gfx3Mesh.buildVertices(json['NumVertices'], vertices, textureCoords, colors, normals)
       });
+
+      const aabb = new Gfx3BoundingBox();
+      aabb.fromVertices(vertices, 3);
+      this.boundingBoxes.push(aabb);
+    }
+
+    this.boundingBoxes = [];
+    for (const obj of json['Frames']) {
+      const vertices = obj['Vertices'] ?? json['Vertices'];
+      const aabb = new Gfx3BoundingBox();
+      aabb.fromVertices(vertices, 3);
+      this.boundingBoxes.push(aabb);
     }
 
     this.animations = [];
@@ -172,7 +187,7 @@ class Gfx3MeshJAM extends Gfx3Mesh {
       }
     }
 
-    this.endVertices();
+    this.endVertices(false);
 
     if (interpolateFactor >= 1) {
       this.currentFrameIndex = nextFrameIndex;
@@ -243,6 +258,20 @@ class Gfx3MeshJAM extends Gfx3Mesh {
    */
   getFrameProgress(): number {
     return this.frameProgress;
+  }
+
+  /**
+   * Returns the bounding box.
+   */
+  getBoundingBox(): Gfx3BoundingBox {
+    return this.boundingBoxes[this.currentFrameIndex];
+  }
+
+  /**
+   * Returns the bounding box in the world space coordinates.
+   */
+  getWorldBoundingBox(): Gfx3BoundingBox {
+    return this.boundingBoxes[this.currentFrameIndex].transform(this.getTransformMatrix());
   }
 }
 

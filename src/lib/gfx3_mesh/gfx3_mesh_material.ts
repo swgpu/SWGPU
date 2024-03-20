@@ -65,7 +65,7 @@ class Gfx3Material {
   envMap: Gfx3Texture;
 
   /**
-   * @param {MATOptions} options - The options to configuring the material.
+   * @param {MATOptions} options - The options to configure the material.
    */
   constructor(options: MATOptions) {
     this.animations = options.animations ?? [];

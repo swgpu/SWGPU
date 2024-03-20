@@ -78,11 +78,15 @@ class Gfx3Drawable extends Gfx3Transformable {
 
   /**
    * Close your vertex buffer to write process.
-   * Note: The boundingbox is up to date from here.
+   * 
+   * @param {boolean} [updateBoundingBox=true] - Determine if boundingbox is up to date with the new vertex set.
    */
-  endVertices(): void {
+  endVertices(updateBoundingBox: boolean = true): void {
     gfx3Manager.writeVertexBuffer(this.vertexSubBuffer, this.vertices);
-    this.boundingBox.fromVertices(this.vertices, this.vertexStride);
+
+    if (updateBoundingBox) {
+      this.boundingBox.fromVertices(this.vertices, this.vertexStride);
+    }
   }
 
   /**

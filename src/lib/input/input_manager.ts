@@ -27,7 +27,14 @@ GAME_PAD_KEY_MAPPING.set('PadRight', '15');
 
 /**
  * Singleton input manager.
- * Handle various sources such as keyboard and gamepad.
+ * Handle various sources such as keyboard, mouse and gamepad.
+ * It emit 'E_ACTION_ONCE' on new action touch.
+ * It emit 'E_ACTION' on action touch.
+ * It emit 'E_ACTION_RELEASED' on action touch released.
+ * It emit 'E_MOUSE_DOWN' on mouse buttons pressed.
+ * It emit 'E_MOUSE_UP' on mouse buttons released.
+ * It emit 'E_MOUSE_MOVE' on mouse moving.
+ * It emit 'E_MOUSE_DRAG' on mouse dragging.
  */
 class InputManager {
   keymap: Map<string, boolean>;
@@ -35,6 +42,10 @@ class InputManager {
   actionRegister: Array<Action>;
   pads: Array<Pad>;
   padsInterval: number | undefined;
+  mouseDown: boolean;
+  mousePosition: vec2;
+  mouseWheel: number;
+  dragStartPosition: vec2;
 
   constructor() {
     this.keymap = new Map<string, boolean>;
@@ -42,9 +53,17 @@ class InputManager {
     this.actionRegister = [];
     this.pads = [];
     this.padsInterval;
+    this.mouseDown = false;
+    this.mousePosition = [0, 0];
+    this.mouseWheel = 0;
+    this.dragStartPosition = [0, 0];
 
     document.addEventListener('keydown', (e) => this.$handleKeyDown(e));
     document.addEventListener('keyup', (e) => this.$handleKeyUp(e));
+    document.addEventListener('pointerdown', (e) => this.$handlePointerDown(e));
+    document.addEventListener('pointerup', () => this.$handlePointerUp());
+    document.addEventListener('pointermove', (e) => this.$handlePointerMove(e));
+    document.addEventListener('wheel', (e) => this.$handleWheel(e), { passive: false });
     window.addEventListener('gamepadconnected', (e) => this.$handleGamePadConnected(e));
     window.addEventListener('gamepaddisconnected', (e) => this.$handleGamePadDisconnected(e));
 
@@ -63,29 +82,6 @@ class InputManager {
     this.registerAction('gamepad0', 'PadRight', 'RIGHT');
     this.registerAction('gamepad0', 'PadTop', 'UP');
     this.registerAction('gamepad0', 'PadBottom', 'DOWN');
-  }
-
-  /**
-   * Returns a pad or undefined if not found.
-   * Note: Pads are automatically added on plug-in.
-   * 
-   * @param {number} index - The index of the pad.
-   */
-  getPad(index: number): Pad | undefined {
-    return this.pads.find(p => p.index == index);
-  }
-
-  /**
-   * Removes a pad.
-   * 
-   * @param {string} id - The unique identifier of the pad
-   */
-  removePad(id: string): void {
-    this.pads = this.pads.filter(p => p.id != id);
-    if (this.pads.length <= 0) {
-      clearInterval(this.padsInterval);
-      this.padsInterval = undefined;
-    }
   }
 
   /**
@@ -160,32 +156,69 @@ class InputManager {
     return this.actionmap.get(actionId);
   }
 
+  /**
+   * Checks if mouse click is currently active.
+   */
+  isMouseDown(): boolean {
+    return this.mouseDown;
+  }
+
+  /**
+   * Returns the mouse position.
+   */
+  getMousePosition(): vec2 {
+    return this.mousePosition;
+  }
+
+  /**
+   * Returns the mouse wheel value.
+   */
+  getMouseWheel(): number {
+    return this.mouseWheel;
+  }
+
+  /**
+   * Returns the current drag movement.
+   */
+  getDragMove(): vec2 {
+    if (!this.mouseDown) {
+      return [0, 0];
+    }
+
+    return [
+      this.mousePosition[0] - this.dragStartPosition[0],
+      this.mousePosition[1] - this.dragStartPosition[1]
+    ];
+  }
+
+  /**
+   * Returns a pad or undefined if not found.
+   * Note: Pads are automatically added on plug-in.
+   * 
+   * @param {number} index - The index of the pad.
+   */
+  getPad(index: number): Pad | undefined {
+    return this.pads.find(p => p.index == index);
+  }
+
+  /**
+   * Removes a pad.
+   * 
+   * @param {string} id - The unique identifier of the pad
+   */
+  removePad(id: string): void {
+    this.pads = this.pads.filter(p => p.id != id);
+    if (this.pads.length <= 0) {
+      clearInterval(this.padsInterval);
+      this.padsInterval = undefined;
+    }
+  }
+
   $addPad(pad: Pad): void {
     this.pads.push(pad);
     if (this.padsInterval === null) {
       this.padsInterval = setInterval(() => this.$updatePadsStatus(), 50);
     }
-  }
-
-  $handleGamePadDisconnected(e: GamepadEvent): void {
-    this.removePad(e.gamepad.id);
-  }
-
-  $handleGamePadConnected(e: GamepadEvent): void {
-    const pad: Pad = {
-      index: e.gamepad.index,
-      id: e.gamepad.id,
-      nButtons: e.gamepad.buttons.length,
-      nAxes: e.gamepad.axes.length,
-      axes: e.gamepad.axes as Array<number>,
-      pressed: []
-    };
-
-    for (let i = 0; i < e.gamepad.buttons.length; i++) {
-      pad.pressed[i] = e.gamepad.buttons[i].pressed;
-    }
-
-    this.$addPad(pad);
   }
 
   $handleKeyDown(e: KeyboardEvent): boolean {
@@ -215,6 +248,59 @@ class InputManager {
     }
 
     this.keymap.set(e.key, false);
+  }
+
+  $handlePointerDown(e: PointerEvent): void {
+    this.mouseDown = true;
+    this.dragStartPosition[0] = e.clientX;
+    this.dragStartPosition[1] = e.clientY;
+    eventManager.emit(this, 'E_MOUSE_DOWN', { buttons: e.buttons });
+  }
+
+  $handlePointerUp(): void {
+    this.mouseDown = false;
+    this.dragStartPosition[0] = 0;
+    this.dragStartPosition[1] = 0;
+    eventManager.emit(this, 'E_MOUSE_UP');
+  }
+
+  $handlePointerMove(e: PointerEvent): void {
+    this.mouseDown = e.pointerType == 'mouse' ? (e.buttons & 1) !== 0 : true;
+    this.mousePosition = [e.clientX, e.clientY];
+
+    if (this.mouseDown) {
+      eventManager.emit(this, 'E_MOUSE_DRAG', { movementX: e.movementX, movementY: e.movementY });
+    }
+
+    eventManager.emit(this, 'E_MOUSE_MOVE', { movementX: e.movementX, movementY: e.movementY });
+  }
+
+  $handleWheel(e: WheelEvent): void {
+    this.mouseDown = (e.buttons & 1) !== 0;
+    this.mouseWheel += Math.sign(e.deltaY);
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  $handleGamePadDisconnected(e: GamepadEvent): void {
+    this.removePad(e.gamepad.id);
+  }
+
+  $handleGamePadConnected(e: GamepadEvent): void {
+    const pad: Pad = {
+      index: e.gamepad.index,
+      id: e.gamepad.id,
+      nButtons: e.gamepad.buttons.length,
+      nAxes: e.gamepad.axes.length,
+      axes: e.gamepad.axes as Array<number>,
+      pressed: []
+    };
+
+    for (let i = 0; i < e.gamepad.buttons.length; i++) {
+      pad.pressed[i] = e.gamepad.buttons[i].pressed;
+    }
+
+    this.$addPad(pad);
   }
 
   $updatePadsStatus(): void {

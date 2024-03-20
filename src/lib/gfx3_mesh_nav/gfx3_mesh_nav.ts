@@ -164,6 +164,13 @@ class Gfx3MeshNav {
   getLift(): number {
     return this.lift;
   }
+
+  /**
+   * Returns the btree.
+   */
+  getBinaryTree(): Gfx3TreePartition {
+    return this.btree;
+  }
 }
 
 export { Gfx3MeshNav };

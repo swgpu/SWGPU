@@ -216,6 +216,9 @@ class Gfx3Transformable {
   lookAt(x: number, y: number, z:number, up: vec3 = [0, 1, 0]): void {
     UT.MAT4_LOOKAT(this.position, [x, y, z], up, this.transformMatrix);
     UT.MAT4_MULTIPLY(this.transformMatrix, UT.MAT4_SCALE(this.scale[0], this.scale[1], this.scale[2]), this.transformMatrix);
+    this.rotation[0] = -Math.asin(y);
+    this.rotation[1] = Math.atan2(x, z);
+    this.rotation[2] = 0;
   }
 
   /**

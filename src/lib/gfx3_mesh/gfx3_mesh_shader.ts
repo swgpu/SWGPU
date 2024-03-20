@@ -111,6 +111,13 @@ fn main(
 }`;
 
 export const FRAGMENT_SHADER = /* wgsl */`
+struct MaterialColors {
+  EMISSIVE: vec3<f32>,
+  AMBIENT: vec3<f32>,
+  DIFFUSE: vec3<f32>,
+  SPECULAR: vec4<f32>
+}
+
 struct MaterialParams {
   OPACITY: f32,
   NORMAL_INTENSITY: f32,
@@ -129,13 +136,6 @@ struct MaterialUvs {
   TEXTURE_SCROLL: vec2<f32>,
   TEXTURE_OFFSET: vec2<f32>,
   DISPLACEMENT_MAP_SCROLL: vec2<f32>
-}
-
-struct MaterialColors {
-  EMISSIVE: vec3<f32>,
-  AMBIENT: vec3<f32>,
-  DIFFUSE: vec3<f32>,
-  SPECULAR: vec4<f32>
 }
 
 struct PointLight {

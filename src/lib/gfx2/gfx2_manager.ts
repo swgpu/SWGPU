@@ -120,31 +120,17 @@ class Gfx2Manager {
   }
 
   /**
-   * Returns the client width of the canvas.
+   * Returns the resolution width of the canvas.
    */
-  getClientWidth(): number {
+  getWidth(): number {
     return this.canvas.clientWidth;
   }
 
   /**
-   * Returns the client height of the canvas.
-   */
-  getClientHeight(): number {
-    return this.canvas.clientHeight;
-  }
-
-  /**
-   * Returns the internal width of the canvas.
-   */
-  getWidth(): number {
-    return this.canvas.width;
-  }
-
-  /**
-   * Returns the internal height of the canvas.
+   * Returns the resolution height of the canvas.
    */
   getHeight(): number {
-    return this.canvas.height;
+    return this.canvas.clientHeight;
   }
 
   /**

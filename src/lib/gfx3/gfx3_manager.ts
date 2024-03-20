@@ -19,6 +19,7 @@ class Gfx3Manager {
   device: GPUDevice;
   canvas: HTMLCanvasElement;
   ctx: GPUCanvasContext;
+  destinationTexture: GPUTexture | null;
   depthTexture: GPUTexture;
   depthView: GPUTextureView;
   commandEncoder: GPUCommandEncoder;
@@ -37,6 +38,7 @@ class Gfx3Manager {
     this.device = {} as GPUDevice;
     this.canvas = {} as HTMLCanvasElement;
     this.ctx = {} as GPUCanvasContext;
+    this.destinationTexture = null;
     this.depthTexture = {} as GPUTexture;
     this.depthView = {} as GPUTextureView;
     this.commandEncoder = {} as GPUCommandEncoder;
@@ -156,10 +158,11 @@ class Gfx3Manager {
     const viewportWidth = this.canvas.width * viewport.widthFactor;
     const viewportHeight = this.canvas.height * viewport.heightFactor;
     const viewBgColor = view.getBgColor();
+    const textureView = this.destinationTexture ? this.destinationTexture.createView() : this.ctx.getCurrentTexture().createView();
 
     this.passEncoder = this.commandEncoder.beginRenderPass({
       colorAttachments: [{
-        view: this.ctx.getCurrentTexture().createView(),
+        view: textureView,
         clearValue: { r: viewBgColor[0], g: viewBgColor[1], b: viewBgColor[2], a: viewBgColor[3] },
         loadOp: 'clear',
         storeOp: 'store'
@@ -305,6 +308,38 @@ class Gfx3Manager {
   }
 
   /**
+   * Creates a default rendering texture.
+   */
+  createRenderingTexture(): Gfx3Texture {
+    return this.createEmptyTexture(this.getWidth(), this.getHeight(), navigator.gpu.getPreferredCanvasFormat(), { magFilter: 'nearest', minFilter: 'nearest' });
+  }
+
+  /**
+   * Creates an empty GPU texture with the given size.
+   * 
+   * @param {number} width - The texture width.
+   * @param {number} height - The texture height.
+   * @param {boolean} [is8bit=false] - Indicates whether the texture should be treated as an 8-bit texture or not.
+   * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
+   */
+  createEmptyTexture(width: number, height: number, format: GPUTextureFormat, samplerDescriptor: GPUSamplerDescriptor = {}): Gfx3Texture {
+    const gpuTexture = this.device.createTexture({
+      size: [width, height],
+      format: format,
+      usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
+    });
+
+    const gpuSampler = this.device.createSampler({
+      magFilter: samplerDescriptor.magFilter ?? 'linear',
+      minFilter: samplerDescriptor.minFilter ?? 'linear',
+      addressModeU: samplerDescriptor.addressModeU ?? 'repeat',
+      addressModeV: samplerDescriptor.addressModeV ?? 'repeat'
+    });
+
+    return { gpuTexture: gpuTexture, gpuSampler: gpuSampler };
+  }
+
+  /**
    * Creates a GPU texture from a given bitmap image or canvas element.
    * 
    * @param {ImageBitmap | HTMLCanvasElement} [bitmap] - The source image.
@@ -322,7 +357,7 @@ class Gfx3Manager {
 
     const gpuTexture = this.device.createTexture({
       size: [bitmap.width, bitmap.height],
-      format: is8bit ? "r8unorm" : 'rgba8unorm',
+      format: is8bit ? 'r8unorm' : 'rgba8unorm',
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
     });
 
@@ -414,17 +449,19 @@ class Gfx3Manager {
   }
 
   /**
-   * Returns the width of the canvas.
+   * Returns the resolution width of the canvas.
    */
   getWidth(): number {
-    return this.canvas.width;
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    return this.canvas.clientWidth * devicePixelRatio;
   }
 
   /**
-   * Returns the height of the canvas.
+   * Returns the resolution height of the canvas.
    */
   getHeight(): number {
-    return this.canvas.height;
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    return this.canvas.clientHeight * devicePixelRatio;
   }
 
   /**
@@ -439,6 +476,32 @@ class Gfx3Manager {
    */
   getDevice(): GPUDevice {
     return this.device;
+  }
+
+  /**
+   * The destination texture is used for multi-pass rendering.
+   * Note: If destination texture is set, we render to the destination texture and let post-processing effect renderers used it.
+   * otherwise we are rendering to the screen directly.
+   * 
+   * @param {GPUTexture | null} destinationTexture - The destination texture.
+   */
+  setDestinationTexture(destinationTexture: GPUTexture | null): void {
+    this.destinationTexture = destinationTexture;
+  }
+
+  /**
+   * Returns the depth texture.
+   */
+  getDepthTexture(): GPUTexture {
+    return this.depthTexture;
+  }
+
+  /**
+   * Returns the current rendering texture.
+   * Note: Is the texture used for final rendering.
+   */
+  getCurrentRenderingTexture(): GPUTexture {
+    return this.ctx.getCurrentTexture();
   }
 
   /**
