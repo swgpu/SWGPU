@@ -23,7 +23,6 @@ class Gfx3MeshJAM extends Gfx3Mesh {
   animations: Array<JAMAnimation>;
   interpolationEnabled: boolean;
   looped: boolean;
-  dynamicBoundingBoxEnabled: boolean;
   currentAnimation: JAMAnimation | null;
   currentFrameIndex: number;
   frameProgress: number;
@@ -36,7 +35,6 @@ class Gfx3MeshJAM extends Gfx3Mesh {
     this.animations = [];
     this.interpolationEnabled = true;
     this.looped = true;
-    this.dynamicBoundingBoxEnabled = false;
     this.currentAnimation = null;
     this.currentFrameIndex = 0;
     this.frameProgress = 0;

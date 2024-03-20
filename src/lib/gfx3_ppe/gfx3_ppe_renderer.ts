@@ -150,6 +150,58 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.params[9] = ditherScaleY;
   }
 
+  getEnabled(): number {
+    return this.params[0];
+  }
+
+  /**
+   * Return the horizontal pixelation value.
+   */
+  getWidthPixelation(): number {
+    return this.params[3];
+  }
+
+  /**
+   * Return the vertical pixelation value.
+   */
+  getHeightPixelation(): number {
+    return this.params[4];
+  }
+  
+  /**
+   * Return the color precision.
+   */
+  getColorPrecision(): number {
+    return this.params[5];
+  }
+
+  /**
+   * Get the dither pattern.
+   */
+  getDitherPattern(): number {
+    return this.params[6];
+  }
+
+  /**
+   * Get the dither threshold.
+   */
+  getDitherThreshold(): number {
+    return this.params[7];
+  }
+  /**
+   * Get the dither x-scale.
+   */
+  getDitherScaleX(): number {
+    return this.params[8];
+  }
+
+  /**
+   * Get the dither y-scale.
+   */
+  getDitherScaleY(): number {
+    return this.params[9];
+  }
+
   /**
    * Returns the source texture.
    * Note: This instance is responsible to create the source texture used to rendering the previous pass.

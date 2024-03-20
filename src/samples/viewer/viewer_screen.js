@@ -2,11 +2,11 @@ import { gfx3Manager } from '../../lib/gfx3/gfx3_manager';
 import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
 import { gfx3DebugRenderer } from '../../lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
-import { inputManager } from '../../lib/input/input_manager';
+import { gfx3PPERenderer } from '../../lib/gfx3_ppe/gfx3_ppe_renderer';
 import { uiManager } from '../../lib/ui/ui_manager';
 import { UT } from '../../lib/core/utils';
 import { Screen } from '../../lib/screen/screen';
-import { Gfx3Camera } from '../../lib/gfx3_camera/gfx3_camera';
+import { Gfx3CameraWASD } from '../../lib/gfx3_camera/gfx3_camera_wasd';
 import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3MeshOBJ } from '../../lib/gfx3_mesh/gfx3_mesh_obj';
 import { Gfx3Skybox } from '../../lib/gfx3_skybox/gfx3_skybox';
@@ -18,17 +18,13 @@ const CAMERA_SPEED = 0.1;
 class ViewerScreen extends Screen {
   constructor() {
     super();
-    this.camera = new Gfx3Camera(0);
+    this.camera = new Gfx3CameraWASD(0);
     this.mesh = new Gfx3MeshJSM();
     this.skybox = new Gfx3Skybox();
     this.isDragging = false;
     this.dragStartPosition = [0, 0];
     this.dragStartRotation = [0, 0];
-
     this.handleKeyDownCb = this.handleKeyDown.bind(this);
-    this.handleMouseDownCb = this.handleMouseDown.bind(this);
-    this.handleMouseUpCb = this.handleMouseUp.bind(this);
-    this.handleMouseMoveCb = this.handleMouseMove.bind(this);
   }
 
   async onEnter() {
@@ -36,45 +32,18 @@ class ViewerScreen extends Screen {
     this.mesh = await CREATE_CUBE();
     this.skybox = await CREATE_SKYBOX();
     uiManager.addNode(CREATE_UI_INFOBOX(), 'position:absolute; bottom:10px; right:10px');
-
     document.addEventListener('keydown', this.handleKeyDownCb);
-    document.addEventListener('mousedown', this.handleMouseDownCb);
-    document.addEventListener('mouseup', this.handleMouseUpCb);
-    document.addEventListener('mousemove', this.handleMouseMoveCb);
   }
 
   onExit() {
     document.removeEventListener('keydown', this.handleKeyDownCb);
-    document.removeEventListener('mousedown', this.handleMouseDownCb);
-    document.removeEventListener('mouseup', this.handleMouseUpCb);
-    document.removeEventListener('mousemove', this.handleMouseMoveCb);
   }
 
   update(ts) {
-    const cameraAxies = this.camera.getLocalAxies();
-    let move = UT.VEC3_CREATE(0, 0, 0);
-
-    if (inputManager.isActiveAction('LEFT')) {
-      move = UT.VEC3_ADD(move, UT.VEC3_SCALE(cameraAxies[0], -CAMERA_SPEED));
-    }
-
-    if (inputManager.isActiveAction('RIGHT')) {
-      move = UT.VEC3_ADD(move, UT.VEC3_SCALE(cameraAxies[0], +CAMERA_SPEED));
-    }
-
-    if (inputManager.isActiveAction('UP')) {
-      move = UT.VEC3_ADD(move, UT.VEC3_SCALE(cameraAxies[2], -CAMERA_SPEED));
-    }
-
-    if (inputManager.isActiveAction('DOWN')) {
-      move = UT.VEC3_ADD(move, UT.VEC3_SCALE(cameraAxies[2], +CAMERA_SPEED));
-    }
-
     const now = Date.now() / 10000;
-
-    this.camera.translate(move[0], move[1], move[2]);    
     this.mesh.setRotation(Math.sin(now), Math.cos(now), 0);
     this.mesh.update(ts);
+    this.camera.update(ts);
   }
 
   draw() {
@@ -106,31 +75,12 @@ class ViewerScreen extends Screen {
     else if (e.key == 'd' || e.key == 'D') {
       this.mesh = await CREATE_DUCK();
     }
-    else if (e.key == 'p' || e.key == 'P') {
+    else if (e.key == 'f' || e.key == 'F') {
       gfx3Manager.hasFilter() ? gfx3Manager.setFilter('') : gfx3Manager.setFilter('grayscale(100%)');
     }
-  }
-
-  handleMouseDown(e) {
-    this.isDragging = true;
-    this.dragStartPosition[0] = e.clientX;
-    this.dragStartPosition[1] = e.clientY;
-    this.dragStartRotation[0] = this.camera.getRotationX();
-    this.dragStartRotation[1] = this.camera.getRotationY();
-  }
-
-  handleMouseUp() {
-    this.isDragging = false;
-  }
-
-  handleMouseMove(e) {
-    if (!this.isDragging) {
-      return;
+    else if (e.key == 'p' || e.key == 'P') {
+      gfx3PPERenderer.getEnabled() ? gfx3PPERenderer.setEnabled(false) : gfx3PPERenderer.setEnabled(true);
     }
-
-    let newRotationX = this.dragStartRotation[0] + ((e.clientY - this.dragStartPosition[1]) * 0.001);
-    let newRotationY = this.dragStartRotation[1] + ((e.clientX - this.dragStartPosition[0]) * 0.001);
-    this.camera.setRotation(newRotationX, newRotationY, 0);
   }
 }
 
@@ -186,7 +136,8 @@ async function CREATE_CUBE_SPRITE() {
       frames: [{
         offsetX: 0,
         offsetY: 0
-      },{
+      },
+      {
         offsetX: 850,
         offsetY: 0
       },
@@ -226,37 +177,43 @@ function CREATE_UI_INFOBOX() {
 
   {
     const li = document.createElement('li');
-    li.textContent = '[o] => Obj Wavefront';
+    li.textContent = '[o] => Load Obj Wavefront';
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[l] => Lantern';  
+    li.textContent = '[l] => Load Lantern';  
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[c] => Cube';  
+    li.textContent = '[c] => Load Cube';  
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[s] => Cube Texture Sprite';  
+    li.textContent = '[s] => Load Cube Texture Sprite';  
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[d] => Duck';  
+    li.textContent = '[d] => Load Duck';  
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[p] => Post Filtering (greyscale)';
+    li.textContent = '[f] => Toggle Filtering (greyscale)';
+    ul.appendChild(li);
+  }
+
+  {
+    const li = document.createElement('li');
+    li.textContent = '[p] => Toggle PPE PSX';
     ul.appendChild(li);
   }
 

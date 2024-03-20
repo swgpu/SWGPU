@@ -110,17 +110,14 @@ class Gfx3Camera extends Gfx3Transformable {
 
   /**
    * Rotate to look at the specified coordinates.
-   * Note: Avoid euler rotation and quaternion rotation.
    * 
    * @param {number} x - The x-coordinate of the target position that the transformable should look at.
    * @param {number} y - The y-coordinate of the target position that the transformable should look at.
    * @param {number} z - The z-coordinate of the target position that the transformable should look at.
    */
   lookAt(x: number, y: number, z:number, up: vec3 = [0, 1, 0]): void {
-    const matrix = this.view.getCameraMatrix();
-    UT.MAT4_LOOKAT(this.position, [x, y, z], up, matrix);
-    UT.MAT4_MULTIPLY(matrix, UT.MAT4_SCALE(this.scale[0], this.scale[1], this.scale[2]), matrix);
-    this.view.setCameraMatrix(matrix);
+    super.lookAt(x, y, z, up);
+    this.view.setCameraMatrix(this.transformMatrix);
   }
 
   /**

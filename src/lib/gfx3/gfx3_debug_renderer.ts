@@ -319,7 +319,7 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
       const y = Math.sin(i * angleStep) * radius;
       for (let j = 0; j <= step * 4; j++) {
         const z = Math.sin(j * angleStep) * r;
-        const x = Math.cos(j * angleStep) * Math.cos(i * angleStep) * radius;
+        const x = Math.cos(j * angleStep) * r;
         points.push([x, y, z]);
       }
     }

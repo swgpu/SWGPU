@@ -308,6 +308,18 @@ class UT {
 
   /**
    * @param a - The first vector.
+   * @param b - The second vector to scale and add to the first.
+   * @param scale - The scale value for second vector.
+   * @param out - The result vector.
+   */
+  static VEC2_ADD_SCALED(a: vec2, b: vec2, scale: number, out: vec2 = [0, 0]): vec2 {
+    out[0] = a[0] + b[0] * scale;
+    out[1] = a[1] + b[1] * scale;
+    return out;
+  }
+
+  /**
+   * @param a - The first vector.
    * @param b - The second vector.
    */
   static VEC2_ANGLE_BETWEEN(a: vec2, b: vec2): number {
@@ -577,6 +589,19 @@ class UT {
     out[0] = a[0] * scale;
     out[1] = a[1] * scale;
     out[2] = a[2] * scale;
+    return out;
+  }
+
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector to scale and add to the first.
+   * @param scale - The scale value for second vector.
+   * @param out - The result vector.
+   */
+  static VEC3_ADD_SCALED(a: vec3, b: vec3, scale: number, out: vec3 = [0, 0, 0]): vec3 {
+    out[0] = a[0] + b[0] * scale;
+    out[1] = a[1] + b[1] * scale;
+    out[2] = a[2] + b[2] * scale;
     return out;
   }
 
@@ -1291,16 +1316,6 @@ class UT {
     UT.MAT4_MULTIPLY(out, UT.MAT4_SCALE(scale[0], scale[1], scale[2]), out);
     return out;
   }
-
-  // static MAT4_TRANSFORM_AROUND(position: vec3, rotation: vec3, scale: vec3, quaternion: Quaternion, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
-  //   UT.MAT4_TRANSLATE(position[0], position[1], position[2], out);
-  //   UT.MAT4_MULTIPLY(out, quaternion.toMatrix4(), out);
-  //   UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_Y(rotation[1]), out);
-  //   UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_X(rotation[0]), out); // y -> x -> z
-  //   UT.MAT4_MULTIPLY(out, UT.MAT4_ROTATE_Z(rotation[2]), out);
-  //   UT.MAT4_MULTIPLY(out, UT.MAT4_SCALE(scale[0], scale[1], scale[2]), out);
-  //   return out;
-  // }
 
   /**
    * @param width - The width.
