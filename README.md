@@ -5,7 +5,8 @@
 
 ![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.3-blue)
 
-**WARME Engine** is the first fully packed **2D/3D** game engine dedicated to **de-make games** on the web ! Some words about our philosophy:
+**WARME Engine** is the first fully packed **2D/3D** game engine dedicated to **de-make games** on the web !     
+Some words about our philosophy:
 - **Simplicity:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle render and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
