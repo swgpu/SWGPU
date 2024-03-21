@@ -38,9 +38,7 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
    * @param {Array<Gfx3BoundingBox>} results - All matching objects.
    */
   search(node: TreePartitionNode<Gfx3BoundingBox>, target: Gfx3BoundingBox, results: Array<Gfx3BoundingBox> = []): Array<Gfx3BoundingBox> {
-    const method = node.getMethod() as Gfx3TreePartitionMethod;
-    const nodeBox = method.box;
-    if (!nodeBox.intersectBoundingBox(target)) {
+    if (!this.box.intersectBoundingBox(target)) {
       return [];
     }
 
@@ -75,27 +73,39 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
 
     for (const object of objects) {
       if (this.axis === 'x') {
-        if (object.min[0] >= center[0]) {
+        if (object.min[0] < center[0] && object.max[0] > center[0]) {
+          left.push(object);
           right.push(object);
         }
-        else {
+        else if (object.max[0] < center[0]) {
           left.push(object);
+        }
+        else {
+          right.push(object);
         }
       }
       else if (this.axis === 'y') {
-        if (object.min[1] >= center[1]) {
+        if (object.min[1] < center[1] && object.max[1] > center[1]) {
+          left.push(object);
           right.push(object);
         }
-        else {
+        else if (object.max[1] < center[1]) {
           left.push(object);
+        }
+        else {
+          right.push(object);
         }
       }
       else {
-        if (object.min[2] >= center[2]) {
+        if (object.min[2] < center[2] && object.max[2] > center[2]) {
+          left.push(object);
           right.push(object);
         }
-        else {
+        else if (object.max[2] < center[2]) {
           left.push(object);
+        }
+        else {
+          right.push(object);
         }
       }
     }
@@ -104,15 +114,15 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
     let newAxis: 'x' | 'y' | 'z' = 'x';
 
     if (this.axis === 'x') {
-      boxes = SPLIT_VERTICAL(this.box);
+      boxes = this.box.splitVertical();
       newAxis = 'y';
     }
     else if (this.axis === 'y') {
-      boxes = SPLIT_HORIZONTAL(this.box);
+      boxes = this.box.splitHorizontal();
       newAxis = 'z';
     }
     else {
-      boxes = SPLIT_DEPTH(this.box);
+      boxes = this.box.splitDepth();
       newAxis = 'x';
     }
 
@@ -124,37 +134,3 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
 }
 
 export { Gfx3TreePartition, Gfx3TreePartitionMethod };
-
-// -------------------------------------------------------------------------------------------
-// HELPFUL
-// -------------------------------------------------------------------------------------------
-
-function SPLIT_VERTICAL(aabb: Gfx3BoundingBox): Array<Gfx3BoundingBox> {
-  const size = aabb.getSize();
-  const center = aabb.getCenter();
-
-  return [
-    Gfx3BoundingBox.createFromCoord(aabb.min[0], aabb.min[1], aabb.min[2], size[0] * 0.5, size[1], size[2]),
-    Gfx3BoundingBox.createFromCoord(center[0], aabb.min[1], aabb.min[2], size[0] * 0.5, size[1], size[2])
-  ];
-}
-
-function SPLIT_HORIZONTAL(aabb: Gfx3BoundingBox): Array<Gfx3BoundingBox> {
-  const size = aabb.getSize();
-  const center = aabb.getCenter();
-
-  return [
-    Gfx3BoundingBox.createFromCoord(aabb.min[0], aabb.min[1], aabb.min[2], size[0], size[1] * 0.5, size[2]),
-    Gfx3BoundingBox.createFromCoord(aabb.min[0], center[1], aabb.min[2], size[0], size[1] * 0.5, size[2])
-  ];
-}
-
-function SPLIT_DEPTH(aabb: Gfx3BoundingBox): Array<Gfx3BoundingBox> {
-  const size = aabb.getSize();
-  const center = aabb.getCenter();
-
-  return [
-    Gfx3BoundingBox.createFromCoord(aabb.min[0], aabb.min[1], aabb.min[2], size[0], size[1], size[2] * 0.5),
-    Gfx3BoundingBox.createFromCoord(aabb.min[0], aabb.min[1], center[2], size[0], size[1], size[2] * 0.5)
-  ];
-}

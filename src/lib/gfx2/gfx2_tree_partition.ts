@@ -38,9 +38,7 @@ class Gfx2TreePartitionMethod implements ITreePartitionMethod<Gfx2BoundingRect> 
   * @param {Array<Gfx2BoundingRect>} results - All matching objects.
   */
   search(node: TreePartitionNode<Gfx2BoundingRect>, target: Gfx2BoundingRect, results: Array<Gfx2BoundingRect> = []): Array<Gfx2BoundingRect> {
-    const method = node.getMethod() as Gfx2TreePartitionMethod;
-    const nodeBox = method.rect;
-    if (!nodeBox.intersectBoundingRect(target)) {
+    if (!this.rect.intersectBoundingRect(target)) {
       return [];
     }
 
@@ -76,24 +74,32 @@ class Gfx2TreePartitionMethod implements ITreePartitionMethod<Gfx2BoundingRect> 
 
     for (const object of objects) {
       if (this.axis === 'x') {
-        if (object.min[0] >= center[0]) {
+        if (object.min[0] < center[0] && object.max[0] > center[0]) {
+          left.push(object);
           right.push(object);
         }
-        else {
+        else if (object.max[0] < center[0]) {
           left.push(object);
+        }
+        else {
+          right.push(object);
         }
       }
       else {
-        if (object.min[1] >= center[1]) {
+        if (object.min[1] < center[1] && object.max[1] > center[1]) {
+          left.push(object);
           right.push(object);
         }
-        else {
+        else if (object.max[1] < center[1]) {
           left.push(object);
+        }
+        else {
+          right.push(object);
         }
       }
     }
 
-    const rects = (this.axis === 'x') ? SPLIT_VERTICAL(this.rect) : SPLIT_HORIZONTAL(this.rect);
+    const rects = (this.axis === 'x') ? this.rect.splitVertical() : this.rect.splitHorizontal();
     const newAxis = (this.axis === 'x') ? 'y' : 'x';
     const leftMethod = new Gfx2TreePartitionMethod(rects[0], newAxis);
     const rightMethod = new Gfx2TreePartitionMethod(rects[1], newAxis);
@@ -103,27 +109,3 @@ class Gfx2TreePartitionMethod implements ITreePartitionMethod<Gfx2BoundingRect> 
 }
 
 export { Gfx2TreePartition, Gfx2TreePartitionMethod };
-
-// -------------------------------------------------------------------------------------------
-// HELPFUL
-// -------------------------------------------------------------------------------------------
-
-function SPLIT_VERTICAL(aabb: Gfx2BoundingRect): Array<Gfx2BoundingRect> {
-  const size = aabb.getSize();
-  const center = aabb.getCenter();
-
-  return [
-    Gfx2BoundingRect.createFromCoord(aabb.min[0], aabb.min[1], size[0] * 0.5, size[1]),
-    Gfx2BoundingRect.createFromCoord(center[0], aabb.min[1], size[0] * 0.5, size[1])
-  ];
-}
-
-function SPLIT_HORIZONTAL(aabb: Gfx2BoundingRect): Array <Gfx2BoundingRect> {
-  const size = aabb.getSize();
-  const center = aabb.getCenter();
-
-  return [
-    Gfx2BoundingRect.createFromCoord(aabb.min[0], aabb.min[1], size[0], size[1] * 0.5),
-    Gfx2BoundingRect.createFromCoord(aabb.min[0], center[1], size[0], size[1] * 0.5)
-  ];
-}

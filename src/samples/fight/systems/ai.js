@@ -203,7 +203,6 @@ export class AISystem extends DNASystem {
 
       const cmd = this.commandRegister[pattern.commandName];
       if (cmd && cmd.apply(this, [entity, enemyEntity, ...pattern.commandArgs])) {
-        console.log(pattern.name + ' pass with tick ' + pattern.then + ' and rand ' + rand);
         pattern.then = 0;
         break;
       }

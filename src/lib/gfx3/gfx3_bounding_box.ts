@@ -119,12 +119,9 @@ class Gfx3BoundingBox {
    * Returns the center point of the box.
    */
   getCenter(): vec3 {
-    const w = this.max[0] - this.min[0];
-    const h = this.max[1] - this.min[1];
-    const d = this.max[2] - this.min[2];
-    const x = this.min[0] + (w * 0.5);
-    const y = this.min[1] + (h * 0.5);
-    const z = this.min[2] + (d * 0.5);
+    const x = (this.min[0] + this.max[0]) * 0.5;
+    const y = (this.min[1] + this.max[1]) * 0.5;
+    const z = (this.min[2] + this.max[2]) * 0.5;
     return [x, y, z];
   }
 
@@ -196,6 +193,45 @@ class Gfx3BoundingBox {
     }
 
     return new Gfx3BoundingBox(min, max);
+  }
+
+  /**
+   * Split the bounding box on x-axis and returns boxes for each side.
+   */
+  splitVertical(): Array<Gfx3BoundingBox> {
+    const size = this.getSize();
+    const center = this.getCenter();
+  
+    return [
+      Gfx3BoundingBox.createFromCoord(this.min[0], this.min[1], this.min[2], size[0] * 0.5, size[1], size[2]),
+      Gfx3BoundingBox.createFromCoord(center[0], this.min[1], this.min[2], size[0] * 0.5, size[1], size[2])
+    ];
+  }
+  
+  /**
+   * Split the bounding box on y-axis and returns boxes for each side.
+   */
+  splitHorizontal(): Array<Gfx3BoundingBox> {
+    const size = this.getSize();
+    const center = this.getCenter();
+  
+    return [
+      Gfx3BoundingBox.createFromCoord(this.min[0], this.min[1], this.min[2], size[0], size[1] * 0.5, size[2]),
+      Gfx3BoundingBox.createFromCoord(this.min[0], center[1], this.min[2], size[0], size[1] * 0.5, size[2])
+    ];
+  }
+
+  /**
+   * Split the bounding box on z-axis and returns boxes for each side.
+   */
+  splitDepth(): Array<Gfx3BoundingBox> {
+    const size = this.getSize();
+    const center = this.getCenter();
+  
+    return [
+      Gfx3BoundingBox.createFromCoord(this.min[0], this.min[1], this.min[2], size[0], size[1], size[2] * 0.5),
+      Gfx3BoundingBox.createFromCoord(this.min[0], this.min[1], center[2], size[0], size[1], size[2] * 0.5)
+    ];
   }
 
   /**

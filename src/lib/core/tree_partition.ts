@@ -31,6 +31,16 @@ class TreePartition<T> {
   }
 
   /**
+   * Search and return all objects that intersect with the target.
+   * 
+   * @param {T} target - The target object.
+   * @param {Array<T>} results - All matching objects.
+   */
+  search(target: T, results: Array<T> = []): Array<T> {
+    return this.root.search(target, results);
+  }
+
+  /**
    * Adds an object.
    * 
    * @param {T} object - The object.

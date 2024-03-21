@@ -57,7 +57,7 @@ class Gfx3MeshPool {
   }
 
   /**
-   * Returns a not used instance, or null if all instance are used.
+   * Returns unused instance, or null if all instance are used.
    */
   acquire(): MeshInstance | null {
     for (const instance of this.instances) {

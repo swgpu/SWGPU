@@ -52,12 +52,10 @@ class Frag extends Gfx3BoundingBox {
  */
 class Gfx3MeshNav {
   btree: Gfx3TreePartition;
-  frags: Array<Frag>;
   lift: number;
 
   constructor() {
     this.btree = new Gfx3TreePartition(20, 10);
-    this.frags = [];
     this.lift = 0.2;
   }
 
@@ -67,18 +65,16 @@ class Gfx3MeshNav {
    * @param {Gfx3MeshJSM} mesh - The static mesh.
    */
   loadFromMesh(mesh: Gfx3Mesh): void {
-    this.btree = new Gfx3TreePartition(20, 10, mesh.getBoundingBox());
-    this.frags = [];
-
+    this.btree = new Gfx3TreePartition(20, 3, mesh.getWorldBoundingBox());
     for (let i = 0; i < mesh.getVertexCount(); i += 3) {
       const frag = new Frag(mesh.getVertices(), i);
       this.btree.addChild(frag);
-      this.frags.push(frag);
     }
   }
 
   /**
-   * Move the virtual box and returns response collision move, a boolean to check wall collide and a boolean to check floor collide.
+   * Move the virtual box and returns response collision infos.
+   * Infos are composed to a move vector, a wall collide flag and floor collide flag.
    * @param {vec3} center - The center point of the box.
    * @param {vec3} size - The size of the box.
    * @param {vec3} move - The movement.
@@ -92,10 +88,11 @@ class Gfx3MeshNav {
     };
 
     aabb.min[1] += this.lift;
-    const wallIntersectedFrags = this.frags.filter(frag => frag.intersectBoundingBox(new Gfx3BoundingBox(
+
+    const wallIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
       [aabb.min[0] + move[0], aabb.min[1] + move[1], aabb.min[2] + move[2]],
       [aabb.max[0] + move[0], aabb.max[1] + move[1], aabb.max[2] + move[2]]
-    )));
+    )) as Array<Frag>;
 
     const points: Array<vec3> = [
       [aabb.min[0], aabb.min[1] + this.lift, aabb.max[2]],
@@ -133,10 +130,11 @@ class Gfx3MeshNav {
     }
 
     aabb.min[1] -= this.lift;
-    const floorIntersectedFrags = this.frags.filter(frag => frag.intersectBoundingBox(new Gfx3BoundingBox(
+
+    const floorIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
       [center[0] + res.move[0], aabb.min[1] + res.move[1], center[2] + res.move[2]],
       [center[0] + res.move[0], aabb.max[1] + res.move[1], center[2] + res.move[2]]
-    )));
+    )) as Array<Frag>;
 
     const footElevation = aabb.min[1];
     const elevation = GET_ELEVATION(floorIntersectedFrags, [center[0] + res.move[0], center[1], center[2] + res.move[2]]);
@@ -172,8 +170,24 @@ class Gfx3MeshNav {
     return this.btree;
   }
 
-  raycast(): void {
+  /**
+   * Returns the ray hit point or null if no hit.
+   * 
+   * @param {vec3} origin - The ray origin.
+   * @param {vec3} dir - The ray direction.
+   * @param {Gfx3BoundingBox} area - The ray area.
+   */
+  raycast(origin: vec3, dir: vec3, area: Gfx3BoundingBox): vec3 | null {
+    const frags = this.btree.search(area) as Array<Frag>;
+    let outIntersectPoint: vec3 = [0, 0, 0];
 
+    for (const frag of frags) {
+      if (UT.RAY_TRIANGLE(origin, dir, frag.a, frag.b, frag.c, true, outIntersectPoint)) {
+        return outIntersectPoint;
+      }
+    }
+
+    return null;
   }
 }
 

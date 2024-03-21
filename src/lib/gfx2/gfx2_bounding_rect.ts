@@ -179,6 +179,32 @@ class Gfx2BoundingRect {
   }
 
   /**
+   * Split the bounding box on x-axis and returns boxes for each side.
+   */
+  splitVertical(): Array<Gfx2BoundingRect> {
+    const size = this.getSize();
+    const center = this.getCenter();
+  
+    return [
+      Gfx2BoundingRect.createFromCoord(this.min[0], this.min[1], size[0] * 0.5, size[1]),
+      Gfx2BoundingRect.createFromCoord(center[0], this.min[1], size[0] * 0.5, size[1])
+    ];
+  }
+
+  /**
+   * Split the bounding box on y-axis and returns boxes for each side.
+   */
+  splitHorizontal(): Array <Gfx2BoundingRect> {
+    const size = this.getSize();
+    const center = this.getCenter();
+  
+    return [
+      Gfx2BoundingRect.createFromCoord(this.min[0], this.min[1], size[0], size[1] * 0.5),
+      Gfx2BoundingRect.createFromCoord(this.min[0], center[1], size[0], size[1] * 0.5)
+    ];
+  }
+
+  /**
    * Checks if a given point is inside the rectangle.
    * 
    * @param {number} x - The x-coordinate of the point.
