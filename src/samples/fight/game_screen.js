@@ -4,24 +4,25 @@ import { Screen } from '../../lib/screen/screen';
 import { Gfx2SpriteJAS } from '../../lib/gfx2_sprite/gfx2_sprite_jas';
 import { Gfx2SpriteJSS } from '../../lib/gfx2_sprite/gfx2_sprite_jss';
 // ---------------------------------------------------------------------------------------
-import { Config } from './config';
 import { UISystem } from './systems/ui';
 import { CameraSystem, CameraComponent } from './systems/camera';
 import { IdleControlsSystem, IdleSystem, IdleControlsComponent, IdleComponent } from './systems/idle';
 import { RunControlsSystem, RunSystem, RunControlsComponent } from './systems/run';
 import { JumpControlsSystem, JumpSystem, JumpControlsComponent } from './systems/jump';
-import { CASSystem, ComboSystem, CASComponent, ComboComponent } from './systems/combo';
+import { CASSystem, ComboSystem, CASComponent } from './systems/combo';
 import { MoveSystem, MoveComponent } from './systems/move';
 import { GravitySystem, GravityComponent } from './systems/gravity';
 import { HitSystem } from './systems/hit';
 import { DamageSystem } from './systems/damage';
 import { DrawableSystem, DrawableComponent } from './systems/drawable';
 import { FighterSystem, FighterComponent } from './systems/fighter';
-import { SpecialAttackSystem, SpecialAttackComponent } from './systems/special_attack';
+import { SpecialAttackSystem } from './systems/special_attack';
 import { PlatformComponent } from './systems/platform';
 import { PositionComponent } from './systems/position';
 import { AIComponent, AISystem } from './systems/ai';
 import { DownSystem, DownControlsComponent, DownControlsSystem } from './systems/down';
+import { ComboFactory } from './combo_factory';
+import { AIPatternFactory } from './ai_pattern_factory';
 // ---------------------------------------------------------------------------------------
 
 const FPS = 60;
@@ -128,7 +129,7 @@ export { GameScreen };
 async function CREATE_SCENE(map) {
   const background = dnaManager.createEntity();
   const backgroundJSS = new Gfx2SpriteJSS();
-  backgroundJSS.setTexture(await gfx2TextureManager.loadTexture(Config.PATH_BACKGROUNDS + map + '/layer.png'));
+  backgroundJSS.setTexture(await gfx2TextureManager.loadTexture('samples/fight/backgrounds/' + map + '/layer.png'));
   backgroundJSS.setTextureRect(0, 0, 800, 600);
   dnaManager.addComponent(background, new DrawableComponent({ jss: backgroundJSS, zIndex: 0 }));
   dnaManager.addComponent(background, new PositionComponent(0, 0));
@@ -137,8 +138,8 @@ async function CREATE_SCENE(map) {
   dnaManager.addComponent(camera, new CameraComponent());
 
   const jas = new Gfx2SpriteJAS();
-  await jas.loadFromFile(Config.PATH_BACKGROUNDS + map + '/floating-rock.jas');
-  jas.setTexture(await gfx2TextureManager.loadTexture(Config.PATH_BACKGROUNDS + map + '/floating-rock.png'));
+  await jas.loadFromFile('samples/fight/backgrounds/' + map + '/floating-rock.jas');
+  jas.setTexture(await gfx2TextureManager.loadTexture('samples/fight/backgrounds/' + map + '/floating-rock.png'));
   jas.setOffset(+52, +18);
   jas.play('DEFAULT', false, true);
 
@@ -150,17 +151,14 @@ async function CREATE_SCENE(map) {
 
 async function CREATE_PLAYER1(name) {
   const playerJAS = new Gfx2SpriteJAS();
-  await playerJAS.loadFromFile(Config.PATH_CHARS + name + '/sprite.jas');
-  playerJAS.setTexture(await gfx2TextureManager.loadTexture(Config.PATH_CHARS + name + '/sprite.png'));
+  await playerJAS.loadFromFile('samples/fight/chars/' + name + '/sprite.jas');
+  playerJAS.setTexture(await gfx2TextureManager.loadTexture('samples/fight/chars/' + name + '/sprite.png'));
   playerJAS.setOffset(+44, +44);
 
   const damageJAS = new Gfx2SpriteJAS();
-  await damageJAS.loadFromFile(Config.PATH_CHARS + name + '/sprite.jas');
-  damageJAS.setTexture(await gfx2TextureManager.loadTexture(Config.PATH_CHARS + name + '/sprite.png'));
+  await damageJAS.loadFromFile('samples/fight/chars/' + name + '/sprite.jas');
+  damageJAS.setTexture(await gfx2TextureManager.loadTexture('samples/fight/chars/' + name + '/sprite.png'));
   damageJAS.setOffset(+44, +44);
-
-  const combos = [];
-  combos.push(await CREATE_COMBO1(name));
 
   const player = dnaManager.createEntity();
   dnaManager.addComponent(player, new FighterComponent(1, 100, damageJAS, 88, 88));
@@ -173,77 +171,23 @@ async function CREATE_PLAYER1(name) {
   dnaManager.addComponent(player, new DownControlsComponent());
   dnaManager.addComponent(player, new IdleComponent());
   dnaManager.addComponent(player, new GravityComponent(2));
-  dnaManager.addComponent(player, new CASComponent(playerJAS.animations, playerJAS.texture, combos));
+  dnaManager.addComponent(player, new CASComponent(playerJAS.animations, playerJAS.texture, [
+    await ComboFactory.PUNCH(name)
+  ]));
+
   return player;
 }
 
 async function CREATE_PLAYER2(name) {
   const playerJAS = new Gfx2SpriteJAS();
-  await playerJAS.loadFromFile(Config.PATH_CHARS + name + '/sprite.jas');
-  playerJAS.setTexture(await gfx2TextureManager.loadTexture(Config.PATH_CHARS + name + '/sprite.png'));
+  await playerJAS.loadFromFile('samples/fight/chars/' + name + '/sprite.jas');
+  playerJAS.setTexture(await gfx2TextureManager.loadTexture('samples/fight/chars/' + name + '/sprite.png'));
   playerJAS.setOffset(+44, +44);
 
   const damageJAS = new Gfx2SpriteJAS();
-  await damageJAS.loadFromFile(Config.PATH_CHARS + name + '/sprite.jas');
-  damageJAS.setTexture(await gfx2TextureManager.loadTexture(Config.PATH_CHARS + name + '/sprite.png'));
+  await damageJAS.loadFromFile('samples/fight/chars/' + name + '/sprite.jas');
+  damageJAS.setTexture(await gfx2TextureManager.loadTexture('samples/fight/chars/' + name + '/sprite.png'));
   damageJAS.setOffset(+44, +44);
-
-  const patterns = [{
-    name: 'WAKE_UP',
-    agentHasComponent: 'Down',
-    enemyAction: null,
-    enemyMinDistance: 0,
-    enemyMaxDistance: Infinity,
-    tick: 100,
-    then: 0,
-    percentSuccess: 100,
-    commandName: 'CMD_WAKEUP',
-    commandArgs: [],
-    conditionName: null,
-    conditionArgs: []
-  },{
-    name: 'COMBO1',
-    agentHasComponent: null,
-    enemyAction: null,
-    enemyMinDistance: 0,
-    enemyMaxDistance: 80,
-    tick: 6000,
-    then: 0,
-    percentSuccess: 80,
-    commandName: 'CMD_COMBO',
-    commandArgs: ['PUNCH1'],
-    conditionName: null,
-    conditionArgs: []
-  },{
-    name: 'IDLE',
-    agentHasComponent: null,
-    enemyAction: null,
-    enemyMinDistance: 0,
-    enemyMaxDistance: 90,
-    tick: 50,
-    then: 0,
-    percentSuccess: 100,
-    commandName: 'CMD_IDLE',
-    commandArgs: [],
-    conditionName: null,
-    conditionArgs: []
-  },{
-    name: 'RUN',
-    agentHasComponent: null,
-    enemyAction: null,
-    enemyMinDistance: 90,
-    enemyMaxDistance: Infinity,
-    tick: 1500,
-    then: 0,
-    percentSuccess: 100,
-    commandName: 'CMD_RUN',
-    commandArgs: [],
-    conditionName: null,
-    conditionArgs: []
-  }];
-
-  const combos = [];
-  combos.push(await CREATE_COMBO1(name));
 
   const player = dnaManager.createEntity();
   dnaManager.addComponent(player, new FighterComponent(2, 100, damageJAS, 88, 88));
@@ -252,42 +196,11 @@ async function CREATE_PLAYER2(name) {
   dnaManager.addComponent(player, new IdleComponent());
   dnaManager.addComponent(player, new MoveComponent());
   dnaManager.addComponent(player, new GravityComponent(2));
-  dnaManager.addComponent(player, new AIComponent(60, patterns));
-  dnaManager.addComponent(player, new CASComponent(playerJAS.animations, playerJAS.texture, combos));
+  dnaManager.addComponent(player, new AIComponent(60, AIPatternFactory.BASE()));
+  dnaManager.addComponent(player, new CASComponent(playerJAS.animations, playerJAS.texture, [
+    await ComboFactory.PUNCH(name),
+    await ComboFactory.SPECIAL(name)
+  ]));
 
   return player;
-}
-
-async function CREATE_COMBO1(charName) {
-  const bgJSS = new Gfx2SpriteJSS();
-  bgJSS.setTexture(await gfx2TextureManager.loadTexture(Config.PATH_CHARS + charName + '/bg-special-attack.png'));
-
-  const avatarJSS = new Gfx2SpriteJSS();
-  avatarJSS.setTexture(await gfx2TextureManager.loadTexture(Config.PATH_CHARS + charName + '/avatar-special-attack.png'));
-
-  return new ComboComponent(
-    'PUNCH1',
-    'Run', 
-    'OKOK', 
-    'PUNCH1',
-    new SpecialAttackComponent(
-      'Special Attack 1',
-      bgJSS,
-      avatarJSS
-    ),
-    [{
-      spriteAnimationOnImpact: 'HIT',
-      frameIndex: 0,
-      w: 10,
-      h: 10,
-      damageHP: 10,
-      damageMaxAge: 1,
-      damageSpriteAnimation: 'HIT',
-      damageSpriteOffset: [21, 29],
-      maxAge: 0.2,
-      relativeX: 44,
-      relativeY: 0,
-      velocityImpact: [10, -10]
-    }]
-  );
 }

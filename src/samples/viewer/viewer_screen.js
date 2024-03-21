@@ -6,24 +6,19 @@ import { gfx3PPERenderer } from '../../lib/gfx3_ppe/gfx3_ppe_renderer';
 import { uiManager } from '../../lib/ui/ui_manager';
 import { UT } from '../../lib/core/utils';
 import { Screen } from '../../lib/screen/screen';
-import { Gfx3CameraWASD } from '../../lib/gfx3_camera/gfx3_camera_wasd';
+import { Gfx3CameraOrbit } from '../../lib/gfx3_camera/gfx3_camera_orbit';
 import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3MeshOBJ } from '../../lib/gfx3_mesh/gfx3_mesh_obj';
 import { Gfx3Skybox } from '../../lib/gfx3_skybox/gfx3_skybox';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
 // ---------------------------------------------------------------------------------------
 
-const CAMERA_SPEED = 0.1;
-
 class ViewerScreen extends Screen {
   constructor() {
     super();
-    this.camera = new Gfx3CameraWASD(0);
+    this.camera = new Gfx3CameraOrbit(0);
     this.mesh = new Gfx3MeshJSM();
     this.skybox = new Gfx3Skybox();
-    this.isDragging = false;
-    this.dragStartPosition = [0, 0];
-    this.dragStartRotation = [0, 0];
     this.handleKeyDownCb = this.handleKeyDown.bind(this);
   }
 

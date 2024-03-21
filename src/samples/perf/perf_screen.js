@@ -4,7 +4,7 @@ import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
 import { UT } from '../../lib/core/utils';
 import { Quaternion } from '../../lib/core/quaternion';
 import { Screen } from '../../lib/screen/screen';
-import { Gfx3Camera } from '../../lib/gfx3_camera/gfx3_camera';
+import { Gfx3CameraWASD } from '../../lib/gfx3_camera/gfx3_camera_wasd';
 import { SHADER_VERTEX_ATTR_COUNT } from '../../lib/gfx3_mesh/gfx3_mesh_shader';
 import { Gfx3Mesh } from '../../lib/gfx3_mesh/gfx3_mesh';
 import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
@@ -28,19 +28,13 @@ class Transform {
 class PerfScreen extends Screen {
   constructor() {
     super();
-    this.camera = new Gfx3Camera(0);
-    this.isDragging = false;
-    this.dragStartPosition = [0, 0];
-    this.dragStartRotation = [0, 0];
+    this.camera = new Gfx3CameraWASD(0);
     this.mode = 1;
     this.colFac = 0;
     this.obj = null;
     this.bigMesh = null;
     this.skySphere = null;
     this.transformations = [];
-    this.handleMouseDownCb = this.handleMouseDown.bind(this);
-    this.handleMouseUpCb = this.handleMouseUp.bind(this);
-    this.handleMouseMoveCb = this.handleMouseMove.bind(this);
     this.handleKeyUpCb = this.handleKeyUp.bind(this);
   }
 
@@ -79,16 +73,11 @@ class PerfScreen extends Screen {
     const bigMeshMatrices = this.transformations.map(t => UT.MAT4_TRANSFORM(t.p, t.a, t.s, t.q));
     this.bigMesh = DUPE(this.obj, bigMeshMatrices);
 
-    document.addEventListener('mousedown', this.handleMouseDownCb);
-    document.addEventListener('mouseup', this.handleMouseUpCb);
-    document.addEventListener('mousemove', this.handleMouseMoveCb);
     document.addEventListener('keyup', this.handleKeyUpCb);
   }
 
   onExit() {
-    document.removeEventListener('mousedown', this.handleMouseDownCb);
-    document.removeEventListener('mouseup', this.handleMouseUpCb);
-    document.removeEventListener('mousemove', this.handleMouseMoveCb);
+    document.removeEventListener('keyup', this.handleKeyUpCb);
   }
 
   update(ts) {
@@ -109,6 +98,7 @@ class PerfScreen extends Screen {
     }
 
     this.colFac += ts * 0.003;
+    this.camera.update(ts);
   }
 
   draw() {
@@ -129,28 +119,6 @@ class PerfScreen extends Screen {
     if (e.code === 'KeyR') {
       this.mode = this.mode == 1 ? 0 : 1;
     }
-  }
-
-  handleMouseDown(e) {
-    this.isDragging = true;
-    this.dragStartPosition[0] = e.clientX;
-    this.dragStartPosition[1] = e.clientY;
-    this.dragStartRotation[0] = this.camera.getRotationX();
-    this.dragStartRotation[1] = this.camera.getRotationY();
-  }
-
-  handleMouseUp() {
-    this.isDragging = false;
-  }
-
-  handleMouseMove(e) {
-    if (!this.isDragging) {
-      return;
-    }
-
-    let newRotationX = this.dragStartRotation[0] + ((e.clientY - this.dragStartPosition[1]) * 0.001);
-    let newRotationY = this.dragStartRotation[1] + ((e.clientX - this.dragStartPosition[0]) * 0.001);
-    this.camera.setRotation(newRotationX, newRotationY, 0);
   }
 }
 

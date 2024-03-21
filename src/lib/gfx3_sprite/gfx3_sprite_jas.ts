@@ -160,9 +160,9 @@ class Gfx3SpriteJAS extends Gfx3Sprite {
   }
 
   /**
-   * Set the animations.
+   * Set the animation descriptors.
    * 
-   * @param animations - The animations.
+   * @param animations - The animations data.
    */
   setAnimations(animations: Array<JASAnimation>): void {
     this.animations = animations;

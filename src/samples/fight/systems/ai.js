@@ -116,6 +116,10 @@ export class AISystem extends DNASystem {
         return false;
       }
 
+      if (dnaManager.hasComponent(enemyEntity, 'Damage')) {
+        return false;
+      }
+
       if (dnaManager.hasComponent(entity, 'Damage')) {
         return false;
       }
@@ -135,7 +139,7 @@ export class AISystem extends DNASystem {
       }
     }
 
-    this.conditionRegister['CND_HEALTH_LESS_THAN'] = function(entity, enemyEntity, health) {
+    this.conditionRegister['COND_HEALTH_LESS_THAN'] = function(entity, enemyEntity, health) {
       const fighter = dnaManager.getComponent(entity, 'Fighter');
       return fighter.health < health;
     } 
@@ -159,42 +163,51 @@ export class AISystem extends DNASystem {
       }
     }
 
-    const rand = Math.random();
-
     for (const pattern of ai.patterns) {
       if (pattern.then < pattern.tick) {
         continue;
       }
 
       if (pattern.agentHasComponent && !dnaManager.hasComponent(entity, pattern.agentHasComponent)) {
+        pattern.then = 0;
         continue;
       }
 
       if (pattern.enemyMinDistance && pattern.enemyMinDistance > enemyDistance) {
+        pattern.then = 0;
         continue;
       }
 
       if (pattern.enemyMaxDistance && pattern.enemyMaxDistance < enemyDistance) {
+        pattern.then = 0;
         continue;
       }
 
       const condition = this.conditionRegister[pattern.conditionName];
-      if (pattern.conditionName && !condition.apply(this, [entity, enemyEntity, ...pattern.conditionArgs])) {
+      if (condition && !condition.apply(this, [entity, enemyEntity, ...pattern.conditionArgs])) {
+        pattern.then = 0;
         continue;
       }
 
       const cas = dnaManager.getComponent(enemyEntity, 'CAS');
       if (pattern.enemyAction && cas.currentAction.search(new RegExp(pattern.enemyAction + '$')) == -1) {
-        continue;
-      }
-
-      if (rand > (pattern.percentSuccess / 100)) {
         pattern.then = 0;
         continue;
       }
 
+      const rand = Math.random();
+      if (rand > (pattern.percentSuccess / 100)) {
+        pattern.then = 0;
+        break;
+      }
+
       const cmd = this.commandRegister[pattern.commandName];
       if (cmd && cmd.apply(this, [entity, enemyEntity, ...pattern.commandArgs])) {
+        console.log(pattern.name + ' pass with tick ' + pattern.then + ' and rand ' + rand);
+        pattern.then = 0;
+        break;
+      }
+      else {
         pattern.then = 0;
         break;
       }

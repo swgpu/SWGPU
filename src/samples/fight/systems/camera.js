@@ -4,8 +4,6 @@ import { UT } from '../../../lib/core/utils';
 import { DNASystem } from '../../../lib/dna/dna_system';
 import { DNAComponent } from '../../../lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
-import { Config } from '../config';
-// ---------------------------------------------------------------------------------------
 
 export class CameraComponent extends DNAComponent {
   constructor() {
@@ -37,11 +35,11 @@ export class CameraSystem extends DNASystem {
     const deltaX = (maxX - minX) + (88 * 2); // 88 * 2 is body margin
     const deltaY = (maxY - minY) + (88 * 2); // 88 * 2 is body margin
 
-    const halfScreenWidth = Config.SCREEN_WIDTH * 0.5;
-    const halfScreenHeight = Config.SCREEN_HEIGHT * 0.5;
+    const halfScreenWidth = gfx2Manager.getWidth() * 0.5;
+    const halfScreenHeight = gfx2Manager.getHeight() * 0.5;
 
-    const ratioDeltaWidth = UT.CLAMP(Config.SCREEN_WIDTH / deltaX, 1, 1.3);
-    const ratioDeltaHeight = UT.CLAMP(Config.SCREEN_HEIGHT / deltaY, 1, 1.3);
+    const ratioDeltaWidth = UT.CLAMP(gfx2Manager.getWidth() / deltaX, 1, 1.3);
+    const ratioDeltaHeight = UT.CLAMP(gfx2Manager.getHeight() / deltaY, 1, 1.3);
     const ratio = Math.min(ratioDeltaWidth, ratioDeltaHeight);
 
     let centerX = minX + ((maxX - minX) / 2);

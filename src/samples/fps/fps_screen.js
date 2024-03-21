@@ -26,7 +26,7 @@ class FPSScreen extends Screen {
       texture: await gfx3TextureManager.loadTexture('./samples/fps/map.png')
     }));
     
-    this.nav.loadFromJSM(this.map);
+    this.nav.loadFromMesh(this.map);
   }
 
   update(ts) {

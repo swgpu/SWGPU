@@ -5,7 +5,6 @@ import { Screen } from '../../lib/screen/screen';
 import { UIWidget } from '../../lib/ui/ui_widget';
 import { UIMenu, MenuAxis } from '../../lib/ui_menu/ui_menu';
 // ------------------------------------------------------------------
-import { Config } from './config';
 import { GameScreen } from './game_screen';
 import { MapScreen } from './map_screen';
 import { CHARS } from './enums';
@@ -48,7 +47,7 @@ class CharacterScreen extends Screen {
 
       this.uiAvatars[i] = document.createElement('img');
       this.uiAvatars[i].className = 'CharacterScreen-avatar';
-      this.uiAvatars[i].src = Config.PATH_CHARS + 'default-avatar.png';
+      this.uiAvatars[i].src = 'samples/fight/chars/' + 'default-avatar.png';
       uiManager.addNode(this.uiAvatars[i], 'position:absolute; ' + v1 + ';' + h1);
 
       const v2 = i == 0 || i == 1 ? 'top:75px'  : 'bottom:75px';
@@ -65,7 +64,7 @@ class CharacterScreen extends Screen {
         className: 'UICharacter',
         template:`
         <div class="UICharacter-container">
-          <img class="UICharacter-container-char-icon js-icon" alt="icon" src="${Config.PATH_CHARS + CHARS[i]}/avatar.jpg"/>
+          <img class="UICharacter-container-char-icon js-icon" alt="icon" src="${'samples/fight/chars/' + CHARS[i]}/avatar.jpg"/>
         </div>`
       }));
     }
@@ -97,7 +96,7 @@ class CharacterScreen extends Screen {
   }
 
   async handleMenuItemFocused(data) {
-    this.uiAvatars[this.selectionPlayerIndex].src = Config.PATH_CHARS + CHARS[data.index] + '/avatar.jpg';
+    this.uiAvatars[this.selectionPlayerIndex].src = 'samples/fight/chars/' + CHARS[data.index] + '/avatar.jpg';
   }
 
   async handleMenuItemSelected(data) {
@@ -110,7 +109,7 @@ class CharacterScreen extends Screen {
     }
     else {
       const index = this.uiMenu.getFocusedWidgetIndex();
-      this.uiAvatars[this.selectionPlayerIndex].src = Config.PATH_CHARS + CHARS[index] + '/avatar.jpg';
+      this.uiAvatars[this.selectionPlayerIndex].src = 'samples/fight/chars/' + CHARS[index] + '/avatar.jpg';
     }
   }
 }

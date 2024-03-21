@@ -194,6 +194,17 @@ class UT {
   }
 
   /**
+   * @param center - The position you want to rotate around.
+   * @param radius - The radius relative to the center of the rotation.
+   * @param angle - The angle rotation.
+   */
+  static VEC2_ROTATE_AROUND(center: vec2, radius: number, angle: number): vec2 {
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+    return [center[0] + x, center[1] + y];
+  }
+
+  /**
    * @param a - The source vector.
    * @param out - The opposite vector.
    */
@@ -478,6 +489,20 @@ class UT {
   static VEC3_SPREAD(base: vec3, spread: vec3): vec3 {
     const rand3 = UT.VEC3_CREATE(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
     return UT.VEC3_ADD(base, UT.VEC3_MULTIPLY(spread, rand3));
+  }
+
+  /**
+   * @param center - The position you want to rotate around.
+   * @param radius - The radius relative to the center of the rotation.
+   * @param phi - The phi angle.
+   * @param theta - The theta angle.
+   */
+  static VEC3_ROTATE_AROUND(center: vec3, radius: number, phi: number, theta: number): vec3 {
+    const r = Math.cos(theta) * radius;
+    const y = Math.sin(theta) * radius;
+    const z = Math.sin(phi) * r;
+    const x = Math.cos(phi) * r;
+    return [center[0] + x, center[1] + y, center[2] + z];
   }
 
   /**
@@ -1407,8 +1432,15 @@ class UT {
    */
   static MAT4_LOOKAT(position: vec3, target: vec3, vertical: vec3 = UT.VEC3_UP, out: mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]): mat4 {
     const axeZ = UT.VEC3_NORMALIZE(UT.VEC3_SUBSTRACT(position, target));
-    const axeX = UT.VEC3_CROSS(vertical, axeZ);
-    const axeY = UT.VEC3_CROSS(axeZ, axeX);
+    vertical = UT.VEC3_NORMALIZE(vertical);
+
+    if (Math.abs(UT.VEC3_DOT(axeZ, vertical)) > 1 - UT.EPSILON) {
+      const arbitraryVec: vec3 = Math.abs(axeZ[1]) < 1 - UT.EPSILON ? [0, 1, 0] : [1, 0, 0];
+      vertical = UT.VEC3_NORMALIZE(UT.VEC3_CROSS(arbitraryVec, axeZ));
+    }
+
+    const axeX = UT.VEC3_NORMALIZE(UT.VEC3_CROSS(vertical, axeZ));
+    const axeY = UT.VEC3_NORMALIZE(UT.VEC3_CROSS(axeZ, axeX));
     out[0] = axeX[0];
     out[1] = axeX[1];
     out[2] = axeX[2];

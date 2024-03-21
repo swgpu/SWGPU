@@ -1,34 +1,3 @@
-export const SHADER_VERTEX_ATTR_COUNT = 4;
-
-export const PIPELINE_DESC: any = {
-  label: 'PPE pipeline',
-  layout: 'auto',
-  vertex: {
-    entryPoint: 'main',
-    buffers: [{
-      arrayStride: SHADER_VERTEX_ATTR_COUNT * 4,
-      attributes: [{
-        shaderLocation: 0, /*position*/
-        offset: 0,
-        format: 'float32x2'
-      }, {
-        shaderLocation: 1, /*uv*/
-        offset: 2 * 4,
-        format: 'float32x2'
-      }]
-    }]
-  },
-  fragment: {
-    entryPoint: 'main',
-    targets: [{
-      format: navigator.gpu.getPreferredCanvasFormat()
-    }]
-  },
-  primitive: {
-    topology: 'triangle-list'
-  }
-};
-
 export const VERTEX_SHADER = /* wgsl */`
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,

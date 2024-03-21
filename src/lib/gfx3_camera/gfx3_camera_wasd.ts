@@ -11,7 +11,8 @@ class Gfx3CameraWASD extends Gfx3Camera {
   rotationSpeed: number;
   frictionCoefficient: number;
   velocity: vec3;
-  dragStartRotation: vec2;
+  maxPitch: number;
+  minPitch: number;
 
   /**
    * @param {number} viewIndex - The view you want to bind the camera.
@@ -22,10 +23,18 @@ class Gfx3CameraWASD extends Gfx3Camera {
     this.rotationSpeed = 2;
     this.frictionCoefficient = 0.99;
     this.velocity = [0, 0, 0];
-    this.dragStartRotation = [0, 0];
+    this.maxPitch = Math.PI * 0.5 - 0.01;
+    this.minPitch = Math.PI * -0.5 + 0.01;
 
-    eventManager.subscribe(inputManager, 'E_MOUSE_DOWN', this, this.$handleMouseDown);
     eventManager.subscribe(inputManager, 'E_MOUSE_DRAG', this, this.$handleMouseDrag);
+  }
+
+  /**
+   * Free all resources.
+   * Warning: You need to call this method to free allocation for this object.
+   */
+  delete(): void {
+    eventManager.unsubscribe(inputManager, 'E_MOUSE_DRAG', this);
   }
 
   /**
@@ -88,6 +97,24 @@ class Gfx3CameraWASD extends Gfx3Camera {
   }
 
   /**
+   * Set the max rotation angle on x-axis.
+   * 
+   * @param {number} maxPitch - The max pitch angle.
+   */
+  setMaxPitch(maxPitch: number): void {
+    this.maxPitch = maxPitch;
+  }
+
+  /**
+   * Set the min rotation angle on x-axis.
+   * 
+   * @param {number} minPitch - The min pitch angle.
+   */
+  setMinPitch(minPitch: number): void {
+    this.minPitch = minPitch;
+  }
+
+  /**
    * Returns the move speed.
    */
   getMovementSpeed(): number {
@@ -108,18 +135,26 @@ class Gfx3CameraWASD extends Gfx3Camera {
     return this.frictionCoefficient;
   }
 
-  $handleMouseDown(): void {
-    this.dragStartRotation[0] = this.getRotationX();
-    this.dragStartRotation[1] = this.getRotationY();
+  /**
+   * Returns the max rotation angle on x-axis.
+   */
+  getMaxPitch(): number {
+    return this.maxPitch;
   }
 
-  $handleMouseDrag(): void {
-    const dragMove = inputManager.getDragMove();
-    let newRotationX = this.dragStartRotation[0] + (dragMove[1] / 1000 * this.rotationSpeed);
-    let newRotationY = this.dragStartRotation[1] + (dragMove[0] / 1000 * this.rotationSpeed);
+  /**
+   * Returns the min rotation angle on x-axis.
+   */
+  getMinPitch(): number {
+    return this.minPitch;
+  }
+
+  $handleMouseDrag(delta: any): void {
+    let newRotationX = this.rotation[0] + (delta.movementY / 1000 * this.rotationSpeed);
+    let newRotationY = this.rotation[1] + (delta.movementX / 1000 * this.rotationSpeed);
 
     newRotationY = newRotationY % (Math.PI * 2);
-    newRotationX = UT.CLAMP(newRotationX, -Math.PI / 2, Math.PI / 2);
+    newRotationX = UT.CLAMP(newRotationX, this.minPitch, this.maxPitch);
     this.setRotation(newRotationX, newRotationY, 0);
   }
 }

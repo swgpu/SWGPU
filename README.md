@@ -3,12 +3,13 @@
     <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner.png" alt="logo"/>
 </p>
 
-![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.2-blue)
+![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.3-blue)
 
-**WARME Engine** is the first fully packed **2D/3D** game engine based on **WebGPU** dedicated to **de-make games** on the web ! Some words about our philosophy:
+**WARME Engine** is the first fully packed **2D/3D** game engine dedicated to **de-make games** on the web ! Some words about our philosophy:
 - **Simplicity:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
-- **Flexibility:** Create your own renderers. Handle rendering and update loops.    
+- **Flexibility:** Create your own renderers. Handle render and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
+- **Modernity:** We used the WebGPU rendering API.
 
 You can check the documentation [here](http://warme-engine.com/).          
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    

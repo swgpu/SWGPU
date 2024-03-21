@@ -6,7 +6,6 @@ import { UIWidget } from '../../lib/ui/ui_widget';
 import { UIMenu, MenuAxis } from '../../lib/ui_menu/ui_menu';
 import { Screen } from '../../lib/screen/screen';
 // ------------------------------------------------------------------
-import { Config } from './config';
 import { CharacterScreen } from './character_screen';
 // ------------------------------------------------------------------
 
@@ -40,7 +39,7 @@ class MapScreen extends Screen {
         className: 'UIMap',
         template:`
         <div class="UIMap-container">
-          <img class="UIMap-container-char-icon js-icon" alt="icon" src="${Config.PATH_BACKGROUNDS + i}/icon.png"/>
+          <img class="UIMap-container-char-icon js-icon" alt="icon" src="${'samples/fight/backgrounds/' + i}/icon.png"/>
         </div>`
       }));
     }

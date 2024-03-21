@@ -147,9 +147,9 @@ class UISprite extends UIWidget {
   }
 
   /**
-   * Set the animations.
+   * Set the animations descriptors.
    * 
-   * @param animations - The animations.
+   * @param animations - The animations data.
    */
   setAnimations(animations: Array<JASAnimation>): void {
     this.animations = animations;

@@ -35,6 +35,7 @@ GAME_PAD_KEY_MAPPING.set('PadRight', '15');
  * It emit 'E_MOUSE_UP' on mouse buttons released.
  * It emit 'E_MOUSE_MOVE' on mouse moving.
  * It emit 'E_MOUSE_DRAG' on mouse dragging.
+ * It emit 'E_MOUSE_WHEEL' on mouse wheeling.
  */
 class InputManager {
   keymap: Map<string, boolean>;
@@ -180,7 +181,7 @@ class InputManager {
   /**
    * Returns the current drag movement.
    */
-  getDragMove(): vec2 {
+  getDragDelta(): vec2 {
     if (!this.mouseDown) {
       return [0, 0];
     }
@@ -267,12 +268,11 @@ class InputManager {
   $handlePointerMove(e: PointerEvent): void {
     this.mouseDown = e.pointerType == 'mouse' ? (e.buttons & 1) !== 0 : true;
     this.mousePosition = [e.clientX, e.clientY];
+    eventManager.emit(this, 'E_MOUSE_MOVE', { movementX: e.movementX, movementY: e.movementY });
 
     if (this.mouseDown) {
       eventManager.emit(this, 'E_MOUSE_DRAG', { movementX: e.movementX, movementY: e.movementY });
     }
-
-    eventManager.emit(this, 'E_MOUSE_MOVE', { movementX: e.movementX, movementY: e.movementY });
   }
 
   $handleWheel(e: WheelEvent): void {
@@ -280,6 +280,7 @@ class InputManager {
     this.mouseWheel += Math.sign(e.deltaY);
     e.preventDefault();
     e.stopPropagation();
+    eventManager.emit(this, 'E_MOUSE_WHEEL', { delta: Math.sign(e.deltaY) });
   }
 
   $handleGamePadDisconnected(e: GamepadEvent): void {

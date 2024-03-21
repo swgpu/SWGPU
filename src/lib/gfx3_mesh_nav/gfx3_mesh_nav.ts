@@ -66,7 +66,7 @@ class Gfx3MeshNav {
    * 
    * @param {Gfx3MeshJSM} mesh - The static mesh.
    */
-  loadFromJSM(mesh: Gfx3Mesh): void {
+  loadFromMesh(mesh: Gfx3Mesh): void {
     this.btree = new Gfx3TreePartition(20, 10, mesh.getBoundingBox());
     this.frags = [];
 
@@ -170,6 +170,10 @@ class Gfx3MeshNav {
    */
   getBinaryTree(): Gfx3TreePartition {
     return this.btree;
+  }
+
+  raycast(): void {
+
   }
 }
 
