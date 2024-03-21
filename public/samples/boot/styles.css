@@ -1,5 +1,6 @@
 .UIBootMenu {
   position: relative;
+  overflow: hidden;
 }
 
 .UIBootMenu::before {
