@@ -19,21 +19,96 @@ You can check the documentation [here](http://warme-engine.com/).
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
 
 ## General features
-- 🧱 **Core** - Maths, tweening, events manager, container manager, curves, quaternions
-- 👾 **2D** - Sprite, isometric tilemap, orthographic tilemap, particles system, rendering filters
-- 🧊 **3D** - Debug shapes, mesh, animated-mesh, sprite, billboard, skybox, multiple-camera, mover, particules, flares, fog, vertex colorization, decals, shadow map, mesh pooling, rendering filters, psx post-processing effects
-- 📐 **Physics** - Walkmesh, navmesh, raytest, circle-circle, cylinder-cylinder, line-line, point-rect, rect-rect, point-box, box-box
-- 💥 **Material** - Phong, displacement-texture-mapping, normal-mapping, env-mapping, specularity-mapping, texture-scrolling, uv-animations
-- 🌞 **Light** - Directional light, multiple point lights
-- 🎮 **Input** - Action mapper for keyboard and gamepad
-- 🧠 **AI** - A* for 2D/3D with graph and grid, minmax with alpha-beta pruning
-- 📺 **Screen** - Handle different screens of your game
-- 📜 **Scripts** - Write game behaviors
-- 🔊 **Sound** - Sound manager built on the Web Audio API
-- 🌳 **Tree** - Binary Space Partition for 2D & 3D
-- 🎨 **UI** - Component architecture to keep project clean and scalable
-- 🌆 **DNA** - Development normalized architecture
-- 🈸 **Demos** - 19 real-life samples you can used to start a project
+- 🧱 **Core**
+    - Maths
+    - Tweening
+    - Events
+    - Curves
+    - Quaternions
+    
+- 👾 **2D**
+    - Static sprite
+    - Animated sprite
+    - Isometric tilemap
+    - Orthographic tilemap
+    - Particles system
+    - Rendering filters
+
+- 🧊 **3D**
+    - Debug shapes
+    - Static mesh (jsm, obj wavefront)
+    - Animated mesh (jam)
+    - Static sprite
+    - Animated sprite
+    - Billboarding
+    - Cubemap skybox
+    - Multi-viewport
+    - Camera orbit
+    - Camera WASD
+    - Particules
+    - Flares
+    - Fog
+    - Vertex colorization
+    - Decals
+    - Shadow map
+    - Mesh pooling
+    - Rendering filters
+    - Post-processing effects
+    - PSX effects
+
+- 📐 **Physics**
+    - Walkmesh
+    - Navigation mesh
+    - Ray-testing
+
+- 💥 **Material**
+    - Phong reflection model
+    - Displacement texture mapping
+    - Displacement texture scrolling
+    - Normal mapping
+    - Env mapping
+    - Specularity mapping
+    - Texture scrolling
+    - Animated UV
+
+- 🌞 **Light**
+    - Directional light
+    - Point lights (max : 16)
+
+- 🎮 **Input**
+    - Action mapping
+    - Gamepad, keyboard and mouse support
+
+- 🧠 **AI**
+    - A* for 2D/3D with graph and grid
+    - Min-max with alpha-beta pruning
+
+- 📺 **Screen**
+    - Navigate between different view of your game
+    - Resources pre-loading
+
+- 📜 **Scripts**
+    - Load script from json file.
+    - Register async command function and call-it from script file
+    - Manual jump to part of script
+
+- 🔊 **Sound**
+    - Handle sounds by groups
+    - Play multiple sounds at same time
+
+- 🌳 **Tree**
+    - 2D binary space partition
+    - 3D binary space partition
+
+- 🎨 **UI**
+    - Component architecture to keep project clean and scalable
+    - Handle focus/unfocus between components
+    - Fade in/out
+    - Some basics built-in components
+
+- 🌆 **DNA**
+    - ECS architecture implementation (optionnal)
+    - State handler
 
 ## Demos
 <table>
