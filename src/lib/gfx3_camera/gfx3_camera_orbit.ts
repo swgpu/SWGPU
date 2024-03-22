@@ -18,6 +18,7 @@ class Gfx3CameraOrbit extends Gfx3Camera {
   velocityTheta: number;
   phi: number;
   theta: number;
+  lastDragTimestamp: number;
 
   /**
    * @param {number} viewIndex - The view you want to bind the camera.
@@ -35,8 +36,10 @@ class Gfx3CameraOrbit extends Gfx3Camera {
     this.velocityTheta = 0;
     this.phi = Math.PI * 0.5;
     this.theta = 0;
+    this.lastDragTimestamp = 0;
 
     eventManager.subscribe(inputManager, 'E_MOUSE_WHEEL', this, this.$handleMouseWheel);
+    eventManager.subscribe(inputManager, 'E_MOUSE_UP', this, this.$handleMouseUp);
     eventManager.subscribe(inputManager, 'E_MOUSE_DOWN', this, this.$handleMouseDown);
     eventManager.subscribe(inputManager, 'E_MOUSE_DRAG', this, this.$handleMouseDrag);
   }
@@ -46,6 +49,9 @@ class Gfx3CameraOrbit extends Gfx3Camera {
    * Warning: You need to call this method to free allocation for this object.
    */
   delete(): void {
+    eventManager.unsubscribe(inputManager, 'E_MOUSE_WHEEL', this);
+    eventManager.unsubscribe(inputManager, 'E_MOUSE_UP', this);
+    eventManager.unsubscribe(inputManager, 'E_MOUSE_DOWN', this);
     eventManager.unsubscribe(inputManager, 'E_MOUSE_DRAG', this);
   }
 
@@ -58,7 +64,7 @@ class Gfx3CameraOrbit extends Gfx3Camera {
     const pos = UT.VEC3_ROTATE_AROUND(this.target, this.distance, this.phi, this.theta);
     this.setPosition(pos[0], pos[1], pos[2]);
     this.lookAt(this.target[0], this.target[1], this.target[2]);
-    
+
     if (!inputManager.isMouseDown()) {
       this.velocityTheta *= Math.pow(1 - this.frictionCoefficient, ts / 1000);
       this.velocityPhi *= Math.pow(1 - this.frictionCoefficient, ts / 1000);
@@ -180,6 +186,14 @@ class Gfx3CameraOrbit extends Gfx3Camera {
     return this.zoomSpeed;
   }
 
+  $handleMouseUp(): void {
+    const delta = Date.now()  - this.lastDragTimestamp;
+    if (delta >= 100) {
+      this.velocityTheta = 0;
+      this.velocityPhi = 0;
+    }
+  }
+
   $handleMouseDown(): void {
     this.velocityPhi = 0;
     this.velocityTheta = 0;
@@ -192,6 +206,7 @@ class Gfx3CameraOrbit extends Gfx3Camera {
     this.theta -= this.velocityTheta;
     this.phi -= this.velocityPhi;
     this.theta = UT.CLAMP(this.theta, this.minPitch, this.maxPitch);
+    this.lastDragTimestamp = Date.now();
   }
 
   $handleMouseWheel(data: any): void {
