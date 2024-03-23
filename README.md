@@ -56,12 +56,12 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Post-processing effects
     - PSX effects
 
-- 📐 **Physics**
+- 📐 **3D Physics**
     - Walkmesh
     - Navigation mesh
     - Ray-testing
 
-- 💥 **Material**
+- 💥 **3D Material**
     - Phong reflection model
     - Displacement texture mapping
     - Displacement texture scrolling
@@ -71,7 +71,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Texture scrolling
     - Animated UV
 
-- 🌞 **Light**
+- 🌞 **3D Light**
     - Directional light
     - Point lights (max : 16)
 
