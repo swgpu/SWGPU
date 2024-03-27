@@ -1,6 +1,6 @@
 # WARME Engine (Web Against Regular Majors Engines)
 <p align="center">
-    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner.png" alt="logo"/>
+    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner-new.png" alt="logo"/>
 </p>
 
 ![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.3-blue)
