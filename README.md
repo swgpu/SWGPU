@@ -1,4 +1,4 @@
-# WARME Engine (Web Against Regular Majors Engines)
+# WARME Y2K Engine
 <p align="center">
     <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner-new.png" alt="logo"/>
 </p>
@@ -311,7 +311,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 5. Open a Pull Request
 
 ## Contributors
-1. Crisxzu - Contribute to the Wiki and typedoc converter.
+1. Crisxzu - Contribute to the Wiki, typedoc converter and Triple Triad demo.
 2. zuda - Contribute to Triple Triad demo.
 3. luciedefraiteur - Contribute to the fog.
 4. thetinyspark - Contribute to the binary space partition.
@@ -322,6 +322,12 @@ If you have a suggestion that would make this better, please fork the repo and c
 - Use human readable custom format for all graphics stuff
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 - No realistic physics engine, we assume if you need one there is many pretty lib for that like ammo.js, plank.js or canon.js
+
+## Roadmap
+- Write a space-shooter 2D tutorial (coming-soon)
+- Write an action/aventure 3D tutorial (coming-soon)
+- Add pixelate to mesh renderer (no-delay)
+- Add oriented bounding box collisions (no-delay)
 
 ## License 
 WARME engine is released under the [MIT](https://opensource.org/licenses/MIT) license. 

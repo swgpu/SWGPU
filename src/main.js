@@ -11,7 +11,7 @@ import { screenManager } from './lib/screen/screen_manager';
 import { uiManager } from './lib/ui/ui_manager';
 import { gfx3PPERenderer } from './lib/gfx3_ppe/gfx3_ppe_renderer';
 // ---------------------------------------------------------------------------------------
-import { BootScreen } from './samples/boot/boot_screen';
+import { AsgardScreen } from './tutorials/asgard/asgard_screen';
 // ---------------------------------------------------------------------------------------
 
 class GameManager {
@@ -65,4 +65,4 @@ class GameManager {
 
 export const gameManager = new GameManager();
 gameManager.startup();
-screenManager.requestSetScreen(new BootScreen());
+screenManager.requestSetScreen(new AsgardScreen());

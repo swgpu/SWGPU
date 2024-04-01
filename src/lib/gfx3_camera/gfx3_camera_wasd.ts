@@ -90,7 +90,7 @@ class Gfx3CameraWASD extends Gfx3Camera {
    * Set the friction coefficient.
    * High value for strong friction.
    * 
-   * @param {number} frictionCoefficient - The friction coef.
+   * @param {number} frictionCoefficient - The friction coef [0-1].
    */
   setFrictionCoefficient(frictionCoefficient: number): void {
     this.frictionCoefficient = frictionCoefficient;

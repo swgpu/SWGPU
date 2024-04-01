@@ -2,6 +2,11 @@ import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
 import { UT } from '../core/utils';
 import { Gfx3Transformable } from '../gfx3/gfx3_transformable';
 
+interface NavInfo {
+  move: vec3;
+  collide: boolean;
+};
+
 interface Sector {
   v1: vec3;
   v2: vec3;
@@ -158,13 +163,27 @@ class Gfx3JWM extends Gfx3Transformable {
   }
 
   /**
+   * Delete a walker.
+   * 
+   * @param {string} id - A unique identifier.
+   */
+  deleteWalker(id: string): void {
+    const index = this.walkers.findIndex(w => w.id == id);
+    if (index == -1) {
+      throw new Error('Gfx3JWM::deleteWalker(): Walker not exist !');
+    }
+
+    this.walkers.splice(index, 1);
+  }
+
+  /**
    * Move a walker.
    * 
    * @param {string} id - The unique identifier of the walker.
    * @param {number} mx - The movement in the x-axis.
    * @param {number} mz - The movement in the z-axis.
    */
-  moveWalker(id: string, mx: number, mz: number): vec3 {
+  moveWalker(id: string, mx: number, mz: number): NavInfo {
     const walker = this.walkers.find(w => w.id == id);
     if (!walker) {
       throw new Error('Gfx3JWM::moveWalker: walker with id ' + id + ' cannot be found.');
@@ -253,7 +272,10 @@ class Gfx3JWM extends Gfx3Transformable {
       walker.points[4].z += mz;
     }
 
-    return [mx, my, mz];
+    return {
+      move: [mx, my, mz],
+      collide: numDeviations > 0
+    };
   }
 
   /**

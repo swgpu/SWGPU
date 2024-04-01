@@ -7,9 +7,9 @@ import { SHADER_VERTEX_ATTR_COUNT } from '../gfx3_mesh/gfx3_mesh_shader';
 const MOVE_MAX_RECURSIVE_CALL = 2;
 
 interface NavInfo {
-  move: vec3,
-  collideFloor: boolean,
-  collideWall: boolean,
+  move: vec3;
+  collideFloor: boolean;
+  collideWall: boolean;
 };
 
 class Frag extends Gfx3BoundingBox {
@@ -52,11 +52,11 @@ class Frag extends Gfx3BoundingBox {
  */
 class Gfx3MeshNav {
   btree: Gfx3TreePartition;
-  lift: number;
+  frags: Array<Frag>;
 
   constructor() {
     this.btree = new Gfx3TreePartition(20, 10);
-    this.lift = 0.2;
+    this.frags = [];
   }
 
   /**
@@ -69,25 +69,25 @@ class Gfx3MeshNav {
     for (let i = 0; i < mesh.getVertexCount(); i += 3) {
       const frag = new Frag(mesh.getVertices(), i);
       this.btree.addChild(frag);
+      this.frags.push(frag);
     }
   }
 
   /**
    * Move the virtual box and returns response collision infos.
    * Infos are composed to a move vector, a wall collide flag and floor collide flag.
-   * @param {vec3} center - The center point of the box.
-   * @param {vec3} size - The size of the box.
+   * @param {vec3} aabb - The box.
    * @param {vec3} move - The movement.
+   * @param {number} lift - The lift is used to elevate the virtual bounding box to let passing over little step or micro obstacles on the floor.
    */
-  move(center: vec3, size: vec3, move: vec3): NavInfo {
-    const aabb = Gfx3BoundingBox.createFromCenter(center[0], center[1], center[2], size[0], size[1], size[2]);
+  move(aabb: Gfx3BoundingBox, move: vec3, lift: number = 0.2): NavInfo {
     const res: NavInfo = {
       move: [move[0], move[1], move[2]],
       collideFloor: false,
       collideWall: false
     };
 
-    aabb.min[1] += this.lift;
+    aabb.min[1] += lift;
 
     const wallIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
       [aabb.min[0] + move[0], aabb.min[1] + move[1], aabb.min[2] + move[2]],
@@ -95,10 +95,10 @@ class Gfx3MeshNav {
     )) as Array<Frag>;
 
     const points: Array<vec3> = [
-      [aabb.min[0], aabb.min[1] + this.lift, aabb.max[2]],
-      [aabb.min[0], aabb.min[1] + this.lift, aabb.min[2]],
-      [aabb.max[0], aabb.min[1] + this.lift, aabb.min[2]],
-      [aabb.max[0], aabb.min[1] + this.lift, aabb.max[2]]
+      [aabb.min[0], aabb.min[1] + lift, aabb.max[2]],
+      [aabb.min[0], aabb.min[1] + lift, aabb.min[2]],
+      [aabb.max[0], aabb.min[1] + lift, aabb.min[2]],
+      [aabb.max[0], aabb.min[1] + lift, aabb.max[2]]
     ];
 
     let deviatedPoints: Array<boolean> = [];
@@ -129,12 +129,15 @@ class Gfx3MeshNav {
       i++;
     }
 
-    aabb.min[1] -= this.lift;
+    aabb.min[1] -= lift;
 
+    const center = aabb.getCenter();
     const floorIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
       [center[0] + res.move[0], aabb.min[1] + res.move[1], center[2] + res.move[2]],
       [center[0] + res.move[0], aabb.max[1] + res.move[1], center[2] + res.move[2]]
     )) as Array<Frag>;
+
+    console.log(floorIntersectedFrags);
 
     const footElevation = aabb.min[1];
     const elevation = GET_ELEVATION(floorIntersectedFrags, [center[0] + res.move[0], center[1], center[2] + res.move[2]]);
@@ -148,22 +151,6 @@ class Gfx3MeshNav {
   }
 
   /**
-   * Set the lift.
-   * 
-   * @param {number} lift - The lift is used to elevate the virtual bounding box to let passing over little step or micro obstacles on the floor.
-   */
-  setLift(lift: number): void {
-    this.lift = lift;
-  }
-
-  /**
-   * Returns the lift.
-   */
-  getLift(): number {
-    return this.lift;
-  }
-
-  /**
    * Returns the btree.
    */
   getBinaryTree(): Gfx3TreePartition {
@@ -171,7 +158,7 @@ class Gfx3MeshNav {
   }
 
   /**
-   * Returns the ray hit point or null if no hit.
+   * Returns the ray hit point or null if no hit occured.
    * 
    * @param {vec3} origin - The ray origin.
    * @param {vec3} dir - The ray direction.

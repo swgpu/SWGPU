@@ -3,7 +3,7 @@
 body {
   overflow: hidden;
   margin: 0;
-  background-image: url(/textures/bg.jpeg);
+  background-image: url(/textures/bg.jpg);
   background-size: cover;
   height: 100vh;
 }

@@ -185,6 +185,13 @@ class UT {
   }
 
   /**
+   * @param a - The vector to check.
+   */
+  static VEC2_ISZERO(a: vec2): boolean {
+    return Math.abs(a[0]) <= UT.EPSILON && Math.abs(a[1]) <= UT.EPSILON;
+  }
+
+  /**
    * @param base - The base vector.
    * @param spread - The spread vector.
    */
@@ -483,6 +490,13 @@ class UT {
   }
 
   /**
+   * @param a - The vector to check.
+   */
+  static VEC3_ISZERO(a: vec3): boolean {
+    return Math.abs(a[0]) <= UT.EPSILON && Math.abs(a[1]) <= UT.EPSILON && Math.abs(a[2]) <= UT.EPSILON;
+  }
+
+  /**
    * @param base - The base vector.
    * @param spread - The spread vector.
    */
@@ -699,6 +713,13 @@ class UT {
     out[2] = src[2];
     out[3] = src[3];
     return out;
+  }
+
+  /**
+   * @param a - The vector to check.
+   */
+  static VEC4_ISZERO(a: vec4): boolean {
+    return Math.abs(a[0]) <= UT.EPSILON && Math.abs(a[1]) <= UT.EPSILON && Math.abs(a[2]) <= UT.EPSILON && Math.abs(a[3]) <= UT.EPSILON;
   }
 
   static MAT3_CREATE(): Float32Array {
