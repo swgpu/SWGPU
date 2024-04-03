@@ -128,6 +128,26 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - ECS architecture implementation (optionnal)
     - State handler
 
+## Tutorials
+<table>
+  <tr>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
+    </td>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <p>Tutorial 2D</p>
+    </td>
+    <td>
+        <p>Tutorial 3D</p>
+    </td>
+  </tr>
+</table>
+
 ## Demos
 <table>
   <tr>
@@ -260,22 +280,6 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     </td>
     <td>
         <p>2D Isometric Background</p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
-    </td>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        <p>Tutorial 2D</p>
-    </td>
-    <td>
-        <p>Tutorial 3D</p>
     </td>
   </tr>
 </table>
