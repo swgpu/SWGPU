@@ -25,7 +25,7 @@ import { ShadowScreen } from '../shadow/shadow_screen';
 import { BgIsoScreen } from '../bg-iso/bg_iso_screen';
 // ---------------------------------------------------------------------------------------
 
-class BootScreen extends Screen {
+class SamplesBootScreen extends Screen {
   constructor() {
     super();
     this.uiMenu = new UIMenuText({ className: 'UIMenuText UIBootMenu' });
@@ -122,4 +122,4 @@ class BootScreen extends Screen {
   }
 }
 
-export { BootScreen };
+export { SamplesBootScreen };

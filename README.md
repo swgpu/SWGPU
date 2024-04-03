@@ -25,40 +25,39 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Events
     - Curves
     - Quaternions
+    - Object pooling
     
 - 👾 **2D**
-    - Static sprite
-    - Animated sprite
+    - Static sprite (jss)
+    - Animated sprite (jas)
     - Isometric tilemap
     - Orthographic tilemap
-    - Particles system
+    - Particles
     - Rendering filters
 
 - 🧊 **3D**
     - Debug shapes
-    - Static mesh (jsm, obj wavefront)
+    - Static mesh (jsm and obj)
     - Animated mesh (jam)
-    - Static sprite
-    - Animated sprite
+    - Static sprite (jss)
+    - Animated sprite (jas)
     - Billboarding
     - Cubemap skybox
-    - Multi-viewport
-    - Camera orbit
-    - Camera WASD
     - Particules
     - Flares
     - Fog
     - Vertex colorization
     - Decals
-    - Shadow map
-    - Mesh pooling
+    - Realtime shadow support
+    - Multi-viewport
+    - Camera orbit
+    - Camera WASD
+    - Post-processing support
     - Rendering filters
-    - Post-processing effects
-    - PSX effects
 
 - 📐 **3D Physics**
-    - Walkmesh
-    - Navigation mesh
+    - Walkmesh (jwm)
+    - Navigation mesh (jnm)
     - Ray-testing
 
 - 💥 **3D Material**
@@ -75,6 +74,12 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Directional light
     - Point lights (max : 16)
 
+- 🖼️ **3D Post-processing**
+    - Hardware dithering
+    - Pixelation
+    - Scanlines
+    - Color depth limiting
+
 - 🎮 **Input**
     - Action mapping
     - Gamepad, keyboard and mouse support
@@ -88,9 +93,9 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Resources pre-loading
 
 - 📜 **Scripts**
-    - Load script from json file.
-    - Register async command function and call-it from script file
-    - Manual jump to part of script
+    - Load script from json file
+    - Register async command function and call-it from json file
+    - Manual jump to part of the script
 
 - 🔊 **Sound**
     - Handle sounds by groups
@@ -101,10 +106,23 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - 3D binary space partition
 
 - 🎨 **UI**
-    - Component architecture to keep project clean and scalable
-    - Handle focus/unfocus between components
+    - Focus/unfocus widgets
     - Fade in/out
-    - Some basics built-in components
+    - Widget architecture
+
+- 🖍️ **UI Widgets**
+    - Dialog + choices
+    - Dialog only
+    - Print long text
+    - Description list
+    - Virtual keyboard
+    - Slider
+    - Menu base
+    - Menu list view
+    - Menu text
+    - Prompt
+    - Sprite
+    - Text
 
 - 🌆 **DNA**
     - ECS architecture implementation (optionnal)
@@ -324,10 +342,17 @@ If you have a suggestion that would make this better, please fork the repo and c
 - No realistic physics engine, we assume if you need one there is many pretty lib for that like ammo.js, plank.js or canon.js
 
 ## Roadmap
-- Write a space-shooter 2D tutorial (coming-soon)
-- Write an action/aventure 3D tutorial (coming-soon)
+- Improve JWM and JNM for multiple contact points.
 - Add pixelate to mesh renderer (no-delay)
-- Add oriented bounding box collisions (no-delay)
+- Add scan-line ppe
+- Add emission mapping
+- Add gloss (roughness) mapping
+- Add per-vertex lighting
+
+- FPS:
+ - Add weapon, bullet, camera movement and strife-jumping to FPS sample + change the map to fit Quake 3.
+- Tuto3D:
+ - Add camera controller, enemy and attacks
 
 ## License 
 WARME engine is released under the [MIT](https://opensource.org/licenses/MIT) license. 

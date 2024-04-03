@@ -4,7 +4,7 @@ import { inputManager } from '../../lib/input/input_manager';
 import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
 import { UT } from '../../lib/core/utils';
 import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
-import { Gfx3JWM } from '../../lib/gfx3_jwm/gfx3_jwm';
+import { Gfx3PhysicsJWM } from '../../lib/gfx3_physics/gfx3_physics_jwm';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
 import { ScriptMachine } from '../../lib/script/script_machine';
 import { UIDialog } from '../../lib/ui_dialog/ui_dialog';
@@ -22,7 +22,7 @@ class Room {
     this.name = '';
     this.description = '';
     this.map = new Gfx3MeshJSM();
-    this.walkmesh = new Gfx3JWM();
+    this.walkmesh = new Gfx3PhysicsJWM();
     this.controller = new Model();
     this.camera = new TrackingCamera(0);
     this.scriptMachine = new ScriptMachine();
@@ -50,9 +50,14 @@ class Room {
 
     this.map = new Gfx3MeshJSM();
     await this.map.loadFromFile(json['MapFile']);
-    this.map.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture(json['MapTextureFile']) }));
+    this.map.setMaterial(new Gfx3Material({
+      texture: await gfx3TextureManager.loadTexture(json['MapTextureFile'], {
+        minFilter: 'nearest',
+        magFilter: 'nearest'
+      })
+    }));
 
-    this.walkmesh = new Gfx3JWM();
+    this.walkmesh = new Gfx3PhysicsJWM();
     await this.walkmesh.loadFromFile(json['WalkmeshFile']);
     await this.controller.loadFromData(json['Controller']);
 
@@ -194,8 +199,8 @@ class Room {
       }
     }
 
-    let move = this.walkmesh.moveWalker('CONTROLLER', moveX, moveZ);
-    let newPos = UT.VEC3_ADD(old, move);
+    let navInfo = this.walkmesh.moveWalker('CONTROLLER', moveX, moveZ);
+    let newPos = UT.VEC3_ADD(old, navInfo.move);
     this.controller.setPosition(newPos[0], newPos[1], newPos[2]);
 
     for (let trigger of this.triggers) {

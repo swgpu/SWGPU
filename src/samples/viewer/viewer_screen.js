@@ -58,8 +58,8 @@ class ViewerScreen extends Screen {
     if (e.key == 'o' || e.key == 'O') {
       this.mesh = await CREATE_OBJ();
     }
-    else if (e.key == 'l' || e.key == 'L') {
-      this.mesh = await CREATE_LANTERN();
+    else if (e.key == 'b' || e.key == 'B') {
+      this.mesh = await CREATE_CUBE_BRICK();
     }
     else if (e.key == 'c' || e.key == 'C') {
       this.mesh = await CREATE_CUBE();
@@ -97,12 +97,13 @@ async function CREATE_OBJ() {
   return obj.getMesh('letter-f');
 }
 
-async function CREATE_LANTERN() {
+async function CREATE_CUBE_BRICK() {
   const mesh = new Gfx3MeshJSM();
-  await mesh.loadFromFile('./samples/viewer/lantern.jsm');
+  await mesh.loadFromFile('./samples/viewer/cube_brick.jsm');
   mesh.setMaterial(new Gfx3Material({
-    texture: await gfx3TextureManager.loadTexture('./samples/viewer/lantern.png'),
-    normalMap: await gfx3TextureManager.loadTexture('./samples/viewer/lantern_normal.png'),
+    texture: await gfx3TextureManager.loadTexture('./samples/viewer/cube_brick.png'),
+    normalMap: await gfx3TextureManager.loadTexture('./samples/viewer/cube_brick_normal.png'),
+    normalIntensity: 5.0,
     lightning: true
   }));
 
@@ -172,19 +173,13 @@ function CREATE_UI_INFOBOX() {
 
   {
     const li = document.createElement('li');
-    li.textContent = '[o] => Load Obj Wavefront';
-    ul.appendChild(li);
-  }
-
-  {
-    const li = document.createElement('li');
-    li.textContent = '[l] => Load Lantern';  
-    ul.appendChild(li);
-  }
-
-  {
-    const li = document.createElement('li');
     li.textContent = '[c] => Load Cube';  
+    ul.appendChild(li);
+  }
+
+  {
+    const li = document.createElement('li');
+    li.textContent = '[b] => Load Cube Normal Map';  
     ul.appendChild(li);
   }
 
@@ -197,6 +192,12 @@ function CREATE_UI_INFOBOX() {
   {
     const li = document.createElement('li');
     li.textContent = '[d] => Load Duck';  
+    ul.appendChild(li);
+  }
+
+  {
+    const li = document.createElement('li');
+    li.textContent = '[o] => Load Obj Wavefront';
     ul.appendChild(li);
   }
 
