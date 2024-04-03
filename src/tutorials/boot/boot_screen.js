@@ -15,8 +15,8 @@ class TutorialsBootScreen extends Screen {
   }
 
   async onEnter() {
-    this.uiMenu.add('0', 'Your first 3D tutorial - Asgard');
-    this.uiMenu.add('1', 'Your first 2D tutorial - Demoname');
+    this.uiMenu.add('0', 'Your first 2D tutorial - Demoname');
+    this.uiMenu.add('1', 'Your first 3D tutorial - Asgard');
     this.uiMenu.add('2', 'Samples');
     uiManager.addWidget(this.uiMenu, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 

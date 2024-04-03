@@ -259,24 +259,18 @@ For a more concret overview on it, you can play examples [here](https://jay19240
         <p>3D Shadow Map</p>
     </td>
     <td>
-        <p>Rendering filters</p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb19.png" width="150px"/>
-    </td>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
-    </td>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
         <p>2D Isometric Background</p>
     </td>
+  </tr>
+  <tr>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
+    </td>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
+    </td>
+  </tr>
+  <tr>
     <td>
         <p>Tutorial 2D</p>
     </td>
@@ -349,10 +343,11 @@ If you have a suggestion that would make this better, please fork the repo and c
 - Add gloss (roughness) mapping
 - Add per-vertex lighting
 
-- FPS:
- - Add weapon, bullet, camera movement and strife-jumping to FPS sample + change the map to fit Quake 3.
 - Tuto3D:
  - Add camera controller, enemy and attacks
+ 
+- FPS:
+ - Add weapon, bullet, camera movement and strife-jumping to FPS sample + change the map to fit Quake 3. (no-delay)
 
 ## License 
 WARME engine is released under the [MIT](https://opensource.org/licenses/MIT) license. 
