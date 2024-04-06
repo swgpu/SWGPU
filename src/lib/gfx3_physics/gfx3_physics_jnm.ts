@@ -270,7 +270,9 @@ class Gfx3PhysicsJNM {
     };
   }
 
-  move(aabb: Gfx3BoundingBox, move: vec3, lift: number = 0.2): ResBox {
+  move(position: vec3, move: vec3, radius: number, height: number, lift: number = 0.2): ResBox {
+    const aabb = Gfx3BoundingBox.createFromCenter(position[0], position[1], position[2], radius * 2, height, radius * 2);
+
     let fmx = move[0];
     let fmy = move[1];
     let fmz = move[2];

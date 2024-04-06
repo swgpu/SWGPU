@@ -117,7 +117,7 @@ class CoreManager {
    * @param {boolean} enabled - Indicating whether scanlines should be enabled or disable.
    */
   enableScanlines(enabled: boolean): void {
-    this.container.classList.toggle('enable-scanlines', enabled);
+    this.container.classList.toggle('scanlines', enabled);
   }
 }
 

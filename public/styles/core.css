@@ -69,7 +69,7 @@ body {
   border-image: url(../textures/frame.png) 100 135 / 90px round;
 }
 
-#APP.enable-scanlines::before {
+#APP.scanlines::before {
   content: " ";
   display: block;
   position: absolute;

@@ -8,7 +8,7 @@
 > [!NOTE]  
 > Don't forget to check the wiki tutorials section, we coming soon with two tutorials for beginners !
  
-**WARME Y2K** is the first fully packed **2D/3D** game engine dedicated to **Y2K games** on the web !     
+**WARME Y2K** is the first fully packed **2D/3D game engine** dedicated to **Y2K games** on the web !     
 Some words about our philosophy:
 - **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle render and update loops.    

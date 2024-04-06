@@ -4,6 +4,7 @@ import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
 import { UT } from '../../lib/core/utils';
 import { Gfx3MeshJAM } from '../../lib/gfx3_mesh/gfx3_mesh_jam';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
+import { Gfx3BoundingBox } from '../../lib/gfx3/gfx3_bounding_box';
 // ---------------------------------------------------------------------------------------
 
 class InputComponent {
@@ -48,8 +49,8 @@ class PhysicsComponent {
     this.jnm = jnm;
     // -------------------
     this.lift = 0.2;
-    this.radius = 1;
-    this.height = 1;
+    this.radius = 0.5;
+    this.height = 0.5;
     this.frictionCoefficient = 0.99999999;
     this.gravityCoefficient = 0.8;
     this.gravityMax = 10;
@@ -63,7 +64,8 @@ class PhysicsComponent {
     if (UT.VEC3_LENGTH(this.entity.velocity) > 0.1) {
       const move = UT.VEC3_SCALE(this.entity.velocity, ts / 1000);
       // const navInfo = this.jnm.box([this.entity.x, this.entity.y, this.entity.z], move[0], move[1], move[2], this.radius, this.height, this.lift);
-      const navInfo = this.jnm.move(this.entity.graphics.jam.getWorldBoundingBox(), move, this.lift);
+      const pos = [this.entity.x, this.entity.y, this.entity.z];
+      const navInfo = this.jnm.move(pos, move, this.radius, this.height, this.lift);
 
       this.entity.x += navInfo.move[0];
       this.entity.y += navInfo.move[1];
@@ -74,7 +76,7 @@ class PhysicsComponent {
       }
       else {
         this.entity.velocity[1] = UT.LINEAR(Math.pow(1 - this.gravityCoefficient, ts / 1000), -this.gravityMax, this.entity.velocity[1]);
-      } 
+      }
     }
     else {
       this.entity.velocity = [0, 0, 0];

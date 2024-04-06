@@ -16,7 +16,7 @@ class CCGScreen extends Screen {
   constructor() {
     super();
     this.duel = new Duel();
-    this.uiBgNode = document.createElement('img');
+    this.uiBgNode = document.createElement('video');
     this.uiTurn = new UITurn();
     this.uiDuelists = [];
     this.uiCardDetail = new UICardDetail();
@@ -28,8 +28,10 @@ class CCGScreen extends Screen {
   async onEnter(args = { duelId }) {
     await this.duel.loadFromFile('samples/ccg/data/duel_' + args.duelId + '/data.json');
 
-    this.uiBgNode.src = 'samples/ccg/bg.gif';
-    uiManager.addNode(this.uiBgNode, 'position:absolute; top:0; right:0; bottom:0; left:0; width:100%');
+    this.uiBgNode.src = 'samples/ccg/bg.mp4';
+    this.uiBgNode.play();
+    this.uiBgNode.loop = true;
+    uiManager.addNode(this.uiBgNode, 'position:absolute; top:0; right:0; bottom:0; left:0; height:100%');
 
     this.uiTurn.setDuel(this.duel);
     uiManager.addWidget(this.uiTurn, 'position: absolute; top:0; left:0; right:0; line-height:30px; z-index:100');
