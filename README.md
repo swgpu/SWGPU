@@ -338,10 +338,10 @@ If you have a suggestion that would make this better, please fork the repo and c
 4. thetinyspark - Contribute to the binary space partition.
 
 ## Some parts taken for this work
-- Used DOM for UI elements
-- Used CanvasRenderingContext2D for 2D stuffs
-- Used human readable custom format for all graphics stuff
-- Used [Rapier](https://rapier.rs/) physics engine for both 2D and 3D world
+- DOM for UI elements
+- CanvasRenderingContext2D for 2D stuffs
+- Human readable custom format for all graphics stuff
+- [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
 ## Roadmap
