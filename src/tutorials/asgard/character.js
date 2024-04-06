@@ -47,7 +47,7 @@ class PhysicsComponent {
     this.entity = entity;
     this.jnm = jnm;
     // -------------------
-    this.lift = 0.4;
+    this.lift = 0.2;
     this.radius = 1;
     this.height = 1;
     this.frictionCoefficient = 0.99999999;
@@ -62,7 +62,9 @@ class PhysicsComponent {
 
     if (UT.VEC3_LENGTH(this.entity.velocity) > 0.1) {
       const move = UT.VEC3_SCALE(this.entity.velocity, ts / 1000);
-      const navInfo = this.jnm.box([this.entity.x, this.entity.y, this.entity.z], move[0], move[1], move[2], this.radius, this.height, this.lift);
+      // const navInfo = this.jnm.box([this.entity.x, this.entity.y, this.entity.z], move[0], move[1], move[2], this.radius, this.height, this.lift);
+      const navInfo = this.jnm.move(this.entity.graphics.jam.getWorldBoundingBox(), move, this.lift);
+
       this.entity.x += navInfo.move[0];
       this.entity.y += navInfo.move[1];
       this.entity.z += navInfo.move[2]; 

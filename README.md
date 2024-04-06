@@ -1,4 +1,4 @@
-# WARME Y2K Engine
+# WARME Y2K
 <p align="center">
     <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner-new.png" alt="logo"/>
 </p>
@@ -8,7 +8,7 @@
 > [!NOTE]  
 > Don't forget to check the wiki tutorials section, we coming soon with two tutorials for beginners !
  
-**WARME Engine** is the first fully packed **2D/3D** game engine dedicated to **Y2K games** on the web !     
+**WARME Y2K** is the first fully packed **2D/3D** game engine dedicated to **Y2K games** on the web !     
 Some words about our philosophy:
 - **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle render and update loops.    
@@ -26,6 +26,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Curves
     - Quaternions
     - Object pooling
+    - Scanlines filter
     
 - 👾 **2D**
     - Static sprite (jss)
@@ -34,6 +35,9 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Orthographic tilemap
     - Particles
     - Rendering filters
+
+- 📐 **2D Physics**
+    - Rapier2D
 
 - 🧊 **3D**
     - Debug shapes
@@ -59,6 +63,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Walkmesh (jwm)
     - Navigation mesh (jnm)
     - Ray-testing
+    - Rapier3D
 
 - 💥 **3D Material**
     - Complete Phong reflection model
@@ -82,7 +87,6 @@ For a more concret overview on it, you can play examples [here](https://jay19240
 - 🖼️ **3D Post-processing**
     - Hardware dithering
     - Pixelation
-    - Scanlines
     - Color depth limiting
 
 - 🎮 **Input**
@@ -303,7 +307,7 @@ to build our first WARME project.
 ```
 
 ## How to integrate your 3D models ?
-The best way is to used the [WARME Blender Exporter](https://github.com/jay19240/WARME-Engine/bin/WARME-Blender-Exporter.zip) otherwise you can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.    
+The best way is to used the [WARME Blender Exporter](https://github.com/jay19240/WARME-Engine/bin/WARME-Blender-Exporter.zip), otherwise you can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.    
 
 Important note: The Blender coordinate system and the engine don't match, see below the rule to translate.
 Don't forget to apply these changes when you export your obj file.

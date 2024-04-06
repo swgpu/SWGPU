@@ -256,9 +256,81 @@ class Gfx3PhysicsJNM {
     )) as Array<Frag>;
 
     const elevation = GET_ELEVATION(floorIntersectedFrags, [centerX + fmx, max[1], centerZ + fmz]);
-    if (elevation) {
+    if (elevation != Infinity) {
       collideFloor = true;
       fmy = elevation - min[1];
+    }
+
+    return {
+      move: [fmx, fmy, fmz],
+      collideWall: collideWall,
+      collideFloor: collideFloor,
+      // fragIndex: elevation ? elevation.fragIndex : -1
+      fragIndex: -1
+    };
+  }
+
+  move(aabb: Gfx3BoundingBox, move: vec3, lift: number = 0.2): ResBox {
+    let fmx = move[0];
+    let fmy = move[1];
+    let fmz = move[2];
+    let collideWall = false;
+    let collideFloor = false;
+    aabb.min[1] += lift;
+
+    const wallIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
+      [aabb.min[0] + move[0], aabb.min[1] + move[1], aabb.min[2] + move[2]],
+      [aabb.max[0] + move[0], aabb.max[1] + move[1], aabb.max[2] + move[2]]
+    )) as Array<Frag>;
+
+    const points: Array<vec3> = [
+      [aabb.min[0], aabb.min[1], aabb.max[2]],
+      [aabb.min[0], aabb.min[1], aabb.min[2]],
+      [aabb.max[0], aabb.min[1], aabb.min[2]],
+      [aabb.max[0], aabb.min[1], aabb.max[2]]
+    ];
+
+    let deviatedPoints: Array<boolean> = [];
+    let i = 0;
+
+    while (i < points.length) {
+      if (deviatedPoints[i]) {
+        i++;
+        continue;
+      }
+
+      const moveXZ = GET_FINAL_MOVE_XZ(wallIntersectedFrags, points[i], [fmx, fmz]);
+      if (moveXZ[0] == 0 && moveXZ[1] == 0) {
+        fmx = 0;
+        fmz = 0;
+        collideWall = true;
+        break;
+      }
+      else if (moveXZ[0] != fmx || moveXZ[1] != fmz) {
+        fmx = moveXZ[0];
+        fmz = moveXZ[1];
+        collideWall = true;
+        deviatedPoints[i] = true;
+        i = 0;
+        continue;
+      }
+
+      i++;
+    }
+
+    aabb.min[1] -= lift;
+
+    const center = aabb.getCenter();
+    const floorIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
+      [center[0] + fmx, aabb.min[1] + fmy, center[2] + fmz],
+      [center[0] + fmx, aabb.max[1] + fmy, center[2] + fmz]
+    )) as Array<Frag>;
+
+    const footElevation = aabb.min[1];
+    const elevation = GET_ELEVATION(floorIntersectedFrags, [center[0] + fmx, aabb.max[1], center[2] + fmz]);
+    if (elevation != Infinity) {
+      collideFloor = true;
+      fmy = elevation - footElevation;
     }
 
     return {
