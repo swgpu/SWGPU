@@ -341,7 +341,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 - Used DOM for UI elements
 - Used CanvasRenderingContext2D for 2D stuffs
 - Used human readable custom format for all graphics stuff
-- Used Rapier physics engine for both 2D and 3D world
+- Used [Rapier](https://rapier.rs/) physics engine for both 2D and 3D world
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
 ## Roadmap

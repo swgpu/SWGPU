@@ -226,7 +226,7 @@ class Gfx3PhysicsJNM {
         continue;
       }
 
-      const moveXZ = this.$moveXZ(wallIntersectedFrags, points[i], [fmx, fmz]);
+      const moveXZ = GET_FINAL_MOVE_XZ(wallIntersectedFrags, points[i], [fmx, fmz]);
       if (moveXZ[0] == 0 && moveXZ[1] == 0) {
         fmx = 0;
         fmz = 0;
@@ -255,18 +255,18 @@ class Gfx3PhysicsJNM {
       [centerX + fmx, max[1] + my, centerZ + fmz]
     )) as Array<Frag>;
 
-    const elevation = this.$getElevation(floorIntersectedFrags, [centerX + fmx, max[1], centerZ + fmz]);
+    const elevation = GET_ELEVATION(floorIntersectedFrags, [centerX + fmx, max[1], centerZ + fmz]);
     if (elevation) {
-      console.log('test');
       collideFloor = true;
-      fmy = elevation.value - min[1];
+      fmy = elevation - min[1];
     }
 
     return {
       move: [fmx, fmy, fmz],
       collideWall: collideWall,
       collideFloor: collideFloor,
-      fragIndex: elevation ? elevation.fragIndex : -1
+      // fragIndex: elevation ? elevation.fragIndex : -1
+      fragIndex: -1
     };
   }
 
@@ -321,13 +321,13 @@ class Gfx3PhysicsJNM {
   $moveXZ(frags: Array<Frag>, point: vec3, move: vec2, i: number = 0): vec2 {
     let minFrag = null;
     let minFragLength = Infinity;
+    let outIntersect: vec3 = [0, 0, 0];
 
     if (i > MOVE_MAX_RECURSIVE_CALL) {
       return [0, 0];
     }
 
     for (const frag of frags) {
-      const outIntersect: vec3 = [0, 0, 0];
       if (UT.RAY_PLAN(point, [move[0], 0, move[1]], frag.a, frag.n, true, outIntersect)) {
         const pen = UT.VEC3_SUBSTRACT(outIntersect, point);
         const penLength = UT.VEC3_LENGTH(pen);
@@ -353,17 +353,80 @@ class Gfx3PhysicsJNM {
 
     for (const frag of frags) {
       if (UT.RAY_TRIANGLE(point, [0, -1, 0], frag.a, frag.b, frag.c, true, outIntersectPoint)) {
-        const pen = UT.VEC3_SUBSTRACT(outIntersectPoint, point);
-        const penLength = UT.VEC3_LENGTH(pen);
-        if (penLength < minFragLength) {
-          minFragLength = penLength;
-          minFrag = frag;
-        }
+        return { value: outIntersectPoint[1], fragIndex: frag.index };  
       }
     }
 
-    return minFrag ? { value: outIntersectPoint[1], fragIndex: minFrag.index } : null;  
+    return null;  
   }
 }
 
 export { Gfx3PhysicsJNM };
+
+
+
+
+// $getElevation(frags: Array<Frag>, point: vec3): { value: number, fragIndex: number } | null {
+//   let minFrag = null;
+//   let minFragLength = Infinity;
+//   let outIntersectPoint: vec3 = [0, 0, 0];
+
+//   for (const frag of frags) {
+//     if (UT.RAY_TRIANGLE(point, [0, -1, 0], frag.a, frag.b, frag.c, true, outIntersectPoint)) {
+//       const pen = UT.VEC3_SUBSTRACT(outIntersectPoint, point);
+//       const penLength = UT.VEC3_LENGTH(pen);
+//       if (penLength < minFragLength) {
+//         minFragLength = penLength;
+//         minFrag = frag;
+//       }
+//     }
+//   }
+
+//   return minFrag ? { value: outIntersectPoint[1], fragIndex: minFrag.index } : null;  
+// }
+
+
+
+function GET_FINAL_MOVE_XZ(frags: Array<Frag>, point: vec3, move: vec2, i: number = 0): vec2 {
+  let minFrag = null;
+  let minFragLength = Infinity;
+
+  if (i > MOVE_MAX_RECURSIVE_CALL) {
+    return [0, 0];
+  }
+
+  for (const frag of frags) {
+    const outIntersect: vec3 = [0, 0, 0];
+    if (UT.RAY_PLAN(point, [move[0], 0, move[1]], frag.a, frag.n, true, outIntersect)) {
+      const pen = UT.VEC3_SUBSTRACT(outIntersect, point);
+      const penLength = UT.VEC3_LENGTH(pen);
+      if (penLength <= UT.VEC2_LENGTH(move) + 0.001 && penLength < minFragLength) {
+        minFragLength = penLength;
+        minFrag = frag;
+      }
+    }
+  }
+
+  if (minFrag) {
+    const newMove = GET_MOVE_PROJECTION(minFrag, move);
+    return GET_FINAL_MOVE_XZ(frags, point, newMove, i + 1);
+  }
+
+  return move;
+}
+
+function GET_MOVE_PROJECTION(frag: Frag, move: vec2): vec2 {
+  const newMove = UT.VEC2_PROJECTION_COS([move[0], move[1]], [frag.t[0], frag.t[2]]);
+  return newMove;
+}
+
+function GET_ELEVATION(frags: Array<Frag>, point: vec3): number {
+  for (const frag of frags) {
+    const outIntersect: vec3 = [0, 0, 0];
+    if (UT.RAY_TRIANGLE(point, [0, -1, 0], frag.a, frag.b, frag.c, true, outIntersect)) {
+      return outIntersect[1];
+    }
+  }
+
+  return Infinity;
+}
