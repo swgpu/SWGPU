@@ -3,9 +3,8 @@ import { UIWidget } from '../ui/ui_widget.js';
 
 /**
  * A UI widget for displaying a bottom fixed dialog box with text and author name.
- * It emit 'E_PRINT_FINISHED' when print is finish.
- * It emit 'E_MENU_ITEM_SELECTED' when menu item is selected.
- * It emit 'E_OK' when action is 'OK' and text is finished.
+ * It emit 'E_PRINT_FINISHED'
+ * It emit 'E_OK'
  */
 class UIDialog extends UIWidget {
   text: string;

@@ -20,9 +20,12 @@ struct Params {
   ENABLED: f32,
   SCREEN_WIDTH: f32,
   SCREEN_HEIGHT: f32,
-  WIDTH_PIXELATION: f32,
-  HEIGHT_PIXELATION: f32,
+  PIXELATION_ENABLED: f32,
+  PIXELATION_WIDTH: f32,
+  PIXELATION_HEIGHT: f32,
+  COLOR_ENABLED: f32,
   COLOR_PRECISION: f32,
+  DITHER_ENABLED: f32,
   DITHER_PATTERN_INDEX: f32,
   DITHER_THRESHOLD: f32,
   DITHER_SCALE_X: f32,
@@ -42,21 +45,32 @@ fn main(
     return textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, FragUV);
   }
 
-  // pixelation
   var pixelCoord = FragUV;
-  pixelCoord.x = floor(pixelCoord.x * PARAMS.WIDTH_PIXELATION) / PARAMS.WIDTH_PIXELATION;
-  pixelCoord.y = floor(pixelCoord.y * PARAMS.HEIGHT_PIXELATION) / PARAMS.HEIGHT_PIXELATION;
+
+  if (PARAMS.PIXELATION_ENABLED == 1.0)
+  {
+    pixelCoord.x = floor(pixelCoord.x * PARAMS.PIXELATION_WIDTH) / PARAMS.PIXELATION_WIDTH;
+    pixelCoord.y = floor(pixelCoord.y * PARAMS.PIXELATION_HEIGHT) / PARAMS.PIXELATION_HEIGHT;  
+  }
+
   var sourceTexel = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, pixelCoord);
-  var pixelColor = floor(sourceTexel * PARAMS.COLOR_PRECISION) / PARAMS.COLOR_PRECISION;
 
-  // dithering
-  var brightness = GetPixelBrightness(pixelColor.rgb);
-  var ditherPattern = GetDitherPattern(PARAMS.DITHER_PATTERN_INDEX);
-  var ditherX = u32((FragUV.x * PARAMS.SCREEN_WIDTH) / PARAMS.DITHER_SCALE_X);
-  var ditherY = u32((FragUV.y * PARAMS.SCREEN_HEIGHT) / PARAMS.DITHER_SCALE_Y);
-  var ditherPixel = GetDitherValue(ditherX, ditherY, brightness, ditherPattern);
+  if (PARAMS.COLOR_ENABLED == 1.0)
+  {
+    sourceTexel = floor(sourceTexel * PARAMS.COLOR_PRECISION) / PARAMS.COLOR_PRECISION;
+  }
 
-  return pixelColor * ditherPixel;
+  if (PARAMS.DITHER_ENABLED == 1.0)
+  {
+    var brightness = GetPixelBrightness(sourceTexel.rgb);
+    var ditherPattern = GetDitherPattern(PARAMS.DITHER_PATTERN_INDEX);
+    var ditherX = u32((FragUV.x * PARAMS.SCREEN_WIDTH) / PARAMS.DITHER_SCALE_X);
+    var ditherY = u32((FragUV.y * PARAMS.SCREEN_HEIGHT) / PARAMS.DITHER_SCALE_Y);
+    var ditherPixel = GetDitherValue(ditherX, ditherY, brightness, ditherPattern);
+    sourceTexel = sourceTexel * ditherPixel;
+  }
+
+  return sourceTexel;
 }
 
 // *****************************************************************************************************************

@@ -17,6 +17,7 @@ interface JASAnimation {
 
 /**
  * A 2D sprite with animations.
+ * It emit 'E_FINISHED'
  */
 class Gfx2SpriteJAS extends Gfx2Drawable {
   flip: [boolean, boolean];

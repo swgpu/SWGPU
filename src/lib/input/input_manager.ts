@@ -28,14 +28,14 @@ GAME_PAD_KEY_MAPPING.set('PadRight', '15');
 /**
  * Singleton input manager.
  * Handle various sources such as keyboard, mouse and gamepad.
- * It emit 'E_ACTION_ONCE' on new action touch.
- * It emit 'E_ACTION' on action touch.
- * It emit 'E_ACTION_RELEASED' on action touch released.
- * It emit 'E_MOUSE_DOWN' on mouse buttons pressed.
- * It emit 'E_MOUSE_UP' on mouse buttons released.
- * It emit 'E_MOUSE_MOVE' on mouse moving.
- * It emit 'E_MOUSE_DRAG' on mouse dragging.
- * It emit 'E_MOUSE_WHEEL' on mouse wheeling.
+ * It emit 'E_ACTION_ONCE' with data { actionId }.
+ * It emit 'E_ACTION' with data { actionId }.
+ * It emit 'E_ACTION_RELEASED' with data { actionId }
+ * It emit 'E_MOUSE_DOWN' with data { buttons }
+ * It emit 'E_MOUSE_UP'
+ * It emit 'E_MOUSE_MOVE' with data { movementX, movementY }
+ * It emit 'E_MOUSE_DRAG' with data { movementX, movementY }
+ * It emit 'E_MOUSE_WHEEL' with data { delta }
  */
 class InputManager {
   keymap: Map<string, boolean>;

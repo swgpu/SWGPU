@@ -4,8 +4,8 @@ import { UIWidget } from '../ui/ui_widget';
 /**
  * A UI widget displaying a full screen dialog print with text.
  * It is ideal for long-text reading.
- * It emit 'E_PRINT_FINISHED' when print is finish.
- * It emit 'E_OK' when action is 'OK' and text is finished.
+ * It emit 'E_PRINT_FINISHED'
+ * It emit 'E_OK'
  */
 class UIPrint extends UIWidget {
   text: string;

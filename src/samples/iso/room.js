@@ -25,6 +25,7 @@ class Room {
     this.map = new Gfx3MeshJSM();
     this.walkmesh = new Gfx3PhysicsJWM();
     this.controller = new Model();
+    this.controllerWalker = {};
     this.camera = new TrackingCamera(0);
     this.scriptMachine = new ScriptMachine();
     this.spawns = [];
@@ -83,7 +84,7 @@ class Room {
     this.controller.setPosition(spawn.getPositionX(), spawn.getPositionY(), spawn.getPositionZ());
     this.controller.setDirection(spawn.getDirection());
     this.controller.play('IDLE_' + spawn.getDirection(), true, true);
-    this.walkmesh.addWalker('CONTROLLER', this.controller.getPositionX(), this.controller.getPositionZ(), this.controller.getRadius());
+    this.controllerWalker = this.walkmesh.addWalker('CONTROLLER', this.controller.getPositionX(), this.controller.getPositionZ(), this.controller.getRadius());
 
     await this.scriptMachine.loadFromFile(json['ScriptFile']);
     this.scriptMachine.jump('ON_INIT');
@@ -192,7 +193,7 @@ class Room {
       }
     }
 
-    let navInfo = this.walkmesh.moveWalker('CONTROLLER', moveX, moveZ);
+    let navInfo = this.walkmesh.moveWalker(this.controllerWalker, moveX, moveZ);
     let newPos = UT.VEC3_ADD(old, navInfo.move);
     this.controller.setPosition(newPos[0], newPos[1], newPos[2]);
 

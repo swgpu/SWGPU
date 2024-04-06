@@ -10,7 +10,7 @@
  
 **WARME Engine** is the first fully packed **2D/3D** game engine dedicated to **Y2K games** on the web !     
 Some words about our philosophy:
-- **Simplicity:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
+- **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle render and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
 - **Modernity:** We used the WebGPU rendering API.
@@ -61,14 +61,19 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Ray-testing
 
 - 💥 **3D Material**
-    - Phong reflection model
-    - Displacement texture mapping
+    - Complete Phong reflection model
+    - Displacement texture map
     - Displacement texture scrolling
-    - Normal mapping
-    - Env mapping
-    - Specularity mapping
+    - Diffuse map
+    - Specular map
+    - Emissive map
+    - Normal map
+    - Env map
     - Texture scrolling
     - Animated UV
+    - Specular shininess
+    - Emissive intensity
+    - Normal intensity
 
 - 🌞 **3D Light**
     - Directional light
@@ -333,25 +338,20 @@ If you have a suggestion that would make this better, please fork the repo and c
 4. thetinyspark - Contribute to the binary space partition.
 
 ## Some parts taken for this work
-- Use DOM for UI elements
-- Use CanvasRenderingContext2D for 2D stuffs
-- Use human readable custom format for all graphics stuff
+- Used DOM for UI elements
+- Used CanvasRenderingContext2D for 2D stuffs
+- Used human readable custom format for all graphics stuff
+- Used Rapier physics engine for both 2D and 3D world
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
-- No realistic physics engine, we assume if you need one there is many pretty lib for that like ammo.js, plank.js or canon.js
 
 ## Roadmap
-- Improve JWM and JNM for multiple contact points.
-- Add pixelate to mesh renderer (no-delay)
-- Add scan-line ppe
-- Add emission mapping
-- Add gloss (roughness) mapping
-- Add per-vertex lighting
+- Add spotlight (no-delay)
+- FPS: Add weapon, bullet, camera movement and strife-jumping to FPS sample + change the map to fit Quake 3 (no-delay)
 
+- Bug 2D Fighter
 - Tuto3D:
- - Add camera controller, enemy and attacks
- 
-- FPS:
- - Add weapon, bullet, camera movement and strife-jumping to FPS sample + change the map to fit Quake 3. (no-delay)
+ - Add camera controller.
+ - Add other entity to make collide test
 
 ## License 
 WARME engine is released under the [MIT](https://opensource.org/licenses/MIT) license. 

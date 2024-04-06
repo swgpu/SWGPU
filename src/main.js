@@ -1,3 +1,4 @@
+import { coreManager } from './lib/core/core_manager';
 import { gfx3Manager } from './lib/gfx3/gfx3_manager';
 import { gfx3DebugRenderer } from './lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from './lib/gfx3_mesh/gfx3_mesh_renderer';
@@ -20,6 +21,7 @@ class GameManager {
   }
 
   startup() {
+    coreManager.enableScanlines(true);
     gfx3DebugRenderer.setShowDebug(true);
     gfx3PPERenderer.setEnabled(false);
     this.run(0);

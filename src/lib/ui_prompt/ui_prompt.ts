@@ -5,7 +5,7 @@ import { UIMenuText } from '../ui_menu_text/ui_menu_text';
 
 /**
  * A UI widget displaying prompt with a text content and a menu of actions.
- * It emits an 'E_ITEM_SELECTED'.
+ * It emit 'E_ITEM_SELECTED' with data { id, index }
  */
 class UIPrompt extends UIWidget {
   uiMenu: UIMenuText;

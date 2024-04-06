@@ -16,6 +16,7 @@ interface JAMAnimation {
 
 /**
  * A 3D animated mesh.
+ * It emit 'E_FINISHED'
  */
 class Gfx3MeshJAM extends Gfx3Mesh {
   numVertices: number;

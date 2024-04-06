@@ -2,7 +2,10 @@ import { eventManager } from '../core/event_manager';
 import { inputManager } from '../input/input_manager';
 
 /**
- * Is a ui element base.
+ * UI Widget base element.
+ * It emit 'E_FOCUSED'
+ * It emit 'E_UNFOCUSED'
+ * It emit 'E_ANIMATION_FINISHED'
  */
 class UIWidget {
   id: string;

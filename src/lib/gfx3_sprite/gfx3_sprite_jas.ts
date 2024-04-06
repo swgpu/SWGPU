@@ -16,6 +16,7 @@ interface JASAnimation {
 
 /**
  * A 3D animated sprite.
+ * It emit 'E_FINISHED'
  */
 class Gfx3SpriteJAS extends Gfx3Sprite {
   animations: Array<JASAnimation>;

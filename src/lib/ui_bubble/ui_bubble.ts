@@ -4,9 +4,9 @@ import { UIMenuText } from '../ui_menu_text/ui_menu_text';
 
 /**
  * A floating dialog widget (looking as a bubble) with text and optional actions.
- * It emit 'E_PRINT_FINISHED' when print is finish.
- * It emit 'E_MENU_ITEM_SELECTED' when menu item is selected.
- * It emit 'E_OK' when action is 'OK' and text is finished.
+ * It emit 'E_PRINT_FINISHED'
+ * It emit 'E_MENU_ITEM_SELECTED' with data { id, index }
+ * It emit 'E_OK'
  */
 class UIBubble extends UIWidget {
   uiMenu: UIMenuText;

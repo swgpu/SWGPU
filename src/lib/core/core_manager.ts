@@ -10,6 +10,7 @@ enum SizeMode {
 /**
  * Singleton core manager.
  * Used to set the size and resolution of the top-level HTMLElement container.
+ * It emit 'E_RESIZE'
  */
 class CoreManager {
   container: HTMLElement;
@@ -108,6 +109,15 @@ class CoreManager {
    */
   toggleClass(className: string): void {
     this.container.classList.toggle(className);
+  }
+
+  /**
+   * Enable scanlines.
+   * 
+   * @param {boolean} enabled - Indicating whether scanlines should be enabled or disable.
+   */
+  enableScanlines(enabled: boolean): void {
+    this.container.classList.toggle('enable-scanlines', enabled);
   }
 }
 

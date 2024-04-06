@@ -3,6 +3,7 @@ import { UT } from '../core/utils';
 
 /**
  * Is used to move along a serie of points.
+ * It emit 'E_FINISHED'
  */
 class Motion {
   points: Array<vec3>;

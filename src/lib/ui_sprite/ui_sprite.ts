@@ -16,6 +16,7 @@ interface JASAnimation {
 
 /**
  * A UI widget displaying a sprite with animations.
+ * It emit 'E_FINISHED'
  */
 class UISprite extends UIWidget {
   animations: Array<JASAnimation>;

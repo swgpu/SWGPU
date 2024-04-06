@@ -30,10 +30,10 @@ class TutorialsBootScreen extends Screen {
 
   handleMenuItemSelected(data) {
     if (data.id == 0) {
-      screenManager.requestSetScreen(new AsgardScreen());
+      
     }
     else if (data.id == 1) {
-      // screenManager.requestSetScreen(new UserInterfaceScreen());
+      screenManager.requestSetScreen(new AsgardScreen());
     }
     else if (data.id == 2) {
       screenManager.requestSetScreen(new SamplesBootScreen());

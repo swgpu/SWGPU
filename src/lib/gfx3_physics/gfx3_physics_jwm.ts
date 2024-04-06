@@ -1,11 +1,6 @@
 import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
 import { UT } from '../core/utils';
 
-interface NavInfo {
-  move: vec3;
-  collide: boolean;
-};
-
 interface Sector {
   v1: vec3;
   v2: vec3;
@@ -22,7 +17,7 @@ interface Shared {
   sectorIds: Array<number>
 };
 
-interface WalkerPoint {
+interface Point {
   sectorIndex: number;
   x: number;
   y: number;
@@ -31,7 +26,19 @@ interface WalkerPoint {
 
 interface Walker {
   id: string;
-  points: Array<WalkerPoint>;
+  points: Array<Point>;
+};
+
+interface ResMoveWalker {
+  walker: Walker;
+  move: vec3;
+  collide: boolean;
+};
+
+interface ResMovePoint {
+  point: Point;
+  move: vec3;
+  collide: boolean;
 };
 
 /**
@@ -40,17 +47,23 @@ interface Walker {
  */
 class Gfx3PhysicsJWM {
   sectors: Array<Sector>;
+  sectorsData: Array<any>;
   neighborPool: Array<Neighbor>;
   sharedPool: Array<Shared>;
-  walkers: Array<Walker>;
+  points: Map<string, Point>;
+  walkers: Map<string, Walker>;
+  debugEnabled: boolean;
   debugVertices: Array<number>;
   debugVertexCount: number;
 
   constructor() {
     this.sectors = [];
+    this.sectorsData = [];
     this.neighborPool = [];
     this.sharedPool = [];
-    this.walkers = [];
+    this.points = new Map<string, Point>();
+    this.walkers = new Map<string, Walker>();
+    this.debugEnabled = true;
     this.debugVertices = [];
     this.debugVertexCount = 0;
   }
@@ -77,6 +90,12 @@ class Gfx3PhysicsJWM {
       });
     }
 
+    this.sectorsData = [];
+    for (const obj of json['SectorsData']) {
+      const sectorIndex = obj['SectorIndex'];
+      this.sectorsData[sectorIndex] = obj;
+    }
+
     this.neighborPool = [];
     for (const obj of json['NeighborPool']) {
       this.neighborPool.push({
@@ -98,6 +117,10 @@ class Gfx3PhysicsJWM {
    * The update function.
    */
   update(): void {
+    if (!this.debugEnabled) {
+      return;
+    }
+
     this.debugVertices = [];
     this.debugVertexCount = 0;
 
@@ -111,7 +134,7 @@ class Gfx3PhysicsJWM {
       this.debugVertexCount += 6;
     }
 
-    for (const walker of this.walkers) {
+    for (const walker of this.walkers.values()) {
       this.debugVertices.push(walker.points[1].x, walker.points[1].y, walker.points[1].z, 1, 1, 1);
       this.debugVertices.push(walker.points[2].x, walker.points[2].y, walker.points[2].z, 1, 1, 1);
       this.debugVertices.push(walker.points[2].x, walker.points[2].y, walker.points[2].z, 1, 1, 1);
@@ -128,21 +151,101 @@ class Gfx3PhysicsJWM {
    * The draw function.
    */
   draw(): void {
+    if (!this.debugEnabled) {
+      return;
+    }
+
     gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount, UT.MAT4_IDENTITY());
+
+    for (const point of this.points.values()) {
+      gfx3DebugRenderer.drawSphere(UT.MAT4_TRANSLATE(point.x, point.y, point.z), 0.01, 2);
+    }
   }
 
   /**
-   * Add a new walker.
-   * Note: A walker is the representation of a moving entity inside a walkmesh context. It is a square moving along the floor.
+   * Enable the debug display.
+   * 
+   * @param {boolean} enabled - The enabled flag.
+   */
+  enableDebug(enabled: boolean): void {
+    this.debugEnabled = enabled;
+  }
+
+  /**
+   * Add a single point.
+   * 
+   * @param {string} id - A unique identifier.
+   * @param {number} x - The x-coordinate of the point position.
+   * @param {number} z - The z-coordinate of the point position.
+   */
+  addPoint(id: string, x: number, z: number): void {
+    if (this.points.has(id)) {
+      throw new Error('Gfx3PhysicsJWM::addPoint: point with id ' + id + ' already exist.');
+    }
+
+    this.points.set(id, this.$utilsCreatePoint(x, z));
+  }
+
+  /**
+   * Remove a point.
+   * 
+   * @param {string} id - A unique identifier.
+   */
+  removePoint(id: string): void {
+    if (!this.points.has(id)) {
+      throw new Error('Gfx3PhysicsJWM::removePoint(): point not exist !');
+    }
+
+    this.points.delete(id);
+  }
+
+  /**
+   * Returns a point.
+   * 
+   * @param {string} id - A unique identifier.
+   */
+  getPoint(id: string): Point {
+    const point = this.points.get(id);
+    if (!point) {
+      throw new Error('Gfx3PhysicsJWM::getPoint: point with id ' + id + ' not exist.');
+    }
+
+    return point;
+  }
+
+  /**
+   * Move a point.
+   * 
+   * @param {Point} point - The point reference.
+   * @param {number} mx - The movement in the x-axis.
+   * @param {number} mz - The movement in the z-axis.
+   */
+  movePoint(point: Point, mx: number, mz: number): ResMovePoint {
+    const moveInfo = this.$utilsMove(point.sectorIndex, point.x, point.z, mx, mz);
+    point.sectorIndex = moveInfo.sectorIndex;
+    point.x += moveInfo.mx;
+    point.y = moveInfo.elevation;
+    point.z += moveInfo.mz;
+
+    return {
+      point: point,
+      move: [moveInfo.mx, moveInfo.elevation - point.y, moveInfo.mz],
+      collide: mx != moveInfo.mx || mz != moveInfo.mz
+    };
+  }
+
+  /**
+   * Add a walker.
+   * Note: A walker is a square composed by 5 rigid points.
    * 
    * @param {string} id - A unique identifier.
    * @param {number} x - The x-coordinate of the walker's starting position.
    * @param {number} z - The z-coordinate of the walker's starting position.
-   * @param {number} radius - The size.
+   * @param {number} radius - The radius.
    */
   addWalker(id: string, x: number, z: number, radius: number): Walker {
-    if (this.walkers.find(w => w.id == id)) {
-      throw new Error('Gfx3PhysicsJWM::addWalker: walker with id ' + id + ' already exist.');
+    if (this.walkers.has(id)) {
+      throw new Error('Gfx3PhysicsJWM::addWalkerFromRadius: walker with id ' + id + ' already exist.');
     }
 
     const walker: Walker = {
@@ -156,88 +259,82 @@ class Gfx3PhysicsJWM {
       ]
     };
 
-    this.walkers.push(walker);
+    this.walkers.set(id, walker);
     return walker;
   }
 
   /**
-   * Delete a walker.
+   * Remove a walker.
    * 
    * @param {string} id - A unique identifier.
    */
-  deleteWalker(id: string): void {
-    const index = this.walkers.findIndex(w => w.id == id);
-    if (index == -1) {
-      throw new Error('Gfx3PhysicsJWM::deleteWalker(): Walker not exist !');
+  removeWalker(id: string): void {
+    if (!this.walkers.has(id)) {
+      throw new Error('Gfx3PhysicsJWM::removeWalker(): Walker not exist !');
     }
 
-    this.walkers.splice(index, 1);
+    this.walkers.delete(id);
+  }
+
+  /**
+   * Returns a walker.
+   * 
+   * @param {string} id - A unique identifier.
+   */
+  getWalker(id: string): Walker {
+    if (!this.walkers.has(id)) {
+      throw new Error('Gfx3PhysicsJWM::getWalker: walker with id ' + id + ' not exist.');
+    }
+
+    return this.walkers.get(id)!;
   }
 
   /**
    * Move a walker.
    * 
-   * @param {string} id - The unique identifier of the walker.
+   * @param {Walker} walker - The walker reference.
    * @param {number} mx - The movement in the x-axis.
    * @param {number} mz - The movement in the z-axis.
    */
-  moveWalker(id: string, mx: number, mz: number): NavInfo {
-    const walker = this.walkers.find(w => w.id == id);
-    if (!walker) {
-      throw new Error('Gfx3PhysicsJWM::moveWalker: walker with id ' + id + ' cannot be found.');
-    }
-
-    const points = walker.points.slice();
-    const deviantPoints: Array<WalkerPoint> = [];
-    const pointSectors: Array<number> = [];
-    const pointElevations: Array<number> = [];
-
-    pointSectors[0] = walker.points[0].sectorIndex;
-    pointSectors[1] = walker.points[1].sectorIndex;
-    pointSectors[2] = walker.points[2].sectorIndex;
-    pointSectors[3] = walker.points[3].sectorIndex;
-    pointSectors[4] = walker.points[4].sectorIndex;
-
-    pointElevations[0] = walker.points[0].y;
-    pointElevations[1] = walker.points[1].y;
-    pointElevations[2] = walker.points[2].y;
-    pointElevations[3] = walker.points[3].y;
-    pointElevations[4] = walker.points[4].y;
-
+  moveWalker(walker: Walker, mx: number, mz: number): ResMoveWalker {
     // prevent dead end.
+    let fmx = mx;
+    let fmz = mz;
+    let fmy = 0;
     let numDeviations = 0;
-    let moving = false;
+    let deviantPoints = [];
+    let moveInfoPoints = [];
     let i = 0;
 
-    while (i < points.length) {
+    while (i < walker.points.length) {
       let deviation = false;
+
       if (!deviantPoints[i]) {
-        const moveInfo = this.$utilsMove(points[i].sectorIndex, points[i].x, points[i].z, mx, mz);
+        const moveInfo = this.$utilsMove(walker.points[i].sectorIndex, walker.points[i].x, walker.points[i].z, fmx, fmz);
         if (moveInfo.mx == 0 && moveInfo.mz == 0) {
-          mx = 0;
-          mz = 0;
-          moving = false;
+          fmx = 0;
+          fmz = 0;
+          moveInfoPoints = [];
           break;
         }
 
-        if (moveInfo.mx != mx || moveInfo.mz != mz) {
+        if (moveInfo.mx != fmx || moveInfo.mz != fmz) {
           numDeviations++;
-          mx = moveInfo.mx;
-          mz = moveInfo.mz;
+          fmx = moveInfo.mx;
+          fmz = moveInfo.mz;
           deviation = true;
-          deviantPoints[i] = points[i];
+          deviantPoints[i] = true;
         }
 
-        moving = true;
-        pointSectors[i] = moveInfo.sectorIndex;
-        pointElevations[i] = moveInfo.elevation;
+        moveInfoPoints[i] = moveInfo;
+        fmy = moveInfoPoints[0].elevation - walker.points[0].y;
       }
 
       // if two points or more are deviated it is a dead-end, no reasons to continue...
       if (numDeviations >= 2) {
-        mx = 0;
-        mz = 0;
-        moving = false;
+        fmx = 0;
+        fmz = 0;
+        moveInfoPoints = [];
         break;
       }
 
@@ -245,34 +342,17 @@ class Gfx3PhysicsJWM {
       i = deviation ? 0 : i + 1;
     }
 
-    const my = pointElevations[0] - walker.points[0].y;
-
-    if (moving) {
-      walker.points[0].sectorIndex = pointSectors[0];
-      walker.points[1].sectorIndex = pointSectors[1];
-      walker.points[2].sectorIndex = pointSectors[2];
-      walker.points[3].sectorIndex = pointSectors[3];
-      walker.points[4].sectorIndex = pointSectors[4];
-      walker.points[0].x += mx;
-      walker.points[1].x += mx;
-      walker.points[2].x += mx;
-      walker.points[3].x += mx;
-      walker.points[4].x += mx;
-      walker.points[0].y = pointElevations[0];
-      walker.points[1].y = pointElevations[1];
-      walker.points[2].y = pointElevations[2];
-      walker.points[3].y = pointElevations[3];
-      walker.points[4].y = pointElevations[4];
-      walker.points[0].z += mz;
-      walker.points[1].z += mz;
-      walker.points[2].z += mz;
-      walker.points[3].z += mz;
-      walker.points[4].z += mz;
+    for (let i = 0; i < moveInfoPoints.length; i++) {
+      walker.points[i].sectorIndex = moveInfoPoints[i].sectorIndex;
+      walker.points[i].x += fmx;
+      walker.points[i].y = moveInfoPoints[i].elevation;
+      walker.points[i].z += fmz;
     }
 
     return {
-      move: [mx, my, mz],
-      collide: numDeviations > 0
+      walker: walker,
+      move: [fmx, fmy, fmz],
+      collide: mx != fmx || mz != fmz
     };
   }
 
@@ -280,20 +360,16 @@ class Gfx3PhysicsJWM {
    * Delete all walkers.
    */
   clearWalkers(): void {
-    this.walkers = [];
+    this.walkers.clear();
   }
 
-  $utilsFindLocationInfo(x: number, z: number): { sectorIndex: number, elev: number } {
-    for (let i = 0; i < this.sectors.length; i++) {
-      const a = this.sectors[i].v1;
-      const b = this.sectors[i].v2;
-      const c = this.sectors[i].v3;
-      if (UT.TRI2_POINT_INSIDE([x, z], [a[0], a[2]], [b[0], b[2]], [c[0], c[2]]) == 1) {
-        return { sectorIndex: i, elev: UT.TRI3_POINT_ELEVATION([x, z], a, b, c) };
-      }
-    }
-
-    return { sectorIndex: -1, elev: Infinity };
+  /**
+   * Return sector data.
+   * 
+   * @param {number} sectorIndex - The sector index.
+   */
+  getSectorData(sectorIndex: number): any {
+    return this.sectorsData[sectorIndex];
   }
 
   $utilsMove(sectorIndex: number, x: number, z: number, mx: number, mz: number, i: number = 0): { sectorIndex: number, mx: number, mz: number, elevation: number } {
@@ -336,7 +412,7 @@ class Gfx3PhysicsJWM {
     return this.$utilsMove(sectorIndex, x, z, mx, mz, i + 1);
   }
 
-  $utilsCreatePoint(x: number, z: number): WalkerPoint {
+  $utilsCreatePoint(x: number, z: number): Point {
     const loc = this.$utilsFindLocationInfo(x, z);
     return {
       sectorIndex: loc.sectorIndex,
@@ -344,6 +420,19 @@ class Gfx3PhysicsJWM {
       y: loc.elev,
       z: z
     };
+  }
+
+  $utilsFindLocationInfo(x: number, z: number): { sectorIndex: number, elev: number } {
+    for (let i = 0; i < this.sectors.length; i++) {
+      const a = this.sectors[i].v1;
+      const b = this.sectors[i].v2;
+      const c = this.sectors[i].v3;
+      if (UT.TRI2_POINT_INSIDE([x, z], [a[0], a[2]], [b[0], b[2]], [c[0], c[2]]) == 1) {
+        return { sectorIndex: i, elev: UT.TRI3_POINT_ELEVATION([x, z], a, b, c) };
+      }
+    }
+
+    return { sectorIndex: -1, elev: Infinity };
   }
 }
 

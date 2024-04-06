@@ -3,6 +3,8 @@ import { eventManager } from './event_manager';
 /**
  * Generic class that represents a collection of items and provides event-based features.
  * @typeParam T - The item type.
+ * It emit 'E_ITEM_ADDED' with data { item, index }
+ * It emit 'E_ITEM_REMOVED' with data { item, index }
  */
 class ArrayCollection<T> {
   items: Array<T>;
