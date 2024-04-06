@@ -26,7 +26,6 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Curves
     - Quaternions
     - Object pooling
-    - Scanlines filter
     
 - 👾 **2D**
     - Static sprite (jss)
