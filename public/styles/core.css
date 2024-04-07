@@ -42,10 +42,9 @@ body {
 
 #METRICS {
   position: absolute;
-  left: 20px;
-  top: 20px;
+  right: 20px;
+  bottom: 20px;
   padding: 10px;
-  background-color: #0000009e;
   color: white;
   width: 200px;
 }

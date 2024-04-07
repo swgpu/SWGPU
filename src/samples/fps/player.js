@@ -85,8 +85,7 @@ class PhysicsComponent {
     this.jnm = jnm;
     // -------------------
     this.lift = 0.2;
-    this.radius = 0.5;
-    this.height = 1;
+    this.radius = 3;
     this.frictionCoefficient = 0.99999999;
     this.gravityCoefficient = 0.8;
     this.gravityMax = 10;
@@ -99,11 +98,12 @@ class PhysicsComponent {
 
     if (UT.VEC3_LENGTH(this.player.velocity) > 0.1) {
       const move = UT.VEC3_SCALE(this.player.velocity, ts / 1000);
-      const navInfo = this.jnm.box(this.player.x, this.player.y + this.height * 0.5, this.player.z, this.radius, this.height, move[0], move[1], move[2], this.lift);
+      // const centerY = this.player.y + this.player.height * 0.5;
+      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, move[0], move[1], move[2], this.lift);
 
       this.player.x += navInfo.move[0];
       this.player.y += navInfo.move[1];
-      this.player.z += navInfo.move[2]; 
+      this.player.z += navInfo.move[2];
 
       if (navInfo.collideFloor) {
         this.player.velocity[1] = 0;
@@ -133,7 +133,7 @@ class CameraComponent {
   }
 
   update(ts) {
-    this.camera.setPosition(this.player.x, this.player.y, this.player.z);
+    this.camera.setPosition(this.player.x, this.player.y + this.player.height * 0.5, this.player.z);
     this.camera.setRotation(this.player.rotation[0], this.player.rotation[1], this.player.rotation[2]);
   }
 }
@@ -147,6 +147,7 @@ class Player {
     this.x = 0;
     this.y = 1;
     this.z = 0;
+    this.height = 1;
     this.dir = [0, 0, 0];
     this.velocity = [0, 0, 0];
     this.rotation = [0, 0, 0];

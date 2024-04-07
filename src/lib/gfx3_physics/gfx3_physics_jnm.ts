@@ -201,10 +201,15 @@ class Gfx3PhysicsJNM {
 
     min[1] += lift;
 
-    const wallIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
+    // const wallIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
+    //   [min[0] + mx, min[1] + my, min[2] + mz],
+    //   [max[0] + mx, max[1] + my, max[2] + mz]
+    // )) as Array<Frag>;
+
+    const wallIntersectedFrags = this.frags.filter(frag => frag.intersectBoundingBox(new Gfx3BoundingBox(
       [min[0] + mx, min[1] + my, min[2] + mz],
       [max[0] + mx, max[1] + my, max[2] + mz]
-    )) as Array<Frag>;
+    )));
 
     let fmx = mx;
     let fmy = my;
@@ -248,14 +253,19 @@ class Gfx3PhysicsJNM {
 
     min[1] -= lift;
     snapFloorDistance = snapFloorDistance == 0 ? Math.abs(my) : snapFloorDistance;
-    
-    const floorIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
+
+    // const floorIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
+    //   [x + fmx, min[1] - snapFloorDistance, z + fmz],
+    //   [x + fmx, max[1] + lift, z + fmz]
+    // )) as Array<Frag>;
+
+    const floorIntersectedFrags = this.frags.filter(frag => frag.intersectBoundingBox(new Gfx3BoundingBox(
       [x + fmx, min[1] - snapFloorDistance, z + fmz],
       [x + fmx, max[1] + lift, z + fmz]
-    )) as Array<Frag>;
+    )));
 
     const elevation = this.$getElevation(floorIntersectedFrags, [x + fmx, max[1] + lift, z + fmz]);
-    const delta = elevation ? min[1] - elevation.value : Infinity; // on negative we climbing, on positive we check snap for descent
+    const delta = elevation ? min[1] - elevation.value : Infinity; // on negative we climbing, on positive we check for descent
 
     if (snapFloor && delta < snapFloorDistance && elevation) {
       collideFloor = true;

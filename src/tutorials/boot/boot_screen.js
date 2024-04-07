@@ -5,6 +5,7 @@ import { Screen } from '../../lib/screen/screen';
 import { UIMenuText } from '../../lib/ui_menu_text/ui_menu_text';
 // ---------------------------------------------------------------------------------------
 import { SamplesBootScreen } from '../../samples/boot/boot_screen';
+import { IsolationScreen } from '../isolation/isolation_screen';
 import { AsgardScreen } from '../asgard/asgard_screen';
 // ---------------------------------------------------------------------------------------
 
@@ -15,8 +16,8 @@ class TutorialsBootScreen extends Screen {
   }
 
   async onEnter() {
-    this.uiMenu.add('0', 'Your first 2D tutorial - Demoname');
-    this.uiMenu.add('1', 'Your first 3D tutorial - Asgard');
+    this.uiMenu.add('0', 'Isolation - Your first tutorial');
+    this.uiMenu.add('1', 'Asgard - Your second tutorial');
     this.uiMenu.add('2', 'Samples');
     uiManager.addWidget(this.uiMenu, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
@@ -30,7 +31,7 @@ class TutorialsBootScreen extends Screen {
 
   handleMenuItemSelected(data) {
     if (data.id == 0) {
-      
+      screenManager.requestSetScreen(new IsolationScreen());
     }
     else if (data.id == 1) {
       screenManager.requestSetScreen(new AsgardScreen());

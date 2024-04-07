@@ -31,18 +31,19 @@ class FPSScreen extends Screen {
   draw() {
     gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [1, 1, 1], [0, 0, 0]);
     this.map.mesh.draw();
+    this.map.jnm.draw();
   }
 
   async createMap() {
     const mesh = new Gfx3MeshJSM();
-    await mesh.loadFromFile('./samples/fps/map.jsm');
+    await mesh.loadFromFile('./samples/fps/Level.jsm');
     mesh.setMaterial(new Gfx3Material({
       lightning: true,
       texture: await gfx3TextureManager.loadTexture('./samples/fps/map.png')
     }));
 
     const jnm = new Gfx3PhysicsJNM();
-    await jnm.loadFromFile('./samples/fps/map.jnm');
+    await jnm.loadFromFile('./samples/fps/Level.jnm');
 
     return { mesh, jnm };
   }
