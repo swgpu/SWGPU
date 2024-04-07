@@ -43,7 +43,7 @@ class Gfx3CameraWASD extends Gfx3Camera {
    * @param {number} ts - The timestep.
    */
   update(ts: number): void {
-    const cameraAxies = this.getLocalAxies();
+    const cameraAxies = this.getAxies();
     let move: vec3 = [0, 0, 0];
   
     if (inputManager.isActiveAction('LEFT')) {

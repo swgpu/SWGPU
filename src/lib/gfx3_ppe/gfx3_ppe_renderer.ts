@@ -1,4 +1,3 @@
-import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { Gfx3PPERendererAbstract } from './gfx3_ppe_renderer_abstract';
 import { VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_ppe_shader';
 
@@ -8,9 +7,6 @@ import { VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_ppe_shader';
 class Gfx3PPERenderer extends Gfx3PPERendererAbstract {
   constructor() {
     super('PPE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, new Float32Array([
-      1.0, // ENABLED
-      gfx3Manager.getWidth(), // SCREEN_WIDTH
-      gfx3Manager.getHeight(), // SCREEN_HEIGHT
       1.0, // PIXELATION_ENABLED
       300.0, // PIXELATION_WIDTH
       300.0, // PIXELATION_HEIGHT
@@ -22,15 +18,6 @@ class Gfx3PPERenderer extends Gfx3PPERendererAbstract {
       1.0, // DITHER_SCALE_X
       1.0 // DITHER_SCALE_Y
     ]));
-  }
-
-  /**
-   * Enable post-process effects.
-   * 
-   * @param {boolean} enabled - Indicating whether ppe should be enabled or disable.
-   */
-  setEnabled(enabled: boolean): void {
-    this.params[0] = enabled ? 1.0 : 0.0;
   }
 
   /**
@@ -128,13 +115,6 @@ class Gfx3PPERenderer extends Gfx3PPERendererAbstract {
    */
   setDitherScaleY(ditherScaleY: number): void {
     this.params[12] = ditherScaleY;
-  }
-
-  /**
-   * Check if post-process effects is enabled.
-   */
-  isEnabled(): boolean {
-    return this.params[0] == 1.0;
   }
 
   /**

@@ -111,23 +111,24 @@ class Room {
     let moveDir = UT.VEC3_ZERO;
 
     if (inputManager.isActiveAction('LEFT')) {
-      moveDir = UT.VEC3_LEFT;
+      moveDir = UT.VEC3_ADD(moveDir, UT.VEC3_LEFT);
       moving = true;
     }
-    else if (inputManager.isActiveAction('RIGHT')) {
-      moveDir = UT.VEC3_RIGHT;
+    if (inputManager.isActiveAction('RIGHT')) {
+      moveDir = UT.VEC3_ADD(moveDir, UT.VEC3_RIGHT);
       moving = true;
     }
-    else if (inputManager.isActiveAction('UP')) {
-      moveDir = UT.VEC3_FORWARD;
+    if (inputManager.isActiveAction('UP')) {
+      moveDir = UT.VEC3_ADD(moveDir, UT.VEC3_FORWARD);
       moving = true;
     }
-    else if (inputManager.isActiveAction('DOWN')) {
-      moveDir = UT.VEC3_BACKWARD;
+    if (inputManager.isActiveAction('DOWN')) {
+      moveDir = UT.VEC3_ADD(moveDir, UT.VEC3_BACKWARD);
       moving = true;
     }
 
     if (moving && !this.pause) {
+      moveDir = UT.VEC3_NORMALIZE(moveDir);
       const moveX = moveDir[0] * CHAR_SPEED * (ts / 1000);
       const moveZ = moveDir[2] * CHAR_SPEED * (ts / 1000);
       this.controller.move(moveX, moveZ, true);

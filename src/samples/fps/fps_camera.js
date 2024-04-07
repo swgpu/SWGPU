@@ -49,7 +49,7 @@ class FPSCamera extends Gfx3Camera {
   }
 
   update(ts) {
-    const cameraAxies = this.getLocalAxies();
+    const cameraAxies = this.getAxies();
     const dir = [0, 0];
     const velocity = [0, 0, 0];
     let moving = false;

@@ -52,7 +52,6 @@ class Gfx3PhysicsJWM {
   sharedPool: Array<Shared>;
   points: Map<string, Point>;
   walkers: Map<string, Walker>;
-  debugEnabled: boolean;
   debugVertices: Array<number>;
   debugVertexCount: number;
 
@@ -63,7 +62,6 @@ class Gfx3PhysicsJWM {
     this.sharedPool = [];
     this.points = new Map<string, Point>();
     this.walkers = new Map<string, Walker>();
-    this.debugEnabled = true;
     this.debugVertices = [];
     this.debugVertexCount = 0;
   }
@@ -117,10 +115,6 @@ class Gfx3PhysicsJWM {
    * The update function.
    */
   update(): void {
-    if (!this.debugEnabled) {
-      return;
-    }
-
     this.debugVertices = [];
     this.debugVertexCount = 0;
 
@@ -151,24 +145,11 @@ class Gfx3PhysicsJWM {
    * The draw function.
    */
   draw(): void {
-    if (!this.debugEnabled) {
-      return;
-    }
-
     gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount, UT.MAT4_IDENTITY());
 
     for (const point of this.points.values()) {
       gfx3DebugRenderer.drawSphere(UT.MAT4_TRANSLATE(point.x, point.y, point.z), 0.01, 2);
     }
-  }
-
-  /**
-   * Enable the debug display.
-   * 
-   * @param {boolean} enabled - The enabled flag.
-   */
-  enableDebug(enabled: boolean): void {
-    this.debugEnabled = enabled;
   }
 
   /**

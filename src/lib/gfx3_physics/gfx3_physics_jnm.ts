@@ -52,16 +52,18 @@ class Gfx3PhysicsJNM {
   frags: Array<Frag>;
   fragsData: Array<any>;
   boundingBox: Gfx3BoundingBox;
-  debugEnabled: boolean;
+  debugMeshEnabled: boolean;
+  debugBspEnabled: boolean;
   debugVertices: Array<number>;
   debugVertexCount: number;
 
   constructor() {
-    this.btree = new Gfx3TreePartition(20, 10);
+    this.btree = new Gfx3TreePartition(20, 3);
     this.frags = [];
     this.fragsData = [];
     this.boundingBox = new Gfx3BoundingBox();
-    this.debugEnabled = true;
+    this.debugBspEnabled = true;
+    this.debugMeshEnabled = true;
     this.debugVertices = [];
     this.debugVertexCount = 0;
   }
@@ -70,8 +72,10 @@ class Gfx3PhysicsJNM {
    * Load asynchronously navmesh data from a json file (jnm).
    * 
    * @param {string} path - The file path.
+   * @param {number} bspMaxChildren - The maximum of children per bsp node.
+   * @param {number} bspMaxDepth - The maximum depth for bsp tree.
    */
-  async loadFromFile(path: string): Promise<void> {
+  async loadFromFile(path: string, bspMaxChildren: number = 20, bspMaxDepth: number = 10): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
 
@@ -80,7 +84,7 @@ class Gfx3PhysicsJNM {
     }
 
     this.boundingBox = new Gfx3BoundingBox(json['Min'], json['Max']);
-    this.btree = new Gfx3TreePartition(20, 3, this.boundingBox);
+    this.btree = new Gfx3TreePartition(bspMaxChildren, bspMaxDepth, this.boundingBox);
     this.frags = [];
 
     for (let i = 0; i < json['Frags'].length; i++) {
@@ -101,10 +105,6 @@ class Gfx3PhysicsJNM {
    * The update function.
    */
   update(): void {
-    if (!this.debugEnabled) {
-      return;
-    }
-
     this.debugVertices = [];
     this.debugVertexCount = 0;
 
@@ -123,61 +123,58 @@ class Gfx3PhysicsJNM {
    * The draw function.
    */
   draw(): void {
-    if (!this.debugEnabled) {
-      return;
+    if (this.debugBspEnabled) {
+      this.btree.draw();
     }
 
-    gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount, UT.MAT4_IDENTITY());
-  }
-
-  /**
-   * Enable the debug display.
-   * 
-   * @param {boolean} enabled - The enabled flag.
-   */
-  enableDebug(enabled: boolean): void {
-    this.debugEnabled = enabled;
+    if (this.debugMeshEnabled) {
+      gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount, UT.MAT4_IDENTITY());
+    }
   }
 
   /**
    * Returns a new move with smooth sliding along wall for the given point (plan xz).
    * Note: Utility used to handle collisions manually for full flexibility.
    * 
-   * @param {vec3} position - The sensor position.
-   * @param {number} mx - The movement in x-axis.
-   * @param {number} mz - The movement in z-axis.
+   * @param {number} x - The x position of sensor.
+   * @param {number} y - The y position of sensor.
+   * @param {number} z - The z position of sensor.
    * @param {number} radius - The radius of sensor area.
    * @param {number} height - The height of sensor area.
+   * @param {number} mx - The movement in x-axis.
+   * @param {number} mz - The movement in z-axis.
    */
-  sensorXZ(position: vec3, mx: number, mz: number, radius: number, height: number): vec2 {
+  sensorXZ(x: number, y: number, z: number, radius: number, height: number, mx: number, mz: number): vec2 {
     const walls = this.btree.search(new Gfx3BoundingBox(
-      [position[0] - radius, position[1] - height * 0.5, position[2] - radius],
-      [position[0] + radius, position[1] + height * 0.5, position[2] + radius]
+      [x - radius, y - height * 0.5, z - radius],
+      [x + radius, y + height * 0.5, z + radius]
     )) as Array<Frag>;
 
-    return this.$moveXZ(walls, position, [mx, mz]);
+    return this.$moveXZ(walls, [x, y, z], [mx, mz]);
   }
 
   /**
    * Returns a new y-move to fix sensor on the floor.
    * Note: Utility used to handle collisions manually for full flexibility.
    * 
-   * @param {vec3} position - The sensor position.
-   * @param {number} mx - The movement in x-axis.
-   * @param {number} mz - The movement in z-axis.
+   * @param {number} x - The x position of sensor.
+   * @param {number} y - The y position of sensor.
+   * @param {number} z - The z position of sensor.
    * @param {number} radius - The radius of sensor area.
    * @param {number} height - The height of sensor area.
+   * @param {number} mx - The movement in x-axis.
+   * @param {number} mz - The movement in z-axis.
    */
-  sensorY(position: vec3, mx: number, mz: number, radius: number, height: number): ResSensorY {
+  sensorY(x: number, y: number, z: number, radius: number, height: number, mx: number, mz: number): ResSensorY {
     const floors = this.btree.search(new Gfx3BoundingBox(
-      [position[0] - radius, position[1] - height * 0.5, position[2] - radius],
-      [position[0] + radius, position[1] + height * 0.5, position[2] + radius]
+      [x - radius, y - height * 0.5, z - radius],
+      [x + radius, y + height * 0.5, z + radius]
     )) as Array<Frag>;
 
-    const elevation = this.$getElevation(floors, [position[0] + mx, position[1] + height * 0.5, position[2] + mz]);
+    const elevation = this.$getElevation(floors, [x + mx, y + height * 0.5, z + mz]);
 
     return {
-      move: elevation ? elevation.value - position[1] : 0,
+      move: elevation ? elevation.value - y : 0,
       fragIndex: elevation ? elevation.fragIndex : -1
     };
   }
@@ -186,17 +183,19 @@ class Gfx3PhysicsJNM {
    * Returns a new move with smooth sliding along wall and floor for the given box.
    * Infos are composed to a move vector, a wall collide flag and floor collide flag.
    * 
-   * @param {vec3} position - The center of the box.
+   * @param {number} x - The x position of the box center.
+   * @param {number} y - The y position of the box center.
+   * @param {number} z - The z position of the box center.
+   * @param {number} radius - The radius of the box.
+   * @param {number} height - The height of the box.
    * @param {number} mx - The movement in the x-axis.
    * @param {number} my - The movement in the y-axis.
    * @param {number} mz - The movement in the z-axis.
-   * @param {number} radius - The radius of the box.
-   * @param {number} height - The height of the box.
    * @param {number} lift - The lift is used to elevate the virtual bounding box to let passing over little step or micro obstacles on the floor.
    */
-  box(position: vec3, mx: number, my: number, mz: number, radius: number, height: number, lift: number = 0.2): ResBox {
-    const min = [position[0] - radius, position[1] - height * 0.5, position[2] - radius];
-    const max = [position[0] + radius, position[1] + height * 0.5, position[2] + radius];
+  box(x: number, y: number, z: number, radius: number, height: number, mx: number, my: number, mz: number, lift: number = 0.2): ResBox {
+    const min = [x - radius, y - height * 0.5, z - radius];
+    const max = [x + radius, y + height * 0.5, z + radius];
 
     min[1] += lift;
 
@@ -226,7 +225,7 @@ class Gfx3PhysicsJNM {
         continue;
       }
 
-      const moveXZ = GET_FINAL_MOVE_XZ(wallIntersectedFrags, points[i], [fmx, fmz]);
+      const moveXZ = this.$moveXZ(wallIntersectedFrags, points[i], [fmx, fmz]);
       if (moveXZ[0] == 0 && moveXZ[1] == 0) {
         fmx = 0;
         fmz = 0;
@@ -247,100 +246,22 @@ class Gfx3PhysicsJNM {
 
     min[1] -= lift;
 
-    const centerX = (min[0] + max[0]) * 0.5;
-    const centerZ = (min[2] + max[2]) * 0.5;
-    
     const floorIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
-      [centerX + fmx, min[1] + my, centerZ + fmz],
-      [centerX + fmx, max[1] + my, centerZ + fmz]
+      [x + fmx, min[1] + my, z + fmz],
+      [x + fmx, max[1] + my, z + fmz]
     )) as Array<Frag>;
 
-    const elevation = GET_ELEVATION(floorIntersectedFrags, [centerX + fmx, max[1], centerZ + fmz]);
-    if (elevation != Infinity) {
+    const elevation = this.$getElevation(floorIntersectedFrags, [x + fmx, max[1], z + fmz]);
+    if (elevation) {
       collideFloor = true;
-      fmy = elevation - min[1];
+      fmy = elevation.value - min[1];
     }
 
     return {
       move: [fmx, fmy, fmz],
       collideWall: collideWall,
       collideFloor: collideFloor,
-      // fragIndex: elevation ? elevation.fragIndex : -1
-      fragIndex: -1
-    };
-  }
-
-  move(position: vec3, move: vec3, radius: number, height: number, lift: number = 0.2): ResBox {
-    const aabb = Gfx3BoundingBox.createFromCenter(position[0], position[1], position[2], radius * 2, height, radius * 2);
-
-    let fmx = move[0];
-    let fmy = move[1];
-    let fmz = move[2];
-    let collideWall = false;
-    let collideFloor = false;
-    aabb.min[1] += lift;
-
-    const wallIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
-      [aabb.min[0] + move[0], aabb.min[1] + move[1], aabb.min[2] + move[2]],
-      [aabb.max[0] + move[0], aabb.max[1] + move[1], aabb.max[2] + move[2]]
-    )) as Array<Frag>;
-
-    const points: Array<vec3> = [
-      [aabb.min[0], aabb.min[1], aabb.max[2]],
-      [aabb.min[0], aabb.min[1], aabb.min[2]],
-      [aabb.max[0], aabb.min[1], aabb.min[2]],
-      [aabb.max[0], aabb.min[1], aabb.max[2]]
-    ];
-
-    let deviatedPoints: Array<boolean> = [];
-    let i = 0;
-
-    while (i < points.length) {
-      if (deviatedPoints[i]) {
-        i++;
-        continue;
-      }
-
-      const moveXZ = GET_FINAL_MOVE_XZ(wallIntersectedFrags, points[i], [fmx, fmz]);
-      if (moveXZ[0] == 0 && moveXZ[1] == 0) {
-        fmx = 0;
-        fmz = 0;
-        collideWall = true;
-        break;
-      }
-      else if (moveXZ[0] != fmx || moveXZ[1] != fmz) {
-        fmx = moveXZ[0];
-        fmz = moveXZ[1];
-        collideWall = true;
-        deviatedPoints[i] = true;
-        i = 0;
-        continue;
-      }
-
-      i++;
-    }
-
-    aabb.min[1] -= lift;
-
-    const center = aabb.getCenter();
-    const floorIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
-      [center[0] + fmx, aabb.min[1] + fmy, center[2] + fmz],
-      [center[0] + fmx, aabb.max[1] + fmy, center[2] + fmz]
-    )) as Array<Frag>;
-
-    const footElevation = aabb.min[1];
-    const elevation = GET_ELEVATION(floorIntersectedFrags, [center[0] + fmx, aabb.max[1], center[2] + fmz]);
-    if (elevation != Infinity) {
-      collideFloor = true;
-      fmy = elevation - footElevation;
-    }
-
-    return {
-      move: [fmx, fmy, fmz],
-      collideWall: collideWall,
-      collideFloor: collideFloor,
-      // fragIndex: elevation ? elevation.fragIndex : -1
-      fragIndex: -1
+      fragIndex: elevation ? elevation.fragIndex : -1
     };
   }
 
@@ -374,6 +295,38 @@ class Gfx3PhysicsJNM {
     }
 
     return minFrag ? { hit: outIntersectPoint, distance: minFragLength, fragIndex: minFrag.index } : null;
+  }
+
+  /**
+   * Enable the debug bsp display.
+   * 
+   * @param {boolean} enabled - The enabled flag.
+   */
+  enableDebugBsp(enabled: boolean): void {
+    this.debugBspEnabled = enabled;
+  }
+
+  /**
+   * Enable the debug mesh display.
+   * 
+   * @param {boolean} enabled - The enabled flag.
+   */
+  enableDebugMesh(enabled: boolean): void {
+    this.debugMeshEnabled = enabled;
+  }
+
+  /**
+   * Check if bsp debugging is enabled.
+   */
+  isDebugBspEnabled(): boolean {
+    return this.debugBspEnabled;
+  }
+
+  /**
+   * Check if mesh debugging is enabled.
+   */
+  isDebugMeshEnabled(): boolean {
+    return this.debugMeshEnabled;
   }
 
   /**
@@ -421,86 +374,16 @@ class Gfx3PhysicsJNM {
   }
 
   $getElevation(frags: Array<Frag>, point: vec3): { value: number, fragIndex: number } | null {
-    let minFrag = null;
-    let minFragLength = Infinity;
     let outIntersectPoint: vec3 = [0, 0, 0];
 
     for (const frag of frags) {
       if (UT.RAY_TRIANGLE(point, [0, -1, 0], frag.a, frag.b, frag.c, true, outIntersectPoint)) {
-        return { value: outIntersectPoint[1], fragIndex: frag.index };  
+        return { value: outIntersectPoint[1], fragIndex: frag.index };
       }
     }
 
-    return null;  
+    return null;
   }
 }
 
 export { Gfx3PhysicsJNM };
-
-
-
-
-// $getElevation(frags: Array<Frag>, point: vec3): { value: number, fragIndex: number } | null {
-//   let minFrag = null;
-//   let minFragLength = Infinity;
-//   let outIntersectPoint: vec3 = [0, 0, 0];
-
-//   for (const frag of frags) {
-//     if (UT.RAY_TRIANGLE(point, [0, -1, 0], frag.a, frag.b, frag.c, true, outIntersectPoint)) {
-//       const pen = UT.VEC3_SUBSTRACT(outIntersectPoint, point);
-//       const penLength = UT.VEC3_LENGTH(pen);
-//       if (penLength < minFragLength) {
-//         minFragLength = penLength;
-//         minFrag = frag;
-//       }
-//     }
-//   }
-
-//   return minFrag ? { value: outIntersectPoint[1], fragIndex: minFrag.index } : null;  
-// }
-
-
-
-function GET_FINAL_MOVE_XZ(frags: Array<Frag>, point: vec3, move: vec2, i: number = 0): vec2 {
-  let minFrag = null;
-  let minFragLength = Infinity;
-
-  if (i > MOVE_MAX_RECURSIVE_CALL) {
-    return [0, 0];
-  }
-
-  for (const frag of frags) {
-    const outIntersect: vec3 = [0, 0, 0];
-    if (UT.RAY_PLAN(point, [move[0], 0, move[1]], frag.a, frag.n, true, outIntersect)) {
-      const pen = UT.VEC3_SUBSTRACT(outIntersect, point);
-      const penLength = UT.VEC3_LENGTH(pen);
-      if (penLength <= UT.VEC2_LENGTH(move) + 0.001 && penLength < minFragLength) {
-        minFragLength = penLength;
-        minFrag = frag;
-      }
-    }
-  }
-
-  if (minFrag) {
-    const newMove = GET_MOVE_PROJECTION(minFrag, move);
-    return GET_FINAL_MOVE_XZ(frags, point, newMove, i + 1);
-  }
-
-  return move;
-}
-
-function GET_MOVE_PROJECTION(frag: Frag, move: vec2): vec2 {
-  const newMove = UT.VEC2_PROJECTION_COS([move[0], move[1]], [frag.t[0], frag.t[2]]);
-  return newMove;
-}
-
-function GET_ELEVATION(frags: Array<Frag>, point: vec3): number {
-  for (const frag of frags) {
-    const outIntersect: vec3 = [0, 0, 0];
-    if (UT.RAY_TRIANGLE(point, [0, -1, 0], frag.a, frag.b, frag.c, true, outIntersect)) {
-      return outIntersect[1];
-    }
-  }
-
-  return Infinity;
-}

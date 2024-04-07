@@ -1,3 +1,8 @@
+// ************************************
+// @todo: change for generic object pooling manager
+// ************************************
+
+
 // import { Gfx3Mesh } from '../gfx3_mesh/gfx3_mesh';
 
 // interface MeshInstance {

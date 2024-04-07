@@ -186,6 +186,20 @@ class Gfx3CameraOrbit extends Gfx3Camera {
     return this.zoomSpeed;
   }
 
+  /**
+   * Returns the theta angle (vertical).
+   */
+  getTheta(): number {
+    return this.theta;
+  }
+
+  /**
+   * Returns the phi angle (horizontal).
+   */
+  getPhi(): number {
+    return this.phi;
+  }
+
   $handleMouseUp(): void {
     const delta = Date.now()  - this.lastDragTimestamp;
     if (delta >= 100) {

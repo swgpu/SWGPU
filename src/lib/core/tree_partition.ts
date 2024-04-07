@@ -8,6 +8,7 @@ export type SplitResult<T> = {
 export interface ITreePartitionMethod<T> {
   split(objects: Array<T>): SplitResult<T>;
   search(node: TreePartitionNode<T>, ...params: any[]): Array<T>;
+  draw(): void;
 }
 
 /**
@@ -28,6 +29,10 @@ class TreePartition<T> {
     this.maxChildren = maxChildren;
     this.maxDepth = maxDepth;
     this.root = new TreePartitionNode<T>(this, 0, method);
+  }
+
+  draw(): void {
+    this.root.draw();
   }
 
   /**
@@ -89,12 +94,24 @@ class TreePartitionNode<T> {
     this.method = method;
   }
 
- /**
-  * Search and return all objects that intersect with the target.
-  * 
-  * @param {T} target - The target object.
-  * @param {Array<T>} results - All matching objects.
-  */
+  draw(): void {
+    this.method.draw();
+
+    if (this.left) {
+      this.left.draw();
+    }
+
+    if (this.right) {
+      this.right.draw();
+    }
+  }  
+
+  /**
+   * Search and return all objects that intersect with the target.
+   * 
+   * @param {T} target - The target object.
+   * @param {Array<T>} results - All matching objects.
+   */
   search(target: T, results: Array<T> = []): Array<T> {
     return this.method.search(this, target, results);
   }

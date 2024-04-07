@@ -354,7 +354,6 @@ If you have a suggestion that would make this better, please fork the repo and c
 - Bug 2D Fighter
 - Tuto3D:
  - Add camera controller.
- - Add other entity to make collide test
 
 ## License 
 WARME engine is released under the [MIT](https://opensource.org/licenses/MIT) license. 

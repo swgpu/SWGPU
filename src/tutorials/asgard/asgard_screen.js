@@ -18,11 +18,11 @@ class AsgardScreen extends Screen {
 
   async onEnter() {
     this.map = await this.createMap();
-    this.player = await this.createPlayer(this.map.jnm);
+    this.player = await this.createPlayer(this.map.jnm, this.camera);
   }
 
   update(ts) {
-    // this.camera.setTarget(this.player.getPosition());
+    this.camera.setTarget([this.player.x, this.player.y, this.player.z]);
     this.map.mesh.update(ts);
     this.map.jnm.update(ts);
     this.camera.update(ts);
@@ -31,7 +31,7 @@ class AsgardScreen extends Screen {
 
   draw() {
     this.map.mesh.draw();
-    this.map.jnm.draw();
+    // this.map.jnm.draw();
     this.player.draw();
   }
 
@@ -43,14 +43,13 @@ class AsgardScreen extends Screen {
     }));
 
     const jnm = new Gfx3PhysicsJNM();
-    jnm.enableDebug(false);
     await jnm.loadFromFile('./tutorials/asgard/map.jnm');
 
     return { mesh, jnm };
   }
 
-  async createPlayer(jnm) {
-    const entity = new Character(jnm);
+  async createPlayer(jnm, camera) {
+    const entity = new Character(jnm, camera);
     await entity.load('./tutorials/asgard/barret.jam', './tutorials/asgard/barret.png');
     return entity;
   }

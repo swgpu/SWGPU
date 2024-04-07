@@ -4,40 +4,85 @@ import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
 import { UT } from '../../lib/core/utils';
 import { Gfx3MeshJAM } from '../../lib/gfx3_mesh/gfx3_mesh_jam';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
-import { Gfx3BoundingBox } from '../../lib/gfx3/gfx3_bounding_box';
 // ---------------------------------------------------------------------------------------
 
+// class InputComponent {
+//   constructor(entity) {
+//     this.entity = entity;
+//   }
+
+//   update(ts) {
+//     let moving = false;
+//     this.entity.dir = [0, 0, 0];
+
+//     if (inputManager.isActiveAction('LEFT')) {
+//       this.entity.dir = UT.VEC3_ADD(this.entity.dir, UT.VEC3_LEFT);
+//       moving = true;
+//     }
+
+//     if (inputManager.isActiveAction('RIGHT')) {
+//       this.entity.dir = UT.VEC3_ADD(this.entity.dir, UT.VEC3_RIGHT);
+//       moving = true;
+//     }
+
+//     if (inputManager.isActiveAction('UP')) {
+//       this.entity.dir = UT.VEC3_ADD(this.entity.dir, UT.VEC3_FORWARD);
+//       moving = true;
+//     }
+
+//     if (inputManager.isActiveAction('DOWN')) {
+//       this.entity.dir = UT.VEC3_ADD(this.entity.dir, UT.VEC3_BACKWARD);
+//       moving = true;
+//     }
+
+//     if (moving) {
+//       this.entity.dir = UT.VEC3_NORMALIZE(this.entity.dir);
+//       this.entity.rotation = UT.VEC2_ANGLE([this.entity.dir[0], this.entity.dir[2]]);
+//     }
+//   }
+// }
+
 class InputComponent {
-  constructor(entity) {
+  constructor(entity, camera) {
     this.entity = entity;
+    this.camera = camera;
   }
 
   update(ts) {
     let moving = false;
+    let moveAngle = 0;
+
     this.entity.dir = [0, 0, 0];
 
     if (inputManager.isActiveAction('LEFT')) {
       this.entity.dir = UT.VEC3_ADD(this.entity.dir, UT.VEC3_LEFT);
+      moveAngle += -Math.PI / 2;
       moving = true;
     }
 
     if (inputManager.isActiveAction('RIGHT')) {
       this.entity.dir = UT.VEC3_ADD(this.entity.dir, UT.VEC3_RIGHT);
+      moveAngle += Math.PI / 2;
       moving = true;
     }
 
     if (inputManager.isActiveAction('UP')) {
       this.entity.dir = UT.VEC3_ADD(this.entity.dir, UT.VEC3_FORWARD);
+      moveAngle += 0;
       moving = true;
     }
 
     if (inputManager.isActiveAction('DOWN')) {
       this.entity.dir = UT.VEC3_ADD(this.entity.dir, UT.VEC3_BACKWARD);
+      moveAngle += -Math.PI;
       moving = true;
     }
 
     if (moving) {
-      this.entity.dir = UT.VEC3_NORMALIZE(this.entity.dir);
+      const phi = this.camera.getPhi();
+      const x = Math.cos(phi + moveAngle);
+      const z = Math.sin(phi + moveAngle);
+      this.entity.dir = [-x, 0, -z];
       this.entity.rotation = UT.VEC2_ANGLE([this.entity.dir[0], this.entity.dir[2]]);
     }
   }
@@ -48,7 +93,7 @@ class PhysicsComponent {
     this.entity = entity;
     this.jnm = jnm;
     // -------------------
-    this.lift = 0.2;
+    this.lift = 0.8;
     this.radius = 0.5;
     this.height = 0.5;
     this.frictionCoefficient = 0.99999999;
@@ -63,9 +108,7 @@ class PhysicsComponent {
 
     if (UT.VEC3_LENGTH(this.entity.velocity) > 0.1) {
       const move = UT.VEC3_SCALE(this.entity.velocity, ts / 1000);
-      // const navInfo = this.jnm.box([this.entity.x, this.entity.y, this.entity.z], move[0], move[1], move[2], this.radius, this.height, this.lift);
-      const pos = [this.entity.x, this.entity.y, this.entity.z];
-      const navInfo = this.jnm.move(pos, move, this.radius, this.height, this.lift);
+      const navInfo = this.jnm.box(this.entity.x, this.entity.y + this.height * 0.5, this.entity.z, this.radius, this.height, move[0], move[1], move[2], this.lift);
 
       this.entity.x += navInfo.move[0];
       this.entity.y += navInfo.move[1];
@@ -84,8 +127,8 @@ class PhysicsComponent {
   }
 
   draw() {
-    const min = [this.entity.x - this.radius, this.entity.y - this.height * 0.5, this.entity.z - this.radius];
-    const max = [this.entity.x + this.radius, this.entity.y + this.height * 0.5, this.entity.z + this.radius];
+    const min = [this.entity.x - this.radius, this.entity.y, this.entity.z - this.radius];
+    const max = [this.entity.x + this.radius, this.entity.y + this.height, this.entity.z + this.radius];
     gfx3DebugRenderer.drawBoundingBox(UT.MAT4_IDENTITY(), min, max);
   }
 }
@@ -112,15 +155,13 @@ class GraphicsComponent {
 
   draw() {
     this.jam.draw();
-    const aabb = this.jam.getWorldBoundingBox();
-    gfx3DebugRenderer.drawBoundingBox(UT.MAT4_IDENTITY(), aabb.min, aabb.max);
   }
 }
 
 class Character {
-  constructor(jnm) {
+  constructor(jnm, camera) {
     this.graphics = new GraphicsComponent(this);
-    this.input = new InputComponent(this);
+    this.input = new InputComponent(this, camera);
     this.physics = new PhysicsComponent(this, jnm);
     // -------------------------
     this.x = 0;

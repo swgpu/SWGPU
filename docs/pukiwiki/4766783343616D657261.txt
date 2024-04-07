@@ -13,7 +13,7 @@ Change the view attached to the camera.~
 - ''getCameraMatrix''(): mat4~
 Returns the camera matrix.~
 ~
-- ''getLocalAxies''()~
+- ''getAxies''()~
 Returns the three local axes of the transformable.~
 ~
 - ''lookAt''(x: number, y: number, z: number, up: vec3): void~
