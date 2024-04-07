@@ -192,8 +192,10 @@ class Gfx3PhysicsJNM {
    * @param {number} my - The movement in the y-axis.
    * @param {number} mz - The movement in the z-axis.
    * @param {number} lift - The lift is used to elevate the virtual bounding box to let passing over little step or micro obstacles on the floor.
+   * @param {number} snapFloor - Enable or disable floor snapping.
+   * @param {number} snapFloorDistance - Minimum distance to snap the floor.
    */
-  box(x: number, y: number, z: number, radius: number, height: number, mx: number, my: number, mz: number, lift: number = 0.2): ResBox {
+  box(x: number, y: number, z: number, radius: number, height: number, mx: number, my: number, mz: number, lift: number = 0.2, snapFloor: boolean = true, snapFloorDistance: number = 1): ResBox {
     const min = [x - radius, y - height * 0.5, z - radius];
     const max = [x + radius, y + height * 0.5, z + radius];
 
@@ -245,14 +247,17 @@ class Gfx3PhysicsJNM {
     }
 
     min[1] -= lift;
-
+    snapFloorDistance = snapFloorDistance == 0 ? Math.abs(my) : snapFloorDistance;
+    
     const floorIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
-      [x + fmx, min[1] + my, z + fmz],
-      [x + fmx, max[1] + my, z + fmz]
+      [x + fmx, min[1] - snapFloorDistance, z + fmz],
+      [x + fmx, max[1] + lift, z + fmz]
     )) as Array<Frag>;
 
-    const elevation = this.$getElevation(floorIntersectedFrags, [x + fmx, max[1], z + fmz]);
-    if (elevation) {
+    const elevation = this.$getElevation(floorIntersectedFrags, [x + fmx, max[1] + lift, z + fmz]);
+    const delta = elevation ? min[1] - elevation.value : Infinity; // on negative we climbing, on positive we check snap for descent
+
+    if (snapFloor && delta < snapFloorDistance && elevation) {
       collideFloor = true;
       fmy = elevation.value - min[1];
     }
@@ -373,7 +378,7 @@ class Gfx3PhysicsJNM {
     return move;
   }
 
-  $getElevation(frags: Array<Frag>, point: vec3): { value: number, fragIndex: number } | null {
+  $getElevation(frags: Array<Frag>, point: vec3): { value: number, fragIndex: number } | null { // need a closest check
     let outIntersectPoint: vec3 = [0, 0, 0];
 
     for (const frag of frags) {
