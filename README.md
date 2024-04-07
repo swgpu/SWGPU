@@ -1,8 +1,4 @@
 # WARME Y2K
-<p align="center">
-    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner-new.png" alt="logo"/>
-</p>
-
 ![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.3-blue)
 
 > [!NOTE]  
@@ -350,10 +346,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 ## Roadmap
 - Add spotlight (no-delay)
 - FPS: Add weapon, bullet, camera movement and strife-jumping to FPS sample + change the map to fit Quake 3 (no-delay)
-
-- Bug 2D Fighter
-- Tuto3D:
- - Add camera controller.
+- Bug 2D Fighter on ai is idle
 
 ## License 
 WARME engine is released under the [MIT](https://opensource.org/licenses/MIT) license. 
