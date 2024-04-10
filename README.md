@@ -335,6 +335,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 2. zuda - Contribute to Triple Triad demo.
 3. luciedefraiteur - Contribute to the fog.
 4. thetinyspark - Contribute to the binary space partition.
+5. Impre-visible - Contribute to 2D tutorial.
 
 ## Some parts taken for this work
 - DOM for UI elements
