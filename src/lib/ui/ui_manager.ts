@@ -3,6 +3,8 @@ import { UIWidget } from './ui_widget';
 
 /**
  * Singleton UI manager.
+ * It emit 'E_FOCUSED' with data { widget }
+ * It emit 'E_UNFOCUSED'
  */
 class UIManager {
   root: HTMLDivElement;

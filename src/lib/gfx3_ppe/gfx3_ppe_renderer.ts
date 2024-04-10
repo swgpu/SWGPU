@@ -1,4 +1,3 @@
-import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { Gfx3PPERendererAbstract } from './gfx3_ppe_renderer_abstract';
 import { VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_ppe_shader';
 
@@ -8,48 +7,57 @@ import { VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_ppe_shader';
 class Gfx3PPERenderer extends Gfx3PPERendererAbstract {
   constructor() {
     super('PPE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, new Float32Array([
-      1.0,
-      gfx3Manager.getWidth(),
-      gfx3Manager.getHeight(),
-      300.0,
-      300.0,
-      16.0,
-      0.0,
-      1.0,
-      1.0,
-      1.0
+      1.0, // PIXELATION_ENABLED
+      300.0, // PIXELATION_WIDTH
+      300.0, // PIXELATION_HEIGHT
+      1.0, // COLOR_ENABLED
+      16.0, // COLOR_PRECISION
+      1.0, // DITHER_ENABLED
+      0.0, // DITHER_PATTERN_INDEX
+      1.0, // DITHER_THRESHOLD
+      1.0, // DITHER_SCALE_X
+      1.0 // DITHER_SCALE_Y
     ]));
   }
 
   /**
-   * Enable post-process effects.
+   * Enable pixelation effect.
    * 
-   * @param {boolean} enabled - Indicating whether ppe should be enabled or disable.
+   * @param {boolean} enabled - Indicating whether pixelation should be enabled or disable.
    */
-  setEnabled(enabled: boolean): void {
-    this.params[0] = enabled ? 1.0 : 0.0;
+  enablePixelation(enabled: boolean): void {
+    this.params[3] = enabled ? 1.0 : 0.0;
   }
 
   /**
    * Set the horizontal pixelation value.
-   * Low value for stronger effect.
+   * It determines the resolution you want to simulate.
    * 
    * @param {number} widthPixelation - The x-pixelation value.
    */
   setWidthPixelation(widthPixelation: number): void {
-    this.params[3] = widthPixelation;
+    this.params[4] = widthPixelation;
   }
 
   /**
    * Set the vertical pixelation value.
-   * Low value for stronger effect.
+   * It determines the resolution you want to simulate.
    * 
    * @param {number} heightPixelation - The y-pixelation value.
    */
   setHeightPixelation(heightPixelation: number): void {
-    this.params[4] = heightPixelation;
+    this.params[5] = heightPixelation;
   }
-  
+
+  /**
+   * Enable color precision effect.
+   * 
+   * @param {boolean} enabled - Indicating whether color precision should be enabled or disable.
+   */
+  enableColorPrecision(enabled: boolean): void {
+    this.params[6] = enabled ? 1.0 : 0.0;
+  }
+
   /**
    * Set the color precision.
    * It determines how much color is limited.
@@ -57,7 +65,16 @@ class Gfx3PPERenderer extends Gfx3PPERendererAbstract {
    * @param {number} colorPrecision - The color precision.
    */
   setColorPrecision(colorPrecision: number): void {
-    this.params[5] = colorPrecision;
+    this.params[7] = colorPrecision;
+  }
+
+  /**
+   * Enable dithering effect.
+   * 
+   * @param {boolean} enabled - Indicating whether dithering should be enabled or disable.
+   */
+  enableDither(enabled: boolean): void {
+    this.params[8] = enabled ? 1.0 : 0.0;
   }
 
   /**
@@ -67,7 +84,7 @@ class Gfx3PPERenderer extends Gfx3PPERendererAbstract {
    * @param {number} ditherPattern - The pattern index.
    */
   setDitherPattern(ditherPattern: number): void {
-    this.params[6] = ditherPattern;
+    this.params[9] = ditherPattern;
   }
 
   /**
@@ -77,7 +94,7 @@ class Gfx3PPERenderer extends Gfx3PPERendererAbstract {
    * @param {number} ditherThreshold - The threshold.
    */
   setDitherThreshold(ditherThreshold: number): void {
-    this.params[7] = ditherThreshold;
+    this.params[10] = ditherThreshold;
   }
 
   /**
@@ -87,7 +104,7 @@ class Gfx3PPERenderer extends Gfx3PPERendererAbstract {
    * @param {number} ditherScaleX - The x-scale.
    */
   setDitherScaleX(ditherScaleX: number): void {
-    this.params[8] = ditherScaleX;
+    this.params[11] = ditherScaleX;
   }
 
   /**
@@ -97,62 +114,76 @@ class Gfx3PPERenderer extends Gfx3PPERendererAbstract {
    * @param {number} ditherScaleY - The y-scale.
    */
   setDitherScaleY(ditherScaleY: number): void {
-    this.params[9] = ditherScaleY;
+    this.params[12] = ditherScaleY;
   }
 
   /**
-   * Check if post-process effects is enabled.
+   * Check if pixelation effect is enabled.
    */
-  getEnabled(): boolean {
-    return this.params[0] == 1.0 ? true : false;
+  isPixelationEnabled(): boolean {
+    return this.params[3] == 1.0;
   }
 
   /**
    * Return the horizontal pixelation value.
    */
-  getWidthPixelation(): number {
-    return this.params[3];
+  getPixelationWidth(): number {
+    return this.params[4];
   }
 
   /**
    * Return the vertical pixelation value.
    */
-  getHeightPixelation(): number {
-    return this.params[4];
+  getPixelationHeight(): number {
+    return this.params[5];
   }
   
+  /**
+   * Check if color precision effect is enabled.
+   */
+  isColorPrecisionEnabled(): boolean {
+    return this.params[6] == 1.0;
+  }
+
   /**
    * Return the color precision.
    */
   getColorPrecision(): number {
-    return this.params[5];
+    return this.params[7];
+  }
+
+  /**
+   * Check if dithering effect is enabled.
+   */
+  isDitherEnabled(): boolean {
+    return this.params[8] == 1.0;
   }
 
   /**
    * Get the dither pattern.
    */
   getDitherPattern(): number {
-    return this.params[6];
+    return this.params[9];
   }
 
   /**
    * Get the dither threshold.
    */
   getDitherThreshold(): number {
-    return this.params[7];
+    return this.params[10];
   }
   /**
    * Get the dither x-scale.
    */
   getDitherScaleX(): number {
-    return this.params[8];
+    return this.params[11];
   }
 
   /**
    * Get the dither y-scale.
    */
   getDitherScaleY(): number {
-    return this.params[9];
+    return this.params[12];
   }
 }
 

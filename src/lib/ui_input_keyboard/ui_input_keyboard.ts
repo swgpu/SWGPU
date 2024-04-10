@@ -6,7 +6,7 @@ const GRID_HEIGHT = 8;
 
 /**
  * A UI widget displaying a virtual keyboard.
- * It emit 'E_VALUE_CHANGED' when value changed.
+ * It emit 'E_VALUE_CHANGED' with data { value }
  */
 class UIInputKeyboard extends UIWidget {
   value: string;

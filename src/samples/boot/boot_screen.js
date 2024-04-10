@@ -25,7 +25,7 @@ import { ShadowScreen } from '../shadow/shadow_screen';
 import { BgIsoScreen } from '../bg-iso/bg_iso_screen';
 // ---------------------------------------------------------------------------------------
 
-class BootScreen extends Screen {
+class SamplesBootScreen extends Screen {
   constructor() {
     super();
     this.uiMenu = new UIMenuText({ className: 'UIMenuText UIBootMenu' });
@@ -34,23 +34,23 @@ class BootScreen extends Screen {
   async onEnter() {
     this.uiMenu.add('0', '3D Viewer');
     this.uiMenu.add('1', 'UI Menu');
-    this.uiMenu.add('2', '3D Pre-rendered Demo');
-    this.uiMenu.add('3', '3D Iso Demo');
-    this.uiMenu.add('4', '2D Visual Novel Demo');
-    this.uiMenu.add('5', '2D Tilemap Demo');
-    this.uiMenu.add('6', '2D Tilemap Pathfinding Demo');
-    this.uiMenu.add('7', '2D Board Demo');
-    this.uiMenu.add('8', '2D CCG Demo');
-    this.uiMenu.add('9', '3D FPS Demo');
-    this.uiMenu.add('10', '3D RPG Demo');
-    this.uiMenu.add('11', '3D Perf Demo');
-    this.uiMenu.add('12', '3D Particles Demo');
-    this.uiMenu.add('13', '2D Fighting Demo');
-    this.uiMenu.add('14', '3D Curve Demo');
-    this.uiMenu.add('15', '2D Triple Triad Demo');
-    this.uiMenu.add('16', '2D Tilemap Iso Demo');
-    this.uiMenu.add('17', '3D Shadow Map Demo');
-    this.uiMenu.add('18', '2D Background Iso');
+    this.uiMenu.add('2', '3D Pre-rendered');
+    this.uiMenu.add('3', '3D Isometric');
+    this.uiMenu.add('4', '2D Visual Novel');
+    this.uiMenu.add('5', '2D Tilemap');
+    this.uiMenu.add('6', '2D Tilemap Pathfinding');
+    this.uiMenu.add('7', '2D Checker');
+    this.uiMenu.add('8', '2D Trading Card Collection');
+    this.uiMenu.add('9', '3D FPS');
+    this.uiMenu.add('10', '3D RPG');
+    this.uiMenu.add('11', '3D Perf');
+    this.uiMenu.add('12', '3D Particles');
+    this.uiMenu.add('13', '2D Fighting Platform');
+    this.uiMenu.add('14', '3D Curve');
+    this.uiMenu.add('15', '2D Triple Triad');
+    this.uiMenu.add('16', '2D Tilemap Isometric');
+    this.uiMenu.add('17', '3D Shadow Map');
+    this.uiMenu.add('18', '2D Background Isometric');
     uiManager.addWidget(this.uiMenu, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
     eventManager.subscribe(this.uiMenu, 'E_ITEM_SELECTED', this, this.handleMenuItemSelected);
@@ -122,4 +122,4 @@ class BootScreen extends Screen {
   }
 }
 
-export { BootScreen };
+export { SamplesBootScreen };

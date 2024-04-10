@@ -185,6 +185,13 @@ class UT {
   }
 
   /**
+   * @param a - The vector to check.
+   */
+  static VEC2_ISZERO(a: vec2): boolean {
+    return Math.abs(a[0]) <= UT.EPSILON && Math.abs(a[1]) <= UT.EPSILON;
+  }
+
+  /**
    * @param base - The base vector.
    * @param spread - The spread vector.
    */
@@ -483,6 +490,13 @@ class UT {
   }
 
   /**
+   * @param a - The vector to check.
+   */
+  static VEC3_ISZERO(a: vec3): boolean {
+    return Math.abs(a[0]) <= UT.EPSILON && Math.abs(a[1]) <= UT.EPSILON && Math.abs(a[2]) <= UT.EPSILON;
+  }
+
+  /**
    * @param base - The base vector.
    * @param spread - The spread vector.
    */
@@ -699,6 +713,13 @@ class UT {
     out[2] = src[2];
     out[3] = src[3];
     return out;
+  }
+
+  /**
+   * @param a - The vector to check.
+   */
+  static VEC4_ISZERO(a: vec4): boolean {
+    return Math.abs(a[0]) <= UT.EPSILON && Math.abs(a[1]) <= UT.EPSILON && Math.abs(a[2]) <= UT.EPSILON && Math.abs(a[3]) <= UT.EPSILON;
   }
 
   static MAT3_CREATE(): Float32Array {
@@ -1625,17 +1646,17 @@ class UT {
     const cp = UT.VEC2_SUBSTRACT(p, c);
 
     const crossAPAB = UT.VEC2_CROSS(ap, ab);
-    if (crossAPAB < UT.EPSILON) {
+    if (crossAPAB < -UT.EPSILON) {
       return -1;
     }
 
     const crossBPBC = UT.VEC2_CROSS(bp, bc);
-    if (crossBPBC < UT.EPSILON) {
+    if (crossBPBC < -UT.EPSILON) {
       return -2;
     }
 
     const crossCPCA = UT.VEC2_CROSS(cp, ca);
-    if (crossCPCA < UT.EPSILON) {
+    if (crossCPCA < -UT.EPSILON) {
       return -3;
     }
 
@@ -1661,34 +1682,26 @@ class UT {
    * @param c - The third triangle point.
    * @param n - The normal vector.
    */
-  static TRI3_POINT_INSIDE(p: vec3, a: vec3, b: vec3, c: vec3, n?: vec3): boolean {
-    if (!n) {
-      n = UT.TRI3_NORMAL(a, b, c);
-    }
+  static TRI3_POINT_INSIDE(p: vec3, a: vec3, b: vec3, c: vec3): boolean {
+    // Compute vectors
+    const v0 = UT.VEC3_SUBSTRACT(c, a);
+    const v1 = UT.VEC3_SUBSTRACT(b, a);
+    const v2 = UT.VEC3_SUBSTRACT(p, a);
 
-    const ab = UT.VEC3_SUBSTRACT(b, a);
-    const bc = UT.VEC3_SUBSTRACT(c, b);
-    const ca = UT.VEC3_SUBSTRACT(a, c);
-    const ap = UT.VEC3_SUBSTRACT(p, a);
-    const bp = UT.VEC3_SUBSTRACT(p, b);
-    const cp = UT.VEC3_SUBSTRACT(p, c);
+    // Compute dot products
+    const dot00 = UT.VEC3_DOT(v0, v0);
+    const dot01 = UT.VEC3_DOT(v0, v1);
+    const dot02 = UT.VEC3_DOT(v0, v2);
+    const dot11 = UT.VEC3_DOT(v1, v1);
+    const dot12 = UT.VEC3_DOT(v1, v2);
 
-    const crossAPAB = UT.VEC3_CROSS(ab, ap);
-    if (UT.VEC3_DOT(crossAPAB, n) < UT.EPSILON) {
-      return false;
-    }
+    // Compute barycentric coordinates
+    const invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+    const u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+    const v = (dot00 * dot12 - dot01 * dot02) * invDenom;
 
-    const crossBPBC = UT.VEC3_CROSS(bc, bp);
-    if (UT.VEC3_DOT(crossBPBC, n) < UT.EPSILON) {
-      return false;
-    }
-
-    const crossCPCA = UT.VEC3_CROSS(ca, cp);
-    if (UT.VEC3_DOT(crossCPCA, n) < UT.EPSILON) {
-      return false;
-    }
-
-    return true;
+    // Check if point is in triangle
+    return (u >= 0) && (v >= 0) && (u + v < 1);
   }
 
   /**
@@ -1734,7 +1747,7 @@ class UT {
       return false;
     }
 
-    return UT.TRI3_POINT_INSIDE(outIntersectPoint, a, b, c, n);
+    return UT.TRI3_POINT_INSIDE(outIntersectPoint, a, b, c);
   }
 
   /**

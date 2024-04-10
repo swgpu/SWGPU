@@ -3,7 +3,7 @@ import { UIWidget } from '../ui/ui_widget';
 
 /**
  * A UI widget displaying a slider input.
- * It emit 'E_VALUE_CHANGED' when value changed.
+ * It emit 'E_VALUE_CHANGED' with data { value }
  */
 class UIInputSlider extends UIWidget {
   value: number;

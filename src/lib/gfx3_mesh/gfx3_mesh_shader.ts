@@ -115,7 +115,7 @@ struct MaterialColors {
   EMISSIVE: vec3<f32>,
   AMBIENT: vec3<f32>,
   DIFFUSE: vec3<f32>,
-  SPECULAR: vec4<f32>
+  SPECULAR: vec3<f32>
 }
 
 struct MaterialParams {
@@ -125,11 +125,15 @@ struct MaterialParams {
   HAS_TEXTURE: f32,
   HAS_DISPLACEMENT_MAP: f32,
   DISPLACEMENT_MAP_FACTOR: f32,
-  HAS_SPECULARITY_MAP: f32,
+  HAS_DIFFUSE_MAP: f32,
+  HAS_SPECULAR_MAP: f32,
+  HAS_EMISSIVE_MAP: f32,
   HAS_NORMAL_MAP: f32,
   HAS_ENV_MAP: f32,
   HAS_DECAL: f32,
-  HAS_SHADOW: f32
+  HAS_SHADOW: f32,
+  SHININESS: f32,
+  EMISSIVE_FACTOR: f32
 }
 
 struct MaterialUvs {
@@ -193,12 +197,16 @@ struct Decal {
 @group(3) @binding(1) var MAT_SAMPLER: sampler;
 @group(3) @binding(2) var MAT_DISPLACEMENT_TEXTURE: texture_2d<f32>;
 @group(3) @binding(3) var MAT_DISPLACEMENT_SAMPLER: sampler;
-@group(3) @binding(4) var MAT_SPECULARITY_TEXTURE: texture_2d<f32>;
-@group(3) @binding(5) var MAT_SPECULARITY_SAMPLER: sampler;
-@group(3) @binding(6) var MAT_NORM_TEXTURE: texture_2d<f32>;
-@group(3) @binding(7) var MAT_NORM_SAMPLER: sampler;
-@group(3) @binding(8) var MAT_ENV_MAP_TEXTURE: texture_cube<f32>;
-@group(3) @binding(9) var MAT_ENV_MAP_SAMPLER: sampler;
+@group(3) @binding(4) var MAT_DIFFUSE_TEXTURE: texture_2d<f32>;
+@group(3) @binding(5) var MAT_DIFFUSE_SAMPLER: sampler;
+@group(3) @binding(6) var MAT_SPECULAR_TEXTURE: texture_2d<f32>;
+@group(3) @binding(7) var MAT_SPECULAR_SAMPLER: sampler;
+@group(3) @binding(8) var MAT_EMISSIVE_TEXTURE: texture_2d<f32>;
+@group(3) @binding(9) var MAT_EMISSIVE_SAMPLER: sampler;
+@group(3) @binding(10) var MAT_NORM_TEXTURE: texture_2d<f32>;
+@group(3) @binding(11) var MAT_NORM_SAMPLER: sampler;
+@group(3) @binding(12) var MAT_ENV_MAP_TEXTURE: texture_cube<f32>;
+@group(3) @binding(13) var MAT_ENV_MAP_SAMPLER: sampler;
 
 @fragment
 fn main(
@@ -254,6 +262,7 @@ fn main(
 
   if (MAT_PARAMS.HAS_LIGHTNING == 1.0)
   {
+    var totalLight = vec4(0.0, 0.0, 0.0, 0.0);
     var shadow = 1.0;
     
     if (MAT_PARAMS.HAS_SHADOW == 1.0)
@@ -263,15 +272,15 @@ fn main(
 
     if (DIR_LIGHT.ENABLED == 1.0)
     {
-      outputColor += CalcDirLight(normal, FragPos, textureUV, shadow) * texel;
+      totalLight += CalcDirLight(normal, FragPos, textureUV, shadow);
     }
 
     for (var i: u32 = 0; i < POINT_LIGHT_COUNT; i++)
     {
-      outputColor += CalcPointLight(i, normal, FragPos, textureUV, shadow) * texel;
+      totalLight += CalcPointLight(i, normal, FragPos, textureUV, shadow);
     }
 
-    outputColor += vec4(MAT_COLORS.EMISSIVE, 1.0);
+    outputColor = texel * totalLight;
   }
   else
   {
@@ -375,34 +384,53 @@ fn CalcDisplacementMap(fragUV: vec2<f32>) -> vec2<f32>
 // *****************************************************************************************************************
 fn CalcLightInternal(lightDir: vec3<f32>, lightAmbient: vec3<f32>, lightDiffuse: vec3<f32>, lightSpecular: vec3<f32>, lightIntensity: f32, normal: vec3<f32>, fragPos: vec3<f32>, textureUV: vec2<f32>, shadow: f32) -> vec4<f32>
 {
-  var ambientColor = lightAmbient * lightIntensity * MAT_COLORS.AMBIENT;
+  var ambientColor = lightAmbient * lightIntensity * MAT_COLORS.AMBIENT; // change for lightambiantintensity
   var diffuseColor = vec3(0.0, 0.0, 0.0);
   var specularColor = vec3(0.0, 0.0, 0.0);
-  var specularExponent = MAT_COLORS.SPECULAR.a;
+  var emissiveColor = vec3(0.0, 0.0, 0.0);
+  var matDiffuse = MAT_COLORS.DIFFUSE;
+  var matSpecular = MAT_COLORS.SPECULAR;
+  var matEmissive = MAT_COLORS.EMISSIVE * MAT_PARAMS.EMISSIVE_FACTOR;
+
   var diffuseFactor = max(dot(normal, -lightDir), 0.0);
 
-  if (MAT_PARAMS.HAS_SPECULARITY_MAP == 1.0)
+  if (MAT_PARAMS.HAS_DIFFUSE_MAP == 1.0)
   {
-    specularExponent = MAT_COLORS.SPECULAR.a * textureSample(MAT_SPECULARITY_TEXTURE, MAT_SPECULARITY_SAMPLER, textureUV).r;
+    matDiffuse = textureSample(MAT_DIFFUSE_TEXTURE, MAT_DIFFUSE_SAMPLER, textureUV).rgb;
+  }
+
+  if (MAT_PARAMS.HAS_SPECULAR_MAP == 1.0)
+  {
+    matSpecular = textureSample(MAT_SPECULAR_TEXTURE, MAT_SPECULAR_SAMPLER, textureUV).rgb;
+  }
+
+  if (MAT_PARAMS.HAS_EMISSIVE_MAP == 1.0)
+  {
+    matEmissive = textureSample(MAT_EMISSIVE_TEXTURE, MAT_EMISSIVE_SAMPLER, textureUV).rgb * MAT_PARAMS.EMISSIVE_FACTOR;
   }
 
   if (diffuseFactor > 0.0)
   {
-    diffuseColor = lightDiffuse * lightIntensity * MAT_COLORS.DIFFUSE * diffuseFactor;
-    if (specularExponent > 0.0)
+    diffuseColor = lightDiffuse * lightIntensity * matDiffuse * diffuseFactor;
+    if (MAT_PARAMS.SHININESS > 0.0)
     {
       var reflectDir = reflect(lightDir, normal);
       var viewDir = normalize(CAMERA_POS - fragPos);
       var specularFactor = max(dot(viewDir, reflectDir), 0.0);
       if (specularFactor > 0.0)
       {
-        specularFactor = pow(specularFactor, specularExponent);
-        specularColor = lightSpecular * lightIntensity * MAT_COLORS.SPECULAR.rgb * specularFactor;
+        specularFactor = pow(specularFactor, MAT_PARAMS.SHININESS);
+        specularColor = lightSpecular * lightIntensity * matSpecular * specularFactor;
       }
     }
   }
 
-  return vec4(ambientColor + (diffuseColor * shadow) + (specularColor * shadow), 1.0);
+  if (specularColor.r > 0.0)
+  {
+    emissiveColor = matEmissive;
+  }
+
+  return vec4(ambientColor + (diffuseColor * shadow) + (specularColor * shadow) + emissiveColor, 1.0);
 }
 
 // *****************************************************************************************************************

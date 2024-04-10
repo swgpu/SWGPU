@@ -1,3 +1,4 @@
+import { gfx2Manager } from './gfx2_manager';
 import { TreePartition, TreePartitionNode, ITreePartitionMethod, SplitResult } from '../core/tree_partition';
 import { Gfx2BoundingRect } from './gfx2_bounding_rect';
 
@@ -29,6 +30,13 @@ class Gfx2TreePartitionMethod implements ITreePartitionMethod<Gfx2BoundingRect> 
   constructor(rect: Gfx2BoundingRect, axis: 'x' | 'y') {
     this.rect = rect;
     this.axis = axis;
+  }
+
+  draw() {
+    const ctx = gfx2Manager.getContext();
+    const size = this.rect.getSize();
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(this.rect.min[0], this.rect.min[1], size[0], size[1]);
   }
 
  /**
@@ -74,11 +82,11 @@ class Gfx2TreePartitionMethod implements ITreePartitionMethod<Gfx2BoundingRect> 
 
     for (const object of objects) {
       if (this.axis === 'x') {
-        if (object.min[0] < center[0] && object.max[0] > center[0]) {
+        if (object.min[0] <= center[0] && object.max[0] >= center[0]) {
           left.push(object);
           right.push(object);
         }
-        else if (object.max[0] < center[0]) {
+        else if (object.max[0] <= center[0]) {
           left.push(object);
         }
         else {
@@ -86,11 +94,11 @@ class Gfx2TreePartitionMethod implements ITreePartitionMethod<Gfx2BoundingRect> 
         }
       }
       else {
-        if (object.min[1] < center[1] && object.max[1] > center[1]) {
+        if (object.min[1] <= center[1] && object.max[1] >= center[1]) {
           left.push(object);
           right.push(object);
         }
-        else if (object.max[1] < center[1]) {
+        else if (object.max[1] <= center[1]) {
           left.push(object);
         }
         else {

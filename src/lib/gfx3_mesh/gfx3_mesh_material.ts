@@ -20,10 +20,10 @@ interface MATOptions {
   opacity?: number;
   normalIntensity?: number;
   lightning?: boolean;
-  emissive?: vec3;
   ambient?: vec3;
   diffuse?: vec3;
-  specular?: vec4;
+  specular?: vec3;
+  emissive?: vec3;
   texture?: Gfx3Texture;
   textureScrollAngle?: number;
   textureScrollRate?: number;
@@ -31,15 +31,20 @@ interface MATOptions {
   displacementMapScrollAngle?: number;
   displacementMapScrollRate?: number;
   displacementMapFactor?: number;
-  specularityMap?: Gfx3Texture;
+  diffuseMap?: Gfx3Texture;
+  specularMap?: Gfx3Texture;
+  emissiveMap?: Gfx3Texture;
   normalMap?: Gfx3Texture;
   envMap?: Gfx3Texture;
   decalEnabled?: boolean;
   shadowEnabled?: boolean;
+  shininess?: number;
+  emissiveFactor?: number;
 };
 
 /**
  * The material of a surface.
+ * It emit 'E_FINISHED' (on texture animation end)
  */
 class Gfx3Material {
   animations: Array<MATAnimation>;
@@ -60,7 +65,9 @@ class Gfx3Material {
   grp3: Gfx3StaticGroup;
   texture: Gfx3Texture;
   displacementMap: Gfx3Texture;
-  specularityMap: Gfx3Texture;
+  diffuseMap: Gfx3Texture;
+  specularMap: Gfx3Texture;
+  emissiveMap: Gfx3Texture;
   normalMap: Gfx3Texture;
   envMap: Gfx3Texture;
 
@@ -97,27 +104,33 @@ class Gfx3Material {
     this.colors[12] = options.specular ? options.specular[0] : 0.0;
     this.colors[13] = options.specular ? options.specular[1] : 0.0;
     this.colors[14] = options.specular ? options.specular[2] : 0.0;
-    this.colors[15] = options.specular ? options.specular[3] : 0.0;
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 11);
+    this.colors[15] = 0.0;
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 15);
     this.params[0] = options.opacity ?? 1.0;
     this.params[1] = options.normalIntensity ?? 1.0;
     this.params[2] = options.lightning ? 1.0 : 0.0;
     this.params[3] = options.texture ? 1.0 : 0.0;
     this.params[4] = options.displacementMap ? 1.0 : 0.0;
     this.params[5] = options.displacementMapFactor ?? 0.0;
-    this.params[6] = options.specularityMap ? 1.0 : 0.0;
-    this.params[7] = options.normalMap ? 1.0 : 0.0;
-    this.params[8] = options.envMap ? 1.0 : 0.0;
-    this.params[9] = options.decalEnabled ? 1.0 : 0.0;
-    this.params[10] = options.shadowEnabled ? 1.0 : 0.0;
+    this.params[6] = options.diffuseMap ? 1.0 : 0.0;
+    this.params[7] = options.specularMap ? 1.0 : 0.0;
+    this.params[8] = options.emissiveMap ? 1.0 : 0.0;
+    this.params[9] = options.normalMap ? 1.0 : 0.0;
+    this.params[10] = options.envMap ? 1.0 : 0.0;
+    this.params[11] = options.decalEnabled ? 1.0 : 0.0;
+    this.params[12] = options.shadowEnabled ? 1.0 : 0.0;
+    this.params[13] = options.shininess ?? 0.0;
+    this.params[14] = options.emissiveFactor ?? 1.0;
     this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 6);
 
     this.grp3 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 3);
     this.texture = this.grp3.setTexture(0, 'MAT_TEXTURE', options.texture ?? gfx3Manager.createTextureFromBitmap());
     this.displacementMap = this.grp3.setTexture(2, 'MAT_DISPLACEMENT_TEXTURE', options.displacementMap ?? gfx3Manager.createTextureFromBitmap());
-    this.specularityMap = this.grp3.setTexture(4, 'MAT_SPECULARITY_TEXTURE', options.specularityMap ?? gfx3Manager.createTextureFromBitmap());
-    this.normalMap = this.grp3.setTexture(6, 'MAT_NORM_TEXTURE', options.normalMap ?? gfx3Manager.createTextureFromBitmap());
-    this.envMap = this.grp3.setTexture(8, 'MAT_ENV_MAP_TEXTURE', options.envMap ?? gfx3Manager.createCubeMapFromBitmap(), { dimension: 'cube' });
+    this.diffuseMap = this.grp3.setTexture(4, 'MAT_DIFFUSE_TEXTURE', options.diffuseMap ?? gfx3Manager.createTextureFromBitmap());
+    this.specularMap = this.grp3.setTexture(6, 'MAT_SPECULAR_TEXTURE', options.specularMap ?? gfx3Manager.createTextureFromBitmap());
+    this.emissiveMap = this.grp3.setTexture(8, 'MAT_EMISSIVE_TEXTURE', options.emissiveMap ?? gfx3Manager.createTextureFromBitmap());
+    this.normalMap = this.grp3.setTexture(10, 'MAT_NORM_TEXTURE', options.normalMap ?? gfx3Manager.createTextureFromBitmap());
+    this.envMap = this.grp3.setTexture(12, 'MAT_ENV_MAP_TEXTURE', options.envMap ?? gfx3Manager.createCubeMapFromBitmap(), { dimension: 'cube' });
 
     this.grp2.allocate();
     this.grp3.allocate();
@@ -170,11 +183,15 @@ class Gfx3Material {
       displacementMapScrollAngle: json['DisplacementMapScrollAngle'],
       displacementMapScrollRate: json['DisplacementMapScrollRate'],
       displacementMapFactor: json['DisplacementMapFactor'],
-      specularityMap: json['SpecularityMap'] ? await gfx3TextureManager.loadTexture(json['SpecularityMap']) : undefined,
+      diffuseMap: json['DiffuseMap'] ? await gfx3TextureManager.loadTexture(json['DiffuseMap']) : undefined,
+      specularMap: json['SpecularMap'] ? await gfx3TextureManager.loadTexture(json['SpecularMap']) : undefined,
+      emissiveMap: json['EmissiveMap'] ? await gfx3TextureManager.loadTexture(json['EmissiveMap']) : undefined,
       normalMap: json['NormalMap'] ? await gfx3TextureManager.loadTexture(json['NormalMap']) : undefined,
       envMap: json['EnvMap'] ? await gfx3TextureManager.loadTexture(json['EnvMap']) : undefined,
       decalEnabled: json['DecalEnabled'],
-      shadowEnabled: json['ShadowEnabled']
+      shadowEnabled: json['ShadowEnabled'],
+      shininess: json['Shininess'],
+      emissiveFactor: json['EmissiveFactor']
     });
   }
 
@@ -298,11 +315,13 @@ class Gfx3Material {
    * @param {number} r - The red component.
    * @param {number} g - The green component.
    * @param {number} b - The blue component.
+   * @param {number} a - The emissive factor.
    */
-  setEmissive(r: number, g: number, b: number): void {
+  setEmissive(r: number, g: number, b: number, a: number): void {
     this.colors[0] = r;
     this.colors[1] = g;
     this.colors[2] = b;
+    this.colors[3] = a;
     this.dataChanged = true;
   }
 
@@ -401,13 +420,37 @@ class Gfx3Material {
   }
 
   /**
-   * Set the specularity texture map.
+   * Set the diffuse texture map.
    * 
-   * @param {Gfx3Texture} specularityMap - The specularity texture map.
+   * @param {Gfx3Texture} diffuseMap - The diffuse texture map.
    */
-  setSpecularityMap(specularityMap: Gfx3Texture): void {
-    this.specularityMap = specularityMap;
+  setDiffuseMap(diffuseMap: Gfx3Texture): void {
+    this.diffuseMap = diffuseMap;
     this.params[6] = 1;
+    this.texturesChanged = true;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the specular texture map.
+   * 
+   * @param {Gfx3Texture} specularMap - The specular texture map.
+   */
+  setSpecularMap(specularMap: Gfx3Texture): void {
+    this.specularMap = specularMap;
+    this.params[7] = 1;
+    this.texturesChanged = true;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the emissive texture map.
+   * 
+   * @param {Gfx3Texture} emissiveMap - The emissive texture map.
+   */
+  setEmissiveMap(emissiveMap: Gfx3Texture): void {
+    this.emissiveMap = emissiveMap;
+    this.params[8] = 1;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -419,7 +462,7 @@ class Gfx3Material {
    */
   setNormalMap(normalMap: Gfx3Texture): void {
     this.normalMap = normalMap;
-    this.params[7] = 1;
+    this.params[9] = 1;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -431,7 +474,7 @@ class Gfx3Material {
    */
   setEnvMap(envMap: Gfx3Texture): void {
     this.envMap = envMap;
-    this.params[8] = 1;
+    this.params[10] = 1;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -442,7 +485,8 @@ class Gfx3Material {
    * @param {boolean} enabled - Indicating whether decals should be enabled or disabled.
    */
   enableDecal(enabled: boolean): void {
-    this.params[9] = enabled ? 1.0 : 0.0;
+    this.params[11] = enabled ? 1.0 : 0.0;
+    this.dataChanged = true;
   }
 
   /**
@@ -451,7 +495,28 @@ class Gfx3Material {
    * @param {boolean} enabled - Indicating whether the shadow should be enabled or disabled.
    */
   enableShadow(enabled: boolean): void {
-    this.params[10] = enabled ? 1.0 : 0.0;
+    this.params[12] = enabled ? 1.0 : 0.0;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the specular shininess.
+   * 
+   * @param {number} shininess - The shininess/specularity value (0-1)
+   */
+  setShininess(shininess: number): void {
+    this.params[13] = shininess;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the emissive factor.
+   * 
+   * @param {number} emissiveFactor - The factor of emission color (0-1)
+   */
+  setEmissiveFactor(emissiveFactor: number): void {
+    this.params[14] = emissiveFactor;
+    this.dataChanged = true;
   }
 
   /**
@@ -477,9 +542,11 @@ class Gfx3Material {
     if (this.texturesChanged) {
       this.grp3.setTexture(0, 'MAT_TEXTURE', this.texture);
       this.grp3.setTexture(2, 'MAT_DISPLACEMENT_TEXTURE', this.displacementMap);
-      this.grp3.setTexture(4, 'MAT_SPECULARITY_TEXTURE', this.specularityMap);
-      this.grp3.setTexture(6, 'MAT_NORM_TEXTURE', this.normalMap);
-      this.grp3.setTexture(8, 'MAT_ENV_MAP_TEXTURE', this.envMap, { dimension: 'cube' });
+      this.grp3.setTexture(4, 'MAT_DIFFUSE_TEXTURE', this.diffuseMap);
+      this.grp3.setTexture(6, 'MAT_SPECULAR_TEXTURE', this.specularMap);
+      this.grp3.setTexture(8, 'MAT_EMISSIVE_TEXTURE', this.emissiveMap);
+      this.grp3.setTexture(10, 'MAT_NORM_TEXTURE', this.normalMap);
+      this.grp3.setTexture(12, 'MAT_ENV_MAP_TEXTURE', this.envMap, { dimension: 'cube' });
       this.grp3.allocate();
       this.texturesChanged = false;
     }

@@ -58,8 +58,15 @@ class Gfx3PPERendererAbstract extends Gfx3RendererAbstract {
     this.vertexBuffer = this.device.createBuffer({ size: 6 * SHADER_VERTEX_ATTR_COUNT * 4, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC });
 
     this.grp0 = gfx3Manager.createStaticGroup('PPE_PIPELINE', 0);
-    this.params = this.grp0.setFloat(0, 'PARAMS', params.length);
-    this.params = params.slice();
+    this.params = this.grp0.setFloat(0, 'PARAMS', params.length + 3);
+    this.params[0] = 1.0;
+    this.params[1] = gfx3Manager.getWidth();
+    this.params[2] = gfx3Manager.getHeight();
+
+    for (let i = 0; i < params.length; i++) {
+      this.params[3 + i] = params[i];
+    }
+
     this.sourceTexture = this.grp0.setTexture(1, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
     this.grp0.allocate();
 
@@ -99,6 +106,22 @@ class Gfx3PPERendererAbstract extends Gfx3RendererAbstract {
   }
 
   /**
+   * Enable post-process effects.
+   * 
+   * @param {boolean} enabled - Indicating whether ppe should be enabled or disable.
+   */
+  setEnabled(enabled: boolean): void {
+    this.params[0] = enabled ? 1.0 : 0.0;
+  }
+
+  /**
+   * Check if post-process effects is enabled.
+   */
+  isEnabled(): boolean {
+    return this.params[0] == 1.0;
+  }
+
+  /**
    * Returns the source texture.
    * Note: This instance is responsible to create the source texture used to rendering the previous pass.
    * This way, it is easy to chain multiple effects.
@@ -107,12 +130,21 @@ class Gfx3PPERendererAbstract extends Gfx3RendererAbstract {
     return this.sourceTexture.gpuTexture;
   }
 
+  /**
+   * Virtual method called on window resize.
+   * 
+   * @param {number} width - The width screen.
+   * @param {number} height - The height screen.
+   */
+  onWindowResize(width: number, height: number): void {}
+
   $handleWindowResize(): void {
     this.params[1] = gfx3Manager.getWidth();
     this.params[2] = gfx3Manager.getHeight();
     this.sourceTexture.gpuTexture.destroy();
     this.sourceTexture = this.grp0.setTexture(1, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
     this.grp0.allocate();
+    this.onWindowResize(this.params[1], this.params[2]);
   }
 }
 

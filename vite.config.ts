@@ -1,10 +1,12 @@
-import basicSsl from '@vitejs/plugin-basic-ssl'
+import wasm from "vite-plugin-wasm";
+import topLevelAwait from "vite-plugin-top-level-await";
 
 export default {
-   	plugins: [
-   		//basicSsl()
-   	],
+  plugins: [
+		wasm(),
+		topLevelAwait()
+  ],
 	build: {
-        target: 'esnext'
-    }
+    target: 'esnext'
+  }
 }

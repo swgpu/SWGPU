@@ -3,8 +3,8 @@ import { UIWidget } from '../ui/ui_widget';
 
 /**
  * A UI widget displaying a bottom fixed dialog widget with picture, text and author name.
- * It emit 'E_PRINT_FINISHED' when print is finish.
- * It emit 'E_OK' when action is 'OK' and text is finished.
+ * It emit 'E_PRINT_FINISHED'
+ * It emit 'E_OK'
  */
 class UIMessage extends UIWidget {
   text: string;

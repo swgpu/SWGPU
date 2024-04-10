@@ -1,5 +1,7 @@
-import { TreePartition, TreePartitionNode, ITreePartitionMethod, SplitResult } from '../core/tree_partition';
+import { gfx3DebugRenderer } from './gfx3_debug_renderer';
+import { UT } from '../core/utils';
 import { Gfx3BoundingBox } from './gfx3_bounding_box';
+import { TreePartition, TreePartitionNode, ITreePartitionMethod, SplitResult } from '../core/tree_partition';
 
 /**
  * A 3D binary tree space partition.
@@ -32,6 +34,13 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
   }
 
   /**
+   * The draw function.
+   */
+  draw(): void {
+    gfx3DebugRenderer.drawBoundingBox(UT.MAT4_IDENTITY(), this.box.min, this.box.max);
+  }
+
+  /**
    * Search and return all objects that intersect with the target.
    * 
    * @param {Gfx3BoundingBox} target - The target object.
@@ -46,8 +55,8 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
     const right = node.getRight();
 
     if (left && right) {
-      left.search(target, results)
-      right.search(target, results)
+      left.search(target, results);
+      right.search(target, results);
     }
     else {
       const children = node.getChildren();
@@ -73,11 +82,11 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
 
     for (const object of objects) {
       if (this.axis === 'x') {
-        if (object.min[0] < center[0] && object.max[0] > center[0]) {
+        if (object.min[0] <= center[0] && object.max[0] >= center[0]) {
           left.push(object);
           right.push(object);
         }
-        else if (object.max[0] < center[0]) {
+        else if (object.max[0] <= center[0]) {
           left.push(object);
         }
         else {
@@ -85,11 +94,11 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
         }
       }
       else if (this.axis === 'y') {
-        if (object.min[1] < center[1] && object.max[1] > center[1]) {
+        if (object.min[1] <= center[1] && object.max[1] >= center[1]) {
           left.push(object);
           right.push(object);
         }
-        else if (object.max[1] < center[1]) {
+        else if (object.max[1] <= center[1]) {
           left.push(object);
         }
         else {
@@ -97,11 +106,11 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
         }
       }
       else {
-        if (object.min[2] < center[2] && object.max[2] > center[2]) {
+        if (object.min[2] <= center[2] && object.max[2] >= center[2]) {
           left.push(object);
           right.push(object);
         }
-        else if (object.max[2] < center[2]) {
+        else if (object.max[2] <= center[2]) {
           left.push(object);
         }
         else {

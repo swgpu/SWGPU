@@ -130,7 +130,7 @@ class Gfx3Camera extends Gfx3Transformable {
   /**
    * Returns the three local axes of the transformable.
    */
-  getLocalAxies(): Array<vec3> {
+  getAxies(): Array<vec3> {
     const matrix = this.view.getCameraMatrix();
     return [
       UT.VEC3_CREATE(matrix[0], matrix[1], matrix[2]),

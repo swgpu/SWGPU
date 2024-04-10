@@ -3,8 +3,7 @@
 body {
   overflow: hidden;
   margin: 0;
-  background-image: url(/textures/bg.jpeg);
-  background-size: cover;
+  background-color: #7f7f7f;
   height: 100vh;
 }
 
@@ -43,10 +42,9 @@ body {
 
 #METRICS {
   position: absolute;
-  left: 20px;
-  top: 20px;
+  right: 20px;
+  bottom: 20px;
   padding: 10px;
-  background-color: #0000009e;
   color: white;
   width: 200px;
 }
@@ -68,6 +66,20 @@ body {
   border-left-width: 55px;
   border-right-width: 55px;
   border-image: url(../textures/frame.png) 100 135 / 90px round;
+}
+
+#APP.scanlines::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 99999999;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
 }
 
 #APP_FAIL {

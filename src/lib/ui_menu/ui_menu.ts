@@ -14,7 +14,12 @@ enum MenuAxis {
 
 /**
  * A UI widget displaying a menu with customizable options.
- * It emit 'E_ITEM_FOCUSED', 'E_ITEM_UNFOCUSED', 'E_ITEM_SELECTED', 'E_ITEM_UNSELECTED' and E_UNSELECTED events.
+ * It emit 'E_ITEM_FOCUSED' with data { id, index }
+ * It emit 'E_ITEM_UNFOCUSED'
+ * It emit 'E_ITEM_SELECTED' with data { id, index }
+ * It emit 'E_ITEM_UNSELECTED'
+ * It emit 'E_UNSELECTED'
+ * It emit 'E_CLOSED'
  */
 class UIMenu extends UIWidget {
   axis: MenuAxis;

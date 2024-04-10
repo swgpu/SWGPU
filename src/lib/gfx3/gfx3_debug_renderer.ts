@@ -270,10 +270,10 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
   drawBoundingRect(matrix: mat4, min: vec2, max: vec2, color: vec3 = [1, 1, 1]): void {
     let vertexCount = 0;
     const vertices: Array<number> = [];
-    const a = [min[0], min[1], 0];
-    const b = [min[0], max[1], 0];
-    const c = [max[0], min[1], 0];
-    const d = [max[0], max[1], 0];
+    const a = [min[0], 0, min[1]];
+    const b = [min[0], 0, max[1]];
+    const c = [max[0], 0, min[1]];
+    const d = [max[0], 0, max[1]];
 
     vertices.push(a[0], a[1], a[2], color[0], color[1], color[2]);
     vertices.push(b[0], b[1], b[2], color[0], color[1], color[2]);

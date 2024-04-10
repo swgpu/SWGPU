@@ -16,6 +16,7 @@ interface JAMAnimation {
 
 /**
  * A 3D animated mesh.
+ * It emit 'E_FINISHED'
  */
 class Gfx3MeshJAM extends Gfx3Mesh {
   numVertices: number;
@@ -262,16 +263,20 @@ class Gfx3MeshJAM extends Gfx3Mesh {
 
   /**
    * Returns the bounding box.
+   * 
+   * @param {boolean} [dynamicMode=false] - Determines whether the animation should loop or not.
    */
-  getBoundingBox(): Gfx3BoundingBox {
-    return this.boundingBoxes[this.currentFrameIndex];
+  getBoundingBox(dynamicMode: boolean = false): Gfx3BoundingBox {
+    return dynamicMode ? this.boundingBoxes[this.currentFrameIndex] : this.boundingBoxes[0];
   }
 
   /**
    * Returns the bounding box in the world space coordinates.
+   * 
+   * @param {boolean} [dynamicMode=false] - Determines whether the animation should loop or not.
    */
-  getWorldBoundingBox(): Gfx3BoundingBox {
-    return this.boundingBoxes[this.currentFrameIndex].transform(this.getTransformMatrix());
+  getWorldBoundingBox(dynamicMode: boolean = false): Gfx3BoundingBox {
+    return dynamicMode ? this.boundingBoxes[this.currentFrameIndex].transform(this.getTransformMatrix()) : this.boundingBoxes[0].transform(this.getTransformMatrix());
   }
 }
 

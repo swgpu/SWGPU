@@ -1,16 +1,12 @@
-# WARME Engine (Web Against Regular Majors Engines)
-<p align="center">
-    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner-new.png" alt="logo"/>
-</p>
-
+# WARME Y2K
 ![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.3-blue)
 
 > [!NOTE]  
 > Don't forget to check the wiki tutorials section, we coming soon with two tutorials for beginners !
  
-**WARME Engine** is the first fully packed **2D/3D** game engine dedicated to **Y2K games** on the web !     
+**WARME Y2K** is the first fully packed **2D/3D game engine** dedicated to **Y2K games** on the web !     
 Some words about our philosophy:
-- **Simplicity:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
+- **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle render and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
 - **Modernity:** We used the WebGPU rendering API.
@@ -25,55 +21,68 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Events
     - Curves
     - Quaternions
+    - Object pooling
     
 - 👾 **2D**
-    - Static sprite
-    - Animated sprite
+    - Static sprite (jss)
+    - Animated sprite (jas)
     - Isometric tilemap
     - Orthographic tilemap
-    - Particles system
+    - Particles
     - Rendering filters
+
+- 📐 **2D Physics**
+    - Rapier2D
 
 - 🧊 **3D**
     - Debug shapes
-    - Static mesh (jsm, obj wavefront)
+    - Static mesh (jsm and obj)
     - Animated mesh (jam)
-    - Static sprite
-    - Animated sprite
+    - Static sprite (jss)
+    - Animated sprite (jas)
     - Billboarding
     - Cubemap skybox
-    - Multi-viewport
-    - Camera orbit
-    - Camera WASD
     - Particules
     - Flares
     - Fog
     - Vertex colorization
     - Decals
-    - Shadow map
-    - Mesh pooling
+    - Realtime shadow support
+    - Multi-viewport
+    - Camera orbit
+    - Camera WASD
+    - Post-processing support
     - Rendering filters
-    - Post-processing effects
-    - PSX effects
 
 - 📐 **3D Physics**
-    - Walkmesh
-    - Navigation mesh
+    - Walkmesh (jwm)
+    - Navigation mesh (jnm)
     - Ray-testing
+    - Rapier3D
 
 - 💥 **3D Material**
-    - Phong reflection model
-    - Displacement texture mapping
+    - Complete Phong reflection model
+    - Displacement texture map
     - Displacement texture scrolling
-    - Normal mapping
-    - Env mapping
-    - Specularity mapping
+    - Diffuse map
+    - Specular map
+    - Emissive map
+    - Normal map
+    - Env map
     - Texture scrolling
     - Animated UV
+    - Specular shininess
+    - Emissive intensity
+    - Normal intensity
 
 - 🌞 **3D Light**
     - Directional light
     - Point lights (max : 16)
+
+- 🖼️ **3D Post-processing**
+    - Hardware dithering
+    - Pixelation
+    - Color depth limiting
 
 - 🎮 **Input**
     - Action mapping
@@ -88,9 +97,9 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Resources pre-loading
 
 - 📜 **Scripts**
-    - Load script from json file.
-    - Register async command function and call-it from script file
-    - Manual jump to part of script
+    - Load script from json file
+    - Register async command function and call-it from json file
+    - Manual jump to part of the script
 
 - 🔊 **Sound**
     - Handle sounds by groups
@@ -101,14 +110,47 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - 3D binary space partition
 
 - 🎨 **UI**
-    - Component architecture to keep project clean and scalable
-    - Handle focus/unfocus between components
+    - Focus/unfocus widgets
     - Fade in/out
-    - Some basics built-in components
+    - Widget architecture
+
+- 🖍️ **UI Widgets**
+    - Dialog + choices
+    - Dialog only
+    - Print long text
+    - Description list
+    - Virtual keyboard
+    - Slider
+    - Menu base
+    - Menu list view
+    - Menu text
+    - Prompt
+    - Sprite
+    - Text
 
 - 🌆 **DNA**
     - ECS architecture implementation (optionnal)
     - State handler
+
+## Tutorials
+<table>
+  <tr>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
+    </td>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <p>Tutorial 2D</p>
+    </td>
+    <td>
+        <p>Tutorial 3D</p>
+    </td>
+  </tr>
+</table>
 
 ## Demos
 <table>
@@ -241,29 +283,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
         <p>3D Shadow Map</p>
     </td>
     <td>
-        <p>Rendering filters</p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb19.png" width="150px"/>
-    </td>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
-    </td>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb-coming-soon.png" width="150px"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
         <p>2D Isometric Background</p>
-    </td>
-    <td>
-        <p>Tutorial 2D</p>
-    </td>
-    <td>
-        <p>Tutorial 3D</p>
     </td>
   </tr>
 </table>
@@ -282,8 +302,8 @@ to build our first WARME project.
 ```
 
 ## How to integrate your 3D models ?
-You can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.
-You can also simply used the [WARME Blender Exporter](https://github.com/jay19240/WARME-Blender-Exporter).
+The best way is to used the [WARME Blender Exporter](https://github.com/jay19240/WARME-Engine/bin/WARME-Blender-Exporter.zip), otherwise you can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.    
+
 Important note: The Blender coordinate system and the engine don't match, see below the rule to translate.
 Don't forget to apply these changes when you export your obj file.
 ```
@@ -311,17 +331,22 @@ If you have a suggestion that would make this better, please fork the repo and c
 5. Open a Pull Request
 
 ## Contributors
-1. Crisxzu - Contribute to the Wiki and typedoc converter.
+1. Crisxzu - Contribute to the Wiki, typedoc converter and Triple Triad demo.
 2. zuda - Contribute to Triple Triad demo.
 3. luciedefraiteur - Contribute to the fog.
 4. thetinyspark - Contribute to the binary space partition.
 
 ## Some parts taken for this work
-- Use DOM for UI elements
-- Use CanvasRenderingContext2D for 2D stuffs
-- Use human readable custom format for all graphics stuff
+- DOM for UI elements
+- CanvasRenderingContext2D for 2D stuffs
+- Human readable custom format for all graphics stuff
+- [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
-- No realistic physics engine, we assume if you need one there is many pretty lib for that like ammo.js, plank.js or canon.js
+
+## Roadmap
+- Add spotlight (no-delay)
+- FPS: Add weapon, bullet, camera movement and strife-jumping to FPS sample + change the map to fit Quake 3 (no-delay)
+- Bug 2D Fighter on ai is idle
 
 ## License 
 WARME engine is released under the [MIT](https://opensource.org/licenses/MIT) license. 

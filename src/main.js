@@ -1,3 +1,4 @@
+import { coreManager } from './lib/core/core_manager';
 import { gfx3Manager } from './lib/gfx3/gfx3_manager';
 import { gfx3DebugRenderer } from './lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from './lib/gfx3_mesh/gfx3_mesh_renderer';
@@ -11,7 +12,7 @@ import { screenManager } from './lib/screen/screen_manager';
 import { uiManager } from './lib/ui/ui_manager';
 import { gfx3PPERenderer } from './lib/gfx3_ppe/gfx3_ppe_renderer';
 // ---------------------------------------------------------------------------------------
-import { BootScreen } from './samples/boot/boot_screen';
+import { TutorialsBootScreen } from './tutorials/boot/boot_screen';
 // ---------------------------------------------------------------------------------------
 
 class GameManager {
@@ -20,6 +21,7 @@ class GameManager {
   }
 
   startup() {
+    coreManager.enableScanlines(false);
     gfx3DebugRenderer.setShowDebug(true);
     gfx3PPERenderer.setEnabled(false);
     this.run(0);
@@ -65,4 +67,4 @@ class GameManager {
 
 export const gameManager = new GameManager();
 gameManager.startup();
-screenManager.requestSetScreen(new BootScreen());
+screenManager.requestSetScreen(new TutorialsBootScreen());

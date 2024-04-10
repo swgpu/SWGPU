@@ -5,7 +5,7 @@ A transformable object with position, rotation, scale and more.~
 ** Constructors
 - ''new Gfx3Transformable''(): Gfx3Transformable~
 ** Methods
-- ''getLocalAxies''()~
+- ''getAxies''()~
 Returns the three local axes of the transformable.~
 ~
 - ''getPosition''(): vec3~
