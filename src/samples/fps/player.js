@@ -57,7 +57,6 @@ class InputComponent {
     // else if (this.player.collideWall) {
     //   this.player.velocity[0] = 0;
     //   this.player.velocity[2] = 0;
-      
     // }
   }
 

@@ -12,7 +12,7 @@ import { screenManager } from './lib/screen/screen_manager';
 import { uiManager } from './lib/ui/ui_manager';
 import { gfx3PPERenderer } from './lib/gfx3_ppe/gfx3_ppe_renderer';
 // ---------------------------------------------------------------------------------------
-import { FPSScreen } from './samples/fps/fps_screen';
+import { TutorialsBootScreen } from './tutorials/boot/boot_screen';
 // ---------------------------------------------------------------------------------------
 
 class GameManager {
@@ -67,4 +67,4 @@ class GameManager {
 
 export const gameManager = new GameManager();
 gameManager.startup();
-screenManager.requestSetScreen(new FPSScreen());
+screenManager.requestSetScreen(new TutorialsBootScreen());
