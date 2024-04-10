@@ -5,15 +5,30 @@ import { Gfx3TreePartition } from '../gfx3/gfx3_tree_partition';
 
 const MOVE_MAX_RECURSIVE_CALL = 2;
 
+class Frag extends Gfx3BoundingBox {
+  index: number;
+  v1: vec3;
+  v2: vec3;
+  v3: vec3;
+  n: vec3;
+  t: vec3;
+
+  constructor(index: number, a: vec3, b: vec3, c: vec3) {
+    super();
+    this.index = index;
+    this.v1 = a;
+    this.v2 = b;
+    this.v3 = c;
+    this.n = UT.VEC3_NORMALIZE(UT.TRI3_NORMAL(this.v1, this.v2, this.v3));
+    this.t = UT.VEC3_NORMALIZE(UT.VEC3_CROSS([0, 1, 0], this.n));
+    super.fromVertices([...this.v1, ...this.v2, ...this.v3], 3);
+  }
+}
+
 interface ResBox {
   move: vec3;
   collideFloor: boolean;
   collideWall: boolean;
-  fragIndex: number
-};
-
-interface ResSensorY {
-  move: number;
   fragIndex: number
 };
 
@@ -23,45 +38,29 @@ interface ResRaycast {
   fragIndex: number;
 };
 
-class Frag extends Gfx3BoundingBox {
-  index: number;
-  a: vec3;
-  b: vec3;
-  c: vec3;
-  n: vec3;
-  t: vec3;
-
-  constructor(index: number, a: vec3, b: vec3, c: vec3) {
-    super();
-    this.index = index;
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.n = UT.TRI3_NORMAL(this.a, this.b, this.c);
-    this.t = UT.VEC3_CROSS([0, 1, 0], this.n);
-    super.fromVertices([...this.a, ...this.b, ...this.c], 3);
-  }
-}
-
 /**
  * A 3D navigation mesh.
  * In collision case, the collision response sliding along wall polygons to keep a good feeling for the player.
  */
 class Gfx3PhysicsJNM {
-  btree: Gfx3TreePartition;
+  boundingBox: Gfx3BoundingBox;
   frags: Array<Frag>;
   fragsData: Array<any>;
-  boundingBox: Gfx3BoundingBox;
+
+  btree: Gfx3TreePartition;
   debugMeshEnabled: boolean;
   debugBspEnabled: boolean;
   debugVertices: Array<number>;
   debugVertexCount: number;
 
   constructor() {
-    this.btree = new Gfx3TreePartition(20, 3);
+    this.boundingBox = new Gfx3BoundingBox();
     this.frags = [];
     this.fragsData = [];
-    this.boundingBox = new Gfx3BoundingBox();
+
+    this.btree = new Gfx3TreePartition(20, 3);
+
+   
     this.debugBspEnabled = true;
     this.debugMeshEnabled = true;
     this.debugVertices = [];
@@ -84,20 +83,20 @@ class Gfx3PhysicsJNM {
     }
 
     this.boundingBox = new Gfx3BoundingBox(json['Min'], json['Max']);
+
     this.btree = new Gfx3TreePartition(bspMaxChildren, bspMaxDepth, this.boundingBox);
     this.frags = [];
-
     for (let i = 0; i < json['Frags'].length; i++) {
       const obj = json['Frags'][i];
-      const frag = new Frag(i, obj[0], obj[1], obj[2]);
-      this.btree.addChild(frag);
-      this.frags.push(frag);
+      const sector = new Frag(i, obj[0], obj[1], obj[2]);
+      this.btree.addChild(sector);
+      this.frags.push(sector);
     }
 
     this.fragsData = [];
     for (const obj of json['FragsData']) {
-      const fragIndex = obj['FragIndex'];
-      this.fragsData[fragIndex] = obj;
+      const sectorIndex = obj['FragIndex'];
+      this.fragsData[sectorIndex] = obj;
     }
   }
 
@@ -109,12 +108,12 @@ class Gfx3PhysicsJNM {
     this.debugVertexCount = 0;
 
     for (const frag of this.frags) {
-      this.debugVertices.push(frag.a[0], frag.a[1], frag.a[2], 1, 1, 1);
-      this.debugVertices.push(frag.b[0], frag.b[1], frag.b[2], 1, 1, 1);
-      this.debugVertices.push(frag.a[0], frag.a[1], frag.a[2], 1, 1, 1);
-      this.debugVertices.push(frag.c[0], frag.c[1], frag.c[2], 1, 1, 1);
-      this.debugVertices.push(frag.b[0], frag.b[1], frag.b[2], 1, 1, 1);
-      this.debugVertices.push(frag.c[0], frag.c[1], frag.c[2], 1, 1, 1);
+      this.debugVertices.push(frag.v1[0], frag.v1[1], frag.v1[2], 1, 1, 1);
+      this.debugVertices.push(frag.v2[0], frag.v2[1], frag.v2[2], 1, 1, 1);
+      this.debugVertices.push(frag.v1[0], frag.v1[1], frag.v1[2], 1, 1, 1);
+      this.debugVertices.push(frag.v3[0], frag.v3[1], frag.v3[2], 1, 1, 1);
+      this.debugVertices.push(frag.v2[0], frag.v2[1], frag.v2[2], 1, 1, 1);
+      this.debugVertices.push(frag.v3[0], frag.v3[1], frag.v3[2], 1, 1, 1);
       this.debugVertexCount += 6;
     }
   }
@@ -133,27 +132,6 @@ class Gfx3PhysicsJNM {
   }
 
   /**
-   * Returns a new move with smooth sliding along wall for the given point (plan xz).
-   * Note: Utility used to handle collisions manually for full flexibility.
-   * 
-   * @param {number} x - The x position of sensor.
-   * @param {number} y - The y position of sensor.
-   * @param {number} z - The z position of sensor.
-   * @param {number} radius - The radius of sensor area.
-   * @param {number} height - The height of sensor area.
-   * @param {number} mx - The movement in x-axis.
-   * @param {number} mz - The movement in z-axis.
-   */
-  sensorXZ(x: number, y: number, z: number, radius: number, height: number, mx: number, mz: number): vec2 {
-    const walls = this.btree.search(new Gfx3BoundingBox(
-      [x - radius, y - height * 0.5, z - radius],
-      [x + radius, y + height * 0.5, z + radius]
-    )) as Array<Frag>;
-
-    return this.$moveXZ(walls, [x, y, z], [mx, mz]);
-  }
-
-  /**
    * Returns a new y-move to fix sensor on the floor.
    * Note: Utility used to handle collisions manually for full flexibility.
    * 
@@ -165,19 +143,19 @@ class Gfx3PhysicsJNM {
    * @param {number} mx - The movement in x-axis.
    * @param {number} mz - The movement in z-axis.
    */
-  sensorY(x: number, y: number, z: number, radius: number, height: number, mx: number, mz: number): ResSensorY {
-    const floors = this.btree.search(new Gfx3BoundingBox(
-      [x - radius, y - height * 0.5, z - radius],
-      [x + radius, y + height * 0.5, z + radius]
-    )) as Array<Frag>;
+  // getElevation(x: number, y: number, z: number, radius: number, height: number, mx: number, mz: number): ResSensorY {
+  //   const floors = this.btree.search(new Gfx3BoundingBox(
+  //     [x - radius, y - height * 0.5, z - radius],
+  //     [x + radius, y + height * 0.5, z + radius]
+  //   )) as Array<Frag>;
 
-    const elevation = this.$getElevation(floors, [x + mx, y + height * 0.5, z + mz]);
+  //   const elevation = this.$getElevation(floors, [x + mx, y + height * 0.5, z + mz]);
 
-    return {
-      move: elevation ? elevation.value - y : 0,
-      fragIndex: elevation ? elevation.fragIndex : -1
-    };
-  }
+  //   return {
+  //     move: elevation ? elevation.value - y : 0,
+  //     fragIndex: elevation ? elevation.fragIndex : -1
+  //   };
+  // }
 
   /**
    * Returns a new move with smooth sliding along wall and floor for the given box.
@@ -220,10 +198,10 @@ class Gfx3PhysicsJNM {
     let i = 0;
 
     const points: Array<vec3> = [
-      [min[0], min[1], max[2]],
-      [min[0], min[1], min[2]],
-      [max[0], min[1], min[2]],
-      [max[0], min[1], max[2]]
+      // [min[0], min[1] + lift, max[2]],
+      [min[0], min[1] + lift, min[2]],
+      [max[0], min[1] + lift, min[2]],
+      // [max[0], min[1] + lift, max[2]]
     ];
 
     while (i < points.length) {
@@ -232,7 +210,7 @@ class Gfx3PhysicsJNM {
         continue;
       }
 
-      const moveXZ = this.$moveXZ(wallIntersectedFrags, points[i], [fmx, fmz]);
+      const moveXZ = this.$moveXZ([x, y, z], wallIntersectedFrags, points[i], [fmx, fmz]);
       if (moveXZ[0] == 0 && moveXZ[1] == 0) {
         fmx = 0;
         fmz = 0;
@@ -261,13 +239,13 @@ class Gfx3PhysicsJNM {
 
     const floorIntersectedFrags = this.frags.filter(frag => frag.intersectBoundingBox(new Gfx3BoundingBox(
       [x + fmx, min[1] - snapFloorDistance, z + fmz],
-      [x + fmx, max[1] + lift, z + fmz]
+      [x + fmx, max[1], z + fmz]
     )));
 
-    const elevation = this.$getElevation(floorIntersectedFrags, [x + fmx, max[1] + lift, z + fmz]);
+    const elevation = this.$getElevation(floorIntersectedFrags, [x + fmx, max[1], z + fmz]);
     const delta = elevation ? min[1] - elevation.value : Infinity; // on negative we climbing, on positive we check for descent
 
-    if (snapFloor && delta < snapFloorDistance && elevation) {
+    if (elevation) {
       collideFloor = true;
       fmy = elevation.value - min[1];
     }
@@ -299,12 +277,15 @@ class Gfx3PhysicsJNM {
     let outIntersectPoint: vec3 = [0, 0, 0];
 
     for (const frag of frags) {
-      if (UT.RAY_TRIANGLE(origin, dir, frag.a, frag.b, frag.c, true, outIntersectPoint)) {
-        const pen = UT.VEC3_SUBSTRACT(outIntersectPoint, origin);
+      const out: vec3 = [0, 0, 0];
+
+      if (UT.RAY_TRIANGLE(origin, dir, frag.v1, frag.v2, frag.v3, true, out)) {
+        const pen = UT.VEC3_SUBSTRACT(out, origin);
         const penLength = UT.VEC3_LENGTH(pen);
         if (penLength < minFragLength) {
           minFragLength = penLength;
           minFrag = frag;
+          outIntersectPoint = out;
         }
       }
     }
@@ -360,20 +341,44 @@ class Gfx3PhysicsJNM {
     return this.fragsData[fragIndex];
   }
 
-  $moveXZ(frags: Array<Frag>, point: vec3, move: vec2, i: number = 0): vec2 {
+  $moveXZ(center: vec3, frags: Array<Frag>, point: vec3, move: vec2, i: number = 0): vec2 {
     let minFrag = null;
     let minFragLength = Infinity;
-    let outIntersect: vec3 = [0, 0, 0];
+    let fmx = move[0];
+    let fmz = move[1];
 
-    if (i > MOVE_MAX_RECURSIVE_CALL) {
-      return [0, 0];
-    }
+    // if (i > MOVE_MAX_RECURSIVE_CALL) {
+    //   return [0, 0];
+    // }
 
     for (const frag of frags) {
-      if (UT.RAY_PLAN(point, [move[0], 0, move[1]], frag.a, frag.n, true, outIntersect)) {
-        const pen = UT.VEC3_SUBSTRACT(outIntersect, point);
-        const penLength = UT.VEC3_LENGTH(pen);
-        if (penLength <= UT.VEC2_LENGTH(move) + 0.001 && penLength < minFragLength) {
+      let out: vec3 = [0, 0, 0];
+      if (UT.RAY_PLAN(point, [move[0], 0, move[1]], frag.v1, frag.n, true, out)) {
+        const pen = UT.VEC2_SUBSTRACT([out[0], out[2]], [point[0] + move[0], point[2] + move[1]]);
+        const centerToOut = UT.VEC2_SUBSTRACT([out[0], out[2]], [center[0], center[2]]);
+        const penLength = UT.VEC2_LENGTH(pen);
+        const d = UT.VEC2_DOT(pen, centerToOut);
+
+
+        const a: vec2 = [0, 0];
+        a[0] = out[0] - frag.n[0] * 100;
+        a[1] = out[2] - frag.n[2] * 100;
+
+        const o: vec2 = [0, 0];
+        o[0] = out[0] + frag.n[0] * 100;
+        o[1] = out[2] + frag.n[2] * 100;
+
+        const p: vec2 = [0, 0];
+        p[0] = point[0] - move[0] * 100;
+        p[1] = point[2] - move[1] * 100;
+
+        const pm: vec2 = [0, 0];
+        pm[0] = point[0] + move[0] * 100;
+        pm[1] = point[2] + move[1] * 100;
+
+        if (d < 0 && UT.COLLIDE_LINE_TO_LINE(a, o, p, pm) && penLength < minFragLength) {
+          // console.log(frag.index);
+          // console.log('plouf');
           minFragLength = penLength;
           minFrag = frag;
         }
@@ -381,23 +386,45 @@ class Gfx3PhysicsJNM {
     }
 
     if (minFrag) {
+      // if (previousFragNormal) {
+      //   const c = UT.VEC2_CROSS([previousFragNormal[0], previousFragNormal[2]], [minFrag.n[0], minFrag.n[2]]);
+      //   if (c > 0) {
+      //     console.log('catch');
+      //     return move;
+      //   }
+      // }
+
       const newMove = UT.VEC2_PROJECTION_COS([move[0], move[1]], [minFrag.t[0], minFrag.t[2]]);
-      return this.$moveXZ(frags, point, newMove, i + 1);
+      fmx = newMove[0];
+      fmz = newMove[1];
+
+      // console.log('choosed: ', minFrag.index, minFragLength);
+      return this.$moveXZ(center, frags, point, [fmx, fmz], i + 1);
     }
 
     return move;
   }
 
   $getElevation(frags: Array<Frag>, point: vec3): { value: number, fragIndex: number } | null { // need a closest check
+    let minFrag: Frag | null = null;
+    let minFragLength = Infinity;
     let outIntersectPoint: vec3 = [0, 0, 0];
 
     for (const frag of frags) {
-      if (UT.RAY_TRIANGLE(point, [0, -1, 0], frag.a, frag.b, frag.c, true, outIntersectPoint)) {
-        return { value: outIntersectPoint[1], fragIndex: frag.index };
+      const out: vec3 = [0, 0, 0];
+
+      if (UT.RAY_TRIANGLE(point, [0, -1, 0], frag.v1, frag.v2, frag.v3, true, out)) {
+        const pen = UT.VEC3_SUBSTRACT(out, point);
+        const penLength = UT.VEC3_LENGTH(pen);
+        if (penLength < minFragLength) {
+          minFragLength = penLength;
+          minFrag = frag;
+          outIntersectPoint = out;
+        }
       }
     }
 
-    return null;
+    return minFrag != null ? { value: outIntersectPoint[1], fragIndex: minFrag.index } : null;
   }
 }
 

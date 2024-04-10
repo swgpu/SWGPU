@@ -95,7 +95,7 @@ class PhysicsComponent {
     // -------------------
     this.lift = 0.8;
     this.radius = 0.5;
-    this.height = 0.5;
+    this.height = 1;
     this.frictionCoefficient = 0.99999999;
     this.gravityCoefficient = 0.8;
     this.gravityMax = 10;

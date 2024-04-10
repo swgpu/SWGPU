@@ -24,8 +24,8 @@ class FPSScreen extends Screen {
 
   update(ts) {
     this.map.mesh.update(ts);
-    this.map.jnm.update(ts);
     this.player.update(ts);
+    this.map.jnm.update(ts);
   }
 
   draw() {
@@ -44,6 +44,7 @@ class FPSScreen extends Screen {
 
     const jnm = new Gfx3PhysicsJNM();
     await jnm.loadFromFile('./samples/fps/Level.jnm');
+    jnm.enableDebugBsp(false);
 
     return { mesh, jnm };
   }

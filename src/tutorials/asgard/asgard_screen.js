@@ -26,15 +26,15 @@ class AsgardScreen extends Screen {
 
   update(ts) {
     const targetPos = [this.player.x, this.player.y + 1, this.player.z];
-    const targetToCamera = UT.VEC3_SUBSTRACT(this.camera.getPosition(), targetPos);
-    const raycast = this.map.jnm.raycast(targetPos, targetToCamera, CAMERA_DISTANCE_MAX, 2);
+    // const targetToCamera = UT.VEC3_SUBSTRACT(this.camera.getPosition(), targetPos);
+    // const raycast = this.map.jnm.raycast(targetPos, targetToCamera, CAMERA_DISTANCE_MAX, 2);
 
-    if (raycast && raycast.distance < CAMERA_DISTANCE_MAX) {
-      this.camera.setDistance(raycast.distance);
-    }
-    else {
-      this.camera.setDistance(CAMERA_DISTANCE_MAX);
-    }
+    // if (raycast && raycast.distance < CAMERA_DISTANCE_MAX) {
+    //   this.camera.setDistance(raycast.distance);
+    // }
+    // else {
+    //   this.camera.setDistance(CAMERA_DISTANCE_MAX);
+    // }
 
     this.camera.setTarget(targetPos);
     this.map.mesh.update(ts);

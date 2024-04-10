@@ -54,6 +54,11 @@ class InputComponent {
     if (moving) {
       this.player.dir = UT.VEC3_NORMALIZE(this.player.dir);
     }
+    // else if (this.player.collideWall) {
+    //   this.player.velocity[0] = 0;
+    //   this.player.velocity[2] = 0;
+      
+    // }
   }
 
   async handleClicked(e) {
@@ -74,8 +79,8 @@ class InputComponent {
   }
 
   handleMouseMove(e) {
-    this.player.rotation[0] += e.movementY * this.player.rotationSpeed;
-    this.player.rotation[1] += e.movementX * this.player.rotationSpeed;
+    this.player.rotation[0] += e.movementY * this.player.rotationSpeed / 1000;
+    this.player.rotation[1] += e.movementX * this.player.rotationSpeed / 1000;
   }
 }
 
@@ -84,8 +89,8 @@ class PhysicsComponent {
     this.player = player;
     this.jnm = jnm;
     // -------------------
-    this.lift = 0.2;
-    this.radius = 3;
+    this.lift = 0.3;
+    this.radius = 0.5;
     this.frictionCoefficient = 0.99999999;
     this.gravityCoefficient = 0.8;
     this.gravityMax = 10;
@@ -98,7 +103,6 @@ class PhysicsComponent {
 
     if (UT.VEC3_LENGTH(this.player.velocity) > 0.1) {
       const move = UT.VEC3_SCALE(this.player.velocity, ts / 1000);
-      // const centerY = this.player.y + this.player.height * 0.5;
       const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, move[0], move[1], move[2], this.lift);
 
       this.player.x += navInfo.move[0];
@@ -111,6 +115,8 @@ class PhysicsComponent {
       else {
         this.player.velocity[1] = UT.LINEAR(Math.pow(1 - this.gravityCoefficient, ts / 1000), -this.gravityMax, this.player.velocity[1]);
       }
+
+      this.player.collideWall = navInfo.collideWall;
     }
     else {
       this.player.velocity = [0, 0, 0];
@@ -122,7 +128,6 @@ class CameraComponent {
   constructor(player, camera) {
     this.player = player;
     this.camera = camera;
-
     this.crosshair = document.createElement('img');
     this.crosshair.src = 'samples/fps/crosshair.png';
     uiManager.addNode(this.crosshair, 'position:absolute; left:50%; top:50%; transform: translate(-50%,-50%);');
@@ -133,7 +138,7 @@ class CameraComponent {
   }
 
   update(ts) {
-    this.camera.setPosition(this.player.x, this.player.y + this.player.height * 0.5, this.player.z);
+    this.camera.setPosition(this.player.x, this.player.y + this.player.height / 2, this.player.z);
     this.camera.setRotation(this.player.rotation[0], this.player.rotation[1], this.player.rotation[2]);
   }
 }
@@ -147,12 +152,14 @@ class Player {
     this.x = 0;
     this.y = 1;
     this.z = 0;
-    this.height = 1;
+    this.height = 1.3;
     this.dir = [0, 0, 0];
     this.velocity = [0, 0, 0];
     this.rotation = [0, 0, 0];
     this.movementSpeed = 7;
-    this.rotationSpeed = 0.001;
+    this.rotationSpeed = 1;
+
+    this.collideWall = false;
   }
 
   async load() {
