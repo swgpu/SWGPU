@@ -12,45 +12,203 @@
 <div class="col-content">
 <div class="tsd-page-title">
 <h2>create-warme</h2></div>
-<div class="tsd-panel tsd-typography"><a id="md:warme-engine-web-against-regular-majors-engines" class="tsd-anchor"></a><h1><a href="#md:warme-engine-web-against-regular-majors-engines">WARME Engine (Web Against Regular Majors Engines)</a></h1><p align="center">
-    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/banner.png" alt="logo"/>
-</p>
-
-<p><img src="https://img.shields.io/badge/lang-typescript-f39f37" alt="Drag Racing"> <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Drag Racing"></p>
-<p><strong>WARME Engine</strong> is an open source realtime 2D/3D game engine based on <strong>WebGPU</strong>.<br>It is a <strong>complete and cross-platform solution</strong> to build desktop/mobile games with high performance.<br><strong>WARME Engine</strong> wrap the web stack to serve one goal, make kewl games with a sweet coding style !<br>Some words about our philosophy:</p>
+<div class="tsd-panel tsd-typography"><a id="md:warme-y2k" class="tsd-anchor"></a><h1><a href="#md:warme-y2k">WARME Y2K</a></h1><p><img src="https://img.shields.io/badge/Langage-Typescript-f39f37" alt="Langage">
+<img src="https://img.shields.io/badge/Version-1.1.0-blue" alt="Version">
+<img src="https://img.shields.io/badge/License-MIT-yellow" alt="License">
+<img src="https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey" alt="Compatibility"></p>
+<blockquote>
+<p>[!NOTE]<br>Don&#39;t forget to check the wiki tutorials section, we coming soon with two tutorials for beginners !</p>
+</blockquote>
+<p><strong>WARME Y2K</strong> is the first fully packed <strong>2D/3D game engine</strong> dedicated to <strong>Y2K games</strong> on the web !<br>Some words about our philosophy:</p>
 <ul>
-<li><strong>Simplicity:</strong> We used only simple and efficient methods coming from the industrie for nearly two decades.     </li>
-<li><strong>Flexibility:</strong> Create your own renderers. Handle rendering and update loops.    </li>
-<li><strong>Modularity:</strong> We used modular architecture to keep things simple and separate.</li>
+<li><strong>Robustness:</strong> We used only simple and efficient methods coming from the industrie for nearly two decades.     </li>
+<li><strong>Flexibility:</strong> Create your own renderers. Handle render and update loops.    </li>
+<li><strong>Modularity:</strong> We used modular architecture to keep things simple and separate.     </li>
+<li><strong>Modernity:</strong> We used the WebGPU API for a blazing fast rendering.</li>
 </ul>
 <p>You can check the documentation <a href="http://warme-engine.com/">here</a>.<br>For a more concret overview on it, you can play examples <a href="https://jay19240.github.io/">here</a> and check the demo source code <a href="https://github.com/jay19240/WARME/tree/main/src/samples">here</a>.    </p>
 <a id="md:general-features" class="tsd-anchor"></a><h2><a href="#md:general-features">General features</a></h2><ul>
-<li>🧱 <strong>Core</strong> - Maths, tweening, events manager, container manager</li>
-<li>👾 <strong>2D</strong> - Sprite, isometric tilemap, orthographic tilemap, particles system, rendering filters</li>
-<li>🧊 <strong>3D</strong> - Debug shapes, mesh, animated-mesh, sprite, billboard, skybox, multiple-camera, mover, particules, flares, fog, vertex colorization, decals, shadow map, mesh pooling, rendering filters</li>
-<li>📐 <strong>Physics</strong> - Walkmesh, nav-mesh, raytest, circle-circle, cylinder-cylinder, line-line, point-rect, rect-rect, point-box, box-box</li>
-<li>💥 <strong>Material</strong> - Phong, displacement-texture-mapping, normal-mapping, env-mapping, specularity-mapping, texture-scrolling, uv-animations</li>
-<li>🌞 <strong>Light</strong> - Directional light, multiple point lights</li>
-<li>🎮 <strong>Input</strong> - Action mapper for keyboard and gamepad</li>
-<li>🧠 <strong>AI</strong> - A* for 2D/3D with graph and grid, minmax with alpha-beta pruning</li>
-<li>📺 <strong>Screen</strong> - Handle different screens of your game</li>
-<li>📜 <strong>Scripts</strong> - Write game behaviors</li>
-<li>🔊 <strong>Sound</strong> - Sound manager built on the Web Audio API</li>
-<li>🌳 <strong>Tree</strong> - Binary Space Partition for 2D &amp; 3D</li>
-<li>🎨 <strong>UI</strong> - Component architecture to keep project clean and scalable</li>
-<li>🌆 <strong>DNA</strong> - Development normalized architecture</li>
-<li>🈸 <strong>Demos</strong> - 19 real-life samples you can used to start a project</li>
+<li><p>🧱 <strong>Core</strong></p>
+<ul>
+<li>Maths</li>
+<li>Tweening</li>
+<li>Events</li>
+<li>Curves</li>
+<li>Quaternions</li>
+<li>Object pooling</li>
 </ul>
+</li>
+<li><p>👾 <strong>2D</strong></p>
+<ul>
+<li>Static sprite (jss)</li>
+<li>Animated sprite (jas)</li>
+<li>Isometric tilemap</li>
+<li>Orthographic tilemap</li>
+<li>Particles</li>
+<li>Rendering filters</li>
+</ul>
+</li>
+<li><p>📐 <strong>2D Physics</strong></p>
+<ul>
+<li>Rapier2D</li>
+</ul>
+</li>
+<li><p>🧊 <strong>3D</strong></p>
+<ul>
+<li>Debug shapes</li>
+<li>Static mesh (jsm and obj)</li>
+<li>Animated mesh (jam)</li>
+<li>Static sprite (jss)</li>
+<li>Animated sprite (jas)</li>
+<li>Billboarding</li>
+<li>Cubemap skybox</li>
+<li>Particules</li>
+<li>Flares</li>
+<li>Fog</li>
+<li>Vertex colorization</li>
+<li>Decals</li>
+<li>Realtime shadow support</li>
+<li>Multi-viewport</li>
+<li>Camera orbit</li>
+<li>Camera WASD</li>
+<li>Post-processing support</li>
+<li>Rendering filters</li>
+</ul>
+</li>
+<li><p>📐 <strong>3D Physics</strong></p>
+<ul>
+<li>Walkmesh (jwm)</li>
+<li>Navigation mesh (jnm)</li>
+<li>Ray-testing</li>
+<li>Rapier3D</li>
+</ul>
+</li>
+<li><p>💥 <strong>3D Material</strong></p>
+<ul>
+<li>Complete Phong reflection model</li>
+<li>Displacement texture map</li>
+<li>Displacement texture scrolling</li>
+<li>Diffuse map</li>
+<li>Specular map</li>
+<li>Emissive map</li>
+<li>Normal map</li>
+<li>Env map</li>
+<li>Texture scrolling</li>
+<li>Animated UV</li>
+<li>Specular shininess</li>
+<li>Emissive intensity</li>
+<li>Normal intensity</li>
+</ul>
+</li>
+<li><p>🌞 <strong>3D Light</strong></p>
+<ul>
+<li>Directional light</li>
+<li>Point lights (max : 16)</li>
+</ul>
+</li>
+<li><p>🖼️ <strong>3D Post-processing</strong></p>
+<ul>
+<li>Hardware dithering</li>
+<li>Pixelation</li>
+<li>Color depth limiting</li>
+</ul>
+</li>
+<li><p>🎮 <strong>Input</strong></p>
+<ul>
+<li>Action mapping</li>
+<li>Gamepad, keyboard and mouse support</li>
+</ul>
+</li>
+<li><p>🧠 <strong>AI</strong></p>
+<ul>
+<li>A* for 2D/3D with graph and grid</li>
+<li>Min-max with alpha-beta pruning</li>
+</ul>
+</li>
+<li><p>📺 <strong>Screen</strong></p>
+<ul>
+<li>Navigate between different view of your game</li>
+<li>Resources pre-loading</li>
+</ul>
+</li>
+<li><p>📜 <strong>Scripts</strong></p>
+<ul>
+<li>Load script from json file</li>
+<li>Register async command function and call-it from json file</li>
+<li>Manual jump to part of the script</li>
+</ul>
+</li>
+<li><p>🔊 <strong>Sound</strong></p>
+<ul>
+<li>Handle sounds by groups</li>
+<li>Play multiple sounds at same time</li>
+</ul>
+</li>
+<li><p>🌳 <strong>Tree</strong></p>
+<ul>
+<li>2D binary space partition</li>
+<li>3D binary space partition</li>
+</ul>
+</li>
+<li><p>🎨 <strong>UI</strong></p>
+<ul>
+<li>Focus/unfocus widgets</li>
+<li>Fade in/out</li>
+<li>Widget architecture</li>
+</ul>
+</li>
+<li><p>🖍️ <strong>UI Widgets</strong></p>
+<ul>
+<li>Dialog + choices</li>
+<li>Dialog only</li>
+<li>Print long text</li>
+<li>Description list</li>
+<li>Virtual keyboard</li>
+<li>Slider</li>
+<li>Menu base</li>
+<li>Menu list view</li>
+<li>Menu text</li>
+<li>Prompt</li>
+<li>Sprite</li>
+<li>Text</li>
+</ul>
+</li>
+<li><p>🌆 <strong>DNA</strong></p>
+<ul>
+<li>ECS architecture implementation (optionnal)</li>
+<li>State handler</li>
+</ul>
+</li>
+</ul>
+<a id="md:tutorials" class="tsd-anchor"></a><h2><a href="#md:tutorials">Tutorials</a></h2><table>
+  <tr>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/tutorial1.png" width="150px"/>
+    </td>
+    <td align="center"> 
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/tutorial2.png" width="150px"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <p>Tutorial 2D</p>
+    </td>
+    <td>
+        <p>Tutorial 3D</p>
+    </td>
+  </tr>
+</table>
+
 <a id="md:demos" class="tsd-anchor"></a><h2><a href="#md:demos">Demos</a></h2><table>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb1.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb1.png" width="150px"/>
     </td>
     <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb2.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb2.png" width="150px"/>
     </td>
    <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb3.png" width="150px"/>
+       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb3.png" width="150px"/>
    </td>
   </tr>
   <tr>
@@ -66,13 +224,13 @@
   </tr>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb4.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb4.png" width="150px"/>
     </td>
     <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb5.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb5.png" width="150px"/>
     </td>
    <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb6.png" width="150px"/>
+       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb6.png" width="150px"/>
    </td>
   </tr>
   <tr>
@@ -88,13 +246,13 @@
   </tr>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb7.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb7.png" width="150px"/>
     </td>
     <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb8.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb8.png" width="150px"/>
     </td>
    <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb9.png" width="150px"/>
+       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb9.png" width="150px"/>
    </td>
   </tr>
   <tr>
@@ -110,13 +268,13 @@
   </tr>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb10.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb10.png" width="150px"/>
     </td>
     <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb11.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb11.png" width="150px"/>
     </td>
    <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb12.png" width="150px"/>
+       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb12.png" width="150px"/>
    </td>
   </tr>
   <tr>
@@ -132,13 +290,13 @@
   </tr>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb13.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb13.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb14.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb14.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb15.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb15.png" width="150px"/>
     </td>
   </tr>
   <tr>
@@ -154,13 +312,13 @@
   </tr>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb16.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb16.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb17.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb17.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb18.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb18.png" width="150px"/>
     </td>
   </tr>
   <tr>
@@ -170,16 +328,6 @@
     <td>
         <p>3D Shadow Map</p>
     </td>
-    <td>
-        <p>Rendering filters</p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb19.png" width="150px"/>
-    </td>
-  </tr>
-  <tr>
     <td>
         <p>2D Isometric Background</p>
     </td>
@@ -191,17 +339,17 @@ Once installation is done, you can clone the repository or use npx
 to build our first WARME project.     </p>
 <pre><code><span class="hl-0">// create your awesome game project</span><br/><span class="hl-1"># </span><span class="hl-2">npx</span><span class="hl-1"> </span><span class="hl-2">create</span><span class="hl-1">-</span><span class="hl-2">warme</span><span class="hl-1"> </span><span class="hl-2">your_project_name</span><br/><br/><span class="hl-0">// now, you can start with</span><br/><span class="hl-1"># </span><span class="hl-2">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">dev</span>
 </code><button>Copy</button></pre>
-<a id="md:how-to-integrate-your-3d-models-" class="tsd-anchor"></a><h2><a href="#md:how-to-integrate-your-3d-models-">How to integrate your 3D models ?</a></h2><a id="md:you-can-used-any-software-that-export-file-in-wavefront-obj-format-like-blender-crocotile-elit3d-or-whatever-you-can-also-simply-used-the-warme-blender-exporter-important-note-the-blender-coordinate-system-and-the-engine-don39t-match-see-below-the-rule-to-translate-don39t-forget-to-apply-these-changes-when-you-export-your-obj-file--blender-gt-engine" class="tsd-anchor"></a><h2><a href="#md:you-can-used-any-software-that-export-file-in-wavefront-obj-format-like-blender-crocotile-elit3d-or-whatever-you-can-also-simply-used-the-warme-blender-exporter-important-note-the-blender-coordinate-system-and-the-engine-don39t-match-see-below-the-rule-to-translate-don39t-forget-to-apply-these-changes-when-you-export-your-obj-file--blender-gt-engine">You can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.
-You can also simply used the <a href="https://github.com/jay19240/WARME-Blender-Exporter">WARME Blender Exporter</a>.
-Important note: The Blender coordinate system and the engine don&#39;t match, see below the rule to translate.
+<a id="md:how-to-integrate-your-3d-models-" class="tsd-anchor"></a><h2><a href="#md:how-to-integrate-your-3d-models-">How to integrate your 3D models ?</a></h2><p>The best way is to used the <a href="https://github.com/jay19240/WARME-Engine/bin/WARME-Blender-Exporter.zip">WARME Blender Exporter</a>, otherwise you can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.    </p>
+<a id="md:important-note-the-blender-coordinate-system-and-the-engine-don39t-match-see-below-the-rule-to-translate-don39t-forget-to-apply-these-changes-when-you-export-your-obj-file--blender-gt-engine" class="tsd-anchor"></a><h2><a href="#md:important-note-the-blender-coordinate-system-and-the-engine-don39t-match-see-below-the-rule-to-translate-don39t-forget-to-apply-these-changes-when-you-export-your-obj-file--blender-gt-engine">Important note: The Blender coordinate system and the engine don&#39;t match, see below the rule to translate.
 Don&#39;t forget to apply these changes when you export your obj file.
 ```
-blender =&gt; engine</a></h2><a id="md:x---x-y--z-z--y" class="tsd-anchor"></a><h2><a href="#md:x---x-y--z-z--y">x = -x
+blender =&gt; engine</a></h2><a id="md:x---x-y--z-z--y-engine-axis" class="tsd-anchor"></a><h2><a href="#md:x---x-y--z-z--y-engine-axis">x = -x
 y = +z
-z = +y</a></h2><p>forward = -z
+z = +y
+engine axis</a></h2><p>forward = -z
 up = +y
 right = +x</p>
-<pre><code><br/><span class="hl-1">## </span><span class="hl-2">Contributions</span><br/><span class="hl-2">Contributions</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">what</span><span class="hl-1"> </span><span class="hl-2">make</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">open</span><span class="hl-1"> </span><span class="hl-2">source</span><span class="hl-1"> </span><span class="hl-2">community</span><span class="hl-1"> </span><span class="hl-2">such</span><span class="hl-1"> </span><span class="hl-2">an</span><span class="hl-1"> </span><span class="hl-2">amazing</span><span class="hl-1"> </span><span class="hl-2">place</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">learn</span><span class="hl-1">, </span><span class="hl-2">inspire</span><span class="hl-1">, </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-2">create</span><span class="hl-1">. </span><span class="hl-2">Any</span><span class="hl-1"> </span><span class="hl-2">contributions</span><span class="hl-1"> </span><span class="hl-2">you</span><span class="hl-1"> </span><span class="hl-2">make</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">greatly</span><span class="hl-1"> </span><span class="hl-2">appreciated</span><span class="hl-1">.</span><br/><br/><span class="hl-2">If</span><span class="hl-1"> </span><span class="hl-2">you</span><span class="hl-1"> </span><span class="hl-2">have</span><span class="hl-1"> </span><span class="hl-2">a</span><span class="hl-1"> </span><span class="hl-2">suggestion</span><span class="hl-1"> </span><span class="hl-2">that</span><span class="hl-1"> </span><span class="hl-2">would</span><span class="hl-1"> </span><span class="hl-2">make</span><span class="hl-1"> </span><span class="hl-3">this</span><span class="hl-1"> </span><span class="hl-2">better</span><span class="hl-1">, </span><span class="hl-2">please</span><span class="hl-1"> </span><span class="hl-2">fork</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">repo</span><span class="hl-1"> </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-2">create</span><span class="hl-1"> </span><span class="hl-2">a</span><span class="hl-1"> </span><span class="hl-2">pull</span><span class="hl-1"> </span><span class="hl-2">request</span><span class="hl-1">. </span><span class="hl-2">You</span><span class="hl-1"> </span><span class="hl-2">can</span><span class="hl-1"> </span><span class="hl-2">also</span><span class="hl-1"> </span><span class="hl-2">simply</span><span class="hl-1"> </span><span class="hl-2">open</span><span class="hl-1"> </span><span class="hl-2">an</span><span class="hl-1"> </span><span class="hl-2">issue</span><span class="hl-1"> </span><span class="hl-4">with</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">tag</span><span class="hl-1"> </span><span class="hl-5">&quot;enhancement&quot;</span><span class="hl-1">. </span><span class="hl-2">Don</span><span class="hl-5">&#39;t forget to give the project a star! Thanks again!   </span><span class="hl-6"> </span><br/><br/><span class="hl-7">1.</span><span class="hl-1"> </span><span class="hl-2">Fork</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">Project</span><br/><span class="hl-7">2.</span><span class="hl-1"> </span><span class="hl-2">Create</span><span class="hl-1"> </span><span class="hl-2">your</span><span class="hl-1"> </span><span class="hl-2">Feature</span><span class="hl-1"> </span><span class="hl-8">Branch</span><span class="hl-1"> (</span><span class="hl-2">git</span><span class="hl-1"> </span><span class="hl-2">checkout</span><span class="hl-1"> -</span><span class="hl-2">b</span><span class="hl-1"> </span><span class="hl-2">new_feature</span><span class="hl-1">)</span><br/><span class="hl-7">3.</span><span class="hl-1"> </span><span class="hl-2">Commit</span><span class="hl-1"> </span><span class="hl-2">your</span><span class="hl-1"> </span><span class="hl-8">Changes</span><span class="hl-1"> (</span><span class="hl-2">git</span><span class="hl-1"> </span><span class="hl-2">commit</span><span class="hl-1"> -</span><span class="hl-2">m</span><span class="hl-1"> </span><span class="hl-5">&#39;Add new feature&#39;</span><span class="hl-1">)</span><br/><span class="hl-7">4.</span><span class="hl-1"> </span><span class="hl-2">Push</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-8">Branch</span><span class="hl-1"> (</span><span class="hl-2">git</span><span class="hl-1"> </span><span class="hl-2">push</span><span class="hl-1"> </span><span class="hl-2">origin</span><span class="hl-1"> </span><span class="hl-2">new_feature</span><span class="hl-1">)</span><br/><span class="hl-7">5.</span><span class="hl-1"> </span><span class="hl-2">Open</span><span class="hl-1"> </span><span class="hl-2">a</span><span class="hl-1"> </span><span class="hl-2">Pull</span><span class="hl-1"> </span><span class="hl-2">Request</span><br/><br/><span class="hl-1">## </span><span class="hl-2">Contributors</span><br/><span class="hl-7">1.</span><span class="hl-1"> </span><span class="hl-2">Crisxzu</span><span class="hl-1"> - </span><span class="hl-2">Contribute</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">Wiki</span><span class="hl-1"> </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-2">typedoc</span><span class="hl-1"> </span><span class="hl-2">converter</span><span class="hl-1">.</span><br/><span class="hl-7">2.</span><span class="hl-1"> </span><span class="hl-2">zuda</span><span class="hl-1"> - </span><span class="hl-2">Contribute</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">Triple</span><span class="hl-1"> </span><span class="hl-2">Triad</span><span class="hl-1"> </span><span class="hl-2">demo</span><span class="hl-1">.</span><br/><span class="hl-7">3.</span><span class="hl-1"> </span><span class="hl-2">luciedefraiteur</span><span class="hl-1"> - </span><span class="hl-2">Contribute</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">fog</span><span class="hl-1">.</span><br/><span class="hl-7">4.</span><span class="hl-1"> </span><span class="hl-2">thetinyspark</span><span class="hl-1"> - </span><span class="hl-2">Contribute</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">binary</span><span class="hl-1"> </span><span class="hl-2">space</span><span class="hl-1"> </span><span class="hl-2">partition</span><span class="hl-1">.</span><br/><br/><span class="hl-1">## </span><span class="hl-2">Some</span><span class="hl-1"> </span><span class="hl-2">parts</span><span class="hl-1"> </span><span class="hl-2">taken</span><span class="hl-1"> </span><span class="hl-2">for</span><span class="hl-1"> </span><span class="hl-3">this</span><span class="hl-1"> </span><span class="hl-2">work</span><br/><span class="hl-1">- </span><span class="hl-2">Use</span><span class="hl-1"> </span><span class="hl-9">DOM</span><span class="hl-1"> </span><span class="hl-2">for</span><span class="hl-1"> </span><span class="hl-9">UI</span><span class="hl-1"> </span><span class="hl-2">elements</span><br/><span class="hl-1">- </span><span class="hl-2">Use</span><span class="hl-1"> </span><span class="hl-2">CanvasRenderingContext2D</span><span class="hl-1"> </span><span class="hl-2">for</span><span class="hl-1"> 2</span><span class="hl-9">D</span><span class="hl-1"> </span><span class="hl-2">stuffs</span><br/><span class="hl-1">- </span><span class="hl-2">Use</span><span class="hl-1"> </span><span class="hl-2">human</span><span class="hl-1"> </span><span class="hl-2">readable</span><span class="hl-1"> </span><span class="hl-2">custom</span><span class="hl-1"> </span><span class="hl-2">format</span><span class="hl-1"> </span><span class="hl-2">for</span><span class="hl-1"> </span><span class="hl-2">all</span><span class="hl-1"> </span><span class="hl-2">graphics</span><span class="hl-1"> </span><span class="hl-2">stuff</span><br/><span class="hl-1">- </span><span class="hl-2">No</span><span class="hl-1"> </span><span class="hl-2">glTF</span><span class="hl-1"> </span><span class="hl-2">support</span><span class="hl-1">, </span><span class="hl-2">we</span><span class="hl-1"> </span><span class="hl-2">don</span><span class="hl-5">&#39;t want to support the rendering techniques used by this format (BSDF, Skinning, etc...</span><span class="hl-6">)</span><br/><span class="hl-1">- </span><span class="hl-2">No</span><span class="hl-1"> </span><span class="hl-2">realistic</span><span class="hl-1"> </span><span class="hl-2">physics</span><span class="hl-1"> </span><span class="hl-2">engine</span><span class="hl-1">, </span><span class="hl-2">we</span><span class="hl-1"> </span><span class="hl-2">assume</span><span class="hl-1"> </span><span class="hl-4">if</span><span class="hl-1"> </span><span class="hl-2">you</span><span class="hl-1"> </span><span class="hl-2">need</span><span class="hl-1"> </span><span class="hl-2">one</span><span class="hl-1"> </span><span class="hl-2">there</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">many</span><span class="hl-1"> </span><span class="hl-2">pretty</span><span class="hl-1"> </span><span class="hl-2">lib</span><span class="hl-1"> </span><span class="hl-2">for</span><span class="hl-1"> </span><span class="hl-2">that</span><span class="hl-1"> </span><span class="hl-2">like</span><span class="hl-1"> </span><span class="hl-2">ammo</span><span class="hl-1">.</span><span class="hl-2">js</span><span class="hl-1">, </span><span class="hl-2">plank</span><span class="hl-1">.</span><span class="hl-2">js</span><span class="hl-1"> </span><span class="hl-2">or</span><span class="hl-1"> </span><span class="hl-2">canon</span><span class="hl-1">.</span><span class="hl-2">js</span><br/><br/><span class="hl-1">## </span><span class="hl-2">License</span><span class="hl-1"> </span><br/><span class="hl-9">WARME</span><span class="hl-1"> </span><span class="hl-2">engine</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">released</span><span class="hl-1"> </span><span class="hl-2">under</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> [</span><span class="hl-9">MIT</span><span class="hl-1">](</span><span class="hl-2">https</span><span class="hl-1">:</span><span class="hl-0">//opensource.org/licenses/MIT) license.</span>
+<pre><code><br/><span class="hl-1">## </span><span class="hl-2">Contributions</span><br/><span class="hl-2">Contributions</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">what</span><span class="hl-1"> </span><span class="hl-2">make</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">open</span><span class="hl-1"> </span><span class="hl-2">source</span><span class="hl-1"> </span><span class="hl-2">community</span><span class="hl-1"> </span><span class="hl-2">such</span><span class="hl-1"> </span><span class="hl-2">an</span><span class="hl-1"> </span><span class="hl-2">amazing</span><span class="hl-1"> </span><span class="hl-2">place</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">learn</span><span class="hl-1">, </span><span class="hl-2">inspire</span><span class="hl-1">, </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-2">create</span><span class="hl-1">. </span><span class="hl-2">Any</span><span class="hl-1"> </span><span class="hl-2">contributions</span><span class="hl-1"> </span><span class="hl-2">you</span><span class="hl-1"> </span><span class="hl-2">make</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">greatly</span><span class="hl-1"> </span><span class="hl-2">appreciated</span><span class="hl-1">.</span><br/><br/><span class="hl-2">If</span><span class="hl-1"> </span><span class="hl-2">you</span><span class="hl-1"> </span><span class="hl-2">have</span><span class="hl-1"> </span><span class="hl-2">a</span><span class="hl-1"> </span><span class="hl-2">suggestion</span><span class="hl-1"> </span><span class="hl-2">that</span><span class="hl-1"> </span><span class="hl-2">would</span><span class="hl-1"> </span><span class="hl-2">make</span><span class="hl-1"> </span><span class="hl-3">this</span><span class="hl-1"> </span><span class="hl-2">better</span><span class="hl-1">, </span><span class="hl-2">please</span><span class="hl-1"> </span><span class="hl-2">fork</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">repo</span><span class="hl-1"> </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-2">create</span><span class="hl-1"> </span><span class="hl-2">a</span><span class="hl-1"> </span><span class="hl-2">pull</span><span class="hl-1"> </span><span class="hl-2">request</span><span class="hl-1">. </span><span class="hl-2">You</span><span class="hl-1"> </span><span class="hl-2">can</span><span class="hl-1"> </span><span class="hl-2">also</span><span class="hl-1"> </span><span class="hl-2">simply</span><span class="hl-1"> </span><span class="hl-2">open</span><span class="hl-1"> </span><span class="hl-2">an</span><span class="hl-1"> </span><span class="hl-2">issue</span><span class="hl-1"> </span><span class="hl-4">with</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">tag</span><span class="hl-1"> </span><span class="hl-5">&quot;enhancement&quot;</span><span class="hl-1">. </span><span class="hl-2">Don</span><span class="hl-5">&#39;t forget to give the project a star! Thanks again!   </span><span class="hl-6"> </span><br/><br/><span class="hl-7">1.</span><span class="hl-1"> </span><span class="hl-2">Fork</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">Project</span><br/><span class="hl-7">2.</span><span class="hl-1"> </span><span class="hl-2">Create</span><span class="hl-1"> </span><span class="hl-2">your</span><span class="hl-1"> </span><span class="hl-2">Feature</span><span class="hl-1"> </span><span class="hl-8">Branch</span><span class="hl-1"> (</span><span class="hl-2">git</span><span class="hl-1"> </span><span class="hl-2">checkout</span><span class="hl-1"> -</span><span class="hl-2">b</span><span class="hl-1"> </span><span class="hl-2">new_feature</span><span class="hl-1">)</span><br/><span class="hl-7">3.</span><span class="hl-1"> </span><span class="hl-2">Commit</span><span class="hl-1"> </span><span class="hl-2">your</span><span class="hl-1"> </span><span class="hl-8">Changes</span><span class="hl-1"> (</span><span class="hl-2">git</span><span class="hl-1"> </span><span class="hl-2">commit</span><span class="hl-1"> -</span><span class="hl-2">m</span><span class="hl-1"> </span><span class="hl-5">&#39;Add new feature&#39;</span><span class="hl-1">)</span><br/><span class="hl-7">4.</span><span class="hl-1"> </span><span class="hl-2">Push</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-8">Branch</span><span class="hl-1"> (</span><span class="hl-2">git</span><span class="hl-1"> </span><span class="hl-2">push</span><span class="hl-1"> </span><span class="hl-2">origin</span><span class="hl-1"> </span><span class="hl-2">new_feature</span><span class="hl-1">)</span><br/><span class="hl-7">5.</span><span class="hl-1"> </span><span class="hl-2">Open</span><span class="hl-1"> </span><span class="hl-2">a</span><span class="hl-1"> </span><span class="hl-2">Pull</span><span class="hl-1"> </span><span class="hl-2">Request</span><br/><br/><span class="hl-1">## </span><span class="hl-2">Contributors</span><br/><span class="hl-7">1.</span><span class="hl-1"> </span><span class="hl-2">Crisxzu</span><span class="hl-1"> - </span><span class="hl-2">Contribute</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">Wiki</span><span class="hl-1">, </span><span class="hl-2">typedoc</span><span class="hl-1"> </span><span class="hl-2">converter</span><span class="hl-1"> </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-2">Triple</span><span class="hl-1"> </span><span class="hl-2">Triad</span><span class="hl-1"> </span><span class="hl-2">demo</span><span class="hl-1">.</span><br/><span class="hl-7">2.</span><span class="hl-1"> </span><span class="hl-2">zuda</span><span class="hl-1"> - </span><span class="hl-2">Contribute</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">Triple</span><span class="hl-1"> </span><span class="hl-2">Triad</span><span class="hl-1"> </span><span class="hl-2">demo</span><span class="hl-1">.</span><br/><span class="hl-7">3.</span><span class="hl-1"> </span><span class="hl-2">luciedefraiteur</span><span class="hl-1"> - </span><span class="hl-2">Contribute</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">fog</span><span class="hl-1">.</span><br/><span class="hl-7">4.</span><span class="hl-1"> </span><span class="hl-2">thetinyspark</span><span class="hl-1"> - </span><span class="hl-2">Contribute</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">binary</span><span class="hl-1"> </span><span class="hl-2">space</span><span class="hl-1"> </span><span class="hl-2">partition</span><span class="hl-1">.</span><br/><span class="hl-7">5.</span><span class="hl-1"> </span><span class="hl-2">Impre</span><span class="hl-1">-</span><span class="hl-2">visible</span><span class="hl-1"> - </span><span class="hl-2">Contribute</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> 2</span><span class="hl-9">D</span><span class="hl-1"> </span><span class="hl-2">tutorial</span><span class="hl-1">.</span><br/><br/><span class="hl-1">## </span><span class="hl-2">Some</span><span class="hl-1"> </span><span class="hl-2">parts</span><span class="hl-1"> </span><span class="hl-2">taken</span><span class="hl-1"> </span><span class="hl-2">for</span><span class="hl-1"> </span><span class="hl-3">this</span><span class="hl-1"> </span><span class="hl-2">work</span><br/><span class="hl-1">- </span><span class="hl-9">DOM</span><span class="hl-1"> </span><span class="hl-2">for</span><span class="hl-1"> </span><span class="hl-9">UI</span><span class="hl-1"> </span><span class="hl-2">elements</span><br/><span class="hl-1">- </span><span class="hl-2">CanvasRenderingContext2D</span><span class="hl-1"> </span><span class="hl-2">for</span><span class="hl-1"> 2</span><span class="hl-9">D</span><span class="hl-1"> </span><span class="hl-2">stuffs</span><br/><span class="hl-1">- </span><span class="hl-2">Human</span><span class="hl-1"> </span><span class="hl-2">readable</span><span class="hl-1"> </span><span class="hl-2">custom</span><span class="hl-1"> </span><span class="hl-2">format</span><span class="hl-1"> </span><span class="hl-2">for</span><span class="hl-1"> </span><span class="hl-2">all</span><span class="hl-1"> </span><span class="hl-2">graphics</span><span class="hl-1"> </span><span class="hl-2">stuff</span><br/><span class="hl-1">- [</span><span class="hl-2">Rapier</span><span class="hl-1">](</span><span class="hl-2">https</span><span class="hl-1">:</span><span class="hl-0">//rapier.rs/) for both 2D and 3D physics engine</span><br/><span class="hl-1">- </span><span class="hl-2">No</span><span class="hl-1"> </span><span class="hl-2">glTF</span><span class="hl-1"> </span><span class="hl-2">support</span><span class="hl-1">, </span><span class="hl-2">we</span><span class="hl-1"> </span><span class="hl-2">don</span><span class="hl-5">&#39;t want to support the rendering techniques used by this format (BSDF, Skinning, etc...</span><span class="hl-6">)</span><br/><br/><span class="hl-1">## </span><span class="hl-2">Roadmap</span><br/><span class="hl-1">- </span><span class="hl-2">Add</span><span class="hl-1"> </span><span class="hl-8">spotlight</span><span class="hl-1"> (</span><span class="hl-2">no</span><span class="hl-1">-</span><span class="hl-2">delay</span><span class="hl-1">)</span><br/><span class="hl-1">- </span><span class="hl-9">FPS</span><span class="hl-1">: </span><span class="hl-2">Add</span><span class="hl-1"> </span><span class="hl-2">weapon</span><span class="hl-1">, </span><span class="hl-2">bullet</span><span class="hl-1">, </span><span class="hl-2">camera</span><span class="hl-1"> </span><span class="hl-2">movement</span><span class="hl-1"> </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-2">strife</span><span class="hl-1">-</span><span class="hl-2">jumping</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-9">FPS</span><span class="hl-1"> </span><span class="hl-2">sample</span><span class="hl-1"> + </span><span class="hl-2">change</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">map</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">fit</span><span class="hl-1"> </span><span class="hl-2">Quake</span><span class="hl-1"> </span><span class="hl-7">3</span><span class="hl-1"> (</span><span class="hl-2">no</span><span class="hl-1">-</span><span class="hl-2">delay</span><span class="hl-1">)</span><br/><br/><span class="hl-1">## </span><span class="hl-2">License</span><span class="hl-1"> </span><br/><span class="hl-9">WARME</span><span class="hl-1"> </span><span class="hl-2">engine</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">released</span><span class="hl-1"> </span><span class="hl-2">under</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> [</span><span class="hl-9">MIT</span><span class="hl-1">](</span><span class="hl-2">https</span><span class="hl-1">:</span><span class="hl-0">//opensource.org/licenses/MIT) license.</span>
 </code><button>Copy</button></pre>
 </div></div>
 <div class="col-sidebar">
@@ -225,22 +373,22 @@ right = +x</p>
 <ul>
 <li>
 <ul>
-<li><a href="#md:warme-engine-web-against-regular-majors-engines"><span>WARME <wbr/>Engine (<wbr/>Web <wbr/>Against <wbr/>Regular <wbr/>Majors <wbr/>Engines)</span></a></li>
+<li><a href="#md:warme-y2k"><span>WARME <wbr/>Y2K</span></a></li>
 <li>
 <ul>
 <li><a href="#md:general-features"><span>General features</span></a></li>
+<li><a href="#md:tutorials"><span>Tutorials</span></a></li>
 <li><a href="#md:demos"><span>Demos</span></a></li>
 <li><a href="#md:getting-started"><span>Getting started</span></a></li>
 <li><a href="#md:how-to-integrate-your-3d-models-"><span>How to integrate your 3<wbr/>D models ?</span></a></li>
-<li><a href="#md:you-can-used-any-software-that-export-file-in-wavefront-obj-format-like-blender-crocotile-elit3d-or-whatever-you-can-also-simply-used-the-warme-blender-exporter-important-note-the-blender-coordinate-system-and-the-engine-don39t-match-see-below-the-rule-to-translate-don39t-forget-to-apply-these-changes-when-you-export-your-obj-file--blender-gt-engine"><span>You can used any software that export file in wavefront obj format like <wbr/>Blender, <wbr/>Crocotile, <wbr/>Elit3<wbr/>D or whatever.
-<wbr/>You can also simply used the WARME <wbr/>Blender <wbr/>Exporter.
-<wbr/>Important note: <wbr/>The <wbr/>Blender coordinate system and the engine don&#39;t match, see below the rule to translate.
+<li><a href="#md:important-note-the-blender-coordinate-system-and-the-engine-don39t-match-see-below-the-rule-to-translate-don39t-forget-to-apply-these-changes-when-you-export-your-obj-file--blender-gt-engine"><span>Important note: <wbr/>The <wbr/>Blender coordinate system and the engine don&#39;t match, see below the rule to translate.
 <wbr/>Don&#39;t forget to apply these changes when you export your obj file.
 ```
 blender =&gt; engine</span></a></li>
-<li><a href="#md:x---x-y--z-z--y"><span>x = -<wbr/>x
+<li><a href="#md:x---x-y--z-z--y-engine-axis"><span>x = -<wbr/>x
 y = +z
-z = +y</span></a></li></ul></li></ul></li></ul></div></details></div>
+z = +y
+engine axis</span></a></li></ul></li></ul></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="index.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>create-warme</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base=".">
@@ -255,6 +403,7 @@ z = +y</span></a></li></ul></li></ul></li></ul></div></details></div>
 <li><a href="modules/core_curve.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/curve</a></li>
 <li><a href="modules/core_event_manager.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/event_manager</a></li>
 <li><a href="modules/core_global.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/global</a></li>
+<li><a href="modules/core_object_pooling.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/object_pooling</a></li>
 <li><a href="modules/core_quaternion.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/quaternion</a></li>
 <li><a href="modules/core_tree_partition.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/tree_partition</a></li>
 <li><a href="modules/core_tween.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/tween</a></li>
@@ -264,7 +413,6 @@ z = +y</span></a></li></ul></li></ul></li></ul></div></details></div>
 <li><a href="modules/dna_dna_system.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>dna/dna_system</a></li>
 <li><a href="modules/gfx2_gfx2_bounding_rect.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>gfx2/gfx2_bounding_rect</a></li>
 <li><a href="modules/gfx2_gfx2_drawable.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>gfx2/gfx2_drawable</a></li>
-<li><a href="modules/gfx2_gfx2_drawer.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>gfx2/gfx2_drawer</a></li>
 <li>Loading...</li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>

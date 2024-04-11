@@ -12,7 +12,7 @@ Some words about our philosophy:
 - **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle render and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
-- **Modernity:** We used the WebGPU API for a blazing fast rendering.
+- **Modernity:** We used WebGPU API for a blazing fast rendering.
 
 You can check the documentation [here](http://warme-engine.com/).          
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
