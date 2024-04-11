@@ -1,3 +1,3 @@
 * Script
-Powerful script machine implementation stuff.~
+Powerful script machine implementation.~
 - [[ScriptMachine]]~
