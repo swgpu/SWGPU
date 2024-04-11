@@ -1,6 +1,8 @@
 import { eventManager } from '../core/event_manager';
 import { gfx2Manager } from '../gfx2/gfx2_manager';
+import { UT } from '../core/utils';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
+import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
 
 interface JASFrame {
   x: number;
@@ -27,6 +29,7 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   currentAnimationFrameIndex: number;
   looped: boolean;
   frameProgress: number;
+  boundingRects: Array<Gfx2BoundingRect>;
 
   constructor() {
     super();
@@ -37,6 +40,7 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
     this.currentAnimationFrameIndex = 0;
     this.looped = false;    
     this.frameProgress = 0;
+    this.boundingRects = [];
   }
 
   /**
@@ -129,6 +133,8 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
     this.flip[1] = json['FlipY'] ?? false;
 
     this.animations = [];
+    this.boundingRects = [];
+
     for (const obj of json['Animations']) {
       const animation: JASAnimation = {
         name: obj['Name'],
@@ -146,6 +152,12 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
       }
 
       this.animations.push(animation);
+      this.boundingRects.push(Gfx2BoundingRect.createFromCoord(
+        json['X'],
+        json['Y'],
+        json['Width'],
+        json['Height']
+      ));
     }
 
     this.currentAnimation = null;
@@ -222,6 +234,39 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
    */
   setTexture(texture: ImageBitmap): void {
     this.texture = texture;
+  }
+
+  /**
+   * Set the bounding rects.
+   * Note: Usualy used to handle collision.
+   * 
+   * @param {Array<Gfx2BoundingRect>} boundingRects - The bounding rectangle list.
+   */
+  setBoundingRect(boundingRects: Array<Gfx2BoundingRect>): void {
+    this.boundingRects = boundingRects;
+  }
+
+  /**
+   * Returns the bounding rect.
+   * 
+   * @param {boolean} [dynamicMode=false] - Determines if bounding rect fit the current animation.
+   */
+  getBoundingRect(dynamicMode: boolean = false): Gfx2BoundingRect {
+    return dynamicMode ? this.boundingRects[this.currentAnimationFrameIndex] : this.boundingRects[0];
+  }
+
+  /**
+   * Returns the bounding rect in the world space coordinates.
+   * 
+   * @param {boolean} [dynamicMode=false] - Determines if bounding rect fit the current animation.
+   */
+  getWorldBoundingRect(dynamicMode: boolean = false): Gfx2BoundingRect {
+    if (dynamicMode) {
+      return this.boundingRects[this.currentAnimationFrameIndex].transform(UT.MAT3_TRANSLATE(this.position[0], this.position[1]));
+    }
+    else {
+      return this.boundingRects[0].transform(UT.MAT3_TRANSLATE(this.position[0], this.position[1]));
+    }
   }
 }
 

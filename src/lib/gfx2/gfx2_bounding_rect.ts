@@ -126,6 +126,20 @@ class Gfx2BoundingRect {
   }
 
   /**
+   * Returns the width.
+   */
+  getWidth(): number {
+    return this.max[0] - this.min[0];
+  }
+
+  /**
+   * Returns the height.
+   */
+  getHeight(): number {
+    return this.max[1] - this.min[1];
+  }
+
+  /**
    * Returns the radius of a circumscribed circle to the rectangle.
    */
   getRadius(): number {

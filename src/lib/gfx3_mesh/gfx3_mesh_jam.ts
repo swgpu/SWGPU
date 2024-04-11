@@ -264,7 +264,7 @@ class Gfx3MeshJAM extends Gfx3Mesh {
   /**
    * Returns the bounding box.
    * 
-   * @param {boolean} [dynamicMode=false] - Determines whether the animation should loop or not.
+   * @param {boolean} [dynamicMode=false] - Determines if bounding box fit the current animation.
    */
   getBoundingBox(dynamicMode: boolean = false): Gfx3BoundingBox {
     return dynamicMode ? this.boundingBoxes[this.currentFrameIndex] : this.boundingBoxes[0];
@@ -273,7 +273,7 @@ class Gfx3MeshJAM extends Gfx3Mesh {
   /**
    * Returns the bounding box in the world space coordinates.
    * 
-   * @param {boolean} [dynamicMode=false] - Determines whether the animation should loop or not.
+   * @param {boolean} [dynamicMode=false] - Determines if bounding box fit the current animation.
    */
   getWorldBoundingBox(dynamicMode: boolean = false): Gfx3BoundingBox {
     return dynamicMode ? this.boundingBoxes[this.currentFrameIndex].transform(this.getTransformMatrix()) : this.boundingBoxes[0].transform(this.getTransformMatrix());
