@@ -12,7 +12,7 @@ Some words about our philosophy:
 - **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle render and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
-- **Modernity:** We used the WebGPU rendering API.
+- **Modernity:** We used the WebGPU API for a blazing fast rendering.
 
 You can check the documentation [here](http://warme-engine.com/).          
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
@@ -139,10 +139,10 @@ For a more concret overview on it, you can play examples [here](https://jay19240
 <table>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/tutorial1.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/tutorial1.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/tutorial2.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/tutorial2.png" width="150px"/>
     </td>
   </tr>
   <tr>
@@ -159,13 +159,13 @@ For a more concret overview on it, you can play examples [here](https://jay19240
 <table>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb1.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb1.png" width="150px"/>
     </td>
     <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb2.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb2.png" width="150px"/>
     </td>
    <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb3.png" width="150px"/>
+       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb3.png" width="150px"/>
    </td>
   </tr>
   <tr>
@@ -181,13 +181,13 @@ For a more concret overview on it, you can play examples [here](https://jay19240
   </tr>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb4.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb4.png" width="150px"/>
     </td>
     <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb5.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb5.png" width="150px"/>
     </td>
    <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb6.png" width="150px"/>
+       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb6.png" width="150px"/>
    </td>
   </tr>
   <tr>
@@ -203,13 +203,13 @@ For a more concret overview on it, you can play examples [here](https://jay19240
   </tr>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb7.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb7.png" width="150px"/>
     </td>
     <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb8.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb8.png" width="150px"/>
     </td>
    <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb9.png" width="150px"/>
+       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb9.png" width="150px"/>
    </td>
   </tr>
   <tr>
@@ -225,13 +225,13 @@ For a more concret overview on it, you can play examples [here](https://jay19240
   </tr>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb10.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb10.png" width="150px"/>
     </td>
     <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb11.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb11.png" width="150px"/>
     </td>
    <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb12.png" width="150px"/>
+       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb12.png" width="150px"/>
    </td>
   </tr>
   <tr>
@@ -247,13 +247,13 @@ For a more concret overview on it, you can play examples [here](https://jay19240
   </tr>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb13.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb13.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb14.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb14.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb15.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb15.png" width="150px"/>
     </td>
   </tr>
   <tr>
@@ -269,13 +269,13 @@ For a more concret overview on it, you can play examples [here](https://jay19240
   </tr>
   <tr>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb16.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb16.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb17.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb17.png" width="150px"/>
     </td>
     <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/imgs/thumb18.png" width="150px"/>
+        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb18.png" width="150px"/>
     </td>
   </tr>
   <tr>

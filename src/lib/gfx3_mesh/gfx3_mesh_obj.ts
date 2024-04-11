@@ -268,7 +268,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
         const r = parseFloat(a[0]);
         const g = parseFloat(a[1]);
         const b = parseFloat(a[2]);
-        curMat.setEmissive(r, g, b);
+        curMat.setEmissive(r, g, b, 1);
       }
 
       if (line.startsWith('map_Kd ')) {
@@ -278,7 +278,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
 
       if (line.startsWith('map_Ns ')) {
         const a = line.substring(7);
-        curMat.setSpecularityMap(await gfx3TextureManager.loadTexture8bit(path + a));
+        curMat.setSpecularMap(await gfx3TextureManager.loadTexture8bit(path + a));
       }
 
       if (line.startsWith('map_Bump ')) {

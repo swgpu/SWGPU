@@ -569,10 +569,24 @@ class Gfx3Material {
   }
 
   /**
+   * Returns the diffuse texture map.
+   */
+  getDiffuseMap(): Gfx3Texture {
+    return this.diffuseMap;
+  }
+
+  /**
    * Returns the specularity texture map.
    */
-  getSpecularityMap(): Gfx3Texture {
-    return this.specularityMap;
+  getSpecularMap(): Gfx3Texture {
+    return this.specularMap;
+  }
+
+  /**
+   * Returns the emissive texture map.
+   */
+  getEmissiveMap(): Gfx3Texture {
+    return this.emissiveMap;
   }
 
   /**
