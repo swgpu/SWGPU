@@ -2,12 +2,17 @@
 
 Singleton core manager.~
 Used to set the size and resolution of the top-level HTMLElement container.~
+It emit 'E_RESIZE'~
 ** Constructors
 - ''new CoreManager''(): CoreManager~
 ** Methods
 - ''addClass''(className: string): void~
 Adds a class to the container element.~
 -- ''className'': The class name.~
+~
+- ''enableScanlines''(enabled: boolean): void~
+Enable scanlines.~
+-- ''enabled'': Indicating whether scanlines should be enabled or disable.~
 ~
 - ''getResolution''(): vec2~
 Returns the resolution size.~

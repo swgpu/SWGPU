@@ -1,6 +1,7 @@
 * Class: Motion
 
 Is used to move along a serie of points.~
+It emit 'E_FINISHED'~
 ** Constructors
 - ''new Motion''(points: vec3[], speed: number, looped: boolean): Motion~
 -- ''points'': The serie of points.~

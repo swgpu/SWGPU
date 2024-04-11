@@ -3,18 +3,10 @@
 ** Constructors
 - ''new Gfx3MeshShadowRenderer''(): Gfx3MeshShadowRenderer~
 ** Methods
-- ''beginPassRender''(): void~
-Prepare a render pass.~
-Warning: You need to call this method before the render calls you want include in this pass.~
-~
 - ''drawMesh''(mesh: Gfx3Mesh, matrix): void~
 Draw a mesh.~
 -- ''mesh'': The mesh.~
 -- ''matrix'': The transformation matrix.~
-~
-- ''endPassRender''(): void~
-Close a render pass.~
-Warning: You need to call this method after the render calls you want include in this pass.~
 ~
 - ''getDepthTexture''(): Gfx3Texture~
 Returns the depth texture.~

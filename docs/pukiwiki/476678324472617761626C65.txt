@@ -10,6 +10,7 @@ The draw function.~
 ~
 - ''getElevation''(): number~
 Returns the elevation.~
+Only used for rendering 2D isometric tiles.~
 ~
 - ''getOffset''(): vec2~
 Returns the origin offset.~
@@ -59,6 +60,7 @@ Add rotation value to current angle.~
 ~
 - ''setElevation''(elevation: number): void~
 Set the elevation.~
+Only used for rendering 2D isometric tiles.~
 -- ''elevation'': The elevation value.~
 ~
 - ''setOffset''(x: number, y: number): void~

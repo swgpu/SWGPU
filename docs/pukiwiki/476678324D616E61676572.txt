@@ -48,12 +48,6 @@ Returns the camera scale factor on y-axis.~
 - ''getCameraTransform''(): mat3~
 Returns the camera transformation matrix.~
 ~
-- ''getClientHeight''(): number~
-Returns the client height of the canvas.~
-~
-- ''getClientWidth''(): number~
-Returns the client width of the canvas.~
-~
 - ''getContext''(): CanvasRenderingContext2D~
 Returns the 2D rendering context of the canvas element.~
 ~
@@ -61,10 +55,10 @@ Returns the 2D rendering context of the canvas element.~
 Returns a default HTMLImageElement.~
 ~
 - ''getHeight''(): number~
-Returns the internal height of the canvas.~
+Returns the resolution height of the canvas.~
 ~
 - ''getWidth''(): number~
-Returns the internal width of the canvas.~
+Returns the resolution width of the canvas.~
 ~
 - ''hasFilter''(): boolean~
 Checks if the canvas element has an active filter.~

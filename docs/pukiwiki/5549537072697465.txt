@@ -1,6 +1,7 @@
 * Class: UISprite
 
 A UI widget displaying a sprite with animations.~
+It emit 'E_FINISHED'~
 - inherit from: UIWidget~
 ** Constructors
 - ''new UISprite''(options): UISprite~
@@ -30,8 +31,8 @@ Play a specific animation.~
 -- ''preventSameAnimation'': Determines whether the same animation should be prevented from playing again.~
 ~
 - ''setAnimations''(animations: JASAnimation[]): void~
-Set the animations.~
--- ''animations'': The animations.~
+Set the animations descriptors.~
+-- ''animations'': The animations data.~
 ~
 - ''update''(ts: number): void~
 The update function.~

@@ -1,9 +1,10 @@
 * Class: Gfx3Material
 
 The material of a surface.~
+It emit 'E_FINISHED' (on texture animation end)~
 ** Constructors
 - ''new Gfx3Material''(options: MATOptions): Gfx3Material~
--- ''options'': The options to configuring the material.~
+-- ''options'': The options to configure the material.~
 ** Methods
 - ''delete''(): void~
 Free all resources.~
@@ -17,8 +18,14 @@ Enable decals on the material surface.~
 Enable shadow on the material surface.~
 -- ''enabled'': Indicating whether the shadow should be enabled or disabled.~
 ~
+- ''getDiffuseMap''(): Gfx3Texture~
+Returns the diffuse texture map.~
+~
 - ''getDisplacementMap''(): Gfx3Texture~
 Returns the displacement texture map.~
+~
+- ''getEmissiveMap''(): Gfx3Texture~
+Returns the emissive texture map.~
 ~
 - ''getEnvMap''(): Gfx3Texture~
 Returns the environment texture map.~
@@ -32,7 +39,7 @@ Returns the bingroup(3).~
 - ''getNormalMap''(): Gfx3Texture~
 Returns the normal texture map.~
 ~
-- ''getSpecularityMap''(): Gfx3Texture~
+- ''getSpecularMap''(): Gfx3Texture~
 Returns the specularity texture map.~
 ~
 - ''getTexture''(): Gfx3Texture~
@@ -61,6 +68,10 @@ It is the color of the object on it's lightning parts.~
 -- ''g'': The green component.~
 -- ''b'': The blue component.~
 ~
+- ''setDiffuseMap''(diffuseMap: Gfx3Texture): void~
+Set the diffuse texture map.~
+-- ''diffuseMap'': The diffuse texture map.~
+~
 - ''setDisplacementMap''(displacementMap: Gfx3Texture, angle: number, rate: number, factor: number): void~
 Set the displacement texture map.~
 It is used to displace pixels of the texture base. It is ideal for water shallow effect, magma etc...~
@@ -72,12 +83,21 @@ It is used to displace pixels of the texture base. It is ideal for water shallow
 -- ''rate'': The scrolling rate of the texture.~
 -- ''factor'': The strength or intensity of the displacement effect.~
 ~
-- ''setEmissive''(r: number, g: number, b: number): void~
+- ''setEmissive''(r: number, g: number, b: number, a: number): void~
 Set the emissive color.~
 It is the color that the object emit.~
 -- ''r'': The red component.~
 -- ''g'': The green component.~
 -- ''b'': The blue component.~
+-- ''a'': The emissive factor.~
+~
+- ''setEmissiveFactor''(emissiveFactor: number): void~
+Set the emissive factor.~
+-- ''emissiveFactor'': The factor of emission color (0-1)~
+~
+- ''setEmissiveMap''(emissiveMap: Gfx3Texture): void~
+Set the emissive texture map.~
+-- ''emissiveMap'': The emissive texture map.~
 ~
 - ''setEnvMap''(envMap: Gfx3Texture): void~
 Set the environment texture map.~
@@ -99,6 +119,10 @@ Set a normal texture map.~
 Sets the opacity value.~
 -- ''opacity'': The opacity (from 0 to 1).~
 ~
+- ''setShininess''(shininess: number): void~
+Set the specular shininess.~
+-- ''shininess'': The shininess/specularity value (0-1)~
+~
 - ''setSpecular''(r: number, g: number, b: number): void~
 Set the specular color (see phong).~
 It is the color of the object on it's lightning and eye-oriented parts.~
@@ -106,14 +130,14 @@ It is the color of the object on it's lightning and eye-oriented parts.~
 -- ''g'': The green component.~
 -- ''b'': The blue component.~
 ~
+- ''setSpecularMap''(specularMap: Gfx3Texture): void~
+Set the specular texture map.~
+-- ''specularMap'': The specular texture map.~
+~
 - ''setSpecularity''(specularity: number): void~
 Set the specular intensity.~
 It determines how much light is reflected off the surface (from 0 to 1).~
 -- ''specularity'': The level of specularity or shininess.~
-~
-- ''setSpecularityMap''(specularityMap: Gfx3Texture): void~
-Set the specularity texture map.~
--- ''specularityMap'': The specularity texture map.~
 ~
 - ''setTexture''(texture: Gfx3Texture, angle: number, rate: number): void~
 Set the texture.~

@@ -11,6 +11,8 @@ The node in a binary tree partition data structure.~
 Adds an object.~
 -- ''object'': The object.~
 ~
+- ''draw''(): void~
+~
 - ''getChildren''()~
 Returns children.~
 ~

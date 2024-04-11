@@ -1,6 +1,8 @@
 * Class: UIManager
 
 Singleton UI manager.~
+It emit 'E_FOCUSED' with data { widget }~
+It emit 'E_UNFOCUSED'~
 ** Constructors
 - ''new UIManager''(): UIManager~
 ** Methods

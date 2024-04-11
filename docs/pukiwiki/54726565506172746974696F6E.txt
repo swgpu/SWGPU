@@ -12,8 +12,15 @@ The root partition binary tree.~
 Adds an object.~
 -- ''object'': The object.~
 ~
+- ''draw''(): void~
+~
 - ''getMaxChildren''(): number~
 Returns the maximum number of children per nodes.~
 ~
 - ''getMaxDepth''(): number~
 Returns the maximum depth of the partition tree.~
+~
+- ''search''(target: T, results: T[])~
+Search and return all objects that intersect with the target.~
+-- ''target'': The target object.~
+-- ''results'': All matching objects.~

@@ -31,6 +31,16 @@ Creates a dynamic group for a given pipeline and group index.~
 -- ''pipelineId'': The unique identifier of a pipeline.~
 -- ''groupIndex'': The uniform group index in the shader.~
 ~
+- ''createEmptyTexture''(width: number, height: number, format: GPUTextureFormat, samplerDescriptor: GPUSamplerDescriptor): Gfx3Texture~
+Creates an empty GPU texture with the given size.~
+-- ''width'': The texture width.~
+-- ''height'': The texture height.~
+-- ''format''~
+-- ''samplerDescriptor'': The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.~
+~
+- ''createRenderingTexture''(): Gfx3Texture~
+Creates a default rendering texture.~
+~
 - ''createStaticGroup''(pipelineId: string, groupIndex: number): Gfx3StaticGroup~
 Creates a static group for a given pipeline and group index.~
 -- ''pipelineId'': The unique identifier of a pipeline.~
@@ -78,15 +88,22 @@ Returns the GPUCommandEncoder.~
 - ''getContext''(): GPUCanvasContext~
 Returns the GPUCanvasContext object.~
 ~
+- ''getCurrentRenderingTexture''(): GPUTexture~
+Returns the current rendering texture.~
+Note: Is the texture used for final rendering.~
+~
 - ''getCurrentView''(): Gfx3View~
 Returns the current view.~
 Note: Current view is set by the "begin" function.~
+~
+- ''getDepthTexture''(): GPUTexture~
+Returns the depth texture.~
 ~
 - ''getDevice''(): GPUDevice~
 Returns the GPU device.~
 ~
 - ''getHeight''(): number~
-Returns the height of the canvas.~
+Returns the resolution height of the canvas.~
 ~
 - ''getLastRenderTime''(): number~
 Returns the last render time.~
@@ -109,7 +126,7 @@ Returns the view at the specified index.~
 -- ''index'': The index.~
 ~
 - ''getWidth''(): number~
-Returns the width of the canvas.~
+Returns the resolution width of the canvas.~
 ~
 - ''hasFilter''(): boolean~
 Checks if the canvas element has an active filter.~
@@ -131,6 +148,12 @@ Removes a view.~
 - ''removeViewAt''(index: number): void~
 Removes a view at specified index.~
 -- ''index'': The index of the view.~
+~
+- ''setDestinationTexture''(destinationTexture): void~
+The destination texture is used for multi-pass rendering.~
+Note: If destination texture is set, we render to the destination texture and let post-processing effect renderers used it.~
+otherwise we are rendering to the screen directly.~
+-- ''destinationTexture'': The destination texture.~
 ~
 - ''setFilter''(filter: string): void~
 Sets the css filter property of the canvas.~

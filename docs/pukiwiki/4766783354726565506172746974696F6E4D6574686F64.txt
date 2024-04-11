@@ -6,6 +6,9 @@ A 3D binary tree partition method for quick search intersections.~
 -- ''box'': The position and size of the partition box.~
 -- ''axis'': The split axis of the partition.~
 ** Methods
+- ''draw''(): void~
+The draw function.~
+~
 - ''search''(node: TreePartitionNode, target: Gfx3BoundingBox, results: Gfx3BoundingBox[])~
 Search and return all objects that intersect with the target.~
 -- ''node''~

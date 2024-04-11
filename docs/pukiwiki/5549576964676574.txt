@@ -1,6 +1,9 @@
 * Class: UIWidget
 
-Is a ui element base.~
+UI Widget base element.~
+It emit 'E_FOCUSED'~
+It emit 'E_UNFOCUSED'~
+It emit 'E_ANIMATION_FINISHED'~
 - parent of: UIBubble, UIDescriptionList, UIDialog, UIInputKeyboard, UIInputSlider, UIMenu, UIMenuTextItem, UIMessage, UIPrint, UIPrompt, UISprite, UIText~
 ** Constructors
 - ''new UIWidget''(options): UIWidget~

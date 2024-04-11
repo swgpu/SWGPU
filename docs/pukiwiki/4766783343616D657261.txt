@@ -2,6 +2,7 @@
 
 A 3D camera object.~
 - inherit from: Gfx3Transformable~
+- parent of: Gfx3CameraOrbit, Gfx3CameraWASD~
 ** Constructors
 - ''new Gfx3Camera''(viewIndex: number): Gfx3Camera~
 -- ''viewIndex'': The view you want to bind the camera.~
@@ -10,15 +11,14 @@ A 3D camera object.~
 Change the view attached to the camera.~
 -- ''viewIndex'': The view specified by its index.~
 ~
-- ''getCameraMatrix''(): mat4~
-Returns the camera matrix.~
-~
 - ''getAxies''()~
 Returns the three local axes of the transformable.~
 ~
+- ''getCameraMatrix''(): mat4~
+Returns the camera matrix.~
+~
 - ''lookAt''(x: number, y: number, z: number, up: vec3): void~
 Rotate to look at the specified coordinates.~
-Note: Avoid euler rotation and quaternion rotation.~
 -- ''x'': The x-coordinate of the target position that the transformable should look at.~
 -- ''y'': The y-coordinate of the target position that the transformable should look at.~
 -- ''z'': The z-coordinate of the target position that the transformable should look at.~

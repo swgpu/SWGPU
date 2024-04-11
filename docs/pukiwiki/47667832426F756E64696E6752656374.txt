@@ -38,6 +38,12 @@ Checks if a given point is inside the rectangle.~
 Merge and returns the union of two rectangles.~
 -- ''rect'': The second rectangle.~
 ~
+- ''splitHorizontal''()~
+Split the bounding box on y-axis and returns boxes for each side.~
+~
+- ''splitVertical''()~
+Split the bounding box on x-axis and returns boxes for each side.~
+~
 - ''transform''(matrix: mat3): Gfx2BoundingRect~
 Returns the transformed bounding rectangle.~
 -- ''matrix'': Used to transform the points of the bounding rectangle.~

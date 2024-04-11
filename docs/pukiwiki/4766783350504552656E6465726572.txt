@@ -1,0 +1,83 @@
+* Class: Gfx3PPERenderer
+
+Singleton post-processing psx-style effects renderer.~
+- inherit from: Gfx3PPERendererAbstract~
+** Constructors
+- ''new Gfx3PPERenderer''(): Gfx3PPERenderer~
+** Methods
+- ''enableColorPrecision''(enabled: boolean): void~
+Enable color precision effect.~
+-- ''enabled'': Indicating whether color precision should be enabled or disable.~
+~
+- ''enableDither''(enabled: boolean): void~
+Enable dithering effect.~
+-- ''enabled'': Indicating whether dithering should be enabled or disable.~
+~
+- ''enablePixelation''(enabled: boolean): void~
+Enable pixelation effect.~
+-- ''enabled'': Indicating whether pixelation should be enabled or disable.~
+~
+- ''getColorPrecision''(): number~
+Return the color precision.~
+~
+- ''getDitherPattern''(): number~
+Get the dither pattern.~
+~
+- ''getDitherScaleX''(): number~
+Get the dither x-scale.~
+~
+- ''getDitherScaleY''(): number~
+Get the dither y-scale.~
+~
+- ''getDitherThreshold''(): number~
+Get the dither threshold.~
+~
+- ''getPixelationHeight''(): number~
+Return the vertical pixelation value.~
+~
+- ''getPixelationWidth''(): number~
+Return the horizontal pixelation value.~
+~
+- ''isColorPrecisionEnabled''(): boolean~
+Check if color precision effect is enabled.~
+~
+- ''isDitherEnabled''(): boolean~
+Check if dithering effect is enabled.~
+~
+- ''isPixelationEnabled''(): boolean~
+Check if pixelation effect is enabled.~
+~
+- ''setColorPrecision''(colorPrecision: number): void~
+Set the color precision.~
+It determines how much color is limited.~
+-- ''colorPrecision'': The color precision.~
+~
+- ''setDitherPattern''(ditherPattern: number): void~
+Set the dither pattern.~
+You have choise between 5 different patterns (from 0 to 4).~
+-- ''ditherPattern'': The pattern index.~
+~
+- ''setDitherScaleX''(ditherScaleX: number): void~
+Set the dither x-scale.~
+High value for strong effect.~
+-- ''ditherScaleX'': The x-scale.~
+~
+- ''setDitherScaleY''(ditherScaleY: number): void~
+Set the dither y-scale.~
+High value for strong effect.~
+-- ''ditherScaleY'': The y-scale.~
+~
+- ''setDitherThreshold''(ditherThreshold: number): void~
+Set the dither threshold.~
+It determines a threshold value from what the dither is triggered.~
+-- ''ditherThreshold'': The threshold.~
+~
+- ''setHeightPixelation''(heightPixelation: number): void~
+Set the vertical pixelation value.~
+It determines the resolution you want to simulate.~
+-- ''heightPixelation'': The y-pixelation value.~
+~
+- ''setWidthPixelation''(widthPixelation: number): void~
+Set the horizontal pixelation value.~
+It determines the resolution you want to simulate.~
+-- ''widthPixelation'': The x-pixelation value.~

@@ -1,6 +1,7 @@
 * Class: Gfx2SpriteJAS
 
 A 2D sprite with animations.~
+It emit 'E_FINISHED'~
 - inherit from: Gfx2Drawable~
 ** Constructors
 - ''new Gfx2SpriteJAS''(): Gfx2SpriteJAS~
@@ -34,8 +35,8 @@ Play a specific animation.~
 -- ''preventSameAnimation'': Determines whether the same animation should be prevented from playing again.~
 ~
 - ''setAnimations''(animations: JASAnimation[]): void~
-Set the animations.~
--- ''animations'': The animations.~
+Set the animation descriptors.~
+-- ''animations'': The animations data.~
 ~
 - ''setFlipX''(x: boolean): void~
 Set flipX.~

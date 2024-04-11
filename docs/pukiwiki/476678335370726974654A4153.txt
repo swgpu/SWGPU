@@ -1,6 +1,7 @@
 * Class: Gfx3SpriteJAS
 
 A 3D animated sprite.~
+It emit 'E_FINISHED'~
 - inherit from: Gfx3Sprite~
 ** Constructors
 - ''new Gfx3SpriteJAS''(): Gfx3SpriteJAS~
@@ -25,8 +26,8 @@ Play a specific animation.~
 -- ''preventSameAnimation'': Determines whether the same animation should be prevented from playing again.~
 ~
 - ''setAnimations''(animations: JASAnimation[]): void~
-Set the animations.~
--- ''animations'': The animations.~
+Set the animation descriptors.~
+-- ''animations'': The animations data.~
 ~
 - ''setOffsetNormalized''(offsetXFactor: number, offsetYFactor: number): void~
 Set the normalized offset value.~

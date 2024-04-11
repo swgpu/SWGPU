@@ -1,7 +1,7 @@
 * Class: Gfx3Transformable
 
 A transformable object with position, rotation, scale and more.~
-- parent of: Gfx3Drawable, Gfx3Camera, Gfx3JWM~
+- parent of: Gfx3Drawable, Gfx3Camera~
 ** Constructors
 - ''new Gfx3Transformable''(): Gfx3Transformable~
 ** Methods

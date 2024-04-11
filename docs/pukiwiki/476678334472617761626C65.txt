@@ -23,9 +23,9 @@ Warning: You need to call this method to free allocation for this object.~
 - ''draw''(): void~
 Virtual draw function.~
 ~
-- ''endVertices''(): void~
+- ''endVertices''(updateBoundingBox: boolean): void~
 Close your vertex buffer to write process.~
-Note: The boundingbox is up to date from here.~
+-- ''updateBoundingBox'': Determine if boundingbox is up to date with the new vertex set.~
 ~
 - ''getBoundingBox''(): Gfx3BoundingBox~
 Returns the bounding box.~

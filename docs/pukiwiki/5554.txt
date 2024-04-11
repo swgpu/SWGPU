@@ -298,12 +298,11 @@
 -- ''b'': The second triangle point.~
 -- ''c'': The third triangle point.~
 ~
-- '''static''' ''TRI3_POINT_INSIDE''(p: vec3, a: vec3, b: vec3, c: vec3, n: vec3): boolean~
+- '''static''' ''TRI3_POINT_INSIDE''(p: vec3, a: vec3, b: vec3, c: vec3): boolean~
 -- ''p'': The point.~
 -- ''a'': The first triangle point.~
 -- ''b'': The second triangle point.~
 -- ''c'': The third triangle point.~
--- ''n'': The normal vector.~
 ~
 - '''static''' ''VEC1_COPY''(src: number, out: vec1): vec1~
 -- ''src'': Number.~
@@ -315,6 +314,12 @@
 - '''static''' ''VEC2_ADD''(a: vec2, b: vec2, out: vec2): vec2~
 -- ''a'': The first vector.~
 -- ''b'': The second vector.~
+-- ''out'': The result vector.~
+~
+- '''static''' ''VEC2_ADD_SCALED''(a: vec2, b: vec2, scale: number, out: vec2): vec2~
+-- ''a'': The first vector.~
+-- ''b'': The second vector to scale and add to the first.~
+-- ''scale'': The scale value for second vector.~
 -- ''out'': The result vector.~
 ~
 - '''static''' ''VEC2_ANGLE''(a: vec2): number~
@@ -356,6 +361,9 @@
 - '''static''' ''VEC2_ISO_TO_2D''(p: vec2): vec2~
 -- ''p'': The iso point.~
 ~
+- '''static''' ''VEC2_ISZERO''(a: vec2): boolean~
+-- ''a'': The vector to check.~
+~
 - '''static''' ''VEC2_LENGTH''(a: vec2): number~
 -- ''a'': The source vector.~
 ~
@@ -394,6 +402,11 @@
 -- ''t'': The time.~
 -- ''out'': The result point.~
 ~
+- '''static''' ''VEC2_ROTATE_AROUND''(center: vec2, radius: number, angle: number): vec2~
+-- ''center'': The position you want to rotate around.~
+-- ''radius'': The radius relative to the center of the rotation.~
+-- ''angle'': The angle rotation.~
+~
 - '''static''' ''VEC2_SCALE''(a: vec2, scale: number, out: vec2): vec2~
 -- ''a'': The first vector.~
 -- ''scale'': The scale value.~
@@ -411,6 +424,12 @@
 - '''static''' ''VEC3_ADD''(a: vec3, b: vec3, out: vec3): vec3~
 -- ''a'': The first vector.~
 -- ''b'': The second vector.~
+-- ''out'': The result vector.~
+~
+- '''static''' ''VEC3_ADD_SCALED''(a: vec3, b: vec3, scale: number, out: vec3): vec3~
+-- ''a'': The first vector.~
+-- ''b'': The second vector to scale and add to the first.~
+-- ''scale'': The scale value for second vector.~
 -- ''out'': The result vector.~
 ~
 - '''static''' ''VEC3_COPY''(src: vec3, out: vec3): vec3~
@@ -438,6 +457,9 @@
 - '''static''' ''VEC3_ISEQUAL''(a: vec3, b: vec3): boolean~
 -- ''a'': The first vector.~
 -- ''b'': The second vector.~
+~
+- '''static''' ''VEC3_ISZERO''(a: vec3): boolean~
+-- ''a'': The vector to check.~
 ~
 - '''static''' ''VEC3_LENGTH''(a: vec3): number~
 -- ''a'': The vector.~
@@ -467,6 +489,12 @@
 -- ''t'': The time.~
 -- ''out'': The result point.~
 ~
+- '''static''' ''VEC3_ROTATE_AROUND''(center: vec3, radius: number, phi: number, theta: number): vec3~
+-- ''center'': The position you want to rotate around.~
+-- ''radius'': The radius relative to the center of the rotation.~
+-- ''phi'': The phi angle.~
+-- ''theta'': The theta angle.~
+~
 - '''static''' ''VEC3_SCALE''(a: vec3, scale: number, out: vec3): vec3~
 -- ''a'': The first vector.~
 -- ''scale'': The scale value.~
@@ -490,6 +518,9 @@
 -- ''y'': The second component.~
 -- ''z'': The third component.~
 -- ''w'': The fourth component.~
+~
+- '''static''' ''VEC4_ISZERO''(a: vec4): boolean~
+-- ''a'': The vector to check.~
 ~
 - '''static''' ''VEC4_PARSE''(str: string, separator: string, out: vec4): vec4~
 -- ''str'': The string.~

@@ -1,10 +1,15 @@
 * Class: Gfx3MeshJAM
 
 A 3D animated mesh.~
+It emit 'E_FINISHED'~
 - inherit from: Gfx3Mesh~
 ** Constructors
 - ''new Gfx3MeshJAM''(): Gfx3MeshJAM~
 ** Methods
+- ''getBoundingBox''(dynamicMode: boolean): Gfx3BoundingBox~
+Returns the bounding box.~
+-- ''dynamicMode'': Determines whether the animation should loop or not.~
+~
 - ''getCurrentAnimation''()~
 Returns the current animation or null if there is no current animation.~
 ~
@@ -19,6 +24,10 @@ Check if interpolation is enabled.~
 ~
 - ''getLooped''(): boolean~
 Check if animation is looped.~
+~
+- ''getWorldBoundingBox''(dynamicMode: boolean): Gfx3BoundingBox~
+Returns the bounding box in the world space coordinates.~
+-- ''dynamicMode'': Determines whether the animation should loop or not.~
 ~
 - ''loadFromFile''(path: string): Promise~
 Load asynchronously animated mesh data from a json file (jam).~

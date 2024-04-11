@@ -51,6 +51,15 @@ Set the maximum value.~
 Set the minimum value.~
 -- ''min'': The min point of the box.~
 ~
+- ''splitDepth''()~
+Split the bounding box on z-axis and returns boxes for each side.~
+~
+- ''splitHorizontal''()~
+Split the bounding box on y-axis and returns boxes for each side.~
+~
+- ''splitVertical''()~
+Split the bounding box on x-axis and returns boxes for each side.~
+~
 - ''transform''(matrix: mat4): Gfx3BoundingBox~
 Returns the transformed bounding box.~
 -- ''matrix'': Used to transform the points of the bounding box.~
