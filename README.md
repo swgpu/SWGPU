@@ -1,4 +1,8 @@
 # WARME Y2K
+<p align="center">
+    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/banner.png" alt="logo"/>
+</p>
+
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
 ![Version](https://img.shields.io/badge/Version-1.1.0-blue)
 ![License](https://img.shields.io/badge/License-MIT-yellow)

@@ -9,6 +9,10 @@ It emit 'E_FINISHED'~
 - ''getAnimations''()~
 Returns the list of animation descriptors.~
 ~
+- ''getBoundingRect''(dynamicMode: boolean): Gfx2BoundingRect~
+Returns the bounding rect.~
+-- ''dynamicMode'': Determines if bounding rect fit the current animation.~
+~
 - ''getCurrentAnimation''()~
 Returns the current animation or null if there is no current animation.~
 ~
@@ -20,6 +24,10 @@ Returns two booleans, first is the x-axis flip flag, second is the y-axis flip f
 ~
 - ''getTexture''()~
 Returns the sprite texture.~
+~
+- ''getWorldBoundingRect''(dynamicMode: boolean): Gfx2BoundingRect~
+Returns the bounding rect in the world space coordinates.~
+-- ''dynamicMode'': Determines if bounding rect fit the current animation.~
 ~
 - ''loadFromFile''(path: string): Promise~
 Loads asynchronously sprite data from a json file (jas).~
@@ -37,6 +45,11 @@ Play a specific animation.~
 - ''setAnimations''(animations: JASAnimation[]): void~
 Set the animation descriptors.~
 -- ''animations'': The animations data.~
+~
+- ''setBoundingRect''(boundingRects: Gfx2BoundingRect[]): void~
+Set the bounding rects.~
+Note: Usualy used to handle collision.~
+-- ''boundingRects'': The bounding rectangle list.~
 ~
 - ''setFlipX''(x: boolean): void~
 Set flipX.~

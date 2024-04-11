@@ -8,7 +8,7 @@ It emit 'E_FINISHED'~
 ** Methods
 - ''getBoundingBox''(dynamicMode: boolean): Gfx3BoundingBox~
 Returns the bounding box.~
--- ''dynamicMode'': Determines whether the animation should loop or not.~
+-- ''dynamicMode'': Determines if bounding box fit the current animation.~
 ~
 - ''getCurrentAnimation''()~
 Returns the current animation or null if there is no current animation.~
@@ -27,7 +27,7 @@ Check if animation is looped.~
 ~
 - ''getWorldBoundingBox''(dynamicMode: boolean): Gfx3BoundingBox~
 Returns the bounding box in the world space coordinates.~
--- ''dynamicMode'': Determines whether the animation should loop or not.~
+-- ''dynamicMode'': Determines if bounding box fit the current animation.~
 ~
 - ''loadFromFile''(path: string): Promise~
 Load asynchronously animated mesh data from a json file (jam).~

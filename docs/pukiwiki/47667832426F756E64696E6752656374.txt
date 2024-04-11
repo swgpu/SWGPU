@@ -13,6 +13,9 @@ Takes a list of vertices and set the new minimum and maximum values.~
 - ''getCenter''(): vec2~
 Returns the center point of the rectangle.~
 ~
+- ''getHeight''(): number~
+Returns the height.~
+~
 - ''getPerimeter''(): number~
 Returns the perimeter of the rectangle.~
 ~
@@ -24,6 +27,9 @@ Returns the width and height of the rectangle.~
 ~
 - ''getVolume''(): number~
 Returns the volume of a the rectangle.~
+~
+- ''getWidth''(): number~
+Returns the width.~
 ~
 - ''intersectBoundingRect''(aabr: Gfx2BoundingRect): boolean~
 Checks if two bounding rectangles intersect.~

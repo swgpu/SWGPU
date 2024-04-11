@@ -5,6 +5,10 @@ A 2D static sprite (without animations).~
 ** Constructors
 - ''new Gfx2SpriteJSS''(): Gfx2SpriteJSS~
 ** Methods
+- ''getBoundingRect''(): Gfx2BoundingRect~
+Returns the bounding rect.~
+Note: Usualy used to handle collision.~
+~
 - ''getFlip''()~
 Returns two booleans, first is the x-axis flip flag, second is the y-axis flip flag.~
 ~
@@ -14,12 +18,20 @@ Returns the sprite texture.~
 - ''getTextureRect''(): vec4~
 Returns the texture rectangle.~
 ~
+- ''getWorldBoundingRect''(): Gfx2BoundingRect~
+Returns the bounding rect in the world space coordinates.~
+~
 - ''loadFromFile''(path: string): Promise~
 Load asynchronously sprite data from a json file (jss).~
 -- ''path'': The file path.~
 ~
 - ''paint''(): void~
 The paint function.~
+~
+- ''setBoundingRect''(boundingRect: Gfx2BoundingRect): void~
+Set the bounding rect.~
+Note: Usualy used to handle collision.~
+-- ''boundingRect'': The bounding rectangle.~
 ~
 - ''setFlipX''(x: boolean): void~
 Set flipX.~
