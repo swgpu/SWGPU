@@ -1,5 +1,8 @@
 # WARME Y2K
-![Drag Racing](https://img.shields.io/badge/lang-typescript-f39f37) ![Drag Racing](https://img.shields.io/badge/version-1.0.3-blue)
+![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
+![Version](https://img.shields.io/badge/Version-1.1.0-blue)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
 > [!NOTE]  
 > Don't forget to check the wiki tutorials section, we coming soon with two tutorials for beginners !

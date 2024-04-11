@@ -21,7 +21,7 @@ class GameManager {
   }
 
   startup() {
-    coreManager.enableScanlines(false);
+    coreManager.enableScanlines(true);
     gfx3DebugRenderer.setShowDebug(true);
     gfx3PPERenderer.setEnabled(false);
     this.run(0);

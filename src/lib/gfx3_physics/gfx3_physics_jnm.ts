@@ -145,16 +145,17 @@ class Gfx3PhysicsJNM {
    * @param {number} lift - The lift is used to elevate the virtual bounding box to let passing over little step or micro obstacles on the floor.
    * @param {number} snapFloor - Enable or disable floor snapping.
    * @param {number} snapFloorDistance - Minimum distance to snap the floor.
+   * @param {number} marginBox - The margin is used to add more space to the virtual bounding box to collide wall collide earlier.
    */
-  box(x: number, y: number, z: number, radius: number, height: number, mx: number, my: number, mz: number, lift: number = 0.2, snapFloor: boolean = true, snapFloorDistance: number = 1): ResBox {
-    const min = [x - radius, y - height * 0.5, z - radius];
-    const max = [x + radius, y + height * 0.5, z + radius];
+  box(x: number, y: number, z: number, radius: number, height: number, mx: number, my: number, mz: number, lift: number = 0.2, snapFloor: boolean = true, snapFloorDistance: number = 1, marginBox: number = 0.1): ResBox {
+    const min: vec3 = [x - radius, y - height * 0.5, z - radius];
+    const max: vec3 = [x + radius, y + height * 0.5, z + radius];
 
     min[1] += lift;
 
     const wallIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
-      [min[0] + mx, min[1] + my, min[2] + mz],
-      [max[0] + mx, max[1] + my, max[2] + mz]
+      [min[0] + mx - marginBox, min[1] + my, min[2] + mz - marginBox],
+      [max[0] + mx + marginBox, max[1] + my, max[2] + mz + marginBox]
     )) as Array<Frag>;
 
     let fmx = mx;
@@ -178,16 +179,17 @@ class Gfx3PhysicsJNM {
         continue;
       }
 
-      const moveXZ = this.$moveXZ([x, y, z], wallIntersectedFrags, points[i], [fmx, fmz]);
-      if (moveXZ[0] == 0 && moveXZ[1] == 0) {
+      const xz = this.$moveXZ([x, y, z], wallIntersectedFrags, points[i], [fmx, fmz]);
+      
+      if (xz.move[0] == 0 && xz.move[1] == 0) {
         fmx = 0;
         fmz = 0;
         collideWall = true;
         break;
       }
-      else if (moveXZ[0] != fmx || moveXZ[1] != fmz) {
-        fmx = moveXZ[0];
-        fmz = moveXZ[1];
+      else if (xz.move[0] != fmx || xz.move[1] != fmz) {
+        fmx = xz.move[0];
+        fmz = xz.move[1];
         collideWall = true;
         deviantPoints[i] = true;
         i = 0;
@@ -331,26 +333,26 @@ class Gfx3PhysicsJNM {
     return this.fragsData[fragIndex];
   }
 
-  $moveXZ(center: vec3, frags: Array<Frag>, point: vec3, move: vec2): vec2 {
-    let minFrag = null;
-    let minFragLength = Infinity;
+  $moveXZ(center: vec3, frags: Array<Frag>, point: vec3, move: vec2, i: number = 0 ): { move: vec2 } {
+    let minFrag: Frag | null = null;
+    let minPenLength = Infinity;
 
     for (const frag of frags) {
       const out: vec3 = [0, 0, 0];
 
-      if (UT.RAY_PLAN(point, [move[0], 0, move[1]], frag.v1, frag.n, true, out)) {
+      UT.RAY_PLAN(point, [move[0], 0, move[1]], frag.v1, frag.n, true, out);
+      const p1: vec2 = [out[0] - frag.t[0] * 100, out[2] - frag.t[2] * 100];
+      const q1: vec2 = [out[0] + frag.t[0] * 100, out[2] + frag.t[2] * 100];
+      const p2: vec2 = [point[0], point[2]];
+      const q2: vec2 = [point[0] + move[0], point[2] + move[1]];
+  
+      if (UT.COLLIDE_LINE_TO_LINE(p1, q1, p2, q2)) {
         const pen = UT.VEC2_SUBSTRACT([out[0], out[2]], [point[0] + move[0], point[2] + move[1]]);
         const centerToOut = UT.VEC2_SUBSTRACT([out[0], out[2]], [center[0], center[2]]);
         const penLength = UT.VEC2_LENGTH(pen);
-
         const d = UT.VEC2_DOT(pen, centerToOut);
-        const p1: vec2 = [out[0] - frag.n[0] * 100, out[2] - frag.n[2] * 100];
-        const q1: vec2 = [out[0] + frag.n[0] * 100, out[2] + frag.n[2] * 100];
-        const p2: vec2 = [point[0] - move[0] * 100, point[2] - move[1] * 100];
-        const q2: vec2 = [point[0] + move[0] * 100, point[2] + move[1] * 100];
-
-        if (d < 0 && UT.COLLIDE_LINE_TO_LINE(p1, q1, p2, q2) && penLength < minFragLength) {
-          minFragLength = penLength;
+        if (d < 0 && penLength < minPenLength) {
+          minPenLength = penLength;
           minFrag = frag;
         }
       }
@@ -358,10 +360,10 @@ class Gfx3PhysicsJNM {
 
     if (minFrag) {
       const newMove = UT.VEC2_PROJECTION_COS([move[0], move[1]], [minFrag.t[0], minFrag.t[2]]);
-      return this.$moveXZ(center, frags, point, newMove);
+      return this.$moveXZ(center, frags, point, newMove, i + 1);
     }
 
-    return move;
+    return { move: move };
   }
 
   $getElevation(frags: Array<Frag>, point: vec3): { value: number, fragIndex: number } | null {

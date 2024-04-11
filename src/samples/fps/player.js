@@ -102,7 +102,7 @@ class PhysicsComponent {
 
     if (UT.VEC3_LENGTH(this.player.velocity) > 0.1) {
       const move = UT.VEC3_SCALE(this.player.velocity, ts / 1000);
-      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, move[0], move[1], move[2], this.lift);
+      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, move[0], move[1], move[2], this.lift, true, 0.1);
 
       this.player.x += navInfo.move[0];
       this.player.y += navInfo.move[1];

@@ -9,6 +9,8 @@ import { Gfx3PhysicsJNM } from '../../lib/gfx3_physics/gfx3_physics_jnm';
 import { Character } from './character';
 // ---------------------------------------------------------------------------------------
 
+const RAYCAST_CAMERA_RADIUS = 10;
+const RAYCAST_CAMERA_HEIGHT = 10;
 const CAMERA_DISTANCE_MAX = 10;
 
 class AsgardScreen extends Screen {
@@ -27,7 +29,7 @@ class AsgardScreen extends Screen {
   update(ts) {
     const targetPos = [this.player.x, this.player.y + 1, this.player.z];
     const targetToCamera = UT.VEC3_SUBSTRACT(this.camera.getPosition(), targetPos);
-    const raycast = this.map.jnm.raycast(targetPos, targetToCamera, CAMERA_DISTANCE_MAX, 2);
+    const raycast = this.map.jnm.raycast(targetPos, targetToCamera, RAYCAST_CAMERA_RADIUS, RAYCAST_CAMERA_HEIGHT);
 
     if (raycast && raycast.distance < CAMERA_DISTANCE_MAX) {
       this.camera.setDistance(raycast.distance);

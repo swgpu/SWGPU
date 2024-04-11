@@ -1772,6 +1772,10 @@ class UT {
     const l = UT.VEC3_DOT(n, origin) * -1;
     const t = (l - d) / s;
 
+    if (t < 0) {
+      return false;
+    }
+
     outIntersectPoint[0] = origin[0] + (dir[0] * t);
     outIntersectPoint[1] = origin[1] + (dir[1] * t);
     outIntersectPoint[2] = origin[2] + (dir[2] * t);
