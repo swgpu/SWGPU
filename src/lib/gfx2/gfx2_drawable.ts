@@ -1,4 +1,6 @@
 import { gfx2Manager } from './gfx2_manager';
+import { UT } from '../core/utils';
+import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
 
 /**
  * A 2D drawable object.
@@ -12,6 +14,7 @@ class Gfx2Drawable {
   opacity: number;
   z: number;
   elevation: number;
+  boundingRect: Gfx2BoundingRect;
 
   constructor() {
     this.position = [0, 0];
@@ -22,6 +25,7 @@ class Gfx2Drawable {
     this.opacity = 1;
     this.z = 0;
     this.elevation = 0;
+    this.boundingRect = new Gfx2BoundingRect();
   }
 
   /**
@@ -264,6 +268,31 @@ class Gfx2Drawable {
    */
   getElevation(): number {
     return this.elevation;
+  }
+
+  /**
+   * Set the bounding rect.
+   * Note: Usualy used to handle collision.
+   * 
+   * @param {Gfx2BoundingRect} boundingRect - The bounding rectangle.
+   */
+  setBoundingRect(boundingRect: Gfx2BoundingRect): void {
+    this.boundingRect = boundingRect;
+  }
+
+  /**
+   * Returns the bounding rect.
+   * Note: Usualy used to handle collision.
+   */
+  getBoundingRect(): Gfx2BoundingRect {
+    return this.boundingRect;
+  }
+
+  /**
+   * Returns the bounding rect in the world space coordinates.
+   */
+  getWorldBoundingRect(): Gfx2BoundingRect {
+    return this.boundingRect.transform(UT.MAT3_TRANSLATE(this.position[0], this.position[1]));
   }
 }
 

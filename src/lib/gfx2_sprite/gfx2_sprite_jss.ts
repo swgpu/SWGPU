@@ -1,5 +1,4 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
-import { UT } from '../core/utils';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
 
@@ -10,14 +9,12 @@ class Gfx2SpriteJSS extends Gfx2Drawable {
   texture: ImageBitmap | HTMLImageElement;
   textureRect: vec4;
   flip: [boolean, boolean];
-  boundingRect: Gfx2BoundingRect;
 
   constructor() {
     super();
     this.texture = gfx2Manager.getDefaultTexture();
     this.textureRect = [0, 0, 0, 0];
     this.flip = [false, false];
-    this.boundingRect = new Gfx2BoundingRect();
   }
 
   /**
@@ -141,31 +138,6 @@ class Gfx2SpriteJSS extends Gfx2Drawable {
    */
   getTexture(): ImageBitmap | HTMLImageElement {
     return this.texture;
-  }
-
-  /**
-   * Set the bounding rect.
-   * Note: Usualy used to handle collision.
-   * 
-   * @param {Gfx2BoundingRect} boundingRect - The bounding rectangle.
-   */
-  setBoundingRect(boundingRect: Gfx2BoundingRect): void {
-    this.boundingRect = boundingRect;
-  }
-
-  /**
-   * Returns the bounding rect.
-   * Note: Usualy used to handle collision.
-   */
-  getBoundingRect(): Gfx2BoundingRect {
-    return this.boundingRect;
-  }
-
-  /**
-   * Returns the bounding rect in the world space coordinates.
-   */
-  getWorldBoundingRect(): Gfx2BoundingRect {
-    return this.boundingRect.transform(UT.MAT3_TRANSLATE(this.position[0], this.position[1]));
   }
 }
 

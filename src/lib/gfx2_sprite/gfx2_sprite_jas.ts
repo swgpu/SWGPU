@@ -152,12 +152,7 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
       }
 
       this.animations.push(animation);
-      this.boundingRects.push(Gfx2BoundingRect.createFromCoord(
-        json['X'],
-        json['Y'],
-        json['Width'],
-        json['Height']
-      ));
+      this.boundingRects.push(Gfx2BoundingRect.createFromCoord(json['X'], json['Y'], json['Width'], json['Height']));
     }
 
     this.currentAnimation = null;
@@ -234,16 +229,6 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
    */
   setTexture(texture: ImageBitmap): void {
     this.texture = texture;
-  }
-
-  /**
-   * Set the bounding rects.
-   * Note: Usualy used to handle collision.
-   * 
-   * @param {Array<Gfx2BoundingRect>} boundingRects - The bounding rectangle list.
-   */
-  setBoundingRect(boundingRects: Array<Gfx2BoundingRect>): void {
-    this.boundingRects = boundingRects;
   }
 
   /**
