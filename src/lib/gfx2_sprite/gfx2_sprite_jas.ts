@@ -152,9 +152,15 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
       }
 
       this.animations.push(animation);
-      this.boundingRects.push(Gfx2BoundingRect.createFromCoord(json['X'], json['Y'], json['Width'], json['Height']));
+      this.boundingRects.push(Gfx2BoundingRect.createFromCoord(
+        json['X'],
+        json['Y'],
+        json['Width'],
+        json['Height']
+      ));
     }
 
+    this.boundingRect = this.boundingRects[0];
     this.currentAnimation = null;
     this.currentAnimationFrameIndex = 0;
     this.frameProgress = 0;

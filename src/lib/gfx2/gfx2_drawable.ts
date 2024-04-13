@@ -294,6 +294,20 @@ class Gfx2Drawable {
   getWorldBoundingRect(): Gfx2BoundingRect {
     return this.boundingRect.transform(UT.MAT3_TRANSLATE(this.position[0], this.position[1]));
   }
+
+  /**
+   * Returns the bounding rect width.
+   */
+  getWidth(): number {
+    return this.boundingRect.getWidth();
+  }
+
+  /**
+   * Returns the bounding rect height.
+   */
+  getHeight(): number {
+    return this.boundingRect.getHeight();
+  }
 }
 
 export { Gfx2Drawable };
