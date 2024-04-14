@@ -34,7 +34,7 @@ const AIPatternFactory = {
       enemyMaxDistance: 90,
       tick: 1000,
       then: 0,
-      percentSuccess: 10,
+      percentSuccess: 50,
       commandName: 'CMD_COMBO',
       commandArgs: ['SPECIAL'],
       conditionName: null,
