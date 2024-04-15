@@ -948,6 +948,21 @@ class UT {
   }
 
   /**
+   * @param position - The position vector.
+   * @param offset - The offset translation.
+   * @param rotation - The rotation angle.
+   * @param scale - The scale vector.
+   * @param out - The result matrix.
+   */
+  static MAT3_TRANSFORM(position: vec2, offset: vec2, rotation: number, scale: vec2, out: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]): mat3 {
+    UT.MAT3_TRANSLATE(position[0], position[1], out);
+    UT.MAT3_ROTATE(rotation, out);
+    UT.MAT3_SCALE(scale[0], scale[1], out);
+    UT.MAT3_TRANSLATE(offset[0], offset[1], out);
+    return out;
+  }
+
+  /**
    * @param w - The width;
    * @param h - The height;
    * @param out - The result matrix.

@@ -102,7 +102,7 @@ class Gfx3PhysicsJNM {
   /**
    * The update function.
    */
-  update(): void {
+  update(ts: number): void {
     this.debugVertices = [];
     this.debugVertexCount = 0;
 

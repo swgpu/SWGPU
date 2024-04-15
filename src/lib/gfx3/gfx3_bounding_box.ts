@@ -59,6 +59,17 @@ class Gfx3BoundingBox {
   }
 
   /**
+   * Takes a list of vertices and set the new minimum and maximum values.
+   * 
+   * @param vertices - The list of vertices. Each triplets of numbers represents the x, y and z coordinates of a point.
+   */
+  static createFromVertices(vertices: Float32Array | Array<number>, vertexStride: number): Gfx3BoundingBox {
+    const box = new Gfx3BoundingBox();
+    box.fromVertices(vertices, vertexStride);
+    return box;
+  }
+
+  /**
    * Merge and returns the union of some boxes.
    * 
    * @param {Array<Gfx3BoundingBox>} aabbs - The list of boxes.
@@ -77,6 +88,7 @@ class Gfx3BoundingBox {
     return new Gfx3BoundingBox(min, max);
   }
 
+  
   /**
    * Takes a list of vertices and set the new minimum and maximum values.
    * 

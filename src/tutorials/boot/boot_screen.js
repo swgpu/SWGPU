@@ -16,8 +16,8 @@ class TutorialsBootScreen extends Screen {
   }
 
   async onEnter() {
-    this.uiMenu.add('0', 'Isolation - Your first tutorial');
-    this.uiMenu.add('1', 'Asgard - Your second tutorial');
+    this.uiMenu.add('0', 'First tutorial - Isolation');
+    this.uiMenu.add('1', 'Second tutorial - Asgard');
     this.uiMenu.add('2', 'Samples');
     uiManager.addWidget(this.uiMenu, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 

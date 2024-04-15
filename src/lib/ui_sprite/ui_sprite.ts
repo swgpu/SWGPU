@@ -41,38 +41,6 @@ class UISprite extends UIWidget {
   }
 
   /**
-   * The update function.
-   * 
-   * @param {number} ts - The timestep.
-   */
-  update(ts: number): void {
-    if (!this.currentAnimation) {
-      return;
-    }
-
-    const currentFrame = this.currentAnimation.frames[this.currentAnimationFrameIndex];
-    this.node.style.backgroundPositionX = -currentFrame.x + 'px';
-    this.node.style.backgroundPositionY = -currentFrame.y + 'px';
-    this.node.style.width = currentFrame.width + 'px';
-    this.node.style.height = currentFrame.height + 'px';
-
-    if (this.timeElapsed >= this.currentAnimation.frameDuration) {
-      if (this.currentAnimationFrameIndex == this.currentAnimation.frames.length - 1) {
-        eventManager.emit(this, 'E_FINISHED');
-        this.currentAnimationFrameIndex = this.isLooped ? 0 : this.currentAnimation.frames.length - 1;
-        this.timeElapsed = 0;
-      }
-      else {
-        this.currentAnimationFrameIndex = this.currentAnimationFrameIndex + 1;
-        this.timeElapsed = 0;
-      }
-    }
-    else {
-      this.timeElapsed += ts;
-    }
-  }
-
-  /**
    * Load asynchronously an image file.
    * 
    * @param {string} imageFile - The file path.
@@ -115,6 +83,38 @@ class UISprite extends UIWidget {
     this.currentAnimation = null;
     this.currentAnimationFrameIndex = 0;
     this.timeElapsed = 0;
+  }
+
+  /**
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
+   */
+  update(ts: number): void {
+    if (!this.currentAnimation) {
+      return;
+    }
+
+    const currentFrame = this.currentAnimation.frames[this.currentAnimationFrameIndex];
+    this.node.style.backgroundPositionX = -currentFrame.x + 'px';
+    this.node.style.backgroundPositionY = -currentFrame.y + 'px';
+    this.node.style.width = currentFrame.width + 'px';
+    this.node.style.height = currentFrame.height + 'px';
+
+    if (this.timeElapsed >= this.currentAnimation.frameDuration) {
+      if (this.currentAnimationFrameIndex == this.currentAnimation.frames.length - 1) {
+        eventManager.emit(this, 'E_FINISHED');
+        this.currentAnimationFrameIndex = this.isLooped ? 0 : this.currentAnimation.frames.length - 1;
+        this.timeElapsed = 0;
+      }
+      else {
+        this.currentAnimationFrameIndex = this.currentAnimationFrameIndex + 1;
+        this.timeElapsed = 0;
+      }
+    }
+    else {
+      this.timeElapsed += ts;
+    }
   }
 
   /**

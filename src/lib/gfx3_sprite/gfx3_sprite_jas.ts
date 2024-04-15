@@ -1,4 +1,5 @@
 import { eventManager } from '../core/event_manager.js';
+import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 import { Gfx3Sprite } from './gfx3_sprite.js';
 
 interface JASFrame {
@@ -12,6 +13,7 @@ interface JASAnimation {
   name: string;
   frames: Array<JASFrame>;
   frameDuration: number;
+  boundingBoxes: Array<Gfx3BoundingBox>;
 };
 
 /**
@@ -56,21 +58,32 @@ class Gfx3SpriteJAS extends Gfx3Sprite {
       const animation: JASAnimation = {
         name: obj['Name'],
         frames: [],
-        frameDuration: parseInt(obj['FrameDuration'])
+        frameDuration: parseInt(obj['FrameDuration']),
+        boundingBoxes: []
       };
 
-      for (const objFrame of obj['Frames']) {
+      for (const frame of obj['Frames']) {
         animation.frames.push({
-          x: objFrame['X'],
-          y: objFrame['Y'],
-          width: objFrame['Width'],
-          height: objFrame['Height']
+          x: frame['X'],
+          y: frame['Y'],
+          width: frame['Width'],
+          height: frame['Height']
         });
+
+        animation.boundingBoxes.push(Gfx3BoundingBox.createFromCoord(
+          frame['X'],
+          frame['Y'],
+          0,
+          frame['Width'],
+          frame['Height'],
+          0
+        ));  
       }
 
       this.animations.push(animation);
     }
 
+    this.boundingBox = this.animations[0].boundingBoxes[0];
     this.currentAnimation = null;
     this.currentAnimationFrameIndex = 0;
     this.frameProgress = 0;
@@ -192,6 +205,33 @@ class Gfx3SpriteJAS extends Gfx3Sprite {
   setOffsetNormalized(offsetXFactor: number, offsetYFactor: number) {
     this.offsetXFactor = offsetXFactor;
     this.offsetYFactor = offsetYFactor;
+  }
+
+  /**
+   * Returns the bounding box.
+   * 
+   * @param {boolean} [dynamicMode=false] - Determines if bounding box fit the current animation.
+   */
+  getBoundingRect(dynamicMode: boolean = false): Gfx3BoundingBox {
+    if (dynamicMode && this.currentAnimation) {
+      this.currentAnimation.boundingBoxes[this.currentAnimationFrameIndex];
+    }
+
+    return this.boundingBox;
+  }
+
+  /**
+   * Returns the bounding box in the world space coordinates.
+   * 
+   * @param {boolean} [dynamicMode=false] - Determines if bounding box fit the current animation.
+   */
+  getWorldBoundingRect(dynamicMode: boolean = false): Gfx3BoundingBox {
+    if (dynamicMode && this.currentAnimation) {
+      const box = this.currentAnimation.boundingBoxes[this.currentAnimationFrameIndex];
+      return box.transform(this.getTransformMatrix());
+    }
+
+    return this.boundingBox.transform(this.getTransformMatrix());
   }
 }
 

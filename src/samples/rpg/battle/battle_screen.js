@@ -104,20 +104,32 @@ class BattleScreen extends Screen {
   }
 
   async handleBattleActionBefore(data) {
-    if (data.action instanceof NewTurnBattleAction == false) {
-      if (data.action.toChar instanceof HeroCharacter) {
-        await this.area.cameraOnAlly();
-      }
-      else {
-        await this.area.cameraOnEnemy();
-      }
+    if (data.action instanceof NewTurnBattleAction) {
+      return;
+    }
+
+    if (data.action instanceof LetBattleAction) {
+      return;
+    }
+
+    if (data.action.toChar instanceof HeroCharacter) {
+      await this.area.cameraOnAlly();
+    }
+    else {
+      await this.area.cameraOnEnemy();
     }
   }
 
   async handleBattleActionAfter(data) {
-    if (data.action instanceof NewTurnBattleAction == false) {
-      await this.area.cameraOnDefault();
-    }    
+    if (data.action instanceof NewTurnBattleAction) {
+      return;
+    }
+
+    if (data.action instanceof LetBattleAction) {
+      return;
+    }
+
+    await this.area.cameraOnDefault();
   }
 
   handleBattleWin() {

@@ -55,7 +55,6 @@ class Gfx3Drawable extends Gfx3Transformable {
     this.vertexSubBuffer = gfx3Manager.createVertexBuffer(vertexCount * this.vertexStride * 4);
     this.vertices = [];
     this.vertexCount = vertexCount;
-    this.boundingBox.reset();
   }
 
   /**
@@ -78,15 +77,9 @@ class Gfx3Drawable extends Gfx3Transformable {
 
   /**
    * Close your vertex buffer to write process.
-   * 
-   * @param {boolean} [updateBoundingBox=true] - Determine if boundingbox is up to date with the new vertex set.
    */
-  endVertices(updateBoundingBox: boolean = true): void {
+  endVertices(): void {
     gfx3Manager.writeVertexBuffer(this.vertexSubBuffer, this.vertices);
-
-    if (updateBoundingBox) {
-      this.boundingBox.fromVertices(this.vertices, this.vertexStride);
-    }
   }
 
   /**
@@ -117,6 +110,15 @@ class Gfx3Drawable extends Gfx3Transformable {
    */
   getVertexCount(): number {
     return this.vertexCount;
+  }
+
+  /**
+   * Set the bounding box.
+   * 
+   * @param {Gfx3BoundingBox} boundingBox - The bounding box.
+   */
+  setBoundingBox(boundingBox: Gfx3BoundingBox): void {
+    this.boundingBox = boundingBox;
   }
 
   /**

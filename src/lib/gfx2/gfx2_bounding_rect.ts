@@ -72,6 +72,17 @@ class Gfx2BoundingRect {
    * 
    * @param vertices - The list of vertices. Each pair of numbers represents the x and y coordinates of a point.
    */
+  static createFromVertices(vertices: Array<number>): Gfx2BoundingRect {
+    const rect = new Gfx2BoundingRect();
+    rect.fromVertices(vertices);
+    return rect;
+  }
+
+  /**
+   * Takes a list of vertices and set the new minimum and maximum values.
+   * 
+   * @param vertices - The list of vertices. Each pair of numbers represents the x and y coordinates of a point.
+   */
   fromVertices(vertices: Array<number>): void {
     const min: vec2 = [vertices[0], vertices[1]];
     const max: vec2 = [vertices[0], vertices[1]];

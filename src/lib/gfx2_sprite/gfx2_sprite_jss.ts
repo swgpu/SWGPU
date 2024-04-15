@@ -18,25 +18,6 @@ class Gfx2SpriteJSS extends Gfx2Drawable {
   }
 
   /**
-   * The paint function.
-   */
-  paint(): void {
-    const ctx = gfx2Manager.getContext();
-    ctx.scale(this.flip[0] ? -1 : 1, this.flip[1] ? -1 : 1);
-    ctx.drawImage(
-      this.texture,
-      this.textureRect[0],
-      this.textureRect[1],
-      this.textureRect[2],
-      this.textureRect[3],
-      this.flip[0] ? this.textureRect[2] * -1 : 0,
-      this.flip[1] ? this.textureRect[3] * -1 : 0,
-      this.textureRect[2],
-      this.textureRect[3]
-    );
-  }
-
-  /**
    * Load asynchronously sprite data from a json file (jss).
    * 
    * @param {string} path - The file path.
@@ -65,10 +46,43 @@ class Gfx2SpriteJSS extends Gfx2Drawable {
   }
 
   /**
+   * The paint function.
+   */
+  paint(): void {
+    const ctx = gfx2Manager.getContext();
+    ctx.scale(this.flip[0] ? -1 : 1, this.flip[1] ? -1 : 1);
+    ctx.drawImage(
+      this.texture,
+      this.textureRect[0],
+      this.textureRect[1],
+      this.textureRect[2],
+      this.textureRect[3],
+      this.flip[0] ? this.textureRect[2] * -1 : 0,
+      this.flip[1] ? this.textureRect[3] * -1 : 0,
+      this.textureRect[2],
+      this.textureRect[3]
+    );
+  }
+
+  /**
    * Returns the texture rectangle.
    */
   getTextureRect(): vec4 {
     return this.textureRect;
+  }
+
+  /**
+   * Returns the texture rect width.
+   */
+  getTextureRectWidth(): number {
+    return this.textureRect[2];
+  }
+
+  /**
+   * Returns the texture rect height.
+   */
+  getTextureRectHeight(): number {
+    return this.textureRect[3];
   }
 
   /**
@@ -128,6 +142,7 @@ class Gfx2SpriteJSS extends Gfx2Drawable {
     if (this.textureRect[2] == 0 && this.textureRect[3] == 0) {
       this.textureRect[2] = texture.width;
       this.textureRect[3] = texture.height;
+      this.boundingRect = Gfx2BoundingRect.createFromCoord(this.textureRect[0], this.textureRect[1], this.textureRect[2], this.textureRect[3]);
     }
 
     this.texture = texture;

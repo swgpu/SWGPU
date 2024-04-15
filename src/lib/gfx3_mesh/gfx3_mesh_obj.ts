@@ -2,9 +2,9 @@ import { gfx3TextureManager } from '../gfx3/gfx3_texture_manager';
 import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '../gfx3_mesh/gfx3_mesh_renderer';
 import { UT } from '../core/utils';
+import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 import { Gfx3Material } from './gfx3_mesh_material';
 import { Gfx3Mesh, Group } from './gfx3_mesh';
-import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 
 class OBJObject {
   name: string;
@@ -76,6 +76,18 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
   }
 
   /**
+   * Load asynchronously data from obj and mtl files and build the mesh.
+   * 
+   * @param {string} objPath - The obj file path.
+   * @param {string} mtlPath - The mtl file path.
+   */
+  async loadFromFile(objPath: string, mtlPath: string) {
+    await this.$loadMaterials(mtlPath);
+    await this.$loadObjects(objPath);
+    this.$build();
+  }
+
+  /**
    * Free all resources.
    * Warning: You need to call this method to free allocation for this object.
    */
@@ -114,18 +126,6 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
     if (this.debugVertexCount > 0) {
       gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount, this.getTransformMatrix());
     }
-  }
-
-  /**
-   * Load asynchronously data from obj and mtl files and build the mesh.
-   * 
-   * @param {string} objPath - The obj file path.
-   * @param {string} mtlPath - The mtl file path.
-   */
-  async loadFromFile(objPath: string, mtlPath: string) {
-    await this.$loadMaterials(mtlPath);
-    await this.$loadObjects(objPath);
-    this.$build();
   }
 
   /**
@@ -449,6 +449,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
         mesh.beginVertices(object.vertexCount);
         mesh.setVertices(Gfx3Mesh.buildVertices(object.vertexCount, this.coords, texcoords, colors, normals, object.groups));
         mesh.endVertices();
+        mesh.setBoundingBox(Gfx3BoundingBox.createFromVertices(this.coords, 3));
         this.meshes.set(object.name, mesh);  
       }
     }

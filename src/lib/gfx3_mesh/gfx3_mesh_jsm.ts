@@ -1,3 +1,4 @@
+import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 import { Gfx3Mesh } from './gfx3_mesh';
 
 /**
@@ -24,6 +25,8 @@ class Gfx3MeshJSM extends Gfx3Mesh {
     this.beginVertices(json['NumVertices']);
     this.setVertices(Gfx3Mesh.buildVertices(json['NumVertices'], json['Vertices'], json['TextureCoords'], json['Colors'], json['Normals']));
     this.endVertices();
+
+    this.boundingBox = Gfx3BoundingBox.createFromVertices(json['Vertices'], 3);
   }
 }
 

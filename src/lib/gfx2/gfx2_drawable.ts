@@ -272,7 +272,6 @@ class Gfx2Drawable {
 
   /**
    * Set the bounding rect.
-   * Note: Usualy used to handle collision.
    * 
    * @param {Gfx2BoundingRect} boundingRect - The bounding rectangle.
    */
@@ -282,7 +281,6 @@ class Gfx2Drawable {
 
   /**
    * Returns the bounding rect.
-   * Note: Usualy used to handle collision.
    */
   getBoundingRect(): Gfx2BoundingRect {
     return this.boundingRect;
@@ -292,21 +290,7 @@ class Gfx2Drawable {
    * Returns the bounding rect in the world space coordinates.
    */
   getWorldBoundingRect(): Gfx2BoundingRect {
-    return this.boundingRect.transform(UT.MAT3_TRANSLATE(this.position[0], this.position[1]));
-  }
-
-  /**
-   * Returns the bounding rect width.
-   */
-  getWidth(): number {
-    return this.boundingRect.getWidth();
-  }
-
-  /**
-   * Returns the bounding rect height.
-   */
-  getHeight(): number {
-    return this.boundingRect.getHeight();
+    return this.boundingRect.transform(UT.MAT3_TRANSFORM(this.position, this.offset, this.rotation, this.scale));
   }
 }
 

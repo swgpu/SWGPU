@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/banner-brand.png" alt="logo"/>
+    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/banner-brand-new.png" alt="logo"/>
 </p>
 
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
@@ -20,7 +20,7 @@ Some words about our philosophy:
 You can check the documentation [here](http://warme-engine.com/).          
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
 
-## General features
+## Features
 - 🧱 **Core**
     - Maths
     - Tweening
@@ -83,7 +83,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
 
 - 🌞 **3D Light**
     - Directional light
-    - Point lights (max : 16)
+    - Point lights (max : 64)
 
 - 🖼️ **3D Post-processing**
     - Hardware dithering

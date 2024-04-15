@@ -15,6 +15,7 @@ interface JASAnimation {
   name: string;
   frames: Array<JASFrame>;
   frameDuration: number;
+  boundingRects: Array<Gfx2BoundingRect>;
 }
 
 /**
@@ -29,7 +30,6 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
   currentAnimationFrameIndex: number;
   looped: boolean;
   frameProgress: number;
-  boundingRects: Array<Gfx2BoundingRect>;
 
   constructor() {
     super();
@@ -40,7 +40,55 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
     this.currentAnimationFrameIndex = 0;
     this.looped = false;    
     this.frameProgress = 0;
-    this.boundingRects = [];
+  }
+
+  /**
+   * Loads asynchronously sprite data from a json file (jas).
+   * 
+   * @param {string} path - The file path.
+   */
+  async loadFromFile(path: string): Promise<void> {
+    const response = await fetch(path);
+    const json = await response.json();
+
+    this.offset[0] = json['OffsetX'] ?? 0;
+    this.offset[1] = json['OffsetY'] ?? 0;
+
+    this.flip[0] = json['FlipX'] ?? false;
+    this.flip[1] = json['FlipY'] ?? false;
+
+    this.animations = [];
+    for (const obj of json['Animations']) {
+      const animation: JASAnimation = {
+        name: obj['Name'],
+        frames: [],
+        frameDuration: parseInt(obj['FrameDuration']),
+        boundingRects: []
+      };
+
+      for (const frame of obj['Frames']) {
+        animation.frames.push({
+          x: frame['X'],
+          y: frame['Y'],
+          width: frame['Width'],
+          height: frame['Height']
+        });
+
+        animation.boundingRects.push(Gfx2BoundingRect.createFromCoord(
+          frame['X'],
+          frame['Y'],
+          frame['Width'],
+          frame['Height']
+        ));  
+      }
+
+      this.animations.push(animation);
+    }
+
+    this.boundingRect = this.animations[0].boundingRects[0];
+    this.currentAnimation = null;
+    this.currentAnimationFrameIndex = 0;
+    this.frameProgress = 0;
   }
 
   /**
@@ -114,55 +162,6 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
     this.currentAnimation = animation;
     this.currentAnimationFrameIndex = 0;
     this.looped = looped;
-    this.frameProgress = 0;
-  }
-
-  /**
-   * Loads asynchronously sprite data from a json file (jas).
-   * 
-   * @param {string} path - The file path.
-   */
-  async loadFromFile(path: string): Promise<void> {
-    const response = await fetch(path);
-    const json = await response.json();
-
-    this.offset[0] = json['OffsetX'] ?? 0;
-    this.offset[1] = json['OffsetY'] ?? 0;
-
-    this.flip[0] = json['FlipX'] ?? false;
-    this.flip[1] = json['FlipY'] ?? false;
-
-    this.animations = [];
-    this.boundingRects = [];
-
-    for (const obj of json['Animations']) {
-      const animation: JASAnimation = {
-        name: obj['Name'],
-        frames: [],
-        frameDuration: parseInt(obj['FrameDuration'])
-      };
-
-      for (const objFrame of obj['Frames']) {
-        animation.frames.push({
-          x: objFrame['X'],
-          y: objFrame['Y'],
-          width: objFrame['Width'],
-          height: objFrame['Height']
-        });
-      }
-
-      this.animations.push(animation);
-      this.boundingRects.push(Gfx2BoundingRect.createFromCoord(
-        json['X'],
-        json['Y'],
-        json['Width'],
-        json['Height']
-      ));
-    }
-
-    this.boundingRect = this.boundingRects[0];
-    this.currentAnimation = null;
-    this.currentAnimationFrameIndex = 0;
     this.frameProgress = 0;
   }
 
@@ -243,7 +242,11 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
    * @param {boolean} [dynamicMode=false] - Determines if bounding rect fit the current animation.
    */
   getBoundingRect(dynamicMode: boolean = false): Gfx2BoundingRect {
-    return dynamicMode ? this.boundingRects[this.currentAnimationFrameIndex] : this.boundingRects[0];
+    if (dynamicMode && this.currentAnimation) {
+      this.currentAnimation.boundingRects[this.currentAnimationFrameIndex];
+    }
+
+    return this.boundingRect;
   }
 
   /**
@@ -252,12 +255,12 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
    * @param {boolean} [dynamicMode=false] - Determines if bounding rect fit the current animation.
    */
   getWorldBoundingRect(dynamicMode: boolean = false): Gfx2BoundingRect {
-    if (dynamicMode) {
-      return this.boundingRects[this.currentAnimationFrameIndex].transform(UT.MAT3_TRANSLATE(this.position[0], this.position[1]));
+    if (dynamicMode && this.currentAnimation) {
+      const rect = this.currentAnimation.boundingRects[this.currentAnimationFrameIndex];
+      return rect.transform(UT.MAT3_TRANSFORM(this.position, this.offset, this.rotation, this.scale));
     }
-    else {
-      return this.boundingRects[0].transform(UT.MAT3_TRANSLATE(this.position[0], this.position[1]));
-    }
+
+    return this.boundingRect.transform(UT.MAT3_TRANSFORM(this.position, this.offset, this.rotation, this.scale));
   }
 }
 

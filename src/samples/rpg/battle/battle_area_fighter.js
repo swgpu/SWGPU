@@ -85,9 +85,8 @@ class BattleAreaFighter extends Gfx3Transformable {
   }
 
   getSize() {
-    const meshAABB = this.mesh.getBoundingBox();
-    const meshSize = meshAABB.getSize();
-    return meshSize;
+    const aabb = this.mesh.getBoundingBox();
+    return aabb.getSize();
   }
 
   async handleEffectInflict(data) {

@@ -14,22 +14,37 @@ const RAYCAST_CAMERA_HEIGHT = 10;
 const CAMERA_DISTANCE_MAX = 10;
 
 class AsgardScreen extends Screen {
+  camera: Gfx3CameraOrbit;
+  mapJSM: Gfx3MeshJSM;
+  mapJNM: Gfx3PhysicsJNM;
+  player: Character;
+
   constructor() {
     super();
     this.camera = new Gfx3CameraOrbit(0);
-    this.map = {};
-    this.player = {};
+    this.mapJSM = new Gfx3MeshJSM();
+    this.mapJNM = new Gfx3PhysicsJNM();
+    this.player = new Character(this.mapJNM, this.camera);
   }
 
   async onEnter() {
-    this.map = await this.createMap();
-    this.player = await this.createPlayer(this.map.jnm, this.camera);
+    this.mapJSM = new Gfx3MeshJSM();
+    await this.mapJSM.loadFromFile('./tutorials/asgard/map.jsm');
+    this.mapJSM.setMaterial(new Gfx3Material({
+      texture: await gfx3TextureManager.loadTexture('./tutorials/asgard/map.png')
+    }));
+
+    this.mapJNM = new Gfx3PhysicsJNM();
+    await this.mapJNM.loadFromFile('./tutorials/asgard/map.jnm');
+
+    this.player = new Character(this.mapJNM, this.camera);
+    await this.player.loadFromFile('./tutorials/asgard/barret.jam', './tutorials/asgard/barret.png');
   }
 
-  update(ts) {
-    const targetPos = [this.player.x, this.player.y + 1, this.player.z];
+  update(ts: number) {
+    const targetPos = UT.VEC3_ADD(this.player.position, [0, 1, 0]);
     const targetToCamera = UT.VEC3_SUBSTRACT(this.camera.getPosition(), targetPos);
-    const raycast = this.map.jnm.raycast(targetPos, targetToCamera, RAYCAST_CAMERA_RADIUS, RAYCAST_CAMERA_HEIGHT);
+    const raycast = this.mapJNM.raycast(targetPos, targetToCamera, RAYCAST_CAMERA_RADIUS, RAYCAST_CAMERA_HEIGHT);
 
     if (raycast && raycast.distance < CAMERA_DISTANCE_MAX) {
       this.camera.setDistance(raycast.distance);
@@ -39,34 +54,15 @@ class AsgardScreen extends Screen {
     }
 
     this.camera.setTarget(targetPos);
-    this.map.mesh.update(ts);
-    this.map.jnm.update(ts);
+    this.mapJSM.update(ts);
+    this.mapJNM.update(ts);
     this.camera.update(ts);
     this.player.update(ts);
   }
 
   draw() {
-    this.map.mesh.draw();
+    this.mapJSM.draw();
     this.player.draw();
-  }
-
-  async createMap() {
-    const mesh = new Gfx3MeshJSM();
-    await mesh.loadFromFile('./tutorials/asgard/map.jsm');
-    mesh.setMaterial(new Gfx3Material({
-      texture: await gfx3TextureManager.loadTexture('./tutorials/asgard/map.png')
-    }));
-
-    const jnm = new Gfx3PhysicsJNM();
-    await jnm.loadFromFile('./tutorials/asgard/map.jnm');
-
-    return { mesh, jnm };
-  }
-
-  async createPlayer(jnm, camera) {
-    const entity = new Character(jnm, camera);
-    await entity.load('./tutorials/asgard/barret.jam', './tutorials/asgard/barret.png');
-    return entity;
   }
 }
 

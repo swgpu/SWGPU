@@ -56,6 +56,7 @@ class Gfx3MeshJAM extends Gfx3Mesh {
     }
 
     this.frames = [];
+    this.boundingBoxes = [];
     for (const obj of json['Frames']) {
       const vertices = obj['Vertices'] ?? json['Vertices'];
       const textureCoords = obj['TextureCoords'] ?? json['TextureCoords'];
@@ -65,17 +66,9 @@ class Gfx3MeshJAM extends Gfx3Mesh {
         vertices: Gfx3Mesh.buildVertices(json['NumVertices'], vertices, textureCoords, colors, normals)
       });
 
-      const aabb = new Gfx3BoundingBox();
-      aabb.fromVertices(vertices, 3);
-      this.boundingBoxes.push(aabb);
-    }
-
-    this.boundingBoxes = [];
-    for (const obj of json['Frames']) {
-      const vertices = obj['Vertices'] ?? json['Vertices'];
-      const aabb = new Gfx3BoundingBox();
-      aabb.fromVertices(vertices, 3);
-      this.boundingBoxes.push(aabb);
+      this.boundingBoxes.push(
+        Gfx3BoundingBox.createFromVertices(vertices, 3)
+      );
     }
 
     this.animations = [];
@@ -88,6 +81,7 @@ class Gfx3MeshJAM extends Gfx3Mesh {
       });
     }
 
+    this.boundingBox = this.boundingBoxes[0];
     this.numVertices = json['NumVertices'];
     this.currentAnimation = null;
     this.interpolationEnabled = true;
@@ -188,7 +182,7 @@ class Gfx3MeshJAM extends Gfx3Mesh {
       }
     }
 
-    this.endVertices(false);
+    this.endVertices();
 
     if (interpolateFactor >= 1) {
       this.currentFrameIndex = nextFrameIndex;
@@ -267,7 +261,11 @@ class Gfx3MeshJAM extends Gfx3Mesh {
    * @param {boolean} [dynamicMode=false] - Determines if bounding box fit the current animation.
    */
   getBoundingBox(dynamicMode: boolean = false): Gfx3BoundingBox {
-    return dynamicMode ? this.boundingBoxes[this.currentFrameIndex] : this.boundingBoxes[0];
+    if (dynamicMode && this.currentAnimation) {
+      return this.boundingBoxes[this.currentFrameIndex];
+    }
+
+    return this.boundingBox;
   }
 
   /**
@@ -276,7 +274,12 @@ class Gfx3MeshJAM extends Gfx3Mesh {
    * @param {boolean} [dynamicMode=false] - Determines if bounding box fit the current animation.
    */
   getWorldBoundingBox(dynamicMode: boolean = false): Gfx3BoundingBox {
-    return dynamicMode ? this.boundingBoxes[this.currentFrameIndex].transform(this.getTransformMatrix()) : this.boundingBoxes[0].transform(this.getTransformMatrix());
+    if (dynamicMode && this.currentAnimation) {
+      const box = this.boundingBoxes[this.currentFrameIndex];
+      return box.transform(this.getTransformMatrix());
+    }
+
+    return this.boundingBox.transform(this.getTransformMatrix());
   }
 }
 
