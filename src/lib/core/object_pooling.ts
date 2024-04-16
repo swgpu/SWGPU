@@ -1,3 +1,7 @@
+interface Clonable<T> {
+  clone(): T;
+};
+
 // ************************************
 // @todo: change for generic object pooling manager
 // ************************************

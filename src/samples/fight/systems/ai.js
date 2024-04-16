@@ -167,7 +167,6 @@ export class AISystem extends DNASystem {
       const cmd = this.commandRegister[pattern.commandName];
       if (cmd && cmd.apply(this, [entity, enemyEntity, ...pattern.commandArgs])) {
         pattern.then = 0;
-        console.log('pass', pattern.name)
         break;
       }
     }

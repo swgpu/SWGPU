@@ -5,10 +5,11 @@ import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
 import { Gfx3PhysicsJNM } from '../../lib/gfx3_physics/gfx3_physics_jnm';
 // ---------------------------------------------------------------------------------------
-import { CharacterComponent, CharacterSystem } from './character';
-import { HPComponent, HPSystem } from './hp';
-import { TPCComponent, TPCSystem } from './tpc';
-import { TPCInputComponent, TPCInputSystem } from './tpc_input';
+import { CharacterComponent } from './character';
+import { CharacterGraphicsComponent, CharacterGraphicsSystem } from './character_graphics';
+import { CharacterPhysicsComponent, CharacterPhysicsSystem } from './character_physics';
+import { CharacterInputComponent, CharacterInputSystem } from './character_input';
+import { CharacterCameraComponent, CharacterCameraSystem } from './character_camera';
 // ---------------------------------------------------------------------------------------
 
 class AsgardScreen extends Screen {
@@ -23,10 +24,10 @@ class AsgardScreen extends Screen {
 
   async onEnter() {
     dnaManager.setup([
-      new TPCSystem(),
-      new TPCInputSystem(),
-      new CharacterSystem(),
-      new HPSystem()
+      new CharacterInputSystem(),
+      new CharacterPhysicsSystem(),
+      new CharacterGraphicsSystem(),
+      new CharacterCameraSystem()
     ]);
 
     this.mapJSM = new Gfx3MeshJSM();
@@ -38,24 +39,7 @@ class AsgardScreen extends Screen {
     this.mapJNM = new Gfx3PhysicsJNM();
     await this.mapJNM.loadFromFile('./tutorials/asgard/map.jnm');
 
-    const player = dnaManager.createEntity();
-    const characterCmp = new CharacterComponent();
-    dnaManager.addComponent(player, characterCmp);
-
-    await characterCmp.jam.loadFromFile('./tutorials/asgard/barret.jam');
-    characterCmp.jam.play('IDLE', true);
-    characterCmp.jam.setMaterial(new Gfx3Material({
-      texture: await gfx3TextureManager.loadTexture('./tutorials/asgard/barret.png')
-    }));
-
-    const hpCmp = new HPComponent(this.mapJNM);
-    dnaManager.addComponent(player, hpCmp);
-
-    const tpcCmp = new TPCComponent(this.mapJNM);
-    dnaManager.addComponent(player, tpcCmp);
-
-    const tpcInputCmp = new TPCInputComponent();
-    dnaManager.addComponent(player, tpcInputCmp);
+    await this.createPlayer(this.mapJNM);
   }
 
   update(ts: number) {
@@ -67,6 +51,30 @@ class AsgardScreen extends Screen {
   draw() {
     this.mapJSM.draw();
     dnaManager.draw();
+  }
+
+  async createPlayer(map: Gfx3PhysicsJNM): Promise<number> {
+    const player = dnaManager.createEntity();
+
+    const character = new CharacterComponent();
+    dnaManager.addComponent(player, character);
+
+    const input = new CharacterInputComponent();
+    dnaManager.addComponent(player, input);
+
+    const physics = new CharacterPhysicsComponent(map);
+    dnaManager.addComponent(player, physics);
+
+    const graphics = new CharacterGraphicsComponent();
+    await graphics.jam.loadFromFile('./tutorials/asgard/barret.jam');
+    graphics.jam.play('IDLE', true);
+    graphics.jam.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture('./tutorials/asgard/barret.png') }));
+    dnaManager.addComponent(player, graphics);
+
+    const camera = new CharacterCameraComponent(map);
+    dnaManager.addComponent(player, camera);
+
+    return player;
   }
 }
 

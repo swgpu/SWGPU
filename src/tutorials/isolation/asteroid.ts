@@ -26,30 +26,30 @@ export class AsteroidSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number): void {
-    const asteroidCmp = dnaManager.getComponent(eid, 'Asteroid') as AsteroidComponent;
+    const asteroid = dnaManager.getComponent(eid, 'Asteroid') as AsteroidComponent;
 
-    asteroidCmp.jss.translate(0, 0.2);
-    if (asteroidCmp.jss.getPositionY() > 300) {
+    asteroid.jss.translate(0, 0.2);
+    if (asteroid.jss.getPositionY() > 300) {
       dnaManager.removeEntity(eid);
       return;
     }
 
-    const ship = dnaManager.findEntity('Ship');
-    const shipCmp = dnaManager.getComponent(ship, 'Ship') as ShipComponent;
+    const shipEnt = dnaManager.findEntity('Ship');
+    const ship = dnaManager.getComponent(shipEnt, 'Ship') as ShipComponent;
 
-    const shipRect = shipCmp.jss.getWorldBoundingRect();
-    const asteroidRect = asteroidCmp.jss.getWorldBoundingRect();
+    const shipRect = ship.jss.getWorldBoundingRect();
+    const asteroidRect = asteroid.jss.getWorldBoundingRect();
 
     if (shipRect.intersectBoundingRect(asteroidRect)) {
       eventManager.emit(this, 'E_PLAYER_DESTROYED');
       return;
     }
 
-    asteroidCmp.jss.update(ts);
+    asteroid.jss.update(ts);
   }
 
   onEntityDraw(eid: number): void {
-    const asteroidCmp = dnaManager.getComponent(eid, 'Asteroid') as AsteroidComponent;
-    asteroidCmp.jss.draw();
+    const asteroid = dnaManager.getComponent(eid, 'Asteroid') as AsteroidComponent;
+    asteroid.jss.draw();
   }
 }

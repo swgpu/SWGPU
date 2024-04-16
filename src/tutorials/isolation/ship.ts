@@ -30,26 +30,26 @@ export class ShipSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number): void {
-    const shipCmp = dnaManager.getComponent(eid, 'Ship') as ShipComponent;
+    const ship = dnaManager.getComponent(eid, 'Ship') as ShipComponent;
     let mx = 0;
 
     if (inputManager.isActiveAction('LEFT')) {
-      mx = -shipCmp.speed * ts;
+      mx = -ship.speed * ts;
     }
     else if (inputManager.isActiveAction('RIGHT')) {
-      mx = +shipCmp.speed * ts;
+      mx = +ship.speed * ts;
     }
 
-    if (shipCmp.jss.getPositionX() + mx >= -300 && shipCmp.jss.getPositionX() + mx <= (300 - 32)) {
-      shipCmp.jss.translate(mx, 0);
+    if (mx != 0 && ship.jss.getPositionX() + mx >= -300 && ship.jss.getPositionX() + mx <= (300 - 32)) {
+      ship.jss.translate(mx, 0);
     }
 
-    shipCmp.jss.update(ts);
+    ship.jss.update(ts);
   }
 
   onEntityDraw(eid: number): void {
-    const shipCmp = dnaManager.getComponent(eid, 'Ship') as ShipComponent;
-    shipCmp.jss.draw();    
+    const ship = dnaManager.getComponent(eid, 'Ship') as ShipComponent;
+    ship.jss.draw();    
   }
 
   onActionOnce(actionId: string, eid: number): void {
@@ -57,18 +57,18 @@ export class ShipSystem extends DNASystem {
       return;
     }
 
-    const shipCmp = dnaManager.getComponent(eid, 'Ship') as ShipComponent;
-    const bullets = dnaManager.findEntities('Bullet');
+    const ship = dnaManager.getComponent(eid, 'Ship') as ShipComponent;
+    const bulletEnts = dnaManager.findEntities('Bullet');
 
-    if (bullets.length >= MAX_BULLETS) {
+    if (bulletEnts.length >= MAX_BULLETS) {
       return;
     }
   
-    const bullet = dnaManager.createEntity();
-    const bulletComponent = new BulletComponent();
+    const newBulletEnt = dnaManager.createEntity();
+    const newBullet = new BulletComponent();
 
-    bulletComponent.jss.setOffsetNormalized(0.5, 0);
-    bulletComponent.jss.setPosition(shipCmp.jss.getPositionX() + shipCmp.jss.getTextureRectWidth() / 2,  shipCmp.jss.getPositionY() - 64);
-    dnaManager.addComponent(bullet, bulletComponent);
+    newBullet.jss.setOffsetNormalized(0.5, 0);
+    newBullet.jss.setPosition(ship.jss.getPositionX() + ship.jss.getTextureRectWidth() / 2,  ship.jss.getPositionY() - 64);
+    dnaManager.addComponent(newBulletEnt, newBullet);
   }
 }

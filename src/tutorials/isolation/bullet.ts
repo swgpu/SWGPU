@@ -25,30 +25,30 @@ export class BulletSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number): void {
-    const bulletCmp = dnaManager.getComponent(eid, 'Bullet') as BulletComponent;
+    const bullet = dnaManager.getComponent(eid, 'Bullet') as BulletComponent;
 
-    bulletCmp.jss.translate(0, -0.6);
-    if (bulletCmp.jss.getPositionY() < -300) {
+    bullet.jss.translate(0, -0.6);
+    if (bullet.jss.getPositionY() < -300) {
       dnaManager.removeEntity(eid);
       return;
     }
 
-    for (const asteroid of dnaManager.findEntities('Asteroid')) {
-      const asteroidCmp = dnaManager.getComponent(asteroid, 'Asteroid') as AsteroidComponent;
-      const bulletRect = bulletCmp.jss.getWorldBoundingRect();
-      const asteroidRect = asteroidCmp.jss.getWorldBoundingRect();
+    for (const asteroidEnt of dnaManager.findEntities('Asteroid')) {
+      const asteroid = dnaManager.getComponent(asteroidEnt, 'Asteroid') as AsteroidComponent;
+      const bulletRect = bullet.jss.getWorldBoundingRect();
+      const asteroidRect = asteroid.jss.getWorldBoundingRect();
 
       if (bulletRect.intersectBoundingRect(asteroidRect)) {
         if (dnaManager.hasEntity(eid)) {
           dnaManager.removeEntity(eid);
         }
 
-        dnaManager.removeEntity(asteroid);
+        dnaManager.removeEntity(asteroidEnt);
         eventManager.emit(this, 'E_ASTEROID_DESTROYED');
       }
     }
 
-    bulletCmp.jss.update(ts);
+    bullet.jss.update(ts);
   }
 
   onEntityDraw(eid: number): void {

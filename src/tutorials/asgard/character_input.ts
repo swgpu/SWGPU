@@ -5,24 +5,24 @@ import { DNASystem } from '../../lib/dna/dna_system';
 import { DNAComponent } from '../../lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { CharacterComponent } from './character';
-import { TPCComponent } from './tpc';
+import { CharacterCameraComponent } from './character_camera';
 // ---------------------------------------------------------------------------------------
 
-export class TPCInputComponent extends DNAComponent {
+export class CharacterInputComponent extends DNAComponent {
   constructor() {
-    super('TPCInput');
+    super('CharacterInput');
   }
 }
 
-export class TPCInputSystem extends DNASystem {
+export class CharacterInputSystem extends DNASystem {
   constructor() {
     super();
-    super.addRequiredComponentTypename('TPCInput');
-    super.addRequiredComponentTypename('TPC');
+    super.addRequiredComponentTypename('CharacterInput');
+    super.addRequiredComponentTypename('CharacterCamera');
     super.addRequiredComponentTypename('Character');
   }
 
-  onUpdate(ts: number, eid: number) {
+  onEntityUpdate(ts: number, eid: number) {
     let moving = false;
     let moveAngle = 0;
 
@@ -46,15 +46,18 @@ export class TPCInputSystem extends DNASystem {
       moving = true;
     }
 
-    if (moving) {
-      const tpcCmp = dnaManager.getComponent(eid, 'TPC') as TPCComponent;
-      const phi = tpcCmp.camera.getPhi();
-      const x = Math.cos(phi + moveAngle);
-      const z = Math.sin(phi + moveAngle);
+    const character = dnaManager.getComponent(eid, 'Character') as CharacterComponent;
 
-      const characterCmp = dnaManager.getComponent(eid, 'Character') as CharacterComponent;
-      characterCmp.velocity = [-x, 0, -z];
-      characterCmp.rotation = UT.VEC2_ANGLE([characterCmp.velocity[0], characterCmp.velocity[2]]);
+    if (moving) {
+      const camera = dnaManager.getComponent(eid, 'CharacterCamera') as CharacterCameraComponent;
+      const phi = camera.rec.getPhi();
+      const x = Math.cos(phi + moveAngle);
+      const z = Math.sin(phi + moveAngle);      
+      character.moveDir = [-x, 0, -z];
+      character.rotation = UT.VEC2_ANGLE([-x, -z]);
+    }
+    else {
+      character.moveDir = [0, 0, 0];
     }
   }
 }

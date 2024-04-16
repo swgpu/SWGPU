@@ -51,8 +51,8 @@ class GameScreen extends Screen {
     this.uiScore.setText('Score: ' + this.score);
     uiManager.addWidget(this.uiScore);
 
-    const ship = dnaManager.createEntity();
-    dnaManager.addComponent(ship, new ShipComponent());
+    const shipEnt = dnaManager.createEntity();
+    dnaManager.addComponent(shipEnt, new ShipComponent());
 
     this.generateWave();
 
