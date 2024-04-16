@@ -1,5 +1,6 @@
 import { eventManager } from '../core/event_manager';
 import { gfx2Manager } from '../gfx2/gfx2_manager';
+import { Poolable } from '../core/object_pool';
 import { UT } from '../core/utils';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
@@ -22,7 +23,7 @@ interface JASAnimation {
  * A 2D sprite with animations.
  * It emit 'E_FINISHED'
  */
-class Gfx2SpriteJAS extends Gfx2Drawable {
+class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
   flip: [boolean, boolean];
   animations: Array<JASAnimation>;
   texture: ImageBitmap | HTMLImageElement;
@@ -261,6 +262,23 @@ class Gfx2SpriteJAS extends Gfx2Drawable {
     }
 
     return this.boundingRect.transform(UT.MAT3_TRANSFORM(this.position, this.offset, this.rotation, this.scale));
+  }
+
+  /**
+   * Clone the object.
+   * 
+   * @param {Gfx2SpriteJAS} jas - The copy object.
+   */
+  clone(jas: Gfx2SpriteJAS = new Gfx2SpriteJAS()): Gfx2SpriteJAS {
+    super.clone(jas);
+    jas.flip = [this.flip[0], this.flip[1]];
+    jas.animations = this.animations;
+    jas.texture = this.texture;
+    jas.currentAnimation = null;
+    jas.currentAnimationFrameIndex = 0;
+    jas.looped = false;    
+    jas.frameProgress = 0;
+    return jas;
   }
 }
 

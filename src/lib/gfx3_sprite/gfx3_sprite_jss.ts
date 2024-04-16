@@ -1,3 +1,5 @@
+import { UT } from '../core/utils';
+import { Poolable } from '../core/object_pool';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { Gfx3Sprite } from './gfx3_sprite';
@@ -5,7 +7,7 @@ import { Gfx3Sprite } from './gfx3_sprite';
 /**
  * A 3D static sprite (without animations).
  */
-class Gfx3SpriteJSS extends Gfx3Sprite {
+class Gfx3SpriteJSS extends Gfx3Sprite implements Poolable<Gfx3SpriteJSS> {
   textureRect: vec4;
 
   constructor() {
@@ -131,6 +133,18 @@ class Gfx3SpriteJSS extends Gfx3Sprite {
     }
 
     this.texture = texture;
+  }
+
+  /**
+   * Clone the object.
+   * 
+   * @param {Gfx3SpriteJSS} jss - The copy object.
+   * @param {mat4} transformMatrix - The transformation matrix.
+   */
+  clone(jss: Gfx3SpriteJSS = new Gfx3SpriteJSS(), transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3SpriteJSS {
+    super.clone(jss, transformMatrix);
+    this.textureRect = [jss.textureRect[0], jss.textureRect[1], jss.textureRect[2], jss.textureRect[3]];
+    return jss;
   }
 }
 

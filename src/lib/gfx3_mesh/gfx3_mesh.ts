@@ -1,5 +1,6 @@
 import { gfx3MeshRenderer } from './gfx3_mesh_renderer';
 import { UT } from '../core/utils';
+import { Poolable } from '../core/object_pool';
 import { Gfx3Drawable } from '../gfx3/gfx3_drawable';
 import { Gfx3Material } from './gfx3_mesh_material';
 import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_mesh_shader';
@@ -20,7 +21,7 @@ export interface Group {
 /**
  * A 3D base mesh object.
  */
-class Gfx3Mesh extends Gfx3Drawable {
+class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
   layer: number;
   shadowCasting: boolean;
   material: Gfx3Material;
@@ -236,22 +237,16 @@ class Gfx3Mesh extends Gfx3Drawable {
   }
 
   /**
-   * Creates a clone of the mesh.
+   * Clone the object.
    * 
+   * @param {Gfx3Mesh} mesh - The copy object.
    * @param {mat4} transformMatrix - The transformation matrix.
    */
-  clone(transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3Mesh {
-    const mesh = new Gfx3Mesh();
-    mesh.beginVertices(this.vertexCount);
-
-    for (let i = 0; i < this.vertices.length; i += this.vertexStride) {
-      const v = UT.MAT4_MULTIPLY_BY_VEC4(transformMatrix, UT.VEC4_CREATE(this.vertices[i + 0], this.vertices[i + 1], this.vertices[i + 2], 1.0));
-      mesh.defineVertex(v[0], v[1], v[2], this.vertices[i + 3], this.vertices[i + 4], this.vertices[i + 5], this.vertices[i + 6], this.vertices[i + 7], this.vertices[i + 8], this.vertices[i + 9], this.vertices[i + 10], this.vertices[i + 11], this.vertices[i + 12], this.vertices[i + 13]);
-    }
-
-    mesh.endVertices();
-    mesh.setLayer(this.layer);
-    mesh.setMaterial(this.material);
+  clone(mesh: Gfx3Mesh = new Gfx3Mesh(), transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3Mesh {
+    super.clone(mesh, transformMatrix);
+    mesh.layer = this.layer;
+    mesh.shadowCasting = this.shadowCasting;
+    mesh.material = this.material;
     return mesh;
   }
 

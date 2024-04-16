@@ -1,4 +1,6 @@
 import { eventManager } from '../core/event_manager.js';
+import { UT } from '../core/utils';
+import { Poolable } from '../core/object_pool';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 import { Gfx3Sprite } from './gfx3_sprite.js';
 
@@ -20,7 +22,7 @@ interface JASAnimation {
  * A 3D animated sprite.
  * It emit 'E_FINISHED'
  */
-class Gfx3SpriteJAS extends Gfx3Sprite {
+class Gfx3SpriteJAS extends Gfx3Sprite implements Poolable<Gfx3SpriteJAS> {
   animations: Array<JASAnimation>;
   currentAnimation: JASAnimation | null;
   currentAnimationFrameIndex: number;
@@ -232,6 +234,24 @@ class Gfx3SpriteJAS extends Gfx3Sprite {
     }
 
     return this.boundingBox.transform(this.getTransformMatrix());
+  }
+
+  /**
+   * Clone the object.
+   * 
+   * @param {Gfx3SpriteJAS} jas - The copy object.
+   * @param {mat4} transformMatrix - The transformation matrix.
+   */
+  clone(jas: Gfx3SpriteJAS = new Gfx3SpriteJAS(), transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3SpriteJAS {
+    super.clone(jas, transformMatrix);
+    jas.animations = this.animations;
+    jas.currentAnimation = null;
+    jas.currentAnimationFrameIndex = 0;
+    jas.looped = false;
+    jas.frameProgress = 0;
+    jas.offsetXFactor = this.offsetXFactor;
+    jas.offsetYFactor = this.offsetYFactor;
+    return jas;
   }
 }
 

@@ -1,4 +1,6 @@
 import { eventManager } from '../core/event_manager';
+import { UT } from '../core/utils';
+import { Poolable } from '../core/object_pool';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 import { Gfx3Mesh } from './gfx3_mesh';
 import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_mesh_shader';
@@ -18,7 +20,7 @@ interface JAMAnimation {
  * A 3D animated mesh.
  * It emit 'E_FINISHED'
  */
-class Gfx3MeshJAM extends Gfx3Mesh {
+class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
   numVertices: number;
   frames: Array<JAMFrame>;
   animations: Array<JAMAnimation>;
@@ -80,6 +82,10 @@ class Gfx3MeshJAM extends Gfx3Mesh {
         frameDuration: parseInt(obj['FrameDuration'])
       });
     }
+
+    this.beginVertices(json['NumVertices']);
+    this.setVertices(this.frames[0].vertices);
+    this.endVertices();
 
     this.boundingBox = this.boundingBoxes[0];
     this.numVertices = json['NumVertices'];
@@ -280,6 +286,32 @@ class Gfx3MeshJAM extends Gfx3Mesh {
     }
 
     return this.boundingBox.transform(this.getTransformMatrix());
+  }
+
+  /**
+   * Clone the object.
+   * 
+   * @param {Gfx3MeshJAM} jam - The copy object.
+   * @param {mat4} transformMatrix - The transformation matrix.
+   */
+  clone(jam: Gfx3MeshJAM = new Gfx3MeshJAM(), transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3MeshJAM {
+    super.clone(jam, transformMatrix);
+    jam.numVertices = this.numVertices;
+    jam.frames = this.frames;
+    jam.animations = this.animations;
+    jam.interpolationEnabled = this.interpolationEnabled;
+    jam.looped = false;
+    jam.currentAnimation = null;
+    jam.currentFrameIndex = 0;
+    jam.frameProgress = 0;
+
+    for (const boundingBox of this.boundingBoxes) {
+      jam.boundingBoxes.push(new Gfx3BoundingBox(
+        boundingBox.min, boundingBox.max
+      ));
+    }
+
+    return jam;
   }
 }
 

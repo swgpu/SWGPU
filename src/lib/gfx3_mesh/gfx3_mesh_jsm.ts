@@ -1,10 +1,12 @@
+import { UT } from '../core/utils';
+import { Poolable } from '../core/object_pool';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 import { Gfx3Mesh } from './gfx3_mesh';
 
 /**
  * A 3D static mesh.
  */
-class Gfx3MeshJSM extends Gfx3Mesh {
+class Gfx3MeshJSM extends Gfx3Mesh implements Poolable<Gfx3MeshJSM> {
   constructor() {
     super();
   }
@@ -27,6 +29,17 @@ class Gfx3MeshJSM extends Gfx3Mesh {
     this.endVertices();
 
     this.boundingBox = Gfx3BoundingBox.createFromVertices(json['Vertices'], 3);
+  }
+
+  /**
+   * Clone the object.
+   * 
+   * @param {Gfx3MeshJSM} jsm - The copy object.
+   * @param {mat4} transformMatrix - The transformation matrix.
+   */
+  clone(jsm: Gfx3MeshJSM = new Gfx3MeshJSM(), transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3MeshJSM {
+    super.clone(jsm, transformMatrix);
+    return jsm;
   }
 }
 

@@ -1,6 +1,7 @@
 import { gfx3TextureManager } from '../gfx3/gfx3_texture_manager';
 import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '../gfx3_mesh/gfx3_mesh_renderer';
+import { Poolable } from '../core/object_pool';
 import { UT } from '../core/utils';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 import { Gfx3Material } from './gfx3_mesh_material';
@@ -51,7 +52,7 @@ class OBJObject {
  * - map_Ns => Specularity map
  * - map_Bump => Normal map
  */
-class Gfx3MeshOBJ extends Gfx3Mesh {
+class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
   coords: Array<number>;
   colors: Array<number>;
   texcoords: Array<number>;
@@ -209,6 +210,30 @@ class Gfx3MeshOBJ extends Gfx3Mesh {
     }
 
     return Gfx3BoundingBox.merge(boxes);
+  }
+
+  /**
+   * Clone the object.
+   * 
+   * @param {Gfx3MeshOBJ} obj - The copy object.
+   * @param {mat4} transformMatrix - The transformation matrix.
+   */
+  clone(obj: Gfx3MeshOBJ = new Gfx3MeshOBJ(), transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3MeshOBJ {
+    obj.coords = this.coords;
+    obj.colors = this.colors;
+    obj.texcoords = this.texcoords;
+    obj.normals = this.normals;
+    obj.objects  = this.objects;
+    obj.materials = this.materials;
+
+    for (const key in this.meshes) {
+      const mesh = this.meshes.get(key)!;
+      obj.meshes.set(key, mesh.clone(new Gfx3Mesh(), transformMatrix));
+    }
+
+    obj.debugVertices = this.debugVertices;
+    obj.debugVertexCount = this.debugVertexCount;
+    return obj;
   }
 
   /**

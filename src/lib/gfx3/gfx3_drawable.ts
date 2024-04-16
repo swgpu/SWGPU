@@ -1,11 +1,14 @@
 import { gfx3Manager, VertexSubBuffer } from './gfx3_manager';
+import { UT } from '../core/utils';
+import { Poolable } from '../core/object_pool';
 import { Gfx3Transformable } from './gfx3_transformable';
 import { Gfx3BoundingBox } from './gfx3_bounding_box';
+import { Quaternion } from '../core/quaternion';
 
 /**
  * A 3D drawable object.
  */
-class Gfx3Drawable extends Gfx3Transformable {
+class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
   vertexSubBuffer: VertexSubBuffer;
   vertices: Array<number>;
   vertexCount: number;
@@ -133,6 +136,30 @@ class Gfx3Drawable extends Gfx3Transformable {
    */
   getWorldBoundingBox(): Gfx3BoundingBox {
     return this.boundingBox.transform(this.getTransformMatrix());
+  }
+
+  /**
+   * Clone the object.
+   * 
+   * @param {Gfx3Drawable} drawable - The copy object.
+   * @param {mat4} transformMatrix - The transformation matrix.
+   */
+  clone(drawable: Gfx3Drawable = new Gfx3Drawable(this.vertexStride), transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3Drawable {
+    drawable.position = [this.position[0], this.position[1], this.position[2]];
+    drawable.rotation = [this.rotation[0], this.rotation[1], this.rotation[2]];
+    drawable.scale = [this.scale[0], this.scale[1], this.scale[2]];
+    drawable.quaternion = new Quaternion(this.quaternion.w, this.quaternion.x, this.quaternion.y, this.quaternion.z);
+    drawable.boundingBox = new Gfx3BoundingBox(this.boundingBox.min, this.boundingBox.max);
+
+    drawable.beginVertices(this.vertexCount);
+
+    for (let i = 0; i < this.vertices.length; i += this.vertexStride) {
+      const v = UT.MAT4_MULTIPLY_BY_VEC4(transformMatrix, [this.vertices[i + 0], this.vertices[i + 1], this.vertices[i + 2], 1.0]);
+      drawable.defineVertex(v[0], v[1], v[2], ...this.vertices.slice(3, this.vertexStride));
+    }
+
+    drawable.endVertices();
+    return drawable;
   }
 }
 

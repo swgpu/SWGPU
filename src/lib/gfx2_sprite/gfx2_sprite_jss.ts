@@ -1,11 +1,12 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
+import { Poolable } from '../core/object_pool';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
 
 /**
  * A 2D static sprite (without animations).
  */
-class Gfx2SpriteJSS extends Gfx2Drawable {
+class Gfx2SpriteJSS extends Gfx2Drawable implements Poolable<Gfx2SpriteJSS> {
   texture: ImageBitmap | HTMLImageElement;
   textureRect: vec4;
   flip: [boolean, boolean];
@@ -153,6 +154,19 @@ class Gfx2SpriteJSS extends Gfx2Drawable {
    */
   getTexture(): ImageBitmap | HTMLImageElement {
     return this.texture;
+  }
+
+  /**
+   * Clone the object.
+   * 
+   * @param {Gfx2SpriteJSS} jss - The copy object.
+   */
+  clone(jss: Gfx2SpriteJSS = new Gfx2SpriteJSS()): Gfx2SpriteJSS {
+    super.clone(jss);
+    jss.texture = this.texture;
+    jss.textureRect = [this.textureRect[0], this.textureRect[1], this.textureRect[2], this.textureRect[3]]
+    jss.flip = [this.flip[0], this.flip[1]];
+    return jss;
   }
 }
 

@@ -1,5 +1,6 @@
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { gfx3SpriteRenderer } from './gfx3_sprite_renderer';
+import { Poolable } from '../core/object_pool';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { UT } from '../core/utils.js';
 import { Gfx3Drawable } from '../gfx3/gfx3_drawable';
@@ -9,7 +10,7 @@ import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_sprite_shader';
 /**
  * A 3D base sprite object.
  */
-class Gfx3Sprite extends Gfx3Drawable {
+class Gfx3Sprite extends Gfx3Drawable implements Poolable<Gfx3Sprite> {
   textureChanged: boolean;
   offset: vec2;
   flip: [boolean, boolean];
@@ -178,6 +179,23 @@ class Gfx3Sprite extends Gfx3Drawable {
     }
 
     return this.grp1;
+  }
+
+  /**
+   * Clone the object.
+   * 
+   * @param {Gfx3Sprite} sprite - The copy object.
+   * @param {mat4} transformMatrix - The transformation matrix.
+   */
+  clone(sprite: Gfx3Sprite = new Gfx3Sprite(), transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3Sprite {
+    super.clone(sprite, transformMatrix);
+    sprite.textureChanged = true;
+    sprite.offset = [this.offset[0], this.offset[1]];
+    sprite.flip = [this.flip[0], this.flip[1]];
+    sprite.pixelsPerUnit = this.pixelsPerUnit;
+    sprite.billboardMode = this.billboardMode;
+    sprite.texture = this.texture;
+    return sprite;
   }
 }
 

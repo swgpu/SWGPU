@@ -1,11 +1,12 @@
 import { gfx2Manager } from './gfx2_manager';
+import { Poolable } from '../core/object_pool';
 import { UT } from '../core/utils';
 import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
 
 /**
  * A 2D drawable object.
  */
-class Gfx2Drawable {
+class Gfx2Drawable implements Poolable<Gfx2Drawable> {
   position: vec2;
   rotation: number;
   scale: vec2;
@@ -291,6 +292,24 @@ class Gfx2Drawable {
    */
   getWorldBoundingRect(): Gfx2BoundingRect {
     return this.boundingRect.transform(UT.MAT3_TRANSFORM(this.position, this.offset, this.rotation, this.scale));
+  }
+
+  /**
+   * Clone the object.
+   * 
+   * @param {Gfx2Drawable} drawable - The copy object.
+   */
+  clone(drawable: Gfx2Drawable = new Gfx2Drawable()): Gfx2Drawable {
+    drawable.position = [this.position[0], this.position[1]];
+    drawable.rotation = this.rotation;
+    drawable.scale = [this.scale[0], this.scale[1]];
+    drawable.offset = [this.offset[0], this.offset[1]];
+    drawable.visible = this.visible;
+    drawable.opacity = this.opacity;
+    drawable.z = this.z;
+    drawable.elevation = this.elevation;
+    drawable.boundingRect = new Gfx2BoundingRect(this.boundingRect.min, this.boundingRect.max);
+    return drawable;
   }
 }
 
