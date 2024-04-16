@@ -15,13 +15,15 @@ interface Instance<T> {
  */
 class ObjectPool<T extends Poolable<T>> {
   instances: Array<Instance<T>>;
+  reset: (object: Poolable<T>) => void;
 
   /**
    * @param {T} originObject - The original object.
    * @param {number} numInstances - The number of allocated instances.
    */
-  constructor(originObject: T, numInstances: number) {
+  constructor(originObject: T, numInstances: number, reset: (object: Poolable<T>) => {}) {
     this.instances = [];
+    this.reset = reset;
 
     for (let i = 0; i < numInstances; i++) {
       const clone = originObject.clone();
@@ -47,6 +49,7 @@ class ObjectPool<T extends Poolable<T>> {
   acquire(): Poolable<T> | null {
     for (const instance of this.instances) {
       if (!instance.used) {
+        this.reset(instance.object);
         instance.used = true;
         return instance.object;
       }
