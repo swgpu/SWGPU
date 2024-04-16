@@ -53,7 +53,7 @@ export class ShipSystem extends DNASystem {
   }
 
   onActionOnce(actionId: string, eid: number): void {
-    if (actionId != 'SELECT') {
+    if (actionId != 'UP') {
       return;
     }
 

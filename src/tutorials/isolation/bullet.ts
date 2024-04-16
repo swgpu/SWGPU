@@ -33,28 +33,20 @@ export class BulletSystem extends DNASystem {
       return;
     }
 
-    const eids = [];
-
     for (const asteroid of dnaManager.findEntities('Asteroid')) {
       const asteroidCmp = dnaManager.getComponent(asteroid, 'Asteroid') as AsteroidComponent;
       const bulletRect = bulletCmp.jss.getWorldBoundingRect();
       const asteroidRect = asteroidCmp.jss.getWorldBoundingRect();
 
       if (bulletRect.intersectBoundingRect(asteroidRect)) {
-        // if (dnaManager.hasEntity(eid)) {
-        //   dnaManager.removeEntity(eid);
-        // }
+        if (dnaManager.hasEntity(eid)) {
+          dnaManager.removeEntity(eid);
+        }
 
-        console.log('intersect');
-
-        // dnaManager.removeEntity(asteroid);
-        eids.push(asteroid);
+        dnaManager.removeEntity(asteroid);
         eventManager.emit(this, 'E_ASTEROID_DESTROYED');
       }
     }
-
-    for (const eid of eids) dnaManager.removeEntity(eid);
-    // console.log(eids);
 
     bulletCmp.jss.update(ts);
   }

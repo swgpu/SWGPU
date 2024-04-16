@@ -918,11 +918,11 @@ class UT {
     const c = Math.cos(a);
     const s = Math.sin(a);
     out[0] = c;
-    out[1] = s;
+    out[1] = -s;
     out[2] = 0;
-    out[3] = -s;
+    out[3] = s;
     out[4] = c;
-    out[5] = 1;
+    out[5] = 0;
     out[6] = 0;
     out[7] = 0;
     out[8] = 1;
@@ -956,9 +956,9 @@ class UT {
    */
   static MAT3_TRANSFORM(position: vec2, offset: vec2, rotation: number, scale: vec2, out: mat3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]): mat3 {
     UT.MAT3_TRANSLATE(position[0], position[1], out);
-    UT.MAT3_ROTATE(rotation, out);
-    UT.MAT3_SCALE(scale[0], scale[1], out);
-    UT.MAT3_TRANSLATE(offset[0], offset[1], out);
+    UT.MAT3_MULTIPLY(out, UT.MAT3_ROTATE(rotation), out);
+    UT.MAT3_MULTIPLY(out, UT.MAT3_SCALE(scale[0], scale[1]), out);
+    UT.MAT3_MULTIPLY(out, UT.MAT3_TRANSLATE(-offset[0], -offset[1]), out);
     return out;
   }
 

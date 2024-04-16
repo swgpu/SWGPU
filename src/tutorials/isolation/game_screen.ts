@@ -17,6 +17,7 @@ const LEFT_PADDING = 75;
 const NB_ROWS = 5;
 const NB_COLS = 8;
 const HOLES = [1, 2, 3, 4, 3];
+const WAVE_GENERATION_INTERVAL = 20000;
 
 class GameScreen extends Screen {
   shipSystem: ShipSystem;
@@ -24,6 +25,7 @@ class GameScreen extends Screen {
   bulletSystem: BulletSystem;
   uiScore: UIText;
   score: number;
+  waveAge: number;
 
   constructor() {
     super();
@@ -32,9 +34,14 @@ class GameScreen extends Screen {
     this.bulletSystem = new BulletSystem();
     this.uiScore = new UIText();
     this.score = 0;
+    this.waveAge = 0;
   }
 
   async onEnter() {
+    await gfx2TextureManager.loadTexture('./tutorials/isolation/asteroid.png');
+    await gfx2TextureManager.loadTexture('./tutorials/isolation/bullet.png');
+    await gfx2TextureManager.loadTexture('./tutorials/isolation/ship.png');
+
     dnaManager.setup([
       this.shipSystem,
       this.asteroidSystem,
@@ -44,23 +51,10 @@ class GameScreen extends Screen {
     this.uiScore.setText('Score: ' + this.score);
     uiManager.addWidget(this.uiScore);
 
-    await gfx2TextureManager.loadTexture('./tutorials/isolation/asteroid.png');
-    await gfx2TextureManager.loadTexture('./tutorials/isolation/bullet.png');
-    await gfx2TextureManager.loadTexture('./tutorials/isolation/ship.png');
-
     const ship = dnaManager.createEntity();
     dnaManager.addComponent(ship, new ShipComponent());
 
-    for (let i = 0; i < NB_ROWS; i++) {
-      for (let j = 0; j < NB_COLS; j++) {
-        if (HOLES[i] != j) {
-          const x = j * 60 - 300 + LEFT_PADDING;
-          const y = i * 60 - 300 + TOP_PADDING;
-          const asteroid = dnaManager.createEntity();
-          dnaManager.addComponent(asteroid, new AsteroidComponent(x, y));
-        }
-      }
-    }
+    this.generateWave();
 
     eventManager.subscribe(this.bulletSystem, 'E_ASTEROID_DESTROYED', this, this.handleAsteroidDestroyed);
     eventManager.subscribe(this.asteroidSystem, 'E_PLAYER_DESTROYED', this, this.handlePlayerDestroyed);
@@ -71,11 +65,32 @@ class GameScreen extends Screen {
   }
 
   update(ts: number) {
+    if (this.waveAge > WAVE_GENERATION_INTERVAL) {
+      this.generateWave();
+      this.waveAge = 0;
+    }
+    else {
+      this.waveAge += ts;
+    }
+
     dnaManager.update(ts);
   }
 
   draw() {
     dnaManager.draw();
+  }
+
+  generateWave() {
+    for (let i = 0; i < NB_ROWS; i++) {
+      for (let j = 0; j < NB_COLS; j++) {
+        if (HOLES[i] != j) {
+          const x = j * 60 - 300 + LEFT_PADDING;
+          const y = i * 60 - 300 + TOP_PADDING;
+          const asteroid = dnaManager.createEntity();
+          dnaManager.addComponent(asteroid, new AsteroidComponent(x, y - 300));
+        }
+      }
+    }
   }
 
   handleAsteroidDestroyed() {

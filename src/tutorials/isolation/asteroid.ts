@@ -37,11 +37,11 @@ export class AsteroidSystem extends DNASystem {
     const ship = dnaManager.findEntity('Ship');
     const shipCmp = dnaManager.getComponent(ship, 'Ship') as ShipComponent;
 
-    const shipRect = shipCmp.jss.getBoundingRect();
+    const shipRect = shipCmp.jss.getWorldBoundingRect();
     const asteroidRect = asteroidCmp.jss.getWorldBoundingRect();
 
     if (shipRect.intersectBoundingRect(asteroidRect)) {
-      // eventManager.emit(this, 'E_PLAYER_DESTROYED');
+      eventManager.emit(this, 'E_PLAYER_DESTROYED');
       return;
     }
 
