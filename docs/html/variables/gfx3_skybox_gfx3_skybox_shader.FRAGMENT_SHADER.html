@@ -18,7 +18,7 @@
 <h1>Variable FRAGMENT_SHADER<code class="tsd-tag ts-flagConst">Const</code> </h1></div>
 <div class="tsd-signature"><span class="tsd-kind-variable">FRAGMENT_<wbr/>SHADER</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;\n@group(0) @binding(0) var&lt;uniform&gt; VPC_INVERSE_MATRIX: mat4x4&lt;f32&gt;;\n@group(1) @binding(0) var CUBEMAP_TEXTURE: texture_cube&lt;f32&gt;;\n@group(1) @binding(1) var CUBEMAP_SAMPLER: sampler;\n\n@fragment\nfn main(\n  @builtin(position) Position: vec4&lt;f32&gt;,\n  @location(0) ClipPos: vec4&lt;f32&gt;\n) -&gt; @location(0) vec4&lt;f32&gt; {\n  var t = VPC_INVERSE_MATRIX * ClipPos;\n  return textureSample(CUBEMAP_TEXTURE, CUBEMAP_SAMPLER, normalize(t.xyz / t.w));\n}&quot;</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Engine/blob/f660e63/src/lib/gfx3_skybox/gfx3_skybox_shader.ts#L68">src/lib/gfx3_skybox/gfx3_skybox_shader.ts:68</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_skybox/gfx3_skybox_shader.ts#L68">src/lib/gfx3_skybox/gfx3_skybox_shader.ts:68</a></li></ul></aside></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -48,7 +48,7 @@
 <li><a href="../modules/core_curve.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/curve</a></li>
 <li><a href="../modules/core_event_manager.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/event_manager</a></li>
 <li><a href="../modules/core_global.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/global</a></li>
-<li><a href="../modules/core_object_pooling.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/object_pooling</a></li>
+<li><a href="../modules/core_object_pool.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/object_pool</a></li>
 <li><a href="../modules/core_quaternion.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/quaternion</a></li>
 <li><a href="../modules/core_tree_partition.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/tree_partition</a></li>
 <li><a href="../modules/core_tween.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/tween</a></li>

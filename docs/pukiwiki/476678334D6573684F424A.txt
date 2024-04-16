@@ -23,6 +23,11 @@ MTL Options:~
 ** Constructors
 - ''new Gfx3MeshOBJ''(): Gfx3MeshOBJ~
 ** Methods
+- ''clone''(obj: Gfx3MeshOBJ, transformMatrix: mat4): Gfx3MeshOBJ~
+Clone the object.~
+-- ''obj'': The copy object.~
+-- ''transformMatrix'': The transformation matrix.~
+~
 - ''delete''(): void~
 Free all resources.~
 Warning: You need to call this method to free allocation for this object.~

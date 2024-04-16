@@ -6,8 +6,9 @@ A 3D base mesh object.~
 ** Constructors
 - ''new Gfx3Mesh''(): Gfx3Mesh~
 ** Methods
-- ''clone''(transformMatrix: mat4): Gfx3Mesh~
-Creates a clone of the mesh.~
+- ''clone''(mesh: Gfx3Mesh, transformMatrix: mat4): Gfx3Mesh~
+Clone the object.~
+-- ''mesh'': The copy object.~
 -- ''transformMatrix'': The transformation matrix.~
 ~
 - ''delete''(keepMat: boolean): void~

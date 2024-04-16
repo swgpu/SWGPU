@@ -141,6 +141,13 @@
 -- ''y'': The y-scale.~
 -- ''out'': The result matrix.~
 ~
+- '''static''' ''MAT3_TRANSFORM''(position: vec2, offset: vec2, rotation: number, scale: vec2, out: mat3): mat3~
+-- ''position'': The position vector.~
+-- ''offset'': The offset translation.~
+-- ''rotation'': The rotation angle.~
+-- ''scale'': The scale vector.~
+-- ''out'': The result matrix.~
+~
 - '''static''' ''MAT3_TRANSLATE''(x: number, y: number, out: mat3): mat3~
 -- ''x'': The x-translation.~
 -- ''y'': The y-translation.~

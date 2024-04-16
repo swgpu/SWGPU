@@ -6,14 +6,27 @@ It emit 'E_FINISHED'~
 ** Constructors
 - ''new Gfx3SpriteJAS''(): Gfx3SpriteJAS~
 ** Methods
+- ''clone''(jas: Gfx3SpriteJAS, transformMatrix: mat4): Gfx3SpriteJAS~
+Clone the object.~
+-- ''jas'': The copy object.~
+-- ''transformMatrix'': The transformation matrix.~
+~
 - ''getAnimations''()~
 Returns the list of animation descriptors.~
+~
+- ''getBoundingRect''(dynamicMode: boolean): Gfx3BoundingBox~
+Returns the bounding box.~
+-- ''dynamicMode'': Determines if bounding box fit the current animation.~
 ~
 - ''getCurrentAnimation''()~
 Returns the current animation or null if there is no current animation.~
 ~
 - ''getCurrentAnimationFrameIndex''(): number~
 Returns the current animation frame index.~
+~
+- ''getWorldBoundingRect''(dynamicMode: boolean): Gfx3BoundingBox~
+Returns the bounding box in the world space coordinates.~
+-- ''dynamicMode'': Determines if bounding box fit the current animation.~
 ~
 - ''loadFromFile''(path: string): Promise~
 Load asynchronously animated sprite data from a json file (jas).~

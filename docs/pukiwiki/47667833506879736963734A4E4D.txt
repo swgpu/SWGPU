@@ -70,5 +70,6 @@ Note: Utility used to handle collisions manually for full flexibility.~
 -- ''radius'': The radius of ray area.~
 -- ''height'': The height of ray area.~
 ~
-- ''update''(): void~
+- ''update''(ts: number): void~
 The update function.~
+-- ''ts''~

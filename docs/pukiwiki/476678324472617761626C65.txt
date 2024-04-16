@@ -5,8 +5,15 @@ A 2D drawable object.~
 ** Constructors
 - ''new Gfx2Drawable''(): Gfx2Drawable~
 ** Methods
+- ''clone''(drawable: Gfx2Drawable): Gfx2Drawable~
+Clone the object.~
+-- ''drawable'': The copy object.~
+~
 - ''draw''(): void~
 The draw function.~
+~
+- ''getBoundingRect''(): Gfx2BoundingRect~
+Returns the bounding rect.~
 ~
 - ''getElevation''(): number~
 Returns the elevation.~
@@ -48,6 +55,9 @@ Returns the scale factor on x-axis.~
 - ''getScaleY''(): number~
 Returns the scale factor on y-axis.~
 ~
+- ''getWorldBoundingRect''(): Gfx2BoundingRect~
+Returns the bounding rect in the world space coordinates.~
+~
 - ''isVisible''(): boolean~
 Check if is visible or not.~
 ~
@@ -57,6 +67,10 @@ Virtual method that is called during the draw phase (after transforms).~
 - ''rotate''(a: number): void~
 Add rotation value to current angle.~
 -- ''a'': The rotation angle to add in radians.~
+~
+- ''setBoundingRect''(boundingRect: Gfx2BoundingRect): void~
+Set the bounding rect.~
+-- ''boundingRect'': The bounding rectangle.~
 ~
 - ''setElevation''(elevation: number): void~
 Set the elevation.~

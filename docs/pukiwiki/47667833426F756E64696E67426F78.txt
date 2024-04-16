@@ -82,6 +82,11 @@ Creates a new instance from coordinates and size.~
 -- ''h'': The height of the bounding box.~
 -- ''d'': The depth of the bounding box.~
 ~
+- '''static''' ''createFromVertices''(vertices, vertexStride: number): Gfx3BoundingBox~
+Takes a list of vertices and set the new minimum and maximum values.~
+-- ''vertices'': The list of vertices. Each triplets of numbers represents the x, y and z coordinates of a point.~
+-- ''vertexStride''~
+~
 - '''static''' ''merge''(aabbs: Gfx3BoundingBox[]): Gfx3BoundingBox~
 Merge and returns the union of some boxes.~
 -- ''aabbs'': The list of boxes.~

@@ -6,6 +6,11 @@ It emit 'E_FINISHED'~
 ** Constructors
 - ''new Gfx3MeshJAM''(): Gfx3MeshJAM~
 ** Methods
+- ''clone''(jam: Gfx3MeshJAM, transformMatrix: mat4): Gfx3MeshJAM~
+Clone the object.~
+-- ''jam'': The copy object.~
+-- ''transformMatrix'': The transformation matrix.~
+~
 - ''getBoundingBox''(dynamicMode: boolean): Gfx3BoundingBox~
 Returns the bounding box.~
 -- ''dynamicMode'': Determines if bounding box fit the current animation.~

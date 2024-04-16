@@ -12,6 +12,11 @@ Prepare your vertex buffer to write process.~
 Warning: You need to call this method before define your vertices.~
 -- ''vertexCount'': The number of vertices.~
 ~
+- ''clone''(drawable: Gfx3Drawable, transformMatrix: mat4): Gfx3Drawable~
+Clone the object.~
+-- ''drawable'': The copy object.~
+-- ''transformMatrix'': The transformation matrix.~
+~
 - ''defineVertex''(v: number[]): void~
 Add a vertex.~
 -- ''v'': The attributes data of the vertex.~
@@ -23,9 +28,8 @@ Warning: You need to call this method to free allocation for this object.~
 - ''draw''(): void~
 Virtual draw function.~
 ~
-- ''endVertices''(updateBoundingBox: boolean): void~
+- ''endVertices''(): void~
 Close your vertex buffer to write process.~
--- ''updateBoundingBox'': Determine if boundingbox is up to date with the new vertex set.~
 ~
 - ''getBoundingBox''(): Gfx3BoundingBox~
 Returns the bounding box.~
@@ -46,6 +50,10 @@ Returns vertices.~
 ~
 - ''getWorldBoundingBox''(): Gfx3BoundingBox~
 Returns the bounding box in the world space coordinates.~
+~
+- ''setBoundingBox''(boundingBox: Gfx3BoundingBox): void~
+Set the bounding box.~
+-- ''boundingBox'': The bounding box.~
 ~
 - ''setVertices''(vertices: number[]): void~
 Set vertices.~

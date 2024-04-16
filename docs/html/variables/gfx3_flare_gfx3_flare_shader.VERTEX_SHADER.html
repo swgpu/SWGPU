@@ -18,7 +18,7 @@
 <h1>Variable VERTEX_SHADER<code class="tsd-tag ts-flagConst">Const</code> </h1></div>
 <div class="tsd-signature"><span class="tsd-kind-variable">VERTEX_<wbr/>SHADER</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;\nstruct VertexOutput {\n  @builtin(position) Position: vec4&lt;f32&gt;,\n  @location(0) FragUV: vec2&lt;f32&gt;\n};\n\n@group(0) @binding(0) var&lt;uniform&gt; RESOLUTION: vec2&lt;f32&gt;;\n@group(1) @binding(0) var&lt;uniform&gt; TRANSLATION: vec2&lt;f32&gt;;\n@group(1) @binding(1) var&lt;uniform&gt; SCALE: vec2&lt;f32&gt;;\n@group(1) @binding(2) var&lt;uniform&gt; ANGLE: f32;\n@group(1) @binding(3) var&lt;uniform&gt; SIZE: vec2&lt;f32&gt;;\n@group(1) @binding(4) var&lt;uniform&gt; OFFSET: vec2&lt;f32&gt;;\n\n@vertex\nfn main(\n  @location(0) Pos: vec2&lt;f32&gt;,\n  @location(1) TexUV: vec2&lt;f32&gt;\n) -&gt; VertexOutput {\n  var output : VertexOutput;\n  var c = cos(ANGLE);\n  var s = sin(ANGLE);\n  var transformedPos = Pos + OFFSET;\n  transformedPos = transformedPos * SIZE * SCALE;\n  transformedPos = vec2(c * (transformedPos.x) + s * (transformedPos.y), c * (transformedPos.y) - s * (transformedPos.x));\n  var screenPos = transformedPos + TRANSLATION;\n  var normScreenPos = screenPos / RESOLUTION;\n  var clipPos = normScreenPos * 2.0 - 1.0;\n  clipPos.y = clipPos.y * -1;\n  output.Position = vec4&lt;f32&gt;(clipPos, 0, 1);\n  output.FragUV = TexUV;\n  return output;\n}&quot;</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Engine/blob/f660e63/src/lib/gfx3_flare/gfx3_flare_shader.ts#L51">src/lib/gfx3_flare/gfx3_flare_shader.ts:51</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_flare/gfx3_flare_shader.ts#L51">src/lib/gfx3_flare/gfx3_flare_shader.ts:51</a></li></ul></aside></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -48,7 +48,7 @@
 <li><a href="../modules/core_curve.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/curve</a></li>
 <li><a href="../modules/core_event_manager.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/event_manager</a></li>
 <li><a href="../modules/core_global.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/global</a></li>
-<li><a href="../modules/core_object_pooling.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/object_pooling</a></li>
+<li><a href="../modules/core_object_pool.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/object_pool</a></li>
 <li><a href="../modules/core_quaternion.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/quaternion</a></li>
 <li><a href="../modules/core_tree_partition.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/tree_partition</a></li>
 <li><a href="../modules/core_tween.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2"></use></svg>core/tween</a></li>

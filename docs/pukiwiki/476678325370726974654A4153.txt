@@ -6,6 +6,10 @@ It emit 'E_FINISHED'~
 ** Constructors
 - ''new Gfx2SpriteJAS''(): Gfx2SpriteJAS~
 ** Methods
+- ''clone''(jas: Gfx2SpriteJAS): Gfx2SpriteJAS~
+Clone the object.~
+-- ''jas'': The copy object.~
+~
 - ''getAnimations''()~
 Returns the list of animation descriptors.~
 ~
@@ -45,11 +49,6 @@ Play a specific animation.~
 - ''setAnimations''(animations: JASAnimation[]): void~
 Set the animation descriptors.~
 -- ''animations'': The animations data.~
-~
-- ''setBoundingRect''(boundingRects: Gfx2BoundingRect[]): void~
-Set the bounding rects.~
-Note: Usualy used to handle collision.~
--- ''boundingRects'': The bounding rectangle list.~
 ~
 - ''setFlipX''(x: boolean): void~
 Set flipX.~
