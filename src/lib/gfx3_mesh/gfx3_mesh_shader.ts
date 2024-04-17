@@ -52,7 +52,9 @@ export const PIPELINE_DESC: any = {
           operation: 'add'
         }
       }
-    }]
+    },
+    { format: 'rgba16float' }, // normals
+    { format: 'rgba16float' }] // ids
   },
   primitive: {
     topology: 'triangle-list',
@@ -96,9 +98,9 @@ fn main(
   @location(4) Tangent: vec3<f32>,
   @location(5) Binormal: vec3<f32>
 ) -> VertexOutput {
-  var output: VertexOutput;
   var posFromLight = LVP_MATRIX * MESH_MATRICES.M_MATRIX * Position; // XY is in (-1, 1) space, Z is in (0, 1) space
 
+  var output: VertexOutput;
   output.Position = MESH_MATRICES.MVPC_MATRIX * Position;
   output.FragPos = vec4(MESH_MATRICES.M_MATRIX * Position).xyz;
   output.FragUV = TexUV;
@@ -111,6 +113,12 @@ fn main(
 }`;
 
 export const FRAGMENT_SHADER = /* wgsl */`
+struct FragOutput {
+  @location(0) Base: vec4f,
+  @location(1) Normal: vec4f,
+  @location(2) Id: vec4f
+}
+
 struct MaterialColors {
   EMISSIVE: vec3<f32>,
   AMBIENT: vec3<f32>,
@@ -190,6 +198,7 @@ struct Decal {
 @group(0) @binding(10) var SHADOW_MAP_TEXTURE: texture_depth_2d;
 @group(0) @binding(11) var SHADOW_MAP_SAMPLER: sampler_comparison;
 @group(1) @binding(1) var<uniform> MESH_LAYER: f32;
+@group(1) @binding(2) var<uniform> MESH_ID: vec4<f32>;
 @group(2) @binding(0) var<uniform> MAT_COLORS: MaterialColors;
 @group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
 @group(2) @binding(2) var<uniform> MAT_UVS: MaterialUvs;
@@ -218,7 +227,7 @@ fn main(
   @location(4) FragTangent: vec3<f32>,
   @location(5) FragBinormal: vec3<f32>,
   @location(6) FragShadowPos: vec3<f32>
-) -> @location(0) vec4<f32> {
+) -> FragOutput {
   var normal = normalize(FragNormal);
   var outputColor = vec4(0.0, 0.0, 0.0, 1.0);
   var texel = vec4(1.0, 1.0, 1.0, 1.0);
@@ -294,12 +303,18 @@ fn main(
 
   if (FOG.ENABLED == 1.0)
   {
-    return CalcFog(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY, FragPos);
+    outputColor = CalcFog(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY, FragPos);
   }
   else
   {
-    return vec4(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY);
+    outputColor = vec4(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY);
   }
+
+  var output: FragOutput;
+  output.Base = outputColor;
+  output.Normal = vec4(normalize(FragNormal), 1.0);
+  output.Id = MESH_ID;
+  return output;
 }
 
 // *****************************************************************************************************************

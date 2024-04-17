@@ -217,6 +217,7 @@ class Gfx3Particles extends Gfx3Drawable {
     this.emitterAlive = true;
     this.grp2 = gfx3Manager.createStaticGroup('PARTICLES_PIPELINE', 2);
     this.texture = this.grp2.setTexture(0, 'TEXTURE', options.texture ?? gfx3Manager.createTextureFromBitmap());
+    this.texture = this.grp2.setSampler(1, 'SAMPLER', this.texture);
 
     for (let i = 0; i < this.particleQuantity; i++) {
       this.particleArray[i] = this.$createParticle();

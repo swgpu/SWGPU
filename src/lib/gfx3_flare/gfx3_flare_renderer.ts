@@ -15,6 +15,7 @@ class Gfx3FlareRenderer extends Gfx3RendererAbstract {
   grp0: Gfx3StaticGroup;
   resolution: Float32Array;
   grp1: Gfx3DynamicGroup;
+  id: Float32Array;
   translation: Float32Array;
   scale: Float32Array;
   angle: Float32Array;
@@ -25,15 +26,18 @@ class Gfx3FlareRenderer extends Gfx3RendererAbstract {
   constructor() {
     super('FLARE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.flares = [];
+
     this.grp0 = gfx3Manager.createStaticGroup('FLARE_PIPELINE', 0);
     this.resolution = this.grp0.setFloat(0, 'RESOLUTION', 2);
+
     this.grp1 = gfx3Manager.createDynamicGroup('FLARE_PIPELINE', 1);
-    this.translation = this.grp1.setFloat(0, 'TRANSLATION', 2);
-    this.scale = this.grp1.setFloat(1, 'SCALE', 2);
-    this.angle = this.grp1.setFloat(2, 'ANGLE', 1);
-    this.size = this.grp1.setFloat(3, 'SIZE', 2);
-    this.offset = this.grp1.setFloat(4, 'OFFSET', 2);
-    this.color = this.grp1.setFloat(5, 'COLOR', 4);
+    this.id = this.grp1.setFloat(0, 'ID', 4);
+    this.translation = this.grp1.setFloat(1, 'TRANSLATION', 2);
+    this.scale = this.grp1.setFloat(2, 'SCALE', 2);
+    this.angle = this.grp1.setFloat(3, 'ANGLE', 1);
+    this.size = this.grp1.setFloat(4, 'SIZE', 2);
+    this.offset = this.grp1.setFloat(5, 'OFFSET', 2);
+    this.color = this.grp1.setFloat(6, 'COLOR', 4);
 
     this.grp0.allocate();
     this.grp1.allocate();
@@ -60,12 +64,13 @@ class Gfx3FlareRenderer extends Gfx3RendererAbstract {
 
     for (let i = 0; i < this.flares.length; i++) {
       const flare = this.flares[i];
-      this.grp1.write(0, UT.VEC2_COPY(flare.getPosition2D(), this.translation) as Float32Array);
-      this.grp1.write(1, UT.VEC2_COPY(flare.getScale2D(), this.scale) as Float32Array);
-      this.grp1.write(2, UT.VEC1_COPY(flare.getRotation2D(), this.angle) as Float32Array);
-      this.grp1.write(3, UT.VEC2_COPY(flare.getSize2D(), this.size) as Float32Array);
-      this.grp1.write(4, UT.VEC2_COPY(flare.getOffset2D(), this.offset) as Float32Array);
-      this.grp1.write(5, UT.VEC4_COPY(flare.getColor(), this.color) as Float32Array);
+      this.grp1.write(0, UT.VEC4_COPY(flare.getId(), this.id) as Float32Array);
+      this.grp1.write(1, UT.VEC2_COPY(flare.getPosition2D(), this.translation) as Float32Array);
+      this.grp1.write(2, UT.VEC2_COPY(flare.getScale2D(), this.scale) as Float32Array);
+      this.grp1.write(3, UT.VEC1_COPY(flare.getRotation2D(), this.angle) as Float32Array);
+      this.grp1.write(4, UT.VEC2_COPY(flare.getSize2D(), this.size) as Float32Array);
+      this.grp1.write(5, UT.VEC2_COPY(flare.getOffset2D(), this.offset) as Float32Array);
+      this.grp1.write(6, UT.VEC4_COPY(flare.getColor(), this.color) as Float32Array);
       passEncoder.setBindGroup(1, this.grp1.getBindGroup(i));
 
       const grp2 = flare.getGroup02();

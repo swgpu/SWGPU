@@ -33,12 +33,14 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   grp1: Gfx3DynamicGroup;
   meshMatrices: Float32Array;
   meshLayer: Uint32Array;
+  meshId: Float32Array;
 
   constructor() {
     super('MESH_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.shadowEnabled = false;
     this.decalAtlasChanged = false;
     this.meshCommands = [];
+
     this.grp0 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 0);
     this.camPos = this.grp0.setFloat(0, 'CAM_POS', 3);
     this.dirLight = this.grp0.setFloat(1, 'DIR_LIGHT', 16);
@@ -49,10 +51,14 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.decals = this.grp0.setFloat(6, 'DECALS', 24 * MAX_DECALS);
     this.lvpMatrix = this.grp0.setFloat(7, 'LVP_MATRIX', 16);
     this.decalAtlas = this.grp0.setTexture(8, 'DECAL_ATLAS_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.decalAtlas = this.grp0.setSampler(9, 'DECAL_ATLAS_SAMPLER', this.decalAtlas);
     this.shadowMap = this.grp0.setTexture(10, 'SHADOW_MAP_TEXTURE', gfx3MeshShadowRenderer.getDepthTexture());
+    this.shadowMap = this.grp0.setSampler(11, 'SHADOW_MAP_SAMPLER', this.shadowMap);
+
     this.grp1 = gfx3Manager.createDynamicGroup('MESH_PIPELINE', 1);
     this.meshMatrices = this.grp1.setFloat(0, 'MESH_MATRICES', 16 * 3);
     this.meshLayer = this.grp1.setInteger(1, 'MESH_LAYER', 1);
+    this.meshId = this.grp1.setFloat(2, 'MESH_ID', 4);
 
     this.grp0.allocate();
     this.grp1.allocate();
@@ -101,6 +107,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
       const mMatrix = command.matrix ? command.matrix : command.mesh.getTransformMatrix();
       this.grp1.write(0, BUILD_MESH_MATRICES(vpcMatrix, mMatrix, this.meshMatrices) as Float32Array);
       this.grp1.write(1, UT.VEC1_COPY(command.mesh.getLayer(), this.meshLayer) as Uint32Array);
+      this.grp1.write(2, UT.VEC4_COPY(command.mesh.getId(), this.meshId) as Float32Array);
       passEncoder.setBindGroup(1, this.grp1.getBindGroup(i));
 
       const material = command.mesh.getMaterial();

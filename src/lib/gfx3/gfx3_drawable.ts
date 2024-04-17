@@ -9,6 +9,7 @@ import { Quaternion } from '../core/quaternion';
  * A 3D drawable object.
  */
 class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
+  id: vec4;
   vertexSubBuffer: VertexSubBuffer;
   vertices: Array<number>;
   vertexCount: number;
@@ -20,6 +21,7 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
    */
   constructor(vertexStride: number) {
     super();
+    this.id = [0, 0, 0, 1];
     this.vertexSubBuffer = gfx3Manager.createVertexBuffer(0);
     this.vertices = [];
     this.vertexCount = 0;
@@ -113,6 +115,31 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
    */
   getVertexCount(): number {
     return this.vertexCount;
+  }
+
+  /**
+   * Set an identifier.
+   * Note: The last component of the id is the apparture channel.
+   * 0 -> invisible, 1 -> visible
+   * 
+   * @param {vec4} id - The identifier formed by 4 normalized components.
+   */
+  setId(id: vec4): void {
+    this.id = id;
+  }
+
+  /**
+   * Returns the identifier.
+   */
+  getId(): vec4 {
+    return this.id;
+  }
+
+  /**
+   * Returns the identifier as string.
+   */
+  getStringId(): string {
+    return '' + this.id[0] + '' + this.id[1] + '' + this.id[2] + '' + this.id[3] + '';
   }
 
   /**

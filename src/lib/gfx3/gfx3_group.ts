@@ -73,7 +73,7 @@ class Gfx3StaticGroup {
   }
 
   /**
-   * Set a texture and sampler resource for uniform entry.
+   * Set a texture resource for uniform entry.
    * 
    * @param {number} binding - The binding index of the uniform in the shader program.
    * @param {string} name - The name of the uniform.
@@ -83,7 +83,20 @@ class Gfx3StaticGroup {
    */
   setTexture(binding: number, name: string, texture: Gfx3Texture, createViewDescriptor: GPUTextureViewDescriptor = {}): Gfx3Texture {
     this.textures.set(binding, { binding: binding, name: name, resource: texture.gpuTexture.createView(createViewDescriptor) });
-    this.textures.set(binding + 1, { binding: binding + 1, name: name, resource: texture.gpuSampler });
+    return texture;
+  }
+
+  /**
+   * Set a sampler resource for uniform entry.
+   * 
+   * @param {number} binding - The binding index of the uniform in the shader program.
+   * @param {string} name - The name of the uniform.
+   * @param {Gfx3Texture} texture - The texture.
+   * @param {GPUTextureViewDescriptor} createViewDescriptor - Specify how the texture view should be created, such as the format, dimension, and mip
+   * level range of the view.
+   */
+  setSampler(binding: number, name: string, texture: Gfx3Texture): Gfx3Texture {
+    this.textures.set(binding, { binding: binding, name: name, resource: texture.gpuSampler });
     return texture;
   }
 

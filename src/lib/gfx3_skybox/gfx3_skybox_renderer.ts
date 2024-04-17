@@ -11,13 +11,15 @@ import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_skybox_sha
 class Gfx3SkyboxRenderer extends Gfx3RendererAbstract {
   skybox: Gfx3Skybox | null;
   grp0: Gfx3StaticGroup;
-  vpcInverseMatrix: Float32Array;  
+  vpcInverseMatrix: Float32Array;
+  id: Float32Array;
 
   constructor() {
     super('SKYBOX_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.skybox = null;
     this.grp0 = gfx3Manager.createStaticGroup('SKYBOX_PIPELINE', 0);
-    this.vpcInverseMatrix = this.grp0.setFloat(0, 'VPC_INVERSE_MATRIX', 16);   
+    this.vpcInverseMatrix = this.grp0.setFloat(0, 'VPC_INVERSE_MATRIX', 16);
+    this.id = this.grp0.setFloat(1, 'ID', 4);
     this.grp0.allocate();
   }
 
@@ -39,6 +41,7 @@ class Gfx3SkyboxRenderer extends Gfx3RendererAbstract {
 
     this.grp0.beginWrite();
     this.grp0.write(0, UT.MAT4_INVERT(vpcMatrix, this.vpcInverseMatrix) as Float32Array);
+    this.grp0.write(1, UT.VEC4_COPY(this.skybox.getId(), this.id) as Float32Array);
     this.grp0.endWrite();
     passEncoder.setBindGroup(0, this.grp0.getBindGroup());
 

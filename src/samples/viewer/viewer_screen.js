@@ -74,7 +74,7 @@ class ViewerScreen extends Screen {
       gfx3Manager.hasFilter() ? gfx3Manager.setFilter('') : gfx3Manager.setFilter('grayscale(100%)');
     }
     else if (e.key == 'p' || e.key == 'P') {
-      gfx3PPERenderer.isEnabled() ? gfx3PPERenderer.setEnabled(false) : gfx3PPERenderer.setEnabled(true);
+      gfx3PPERenderer.setParam(0, !gfx3PPERenderer.getParam(0));
     }
   }
 }

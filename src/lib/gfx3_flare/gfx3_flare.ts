@@ -30,6 +30,7 @@ class Gfx3Flare extends Gfx3Drawable {
     this.color = [1.0, 1.0, 1.0, 1.0];
     this.grp2 = gfx3Manager.createStaticGroup('FLARE_PIPELINE', 2);
     this.texture = this.grp2.setTexture(0, 'TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.texture = this.grp2.setSampler(1, 'SAMPLER', this.texture);
 
     this.beginVertices(6);
     this.defineVertex(0.0, 0.0, 0.0, 0.0);

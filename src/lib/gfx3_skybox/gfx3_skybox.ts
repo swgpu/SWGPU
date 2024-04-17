@@ -18,7 +18,8 @@ class Gfx3Skybox extends Gfx3Drawable {
     this.cubemapChanged = false;
     this.grp1 = gfx3Manager.createStaticGroup('SKYBOX_PIPELINE', 1);
     this.cubemap = this.grp1.setTexture(0, 'CUBEMAP_TEXTURE', gfx3Manager.createCubeMapFromBitmap(), { dimension: 'cube' });
-    
+    this.cubemap = this.grp1.setSampler(1, 'CUBEMAP_SAMPLER', this.cubemap);
+
     this.beginVertices(6);
     this.defineVertex(-1, -1, -1, -1, -1, -1);
     this.defineVertex(+1, -1, -1, -1, -1, +1);

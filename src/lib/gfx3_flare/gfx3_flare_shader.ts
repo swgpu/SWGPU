@@ -34,7 +34,9 @@ export const PIPELINE_DESC: any = {
           operation: 'add'
         }
       }
-    }]
+    },
+    { format: 'rgba16float' }, // normals
+    { format: 'rgba16float' }] // ids
   },
   primitive: {
     topology: 'triangle-list',
@@ -55,34 +57,43 @@ struct VertexOutput {
 };
 
 @group(0) @binding(0) var<uniform> RESOLUTION: vec2<f32>;
-@group(1) @binding(0) var<uniform> TRANSLATION: vec2<f32>;
-@group(1) @binding(1) var<uniform> SCALE: vec2<f32>;
-@group(1) @binding(2) var<uniform> ANGLE: f32;
-@group(1) @binding(3) var<uniform> SIZE: vec2<f32>;
-@group(1) @binding(4) var<uniform> OFFSET: vec2<f32>;
+@group(1) @binding(1) var<uniform> TRANSLATION: vec2<f32>;
+@group(1) @binding(2) var<uniform> SCALE: vec2<f32>;
+@group(1) @binding(3) var<uniform> ANGLE: f32;
+@group(1) @binding(4) var<uniform> SIZE: vec2<f32>;
+@group(1) @binding(5) var<uniform> OFFSET: vec2<f32>;
 
 @vertex
 fn main(
   @location(0) Pos: vec2<f32>,
   @location(1) TexUV: vec2<f32>
 ) -> VertexOutput {
-  var output : VertexOutput;
   var c = cos(ANGLE);
   var s = sin(ANGLE);
   var transformedPos = Pos + OFFSET;
   transformedPos = transformedPos * SIZE * SCALE;
   transformedPos = vec2(c * (transformedPos.x) + s * (transformedPos.y), c * (transformedPos.y) - s * (transformedPos.x));
+
   var screenPos = transformedPos + TRANSLATION;
   var normScreenPos = screenPos / RESOLUTION;
   var clipPos = normScreenPos * 2.0 - 1.0;
   clipPos.y = clipPos.y * -1;
+
+  var output: VertexOutput;
   output.Position = vec4<f32>(clipPos, 0, 1);
   output.FragUV = TexUV;
   return output;
 }`;
 
 export const FRAGMENT_SHADER = /* wgsl */`
-@group(1) @binding(5) var<uniform> COLOR: vec4<f32>;
+struct FragOutput {
+  @location(0) Base: vec4f,
+  @location(1) Normal: vec4f,
+  @location(2) Id: vec4f
+}
+
+@group(1) @binding(0) var<uniform> ID: vec4<f32>;
+@group(1) @binding(6) var<uniform> COLOR: vec4<f32>;
 @group(2) @binding(0) var TEXTURE: texture_2d<f32>;
 @group(2) @binding(1) var SAMPLER: sampler;
 
@@ -90,6 +101,10 @@ export const FRAGMENT_SHADER = /* wgsl */`
 fn main(
   @builtin(position) Position: vec4<f32>,
   @location(0) FragUV: vec2<f32>
-) -> @location(0) vec4<f32> {
-  return textureSample(TEXTURE, SAMPLER, FragUV) * COLOR;
+) -> FragOutput {
+  var output: FragOutput;
+  output.Base = textureSample(TEXTURE, SAMPLER, FragUV) * COLOR;
+  output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
+  output.Id = ID;
+  return output;
 }`;

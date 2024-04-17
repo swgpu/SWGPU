@@ -12,12 +12,14 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
   sprites: Array<Gfx3Sprite>;
   grp0: Gfx3DynamicGroup;
   mvpcMatrix: Float32Array;
+  id: Float32Array;
 
   constructor() {
     super('SPRITE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.sprites = [];
     this.grp0 = gfx3Manager.createDynamicGroup('SPRITE_PIPELINE', 0);
     this.mvpcMatrix = this.grp0.setFloat(0, 'MVPC_MATRIX', 16);    
+    this.id = this.grp0.setFloat(1, 'ID', 4);
     this.grp0.allocate();
   }
 
@@ -52,6 +54,7 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
       }
 
       this.grp0.write(0, this.mvpcMatrix);
+      this.grp0.write(1, UT.VEC4_COPY(sprite.getId(), this.id) as Float32Array);
       passEncoder.setBindGroup(0, this.grp0.getBindGroup(i));
 
       const grp1 = sprite.getGroup01();

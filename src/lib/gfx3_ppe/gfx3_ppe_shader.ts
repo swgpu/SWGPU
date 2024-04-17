@@ -1,3 +1,34 @@
+export const SHADER_VERTEX_ATTR_COUNT = 4;
+
+export const PIPELINE_DESC: any = {
+  label: 'PPE pipeline',
+  layout: 'auto',
+  vertex: {
+    entryPoint: 'main',
+    buffers: [{
+      arrayStride: SHADER_VERTEX_ATTR_COUNT * 4,
+      attributes: [{
+        shaderLocation: 0, /*position*/
+        offset: 0,
+        format: 'float32x2'
+      }, {
+        shaderLocation: 1, /*uv*/
+        offset: 2 * 4,
+        format: 'float32x2'
+      }]
+    }]
+  },
+  fragment: {
+    entryPoint: 'main',
+    targets: [{
+      format: navigator.gpu.getPreferredCanvasFormat()
+    }]
+  },
+  primitive: {
+    topology: 'triangle-list'
+  }
+};
+
 export const VERTEX_SHADER = /* wgsl */`
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
@@ -6,10 +37,10 @@ struct VertexOutput {
 
 @vertex
 fn main(
-  @location(0) Position : vec2<f32>,
-  @location(1) TexUV : vec2<f32>
+  @location(0) Position: vec2<f32>,
+  @location(1) TexUV: vec2<f32>
 ) -> VertexOutput {
-  var output : VertexOutput;
+  var output: VertexOutput;
   output.Position = vec4(Position, 0.0, 1.0);
   output.FragUV = TexUV;
   return output;
@@ -18,8 +49,6 @@ fn main(
 export const FRAGMENT_SHADER = /* wgsl */`
 struct Params {
   ENABLED: f32,
-  SCREEN_WIDTH: f32,
-  SCREEN_HEIGHT: f32,
   PIXELATION_ENABLED: f32,
   PIXELATION_WIDTH: f32,
   PIXELATION_HEIGHT: f32,
@@ -29,48 +58,121 @@ struct Params {
   DITHER_PATTERN_INDEX: f32,
   DITHER_THRESHOLD: f32,
   DITHER_SCALE_X: f32,
-  DITHER_SCALE_Y: f32
+  DITHER_SCALE_Y: f32,
+  OUTLINE_ENABLED: f32,
+  OUTLINE_THICKNESS: f32,
+  OUTLINE_R: f32,
+  OUTLINE_G: f32,
+  OUTLINE_B: f32
 };
 
 @group(0) @binding(0) var<uniform> PARAMS: Params;
-@group(0) @binding(1) var SOURCE_TEXTURE: texture_2d<f32>;
-@group(0) @binding(2) var SOURCE_SAMPLER: sampler;
+@group(0) @binding(1) var<uniform> SIZE: vec2<f32>;
+@group(0) @binding(2) var SOURCE_TEXTURE: texture_2d<f32>;
+@group(0) @binding(3) var SOURCE_SAMPLER: sampler;
+@group(0) @binding(4) var NORMALS_TEXTURE: texture_2d<f32>;
+@group(0) @binding(5) var NORMALS_SAMPLER: sampler;
+@group(0) @binding(6) var IDS_TEXTURE: texture_2d<f32>;
+@group(0) @binding(7) var IDS_SAMPLER: sampler;
+@group(0) @binding(8) var DEPTH_TEXTURE: texture_depth_2d;
+@group(0) @binding(9) var DEPTH_SAMPLER: sampler;
 
 @fragment
 fn main(
   @location(0) FragUV: vec2<f32>
 ) -> @location(0) vec4<f32> {
+  var outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, FragUV);
+  var normal = textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, FragUV);
+  var id = textureSample(IDS_TEXTURE, IDS_SAMPLER, FragUV);
+  var depth = textureSample(DEPTH_TEXTURE, DEPTH_SAMPLER, FragUV);
+
   if (PARAMS.ENABLED == 0.0)
   {
-    return textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, FragUV);
+    return outputColor;
   }
-
-  var pixelCoord = FragUV;
 
   if (PARAMS.PIXELATION_ENABLED == 1.0)
   {
-    pixelCoord.x = floor(pixelCoord.x * PARAMS.PIXELATION_WIDTH) / PARAMS.PIXELATION_WIDTH;
-    pixelCoord.y = floor(pixelCoord.y * PARAMS.PIXELATION_HEIGHT) / PARAMS.PIXELATION_HEIGHT;  
+    var pixelCoord = vec2<f32>(0.0, 0.0);
+    pixelCoord.x = floor(FragUV.x * PARAMS.PIXELATION_WIDTH) / PARAMS.PIXELATION_WIDTH;
+    pixelCoord.y = floor(FragUV.y * PARAMS.PIXELATION_HEIGHT) / PARAMS.PIXELATION_HEIGHT;
+    outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, pixelCoord);
   }
-
-  var sourceTexel = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, pixelCoord);
 
   if (PARAMS.COLOR_ENABLED == 1.0)
   {
-    sourceTexel = floor(sourceTexel * PARAMS.COLOR_PRECISION) / PARAMS.COLOR_PRECISION;
+    outputColor = floor(outputColor * PARAMS.COLOR_PRECISION) / PARAMS.COLOR_PRECISION;
   }
 
   if (PARAMS.DITHER_ENABLED == 1.0)
   {
-    var brightness = GetPixelBrightness(sourceTexel.rgb);
+    var brightness = GetPixelBrightness(outputColor.rgb);
     var ditherPattern = GetDitherPattern(PARAMS.DITHER_PATTERN_INDEX);
-    var ditherX = u32((FragUV.x * PARAMS.SCREEN_WIDTH) / PARAMS.DITHER_SCALE_X);
-    var ditherY = u32((FragUV.y * PARAMS.SCREEN_HEIGHT) / PARAMS.DITHER_SCALE_Y);
+    var ditherX = u32((FragUV.x * SIZE.x) / PARAMS.DITHER_SCALE_X);
+    var ditherY = u32((FragUV.y * SIZE.y) / PARAMS.DITHER_SCALE_Y);
     var ditherPixel = GetDitherValue(ditherX, ditherY, brightness, ditherPattern);
-    sourceTexel = sourceTexel * ditherPixel;
+    outputColor = outputColor * ditherPixel;
   }
 
-  return sourceTexel;
+  if (PARAMS.OUTLINE_ENABLED == 1.0)
+  {
+    var t = PARAMS.OUTLINE_THICKNESS * (1.0 - depth);
+    var idDiff = 0.0;
+
+    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( t,  0)));
+    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( 0,  t)));
+    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( 0,  t)));
+    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( 0, -t)));
+    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( t,  t)));
+    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( t, -t)));
+    idDiff += distance(id, getIdValue(FragUV, vec2<f32>(-t,  t)));
+    idDiff += distance(id, getIdValue(FragUV, vec2<f32>(-t, -t)));
+
+    if (idDiff != 0.0)
+    {
+      idDiff = 1.0;
+      var outline = clamp(idDiff, 0, 1);
+      outputColor = mix(outputColor, vec4<f32>(PARAMS.OUTLINE_R, PARAMS.OUTLINE_G, PARAMS.OUTLINE_B, 1.0), outline);  
+    }
+  }
+
+  return outputColor;
+}
+
+// *****************************************************************************************************************
+// GET TEXEL VALUE
+// *****************************************************************************************************************
+fn getTexelValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
+{
+  var ps = vec2<f32>(1.0 / SIZE.x, 1.0 / SIZE.y);
+  return textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, textureUV + ps * offset);
+}
+
+// *****************************************************************************************************************
+// GET NORMAL VALUE
+// *****************************************************************************************************************
+fn getNormalValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
+{
+  var ps = vec2<f32>(1.0 / SIZE.x, 1.0 / SIZE.y);
+  return textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, textureUV + ps * offset);
+}
+
+// *****************************************************************************************************************
+// GET ID VALUE
+// *****************************************************************************************************************
+fn getIdValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
+{
+  var ps = vec2<f32>(1.0 / SIZE.x, 1.0 / SIZE.y);
+  return textureSample(IDS_TEXTURE, IDS_SAMPLER, textureUV + ps * offset);
+}
+
+// *****************************************************************************************************************
+// GET DEPTH VALUE
+// *****************************************************************************************************************
+fn getDepthValue(textureUV: vec2<f32>, offset: vec2<f32>) -> f32
+{
+  var ps = vec2<f32>(1.0 / SIZE.x, 1.0 / SIZE.y);
+  return textureSample(DEPTH_TEXTURE, DEPTH_SAMPLER, textureUV + ps * offset);
 }
 
 // *****************************************************************************************************************

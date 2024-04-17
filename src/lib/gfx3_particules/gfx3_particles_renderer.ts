@@ -14,14 +14,18 @@ class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
   vMatrix: Float32Array;
   grp1: Gfx3DynamicGroup;
   mvpcMatrix: Float32Array;
+  id: Float32Array;
 
   constructor() {
     super('PARTICLES_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.particlesList = [];
+
     this.grp0 = gfx3Manager.createStaticGroup('PARTICLES_PIPELINE', 0);
     this.vMatrix = this.grp0.setFloat(0, 'V_MATRIX', 16);
+
     this.grp1 = gfx3Manager.createDynamicGroup('PARTICLES_PIPELINE', 1);
     this.mvpcMatrix = this.grp1.setFloat(0, 'MVPC_MATRIX', 16);    
+    this.id = this.grp1.setFloat(1, 'ID', 4);
  
     this.grp0.allocate();
     this.grp1.allocate();
@@ -50,6 +54,7 @@ class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
     for (let i = 0; i < this.particlesList.length; i++) {
       const particles = this.particlesList[i];
       this.grp1.write(0, UT.MAT4_MULTIPLY(vpcMatrix, particles.getTransformMatrix(), this.mvpcMatrix) as Float32Array);
+      this.grp1.write(1, UT.VEC4_COPY(particles.getId(), this.id) as Float32Array);
       passEncoder.setBindGroup(1, this.grp1.getBindGroup(i));
 
       const grp2 = particles.getGroup02();

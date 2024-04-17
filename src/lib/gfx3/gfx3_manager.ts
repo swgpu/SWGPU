@@ -20,8 +20,9 @@ class Gfx3Manager {
   canvas: HTMLCanvasElement;
   ctx: GPUCanvasContext;
   destinationTexture: GPUTexture | null;
-  depthTexture: GPUTexture;
-  depthView: GPUTextureView;
+  normalsTexture: Gfx3Texture;
+  idsTexture: Gfx3Texture;
+  depthTexture: Gfx3Texture;  
   commandEncoder: GPUCommandEncoder;
   passEncoder: GPURenderPassEncoder;
   pipelines: Map<string, GPURenderPipeline>;
@@ -39,8 +40,9 @@ class Gfx3Manager {
     this.canvas = {} as HTMLCanvasElement;
     this.ctx = {} as GPUCanvasContext;
     this.destinationTexture = null;
-    this.depthTexture = {} as GPUTexture;
-    this.depthView = {} as GPUTextureView;
+    this.normalsTexture = {} as Gfx3Texture;
+    this.idsTexture = {} as Gfx3Texture;
+    this.depthTexture = {} as Gfx3Texture;
     this.commandEncoder = {} as GPUCommandEncoder;
     this.passEncoder = {} as GPURenderPassEncoder;
     this.pipelines = new Map<string, GPURenderPipeline>();
@@ -93,14 +95,9 @@ class Gfx3Manager {
     this.canvas.width = this.canvas.clientWidth * devicePixelRatio;
     this.canvas.height = this.canvas.clientHeight * devicePixelRatio;
     this.currentView = this.createView();
-
-    this.depthTexture = this.device.createTexture({
-      size: [this.canvas.width, this.canvas.height],
-      format: 'depth24plus',
-      usage: GPUTextureUsage.RENDER_ATTACHMENT
-    });
-
-    this.depthView = this.depthTexture.createView();
+    this.normalsTexture = this.createRenderingTexture('rgba16float');
+    this.idsTexture = this.createRenderingTexture('rgba16float');
+    this.depthTexture = this.createRenderingTexture('depth24plus');
     this.vertexBuffer = this.device.createBuffer({ size: 0, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST });
 
     eventManager.subscribe(coreManager, 'E_RESIZE', this, this.$handleWindowResize);
@@ -166,9 +163,19 @@ class Gfx3Manager {
         clearValue: { r: viewBgColor[0], g: viewBgColor[1], b: viewBgColor[2], a: viewBgColor[3] },
         loadOp: 'clear',
         storeOp: 'store'
+      },{
+        view: this.normalsTexture.gpuTexture.createView(),
+        clearValue: {r: 0.0, g: 0.0, b: 1.0, a: 1.0},
+        loadOp: 'clear',
+        storeOp: 'store'
+      },{
+        view: this.idsTexture.gpuTexture.createView(),
+        clearValue: {r: 0.0, g: 0.0, b: 0.0, a: 1.0},
+        loadOp: 'clear',
+        storeOp: 'store'
       }],
       depthStencilAttachment: {
-        view: this.depthView,
+        view: this.depthTexture.gpuTexture.createView(),
         depthClearValue: 1.0,
         depthLoadOp: 'clear',
         depthStoreOp: 'store'
@@ -225,6 +232,19 @@ class Gfx3Manager {
     const pipeline = this.device.createRenderPipeline(pipelineDesc);
     this.pipelines.set(id, pipeline);
     return pipeline;
+  }
+
+  /**
+   * Delete a GPU render pipeline.
+   * 
+   * @param {string} id - The identifier of the pipeline.
+   */
+  deletePipeline(id: string): void {
+    if (!this.pipelines.has(id)) {
+      throw new Error('Gfx3Manager::deletePipeline(): pipeline not found !');
+    }
+
+    this.pipelines.delete(id);
   }
 
   /**
@@ -310,8 +330,8 @@ class Gfx3Manager {
   /**
    * Creates a default rendering texture.
    */
-  createRenderingTexture(): Gfx3Texture {
-    return this.createEmptyTexture(this.getWidth(), this.getHeight(), navigator.gpu.getPreferredCanvasFormat(), { magFilter: 'nearest', minFilter: 'nearest' });
+  createRenderingTexture(format: GPUTextureFormat = navigator.gpu.getPreferredCanvasFormat()): Gfx3Texture {
+    return this.createEmptyTexture(this.getWidth(), this.getHeight(), format, { magFilter: 'nearest', minFilter: 'nearest' });
   }
 
   /**
@@ -490,9 +510,23 @@ class Gfx3Manager {
   }
 
   /**
+   * Returns the rendering texture contains normals.
+   */
+  getNormalsTexture(): Gfx3Texture {
+    return this.normalsTexture;
+  }
+
+  /**
+   * Returns the rendering texture contains ids.
+   */
+  getIdsTexture(): Gfx3Texture {
+    return this.idsTexture;
+  }
+
+  /**
    * Returns the depth texture.
    */
-  getDepthTexture(): GPUTexture {
+  getDepthTexture(): Gfx3Texture {
     return this.depthTexture;
   }
 
@@ -602,14 +636,14 @@ class Gfx3Manager {
     this.canvas.width = this.canvas.clientWidth * devicePixelRatio;
     this.canvas.height = this.canvas.clientHeight * devicePixelRatio;
 
-    this.depthTexture.destroy();
-    this.depthTexture = this.device.createTexture({
-      size: [this.canvas.width, this.canvas.height],
-      format: 'depth24plus',
-      usage: GPUTextureUsage.RENDER_ATTACHMENT
-    });
+    this.normalsTexture.gpuTexture.destroy();
+    this.normalsTexture = this.createRenderingTexture('rgba16float');
 
-    this.depthView = this.depthTexture.createView();
+    this.idsTexture.gpuTexture.destroy();
+    this.idsTexture = this.createRenderingTexture('rgba16float');
+    
+    this.depthTexture.gpuTexture.destroy();
+    this.depthTexture = this.createRenderingTexture('depth24plus');
 
     for (const view of this.views) {
       view.setScreenSize(this.canvas.width, this.canvas.height);

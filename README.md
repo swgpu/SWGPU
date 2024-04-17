@@ -308,7 +308,7 @@ to build our first WARME project.
 ```
 
 ## How to integrate your 3D models ?
-The best way is to used the [WARME Blender Exporter](https://github.com/jay19240/WARME-Engine/bin/WARME-Blender-Exporter.zip), otherwise you can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.    
+The best way is to used the [Blender Exporter](https://github.com/jay19240/WARME-Engine/bin/WARME-Blender-Exporter.zip), otherwise you can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.    
 
 Important note: The Blender coordinate system and the engine don't match, see below the rule to translate.
 Don't forget to apply these changes when you export your obj file.

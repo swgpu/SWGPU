@@ -58,7 +58,9 @@ export const PIPELINE_DESC: any = {
           operation: 'add'
         }
       }
-    }]
+    },
+    { format: 'rgba16float' }, // normals
+    { format: 'rgba16float' }] // ids
   },
   primitive: {
     topology: 'triangle-list',
@@ -94,7 +96,7 @@ fn main(
   @location(6) Angle: f32,
   @location(7) Visible: f32
 ) -> VertexOutput {
-  var output : VertexOutput;
+  var output: VertexOutput;
 
   if(Visible == 1)
   {
@@ -115,6 +117,13 @@ fn main(
 }`;
 
 export const FRAGMENT_SHADER = /* wgsl */`
+struct FragOutput {
+  @location(0) Base: vec4f,
+  @location(1) Normal: vec4f,
+  @location(2) Id: vec4f
+}
+
+@group(1) @binding(1) var<uniform> ID: vec4<f32>;
 @group(2) @binding(0) var TEXTURE: texture_2d<f32>;
 @group(2) @binding(1) var SAMPLER: sampler;
 
@@ -124,7 +133,7 @@ fn main(
   @location(0) FragUV: vec2<f32>,
   @location(1) Color: vec4<f32>,
   @location(2) Angle: f32
-) -> @location(0) vec4<f32> {
+) -> FragOutput {
   var c = cos(Angle);
   var s = sin(Angle);
 
@@ -133,5 +142,9 @@ fn main(
     c * (FragUV.y - 0.5) - s * (FragUV.x - 0.5) + 0.5
   );
 
-  return textureSample(TEXTURE, SAMPLER, rotatedUV) * Color;
+  var output: FragOutput;
+  output.Base = textureSample(TEXTURE, SAMPLER, rotatedUV) * Color;
+  output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
+  output.Id = ID;
+  return output;
 }`;

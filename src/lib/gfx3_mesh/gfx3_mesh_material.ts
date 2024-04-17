@@ -125,12 +125,19 @@ class Gfx3Material {
 
     this.grp3 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 3);
     this.texture = this.grp3.setTexture(0, 'MAT_TEXTURE', options.texture ?? gfx3Manager.createTextureFromBitmap());
+    this.texture = this.grp3.setSampler(1, 'MAT_SAMPLER', this.texture);
     this.displacementMap = this.grp3.setTexture(2, 'MAT_DISPLACEMENT_TEXTURE', options.displacementMap ?? gfx3Manager.createTextureFromBitmap());
+    this.displacementMap = this.grp3.setSampler(3, 'MAT_DISPLACEMENT_SAMPLER', this.displacementMap);
     this.diffuseMap = this.grp3.setTexture(4, 'MAT_DIFFUSE_TEXTURE', options.diffuseMap ?? gfx3Manager.createTextureFromBitmap());
+    this.diffuseMap = this.grp3.setSampler(5, 'MAT_DIFFUSE_SAMPLER', this.diffuseMap);
     this.specularMap = this.grp3.setTexture(6, 'MAT_SPECULAR_TEXTURE', options.specularMap ?? gfx3Manager.createTextureFromBitmap());
+    this.specularMap = this.grp3.setSampler(7, 'MAT_SPECULAR_SAMPLER', this.specularMap);
     this.emissiveMap = this.grp3.setTexture(8, 'MAT_EMISSIVE_TEXTURE', options.emissiveMap ?? gfx3Manager.createTextureFromBitmap());
+    this.emissiveMap = this.grp3.setSampler(9, 'MAT_EMISSIVE_SAMPLER', this.emissiveMap);
     this.normalMap = this.grp3.setTexture(10, 'MAT_NORM_TEXTURE', options.normalMap ?? gfx3Manager.createTextureFromBitmap());
+    this.normalMap = this.grp3.setSampler(11, 'MAT_NORM_SAMPLER', this.normalMap);
     this.envMap = this.grp3.setTexture(12, 'MAT_ENV_MAP_TEXTURE', options.envMap ?? gfx3Manager.createCubeMapFromBitmap(), { dimension: 'cube' });
+    this.envMap = this.grp3.setSampler(13, 'MAT_ENV_MAP_SAMPLER', this.envMap);
 
     this.grp2.allocate();
     this.grp3.allocate();

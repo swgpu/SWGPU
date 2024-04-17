@@ -28,6 +28,7 @@ class Gfx3Sprite extends Gfx3Drawable implements Poolable<Gfx3Sprite> {
     this.billboardMode = false;
     this.grp1 = gfx3Manager.createStaticGroup('SPRITE_PIPELINE', 1);
     this.texture = this.grp1.setTexture(0, 'TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.texture = this.grp1.setSampler(1, 'SAMPLER', this.texture);
     this.grp1.allocate();    
   }
 
