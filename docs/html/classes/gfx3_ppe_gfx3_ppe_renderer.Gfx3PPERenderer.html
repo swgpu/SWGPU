@@ -17,17 +17,17 @@
 <li><a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html">Gfx3PPERenderer</a></li></ul>
 <h1>Class Gfx3PPERenderer</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Singleton post-processing psx-style effects renderer.</p>
+<div class="tsd-comment tsd-typography"><p>Singleton post-processing effects renderer.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
-<li><a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html" class="tsd-signature-type tsd-kind-class">Gfx3PPERendererAbstract</a>
+<li><a href="gfx3_gfx3_renderer_abstract.Gfx3RendererAbstract.html" class="tsd-signature-type tsd-kind-class">Gfx3RendererAbstract</a>
 <ul class="tsd-hierarchy">
 <li><span class="target">Gfx3PPERenderer</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L7">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:7</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L31">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:31</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -39,41 +39,25 @@
 </div></section>
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
-<div class="tsd-index-list"><a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#device" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>device</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#grp0" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>grp0</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#params" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>params</span></a>
+<div class="tsd-index-list"><a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#depthTexture" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>depth<wbr/>Texture</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#device" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>device</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#grp0" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>grp0</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#idsTexture" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>ids<wbr/>Texture</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#normalsTexture" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>normals<wbr/>Texture</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#params" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>params</span></a>
 <a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#pipeline" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>pipeline</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#sourceTexture" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source<wbr/>Texture</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#vertexBuffer" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>vertex<wbr/>Buffer</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#size" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>size</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#sourceTexture" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source<wbr/>Texture</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#vertexBuffer" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>vertex<wbr/>Buffer</span></a>
 </div></section>
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Methods</h3>
-<div class="tsd-index-list"><a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#_handleWindowResize" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>$handle<wbr/>Window<wbr/>Resize</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#enableColorPrecision" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>enable<wbr/>Color<wbr/>Precision</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#enableDither" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>enable<wbr/>Dither</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#enablePixelation" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>enable<wbr/>Pixelation</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#getColorPrecision" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Color<wbr/>Precision</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#getDitherPattern" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Dither<wbr/>Pattern</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#getDitherScaleX" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Dither<wbr/>ScaleX</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#getDitherScaleY" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Dither<wbr/>ScaleY</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#getDitherThreshold" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Dither<wbr/>Threshold</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#getPixelationHeight" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Pixelation<wbr/>Height</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#getPixelationWidth" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Pixelation<wbr/>Width</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#getSourceTexture" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Source<wbr/>Texture</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#isColorPrecisionEnabled" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Color<wbr/>Precision<wbr/>Enabled</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#isDitherEnabled" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Dither<wbr/>Enabled</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#isEnabled" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Enabled</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#isPixelationEnabled" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Pixelation<wbr/>Enabled</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#onWindowResize" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>on<wbr/>Window<wbr/>Resize</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#render" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>render</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#setColorPrecision" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Color<wbr/>Precision</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#setDitherPattern" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Dither<wbr/>Pattern</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#setDitherScaleX" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Dither<wbr/>ScaleX</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#setDitherScaleY" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Dither<wbr/>ScaleY</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#setDitherThreshold" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Dither<wbr/>Threshold</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#setEnabled" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Enabled</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#setHeightPixelation" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Height<wbr/>Pixelation</span></a>
-<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#setWidthPixelation" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Width<wbr/>Pixelation</span></a>
+<div class="tsd-index-list"><a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#_handleWindowResize" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>$handle<wbr/>Window<wbr/>Resize</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#getParam" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Param</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#getSourceTexture" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Source<wbr/>Texture</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#loadPipeline" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>load<wbr/>Pipeline</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#render" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>render</span></a>
+<a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html#setParam" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Param</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Constructors</h2>
@@ -83,195 +67,91 @@
 <li class="tsd-signature tsd-anchor-link" id="constructor.new_Gfx3PPERenderer"><span class="tsd-kind-constructor-signature">new <wbr/>Gfx3PPERenderer</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html" class="tsd-signature-type tsd-kind-class">Gfx3PPERenderer</a><a href="#constructor.new_Gfx3PPERenderer" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <h4 class="tsd-returns-title">Returns <a href="gfx3_ppe_gfx3_ppe_renderer.Gfx3PPERenderer.html" class="tsd-signature-type tsd-kind-class">Gfx3PPERenderer</a></h4><aside class="tsd-sources">
-<p>Overrides <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#constructor">constructor</a></p>
+<p>Overrides <a href="gfx3_gfx3_renderer_abstract.Gfx3RendererAbstract.html">Gfx3RendererAbstract</a>.<a href="gfx3_gfx3_renderer_abstract.Gfx3RendererAbstract.html#constructor">constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L8">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:8</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L42">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:42</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="device" class="tsd-anchor"></a>
+<section class="tsd-panel tsd-member"><a id="depthTexture" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>depth<wbr/>Texture</span><a href="#depthTexture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">depth<wbr/>Texture</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/gfx3_gfx3_texture.Gfx3Texture.html" class="tsd-signature-type tsd-kind-interface">Gfx3Texture</a></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L40">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:40</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="device" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>device</span><a href="#device" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">device</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">GPUDevice</span></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#device">device</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L43">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:43</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="grp0" class="tsd-anchor"></a>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L32">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:32</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="grp0" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>grp0</span><a href="#grp0" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">grp0</span><span class="tsd-signature-symbol">:</span> <a href="gfx3_gfx3_group.Gfx3StaticGroup.html" class="tsd-signature-type tsd-kind-class">Gfx3StaticGroup</a></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#grp0">grp0</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L45">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:45</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="params" class="tsd-anchor"></a>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L34">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:34</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="idsTexture" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>ids<wbr/>Texture</span><a href="#idsTexture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">ids<wbr/>Texture</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/gfx3_gfx3_texture.Gfx3Texture.html" class="tsd-signature-type tsd-kind-interface">Gfx3Texture</a></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L39">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:39</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="normalsTexture" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>normals<wbr/>Texture</span><a href="#normalsTexture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">normals<wbr/>Texture</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/gfx3_gfx3_texture.Gfx3Texture.html" class="tsd-signature-type tsd-kind-interface">Gfx3Texture</a></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L38">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:38</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="params" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>params</span><a href="#params" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">params</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Float32Array</span></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#params">params</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L46">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:46</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L35">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:35</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited"><a id="pipeline" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>pipeline</span><a href="#pipeline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">pipeline</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">GPURenderPipeline</span></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#pipeline">pipeline</a></p>
+<p>Inherited from <a href="gfx3_gfx3_renderer_abstract.Gfx3RendererAbstract.html">Gfx3RendererAbstract</a>.<a href="gfx3_gfx3_renderer_abstract.Gfx3RendererAbstract.html#pipeline">pipeline</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3/gfx3_renderer_abstract.ts#L7">src/lib/gfx3/gfx3_renderer_abstract.ts:7</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="sourceTexture" class="tsd-anchor"></a>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3/gfx3_renderer_abstract.ts#L7">src/lib/gfx3/gfx3_renderer_abstract.ts:7</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="size" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>size</span><a href="#size" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">size</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Float32Array</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L36">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:36</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="sourceTexture" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>source<wbr/>Texture</span><a href="#sourceTexture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">source<wbr/>Texture</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/gfx3_gfx3_texture.Gfx3Texture.html" class="tsd-signature-type tsd-kind-interface">Gfx3Texture</a></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#sourceTexture">sourceTexture</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L47">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:47</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="vertexBuffer" class="tsd-anchor"></a>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L37">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:37</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="vertexBuffer" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>vertex<wbr/>Buffer</span><a href="#vertexBuffer" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">vertex<wbr/>Buffer</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">GPUBuffer</span></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#vertexBuffer">vertexBuffer</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L44">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:44</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L33">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:33</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="_handleWindowResize" class="tsd-anchor"></a>
+<section class="tsd-panel tsd-member"><a id="_handleWindowResize" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>$handle<wbr/>Window<wbr/>Resize</span><a href="#_handleWindowResize" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures tsd-is-inherited">
+<ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="_handleWindowResize._handleWindowResize-1"><span class="tsd-kind-call-signature">$handle<wbr/>Window<wbr/>Resize</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#_handleWindowResize._handleWindowResize-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#_handleWindowResize">$handleWindowResize</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L141">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:141</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="enableColorPrecision" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>enable<wbr/>Color<wbr/>Precision</span><a href="#enableColorPrecision" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L190">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:190</a></li></ul></aside></li></ul></section>
+<section class="tsd-panel tsd-member"><a id="getParam" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>get<wbr/>Param</span><a href="#getParam" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="enableColorPrecision.enableColorPrecision-1"><span class="tsd-kind-call-signature">enable<wbr/>Color<wbr/>Precision</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">enabled</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#enableColorPrecision.enableColorPrecision-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="getParam.getParam-1"><span class="tsd-kind-call-signature">get<wbr/>Param</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">index</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#getParam.getParam-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Enable color precision effect.</p>
+<div class="tsd-comment tsd-typography"><p>Returns the specified param value.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><span class="tsd-kind-parameter">enabled</span>: <span class="tsd-signature-type">boolean</span></h5>
-<div class="tsd-comment tsd-typography"><p>Indicating whether color precision should be enabled or disable.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L57">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:57</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="enableDither" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>enable<wbr/>Dither</span><a href="#enableDither" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="enableDither.enableDither-1"><span class="tsd-kind-call-signature">enable<wbr/>Dither</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">enabled</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#enableDither.enableDither-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Enable dithering effect.</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
-<li>
-<h5><span class="tsd-kind-parameter">enabled</span>: <span class="tsd-signature-type">boolean</span></h5>
-<div class="tsd-comment tsd-typography"><p>Indicating whether dithering should be enabled or disable.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L76">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:76</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="enablePixelation" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>enable<wbr/>Pixelation</span><a href="#enablePixelation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="enablePixelation.enablePixelation-1"><span class="tsd-kind-call-signature">enable<wbr/>Pixelation</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">enabled</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#enablePixelation.enablePixelation-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Enable pixelation effect.</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
-<li>
-<h5><span class="tsd-kind-parameter">enabled</span>: <span class="tsd-signature-type">boolean</span></h5>
-<div class="tsd-comment tsd-typography"><p>Indicating whether pixelation should be enabled or disable.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L28">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:28</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="getColorPrecision" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>get<wbr/>Color<wbr/>Precision</span><a href="#getColorPrecision" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="getColorPrecision.getColorPrecision-1"><span class="tsd-kind-call-signature">get<wbr/>Color<wbr/>Precision</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#getColorPrecision.getColorPrecision-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Return the color precision.</p>
-</div>
+<h5><span class="tsd-kind-parameter">index</span>: <span class="tsd-signature-type">number</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L151">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:151</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="getDitherPattern" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>get<wbr/>Dither<wbr/>Pattern</span><a href="#getDitherPattern" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="getDitherPattern.getDitherPattern-1"><span class="tsd-kind-call-signature">get<wbr/>Dither<wbr/>Pattern</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#getDitherPattern.getDitherPattern-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Get the dither pattern.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L165">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:165</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="getDitherScaleX" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>get<wbr/>Dither<wbr/>ScaleX</span><a href="#getDitherScaleX" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="getDitherScaleX.getDitherScaleX-1"><span class="tsd-kind-call-signature">get<wbr/>Dither<wbr/>ScaleX</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#getDitherScaleX.getDitherScaleX-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Get the dither x-scale.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L178">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:178</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="getDitherScaleY" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>get<wbr/>Dither<wbr/>ScaleY</span><a href="#getDitherScaleY" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="getDitherScaleY.getDitherScaleY-1"><span class="tsd-kind-call-signature">get<wbr/>Dither<wbr/>ScaleY</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#getDitherScaleY.getDitherScaleY-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Get the dither y-scale.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L185">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:185</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="getDitherThreshold" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>get<wbr/>Dither<wbr/>Threshold</span><a href="#getDitherThreshold" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="getDitherThreshold.getDitherThreshold-1"><span class="tsd-kind-call-signature">get<wbr/>Dither<wbr/>Threshold</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#getDitherThreshold.getDitherThreshold-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Get the dither threshold.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L172">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:172</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="getPixelationHeight" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>get<wbr/>Pixelation<wbr/>Height</span><a href="#getPixelationHeight" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="getPixelationHeight.getPixelationHeight-1"><span class="tsd-kind-call-signature">get<wbr/>Pixelation<wbr/>Height</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#getPixelationHeight.getPixelationHeight-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Return the vertical pixelation value.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L137">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:137</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="getPixelationWidth" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>get<wbr/>Pixelation<wbr/>Width</span><a href="#getPixelationWidth" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="getPixelationWidth.getPixelationWidth-1"><span class="tsd-kind-call-signature">get<wbr/>Pixelation<wbr/>Width</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#getPixelationWidth.getPixelationWidth-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Return the horizontal pixelation value.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L130">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:130</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="getSourceTexture" class="tsd-anchor"></a>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L177">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:177</a></li></ul></aside></li></ul></section>
+<section class="tsd-panel tsd-member"><a id="getSourceTexture" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>Source<wbr/>Texture</span><a href="#getSourceTexture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures tsd-is-inherited">
+<ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getSourceTexture.getSourceTexture-1"><span class="tsd-kind-call-signature">get<wbr/>Source<wbr/>Texture</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">GPUTexture</span><a href="#getSourceTexture.getSourceTexture-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Returns the source texture.
@@ -280,82 +160,49 @@ This way, it is easy to chain multiple effects.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">GPUTexture</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#getSourceTexture">getSourceTexture</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L129">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:129</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="isColorPrecisionEnabled" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>is<wbr/>Color<wbr/>Precision<wbr/>Enabled</span><a href="#isColorPrecisionEnabled" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L186">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:186</a></li></ul></aside></li></ul></section>
+<section class="tsd-panel tsd-member"><a id="loadPipeline" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>load<wbr/>Pipeline</span><a href="#loadPipeline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="isColorPrecisionEnabled.isColorPrecisionEnabled-1"><span class="tsd-kind-call-signature">is<wbr/>Color<wbr/>Precision<wbr/>Enabled</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#isColorPrecisionEnabled.isColorPrecisionEnabled-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="loadPipeline.loadPipeline-1"><span class="tsd-kind-call-signature">load<wbr/>Pipeline</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">fragmentShader</span>, <span class="tsd-kind-parameter">params</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#loadPipeline.loadPipeline-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Check if color precision effect is enabled.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L144">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:144</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="isDitherEnabled" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>is<wbr/>Dither<wbr/>Enabled</span><a href="#isDitherEnabled" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="isDitherEnabled.isDitherEnabled-1"><span class="tsd-kind-call-signature">is<wbr/>Dither<wbr/>Enabled</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#isDitherEnabled.isDitherEnabled-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Check if dithering effect is enabled.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L158">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:158</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="isEnabled" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>is<wbr/>Enabled</span><a href="#isEnabled" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures tsd-is-inherited">
-<li class="tsd-signature tsd-anchor-link" id="isEnabled.isEnabled-1"><span class="tsd-kind-call-signature">is<wbr/>Enabled</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#isEnabled.isEnabled-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Check if post-process effects is enabled.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#isEnabled">isEnabled</a></p>
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L120">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:120</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="isPixelationEnabled" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>is<wbr/>Pixelation<wbr/>Enabled</span><a href="#isPixelationEnabled" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="isPixelationEnabled.isPixelationEnabled-1"><span class="tsd-kind-call-signature">is<wbr/>Pixelation<wbr/>Enabled</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#isPixelationEnabled.isPixelationEnabled-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Check if pixelation effect is enabled.</p>
-</div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L123">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:123</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="onWindowResize" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>on<wbr/>Window<wbr/>Resize</span><a href="#onWindowResize" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures tsd-is-inherited">
-<li class="tsd-signature tsd-anchor-link" id="onWindowResize.onWindowResize-1"><span class="tsd-kind-call-signature">on<wbr/>Window<wbr/>Resize</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">width</span>, <span class="tsd-kind-parameter">height</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#onWindowResize.onWindowResize-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Virtual method called on window resize.</p>
+<div class="tsd-comment tsd-typography"><p>Load a new ppe pipeline, pretty cool when you want your own post-process effects.
+Note: Please, be careful to include these uniforms in your fragment shader, they are required:</p>
+<p>struct Params {
+// the place for your params
+};</p>
+<p>@group(0) @binding(0) var<uniform> PARAMS: Params;
+@group(0) @binding(1) var<uniform> SIZE: vec2<f32>;
+@group(0) @binding(2) var SOURCE_TEXTURE: texture_2d<f32>;
+@group(0) @binding(3) var SOURCE_SAMPLER: sampler;
+@group(0) @binding(4) var NORMALS_TEXTURE: texture_2d<f32>;
+@group(0) @binding(5) var NORMALS_SAMPLER: sampler;
+@group(0) @binding(6) var IDS_TEXTURE: texture_2d<f32>;
+@group(0) @binding(7) var IDS_SAMPLER: sampler;
+@group(0) @binding(8) var DEPTH_TEXTURE: texture_2d<f32>;
+@group(0) @binding(9) var DEPTH_SAMPLER: sampler;</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type">number</span></h5>
-<div class="tsd-comment tsd-typography"><p>The width screen.</p>
+<h5><span class="tsd-kind-parameter">fragmentShader</span>: <span class="tsd-signature-type">string</span></h5>
+<div class="tsd-comment tsd-typography"><p>The fragment shader code.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li>
 <li>
-<h5><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type">number</span></h5>
-<div class="tsd-comment tsd-typography"><p>The height screen.</p>
+<h5><span class="tsd-kind-parameter">params</span>: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+<div class="tsd-comment tsd-typography"><p>The params values.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#onWindowResize">onWindowResize</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L139">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:139</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="render" class="tsd-anchor"></a>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L137">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:137</a></li></ul></aside></li></ul></section>
+<section class="tsd-panel tsd-member"><a id="render" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>render</span><a href="#render" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures tsd-is-inherited">
+<ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="render.render-1"><span class="tsd-kind-call-signature">render</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">destinationTexture</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#render.render-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>The render function.</p>
@@ -367,169 +214,32 @@ This way, it is easy to chain multiple effects.</p>
 <h5><span class="tsd-kind-parameter">destinationTexture</span>: <span class="tsd-signature-type ">GPUTexture</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#render">render</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L88">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:88</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="setColorPrecision" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>set<wbr/>Color<wbr/>Precision</span><a href="#setColorPrecision" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L94">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:94</a></li></ul></aside></li></ul></section>
+<section class="tsd-panel tsd-member"><a id="setParam" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>set<wbr/>Param</span><a href="#setParam" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="setColorPrecision.setColorPrecision-1"><span class="tsd-kind-call-signature">set<wbr/>Color<wbr/>Precision</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">colorPrecision</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setColorPrecision.setColorPrecision-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="setParam.setParam-1"><span class="tsd-kind-call-signature">set<wbr/>Param</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">index</span>, <span class="tsd-kind-parameter">value</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setParam.setParam-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Set the color precision.
-It determines how much color is limited.</p>
+<div class="tsd-comment tsd-typography"><p>Set a parameter value.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><span class="tsd-kind-parameter">colorPrecision</span>: <span class="tsd-signature-type">number</span></h5>
-<div class="tsd-comment tsd-typography"><p>The color precision.</p>
+<h5><span class="tsd-kind-parameter">index</span>: <span class="tsd-signature-type">number</span></h5>
+<div class="tsd-comment tsd-typography"><p>The param index.</p>
 </div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L67">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:67</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="setDitherPattern" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>set<wbr/>Dither<wbr/>Pattern</span><a href="#setDitherPattern" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="setDitherPattern.setDitherPattern-1"><span class="tsd-kind-call-signature">set<wbr/>Dither<wbr/>Pattern</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">ditherPattern</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setDitherPattern.setDitherPattern-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Set the dither pattern.
-You have choise between 5 different patterns (from 0 to 4).</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
+<div class="tsd-comment tsd-typography"></div></li>
 <li>
-<h5><span class="tsd-kind-parameter">ditherPattern</span>: <span class="tsd-signature-type">number</span></h5>
-<div class="tsd-comment tsd-typography"><p>The pattern index.</p>
+<h5><span class="tsd-kind-parameter">value</span>: <span class="tsd-signature-type">number</span></h5>
+<div class="tsd-comment tsd-typography"><p>The value.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L86">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:86</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="setDitherScaleX" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>set<wbr/>Dither<wbr/>ScaleX</span><a href="#setDitherScaleX" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="setDitherScaleX.setDitherScaleX-1"><span class="tsd-kind-call-signature">set<wbr/>Dither<wbr/>ScaleX</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">ditherScaleX</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setDitherScaleX.setDitherScaleX-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Set the dither x-scale.
-High value for strong effect.</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
-<li>
-<h5><span class="tsd-kind-parameter">ditherScaleX</span>: <span class="tsd-signature-type">number</span></h5>
-<div class="tsd-comment tsd-typography"><p>The x-scale.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L106">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:106</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="setDitherScaleY" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>set<wbr/>Dither<wbr/>ScaleY</span><a href="#setDitherScaleY" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="setDitherScaleY.setDitherScaleY-1"><span class="tsd-kind-call-signature">set<wbr/>Dither<wbr/>ScaleY</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">ditherScaleY</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setDitherScaleY.setDitherScaleY-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Set the dither y-scale.
-High value for strong effect.</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
-<li>
-<h5><span class="tsd-kind-parameter">ditherScaleY</span>: <span class="tsd-signature-type">number</span></h5>
-<div class="tsd-comment tsd-typography"><p>The y-scale.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L116">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:116</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="setDitherThreshold" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>set<wbr/>Dither<wbr/>Threshold</span><a href="#setDitherThreshold" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="setDitherThreshold.setDitherThreshold-1"><span class="tsd-kind-call-signature">set<wbr/>Dither<wbr/>Threshold</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">ditherThreshold</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setDitherThreshold.setDitherThreshold-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Set the dither threshold.
-It determines a threshold value from what the dither is triggered.</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
-<li>
-<h5><span class="tsd-kind-parameter">ditherThreshold</span>: <span class="tsd-signature-type">number</span></h5>
-<div class="tsd-comment tsd-typography"><p>The threshold.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L96">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:96</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member tsd-is-inherited"><a id="setEnabled" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>set<wbr/>Enabled</span><a href="#setEnabled" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures tsd-is-inherited">
-<li class="tsd-signature tsd-anchor-link" id="setEnabled.setEnabled-1"><span class="tsd-kind-call-signature">set<wbr/>Enabled</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">enabled</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setEnabled.setEnabled-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Enable post-process effects.</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
-<li>
-<h5><span class="tsd-kind-parameter">enabled</span>: <span class="tsd-signature-type">boolean</span></h5>
-<div class="tsd-comment tsd-typography"><p>Indicating whether ppe should be enabled or disable.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<p>Inherited from <a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html">Gfx3PPERendererAbstract</a>.<a href="gfx3_ppe_gfx3_ppe_renderer_abstract.Gfx3PPERendererAbstract.html#setEnabled">setEnabled</a></p>
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts#L113">src/lib/gfx3_ppe/gfx3_ppe_renderer_abstract.ts:113</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="setHeightPixelation" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>set<wbr/>Height<wbr/>Pixelation</span><a href="#setHeightPixelation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="setHeightPixelation.setHeightPixelation-1"><span class="tsd-kind-call-signature">set<wbr/>Height<wbr/>Pixelation</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">heightPixelation</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setHeightPixelation.setHeightPixelation-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Set the vertical pixelation value.
-It determines the resolution you want to simulate.</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
-<li>
-<h5><span class="tsd-kind-parameter">heightPixelation</span>: <span class="tsd-signature-type">number</span></h5>
-<div class="tsd-comment tsd-typography"><p>The y-pixelation value.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L48">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:48</a></li></ul></aside></li></ul></section>
-<section class="tsd-panel tsd-member"><a id="setWidthPixelation" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>set<wbr/>Width<wbr/>Pixelation</span><a href="#setWidthPixelation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="setWidthPixelation.setWidthPixelation-1"><span class="tsd-kind-call-signature">set<wbr/>Width<wbr/>Pixelation</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">widthPixelation</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setWidthPixelation.setWidthPixelation-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
-<li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Set the horizontal pixelation value.
-It determines the resolution you want to simulate.</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
-<li>
-<h5><span class="tsd-kind-parameter">widthPixelation</span>: <span class="tsd-signature-type">number</span></h5>
-<div class="tsd-comment tsd-typography"><p>The x-pixelation value.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/63d4d0c/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L38">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:38</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/jay19240/WARME-Y2K/blob/4326b13/src/lib/gfx3_ppe/gfx3_ppe_renderer.ts#L170">src/lib/gfx3_ppe/gfx3_ppe_renderer.ts:170</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -550,38 +260,22 @@ It determines the resolution you want to simulate.</p>
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#constructor" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-512"></use></svg><span>constructor</span></a></li>
-<li><a href="#device" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>device</span></a></li>
-<li><a href="#grp0" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>grp0</span></a></li>
-<li><a href="#params" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>params</span></a></li>
+<li><a href="#depthTexture" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>depth<wbr/>Texture</span></a></li>
+<li><a href="#device" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>device</span></a></li>
+<li><a href="#grp0" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>grp0</span></a></li>
+<li><a href="#idsTexture" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>ids<wbr/>Texture</span></a></li>
+<li><a href="#normalsTexture" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>normals<wbr/>Texture</span></a></li>
+<li><a href="#params" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>params</span></a></li>
 <li><a href="#pipeline" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>pipeline</span></a></li>
-<li><a href="#sourceTexture" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source<wbr/>Texture</span></a></li>
-<li><a href="#vertexBuffer" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>vertex<wbr/>Buffer</span></a></li>
-<li><a href="#_handleWindowResize" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>$handle<wbr/>Window<wbr/>Resize</span></a></li>
-<li><a href="#enableColorPrecision" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>enable<wbr/>Color<wbr/>Precision</span></a></li>
-<li><a href="#enableDither" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>enable<wbr/>Dither</span></a></li>
-<li><a href="#enablePixelation" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>enable<wbr/>Pixelation</span></a></li>
-<li><a href="#getColorPrecision" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Color<wbr/>Precision</span></a></li>
-<li><a href="#getDitherPattern" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Dither<wbr/>Pattern</span></a></li>
-<li><a href="#getDitherScaleX" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Dither<wbr/>ScaleX</span></a></li>
-<li><a href="#getDitherScaleY" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Dither<wbr/>ScaleY</span></a></li>
-<li><a href="#getDitherThreshold" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Dither<wbr/>Threshold</span></a></li>
-<li><a href="#getPixelationHeight" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Pixelation<wbr/>Height</span></a></li>
-<li><a href="#getPixelationWidth" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Pixelation<wbr/>Width</span></a></li>
-<li><a href="#getSourceTexture" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Source<wbr/>Texture</span></a></li>
-<li><a href="#isColorPrecisionEnabled" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Color<wbr/>Precision<wbr/>Enabled</span></a></li>
-<li><a href="#isDitherEnabled" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Dither<wbr/>Enabled</span></a></li>
-<li><a href="#isEnabled" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Enabled</span></a></li>
-<li><a href="#isPixelationEnabled" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>is<wbr/>Pixelation<wbr/>Enabled</span></a></li>
-<li><a href="#onWindowResize" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>on<wbr/>Window<wbr/>Resize</span></a></li>
-<li><a href="#render" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>render</span></a></li>
-<li><a href="#setColorPrecision" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Color<wbr/>Precision</span></a></li>
-<li><a href="#setDitherPattern" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Dither<wbr/>Pattern</span></a></li>
-<li><a href="#setDitherScaleX" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Dither<wbr/>ScaleX</span></a></li>
-<li><a href="#setDitherScaleY" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Dither<wbr/>ScaleY</span></a></li>
-<li><a href="#setDitherThreshold" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Dither<wbr/>Threshold</span></a></li>
-<li><a href="#setEnabled" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Enabled</span></a></li>
-<li><a href="#setHeightPixelation" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Height<wbr/>Pixelation</span></a></li>
-<li><a href="#setWidthPixelation" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Width<wbr/>Pixelation</span></a></li></ul></div></details></div>
+<li><a href="#size" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>size</span></a></li>
+<li><a href="#sourceTexture" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source<wbr/>Texture</span></a></li>
+<li><a href="#vertexBuffer" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>vertex<wbr/>Buffer</span></a></li>
+<li><a href="#_handleWindowResize" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>$handle<wbr/>Window<wbr/>Resize</span></a></li>
+<li><a href="#getParam" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Param</span></a></li>
+<li><a href="#getSourceTexture" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>get<wbr/>Source<wbr/>Texture</span></a></li>
+<li><a href="#loadPipeline" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>load<wbr/>Pipeline</span></a></li>
+<li><a href="#render" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>render</span></a></li>
+<li><a href="#setParam" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2048"></use></svg><span>set<wbr/>Param</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../index.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>create-warme</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">

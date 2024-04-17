@@ -29,7 +29,6 @@
 - [[Gfx3PhysicsJNM]]~
 - [[Gfx3PhysicsJWM]]~
 - [[Gfx3PPERenderer]]~
-- [[Gfx3PPERendererAbstract]]~
 - [[Gfx3Skybox]]~
 - [[Gfx3SkyboxRenderer]]~
 - [[Gfx3Sprite]]~

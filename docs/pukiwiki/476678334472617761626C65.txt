@@ -34,6 +34,12 @@ Close your vertex buffer to write process.~
 - ''getBoundingBox''(): Gfx3BoundingBox~
 Returns the bounding box.~
 ~
+- ''getId''(): vec4~
+Returns the identifier.~
+~
+- ''getStringId''(): string~
+Returns the identifier as string.~
+~
 - ''getVertexCount''(): number~
 Returns the number of vertices.~
 ~
@@ -54,6 +60,12 @@ Returns the bounding box in the world space coordinates.~
 - ''setBoundingBox''(boundingBox: Gfx3BoundingBox): void~
 Set the bounding box.~
 -- ''boundingBox'': The bounding box.~
+~
+- ''setId''(id: vec4): void~
+Set an identifier.~
+Note: The last component of the id is the apparture channel.~
+0 -> invisible, 1 -> visible~
+-- ''id'': The identifier formed by 4 normalized components.~
 ~
 - ''setVertices''(vertices: number[]): void~
 Set vertices.~

@@ -1,7 +1,7 @@
 * Class: Gfx3RendererAbstract
 
 Abstract class for all 3D renderer.~
-- parent of: Gfx3DebugRenderer, Gfx3FlareRenderer, Gfx3MeshRenderer, Gfx3ParticlesRenderer, Gfx3PPERendererAbstract, Gfx3SkyboxRenderer, Gfx3SpriteRenderer~
+- parent of: Gfx3DebugRenderer, Gfx3FlareRenderer, Gfx3MeshRenderer, Gfx3ParticlesRenderer, Gfx3PPERenderer, Gfx3SkyboxRenderer, Gfx3SpriteRenderer~
 ** Constructors
 - ''new Gfx3RendererAbstract''(pipelineId: string, vertexShader: string, fragmentShader: string, pipelineDesc: GPURenderPipelineDescriptor): Gfx3RendererAbstract~
 -- ''pipelineId'': A unique identifier for the render pipeline.~

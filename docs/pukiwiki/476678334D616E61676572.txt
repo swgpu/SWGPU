@@ -38,8 +38,9 @@ Creates an empty GPU texture with the given size.~
 -- ''format''~
 -- ''samplerDescriptor'': The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.~
 ~
-- ''createRenderingTexture''(): Gfx3Texture~
+- ''createRenderingTexture''(format: GPUTextureFormat): Gfx3Texture~
 Creates a default rendering texture.~
+-- ''format''~
 ~
 - ''createStaticGroup''(pipelineId: string, groupIndex: number): Gfx3StaticGroup~
 Creates a static group for a given pipeline and group index.~
@@ -59,6 +60,10 @@ Note: A sub-buffer is just a reference offset/size pointing to the big one verte
 ~
 - ''createView''(): Gfx3View~
 Create a new view and return it.~
+~
+- ''deletePipeline''(id: string): void~
+Delete a GPU render pipeline.~
+-- ''id'': The identifier of the pipeline.~
 ~
 - ''destroyVertexBuffer''(sub: VertexSubBuffer): void~
 Removes a vertex sub-buffer.~
@@ -96,7 +101,7 @@ Note: Is the texture used for final rendering.~
 Returns the current view.~
 Note: Current view is set by the "begin" function.~
 ~
-- ''getDepthTexture''(): GPUTexture~
+- ''getDepthTexture''(): Gfx3Texture~
 Returns the depth texture.~
 ~
 - ''getDevice''(): GPUDevice~
@@ -105,8 +110,14 @@ Returns the GPU device.~
 - ''getHeight''(): number~
 Returns the resolution height of the canvas.~
 ~
+- ''getIdsTexture''(): Gfx3Texture~
+Returns the rendering texture contains ids.~
+~
 - ''getLastRenderTime''(): number~
 Returns the last render time.~
+~
+- ''getNormalsTexture''(): Gfx3Texture~
+Returns the rendering texture contains normals.~
 ~
 - ''getNumViews''(): number~
 Returns the number of views.~

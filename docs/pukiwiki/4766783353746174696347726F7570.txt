@@ -37,8 +37,14 @@ Set a integer-typed uniform entry and returns a writable buffer.~
 -- ''name'': The name of the uniform.~
 -- ''length'': The number of integer.~
 ~
+- ''setSampler''(binding: number, name: string, texture: Gfx3Texture): Gfx3Texture~
+Set a sampler resource for uniform entry.~
+-- ''binding'': The binding index of the uniform in the shader program.~
+-- ''name'': The name of the uniform.~
+-- ''texture'': The texture.~
+~
 - ''setTexture''(binding: number, name: string, texture: Gfx3Texture, createViewDescriptor: GPUTextureViewDescriptor): Gfx3Texture~
-Set a texture and sampler resource for uniform entry.~
+Set a texture resource for uniform entry.~
 -- ''binding'': The binding index of the uniform in the shader program.~
 -- ''name'': The name of the uniform.~
 -- ''texture'': The texture.~
