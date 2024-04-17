@@ -86,6 +86,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Point lights (max : 64)
 
 - 🖼️ **3D Post-processing**
+    - Outline
     - Hardware dithering
     - Pixelation
     - Color depth limiting
