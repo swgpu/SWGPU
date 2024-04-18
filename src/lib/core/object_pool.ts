@@ -27,6 +27,7 @@ class ObjectPool<T extends Poolable<T>> {
 
     for (let i = 0; i < numInstances; i++) {
       const clone = originObject.clone();
+      this.reset(clone);
       this.instances.push({ object: clone, used: false, id: i + 1 });
     }
   }

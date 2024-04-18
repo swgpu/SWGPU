@@ -10,7 +10,7 @@ import { gfx3ParticlesRenderer } from './lib/gfx3_particules/gfx3_particles_rend
 import { gfx2Manager } from './lib/gfx2/gfx2_manager';
 import { screenManager } from './lib/screen/screen_manager';
 import { uiManager } from './lib/ui/ui_manager';
-import { PPEParam, gfx3PPERenderer } from './lib/gfx3_ppe/gfx3_ppe_renderer';
+import { gfx3PPERenderer } from './lib/gfx3_ppe/gfx3_ppe_renderer';
 // ---------------------------------------------------------------------------------------
 import { TutorialsBootScreen } from './tutorials/boot/boot_screen';
 // ---------------------------------------------------------------------------------------

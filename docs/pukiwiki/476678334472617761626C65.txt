@@ -61,11 +61,12 @@ Returns the bounding box in the world space coordinates.~
 Set the bounding box.~
 -- ''boundingBox'': The bounding box.~
 ~
-- ''setId''(id: vec4): void~
-Set an identifier.~
-Note: The last component of the id is the apparture channel.~
-0 -> invisible, 1 -> visible~
--- ''id'': The identifier formed by 4 normalized components.~
+- ''setId''(r: number, g: number, b: number, a: number): void~
+Set an identifier based on three components.~
+-- ''r'': The r value used for object identification.~
+-- ''g'': The g value used for group identification (used by decals).~
+-- ''b'': The b value used for object identification.~
+-- ''a'': The a value used for object identification.~
 ~
 - ''setVertices''(vertices: number[]): void~
 Set vertices.~

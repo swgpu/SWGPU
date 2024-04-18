@@ -5,9 +5,9 @@ Singleton mesh renderer.~
 ** Constructors
 - ''new Gfx3MeshRenderer''(): Gfx3MeshRenderer~
 ** Methods
-- ''drawDecal''(layer: number, sx: number, sy: number, sw: number, sh: number, position: vec3, orientationX: vec3, orientationY: vec3, orientationZ: vec3, size: vec3, opacity: number): void~
+- ''drawDecal''(group: number, sx: number, sy: number, sw: number, sh: number, position: vec3, orientationX: vec3, orientationY: vec3, orientationZ: vec3, size: vec3, opacity: number): void~
 Draw a decal.~
--- ''layer'': The layer target.~
+-- ''group'': The group target (mesh is identified by its 'g' id component).~
 -- ''sx'': The x-coordinate of the decal sprite in the atlas texture.~
 -- ''sy'': The y-coordinate of the decal sprite in the atlas texture.~
 -- ''sw'': The width of the decal sprite in the atlas texture.~

@@ -19,19 +19,11 @@ Warning: You need to call this method to free allocation for this object.~
 - ''draw''(): void~
 The draw function.~
 ~
-- ''getLayer''(): number~
-Returns the layer.~
-~
 - ''getMaterial''(): Gfx3Material~
 Returns the material.~
 ~
 - ''getShadowCasting''(): boolean~
 Check if shadow casting is enable or not.~
-~
-- ''setLayer''(layer: number): void~
-Set the layer.~
-Mesh layer is used to easily categorized and identified group of meshes, actually it is only used for decals.~
--- ''layer'': The layer.~
 ~
 - ''setMaterial''(material: Gfx3Material, keepMat: boolean): void~
 Set a material.~
