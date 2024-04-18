@@ -66,6 +66,11 @@ export class CharacterPhysicsSystem extends DNASystem {
     else {
       character.velocity[1] = UT.LINEAR(Math.pow(1 - physics.gravityCoefficient, ts / 1000), -physics.gravityMax, character.velocity[1]);
     }
+
+    if (character.moveDir[0] == 0 && character.moveDir[2] == 0 && navInfo.collideWall) {
+      character.velocity[0] = 0;
+      character.velocity[2] = 0;
+    }
   }
 
   onEntityDraw(eid: number): void {

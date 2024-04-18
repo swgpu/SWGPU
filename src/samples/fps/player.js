@@ -54,10 +54,6 @@ class InputComponent {
     if (moving) {
       this.player.dir = UT.VEC3_NORMALIZE(this.player.dir);
     }
-    // else if (this.player.collideWall) {
-    //   this.player.velocity[0] = 0;
-    //   this.player.velocity[2] = 0;
-    // }
   }
 
   async handleClicked(e) {
@@ -115,7 +111,10 @@ class PhysicsComponent {
         this.player.velocity[1] = UT.LINEAR(Math.pow(1 - this.gravityCoefficient, ts / 1000), -this.gravityMax, this.player.velocity[1]);
       }
 
-      this.player.collideWall = navInfo.collideWall;
+      if (this.player.dir[0] == 0 && this.player.dir[2] == 0 && navInfo.collideWall) {
+        this.player.velocity[0] = 0;
+        this.player.velocity[2] = 0;
+      }
     }
     else {
       this.player.velocity = [0, 0, 0];
@@ -157,8 +156,6 @@ class Player {
     this.rotation = [0, 0, 0];
     this.movementSpeed = 7;
     this.rotationSpeed = 1;
-
-    this.collideWall = false;
   }
 
   async load() {
