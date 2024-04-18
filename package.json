@@ -27,7 +27,7 @@
     "typedoc": "^0.25.1",
     "typedoc-plugin-markdown": "^3.16.0",
     "typescript": "^4.6.4",
-    "vite": "^3.1.0"
+    "vite": "^4.5.0"
   },
   "dependencies": {
     "@dimforge/rapier2d": "^0.12.0",
@@ -35,6 +35,7 @@
     "@webgpu/types": "^0.1.21",
     "curve-interpolator": "^3.3.1",
     "dotenv": "^16.4.5",
+    "unplugin-preprocessor-directives": "^1.0.3",
     "vite-plugin-top-level-await": "^1.4.1",
     "vite-plugin-wasm": "^3.3.0"
   }

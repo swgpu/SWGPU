@@ -118,14 +118,15 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
   }
 
   /**
-   * Set an identifier.
-   * Note: The last component of the id is the apparture channel.
-   * 0 -> invisible, 1 -> visible
+   * Set an identifier based on three components.
    * 
-   * @param {vec4} id - The identifier formed by 4 normalized components.
+   * @param {number} r - The r value used for object identification.
+   * @param {number} g - The g value used for group identification (used by decals).
+   * @param {number} b - The b value used for object identification.
+   * @param {number} a - The a value used for object identification.
    */
-  setId(id: vec4): void {
-    this.id = id;
+  setId(r: number, g: number, b: number, a: number): void {
+    this.id = [r, g, b, a];
   }
 
   /**

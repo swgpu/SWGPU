@@ -69,12 +69,6 @@ export const PIPELINE_DESC: any = {
 };
 
 export const VERTEX_SHADER = /* wgsl */`
-struct MeshMatrices {
-  MVPC_MATRIX: mat4x4<f32>,
-  M_MATRIX: mat4x4<f32>,
-  NORM_MATRIX: mat3x3<f32>
-}
-
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
   @location(0) FragPos: vec3<f32>,
@@ -86,8 +80,15 @@ struct VertexOutput {
   @location(6) FragShadowPos: vec3<f32>
 }
 
+struct MeshInfos {
+  MVPC_MATRIX: mat4x4<f32>,
+  M_MATRIX: mat4x4<f32>,
+  NORM_MATRIX: mat3x3<f32>,
+  ID: vec4<f32>
+}
+
 @group(0) @binding(7) var<uniform> LVP_MATRIX: mat4x4<f32>;
-@group(1) @binding(0) var<uniform> MESH_MATRICES: MeshMatrices;
+@group(1) @binding(0) var<uniform> MESH_INFOS: MeshInfos;
 
 @vertex
 fn main(
@@ -98,16 +99,16 @@ fn main(
   @location(4) Tangent: vec3<f32>,
   @location(5) Binormal: vec3<f32>
 ) -> VertexOutput {
-  var posFromLight = LVP_MATRIX * MESH_MATRICES.M_MATRIX * Position; // XY is in (-1, 1) space, Z is in (0, 1) space
+  var posFromLight = LVP_MATRIX * MESH_INFOS.M_MATRIX * Position; // XY is in (-1, 1) space, Z is in (0, 1) space
 
   var output: VertexOutput;
-  output.Position = MESH_MATRICES.MVPC_MATRIX * Position;
-  output.FragPos = vec4(MESH_MATRICES.M_MATRIX * Position).xyz;
+  output.Position = MESH_INFOS.MVPC_MATRIX * Position;
+  output.FragPos = vec4(MESH_INFOS.M_MATRIX * Position).xyz;
   output.FragUV = TexUV;
   output.FragColor = Color;
-  output.FragNormal = MESH_MATRICES.NORM_MATRIX * Normal;
-  output.FragTangent = MESH_MATRICES.NORM_MATRIX * Tangent;
-  output.FragBinormal = MESH_MATRICES.NORM_MATRIX * Binormal;
+  output.FragNormal = MESH_INFOS.NORM_MATRIX * Normal;
+  output.FragTangent = MESH_INFOS.NORM_MATRIX * Tangent;
+  output.FragBinormal = MESH_INFOS.NORM_MATRIX * Binormal;
   output.FragShadowPos = vec3(posFromLight.xy * vec2(0.5, -0.5) + vec2(0.5), posFromLight.z); // Convert XY to (0, 1) and Y is flipped because texture coords are Y-down.
   return output;
 }`;
@@ -117,6 +118,13 @@ struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
   @location(2) Id: vec4f
+}
+
+struct MeshInfos {
+  MVPC_MATRIX: mat4x4<f32>,
+  M_MATRIX: mat4x4<f32>,
+  NORM_MATRIX: mat3x3<f32>,
+  ID: vec4<f32>
 }
 
 struct MaterialColors {
@@ -183,9 +191,10 @@ struct Decal {
   TEXTURE_HEIGHT: f32,
   ASPECT_RATIO: vec2<f32>,
   OPACITY: f32,
-  LAYER: f32
+  GROUP: f32
 }
 
+@group(1) @binding(0) var<uniform> MESH_INFOS: MeshInfos;
 @group(0) @binding(0) var<uniform> CAMERA_POS: vec3<f32>;
 @group(0) @binding(1) var<uniform> DIR_LIGHT: DirLight;
 @group(0) @binding(2) var<uniform> FOG: Fog;
@@ -197,8 +206,6 @@ struct Decal {
 @group(0) @binding(9) var DECAL_ATLAS_SAMPLER: sampler;
 @group(0) @binding(10) var SHADOW_MAP_TEXTURE: texture_depth_2d;
 @group(0) @binding(11) var SHADOW_MAP_SAMPLER: sampler_comparison;
-@group(1) @binding(1) var<uniform> MESH_LAYER: f32;
-@group(1) @binding(2) var<uniform> MESH_ID: vec4<f32>;
 @group(2) @binding(0) var<uniform> MAT_COLORS: MaterialColors;
 @group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
 @group(2) @binding(2) var<uniform> MAT_UVS: MaterialUvs;
@@ -253,7 +260,7 @@ fn main(
     var decalsColor = vec4(0.0, 0.0, 0.0, 0.0);
     for (var i: u32 = 0; i < DECAL_COUNT; i++)
     {
-      if (MESH_LAYER == DECALS[i].LAYER)
+      if (MESH_INFOS.ID.g == DECALS[i].GROUP)
       {
         decalsColor += CalcDecal(i, FragPos);
       }
@@ -313,7 +320,7 @@ fn main(
   var output: FragOutput;
   output.Base = outputColor;
   output.Normal = vec4(normalize(FragNormal), 1.0);
-  output.Id = MESH_ID;
+  output.Id = MESH_INFOS.ID;
   return output;
 }
 

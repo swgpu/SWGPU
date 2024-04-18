@@ -2,7 +2,7 @@ import { gfx3Manager } from '../../lib/gfx3/gfx3_manager';
 import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
 import { gfx3DebugRenderer } from '../../lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
-import { gfx3PPERenderer } from '../../lib/gfx3_ppe/gfx3_ppe_renderer';
+import { gfx3PPERenderer, PPEParam } from '../../lib/gfx3_ppe/gfx3_ppe_renderer';
 import { uiManager } from '../../lib/ui/ui_manager';
 import { UT } from '../../lib/core/utils';
 import { Screen } from '../../lib/screen/screen';
@@ -26,6 +26,8 @@ class ViewerScreen extends Screen {
     this.camera.setPosition(0, 0, 10);
     this.mesh = await CREATE_CUBE();
     this.skybox = await CREATE_SKYBOX();
+
+    // gfx3PPERenderer.setParam(PPEParam.ENABLED, 1.0);
     uiManager.addNode(CREATE_UI_INFOBOX(), 'position:absolute; bottom:10px; right:10px');
     document.addEventListener('keydown', this.handleKeyDownCb);
   }
@@ -74,7 +76,21 @@ class ViewerScreen extends Screen {
       gfx3Manager.hasFilter() ? gfx3Manager.setFilter('') : gfx3Manager.setFilter('grayscale(100%)');
     }
     else if (e.key == 'p' || e.key == 'P') {
-      gfx3PPERenderer.setParam(0, !gfx3PPERenderer.getParam(0));
+      gfx3PPERenderer.setParam(PPEParam.ENABLED, 1.0);
+      gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 1.0);
+      gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 1.0);
+      gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 1.0);
+      gfx3PPERenderer.setParam(PPEParam.OUTLINE_ENABLED, 0.0);
+    }
+    else if (e.key == 'l' || e.key == 'L') {
+      gfx3PPERenderer.setParam(PPEParam.ENABLED, 1.0);
+      gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 0.0);
+      gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 0.0);
+      gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 0.0);
+      gfx3PPERenderer.setParam(PPEParam.OUTLINE_ENABLED, 1.0);
+    }
+    else if (e.key == 'n' || e.key == 'L') {
+      gfx3PPERenderer.setParam(PPEParam.ENABLED, 0.0);
     }
   }
 }
@@ -100,6 +116,7 @@ async function CREATE_OBJ() {
 async function CREATE_CUBE_BRICK() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/cube_brick.jsm');
+  mesh.setId(1.0, 0.0, 0.0, 1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/cube_brick.png'),
     normalMap: await gfx3TextureManager.loadTexture('./samples/viewer/cube_brick_normal.png'),
@@ -113,6 +130,7 @@ async function CREATE_CUBE_BRICK() {
 async function CREATE_CUBE() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/cube.jsm');
+  mesh.setId(1.0, 0.0, 0.0, 1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/cube.png'),
     lightning: true
@@ -124,6 +142,7 @@ async function CREATE_CUBE() {
 async function CREATE_CUBE_SPRITE() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/cube_sprite.jsm');
+  mesh.setId(1.0, 0.0, 0.0, 1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/cube_sprite.png'),
     lightning: false,
@@ -152,6 +171,7 @@ async function CREATE_CUBE_SPRITE() {
 async function CREATE_DUCK() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/duck.jsm');
+  mesh.setId(1.0, 0.0, 0.0, 1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/duck.png'),
     lightning: true
@@ -203,13 +223,31 @@ function CREATE_UI_INFOBOX() {
 
   {
     const li = document.createElement('li');
+    li.textContent = '----------------------------------------';
+    ul.appendChild(li);
+  }
+
+  {
+    const li = document.createElement('li');
     li.textContent = '[f] => Toggle Filtering (greyscale)';
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[p] => Toggle PPE PSX';
+    li.textContent = '[p] => PSX mode';
+    ul.appendChild(li);
+  }
+
+  {
+    const li = document.createElement('li');
+    li.textContent = '[l] => Outline mode';
+    ul.appendChild(li);
+  }
+
+  {
+    const li = document.createElement('li');
+    li.textContent = '[n] => Default mode';
     ul.appendChild(li);
   }
 

@@ -31,9 +31,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   decalAtlas: Gfx3Texture;
   shadowMap: Gfx3Texture;
   grp1: Gfx3DynamicGroup;
-  meshMatrices: Float32Array;
-  meshLayer: Uint32Array;
-  meshId: Float32Array;
+  meshInfos: Float32Array;
 
   constructor() {
     super('MESH_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
@@ -56,9 +54,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.shadowMap = this.grp0.setSampler(11, 'SHADOW_MAP_SAMPLER', this.shadowMap);
 
     this.grp1 = gfx3Manager.createDynamicGroup('MESH_PIPELINE', 1);
-    this.meshMatrices = this.grp1.setFloat(0, 'MESH_MATRICES', 16 * 3);
-    this.meshLayer = this.grp1.setInteger(1, 'MESH_LAYER', 1);
-    this.meshId = this.grp1.setFloat(2, 'MESH_ID', 4);
+    this.meshInfos = this.grp1.setFloat(0, 'MESH_MATRICES', 16 * 4);
 
     this.grp0.allocate();
     this.grp1.allocate();
@@ -105,9 +101,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     for (let i = 0; i < this.meshCommands.length; i++) {
       const command = this.meshCommands[i];
       const mMatrix = command.matrix ? command.matrix : command.mesh.getTransformMatrix();
-      this.grp1.write(0, BUILD_MESH_MATRICES(vpcMatrix, mMatrix, this.meshMatrices) as Float32Array);
-      this.grp1.write(1, UT.VEC1_COPY(command.mesh.getLayer(), this.meshLayer) as Uint32Array);
-      this.grp1.write(2, UT.VEC4_COPY(command.mesh.getId(), this.meshId) as Float32Array);
+      this.grp1.write(0, BUILD_MESH_INFOS(vpcMatrix, mMatrix, command.mesh.getId(), this.meshInfos) as Float32Array);
       passEncoder.setBindGroup(1, this.grp1.getBindGroup(i));
 
       const material = command.mesh.getMaterial();
@@ -254,7 +248,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   /**
    * Draw a decal.
    * 
-   * @param {number} layer - The layer target.
+   * @param {number} group - The group target (mesh is identified by its 'g' id component).
    * @param {number} sx - The x-coordinate of the decal sprite in the atlas texture.
    * @param {number} sy - The y-coordinate of the decal sprite in the atlas texture.
    * @param {number} sw - The width of the decal sprite in the atlas texture.
@@ -266,7 +260,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {vec3} size - The size (width, height, depth) of the projector.
    * @param {number} opacity - The opacity or transparency of the decal.
    */
-  drawDecal(layer: number, sx: number, sy: number, sw: number, sh: number, position: vec3, orientationX: vec3, orientationY: vec3, orientationZ: vec3, size: vec3, opacity: number): void {
+  drawDecal(group: number, sx: number, sy: number, sw: number, sh: number, position: vec3, orientationX: vec3, orientationY: vec3, orientationZ: vec3, size: vec3, opacity: number): void {
     const count = this.decalCount[0];
     if (count >= MAX_DECALS) {
       throw new Error('Gfx3MeshRenderer::drawDecal(): Max decals number exceeded !');
@@ -323,7 +317,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.decals[count * 24 + 20] = aspectRatio[0];
     this.decals[count * 24 + 21] = aspectRatio[1];
     this.decals[count * 24 + 22] = opacity;
-    this.decals[count * 24 + 23] = layer;
+    this.decals[count * 24 + 23] = group;
     this.decalCount[0]++;
   }
 }
@@ -335,7 +329,7 @@ export const gfx3MeshRenderer = new Gfx3MeshRenderer();
 // HELPFUL
 // -------------------------------------------------------------------------------------------
 
-function BUILD_MESH_MATRICES(vpcMatrix: mat4, mMatrix: mat4, out: Float32Array): Float32Array {
+function BUILD_MESH_INFOS(vpcMatrix: mat4, mMatrix: mat4, meshId: vec4, out: Float32Array): Float32Array {
   // 4x4 mvpc matrix
   UT.MAT4_MULTIPLY(vpcMatrix, mMatrix, out);
   // 4x4 model matrix
@@ -352,5 +346,10 @@ function BUILD_MESH_MATRICES(vpcMatrix: mat4, mMatrix: mat4, out: Float32Array):
   out[32 + 8] = mMatrix[8];
   out[32 + 9] = mMatrix[9];
   out[32 + 10] = mMatrix[10];
+  out[32 + 11] = 0;
+  out[32 + 12] = meshId[0];
+  out[32 + 13] = meshId[1];
+  out[32 + 14] = meshId[2];
+  out[32 + 15] = meshId[3];
   return out;
 }

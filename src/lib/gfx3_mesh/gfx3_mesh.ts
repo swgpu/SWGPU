@@ -22,13 +22,11 @@ export interface Group {
  * A 3D base mesh object.
  */
 class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
-  layer: number;
   shadowCasting: boolean;
   material: Gfx3Material;
 
   constructor() {
     super(SHADER_VERTEX_ATTR_COUNT);
-    this.layer = 0;
     this.shadowCasting = false;
     this.material = new Gfx3Material({});
   }
@@ -183,23 +181,6 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
   }
 
   /**
-   * Set the layer.
-   * Mesh layer is used to easily categorized and identified group of meshes, actually it is only used for decals.
-   * 
-   * @param {number} layer - The layer.
-   */
-  setLayer(layer: number): void {
-    this.layer = layer;
-  }
-
-  /**
-   * Returns the layer.
-   */
-  getLayer(): number {
-    return this.layer;
-  }
-
-  /**
    * Set the shadow casting.
    * 
    * @param {boolean} shadowCasting - Determines if object cast shadows.
@@ -244,7 +225,6 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
    */
   clone(mesh: Gfx3Mesh = new Gfx3Mesh(), transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3Mesh {
     super.clone(mesh, transformMatrix);
-    mesh.layer = this.layer;
     mesh.shadowCasting = this.shadowCasting;
     mesh.material = this.material;
     return mesh;

@@ -23,10 +23,6 @@ class GameManager {
   startup() {
     coreManager.enableScanlines(true);
     gfx3DebugRenderer.setShowDebug(true);
-    gfx3PPERenderer.setParam(PPEParam.ENABLED, 0.0);
-    gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 1.0);
-    gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 1.0);
-    gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 1.0);
     this.run(0);
   }
 
