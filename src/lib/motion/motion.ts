@@ -66,21 +66,20 @@ class Motion {
    */
   update(ts: number): void {
     if (!this.running) {
+      this.currentMove = [0, 0, 0];
       return;
     }
 
     const currentSegment = UT.VEC3_SUBSTRACT(this.points[this.currentPointIndex], this.points[this.currentPointIndex - 1]);
     const currentSegmentDir = UT.VEC3_NORMALIZE(currentSegment);
     const currentSegmentLength = UT.VEC3_LENGTH(currentSegment);
-    const move = UT.VEC3_SCALE(currentSegmentDir, this.speed * (ts / 1000));
-
     const progress = UT.VEC3_SUBSTRACT(this.currentPosition, this.points[this.currentPointIndex - 1]);
     const progressLength = UT.VEC3_LENGTH(progress);
-
-    this.currentPosition[0] = this.currentPosition[0] + move[0];
-    this.currentPosition[1] = this.currentPosition[1] + move[1];
-    this.currentPosition[2] = this.currentPosition[2] + move[2];
-    this.currentMove = move;
+    
+    this.currentMove = UT.VEC3_SCALE(currentSegmentDir, this.speed * (ts / 1000));
+    this.currentPosition[0] = this.currentPosition[0] + this.currentMove[0];
+    this.currentPosition[1] = this.currentPosition[1] + this.currentMove[1];
+    this.currentPosition[2] = this.currentPosition[2] + this.currentMove[2];
     this.currentSegmentTime = progressLength / currentSegmentLength;
 
     if (progressLength > currentSegmentLength) {
@@ -180,6 +179,20 @@ class Motion {
    */
   getCurrentMoveZ(): number {
     return this.currentMove[2];
+  }
+
+  /**
+   * Returns the current y-rotation in 3D space.
+   */
+  getCurrentRotationY(): number {
+    return UT.VEC2_ANGLE([this.currentMove[0], this.currentMove[2]]);
+  }
+
+  /**
+   * Returns the current y-rotation in 3D space.
+   */
+  getCurrentRotationZ(): number {
+    return UT.VEC2_ANGLE([this.currentMove[0], this.currentMove[1]]);
   }
 
   /**

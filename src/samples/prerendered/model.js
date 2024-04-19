@@ -6,7 +6,6 @@ import { Gfx3MeshJAM } from '../../lib/gfx3_mesh/gfx3_mesh_jam';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
 // ---------------------------------------------------------------------------------------
 
-// @todo: change Gfx3Transformable to Gfx3Drawable
 class Model extends Gfx3Transformable {
   constructor() {
     super();

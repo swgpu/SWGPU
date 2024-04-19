@@ -107,6 +107,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Load script from json file
     - Register async command function and call-it from json file
     - Manual jump to part of the script
+    - Command primitives like: WAITPAD, GOTO, GOTO_IF, EXEC_IF, VAR_SET, VAR_ADD, VAR_SUB, DELAY
 
 - 🔊 **Sound**
     - Handle sounds by groups

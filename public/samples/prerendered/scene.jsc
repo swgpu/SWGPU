@@ -9,7 +9,7 @@
     "Description": "NOP",
     "Calls": [
       {
-        "Name": "RUN",
+        "Name": "CONTINUE",
         "Args": []
       }
     ]
@@ -24,7 +24,46 @@
       },
       {
         "Name": "UI_CREATE_DIALOG",
-        "Args": ["Unit :", "Bienvenue dans notre scène de démonstration."]
+        "Args": ["Unit :", "Bienvenue dans notre scène de\n démonstration."]
+      },
+      {
+        "Name": "UI_CREATE_CHOICES",
+        "Args": ["Unit", "Souhaitez-vous quelque chose ?", [
+          {
+            "Text": "Déplace toi s'il te plaît !",
+            "Jumpto": "0001"
+          },
+          {
+            "Text": "Non merci, aurevoir !",
+            "Jumpto": "NOP"
+          }
+        ]]
+      },
+      {
+        "Name": "CONTINUE",
+        "Args": []
+      }
+    ]
+  },
+  {
+    "Id": "0001",
+    "Description": "FROM 0000",
+    "Calls": [
+      {
+        "Name": "STOP",
+        "Args": []
+      },
+      {
+        "Name": "MODEL_PLAY_ANIMATION",
+        "Args": [0, "RUN", true]
+      },
+      {
+        "Name": "MODEL_PLAY_MOTION",
+        "Args": [0, 0]
+      },
+      {
+        "Name": "MODEL_PLAY_ANIMATION",
+        "Args": [0, "IDLE", true]
       },
       {
         "Name": "CONTINUE",

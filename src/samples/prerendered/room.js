@@ -6,8 +6,10 @@ import { UT } from '../../lib/core/utils';
 import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3PhysicsJWM } from '../../lib/gfx3_physics/gfx3_physics_jwm';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
+import { Motion } from '../../lib/motion/motion';
 import { ScriptMachine } from '../../lib/script/script_machine';
 import { UIDialog } from '../../lib/ui_dialog/ui_dialog';
+import { UIMenuText } from '../../lib/ui_menu_text/ui_menu_text';
 // ---------------------------------------------------------------------------------------
 import { Spawn } from './spawn';
 import { Model } from './model';
@@ -29,13 +31,17 @@ class Room {
     this.scriptMachine = new ScriptMachine();
     this.spawns = [];
     this.models = [];
+    this.motions = [];
     this.triggers = [];
     this.pause = false;
+    this.motionModelMapping = new Map();
 
     this.scriptMachine.registerCommand('LOAD_ROOM', this.$loadRoom.bind(this));
     this.scriptMachine.registerCommand('CONTINUE', this.$continue.bind(this));
     this.scriptMachine.registerCommand('STOP', this.$stop.bind(this));
+    this.scriptMachine.registerCommand('UI_CREATE_CHOICES', this.$uiCreateChoices.bind(this));
     this.scriptMachine.registerCommand('UI_CREATE_DIALOG', this.$uiCreateDialog.bind(this));
+    this.scriptMachine.registerCommand('MODEL_PLAY_MOTION', this.$modelPlayMotion.bind(this));
     this.scriptMachine.registerCommand('MODEL_PLAY_ANIMATION', this.$modelPlayAnimation.bind(this));
 
     eventManager.subscribe(inputManager, 'E_ACTION_ONCE', this, this.handleActionOnce);
@@ -80,6 +86,12 @@ class Room {
       this.models.push(model);
     }
 
+    this.motions = [];
+    for (let obj of json['Motions']) {
+      let mover = new Motion(obj['Points'], obj['Speed'], obj['Looped']);
+      this.motions.push(mover);
+    }
+
     this.triggers = [];
     for (let obj of json['Triggers']) {
       let trigger = new Trigger();
@@ -95,6 +107,8 @@ class Room {
     await this.scriptMachine.loadFromFile(json['ScriptFile']);
     this.scriptMachine.jump('ON_INIT');
     this.scriptMachine.setEnabled(true);
+
+    this.motionModelMapping.clear();
   }
 
   delete() {
@@ -146,6 +160,14 @@ class Room {
 
     for (let model of this.models) {
       model.update(ts);
+    }
+
+    for (const [motionIndex, modelIndex] of this.motionModelMapping.entries()) {
+      let motion = this.motions[motionIndex];
+      let model = this.models[modelIndex];
+      model.setPosition(motion.getCurrentPositionX(), motion.getCurrentPositionY(), motion.getCurrentPositionZ());
+      model.setRotation(0, motion.getCurrentRotationY(), 0);
+      motion.update(ts);
     }
   }
 
@@ -232,6 +254,28 @@ class Room {
     this.pause = true;
   }
 
+  async $uiCreateChoices(author, text, choices = []) {
+    this.scriptMachine.setEnabled(false);
+    let uiDialog = new UIDialog();
+    uiDialog.setAuthor(author);
+    uiDialog.setText(text);
+    uiManager.addWidget(uiDialog);
+    await eventManager.wait(uiDialog, 'E_PRINT_FINISHED');
+
+    let uiMenu = new UIMenuText();
+    uiManager.addWidget(uiMenu, 'position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:12');
+    for (let choice of choices) {
+      uiMenu.add(0, choice['Text']);
+    }
+
+    uiManager.focus(uiMenu);
+    let data = await eventManager.wait(uiMenu, 'E_ITEM_SELECTED');
+    uiManager.removeWidget(uiDialog);
+    uiManager.removeWidget(uiMenu);
+    this.scriptMachine.jump(choices[data.index]['Jumpto']);
+    this.scriptMachine.setEnabled(true);
+  }
+
   async $uiCreateDialog(author, text) {
     this.scriptMachine.setEnabled(false);
     let uiDialog = new UIDialog();
@@ -245,9 +289,19 @@ class Room {
     this.scriptMachine.setEnabled(true);
   }
 
+  async $modelPlayMotion(motionIndex, modelIndex) {
+    this.scriptMachine.setEnabled(false);
+    this.motionModelMapping.set(motionIndex, modelIndex);
+    this.motions[motionIndex].run();
+
+    await eventManager.wait(this.motions[motionIndex], 'E_FINISHED');
+    this.motionModelMapping.delete(motionIndex);
+    this.scriptMachine.setEnabled(true);
+  }
+
   $modelPlayAnimation(modelIndex, animationName, isLooped) {
-    let model = this.models[modelIndex];
-    model.play(animationName, isLooped);
+    console.log('called' + animationName + modelIndex);
+    this.models[modelIndex].play(animationName);
   }
 }
 

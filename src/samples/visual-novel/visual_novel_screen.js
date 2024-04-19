@@ -19,14 +19,6 @@ class VisualNovelScreen extends Screen {
 
   async onEnter() {
     this.scriptMachine.registerCommand('LOAD_SCRIPT', this.$loadScript.bind(this));
-    this.scriptMachine.registerCommand('WAITPAD', this.$waitPad.bind(this));
-    this.scriptMachine.registerCommand('GOTO', this.$goto.bind(this));
-    this.scriptMachine.registerCommand('GOTO_IF', this.$gotoIf.bind(this));
-    this.scriptMachine.registerCommand('EXEC_IF', this.$execIf.bind(this));
-    this.scriptMachine.registerCommand('VAR_SET', this.$varSet.bind(this));
-    this.scriptMachine.registerCommand('VAR_ADD', this.$varAdd.bind(this));
-    this.scriptMachine.registerCommand('VAR_SUB', this.$varSub.bind(this));
-    this.scriptMachine.registerCommand('DELAY', this.$delay.bind(this));
     this.scriptMachine.registerCommand('UI_CREATE_DIALOG', this.$uiCreateDialog.bind(this));
     this.scriptMachine.registerCommand('UI_CREATE_CHOICES', this.$uiCreateChoices.bind(this));
     this.scriptMachine.registerCommand('UI_CREATE_AVATAR', this.$uiCreateAvatar.bind(this));
@@ -48,48 +40,9 @@ class VisualNovelScreen extends Screen {
 
   async $loadScript(path) {
     await this.scriptMachine.loadFromFile(path);
+    this.scriptMachine.loadVariantFromData(this.player.getVariant());
     this.scriptMachine.jump('ON_INIT');
     this.scriptMachine.setEnabled(true);
-  }
-
-  $waitPad() {
-    this.scriptMachine.setEnabled(false);
-    document.addEventListener('keydown', (e) => e.key == 'Enter' ? this.scriptMachine.setEnabled(true) : '', { once: true });
-  }
-
-  $goto(jumpto) {
-    return jumpto;
-  }
-
-  $gotoIf(varloc, cond, value, jumpto) {
-    if (CHECK_CONDITION(this.player.getVariant(varloc), cond, value)) {
-      return jumpto;
-    }
-  }
-
-  $execIf(varloc, cond, value, cmd = { CommandName, CommandArgs }) {
-    if (CHECK_CONDITION(this.player.getVariant(varloc), cond, value)) {
-      this.scriptMachine.runCommand(cmd['CommandName'], cmd['CommandArgs']);
-    }
-  }
-
-  $varSet(varloc, value) {
-    this.player.setVariant(varloc, value);
-  }
-
-  $varAdd(varloc, value) {
-    let variant = this.player.getVariant(varloc);
-    player.setVariant(varloc, variant + value);
-  }
-
-  $varSub(varloc, value) {
-    let variant = this.player.getVariant(varloc);
-    player.setVariant(varloc, variant - value);
-  }
-
-  $delay(ms) {
-    this.scriptMachine.setEnabled(false);
-    window.setTimeout(() => this.scriptMachine.setEnabled(true), ms);
   }
 
   async $uiCreateDialog(author, text) {
@@ -203,11 +156,3 @@ class VisualNovelScreen extends Screen {
 }
 
 export { VisualNovelScreen };
-
-// -------------------------------------------------------------------------------------------
-// HELPFUL
-// -------------------------------------------------------------------------------------------
-
-function CHECK_CONDITION(value1, cond, value2) {
-  return (cond == 'not equal' && value1 != value2) || (cond == 'equal' && value1 == value2) || (cond == 'is less than' && value1 < value2) || (cond == 'is greater than' && value1 > value2);
-}

@@ -43,8 +43,8 @@
     "Height": 1,
     "OnActionBlockId": "0000"
   }],
-  "Movers": [{
-    "Speed": 0.3,
+  "Motions": [{
+    "Speed": 3,
     "Points": [
       [15, -13.5, -23],
       [16, -13.5, -23],
