@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/banner-brand.png" alt="logo"/>
+    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/banner-brand.png" alt="logo"/>
 </p>
 
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
