@@ -43,9 +43,10 @@ Draw a point light.~
 -- ''linear'': The linear attenuation factor of the point light.~
 -- ''exp'': The exponent of the attenuation equation for the point light.~
 ~
-- ''enableFog''(enabled: boolean, color: vec3, near: number, far: number): void~
+- ''enableFog''(enabled: boolean, from: vec3, color: vec3, near: number, far: number): void~
 Enable the fog.~
 -- ''enabled'': Indicating whether the fog is enabled or not.~
+-- ''from'': The fog origin point.~
 -- ''color'': The fog color.~
 -- ''near'': The distance from the camera at which the fog starts to appear.~
 -- ''far'': The distance from the camera at which the fog effect should start to fade out.~

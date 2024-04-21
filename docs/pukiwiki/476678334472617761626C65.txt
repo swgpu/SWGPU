@@ -63,10 +63,16 @@ Set the bounding box.~
 ~
 - ''setId''(r: number, g: number, b: number, a: number): void~
 Set an identifier based on three components.~
--- ''r'': The r value used for object identification.~
--- ''g'': The g value used for group identification (used by decals).~
--- ''b'': The b value used for object identification.~
--- ''a'': The a value used for object identification.~
+Note: WARME use some specials ID's in its internal pipeline, check the table below:~
+■ decals group: g = n~
+■ pixelation: r = -1~
+■ color limitation: g = -1~
+■ dither: b = -1~
+■ outline: a = -1~
+-- ''r'': The r integer value.~
+-- ''g'': The g integer value. Used by decals for group identification.~
+-- ''b'': The b integer value.~
+-- ''a'': The a integer value.~
 ~
 - ''setVertices''(vertices: number[]): void~
 Set vertices.~
