@@ -20,9 +20,9 @@ class Motion {
    * @param {number} speed - The moving speed.
    * @param {boolean} looped - Determine if path is closed, if closed then motion running in loop.
    */
-  constructor(points: Array<vec3> = [], speed: number = 1, looped: boolean = false) {
+  constructor(points: Array<vec3> = [], looped: boolean = false) {
     this.points = points;
-    this.speed = speed;
+    this.speed = 1;
     this.looped = looped;
     this.running = false;
     this.currentPosition = [0, 0, 0];
@@ -39,6 +39,11 @@ class Motion {
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
+
+    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'JLM') {
+      throw new Error('Motion::loadFromFile(): File not valid !');
+    }
+
     this.loadFromData(json);
   }
 
@@ -54,7 +59,6 @@ class Motion {
       this.points.push(point);
     }
 
-    this.speed = data['Speed'];
     this.looped = UT.VEC3_ISEQUAL(data['Points'].at(-1), data['Points'].at(0));
     this.running = false;
   }
@@ -97,11 +101,12 @@ class Motion {
   /**
    * Start moving along the path.
    */
-  run(): void {
+  run(speed: number): void {
     if (this.points.length < 2) {
       throw new Error('Motion::play(): points is not defined.');
     }
 
+    this.speed = speed;
     this.running = true;
     this.currentPosition[0] = this.points[0][0];
     this.currentPosition[1] = this.points[0][1];

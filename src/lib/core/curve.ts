@@ -11,7 +11,7 @@ interface CurveOptions {
 };
 
 /**
- * A cubic curve.
+ * A Centripetal Catmull–Rom spline.
  */
 class Curve {
   /**
@@ -19,9 +19,13 @@ class Curve {
    * 
    * @param {string} path - The file path.
    */
-  static async createInterpolatorFromFile(path: string): Promise<CurveInterpolator> {
+  static async createFromFile(path: string): Promise<CurveInterpolator> {
     let response = await fetch(path);
     let json = await response.json();
+
+    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'JLM') {
+      throw new Error('Curve::createFromFile(): File not valid !');
+    }
 
     const points = [];
     for (const point of json['Points']) {

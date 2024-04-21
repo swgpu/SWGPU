@@ -17,7 +17,7 @@ class CurveScreen extends Screen {
     this.skySphere = null;
     this.lookAtTween = null;
     this.camera = new Gfx3Camera(0);
-    this.curveInterpolator = null;
+    this.curve = null;
     this.curveVertices = [];
     this.curveVertexCount = 0;
     this.t = 0.1;
@@ -33,11 +33,11 @@ class CurveScreen extends Screen {
       texture: await gfx3TextureManager.loadTexture('./samples/curve/sky_sphere.jpg')
     }));
 
-    this.curveInterpolator = await Curve.createInterpolatorFromFile('./samples/curve/curve.json');
+    this.curve = await Curve.createFromFile('./samples/curve/curve.json');
 
     for (let t = 0; t <= 0.99; t += 0.01) {
-      const p0 = this.curveInterpolator.getPointAt(t);
-      const p1 = this.curveInterpolator.getPointAt(t + 0.01);
+      const p0 = this.curve.getPointAt(t);
+      const p1 = this.curve.getPointAt(t + 0.01);
       this.curveVertices.push(p0[0], p0[1], p0[2], 1, 1, 1);
       this.curveVertices.push(p1[0], p1[1], p1[2], 1, 1, 1);
       this.curveVertexCount += 2;
@@ -49,8 +49,8 @@ class CurveScreen extends Screen {
     this.skySphere.update(ts);
 
     if (this.t < 0.99) {
-      const position = this.curveInterpolator.getPointAt(this.t);
-      const tangent = UT.VEC3_NORMALIZE(this.curveInterpolator.getTangentAt(this.t));
+      const position = this.curve.getPointAt(this.t);
+      const tangent = UT.VEC3_NORMALIZE(this.curve.getTangentAt(this.t));
       this.camera.setPosition(position[0], position[1] + 0.1, position[2]);
       this.camera.lookAt(position[0] + tangent[0], position[1] + tangent[1], position[2] + tangent[2]);
       this.t += ts / 10000;

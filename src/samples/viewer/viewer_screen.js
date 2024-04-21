@@ -27,7 +27,6 @@ class ViewerScreen extends Screen {
     this.mesh = await CREATE_CUBE();
     this.skybox = await CREATE_SKYBOX();
 
-    // gfx3PPERenderer.setParam(PPEParam.ENABLED, 1.0);
     uiManager.addNode(CREATE_UI_INFOBOX(), 'position:absolute; bottom:10px; right:10px');
     document.addEventListener('keydown', this.handleKeyDownCb);
   }
