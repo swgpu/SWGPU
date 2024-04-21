@@ -116,7 +116,7 @@ async function CREATE_OBJ() {
 async function CREATE_CUBE_BRICK() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/cube_brick.jsm');
-  mesh.setId(1.0, 0.0, 0.0, 1.0);
+  mesh.setId(-1.0, -1.0, -1.0, -1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/cube_brick.png'),
     normalMap: await gfx3TextureManager.loadTexture('./samples/viewer/cube_brick_normal.png'),
@@ -130,7 +130,7 @@ async function CREATE_CUBE_BRICK() {
 async function CREATE_CUBE() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/cube.jsm');
-  mesh.setId(1.0, 0.0, 0.0, 1.0);
+  mesh.setId(-1.0, -1.0, -1.0, -1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/cube.png'),
     lightning: true
@@ -142,7 +142,7 @@ async function CREATE_CUBE() {
 async function CREATE_CUBE_SPRITE() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/cube_sprite.jsm');
-  mesh.setId(1.0, 0.0, 0.0, 1.0);
+  mesh.setId(-1.0, -1.0, -1.0, -1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/cube_sprite.png'),
     lightning: false,
@@ -171,7 +171,7 @@ async function CREATE_CUBE_SPRITE() {
 async function CREATE_DUCK() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/duck.jsm');
-  mesh.setId(1.0, 0.0, 0.0, 1.0);
+  mesh.setId(-1.0, -1.0, -1.0, -1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/duck.png'),
     lightning: true

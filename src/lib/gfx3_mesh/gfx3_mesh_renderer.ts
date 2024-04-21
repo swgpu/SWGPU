@@ -42,7 +42,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.grp0 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 0);
     this.camPos = this.grp0.setFloat(0, 'CAM_POS', 3);
     this.dirLight = this.grp0.setFloat(1, 'DIR_LIGHT', 16);
-    this.fog = this.grp0.setFloat(2, 'FOG', 8);
+    this.fog = this.grp0.setFloat(2, 'FOG', 12);
     this.pointLightCount = this.grp0.setInteger(3, 'POINT_LIGHT_COUNT', 1);
     this.pointLights = this.grp0.setFloat(4, 'POINT_LIGHTS', 20 * MAX_POINT_LIGHTS);
     this.decalCount = this.grp0.setInteger(5, 'DECAL_COUNT', 1);
@@ -147,11 +147,12 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * Enable the fog.
    * 
    * @param {boolean} enabled - Indicating whether the fog is enabled or not.
+   * @param {vec3} from - The fog origin point.
    * @param {vec3} color - The fog color.
    * @param {number} [near=3.0] - The distance from the camera at which the fog starts to appear.
    * @param {number} [far=15.0] - The distance from the camera at which the fog effect should start to fade out.
    */
-  enableFog(enabled: boolean, color: vec3 = [0.5, 0.5, 0.5], near: number = 3.0, far: number = 15.0): void {
+  enableFog(enabled: boolean, from: vec3 = [0, 0, 0], color: vec3 = [0.5, 0.5, 0.5], near: number = 3.0, far: number = 15.0): void {
     this.fog[0] = enabled ? 1.0 : 0.0;
     this.fog[1] = near;
     this.fog[2] = far;
@@ -160,6 +161,10 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.fog[5] = color[1];
     this.fog[6] = color[2];
     this.fog[7] = 0;
+    this.fog[8] = from[0];
+    this.fog[9] = from[1];
+    this.fog[10] = from[2];
+    this.fog[11] = 0;
   }
 
   /**

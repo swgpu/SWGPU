@@ -91,20 +91,22 @@ fn main(
     return outputColor;
   }
 
-  if (PARAMS.PIXELATION_ENABLED == 1.0)
+  var pixelCoord = FragUV;
+
+  if (PARAMS.PIXELATION_ENABLED == 1.0 && id.r == -1.0)
   {
-    var pixelCoord = vec2<f32>(0.0, 0.0);
     pixelCoord.x = floor(FragUV.x * PARAMS.PIXELATION_WIDTH) / PARAMS.PIXELATION_WIDTH;
     pixelCoord.y = floor(FragUV.y * PARAMS.PIXELATION_HEIGHT) / PARAMS.PIXELATION_HEIGHT;
-    outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, pixelCoord);
   }
 
-  if (PARAMS.COLOR_ENABLED == 1.0)
+  outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, pixelCoord);
+
+  if (PARAMS.COLOR_ENABLED == 1.0 && id.g == -1.0)
   {
     outputColor = floor(outputColor * PARAMS.COLOR_PRECISION) / PARAMS.COLOR_PRECISION;
   }
 
-  if (PARAMS.DITHER_ENABLED == 1.0)
+  if (PARAMS.DITHER_ENABLED == 1.0 && id.b == -1.0)
   {
     var brightness = GetPixelBrightness(outputColor.rgb);
     var ditherPattern = GetDitherPattern(PARAMS.DITHER_PATTERN_INDEX);
@@ -128,7 +130,7 @@ fn main(
     idDiff += distance(id, getIdValue(FragUV, vec2<f32>(-t,  t)));
     idDiff += distance(id, getIdValue(FragUV, vec2<f32>(-t, -t)));
 
-    if (idDiff != 0.0)
+    if (idDiff != 0.0 && id.a == -1)
     {
       idDiff = 1.0;
       var outline = clamp(idDiff, 0, 1);
@@ -154,7 +156,7 @@ fn getTexelValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 fn getNormalValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 {
   var ps = vec2<f32>(1.0 / SIZE.x, 1.0 / SIZE.y);
-  return textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, textureUV + ps * offset);
+  return textureSampleBaseClampToEdge(NORMALS_TEXTURE, NORMALS_SAMPLER, textureUV + ps * offset);
 }
 
 // *****************************************************************************************************************
@@ -163,7 +165,7 @@ fn getNormalValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 fn getIdValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 {
   var ps = vec2<f32>(1.0 / SIZE.x, 1.0 / SIZE.y);
-  return textureSample(IDS_TEXTURE, IDS_SAMPLER, textureUV + ps * offset);
+  return textureSampleBaseClampToEdge(IDS_TEXTURE, IDS_SAMPLER, textureUV + ps * offset);
 }
 
 // *****************************************************************************************************************

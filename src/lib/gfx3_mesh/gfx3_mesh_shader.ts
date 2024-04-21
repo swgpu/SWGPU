@@ -99,8 +99,7 @@ fn main(
   @location(4) Tangent: vec3<f32>,
   @location(5) Binormal: vec3<f32>
 ) -> VertexOutput {
-  var posFromLight = LVP_MATRIX * MESH_INFOS.M_MATRIX * Position; // XY is in (-1, 1) space, Z is in (0, 1) space
-
+  var posFromLight = LVP_MATRIX * MESH_INFOS.M_MATRIX * Position;
   var output: VertexOutput;
   output.Position = MESH_INFOS.MVPC_MATRIX * Position;
   output.FragPos = vec4(MESH_INFOS.M_MATRIX * Position).xyz;
@@ -180,7 +179,8 @@ struct Fog {
   ENABLED: f32,
   NEAR: f32,
   FAR: f32,
-  COLOR: vec3<f32>
+  COLOR: vec3<f32>,
+  FROM: vec3<f32>
 }
 
 struct Decal {
@@ -332,7 +332,7 @@ fn CalcFog(inputColor: vec3<f32>, inputAlpha: f32, fragPos: vec3<f32>) -> vec4<f
   var fogColor = FOG.COLOR;
   var fogStart = FOG.NEAR;
   var fogEnd = FOG.FAR;
-  var fogDist = length(CAMERA_POS - fragPos);
+  var fogDist = length(FOG.FROM - fragPos);
   var fogFactor = clamp((fogEnd - fogDist) / (fogEnd - fogStart), 0.0, 1.0);
   var outputColor = (fogColor * (1.0 - fogFactor)) + (inputColor * fogFactor);
   var outputAlpha = mix(inputAlpha, 1.0, fogFactor);
