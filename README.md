@@ -4,6 +4,7 @@
 
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
 ![Version](https://img.shields.io/badge/Version-1.1.1-blue)
+![Size](https://badgen.net/bundlephobia/minzip/warme-y2k)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
