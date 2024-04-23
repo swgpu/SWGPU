@@ -299,7 +299,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
 </table>
 
 ## Getting started 
-The best way is to start with our [blank boilerplate](https://github.com/jay19240/WARME-Y2K-Boilerplate), it's a complete environment including vite, typescript and warme. Clone it and have fun !      
+A good start is to download [blank boilerplate](https://github.com/jay19240/WARME-Y2K-Boilerplate), it's a complete environment including vite, typescript and warme. Clone it and have fun !      
 A second way is to start with the engine repository itself, in this case you can perfectly add a sample and work on it.     
 
 Run with the following commands
