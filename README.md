@@ -153,8 +153,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
     - Text
 
 - 🌆 **DNA**
-    - ECS architecture implementation (optionnal)
-    - State handler
+    - ECS architecture implementation
 
 ## Tutorials
 <table>
