@@ -302,12 +302,10 @@ For a more concret overview on it, you can play examples [here](https://jay19240
 The best way is to start with [blank boilerplate](https://github.com/jay19240/WARME-Y2K-Boilerplate), it's a complete environement including vite, typescript and warme. Clone it and have fun !      
 A second way is to start with the engine repository itself, in this case you can perfectly add a sample and work on it.     
 
-Running commands are:
+Run with the following commands
 ```
- // install modules
- # npm install
- // run as dev mode
- # npm run dev
+# npm install
+# npm run dev
 ```
 
 ## How to integrate your 3D models ?
