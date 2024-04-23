@@ -359,4 +359,4 @@ If you have a suggestion that would make this better, please fork the repo and c
 - FPS: Add weapon, bullet, camera movement and strife-jumping to FPS sample + change the map to fit Quake 3 (no-delay)
 
 ## License 
-WARME engine is released under the [MIT](https://opensource.org/licenses/MIT) license. 
+WARME Y2K is released under the [MIT](https://opensource.org/licenses/MIT) license. 
