@@ -12,8 +12,8 @@
 > Don't forget to check the wiki tutorials section, we coming soon with two tutorials for beginners !
  
 **WARME Y2K** is a fully packed **2D/3D game engine** dedicated to **Y2K games** on the web !     
-**WARME** is an acronym for **Web Against Regular Major Engines**, you can understand it like a tentative
-to make a complete game engine for the web and **Y2K** is the common acronym used to define the era covers **1998-2004** and is used to define the technics limitation intentionally taken. These limitations are the guarants of a human scaled tool and help a lot of to reduce the learning curve.
+The first part of the name (W.A.R.M.E) is an acronym for **Web Against Regular Major Engines**, you can understand it like a tentative
+to make a complete game engine for the web. The second part (Y.2.K) is the common acronym used to define the era covers **1998-2004** and is used to define the technics limitation intentionally taken. These limitations are guarants of a human scaled tool and help a lot of to reduce the learning curve.
 
 Some words about our philosophy:
 - **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
