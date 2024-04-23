@@ -17,6 +17,7 @@ Some words about our philosophy:
 - **Flexibility:** Create your own renderers. Handle render and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
 - **Modernity:** We used WebGPU API for a blazing fast rendering.
+- **Lightweight:** Just look at the lib minzipped size as 2.5KB.
 
 You can check the documentation [here](http://warme-engine.com/).          
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
@@ -298,16 +299,17 @@ For a more concret overview on it, you can play examples [here](https://jay19240
 </table>
 
 ## Getting started
-You need to install [nodejs](https://nodejs.org/en/download/). 
-Once installation is done, you can clone the repository or use npx
-to build our first WARME project.     
+First, you need to install [nodejs](https://nodejs.org/en/download/).     
+The best way is to start with this [blank boilerplate](https://github.com/jay19240/WARME-Y2K-Boilerplate).     
+It include a complete developement environement with vite, typescript and of course the warme-y2k engine.     
+Clone it and have fun !      
+A second way is to start with the engine repository itself, in this case you can perfectly add a sample and work on it.     
 
 ```
-// create your awesome game project
-# npx create-warme your_project_name
-
-// now, you can start with
-# npm run dev
+ // install modules
+ # npm install
+ // run as dev mode
+ # npm run dev
 ```
 
 ## How to integrate your 3D models ?
