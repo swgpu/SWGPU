@@ -31,7 +31,7 @@ For a more concret overview on it, you can play examples [here](https://jay19240
 * [Tutorials](#tutorials)
 * [Demos](#demos)
 * [Getting Started](#getting-started)
-* [How to integrate your 3D models ?](#how-to-integrate-your-3d-models-?)
+* [How to integrate your 3D models ?](#how-to-integrate-your-3d-models)
 * [Contributions](#contributions)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
