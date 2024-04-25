@@ -8,6 +8,8 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
+[![](https://dcbadge.vercel.app/api/server/eT4wWAN4)](https://discord.gg/eT4wWAN4)
+
 > [!NOTE]  
 > Don't forget to check the wiki tutorials section, we coming soon with two tutorials for beginners !
  
