@@ -14,7 +14,7 @@
   "email": "aliyah.raijin@gmail.com",
   "author": "Julien Rongiere",
   "license": "MIT",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "type": "module",
   "main": "src/lib/index.ts",
   "files": ["src/lib/*"],
@@ -24,9 +24,6 @@
     "preview": "vite preview",
     "doc": "typedoc --entryPointStrategy Expand src/lib/ --json docs/doc.json --out docs/html --exclude \"quaternion.ts\"",
     "pukiwiki": "python3 bin/converter-typedoc-to-pukiwiki.py --json docs/doc.json --output docs/pukiwiki"
-  },
-  "bin": {
-    "create-warme": "bin/create-warme.js"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.0.2",
