@@ -368,7 +368,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
 
-## Roadmap (usage interne, fr)
+## Roadmap (internal usage, only fr)
 [INFO]
 1. Cette roadmap peut changer (réduction ou ajout)
 2. Elle est classé par ordre de priorité
