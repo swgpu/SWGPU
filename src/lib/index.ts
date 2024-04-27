@@ -23,7 +23,8 @@ export { Gfx2TreePartition, Gfx2TreePartitionMethod } from './gfx2/gfx2_tree_par
 export { Gfx2IsoDrawer } from './gfx2_iso/gfx2_iso_drawer';
 export { Gfx2IsoTileMapLayer } from './gfx2_iso/gfx2_iso_tile_map_layer';
 export { Gfx2IsoTile } from './gfx2_iso/gfx2_iso_tile';
-export { Gfx2Particles, ParticlesOptions, PositionStyle, VelocityStyle } from './gfx2_particles/gfx2_particles';
+export { Gfx2Particles, PositionStyle, VelocityStyle } from './gfx2_particles/gfx2_particles';
+
 export { Rapier2D } from './gfx2_physics/gfx2_physics_rapier';
 export { Gfx2SpriteJAS } from './gfx2_sprite/gfx2_sprite_jas';
 export { Gfx2SpriteJSS } from './gfx2_sprite/gfx2_sprite_jss';
@@ -34,10 +35,9 @@ export { Gfx3BoundingBox } from './gfx3/gfx3_bounding_box';
 export { Gfx3Drawable } from './gfx3/gfx3_drawable';
 export { Gfx3StaticGroup, Gfx3DynamicGroup } from './gfx3/gfx3_group';
 export { Gfx3RendererAbstract } from './gfx3/gfx3_renderer_abstract';
-export { Gfx3Texture } from './gfx3/gfx3_texture';
 export { Gfx3Transformable } from './gfx3/gfx3_transformable';
 export { Gfx3TreePartition, Gfx3TreePartitionMethod } from './gfx3/gfx3_tree_partition';
-export { Gfx3View, Gfx3Viewport } from './gfx3/gfx3_view';
+export { Gfx3View } from './gfx3/gfx3_view';
 export { Gfx3Camera } from './gfx3_camera/gfx3_camera';
 export { Gfx3CameraOrbit } from './gfx3_camera/gfx3_camera_orbit';
 export { Gfx3CameraWASD } from './gfx3_camera/gfx3_camera_wasd';
@@ -98,3 +98,7 @@ export { inputManager } from './input/input_manager';
 export { screenManager } from './screen/screen_manager';
 export { soundManager } from './sound/sound_manager';
 export { uiManager } from './ui/ui_manager';
+// -------------------------------------------------------------------------------------------
+export type { Gfx3Texture } from './gfx3/gfx3_texture';
+export type { ParticlesOptions } from './gfx2_particles/gfx2_particles';
+export type { Gfx3Viewport } from './gfx3/gfx3_view';
