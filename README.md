@@ -367,9 +367,28 @@ If you have a suggestion that would make this better, please fork the repo and c
 - [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
-## Roadmap
-- Add spotlight (no-delay)
-- FPS: Add weapon, bullet, camera movement and strife-jumping to FPS sample + change the map to fit Quake 3 (no-delay)
+
+## Roadmap (usage interne, fr)
+[INFO]
+1. Cette roadmap peut changer (réduction ou ajout)
+2. Elle est classé par ordre de priorité
+3. Ont fait qu'une seule tache à la fois
+
+[CORE TASKS]
+1. Ecriture d'un tutorial sur la demo "pre-rendered" pour le mag "programmez" - (J4Y & Dazu)
+2. Evolution du mip-mapping - (J4Y suit https://webgpufundamentals.org/webgpu/lessons/webgpu-textures.html)
+3. R&D sur la possibilité de passer les formats propriétaire en binaire - (J4Y)
+4. Ajout des spot-lights - (J4Y)
+
+[DEMO TASKS]
+1. Ajout la possibilité de sauter à la demo fps - (Imprévisible)
+2. Ajout d'une arme + tir à la demo fps
+3. Ajout d'enemis basiques
+4. Améliorer le système de collisions - (J4Y)
+
+[DEADLINES]
+1. CORE_TASKS.1.2: 01 Juin
+2. DEMO_TASKS.1.2.3.4: 01 Juin
 
 ## License 
 WARME Y2K is released under the [MIT](https://opensource.org/licenses/MIT) license. 
