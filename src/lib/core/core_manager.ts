@@ -9,7 +9,7 @@ enum SizeMode {
 
 /**
  * Singleton core manager.
- * Used to set the size and resolution of the top-level HTMLElement container.
+ * Used to set the size and resolution of the top-level container.
  * It emit 'E_RESIZE'
  */
 class CoreManager {
