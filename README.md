@@ -10,8 +10,8 @@
 
 [![](https://dcbadge.vercel.app/api/server/eT4wWAN4)](https://discord.gg/eT4wWAN4)
 
-> [!NOTE]  
-> Don't forget to check the wiki tutorials section, we coming soon with two tutorials for beginners !
+> [!WARNING]  
+> Engine is currently under performance issue investigation, some demo doesn't work.
  
 **WARME Y2K** is a fully packed **2D/3D game engine** dedicated to **Y2K games** on the web !     
 The first part of the name (W.A.R.M.E) is an acronym for **Web Against Regular Major Engines**, you can understand it like a tentative
