@@ -9,9 +9,6 @@
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
 [![](https://dcbadge.vercel.app/api/server/eT4wWAN4)](https://discord.gg/eT4wWAN4)
-
-> [!WARNING]  
-> Engine is currently under performance issue investigation, some demo doesn't work.
  
 **WARME Y2K** is a fully packed **2D/3D game engine** dedicated to **Y2K games** on the web !     
 The first part of the name (W.A.R.M.E) is an acronym for **Web Against Regular Major Engines**, you can understand it like a tentative
