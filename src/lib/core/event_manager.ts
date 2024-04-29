@@ -84,7 +84,7 @@ class EventManager {
    * @param {string} type - The event type name.
    * @param {any} data - Custom data that will be passed to the callback function of each subscriber.
    */
-  async emit(emitter: any, type: string, data: any = {}): Promise<any> {
+  async emitAsync(emitter: any, type: string, data: any = {}): Promise<any> {
     const promises: Array<Promise<any>> = [];
 
     for (const subscriber of this.subscribers.slice()) {
@@ -101,6 +101,24 @@ class EventManager {
     }
 
     return Promise.all(promises);
+  }
+
+  /**
+   * Notifies subscribers of an event and returns a promise that resolves when all subscriber callbacks have been executed.
+   * 
+   * @param {any} emitter - Is an object that emits events. It could be any object.
+   * @param {string} type - The event type name.
+   * @param {any} data - Custom data that will be passed to the callback function of each subscriber.
+   */
+  emit(emitter: any, type: string, data: any = {}): void {
+    for (const subscriber of this.subscribers.slice()) {
+      if (subscriber.emitter == emitter && subscriber.type == type) {
+        subscriber.cb.call(subscriber.listener, data);
+        if (subscriber.once) {
+          this.subscribers.splice(this.subscribers.indexOf(subscriber), 1);
+        }
+      }
+    }
   }
 }
 

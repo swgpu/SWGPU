@@ -1,3 +1,4 @@
+import { inputManager } from '../../lib/input/input_manager';
 import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
 import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
 import { Screen } from '../../lib/screen/screen';
@@ -18,8 +19,11 @@ class FPSScreen extends Screen {
   }
 
   async onEnter() {
+    inputManager.setPointerLockEnabled(true);
+
     this.map = await this.createMap();
     this.player = new Player(this.map.jnm, this.camera);
+    await this.player.load();
   }
 
   update(ts) {
@@ -30,18 +34,19 @@ class FPSScreen extends Screen {
   draw() {
     gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [1, 1, 1], [0, 0, 0]);
     this.map.mesh.draw();
+    this.player.draw();
   }
 
   async createMap() {
     const mesh = new Gfx3MeshJSM();
-    await mesh.loadFromFile('./samples/fps/Level.jsm');
+    await mesh.loadFromFile('./samples/fps/map.jsm');
     mesh.setMaterial(new Gfx3Material({
       lightning: true,
       texture: await gfx3TextureManager.loadTexture('./samples/fps/map.png')
     }));
 
     const jnm = new Gfx3PhysicsJNM();
-    await jnm.loadFromFile('./samples/fps/Level.jnm');
+    await jnm.loadFromFile('./samples/fps/map.jnm');
 
     return { mesh, jnm };
   }

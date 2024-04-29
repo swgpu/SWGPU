@@ -57,8 +57,8 @@ class GameManager {
     gfx3PPERenderer.render(gfx3Manager.getCurrentRenderingTexture());
     gfx3Manager.endRender();
 
-    document.getElementById('fps').innerHTML = (1000 / ts).toFixed(2);
-    document.getElementById('rt').innerHTML = (1000 / gfx3Manager.getLastRenderTime()).toFixed(2);
+    document.getElementById('fps').textContent = (1000 / ts).toFixed(2);
+    document.getElementById('rt').textContent = (1000 / gfx3Manager.getLastRenderTime()).toFixed(2);
 
     requestAnimationFrame(timeStamp => this.run(timeStamp));
   }

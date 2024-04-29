@@ -40,24 +40,28 @@ GAME_PAD_KEY_MAPPING.set('PadRight', '15');
 class InputManager {
   keymap: Map<string, boolean>;
   actionmap: Map<string, boolean>;
-  actionRegister: Array<Action>;
+  actionRegister: Map<string, Action>;
   pads: Array<Pad>;
   padsInterval: number | undefined;
   mouseDown: boolean;
   mousePosition: vec2;
   mouseWheel: number;
   dragStartPosition: vec2;
+  pointerLockEnabled: boolean;
+  pointerLockCaptured: boolean;
 
   constructor() {
     this.keymap = new Map<string, boolean>;
     this.actionmap = new Map<string, boolean>;
-    this.actionRegister = [];
+    this.actionRegister = new Map<string, Action>;
     this.pads = [];
     this.padsInterval;
     this.mouseDown = false;
     this.mousePosition = [0, 0];
     this.mouseWheel = 0;
     this.dragStartPosition = [0, 0];
+    this.pointerLockEnabled = false;
+    this.pointerLockCaptured = false;
 
     document.addEventListener('keydown', (e) => this.$handleKeyDown(e));
     document.addEventListener('keyup', (e) => this.$handleKeyUp(e));
@@ -65,6 +69,7 @@ class InputManager {
     document.addEventListener('pointerup', () => this.$handlePointerUp());
     document.addEventListener('pointermove', (e) => this.$handlePointerMove(e));
     document.addEventListener('wheel', (e) => this.$handleWheel(e), { passive: false });
+    document.addEventListener('pointerlockchange', (e) => this.$handlePointerLockChanged(e), false);
     window.addEventListener('gamepadconnected', (e) => this.$handleGamePadConnected(e));
     window.addEventListener('gamepaddisconnected', (e) => this.$handleGamePadDisconnected(e));
 
@@ -93,17 +98,12 @@ class InputManager {
    * @param {string} actionId - The unique action identifier.
    */
   registerAction(inputSource: string, eventKey: string, actionId: string): void {
-    const found = this.actionRegister.find(a => {
-      return a.inputSource == inputSource &&
-        a.eventKey == eventKey &&
-        a.id == actionId
-    });
-
+    const found = this.actionRegister.has(inputSource + eventKey);
     if (found) {
-      return;
+      throw new Error('InputManager::registerAction(): you cannot register action with same event source & key.');
     }
 
-    this.actionRegister.push({
+    this.actionRegister.set(inputSource + eventKey, {
       id: actionId,
       inputSource: inputSource,
       eventKey: inputSource.startsWith('gamepad') ? GAME_PAD_KEY_MAPPING.get(eventKey)! : eventKey
@@ -115,37 +115,9 @@ class InputManager {
    * 
    * @param {string} inputSource - The device from which the input is received.
    * @param {string} eventKey - The key or button that triggers the action.
-   * @param {string} actionId - The unique action identifier.
    */
-  unregisterAction(inputSource: string, eventKey: string, actionId: string): void {
-    const index = this.actionRegister.findIndex(a => {
-      return a.inputSource == inputSource &&
-        a.eventKey == eventKey &&
-        a.id == actionId
-    });
-
-    if (index == -1) {
-      throw new Error('InputManager::unregisterAction(): action not found !');
-    }
-
-    this.actionRegister.splice(index, 1);
-  }
-
-  /**
-   * Returns the action list that match the given input source and event key.
-   * 
-   * @param {string} inputSource - The device from which the input is received.
-   * @param {string} eventKey - The key or button that triggers the action.
-   */
-  findActionIds(inputSource: string, eventKey: string): Array<string> {
-    const actionIds = []
-    for (const action of this.actionRegister) {
-      if (action.inputSource == inputSource && action.eventKey == eventKey) {
-        actionIds.push(action.id);
-      }
-    }
-
-    return actionIds;
+  unregisterAction(inputSource: string, eventKey: string): void {
+    this.actionRegister.delete(inputSource + eventKey);
   }
 
   /**
@@ -176,6 +148,29 @@ class InputManager {
    */
   getMouseWheel(): number {
     return this.mouseWheel;
+  }
+
+  /**
+   * Checks if pointer lock is enabled.
+   */
+  isPointerLockEnabled(): boolean {
+    return this.pointerLockEnabled;
+  }
+
+  /**
+   * Checks if pointer lock is captured.
+   */
+  isPointerLockCaptured(): boolean {
+    return this.pointerLockCaptured;
+  }
+
+  /**
+   * Enable pointer lock state.
+   * 
+   * @param {boolean} enabled - The enabled flag.
+   */
+  setPointerLockEnabled(enabled: boolean): void {
+    this.pointerLockEnabled = enabled;
   }
 
   /**
@@ -223,16 +218,16 @@ class InputManager {
   }
 
   $handleKeyDown(e: KeyboardEvent): boolean {
-    if (!this.keymap.get(e.key)) {
-      for (const actionId of this.findActionIds('keyboard', e.key)) {
-        eventManager.emit(this, 'E_ACTION_ONCE', { actionId: actionId });
-        this.actionmap.set(actionId, true);
-      }
+    const action = this.actionRegister.get('keyboard' + e.key);
+
+    if (!this.keymap.get(e.key) && action) {      
+      eventManager.emit(this, 'E_ACTION_ONCE', { actionId: action.id });
+      this.actionmap.set(action.id, true);
     }
 
-    for (const actionId of this.findActionIds('keyboard', e.key)) {
-      eventManager.emit(this, 'E_ACTION', { actionId: actionId });
-      this.actionmap.set(actionId, true);
+    if (action) {
+      eventManager.emit(this, 'E_ACTION', { actionId: action.id });
+      this.actionmap.set(action.id, true);
     }
 
     this.keymap.set(e.key, true);
@@ -243,15 +238,21 @@ class InputManager {
   }
 
   $handleKeyUp(e: KeyboardEvent): void {
-    for (const actionId of this.findActionIds('keyboard', e.key)) {
-      eventManager.emit(this, 'E_ACTION_RELEASED', { actionId: actionId });
-      this.actionmap.set(actionId, false);
+    const action = this.actionRegister.get('keyboard' + e.key);
+
+    if (action) {
+      eventManager.emit(this, 'E_ACTION_RELEASED', { actionId: action.id });
+      this.actionmap.set(action.id, false);  
     }
 
     this.keymap.set(e.key, false);
   }
 
-  $handlePointerDown(e: PointerEvent): void {
+  async $handlePointerDown(e: PointerEvent): Promise<void> {
+    if (this.pointerLockEnabled && !document.pointerLockElement) {
+      await document.body.requestPointerLock();
+    }
+
     this.mouseDown = true;
     this.dragStartPosition[0] = e.clientX;
     this.dragStartPosition[1] = e.clientY;
@@ -266,6 +267,10 @@ class InputManager {
   }
 
   $handlePointerMove(e: PointerEvent): void {
+    if (this.pointerLockEnabled && !this.pointerLockCaptured) {
+      return;
+    }
+
     this.mouseDown = e.pointerType == 'mouse' ? (e.buttons & 1) !== 0 : true;
     this.mousePosition = [e.clientX, e.clientY];
     eventManager.emit(this, 'E_MOUSE_MOVE', { movementX: e.movementX, movementY: e.movementY });
@@ -281,6 +286,19 @@ class InputManager {
     e.preventDefault();
     e.stopPropagation();
     eventManager.emit(this, 'E_MOUSE_WHEEL', { delta: Math.sign(e.deltaY) });
+  }
+
+  $handlePointerLockChanged(e: Event): void {
+    if (!this.pointerLockEnabled) {
+      return;
+    }
+
+    if (document.pointerLockElement == document.body) {
+      this.pointerLockCaptured = true;
+    }
+    else {
+      this.pointerLockCaptured = false;
+    }
   }
 
   $handleGamePadDisconnected(e: GamepadEvent): void {
@@ -320,10 +338,12 @@ class InputManager {
             continue;
           }
 
-          for (const actionId of this.findActionIds('gamepad' + gamepad.index, n.toString())) {
-            this.actionmap.set(actionId, gamepad.buttons[n].pressed);
+          const action = this.actionRegister.get('gamepad' + gamepad.index + n.toString());
+
+          if (action) {
+            this.actionmap.set(action.id, gamepad.buttons[n].pressed);
             if (gamepad.buttons[n].pressed) {
-              eventManager.emit(this, 'E_ACTION', { actionId: actionId });
+              eventManager.emit(this, 'E_ACTION', { actionId: action.id });
             }
           }
 

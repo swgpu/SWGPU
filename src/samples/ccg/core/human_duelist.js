@@ -22,7 +22,7 @@ class HumanDuelist extends DuelistAbstract {
     response.index = 0;
     response.card = null;
 
-    await eventManager.emit(this, 'E_SELECT_LOCATION', { range: range, predicateCard: predicateCard, response: response, required: false });
+    await eventManager.emitAsync(this, 'E_SELECT_LOCATION', { range: range, predicateCard: predicateCard, response: response, required: false });
     if (!response.state) {
       return null;
     }
@@ -37,7 +37,7 @@ class HumanDuelist extends DuelistAbstract {
     response.index = 0;
     response.card = null;
 
-    await eventManager.emit(this, 'E_SELECT_LOCATION', { range: range, predicateCard: predicateCard, response: response, required: true });
+    await eventManager.emitAsync(this, 'E_SELECT_LOCATION', { range: range, predicateCard: predicateCard, response: response, required: true });
     if (!response.state) {
       return null;
     }

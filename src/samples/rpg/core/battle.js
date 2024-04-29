@@ -53,9 +53,9 @@ class Battle {
 
   async runAction(action) {
     // exec action
-    await eventManager.emit(this, 'E_ACTION_BEFORE', { action: action });
+    await eventManager.emitAsync(this, 'E_ACTION_BEFORE', { action: action });
     await action.exec();
-    await eventManager.emit(this, 'E_ACTION_AFTER', { action: action });
+    await eventManager.emitAsync(this, 'E_ACTION_AFTER', { action: action });
 
     // remove died character from the queue
     for (let char of this.characterQueue) {
@@ -92,7 +92,7 @@ class Battle {
       }
     }
     
-    await eventManager.emit(this, 'E_CHAR_READY', { char: ready[0] });
+    await eventManager.emitAsync(this, 'E_CHAR_READY', { char: ready[0] });
 
     if (ready[0] instanceof EnemyCharacter) {
       this.handleAI();

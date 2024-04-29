@@ -64,7 +64,7 @@ class Game {
     response.y = 0;
     response.action = '';
 
-    await eventManager.emit(this, 'E_REQUEST_TILE_ACTION', {
+    await eventManager.emitAsync(this, 'E_REQUEST_TILE_ACTION', {
       response: response
     });
 
@@ -77,7 +77,7 @@ class Game {
     response.y = 0;
     response.canceled = false;
 
-    await eventManager.emit(this, 'E_REQUEST_TILE_LOCATION', {
+    await eventManager.emitAsync(this, 'E_REQUEST_TILE_LOCATION', {
       required: required,
       predicateTile: predicateTile,
       response: response

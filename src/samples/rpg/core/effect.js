@@ -54,7 +54,7 @@ class Effect {
   }
 
   async apply(fromChar, toChar) {
-    await eventManager.emit(toChar, 'E_EFFECT_INFLICT', { effect: this });
+    await eventManager.emitAsync(toChar, 'E_EFFECT_INFLICT', { effect: this });
     await MECHANIC(this.mechanicId, fromChar, toChar, this.mechanicOpts);
   }
 

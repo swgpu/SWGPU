@@ -9,7 +9,7 @@ import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER, MAX_POINT_LIGHTS, MAX_DE
 
 interface MeshCommand {
   mesh: Gfx3Mesh;
-  matrix: mat4 | null;
+  matrix: mat4;
 };
 
 /**
@@ -100,8 +100,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
 
     for (let i = 0; i < this.meshCommands.length; i++) {
       const command = this.meshCommands[i];
-      const mMatrix = command.matrix ? command.matrix : command.mesh.getTransformMatrix();
-      this.grp1.write(0, BUILD_MESH_INFOS(vpcMatrix, mMatrix, command.mesh.getId(), this.meshInfos) as Float32Array);
+      this.grp1.write(0, BUILD_MESH_INFOS(vpcMatrix, command.matrix, command.mesh.getId(), this.meshInfos) as Float32Array);
       passEncoder.setBindGroup(1, this.grp1.getBindGroup(i));
 
       const material = command.mesh.getMaterial();
@@ -174,10 +173,11 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {mat4 | null} [matrix=null] - The transformation matrix.
    */
   drawMesh(mesh: Gfx3Mesh, matrix: mat4 | null = null): void {
-    this.meshCommands.push({ mesh: mesh, matrix: matrix });
+    const meshMatrix = matrix ?? mesh.getTransformMatrix();
+    this.meshCommands.push({ mesh: mesh, matrix: meshMatrix });
 
     if (this.shadowEnabled && mesh.getShadowCasting()) {
-      gfx3MeshShadowRenderer.drawMesh(mesh, matrix);
+      gfx3MeshShadowRenderer.drawMesh(mesh, meshMatrix);
     }
   }
 

@@ -51,7 +51,7 @@ class CharacterAbstract {
 
     this.attributes.addModifiers(seal.modifiers);
     this.activeSeals.push(seal);
-    await eventManager.emit(this, 'E_SEAL_ADDED');
+    await eventManager.emitAsync(this, 'E_SEAL_ADDED');
   }
 
   async removeSeal(seal) {
@@ -61,31 +61,31 @@ class CharacterAbstract {
 
     this.attributes.removeModifiers(seal.modifiers);
     this.activeSeals.splice(this.activeSeals.indexOf(seal), 1);
-    await eventManager.emit(this, 'E_SEAL_REMOVED');
+    await eventManager.emitAsync(this, 'E_SEAL_REMOVED');
   }
 
   async increaseHP(amount, element = null) {
     let elementalFactor = GET_ELEMENTAL_OPPOSITION_FACTOR(element, this.attributes.get('ELEMENT'));
     amount = element ? amount * elementalFactor : amount;
     this.attributes.add('HP', + amount);
-    await eventManager.emit(this, 'E_INCREASE_HP', { amount: amount });
+    await eventManager.emitAsync(this, 'E_INCREASE_HP', { amount: amount });
   }
 
   async decreaseHP(amount, element = null) {
     let elementalFactor = GET_ELEMENTAL_OPPOSITION_FACTOR(element, this.attributes.get('ELEMENT'));
     amount = element ? amount * elementalFactor : amount;
     this.attributes.add('HP', - amount);
-    await eventManager.emit(this, 'E_DECREASE_HP', { amount: amount });
+    await eventManager.emitAsync(this, 'E_DECREASE_HP', { amount: amount });
   }
 
   async increaseMP(amount) {
     this.attributes.add('MP', + amount);
-    await eventManager.emit(this, 'E_INCREASE_MP', { amount: amount });
+    await eventManager.emitAsync(this, 'E_INCREASE_MP', { amount: amount });
   }
 
   async decreaseMP(amount) {
     this.attributes.add('MP', - amount);
-    await eventManager.emit(this, 'E_DECREASE_MP', { amount: amount });
+    await eventManager.emitAsync(this, 'E_DECREASE_MP', { amount: amount });
   }
 
   getId() {

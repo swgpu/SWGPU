@@ -205,6 +205,10 @@ class Gfx3Transformable {
     return this.transformMatrix;
   }
 
+  setTransformMatrix(transformMatrix: mat4): void {
+    this.transformMatrix = transformMatrix;
+  }
+
   /**
    * Rotate to look at the specified coordinates.
    * Note: Avoid euler rotation and quaternion rotation.

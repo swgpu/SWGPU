@@ -1,24 +1,21 @@
 import { uiManager } from '../../lib/ui/ui_manager';
+import { eventManager } from '../../lib/core/event_manager';
 import { inputManager } from '../../lib/input/input_manager';
+import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
 import { UT } from '../../lib/core/utils';
+import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
+import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
 // ---------------------------------------------------------------------------------------
 
 class InputComponent {
   constructor(player, camera) {
     this.player = player;
     this.camera = camera;
-    this.handleClickedCb = this.handleClicked.bind(this);
-    this.handlePointerLockChangeCb = this.handlePointerLockChange.bind(this);
-    this.handleMouseMoveCb = this.handleMouseMove.bind(this);
-
-    document.addEventListener('click', this.handleClickedCb);
-    document.addEventListener('pointerlockchange', this.handlePointerLockChangeCb, false);
+    eventManager.subscribe(inputManager, 'E_MOUSE_MOVE', this, this.handleMouseMove);
   }
 
   delete() {
-    document.removeEventListener('click', this.handleClickedCb);
-    document.removeEventListener('pointerlockchange', this.handlePointerLockChangeCb, false);
-    document.removeEventListener('mousemove', this.handleMouseMoveCb);
+    eventManager.unsubscribe(inputManager, 'E_MOUSE_MOVE', this.handleMouseMove);
   }
 
   update(ts) {
@@ -53,23 +50,6 @@ class InputComponent {
 
     if (moving) {
       this.player.dir = UT.VEC3_NORMALIZE(this.player.dir);
-    }
-  }
-
-  async handleClicked(e) {
-    if (!document.pointerLockElement) {
-      await document.body.requestPointerLock({
-        unadjustedMovement: true,
-      });
-    }
-  }
-
-  handlePointerLockChange(e) {
-    if (document.pointerLockElement == document.body) {
-      document.addEventListener('mousemove', this.handleMouseMoveCb, false);
-    }
-    else {
-      document.removeEventListener('mousemove', this.handleMouseMoveCb, false);
     }
   }
 
@@ -146,6 +126,8 @@ class Player {
     this.input = new InputComponent(this, camera);
     this.camera = new CameraComponent(this, camera);
     this.physics = new PhysicsComponent(this, jnm);
+
+    this.cam = camera;
     // --------------------------------------------
     this.x = 0;
     this.y = 1;
@@ -156,16 +138,39 @@ class Player {
     this.rotation = [0, 0, 0];
     this.movementSpeed = 7;
     this.rotationSpeed = 1;
+    this.weapon = new Gfx3MeshJSM();
   }
 
   async load() {
-    // can be used to load weapon or whatever.
+    this.weapon = new Gfx3MeshJSM();
+    await this.weapon.loadFromFile('./samples/fps/weapon.jsm');
+    this.weapon.setMaterial(new Gfx3Material({
+      texture: await gfx3TextureManager.loadTexture('./samples/fps/weapon.png')
+    }));
   }
 
   update(ts) {
     this.input.update(ts);
     this.physics.update(ts);
     this.camera.update(ts);
+
+    const cameraAxies = this.cam.getAxies();
+
+    // this.weapon.setPosition(0, 0, 0);
+    // this.weapon.lookAt(-cameraAxies[2][0], -cameraAxies[2][1], cameraAxies[2][2]);
+    this.weapon.setPosition(this.x, this.y, this.z);
+
+    this.weapon.setRotation(this.rotation[0], this.rotation[1], this.rotation[2]);
+
+
+
+    // this.weapon.setTransformMatrix()
+
+    this.weapon.update(ts);
+  }
+
+  draw() {
+    this.weapon.draw();
   }
 }
 
