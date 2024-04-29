@@ -23,11 +23,13 @@ export interface Group {
  */
 class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
   shadowCasting: boolean;
+  billboard: boolean;
   material: Gfx3Material;
 
   constructor() {
     super(SHADER_VERTEX_ATTR_COUNT);
     this.shadowCasting = false;
+    this.billboard = false;
     this.material = new Gfx3Material({});
   }
 
@@ -194,6 +196,22 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
    */
   getShadowCasting(): boolean {
     return this.shadowCasting;
+  }
+
+  /**
+   * Set the billboard mode.
+   * 
+   * @param {boolean} billboard - Determines if object is a billboard.
+   */
+  setBillboard(billboard: boolean): void {
+    this.billboard = billboard;
+  }
+
+  /**
+   * Check if billboard mode is enable or not.
+   */
+  isBillboard(): boolean {
+    return this.billboard;
   }
 
   /**

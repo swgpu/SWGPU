@@ -12,10 +12,12 @@ class InputComponent {
     this.player = player;
     this.camera = camera;
     eventManager.subscribe(inputManager, 'E_MOUSE_MOVE', this, this.handleMouseMove);
+    eventManager.subscribe(inputManager, 'E_ACTION_ONCE', this, this.handleActionOnce);
   }
 
   delete() {
     eventManager.unsubscribe(inputManager, 'E_MOUSE_MOVE', this.handleMouseMove);
+    eventManager.unsubscribe(inputManager, 'E_ACTION_ONCE', this.handleActionOnce);
   }
 
   update(ts) {
@@ -57,6 +59,13 @@ class InputComponent {
     this.player.rotation[0] += e.movementY * this.player.rotationSpeed / 1000;
     this.player.rotation[1] += e.movementX * this.player.rotationSpeed / 1000;
   }
+
+  handleActionOnce(e) {
+    if (e.actionId == 'SELECT') {
+      this.player.jump = true;
+    }
+    console.log('action once');
+  }
 }
 
 class PhysicsComponent {
@@ -72,17 +81,20 @@ class PhysicsComponent {
   }
 
   update(ts) {
-    const velocity = UT.VEC3_SCALE(this.player.dir, this.player.movementSpeed);
+    const velocity = UT.VEC3_SCALE(this.player.dir, this.player.maxSpeed);
     this.player.velocity[0] = UT.LINEAR(Math.pow(1 - this.frictionCoefficient, ts / 1000), velocity[0], this.player.velocity[0]);
     this.player.velocity[2] = UT.LINEAR(Math.pow(1 - this.frictionCoefficient, ts / 1000), velocity[2], this.player.velocity[2]);
 
     if (UT.VEC3_LENGTH(this.player.velocity) > 0.1) {
-      const move = UT.VEC3_SCALE(this.player.velocity, ts / 1000);
-      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, move[0], move[1], move[2], this.lift, true, 0.1);
+      const n = UT.VEC3_NORMALIZE(this.player.velocity);
+      const s = UT.VEC3_LENGTH(this.player.velocity);
+      const m = UT.VEC3_SCALE(n, this.player.maxSpeed * (ts / 1000));
+      const d = s / this.player.maxSpeed;
+      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, m[0], m[1], m[2], this.lift, true, 0.1);
 
-      this.player.x += navInfo.move[0];
-      this.player.y += navInfo.move[1];
-      this.player.z += navInfo.move[2];
+      this.player.x += navInfo.move[0] * d;
+      this.player.y += navInfo.move[1] * d;
+      this.player.z += navInfo.move[2] * d;
 
       if (navInfo.collideFloor) {
         this.player.velocity[1] = 0;
@@ -90,14 +102,14 @@ class PhysicsComponent {
       else {
         this.player.velocity[1] = UT.LINEAR(Math.pow(1 - this.gravityCoefficient, ts / 1000), -this.gravityMax, this.player.velocity[1]);
       }
-
-      if (this.player.dir[0] == 0 && this.player.dir[2] == 0 && navInfo.collideWall) {
-        this.player.velocity[0] = 0;
-        this.player.velocity[2] = 0;
-      }
     }
     else {
       this.player.velocity = [0, 0, 0];
+    }
+
+    if (this.player.jump) {
+      this.player.velocity[1] += 10;
+      this.player.jump = false;
     }
   }
 }
@@ -121,13 +133,41 @@ class CameraComponent {
   }
 }
 
+class WeaponComponent {
+  constructor(player) {
+    this.player = player;
+    this.mesh = new Gfx3MeshJSM();
+  }
+
+  async load() {
+    this.mesh = new Gfx3MeshJSM();
+    await this.mesh.loadFromFile('./samples/fps/weapon.jsm');
+    this.mesh.setMaterial(new Gfx3Material({
+      texture: await gfx3TextureManager.loadTexture('./samples/fps/weapon.png')
+    }));
+  }
+
+  delete() {
+    this.mesh.delete();
+  }
+
+  update(ts) {
+    this.mesh.setPosition(this.player.x, this.player.y + 0.5, this.player.z);
+    this.mesh.setRotation(this.player.rotation[0], this.player.rotation[1], this.player.rotation[2]);
+    this.mesh.update(ts);
+  }
+
+  draw() {
+    this.mesh.draw();
+  }
+}
+
 class Player {
   constructor(jnm, camera) {
     this.input = new InputComponent(this, camera);
     this.camera = new CameraComponent(this, camera);
     this.physics = new PhysicsComponent(this, jnm);
-
-    this.cam = camera;
+    this.weapon = new WeaponComponent(this);
     // --------------------------------------------
     this.x = 0;
     this.y = 1;
@@ -136,36 +176,19 @@ class Player {
     this.dir = [0, 0, 0];
     this.velocity = [0, 0, 0];
     this.rotation = [0, 0, 0];
-    this.movementSpeed = 7;
+    this.maxSpeed = 7;
     this.rotationSpeed = 1;
-    this.weapon = new Gfx3MeshJSM();
+    this.jump = false;
   }
 
   async load() {
-    this.weapon = new Gfx3MeshJSM();
-    await this.weapon.loadFromFile('./samples/fps/weapon.jsm');
-    this.weapon.setMaterial(new Gfx3Material({
-      texture: await gfx3TextureManager.loadTexture('./samples/fps/weapon.png')
-    }));
+    await this.weapon.load();
   }
 
   update(ts) {
     this.input.update(ts);
     this.physics.update(ts);
     this.camera.update(ts);
-
-    const cameraAxies = this.cam.getAxies();
-
-    // this.weapon.setPosition(0, 0, 0);
-    // this.weapon.lookAt(-cameraAxies[2][0], -cameraAxies[2][1], cameraAxies[2][2]);
-    this.weapon.setPosition(this.x, this.y, this.z);
-
-    this.weapon.setRotation(this.rotation[0], this.rotation[1], this.rotation[2]);
-
-
-
-    // this.weapon.setTransformMatrix()
-
     this.weapon.update(ts);
   }
 

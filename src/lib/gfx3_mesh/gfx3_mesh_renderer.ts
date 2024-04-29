@@ -66,6 +66,8 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   render(): void {
     const currentView = gfx3Manager.getCurrentView();
     const passEncoder = gfx3Manager.getPassEncoder();
+
+    const bpcMatrix = currentView.getBillboardProjectionClipMatrix();
     const vpcMatrix = currentView.getViewProjectionClipMatrix();
     passEncoder.setPipeline(this.pipeline);
 
@@ -100,7 +102,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
 
     for (let i = 0; i < this.meshCommands.length; i++) {
       const command = this.meshCommands[i];
-      this.grp1.write(0, BUILD_MESH_INFOS(vpcMatrix, command.matrix, command.mesh.getId(), this.meshInfos) as Float32Array);
+      this.grp1.write(0, BUILD_MESH_INFOS(command.mesh.billboard ? bpcMatrix : vpcMatrix, command.matrix, command.mesh.getId(), this.meshInfos) as Float32Array);
       passEncoder.setBindGroup(1, this.grp1.getBindGroup(i));
 
       const material = command.mesh.getMaterial();

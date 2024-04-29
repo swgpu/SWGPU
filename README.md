@@ -18,7 +18,7 @@ Some words about our philosophy:
 - **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
 - **Flexibility:** Create your own renderers. Handle render and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
-- **Modernity:** We used WebGPU API for a blazing fast rendering.
+- **Performance:** We used WebGPU API for a blazing fast rendering.
 - **Lightweight:** The lib minzipped size is just 2.5KB.
 
 You can check the documentation [here](http://warme-engine.com/).          

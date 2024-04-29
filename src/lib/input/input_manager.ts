@@ -36,6 +36,15 @@ GAME_PAD_KEY_MAPPING.set('PadRight', '15');
  * It emit 'E_MOUSE_MOVE' with data { movementX, movementY }
  * It emit 'E_MOUSE_DRAG' with data { movementX, movementY }
  * It emit 'E_MOUSE_WHEEL' with data { delta }
+ * Default actions table:
+ * ■ ACTION => KEYBOARD => GAMEPAD
+ * ■ OK => Enter => 0
+ * ■ BACK => Escape => 1
+ * ■ SELECT => Space => BtnSelect
+ * ■ LEFT => ArrowLeft => PadLeft
+ * ■ RIGHT => ArrowRight => PadRight
+ * ■ UP => ArrowUp => PadTop
+ * ■ DOWN => ArrowDown => PadBottom
  */
 class InputManager {
   keymap: Map<string, boolean>;

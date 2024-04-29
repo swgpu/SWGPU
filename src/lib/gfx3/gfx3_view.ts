@@ -328,6 +328,18 @@ class Gfx3View {
   }
 
   /**
+   * Returns the result of multiplying the clip matrix, projection matrix, and camera view translation only matrix.
+   */
+  getBillboardProjectionClipMatrix(): mat4 {
+    const matrix = UT.MAT4_IDENTITY();
+    const viewMatrix = this.getCameraViewMatrix();
+    UT.MAT4_MULTIPLY(matrix, this.getClipMatrix(), matrix);
+    UT.MAT4_MULTIPLY(matrix, this.getProjectionMatrix(), matrix);
+    UT.MAT4_MULTIPLY(matrix, UT.MAT4_TRANSLATE(viewMatrix[12], viewMatrix[13], viewMatrix[14]), matrix);
+    return matrix;
+  }
+
+  /**
    * Returns the client screen position of a 3D point given its world coordinates.
    * 
    * @param {number} x - The x world coordinate.
