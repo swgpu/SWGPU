@@ -64,7 +64,6 @@ class InputComponent {
     if (e.actionId == 'SELECT') {
       this.player.jump = true;
     }
-    console.log('action once');
   }
 }
 
@@ -76,8 +75,7 @@ class PhysicsComponent {
     this.lift = 0.3;
     this.radius = 0.5;
     this.frictionCoefficient = 0.99999999;
-    this.gravityCoefficient = 0.8;
-    this.gravityMax = 10;
+    this.gravity = 0.8;
   }
 
   update(ts) {
@@ -85,22 +83,21 @@ class PhysicsComponent {
     this.player.velocity[0] = UT.LINEAR(Math.pow(1 - this.frictionCoefficient, ts / 1000), velocity[0], this.player.velocity[0]);
     this.player.velocity[2] = UT.LINEAR(Math.pow(1 - this.frictionCoefficient, ts / 1000), velocity[2], this.player.velocity[2]);
 
-    if (UT.VEC3_LENGTH(this.player.velocity) > 0.1) {
-      const n = UT.VEC3_NORMALIZE(this.player.velocity);
-      const s = UT.VEC3_LENGTH(this.player.velocity);
-      const m = UT.VEC3_SCALE(n, this.player.maxSpeed * (ts / 1000));
-      const d = s / this.player.maxSpeed;
-      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, m[0], m[1], m[2], this.lift, true, 0.1);
+    const speed = UT.VEC3_LENGTH(this.player.velocity);
+    const speedRatio = speed / this.player.maxSpeed;
 
-      this.player.x += navInfo.move[0] * d;
-      this.player.y += navInfo.move[1] * d;
-      this.player.z += navInfo.move[2] * d;
+    if (speed > 0.1) {
+      const mx = this.player.velocity[0] / speedRatio * (ts / 1000);
+      const my = this.player.velocity[1] * (ts / 1000);
+      const mz = this.player.velocity[2] / speedRatio * (ts / 1000);
+      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, mx, my, mz, this.lift, my < 0, 0.1);
 
-      if (navInfo.collideFloor) {
+      this.player.x += navInfo.move[0] * speedRatio;
+      this.player.y += navInfo.move[1];
+      this.player.z += navInfo.move[2] * speedRatio;
+
+      if (this.player.velocity[1] < 0 && navInfo.collideFloor) {
         this.player.velocity[1] = 0;
-      }
-      else {
-        this.player.velocity[1] = UT.LINEAR(Math.pow(1 - this.gravityCoefficient, ts / 1000), -this.gravityMax, this.player.velocity[1]);
       }
     }
     else {
@@ -108,8 +105,11 @@ class PhysicsComponent {
     }
 
     if (this.player.jump) {
-      this.player.velocity[1] += 10;
-      this.player.jump = false;
+      this.player.velocity[1] = this.player.jumpStrength;
+      this.player.jump = false;    
+    }
+    else {
+      this.player.velocity[1] -= this.gravity;
     }
   }
 }
@@ -179,6 +179,7 @@ class Player {
     this.maxSpeed = 7;
     this.rotationSpeed = 1;
     this.jump = false;
+    this.jumpStrength = 10;
   }
 
   async load() {

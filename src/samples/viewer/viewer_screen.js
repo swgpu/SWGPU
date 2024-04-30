@@ -37,7 +37,7 @@ class ViewerScreen extends Screen {
 
   update(ts) {
     const now = Date.now() / 10000;
-    // this.mesh.setRotation(Math.sin(now), Math.cos(now), 0);
+    this.mesh.setRotation(Math.sin(now), Math.cos(now), 0);
     this.mesh.update(ts);
     this.camera.update(ts);
   }
