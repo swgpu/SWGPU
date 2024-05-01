@@ -328,7 +328,7 @@ class Gfx3View {
   }
 
   /**
-   * Returns the result of multiplying the clip matrix, projection matrix, and camera view translation only matrix.
+   * Returns the result of multiplying the clip matrix, projection matrix, and camera view matrix translation only.
    */
   getBillboardProjectionClipMatrix(): mat4 {
     const matrix = UT.MAT4_IDENTITY();

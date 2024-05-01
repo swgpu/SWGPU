@@ -135,22 +135,35 @@ class UT {
   /**
    * @param a - The begin.
    * @param b - The end.
-   * @param coefficient - The decrease coefficient factor.
-   * @param t - The time.
-   */
-  static LERP_DEXP(a: number, b: number, coefficient: number, t: number): number {
-    return a + (b - a) * Math.pow(1 - coefficient, t);
-  }
-
-  /**
-   * @param a - The begin.
-   * @param b - The end.
    * @param coefficient - The increase coefficient factor.
    * @param t - The time.
    */
   static LERP_EXP(a: number, b: number, coefficient: number, t: number): number {
     return a + (b - a) * Math.pow(coefficient, t);
   }
+
+  /**
+   * @param a - The begin.
+   * @param b - The end.
+   * @param t - The time.
+   */
+  static MIX(a: Array<any>, b: Array<any>, t: number): Array<any> {
+    return a.map((v, i) => UT.LERP(v, b[i], t));
+  }
+
+  /**
+   * @param tl - The top left color.
+   * @param tr - The top right color.
+   * @param bl - The bottom left color.
+   * @param br - The bottom right color.
+   * @param t1 - The horizontal interpolation distance.
+   * @param t2 - The vertical interpolation distance.
+   */
+  static BILINEAR_FILTER(tl: Array<any>, tr: Array<any>, bl: Array<any>, br: Array<any>, t1: number, t2: number): Array<any> {
+    const t = UT.MIX(tl, tr, t1);
+    const b = UT.MIX(bl, br, t1);
+    return UT.MIX(t, b, t2);
+  };
 
   /**
    * @param num - The number.

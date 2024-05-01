@@ -57,7 +57,7 @@ export class CharacterPhysicsSystem extends DNASystem {
       character.velocity[1] = 0;
     }
     else {
-      character.velocity[1] = UT.LINEAR(Math.pow(1 - physics.gravityCoefficient, ts / 1000), -physics.gravityMax, character.velocity[1]);
+      character.velocity[1] = UT.LERP_EXP(-physics.gravityMax, character.velocity[1], 1 - physics.gravityCoefficient, ts / 1000);
     }
   }
 

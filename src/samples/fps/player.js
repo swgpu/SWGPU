@@ -80,8 +80,8 @@ class PhysicsComponent {
 
   update(ts) {
     const velocity = UT.VEC3_SCALE(this.player.dir, this.player.maxSpeed);
-    this.player.velocity[0] = UT.LERP_DEXP(velocity[0], this.player.velocity[0], this.frictionCoefficient, ts / 1000);
-    this.player.velocity[2] = UT.LERP_DEXP(velocity[2], this.player.velocity[2], this.frictionCoefficient, ts / 1000);
+    this.player.velocity[0] = UT.LERP_EXP(velocity[0], this.player.velocity[0], 1 - this.frictionCoefficient, ts / 1000);
+    this.player.velocity[2] = UT.LERP_EXP(velocity[2], this.player.velocity[2], 1 - this.frictionCoefficient, ts / 1000);
 
     const speed = UT.VEC2_LENGTH([this.player.velocity[0], this.player.velocity[2]]);
     const speedRatio = speed / this.player.maxSpeed;
