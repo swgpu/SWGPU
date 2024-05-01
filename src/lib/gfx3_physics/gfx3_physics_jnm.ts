@@ -185,7 +185,6 @@ class Gfx3PhysicsJNM {
         fmx = xz.move[0];
         fmz = xz.move[1];
         collideWall = true;
-        i = 0;
         break;
       }
 

@@ -43,15 +43,8 @@ export class CharacterPhysicsSystem extends DNASystem {
     const character = dnaManager.getComponent(eid, 'Character') as CharacterComponent;
 
     const moveDir = UT.VEC3_NORMALIZE(character.moveDir);
-    const velocity = UT.VEC3_SCALE(moveDir, physics.speed);
-
-    character.velocity[0] = UT.LINEAR(Math.pow(1 - physics.frictionCoefficient, ts / 1000), velocity[0], character.velocity[0]);
-    character.velocity[2] = UT.LINEAR(Math.pow(1 - physics.frictionCoefficient, ts / 1000), velocity[2], character.velocity[2]);
-
-    if (UT.VEC3_LENGTH(character.velocity) < 0.1) {
-      character.velocity = [0, 0, 0];
-      return;
-    }
+    character.velocity[0] = moveDir[0] * physics.speed;
+    character.velocity[2] = moveDir[2] * physics.speed;
 
     const move = UT.VEC3_SCALE(character.velocity, ts / 1000);
     const navInfo = physics.map.box(character.x, character.y + physics.height * 0.5, character.z, physics.radius, physics.height, move[0], move[1], move[2], physics.lift);
@@ -65,11 +58,6 @@ export class CharacterPhysicsSystem extends DNASystem {
     }
     else {
       character.velocity[1] = UT.LINEAR(Math.pow(1 - physics.gravityCoefficient, ts / 1000), -physics.gravityMax, character.velocity[1]);
-    }
-
-    if (character.moveDir[0] == 0 && character.moveDir[2] == 0 && navInfo.collideWall) {
-      character.velocity[0] = 0;
-      character.velocity[2] = 0;
     }
   }
 

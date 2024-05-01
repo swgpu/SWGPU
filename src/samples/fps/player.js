@@ -98,8 +98,10 @@ class PhysicsComponent {
         this.player.velocity[1] = 0;
       }
     }
-    else {
-      this.player.velocity = [0, 0, 0];
+    
+    if (UT.VEC3_LENGTH(velocity) == 0 && this.player.velocity[0] < 0.001 && this.player.velocity[2] < 0.001) {
+      this.player.velocity[0] = 0;
+      this.player.velocity[2] = 0;
     }
 
     if (this.player.jump) {
@@ -132,9 +134,13 @@ class CameraComponent {
 }
 
 class WeaponComponent {
+  static OSCILLATION_LENGTH = 0.05;
+  static OSCILLATION_RATE = 7;
+  
   constructor(player) {
     this.player = player;
     this.mesh = new Gfx3MeshJSM();
+    this.oscillation = 0;
   }
 
   async load() {
@@ -150,7 +156,12 @@ class WeaponComponent {
   }
 
   update(ts) {
-    this.mesh.setPosition(this.player.x, this.player.y + 0.5, this.player.z);
+    if (this.player.dir[0] != 0 || this.player.dir[2] != 0) {
+      this.oscillation += WeaponComponent.OSCILLATION_RATE * (ts / 1000);
+    }
+
+    const oscillationY = Math.sin(this.oscillation) * WeaponComponent.OSCILLATION_LENGTH * 0.5;
+    this.mesh.setPosition(this.player.x, this.player.y + 0.5 + oscillationY, this.player.z);
     this.mesh.setRotation(this.player.rotation[0], this.player.rotation[1], this.player.rotation[2]);
     this.mesh.update(ts);
   }

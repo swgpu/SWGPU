@@ -4,12 +4,14 @@ import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
 import { Gfx2TreePartition } from '../gfx2/gfx2_tree_partition';
 
 class Sector extends Gfx2BoundingRect {
+  index: number;
   v1: vec3;
   v2: vec3;
   v3: vec3;
 
-  constructor(a: vec3, b: vec3, c: vec3) {
+  constructor(index: number, a: vec3, b: vec3, c: vec3) {
     super();
+    this.index = index;
     this.v1 = a;
     this.v2 = b;
     this.v3 = c;
@@ -97,8 +99,9 @@ class Gfx3PhysicsJWM {
     this.btree = new Gfx2TreePartition(bspMaxChildren, bspMaxDepth, this.boundingRect);
 
     this.sectors = [];
-    for (const obj of json['Sectors']) {
-      const sector = new Sector(obj[0], obj[1], obj[2]);
+    for (let i = 0; i < json['Sectors'].length; i++) {
+      const obj = json['Sectors'][i];
+      const sector = new Sector(i, obj[0], obj[1], obj[2]);
       this.btree.addChild(sector);
       this.sectors.push(sector);
     }
@@ -293,7 +296,6 @@ class Gfx3PhysicsJWM {
    * @param {number} mz - The movement in the z-axis.
    */
   moveWalker(walker: Walker, mx: number, mz: number): ResMoveWalker {
-    // prevent dead end.
     let fmx = mx;
     let fmz = mz;
     let fmy = 0;
@@ -424,12 +426,12 @@ class Gfx3PhysicsJWM {
       [x + 1, z + 1]
     )) as Array<Sector>;
 
-    for (let i = 0; i < sectors.length; i++) {
-      const a = this.sectors[i].v1;
-      const b = this.sectors[i].v2;
-      const c = this.sectors[i].v3;
+    for (const sector of sectors) {
+      const a = sector.v1;
+      const b = sector.v2;
+      const c = sector.v3;
       if (UT.TRI2_POINT_INSIDE([x, z], [a[0], a[2]], [b[0], b[2]], [c[0], c[2]]) == 1) {
-        return { sectorIndex: i, elev: UT.TRI3_POINT_ELEVATION([x, z], a, b, c) };
+        return { sectorIndex: sector.index, elev: UT.TRI3_POINT_ELEVATION([x, z], a, b, c) };
       }
     }
 
