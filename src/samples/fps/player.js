@@ -80,22 +80,20 @@ class PhysicsComponent {
 
   update(ts) {
     const velocity = UT.VEC3_SCALE(this.player.dir, this.player.maxSpeed);
-    this.player.velocity[0] = UT.LINEAR(Math.pow(1 - this.frictionCoefficient, ts / 1000), velocity[0], this.player.velocity[0]);
-    this.player.velocity[2] = UT.LINEAR(Math.pow(1 - this.frictionCoefficient, ts / 1000), velocity[2], this.player.velocity[2]);
+    this.player.velocity[0] = UT.LERP_DEXP(velocity[0], this.player.velocity[0], this.frictionCoefficient, ts / 1000);
+    this.player.velocity[2] = UT.LERP_DEXP(velocity[2], this.player.velocity[2], this.frictionCoefficient, ts / 1000);
 
-    const speed = UT.VEC3_LENGTH(this.player.velocity);
+    const speed = UT.VEC2_LENGTH([this.player.velocity[0], this.player.velocity[2]]);
     const speedRatio = speed / this.player.maxSpeed;
+    const mx = speedRatio > 0 ? this.player.velocity[0] / speedRatio * (ts / 1000) : 0;
+    const my = this.player.velocity[1] * (ts / 1000);
+    const mz = speedRatio > 0 ? this.player.velocity[2] / speedRatio * (ts / 1000) : 0;
 
-    if (speed > 0.1) {
-      const mx = this.player.velocity[0] / speedRatio * (ts / 1000);
-      const my = this.player.velocity[1] * (ts / 1000);
-      const mz = this.player.velocity[2] / speedRatio * (ts / 1000);
+    if (UT.VEC3_LENGTH(this.player.velocity) > 0.1) {
       const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, mx, my, mz, this.lift, my < 0, 0.1);
-
       this.player.x += navInfo.move[0] * speedRatio;
       this.player.y += navInfo.move[1];
       this.player.z += navInfo.move[2] * speedRatio;
-
       if (this.player.velocity[1] < 0 && navInfo.collideFloor) {
         this.player.velocity[1] = 0;
       }
@@ -106,7 +104,7 @@ class PhysicsComponent {
 
     if (this.player.jump) {
       this.player.velocity[1] = this.player.jumpStrength;
-      this.player.jump = false;    
+      this.player.jump = false;
     }
     else {
       this.player.velocity[1] -= this.gravity;
@@ -171,12 +169,12 @@ class Player {
     // --------------------------------------------
     this.x = 0;
     this.y = 1;
-    this.z = 0;
+    this.z = 1;
     this.height = 1.3;
     this.dir = [0, 0, 0];
     this.velocity = [0, 0, 0];
     this.rotation = [0, 0, 0];
-    this.maxSpeed = 7;
+    this.maxSpeed = 15;
     this.rotationSpeed = 1;
     this.jump = false;
     this.jumpStrength = 10;

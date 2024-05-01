@@ -133,6 +133,26 @@ class UT {
   }
 
   /**
+   * @param a - The begin.
+   * @param b - The end.
+   * @param coefficient - The decrease coefficient factor.
+   * @param t - The time.
+   */
+  static LERP_DEXP(a: number, b: number, coefficient: number, t: number): number {
+    return a + (b - a) * Math.pow(1 - coefficient, t);
+  }
+
+  /**
+   * @param a - The begin.
+   * @param b - The end.
+   * @param coefficient - The increase coefficient factor.
+   * @param t - The time.
+   */
+  static LERP_EXP(a: number, b: number, coefficient: number, t: number): number {
+    return a + (b - a) * Math.pow(coefficient, t);
+  }
+
+  /**
    * @param num - The number.
    * @param digits - The number after float.
    * @param base - The numeric base.

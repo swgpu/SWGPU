@@ -1,11 +1,21 @@
 import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
 import { UT } from '../core/utils';
+import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
+import { Gfx2TreePartition } from '../gfx2/gfx2_tree_partition';
 
-interface Sector {
+class Sector extends Gfx2BoundingRect {
   v1: vec3;
   v2: vec3;
   v3: vec3;
-};
+
+  constructor(a: vec3, b: vec3, c: vec3) {
+    super();
+    this.v1 = a;
+    this.v2 = b;
+    this.v3 = c;
+    super.fromVertices([this.v1[0], this.v1[2], this.v2[0], this.v2[2], this.v3[0], this.v3[2]]);
+  }
+}
 
 interface Neighbor {
   s1: number;
@@ -46,20 +56,24 @@ interface ResMovePoint {
  * In collision case, the collision response sliding along the edges of the walkmesh to keep a good feeling for the player.
  */
 class Gfx3PhysicsJWM {
+  boundingRect: Gfx2BoundingRect;
   sectors: Array<Sector>;
   sectorsData: Array<any>;
   neighborPool: Array<Neighbor>;
   sharedPool: Array<Shared>;
+  btree: Gfx2TreePartition;
   points: Map<string, Point>;
   walkers: Map<string, Walker>;
   debugVertices: Array<number>;
   debugVertexCount: number;
 
   constructor() {
+    this.boundingRect = new Gfx2BoundingRect();
     this.sectors = [];
     this.sectorsData = [];
     this.neighborPool = [];
     this.sharedPool = [];
+    this.btree = new Gfx2TreePartition(0, 0);
     this.points = new Map<string, Point>();
     this.walkers = new Map<string, Walker>();
     this.debugVertices = [];
@@ -71,7 +85,7 @@ class Gfx3PhysicsJWM {
    * 
    * @param {string} path - The file path.
    */
-  async loadFromFile(path: string): Promise<void> {
+  async loadFromFile(path: string, bspMaxChildren: number = 20, bspMaxDepth: number = 10): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
 
@@ -79,13 +93,14 @@ class Gfx3PhysicsJWM {
       throw new Error('GfxJWM::loadFromFile(): File not valid !');
     }
 
+    this.boundingRect = new Gfx2BoundingRect(json['Min'], json['Max']);
+    this.btree = new Gfx2TreePartition(bspMaxChildren, bspMaxDepth, this.boundingRect);
+
     this.sectors = [];
     for (const obj of json['Sectors']) {
-      this.sectors.push({
-        v1: obj[0],
-        v2: obj[1],
-        v3: obj[2]
-      });
+      const sector = new Sector(obj[0], obj[1], obj[2]);
+      this.btree.addChild(sector);
+      this.sectors.push(sector);
     }
 
     this.sectorsData = [];
@@ -404,7 +419,12 @@ class Gfx3PhysicsJWM {
   }
 
   $utilsFindLocationInfo(x: number, z: number): { sectorIndex: number, elev: number } {
-    for (let i = 0; i < this.sectors.length; i++) {
+    const sectors = this.btree.search(new Gfx2BoundingRect(
+      [x - 1, z - 1],
+      [x + 1, z + 1]
+    )) as Array<Sector>;
+
+    for (let i = 0; i < sectors.length; i++) {
       const a = this.sectors[i].v1;
       const b = this.sectors[i].v2;
       const c = this.sectors[i].v3;
