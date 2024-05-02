@@ -1,4 +1,5 @@
 import { gfx3Manager } from './gfx3_manager';
+import { gfx3MipmapManager } from './gfx3_mipmap_manager';
 import { Gfx3Texture } from './gfx3_texture';
 
 /**
@@ -16,36 +17,38 @@ class Gfx3TextureManager {
    * 
    * @param {string} path - The file path.
    * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
+   * @param {boolean} [is8bit] - Determine if texture is 8bits encoded.
    */
-  async loadTexture(path: string, samplerDescriptor: GPUSamplerDescriptor = {}): Promise<Gfx3Texture> {
+  async loadTexture(path: string, samplerDescriptor: GPUSamplerDescriptor = {}, is8bit: boolean = false): Promise<Gfx3Texture> {
     if (this.textures.has(path)) {
       return this.textures.get(path)!;
     }
 
     const res = await fetch(path);
     const img = await res.blob();
-    const bitmap = await createImageBitmap(img);
-    const texture = gfx3Manager.createTextureFromBitmap(bitmap, false, samplerDescriptor);
+    const bitmap = await createImageBitmap(img, { colorSpaceConversion: 'none' });
+    const texture = gfx3Manager.createTextureFromBitmap(bitmap, is8bit, samplerDescriptor);
 
     this.textures.set(path, texture);
     return texture;
   }
 
   /**
-   * Load asynchronously an image from a given path and returns it as an 8bits texture, caching it for future use.
+   * Load asynchronously an image from a given path and returns a texture with its mipmaps, caching it for future use.
    * 
    * @param {string} path - The file path.
    * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
+   * @param {boolean} [is8bit] - Determine if texture is 8bits encoded.
    */
-  async loadTexture8bit(path: string, samplerDescriptor: GPUSamplerDescriptor = {}): Promise<Gfx3Texture> {
+  async loadTextureMips(path: string, samplerDescriptor: GPUSamplerDescriptor = {}, is8bit: boolean): Promise<Gfx3Texture> {
     if (this.textures.has(path)) {
       return this.textures.get(path)!;
     }
 
     const res = await fetch(path);
     const img = await res.blob();
-    const bitmap = await createImageBitmap(img);
-    const texture = gfx3Manager.createTextureFromBitmap(bitmap, true, samplerDescriptor);
+    const bitmap = await createImageBitmap(img, { colorSpaceConversion: 'none' });
+    const texture = gfx3MipmapManager.createTextureFromBitmap(bitmap, is8bit, samplerDescriptor);
     this.textures.set(path, texture);
     return texture;
   }
@@ -67,7 +70,7 @@ class Gfx3TextureManager {
     for (const dir of dirs) {
       const res = await fetch(path + dir + '.' + extension);
       const img = await res.blob();
-      const bitmap = await createImageBitmap(img);
+      const bitmap = await createImageBitmap(img, { colorSpaceConversion: 'none' });
       bitmaps.push(bitmap);
     }
 

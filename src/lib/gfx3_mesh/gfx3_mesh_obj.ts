@@ -303,7 +303,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
 
       if (line.startsWith('map_Ns ')) {
         const a = line.substring(7);
-        curMat.setSpecularMap(await gfx3TextureManager.loadTexture8bit(path + a));
+        curMat.setSpecularMap(await gfx3TextureManager.loadTexture(path + a, {}, true));
       }
 
       if (line.startsWith('map_Bump ')) {

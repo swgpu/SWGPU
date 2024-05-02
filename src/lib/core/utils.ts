@@ -147,7 +147,7 @@ class UT {
    * @param b - The end.
    * @param t - The time.
    */
-  static MIX(a: Array<any>, b: Array<any>, t: number): Array<any> {
+  static MIX(a: Array<number>, b: Array<number>, t: number): Array<number> {
     return a.map((v, i) => UT.LERP(v, b[i], t));
   }
 
@@ -159,7 +159,7 @@ class UT {
    * @param t1 - The horizontal interpolation distance.
    * @param t2 - The vertical interpolation distance.
    */
-  static BILINEAR_FILTER(tl: Array<any>, tr: Array<any>, bl: Array<any>, br: Array<any>, t1: number, t2: number): Array<any> {
+  static BILINEAR_FILTER(tl: Array<number>, tr: Array<number>, bl: Array<number>, br: Array<number>, t1: number, t2: number): Array<any> {
     const t = UT.MIX(tl, tr, t1);
     const b = UT.MIX(bl, br, t1);
     return UT.MIX(t, b, t2);

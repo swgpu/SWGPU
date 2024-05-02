@@ -349,12 +349,12 @@ class Gfx3Manager {
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
     });
 
-    const gpuSampler = this.device.createSampler({
+    const gpuSampler = this.device.createSampler(Object.assign(samplerDescriptor, {
       magFilter: samplerDescriptor.magFilter ?? 'linear',
       minFilter: samplerDescriptor.minFilter ?? 'linear',
       addressModeU: samplerDescriptor.addressModeU ?? 'repeat',
       addressModeV: samplerDescriptor.addressModeV ?? 'repeat'
-    });
+    }));
 
     return { gpuTexture: gpuTexture, gpuSampler: gpuSampler };
   }
@@ -383,12 +383,12 @@ class Gfx3Manager {
 
     this.device.queue.copyExternalImageToTexture({ source: bitmap }, { texture: gpuTexture }, [bitmap.width, bitmap.height]);
 
-    const gpuSampler = this.device.createSampler({
+    const gpuSampler = this.device.createSampler(Object.assign(samplerDescriptor, {
       magFilter: samplerDescriptor.magFilter ?? 'linear',
       minFilter: samplerDescriptor.minFilter ?? 'linear',
       addressModeU: samplerDescriptor.addressModeU ?? 'repeat',
       addressModeV: samplerDescriptor.addressModeV ?? 'repeat'
-    });
+    }));
 
     return { gpuTexture: gpuTexture, gpuSampler: gpuSampler };
   }
