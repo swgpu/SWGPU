@@ -98,8 +98,8 @@ class PhysicsComponent {
         this.player.velocity[1] = 0;
       }
     }
-    
-    if (UT.VEC3_LENGTH(velocity) == 0 && this.player.velocity[0] < 0.001 && this.player.velocity[2] < 0.001) {
+  
+    if (UT.VEC3_LENGTH(velocity) == 0 && speed < 0.001) {
       this.player.velocity[0] = 0;
       this.player.velocity[2] = 0;
     }

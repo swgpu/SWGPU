@@ -33,7 +33,11 @@ class AsgardScreen extends Screen {
     this.mapJSM = new Gfx3MeshJSM();
     await this.mapJSM.loadFromFile('./tutorials/asgard/map.jsm');
     this.mapJSM.setMaterial(new Gfx3Material({
-      texture: await gfx3TextureManager.loadTexture('./tutorials/asgard/map.png')
+      texture: await gfx3TextureManager.loadTextureMips('./tutorials/asgard/map.png', {
+        magFilter: 'nearest',
+        minFilter: 'nearest',
+        mipmapFilter: 'linear'
+      })
     }));
 
     this.mapJNM = new Gfx3PhysicsJNM();

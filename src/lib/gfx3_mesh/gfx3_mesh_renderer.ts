@@ -41,10 +41,10 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
 
     this.grp0 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 0);
     this.camPos = this.grp0.setFloat(0, 'CAM_POS', 3);
-    this.dirLight = this.grp0.setFloat(1, 'DIR_LIGHT', 16);
+    this.dirLight = this.grp0.setFloat(1, 'DIR_LIGHT', 20);
     this.fog = this.grp0.setFloat(2, 'FOG', 12);
     this.pointLightCount = this.grp0.setInteger(3, 'POINT_LIGHT_COUNT', 1);
-    this.pointLights = this.grp0.setFloat(4, 'POINT_LIGHTS', 20 * MAX_POINT_LIGHTS);
+    this.pointLights = this.grp0.setFloat(4, 'POINT_LIGHTS', 24 * MAX_POINT_LIGHTS);
     this.decalCount = this.grp0.setInteger(5, 'DECAL_COUNT', 1);
     this.decals = this.grp0.setFloat(6, 'DECALS', 24 * MAX_DECALS);
     this.lvpMatrix = this.grp0.setFloat(7, 'LVP_MATRIX', 16);
@@ -191,8 +191,9 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {vec3} diffuse - The diffuse color.
    * @param {vec3} specular - The specular color.
    * @param {number} [intensity=1] - The strength or brightness.
+   * @param {number} [meshId=0] - The mesh id targeted (0 affect all mesh).
    */
-  drawDirLight(direction: vec3, ambient: vec3, diffuse: vec3, specular: vec3, intensity: number = 1): void {
+  drawDirLight(direction: vec3, ambient: vec3, diffuse: vec3, specular: vec3, intensity: number = 1, meshId: number = 0): void {
     this.dirLight[0] = direction[0];
     this.dirLight[1] = direction[1];
     this.dirLight[2] = direction[2];
@@ -209,6 +210,10 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.dirLight[13] = specular[1];
     this.dirLight[14] = specular[2];
     this.dirLight[15] = intensity;
+    this.dirLight[16] = meshId;
+    this.dirLight[17] = 0;
+    this.dirLight[18] = 0;
+    this.dirLight[19] = 0;
   }
 
   /**
@@ -219,36 +224,41 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {vec3} diffuse - The diffuse color.
    * @param {vec3} specular - The specular color.
    * @param {number} [intensity=1] - The brightness or strength.
+   * @param {number} [meshId=0] - The mesh id targeted (0 affect all mesh).
    * @param {number} [constant=1] - The constant attenuation factor of the point light.
    * @param {number} [linear=0] - The linear attenuation factor of the point light.
    * @param {number} [exp=0] - The exponent of the attenuation equation for the point light.
    */
-  drawPointLight(position: vec3, ambient: vec3, diffuse: vec3, specular: vec3, intensity: number = 1, constant: number = 1, linear: number = 0, exp: number = 0): void {
+  drawPointLight(position: vec3, ambient: vec3, diffuse: vec3, specular: vec3, intensity: number = 1, meshId: number = 0, constant: number = 1, linear: number = 0, exp: number = 0): void {
     const count = this.pointLightCount[0];
     if (count >= MAX_POINT_LIGHTS) {
       throw new Error('Gfx3MeshRenderer::drawPointLight(): Max point lights number exceeded !');
     }
 
-    this.pointLights[count * 20 + 0] = position[0];
-    this.pointLights[count * 20 + 1] = position[1];
-    this.pointLights[count * 20 + 2] = position[2];
-    this.pointLights[count * 20 + 3] = 0;
-    this.pointLights[count * 20 + 4] = ambient[0];
-    this.pointLights[count * 20 + 5] = ambient[1];
-    this.pointLights[count * 20 + 6] = ambient[2];
-    this.pointLights[count * 20 + 7] = 0;
-    this.pointLights[count * 20 + 8] = diffuse[0];
-    this.pointLights[count * 20 + 9] = diffuse[1];
-    this.pointLights[count * 20 + 10] = diffuse[2];
-    this.pointLights[count * 20 + 11] = 0;
-    this.pointLights[count * 20 + 12] = specular[0];
-    this.pointLights[count * 20 + 13] = specular[1];
-    this.pointLights[count * 20 + 14] = specular[2];
-    this.pointLights[count * 20 + 15] = 0;
-    this.pointLights[count * 20 + 16] = constant;
-    this.pointLights[count * 20 + 17] = linear;
-    this.pointLights[count * 20 + 18] = exp;
-    this.pointLights[count * 20 + 19] = intensity;
+    this.pointLights[count * 24 + 0] = position[0];
+    this.pointLights[count * 24 + 1] = position[1];
+    this.pointLights[count * 24 + 2] = position[2];
+    this.pointLights[count * 24 + 3] = 0;
+    this.pointLights[count * 24 + 4] = ambient[0];
+    this.pointLights[count * 24 + 5] = ambient[1];
+    this.pointLights[count * 24 + 6] = ambient[2];
+    this.pointLights[count * 24 + 7] = 0;
+    this.pointLights[count * 24 + 8] = diffuse[0];
+    this.pointLights[count * 24 + 9] = diffuse[1];
+    this.pointLights[count * 24 + 10] = diffuse[2];
+    this.pointLights[count * 24 + 11] = 0;
+    this.pointLights[count * 24 + 12] = specular[0];
+    this.pointLights[count * 24 + 13] = specular[1];
+    this.pointLights[count * 24 + 14] = specular[2];
+    this.pointLights[count * 24 + 15] = 0;
+    this.pointLights[count * 24 + 16] = constant;
+    this.pointLights[count * 24 + 17] = linear;
+    this.pointLights[count * 24 + 18] = exp;
+    this.pointLights[count * 24 + 19] = intensity;
+    this.pointLights[count * 24 + 20] = meshId;
+    this.pointLights[count * 24 + 21] = 0;
+    this.pointLights[count * 24 + 22] = 0;
+    this.pointLights[count * 24 + 23] = 0;
     this.pointLightCount[0]++;
   }
 

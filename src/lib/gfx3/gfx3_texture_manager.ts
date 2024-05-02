@@ -40,7 +40,7 @@ class Gfx3TextureManager {
    * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
    * @param {boolean} [is8bit] - Determine if texture is 8bits encoded.
    */
-  async loadTextureMips(path: string, samplerDescriptor: GPUSamplerDescriptor = {}, is8bit: boolean): Promise<Gfx3Texture> {
+  async loadTextureMips(path: string, samplerDescriptor: GPUSamplerDescriptor = {}, is8bit: boolean = false): Promise<Gfx3Texture> {
     if (this.textures.has(path)) {
       return this.textures.get(path)!;
     }

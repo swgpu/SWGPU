@@ -120,6 +120,7 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
   /**
    * Set an identifier based on three components.
    * Note: WARME use some specials ID's in its internal pipeline, check the table below:
+   * ■ lights group: r = n
    * ■ decals group: g = n
    * ■ pixelation: r = -1
    * ■ color limitation: g = -1

@@ -177,7 +177,7 @@ class Gfx3PhysicsJNM {
       const angleA = UT.VEC2_ANGLE_BETWEEN([centerToA[0], centerToA[2]], [mx, mz]);
       const angleB = UT.VEC2_ANGLE_BETWEEN([centerToB[0], centerToB[2]], [mx, mz]);
       return angleA - angleB;
-    });
+    }).slice(0, 2);
 
     while (i < sortedPoints.length) {
       const xz = this.$moveXZ(wallIntersectedFrags, sortedPoints[i], [fmx, fmz]);
@@ -331,17 +331,11 @@ class Gfx3PhysicsJNM {
 
     for (const frag of frags) {
       const out: vec3 = [0, 0, 0];
-      UT.RAY_PLAN([point[0] - move[0], point[1], point[2] - move[1]], [move[0], 0, move[1]], frag.v1, frag.n, true, out);
+      UT.RAY_PLAN([point[0] - (move[0] * 2), point[1], point[2] - (move[1] * 2)], [move[0], 0, move[1]], frag.v1, frag.n, true, out);
       const p1: vec2 = [out[0] - frag.t[0] * 100, out[2] - frag.t[2] * 100]; // scale by 100 for lines extends
       const q1: vec2 = [out[0] + frag.t[0] * 100, out[2] + frag.t[2] * 100]; // and get very-fast object
-      const p2: vec2 = [point[0] - move[0], point[2] - move[1]];
-      const q2: vec2 = [point[0] + move[0], point[2] + move[1]];
-
-      // UT.RAY_PLAN(point, [move[0], 0, move[1]], frag.v1, frag.n, true, out);
-      // const p1: vec2 = [out[0] - frag.t[0] * 100, out[2] - frag.t[2] * 100]; // scale by 100 for lines extends
-      // const q1: vec2 = [out[0] + frag.t[0] * 100, out[2] + frag.t[2] * 100]; // and get very-fast object
-      // const p2: vec2 = [point[0], point[2]];
-      // const q2: vec2 = [point[0] + move[0], point[2] + move[1]];
+      const p2: vec2 = [point[0] - (move[0] * 2), point[2] - (move[1] * 2)];
+      const q2: vec2 = [point[0] + (move[0] * 2), point[2] + (move[1] * 2)];
 
       if (UT.COLLIDE_LINE_TO_LINE(p1, q1, p2, q2)) {
         const pen = UT.VEC2_SUBSTRACT([out[0], out[2]], [point[0] + move[0], point[2] + move[1]]);

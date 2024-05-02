@@ -163,7 +163,8 @@ struct PointLight {
   DIFFUSE: vec3<f32>,
   SPECULAR: vec3<f32>,
   ATTEN: vec3<f32>,
-  INTENSITY: f32
+  INTENSITY: f32,
+  MESH_ID: f32
 }
 
 struct DirLight {
@@ -172,7 +173,8 @@ struct DirLight {
   AMBIENT: vec3<f32>,
   DIFFUSE: vec3<f32>,
   SPECULAR: vec3<f32>,
-  INTENSITY: f32
+  INTENSITY: f32,
+  MESH_ID: f32
 }
 
 struct Fog {
@@ -286,14 +288,16 @@ fn main(
       shadow = CalcShadow(FragShadowPos);
     }
 
-    if (DIR_LIGHT.ENABLED == 1.0)
+    if (DIR_LIGHT.ENABLED == 1.0 && (DIR_LIGHT.MESH_ID == 0.0 || DIR_LIGHT.MESH_ID == MESH_INFOS.ID.r))
     {
       totalLight += CalcDirLight(normal, FragPos, textureUV, shadow);
     }
 
     for (var i: u32 = 0; i < POINT_LIGHT_COUNT; i++)
     {
-      totalLight += CalcPointLight(i, normal, FragPos, textureUV, shadow);
+      if (POINT_LIGHTS[i].MESH_ID == 0.0 || POINT_LIGHTS[i].MESH_ID == MESH_INFOS.ID.r) {
+        totalLight += CalcPointLight(i, normal, FragPos, textureUV, shadow);
+      }
     }
 
     outputColor = texel * totalLight;
