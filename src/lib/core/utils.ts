@@ -138,8 +138,8 @@ class UT {
    * @param coefficient - The increase coefficient factor.
    * @param t - The time.
    */
-  static LERP_EXP(a: number, b: number, coefficient: number, t: number): number {
-    return a + (b - a) * Math.pow(coefficient, t);
+  static LERP_EXP(a: number, b: number, exp: number, t: number): number {
+    return a + (b - a) * Math.pow(exp, t);
   }
 
   /**

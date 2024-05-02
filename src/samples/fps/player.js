@@ -74,7 +74,7 @@ class PhysicsComponent {
     // -------------------
     this.lift = 0.3;
     this.radius = 0.5;
-    this.frictionCoefficient = 0.99999999;
+    this.frictionCoefficient = 0.999999999;
     this.gravity = 0.8;
   }
 
@@ -83,23 +83,7 @@ class PhysicsComponent {
     this.player.velocity[0] = UT.LERP_EXP(velocity[0], this.player.velocity[0], 1 - this.frictionCoefficient, ts / 1000);
     this.player.velocity[2] = UT.LERP_EXP(velocity[2], this.player.velocity[2], 1 - this.frictionCoefficient, ts / 1000);
 
-    const speed = UT.VEC2_LENGTH([this.player.velocity[0], this.player.velocity[2]]);
-    const speedRatio = speed / this.player.maxSpeed;
-    const mx = speedRatio > 0 ? this.player.velocity[0] / speedRatio * (ts / 1000) : 0;
-    const my = this.player.velocity[1] * (ts / 1000);
-    const mz = speedRatio > 0 ? this.player.velocity[2] / speedRatio * (ts / 1000) : 0;
-
-    if (UT.VEC3_LENGTH(this.player.velocity) > 0.1) {
-      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, mx, my, mz, this.lift, my < 0, 0.1);
-      this.player.x += navInfo.move[0] * speedRatio;
-      this.player.y += navInfo.move[1];
-      this.player.z += navInfo.move[2] * speedRatio;
-      if (this.player.velocity[1] < 0 && navInfo.collideFloor) {
-        this.player.velocity[1] = 0;
-      }
-    }
-  
-    if (UT.VEC3_LENGTH(velocity) == 0 && speed < 0.001) {
+    if (UT.VEC2_LENGTH([this.player.velocity[0], this.player.velocity[2]]) < 0.01) {
       this.player.velocity[0] = 0;
       this.player.velocity[2] = 0;
     }
@@ -108,8 +92,27 @@ class PhysicsComponent {
       this.player.velocity[1] = this.player.jumpStrength;
       this.player.jump = false;
     }
-    else {
-      this.player.velocity[1] -= this.gravity;
+
+    const speedXZ = UT.VEC2_LENGTH([this.player.velocity[0], this.player.velocity[2]]);
+    const speedRatio = speedXZ / this.player.maxSpeed;
+
+    const mx = speedRatio > 0 ? this.player.velocity[0] / speedRatio * (ts / 1000) : 0;
+    const my = this.player.velocity[1] * (ts / 1000);
+    const mz = speedRatio > 0 ? this.player.velocity[2] / speedRatio * (ts / 1000) : 0;
+
+    if (UT.VEC3_LENGTH(this.player.velocity) > 0) {
+      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, mx, my, mz, this.lift, my <= 0);
+      this.player.x += navInfo.move[0] * speedRatio;
+      this.player.y += navInfo.move[1] * speedRatio;
+      this.player.z += navInfo.move[2] * speedRatio;
+
+      if (this.player.velocity[1] < 0 && navInfo.collideFloor) {
+        this.player.velocity[1] = 0;
+      }
+
+      if (!navInfo.collideFloor) {
+        this.player.velocity[1] -= this.gravity;
+      }
     }
   }
 }

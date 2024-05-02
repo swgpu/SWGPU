@@ -61,6 +61,7 @@ body {
   user-select: none;
   box-sizing: content-box;
   border: 20px solid #c1c1c1;
+  border-image: linear-gradient(to left, blue, gold, blue) 1;
 }
 
 #APP.scanlines::before {

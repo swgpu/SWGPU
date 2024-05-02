@@ -331,7 +331,10 @@ class Gfx3PhysicsJNM {
 
     for (const frag of frags) {
       const out: vec3 = [0, 0, 0];
-      UT.RAY_PLAN([point[0] - (move[0] * 2), point[1], point[2] - (move[1] * 2)], [move[0], 0, move[1]], frag.v1, frag.n, true, out);
+      if (!UT.RAY_PLAN([point[0] - (move[0] * 2), point[1], point[2] - (move[1] * 2)], [move[0], 0, move[1]], frag.v1, frag.n, true, out)) {
+        continue;
+      }
+
       const p1: vec2 = [out[0] - frag.t[0] * 100, out[2] - frag.t[2] * 100]; // scale by 100 for lines extends
       const q1: vec2 = [out[0] + frag.t[0] * 100, out[2] + frag.t[2] * 100]; // and get very-fast object
       const p2: vec2 = [point[0] - (move[0] * 2), point[2] - (move[1] * 2)];
@@ -363,7 +366,6 @@ class Gfx3PhysicsJNM {
 
     for (const frag of frags) {
       const out: vec3 = [0, 0, 0];
-
       if (UT.RAY_TRIANGLE(point, [0, -1, 0], frag.v1, frag.v2, frag.v3, true, out)) {
         const pen = UT.VEC3_SUBSTRACT(out, point);
         const penLength = UT.VEC3_LENGTH(pen);

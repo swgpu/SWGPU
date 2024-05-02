@@ -19,7 +19,7 @@ Some words about our philosophy:
 - **Flexibility:** Create your own renderers. Handle render and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
 - **Performance:** We used WebGPU API for a blazing fast rendering.
-- **Lightweight:** The lib minzipped size is just 73 kB (1Mb with Rapier).
+- **Lightweight:** The lib minzipped size is just 73 kB (1Mb with Rapier2D & Rapier3D).
 
 You can check the documentation [here](http://warme-engine.com/).          
 For a more concret overview on it, you can play examples [here](http://demo.warme-engine.com/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
@@ -27,8 +27,6 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 ## Table of content
 
 * [Features](#features)
-* [Tutorials](#tutorials)
-* [Demos](#demos)
 * [Getting Started](#getting-started)
 * [How to integrate your 3D models ?](#how-to-integrate-your-3d-models)
 * [Contributions](#contributions)
@@ -154,162 +152,6 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 - 🌆 **DNA**
     - ECS architecture implementation
 
-## Tutorials
-<table>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/tutorial1.png" width="150px"/>
-    </td>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/tutorial2.png" width="150px"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        <p>Tutorial 2D</p>
-    </td>
-    <td>
-        <p>Tutorial 3D</p>
-    </td>
-  </tr>
-</table>
-
-## Demos
-<table>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb1.png" width="150px"/>
-    </td>
-    <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb2.png" width="150px"/>
-    </td>
-   <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb3.png" width="150px"/>
-   </td>
-  </tr>
-  <tr>
-    <td> 
-        <p>3D Viewer Multi-lights</p>
-    </td>
-    <td>
-        <p>UI Menu</p>
-    </td>
-   <td>
-       <p>3D Pre-rendered Scene</p>
-   </td>
-  </tr>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb4.png" width="150px"/>
-    </td>
-    <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb5.png" width="150px"/>
-    </td>
-   <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb6.png" width="150px"/>
-   </td>
-  </tr>
-  <tr>
-    <td> 
-        <p>3D Isometric Scene</p>
-    </td>
-    <td>
-        <p>Visual Novel</p>
-    </td>
-   <td>
-       <p>2D Ortho Tiles</p>
-   </td>
-  </tr>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb7.png" width="150px"/>
-    </td>
-    <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb8.png" width="150px"/>
-    </td>
-   <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb9.png" width="150px"/>
-   </td>
-  </tr>
-  <tr>
-    <td>
-        <p>Boarding Game</p>
-    </td>
-    <td>
-        <p>Collectible Card Game</p>
-    </td>
-   <td>
-       <p>3D FPS</p>
-   </td>
-  </tr>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb10.png" width="150px"/>
-    </td>
-    <td align="center">
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb11.png" width="150px"/>
-    </td>
-   <td align="center">
-       <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb12.png" width="150px"/>
-   </td>
-  </tr>
-  <tr>
-    <td> 
-        <p>3D RPG Battle</p>
-    </td>
-    <td>
-        <p>3D Performance (10.000 Cubes)</p>
-    </td>
-   <td>
-       <p>2D Fighting Game</p>
-   </td>
-  </tr>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb13.png" width="150px"/>
-    </td>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb14.png" width="150px"/>
-    </td>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb15.png" width="150px"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        <p>3D Particles</p>
-    </td>
-    <td>
-        <p>3D Curve</p>
-    </td>
-    <td>
-        <p>Triple Triad</p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb16.png" width="150px"/>
-    </td>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb17.png" width="150px"/>
-    </td>
-    <td align="center"> 
-        <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/thumb18.png" width="150px"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        <p>2D Isometric Tiles</p>
-    </td>
-    <td>
-        <p>3D Shadow Map</p>
-    </td>
-    <td>
-        <p>2D Isometric Background</p>
-    </td>
-  </tr>
-</table>
-
 ## Getting started 
 A good start is to download [blank boilerplate](https://github.com/jay19240/WARME-Y2K-Boilerplate), it's a complete environment including vite, typescript and warme. Clone it and have fun !      
 A second way is to start with the engine repository itself, in this case you can perfectly add a sample and work on it.     
@@ -367,25 +209,18 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## Roadmap (internal usage, only fr)
 [INFO]
-1. Cette roadmap peut changer (réduction ou ajout)
-2. Elle est classé par ordre de priorité
-3. Ont fait qu'une seule tache à la fois
+1. This roadmap can changed.
+2. Ordered by priority
+3. Task done one by one
 
 [CORE TASKS]
-1. Ecriture d'un tutorial sur la demo "pre-rendered" pour le mag "programmez" - (J4Y & Dazu)
-2. Evolution du mip-mapping - (J4Y suit https://webgpufundamentals.org/webgpu/lessons/webgpu-textures.html)
-3. R&D sur la possibilité de passer les formats propriétaire en binaire - (J4Y)
-4. Ajout des spot-lights - (J4Y)
-
-[DEMO TASKS]
-1. Ajout la possibilité de sauter à la demo fps - (Imprévisible)
-2. Ajout d'une arme + tir à la demo fps
-3. Ajout d'enemis basiques
-4. Améliorer le système de collisions - (J4Y)
+1. Write tutorial for "programmez" mag
+3. Add binary format for 3D files.
+4. Add JSON Tilemap format to fit SpriteFusion.
+4. Add spot-light
 
 [DEADLINES]
-1. CORE_TASKS.1.2: 01 Juin
-2. DEMO_TASKS.1.2.3.4: 01 Juin
+a. CORE_TASKS.1.2: 01 Juin
 
 ## License 
 WARME Y2K is released under the [MIT](https://opensource.org/licenses/MIT) license. 
