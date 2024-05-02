@@ -1,4 +1,4 @@
-import { UIWidget } from '../ui/ui_widget.js';
+import { UIWidget } from '../ui/ui_widget';
 
 /**
  * A UI widget for displaying a list of items with labels and values.

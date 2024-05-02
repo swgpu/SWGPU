@@ -1,5 +1,5 @@
-import { eventManager } from '../core/event_manager.js';
-import { UIWidget } from '../ui/ui_widget.js';
+import { eventManager } from '../core/event_manager';
+import { UIWidget } from '../ui/ui_widget';
 
 /**
  * A UI widget for displaying a bottom fixed dialog box with text and author name.

@@ -1,4 +1,4 @@
-import { eventManager } from '../core/event_manager.js';
+import { eventManager } from '../core/event_manager';
 import { gfx3TextureManager } from '../gfx3/gfx3_texture_manager';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';

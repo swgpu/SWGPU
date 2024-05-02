@@ -2,7 +2,7 @@ import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { gfx3SpriteRenderer } from './gfx3_sprite_renderer';
 import { Poolable } from '../core/object_pool';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
-import { UT } from '../core/utils.js';
+import { UT } from '../core/utils';
 import { Gfx3Drawable } from '../gfx3/gfx3_drawable';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_sprite_shader';

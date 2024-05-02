@@ -1,8 +1,8 @@
-import { eventManager } from '../core/event_manager.js';
+import { eventManager } from '../core/event_manager';
 import { UT } from '../core/utils';
 import { Poolable } from '../core/object_pool';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
-import { Gfx3Sprite } from './gfx3_sprite.js';
+import { Gfx3Sprite } from './gfx3_sprite';
 
 interface JASFrame {
   x: number;
