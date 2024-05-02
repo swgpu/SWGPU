@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
-![Join our discord !](https://discord.gg/9PcFvg5f7P)
+[Documentation](https://warme-engine.com/) - [Demos](https://demo.warme-engine.com/) - [Screenshots](https://warme-engine.com/?Screenshots) - [Join our discord !](https://discord.gg/9PcFvg5f7P)
 
 > [!WARNING]  
 > Gfx3PhysicsJNM is under invesgation for collides issue.
