@@ -159,7 +159,9 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
    * @param {string} name - The name.
    */
   getMesh(name: string): Gfx3Mesh {
+    
     if (!this.meshes.has(name)) {
+      console.log('name', this.meshes);
       throw new Error('Gfx3MeshOBJ::getMesh(): The mesh object doesn\'t exist !');
     }
 
@@ -253,7 +255,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
 
     for (const line of lines) {
       if (line.startsWith('newmtl ')) {
-        curMatName = line.substring(7);
+        curMatName = extract(line, 7);
         curMat = new Gfx3Material({ lightning: true });
         this.materials.set(curMatName, curMat);
       }
@@ -263,7 +265,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
       }
 
       if (line.startsWith('Kd ')) {
-        const a = line.substring(3).split(' ');
+        const a = extract(line, 3).split(' ');
         const r = parseFloat(a[0]);
         const g = parseFloat(a[1]);
         const b = parseFloat(a[2]);
@@ -271,7 +273,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
       }
 
       if (line.startsWith('Ks ')) {
-        const a = line.substring(3).split(' ');
+        const a = extract(line, 3).split(' ');
         const r = parseFloat(a[0]);
         const g = parseFloat(a[1]);
         const b = parseFloat(a[2]);
@@ -279,17 +281,17 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
       }
 
       if (line.startsWith('Ns ')) {
-        const a = line.substring(3);;
+        const a = extract(line, 3);
         curMat.setSpecularity(parseFloat(a));
       }
 
       if (line.startsWith('d')) {
-        const a = line.substring(1);
+        const a = extract(line, 1);
         curMat.setOpacity(parseFloat(a));
       }
 
       if (line.startsWith('Ke ')) {
-        const a = line.substring(3).split(' ');
+        const a = extract(line, 3).split(' ');
         const r = parseFloat(a[0]);
         const g = parseFloat(a[1]);
         const b = parseFloat(a[2]);
@@ -297,12 +299,12 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
       }
 
       if (line.startsWith('map_Kd ')) {
-        const a = line.substring(7);
+        const a = extract(line, 7);
         curMat.setTexture(await gfx3TextureManager.loadTexture(path + a));
       }
 
       if (line.startsWith('map_Ns ')) {
-        const a = line.substring(7);
+        const a = extract(line, 7);
         curMat.setSpecularMap(await gfx3TextureManager.loadTexture(path + a, {}, true));
       }
 
@@ -348,7 +350,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
     for (const line of lines) {
       if (line.startsWith('o ')) {
         const object = new OBJObject();
-        object.name = line.substring(2);
+        object.name = extract(line, 2);
         object.groups = [{ name: 'default', faces: [], vertexCount: 0 }];
         currentObject = object;
         currentGroup = object.groups[0];
@@ -356,11 +358,11 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
       }
 
       if (line.startsWith('usemtl ')) {
-        currentObject.materialName = line.substring(7);
+        currentObject.materialName = extract(line, 7);
       }
 
       if (line.startsWith('v ')) {
-        const a = line.substring(2).split(' ');
+        const a = extract(line, 2).split(' ');
         const x = parseFloat(a[0]);
         const y = parseFloat(a[1]);
         const z = parseFloat(a[2]);
@@ -377,7 +379,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
       }
 
       if (line.startsWith('vt ')) {
-        const a = line.substring(3).split(' ');
+        const a = extract(line, 3).split(' ');
         const u = parseFloat(a[0]);
         const v = 1 - parseFloat(a[1]);
         this.texcoords.push(u, v);
@@ -385,7 +387,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
       }
 
       if (line.startsWith('vn ')) {
-        const a = line.substring(3).split(' ');
+        const a = extract(line, 3).split(' ');
         const x = parseFloat(a[0]);
         const y = parseFloat(a[1]);
         const z = parseFloat(a[2]);
@@ -394,12 +396,12 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
       }
 
       if (line.startsWith('s ')) {
-        const a = line.substring(2);
+        const a = extract(line, 2);
         currentSmoothGroup = parseInt(a);
       }
 
       if (line.startsWith('g ')) {
-        const a = line.substring(2);
+        const a = extract(line, 2);
         const group = currentObject.groups.find(g => g.name == a);
 
         if (group) {
@@ -413,7 +415,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
       }
 
       if (line.startsWith('f ')) {
-        const a = line.substring(2).split(' ');
+        const a = extract(line, 2).split(' ');
         if (a.length > 3) {
           throw new Error('Gfx3MeshOBJ::loadObjects(): No support of quad faces !');
         }
@@ -434,7 +436,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
       }
 
       if (line.startsWith('l ')) {
-        const a = line.substring(2).split(' ');
+        const a = extract(line, 2).split(' ');
         const ax = this.coords[(parseInt(a[0]) - 1) * 3 + 0];
         const ay = this.coords[(parseInt(a[0]) - 1) * 3 + 1];
         const az = this.coords[(parseInt(a[0]) - 1) * 3 + 2];
@@ -475,10 +477,18 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
         mesh.setVertices(Gfx3Mesh.buildVertices(object.vertexCount, this.coords, texcoords, colors, normals, object.groups));
         mesh.endVertices();
         mesh.setBoundingBox(Gfx3BoundingBox.createFromVertices(this.coords, 3));
-        this.meshes.set(object.name, mesh);  
+        this.meshes.set(object.name, mesh);
       }
     }
   }
 }
 
 export { Gfx3MeshOBJ };
+
+// -------------------------------------------------------------------------------------------
+// HELPFUL
+// -------------------------------------------------------------------------------------------
+
+function extract(line: string, start: number): string {
+  return line.substring(start).replace('\r', '');
+}

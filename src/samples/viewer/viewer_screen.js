@@ -11,6 +11,7 @@ import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3MeshOBJ } from '../../lib/gfx3_mesh/gfx3_mesh_obj';
 import { Gfx3Skybox } from '../../lib/gfx3_skybox/gfx3_skybox';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
+import { coreManager } from '../../lib/core/core_manager';
 // ---------------------------------------------------------------------------------------
 
 class ViewerScreen extends Screen {
@@ -73,6 +74,9 @@ class ViewerScreen extends Screen {
     }
     else if (e.key == 'f' || e.key == 'F') {
       gfx3Manager.hasFilter() ? gfx3Manager.setFilter('') : gfx3Manager.setFilter('grayscale(100%)');
+    }
+    else if (e.key == 'q' || e.key == 'Q') {
+      coreManager.toggleClass('scanlines');
     }
     else if (e.key == 'p' || e.key == 'P') {
       gfx3PPERenderer.setParam(PPEParam.ENABLED, 1.0);
@@ -229,6 +233,12 @@ function CREATE_UI_INFOBOX() {
   {
     const li = document.createElement('li');
     li.textContent = '[f] => Toggle Filtering (greyscale)';
+    ul.appendChild(li);
+  }
+
+  {
+    const li = document.createElement('li');
+    li.textContent = '[q] => Toggle Scanlines';
     ul.appendChild(li);
   }
 
