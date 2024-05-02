@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
-[![](https://dcbadge.vercel.app/api/server/eT4wWAN4)](https://discord.gg/9PcFvg5f7P)
+![Join our discord !](https://discord.gg/9PcFvg5f7P)
 
 > [!WARNING]  
 > Gfx3PhysicsJNM is under invesgation for collides issue.
