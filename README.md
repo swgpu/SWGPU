@@ -4,7 +4,7 @@
 
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
 ![NPM Version](https://img.shields.io/npm/v/warme-y2k)
-![Size](https://badgen.net/bundlephobia/minzip/warme-y2k)
+![Size](https://deno.bundlejs.com/?q=warme-y2k&badge)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
@@ -19,7 +19,7 @@ Some words about our philosophy:
 - **Flexibility:** Create your own renderers. Handle render and update loops.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
 - **Performance:** We used WebGPU API for a blazing fast rendering.
-- **Lightweight:** The lib minzipped size is just 2.5KB.
+- **Lightweight:** The lib minzipped size is just 73 kB (1Mb with Rapier).
 
 You can check the documentation [here](http://warme-engine.com/).          
 For a more concret overview on it, you can play examples [here](http://demo.warme-engine.com/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
