@@ -337,6 +337,12 @@ class Gfx3PhysicsJNM {
       const p2: vec2 = [point[0] - move[0], point[2] - move[1]];
       const q2: vec2 = [point[0] + move[0], point[2] + move[1]];
 
+      // UT.RAY_PLAN(point, [move[0], 0, move[1]], frag.v1, frag.n, true, out);
+      // const p1: vec2 = [out[0] - frag.t[0] * 100, out[2] - frag.t[2] * 100]; // scale by 100 for lines extends
+      // const q1: vec2 = [out[0] + frag.t[0] * 100, out[2] + frag.t[2] * 100]; // and get very-fast object
+      // const p2: vec2 = [point[0], point[2]];
+      // const q2: vec2 = [point[0] + move[0], point[2] + move[1]];
+
       if (UT.COLLIDE_LINE_TO_LINE(p1, q1, p2, q2)) {
         const pen = UT.VEC2_SUBSTRACT([out[0], out[2]], [point[0] + move[0], point[2] + move[1]]);
         const penLength = UT.VEC2_LENGTH(pen);

@@ -42,7 +42,9 @@ class FPSScreen extends Screen {
     await mesh.loadFromFile('./samples/fps/map.jsm');
     mesh.setMaterial(new Gfx3Material({
       lightning: true,
-      texture: await gfx3TextureManager.loadTexture('./samples/fps/map.png')
+      texture: await gfx3TextureManager.loadTexture('./samples/fps/map.png', {
+        magFilter: 'nearest'
+      })
     }));
 
     const jnm = new Gfx3PhysicsJNM();
