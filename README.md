@@ -4,7 +4,8 @@
 
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
 ![NPM Version](https://img.shields.io/npm/v/warme-y2k)
-![Size](https://deno.bundlejs.com/?q=warme-y2k&badge)
+![LibSize](https://img.shields.io/badge/LibSize-73KB-blue)
+![Size](https://img.shields.io/badge/DepSize-1MB-blue)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
