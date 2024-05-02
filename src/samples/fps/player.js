@@ -185,7 +185,7 @@ class Player {
     this.dir = [0, 0, 0];
     this.velocity = [0, 0, 0];
     this.rotation = [0, 0, 0];
-    this.maxSpeed = 10;
+    this.maxSpeed = 7;
     this.rotationSpeed = 1;
     this.jump = false;
     this.jumpStrength = 10;
