@@ -12,7 +12,7 @@
 [Documentation](https://warme-engine.com/) - [Demos](https://demo.warme-engine.com/) - [Screenshots](https://warme-engine.com/?Screenshots) - [Join our discord !](https://discord.gg/9PcFvg5f7P)
 
 > [!TIP]
-> High luminosity is recommanded with scanlines filter (set as default).
+> High luminosity is recommanded with scanlines filter enabled (set as default).
 
 **WARME Y2K** is a fully packed **2D/3D game engine** dedicated to **Y2K games** on the web !     
 The first part of the name (W.A.R.M.E) is an acronym for **Web Against Regular Major Engines**, you can understand it like a tentative
