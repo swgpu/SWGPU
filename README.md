@@ -207,6 +207,22 @@ If you have a suggestion that would make this better, please fork the repo and c
 - [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
+## Changelog
+```
+- [Ver. 1.1.12] Fix and optimize jnm.
+- [Ver. 1.1.10] Some added to fps demo.
+- [Ver. 1.1.7]  Mipmap added.
+- [Ver. 1.1.5]  Export as npm module added.
+- [Ver. 1.1.1]  Outline post-process effect added.
+- [Ver. 1.1.1]  Normals, id and depth rendering buffer added.
+- [Ver. 1.1.1]  Object pooling added.
+- [Ver. 1.1.0]  Move physics to dedicated folder and redesign JNM.
+- [Ver. 1.1.0]  Rapier has been added.
+- [Ver. 1.0.3]  Playstation one post-process effect has been added.
+- [Ver. 1.0.3]  Post-processing effects has been added.
+- [Ver. 1.0.3]  Camera WASD has been added.
+- [Ver. 1.0.3]  Camera orbit has been added.
+```
 
 ## Roadmap (internal usage, only fr)
 [INFO]
