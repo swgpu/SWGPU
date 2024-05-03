@@ -15,6 +15,13 @@ class Gfx3MipmapManager {
     this.shaderModule = this.device.createShaderModule({ code: SHADER_CODE });
   }
 
+  /**
+   * Creates a GPU texture from a given bitmap image or canvas element with mips.
+   * 
+   * @param {ImageBitmap | HTMLCanvasElement} [bitmap] - The source image.
+   * @param {boolean} [is8bit=false] - Indicates whether the texture should be treated as an 8-bit texture or not.
+   * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
+   */
   createTextureFromBitmap(bitmap: ImageBitmap | HTMLCanvasElement, is8bit: boolean = false, samplerDescriptor: GPUSamplerDescriptor = {}): Gfx3Texture {
     const gpuTexture = this.device.createTexture({
       format: is8bit ? 'r8unorm' : 'rgba8unorm',
