@@ -164,23 +164,27 @@ class Gfx3PhysicsJNM {
     let collideWall = false;
     let i = 0;
 
-    const points: Array<vec3> = [
+    const bottomPoints: Array<vec3> = [
       [min[0], min[1] + lift, max[2]],
       [min[0], min[1] + lift, min[2]],
       [max[0], min[1] + lift, min[2]],
       [max[0], min[1] + lift, max[2]]
     ];
 
-    const sortedPoints = points.sort((a: vec3, b: vec3): number => {
-      const centerToA = UT.VEC3_SUBSTRACT(a, [x, y, z]);
-      const centerToB = UT.VEC3_SUBSTRACT(b, [x, y, z]);
-      const angleA = UT.VEC2_ANGLE_BETWEEN([centerToA[0], centerToA[2]], [mx, mz]);
-      const angleB = UT.VEC2_ANGLE_BETWEEN([centerToB[0], centerToB[2]], [mx, mz]);
-      return angleA - angleB;
-    }).slice(0, 2);
+    const topPoints: Array<vec3> = [
+      [min[0], max[1], max[2]],
+      [min[0], max[1], min[2]],
+      [max[0], max[1], min[2]],
+      [max[0], max[1], max[2]]
+    ];
 
-    while (i < sortedPoints.length) {
-      const xz = this.$moveXZ(wallIntersectedFrags, sortedPoints[i], [fmx, fmz]);
+    const points: Array<vec3> = [
+      ...POINT_SORTING(x, y, z, mx, mz, bottomPoints),
+      ...POINT_SORTING(x, y, z, mx, mz, topPoints),
+    ];
+
+    while (i < points.length) {
+      const xz = this.$moveXZ(wallIntersectedFrags, points[i], [fmx, fmz]);
       if (xz.move[0] != fmx || xz.move[1] != fmz) {
         fmx = xz.move[0];
         fmz = xz.move[1];
@@ -331,14 +335,14 @@ class Gfx3PhysicsJNM {
 
     for (const frag of frags) {
       const out: vec3 = [0, 0, 0];
-      if (!UT.RAY_PLAN([point[0] - (move[0] * 2), point[1], point[2] - (move[1] * 2)], [move[0], 0, move[1]], frag.v1, frag.n, true, out)) {
-        continue;
+      if (!UT.RAY_PLAN([point[0] - (move[0] * 4), point[1], point[2] - (move[1] * 4)], [move[0], 0, move[1]], frag.v1, frag.n, true, out)) {
+        continue; // ideal solution here is to place the origin ray to point - (move * box length), whatever just * 4 is more fast and seem works for now.
       }
 
       const p1: vec2 = [out[0] - frag.t[0] * 100, out[2] - frag.t[2] * 100]; // scale by 100 for lines extends
       const q1: vec2 = [out[0] + frag.t[0] * 100, out[2] + frag.t[2] * 100]; // and get very-fast object
-      const p2: vec2 = [point[0] - (move[0] * 2), point[2] - (move[1] * 2)];
-      const q2: vec2 = [point[0] + (move[0] * 2), point[2] + (move[1] * 2)];
+      const p2: vec2 = [point[0] - (move[0] * 4), point[2] - (move[1] * 4)];
+      const q2: vec2 = [point[0] + (move[0] * 4), point[2] + (move[1] * 4)];
 
       if (UT.COLLIDE_LINE_TO_LINE(p1, q1, p2, q2)) {
         const pen = UT.VEC2_SUBSTRACT([out[0], out[2]], [point[0] + move[0], point[2] + move[1]]);
@@ -382,3 +386,17 @@ class Gfx3PhysicsJNM {
 }
 
 export { Gfx3PhysicsJNM };
+
+// -------------------------------------------------------------------------------------------
+// HELPFUL
+// -------------------------------------------------------------------------------------------
+
+function POINT_SORTING(x: number, y: number, z: number, mx: number, mz: number, points: Array<vec3>) {
+  return points.sort((a: vec3, b: vec3): number => {
+    const centerToA = UT.VEC3_SUBSTRACT(a, [x, y, z]);
+    const centerToB = UT.VEC3_SUBSTRACT(b, [x, y, z]);
+    const angleA = UT.VEC2_ANGLE_BETWEEN([centerToA[0], centerToA[2]], [mx, mz]);
+    const angleB = UT.VEC2_ANGLE_BETWEEN([centerToB[0], centerToB[2]], [mx, mz]);
+    return angleA - angleB;
+  }).slice(0, 2);
+}

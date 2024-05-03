@@ -99,11 +99,13 @@ class PhysicsComponent {
     const mx = speedRatio > 0 ? this.player.velocity[0] / speedRatio * (ts / 1000) : 0;
     const my = this.player.velocity[1] * (ts / 1000);
     const mz = speedRatio > 0 ? this.player.velocity[2] / speedRatio * (ts / 1000) : 0;
+    const snapFloor = my <= 0;
+    const snapDistance = my <= 0 ? 0.1 : 0.01;
 
     if (UT.VEC3_LENGTH(this.player.velocity) > 0) {
-      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, mx, my, mz, this.lift, my <= 0);
+      const navInfo = this.jnm.box(this.player.x, this.player.y, this.player.z, this.radius, this.player.height, mx, my, mz, this.lift, snapFloor, snapDistance);
       this.player.x += navInfo.move[0] * speedRatio;
-      this.player.y += navInfo.move[1] * speedRatio;
+      this.player.y += navInfo.move[1] * (my == 0 ? speedRatio : 1);
       this.player.z += navInfo.move[2] * speedRatio;
 
       if (this.player.velocity[1] < 0 && navInfo.collideFloor) {
@@ -123,7 +125,7 @@ class CameraComponent {
     this.camera = camera;
     this.crosshair = document.createElement('img');
     this.crosshair.src = 'samples/fps/crosshair.png';
-    uiManager.addNode(this.crosshair, 'position:absolute; left:50%; top:50%; transform: translate(-50%,-50%);');
+    uiManager.addNode(this.crosshair, 'position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);');
   }
 
   delete() {

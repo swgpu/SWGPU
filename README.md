@@ -164,8 +164,8 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - ECS architecture implementation
 
 ## Getting started 
-A good start is to download [blank boilerplate](https://github.com/jay19240/WARME-Y2K-Boilerplate), it's a complete environment including vite, typescript and warme. Clone it and have fun !      
-A second way is to start with the engine repository itself, in this case you can perfectly add a sample and work on it.     
+A good start is to download the engine repository here add a sample and work on it.
+A second way for serious project is to start from scratch with this [minimal boilerplate](https://github.com/jay19240/WARME-Y2K-Boilerplate) it's a complete environment including vite, typescript, warme and it's dependencies. Clone it and have fun !
 
 Run with the following commands
 ```
@@ -174,7 +174,7 @@ Run with the following commands
 ```
 
 ## How to integrate your 3D models
-The best way is to used the [Blender Exporter](https://github.com/jay19240/WARME-Engine/bin/WARME-Blender-Exporter.zip), otherwise you can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.    
+The best way is to used the [Blender Exporter](https://github.com/jay19240/WARME-Y2K/bin/WARME-Blender-Exporter.zip), otherwise you can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.    
 
 Important note: The Blender coordinate system and the engine don't match, see below the rule to translate.
 Don't forget to apply these changes when you export your obj file.
