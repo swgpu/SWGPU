@@ -1576,7 +1576,7 @@ class UT {
    * @param r2 - radius of circle 2.
    * @param outVelocity - The out elastic collision velocity.
    */
-  static COLLIDE_CIRCLE(c1: vec2, r1: number, c2: vec2, r2: number, outVelocity: vec2 = [0, 0]): boolean {
+  static COLLIDE_CIRCLE_TO_CIRCLE(c1: vec2, r1: number, c2: vec2, r2: number, outVelocity: vec2 = [0, 0]): boolean {
     const delta = UT.VEC2_SUBSTRACT(c1, c2);
     const distance = UT.VEC2_LENGTH(delta);
     const distanceMin = r1 + r2;
@@ -1592,25 +1592,41 @@ class UT {
   }
 
   /**
-   * @param c1 - The center of cylinder 1.
+   * @param c1 - The bottom-center of cylinder 1.
    * @param r1 - The radius of cylinder 1.
    * @param h1 - The height of cylinder 1.
-   * @param c2 - The center of cylinder 2.
+   * @param c2 - The bottom-center of cylinder 2.
    * @param r2 - The radius of cylinder 2.
    * @param h2 - The height of cylinder 2.
    * @param outVelocity - The out elastic collision velocity.
    */
-  static COLLIDE_CYLINDER(c1: vec3, r1: number, h1: number, c2: vec3, r2: number, h2: number, outVelocity: vec2 = [0, 0]): boolean {
-    let isCollide = UT.COLLIDE_CIRCLE([c1[0], c1[2]], r1, [c2[0], c2[2]], r2, outVelocity);
+  static COLLIDE_CYLINDER_TO_CYLINDER(c1: vec3, r1: number, h1: number, c2: vec3, r2: number, h2: number, outVelocity: vec2 = [0, 0]): boolean {
+    const isCollide = UT.COLLIDE_CIRCLE_TO_CIRCLE([c1[0], c1[2]], r1, [c2[0], c2[2]], r2, outVelocity);
     if (!isCollide) {
       return false;
     }
 
-    let min1 = c1[1];
-    let max1 = c1[1] + h1;
-    let min2 = c2[1];
-    let max2 = c2[1] + h2;
+    const min1 = c1[1];
+    const max1 = c1[1] + h1;
+    const min2 = c2[1];
+    const max2 = c2[1] + h2;
     return min1 <= max2 && max1 >= min2;
+  }
+
+  /**
+   * @param p - The point.
+   * @param cp - The bottom-center of cylinder.
+   * @param ch - The height of cylinder.
+   * @param cr - The radius of cylinder.
+   */
+  static COLLIDE_POINT_TO_CYLINDER(p: vec3, cp: vec3, ch: number, cr: number): boolean {
+    const delta = UT.VEC2_SUBSTRACT([p[0], p[2]], [cp[0], cp[2]]);
+    const distance = UT.VEC2_LENGTH(delta);
+    if (distance > cr) {
+      return false;
+    }
+
+    return p[1] >= cp[1] && p[1] <= cp[1] + ch;
   }
 
   /**

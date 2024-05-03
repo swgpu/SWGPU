@@ -14,14 +14,14 @@
 -- ''min2'': The min of box 2.~
 -- ''max2'': The max of box 2.~
 ~
-- '''static''' ''COLLIDE_CIRCLE''(c1: vec2, r1: number, c2: vec2, r2: number, outVelocity: vec2): boolean~
+- '''static''' ''COLLIDE_CIRCLE_TO_CIRCLE''(c1: vec2, r1: number, c2: vec2, r2: number, outVelocity: vec2): boolean~
 -- ''c1'': center of circle 1.~
 -- ''r1'': radius of circle 1.~
 -- ''c2'': center of circle 2.~
 -- ''r2'': radius of circle 2.~
 -- ''outVelocity'': The out elastic collision velocity.~
 ~
-- '''static''' ''COLLIDE_CYLINDER''(c1: vec3, r1: number, h1: number, c2: vec3, r2: number, h2: number, outVelocity: vec2): boolean~
+- '''static''' ''COLLIDE_CYLINDER_TO_CYLINDER''(c1: vec3, r1: number, h1: number, c2: vec3, r2: number, h2: number, outVelocity: vec2): boolean~
 -- ''c1'': The center of cylinder 1.~
 -- ''r1'': The radius of cylinder 1.~
 -- ''h1'': The height of cylinder 1.~

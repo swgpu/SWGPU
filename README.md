@@ -12,7 +12,7 @@
 [Documentation](https://warme-engine.com/) - [Demos](https://demo.warme-engine.com/) - [Screenshots](https://warme-engine.com/?Screenshots) - [Join our discord !](https://discord.gg/9PcFvg5f7P)
 
 > [!TIP]
-> High luminosity is recommanded with scanlines filter enabled (set as default).
+> High luminosity is recommanded with scanlines filter (set enabled as default).
 
 **WARME Y2K** is a fully packed **2D/3D game engine** dedicated to **Y2K games** on the web !     
 The first part of the name (W.A.R.M.E) is an acronym for **Web Against Regular Major Engines**, you can understand it like a tentative
@@ -57,6 +57,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - Rendering filters
 
 - 📐 **2D Physics**
+    - BoundingRect
     - Rapier2D
 
 - 🧊 **3D**
@@ -80,6 +81,8 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - Rendering filters
 
 - 📐 **3D Physics**
+    - BoundingBox
+    - BoundingCylinder
     - Walkmesh (jwm)
     - Navigation mesh (jnm)
     - Ray-testing
@@ -214,6 +217,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## Changelog
 ```
+- [Ver. 1.1.13] Cylinder collision class added.
 - [Ver. 1.1.12] Fix and optimize jnm.
 - [Ver. 1.1.10] Some added to fps demo.
 - [Ver. 1.1.7]  Mipmap added.
@@ -237,10 +241,11 @@ If you have a suggestion that would make this better, please fork the repo and c
 3. Task done one by one
 
 [CORE TASKS]
-1. Write tutorial for "programmez" mag
+1. Write tutorial for "programmez" mag.
+2. Handle the uppercap in Gfx3PhysicsJNM.
 3. Add binary format for 3D files.
 4. Add JSON Tilemap format to fit SpriteFusion.
-4. Add spot-light
+5. Add spot-light
 
 [DEADLINES]
 a. CORE_TASKS.1.2: 01 Juin

@@ -292,7 +292,7 @@ class Room {
   async $modelPlayMotion(motionIndex, modelIndex) {
     this.scriptMachine.setEnabled(false);
     this.motionModelMapping.set(motionIndex, modelIndex);
-    this.motions[motionIndex].run();
+    this.motions[motionIndex].run(CHAR_SPEED);
 
     await eventManager.wait(this.motions[motionIndex], 'E_FINISHED');
     this.motionModelMapping.delete(motionIndex);
@@ -300,7 +300,6 @@ class Room {
   }
 
   $modelPlayAnimation(modelIndex, animationName, isLooped) {
-    console.log('called' + animationName + modelIndex);
     this.models[modelIndex].play(animationName);
   }
 }

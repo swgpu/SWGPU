@@ -79,11 +79,11 @@ class Motion {
     const currentSegmentLength = UT.VEC3_LENGTH(currentSegment);
     const progress = UT.VEC3_SUBSTRACT(this.currentPosition, this.points[this.currentPointIndex - 1]);
     const progressLength = UT.VEC3_LENGTH(progress);
-    
+
     this.currentMove = UT.VEC3_SCALE(currentSegmentDir, this.speed * (ts / 1000));
-    this.currentPosition[0] = this.currentPosition[0] + this.currentMove[0];
-    this.currentPosition[1] = this.currentPosition[1] + this.currentMove[1];
-    this.currentPosition[2] = this.currentPosition[2] + this.currentMove[2];
+    this.currentPosition[0] += this.currentMove[0];
+    this.currentPosition[1] += this.currentMove[1];
+    this.currentPosition[2] += this.currentMove[2];
     this.currentSegmentTime = progressLength / currentSegmentLength;
 
     if (progressLength > currentSegmentLength) {

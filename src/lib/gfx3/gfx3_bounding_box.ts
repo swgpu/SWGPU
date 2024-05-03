@@ -59,9 +59,10 @@ class Gfx3BoundingBox {
   }
 
   /**
-   * Takes a list of vertices and set the new minimum and maximum values.
+   * Creates a new instance from vertices.
    * 
-   * @param vertices - The list of vertices. Each triplets of numbers represents the x, y and z coordinates of a point.
+   * @param vertices - The list of vertices.
+   * @param vertexStride - The vertex stride (will take always first tree values).
    */
   static createFromVertices(vertices: Float32Array | Array<number>, vertexStride: number): Gfx3BoundingBox {
     const box = new Gfx3BoundingBox();
@@ -92,7 +93,8 @@ class Gfx3BoundingBox {
   /**
    * Takes a list of vertices and set the new minimum and maximum values.
    * 
-   * @param vertices - The list of vertices. Each triplets of numbers represents the x, y and z coordinates of a point.
+   * @param vertices - The list of vertices.
+   * @param vertexStride - The vertex stride (will take always first tree values).
    */
   fromVertices(vertices: Float32Array | Array<number>, vertexStride: number): void {
     const min: vec3 = [vertices[0], vertices[1], vertices[2]];
@@ -145,6 +147,27 @@ class Gfx3BoundingBox {
     const h = this.max[1] - this.min[1];
     const d = this.max[2] - this.min[2];
     return [w, h, d];
+  }
+
+  /**
+   * Returns the width.
+   */
+  getWidth(): number {
+    return this.max[0] - this.min[0];
+  }
+
+  /**
+   * Returns the height.
+   */
+  getHeight(): number {
+    return this.max[1] - this.min[1];
+  }
+
+  /**
+   * Returns the depth.
+   */
+  getDepth(): number {
+    return this.max[2] - this.min[2];
   }
 
   /**

@@ -44,7 +44,6 @@
     "OnActionBlockId": "0000"
   }],
   "Motions": [{
-    "Speed": 3,
     "Points": [
       [15, -13.5, -23],
       [16, -13.5, -23],

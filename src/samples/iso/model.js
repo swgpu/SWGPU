@@ -94,7 +94,7 @@ class Model extends Gfx3Transformable {
   }
 
   isCollideTrigger(trigger) {
-    return UT.COLLIDE_CYLINDER(
+    return UT.COLLIDE_CYLINDER_TO_CYLINDER(
       this.position,
       this.radius,
       this.height,
@@ -105,7 +105,7 @@ class Model extends Gfx3Transformable {
   }
 
   isCollideModel(model) {
-    return UT.COLLIDE_CYLINDER(
+    return UT.COLLIDE_CYLINDER_TO_CYLINDER(
       this.position,
       this.radius,
       this.height,
@@ -116,7 +116,7 @@ class Model extends Gfx3Transformable {
   }
 
   isHandCollide(other) {
-    return UT.COLLIDE_CYLINDER(
+    return UT.COLLIDE_CYLINDER_TO_CYLINDER(
       this.getHandPosition(),
       0,
       this.height,
