@@ -9,7 +9,9 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
-[Documentation](https://warme-engine.com/) - [Demos](https://demo.warme-engine.com/) - [Screenshots](https://warme-engine.com/?Screenshots) - [Join our discord !](https://discord.gg/9PcFvg5f7P)
+<p align="center">
+    <a href="https://warme-engine.com/">Documentation</a> - <a href="https://demo.warme-engine.com/">Demos</a> - <a href="https://warme-engine.com/?Screenshots">Screenshots</a> - <a href="https://discord.gg/9PcFvg5f7P">Join our discord !</a>
+</p>
 
 > [!TIP]
 > High luminosity is recommanded with scanlines filter (set enabled as default).
