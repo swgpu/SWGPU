@@ -33,6 +33,8 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 * [Contributions](#contributions)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
+* [Changelog](#changelog)
+* [Roadmap](#roadmap)
 
 ## Features
 - 🧱 **Core**
