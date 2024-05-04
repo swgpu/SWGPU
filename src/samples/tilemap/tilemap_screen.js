@@ -28,7 +28,7 @@ class TilemapScreen extends Screen {
 
   async onEnter() {
     await this.tileMap.loadFromFile('./samples/tilemap/map.json');
-    this.backgroundLayer.loadFromTileMap(this.tileMap,  LAYER.BACKGROUND);
+    this.backgroundLayer.loadFromTileMap(this.tileMap, LAYER.BACKGROUND);
     this.middleLayer.loadFromTileMap(this.tileMap, LAYER.MIDDLE);
     this.foregroundLayer.loadFromTileMap(this.tileMap, LAYER.FOREGROUND);
 

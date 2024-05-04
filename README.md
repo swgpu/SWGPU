@@ -22,7 +22,7 @@ to make a complete game engine for the web. The second part (Y.2.K) is the commo
 
 Some words about our philosophy:
 - **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
-- **Flexibility:** Create your own renderers. Handle render and update loops.    
+- **Flexibility:** Create your own renderers. Handle render and update loops in a state-less way.    
 - **Modularity:** We used modular architecture to keep things simple and separate.     
 - **Performance:** We used WebGPU API for a blazing fast rendering.
 - **Lightweight:** The lib minzipped size is just 73 kB (1Mb with Rapier2D & Rapier3D).
@@ -53,8 +53,8 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 - 👾 **2D**
     - Static sprite (jss)
     - Animated sprite (jas)
-    - Isometric tilemap
-    - Orthographic tilemap
+    - Isometric tilemap (jtm)
+    - Orthographic tilemap (jtm)
     - Particles
     - Rendering filters
 
@@ -75,13 +75,14 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - Fog
     - Vertex colorization
     - Decals
-    - Realtime shadow support
+    - Realtime shadowmap
     - Multi-viewport
     - Camera orbit
     - Camera WASD
-    - Post-processing support
+    - Auto mipmap
+    - Post-process rendering (gbuffers: depth/normal/ids)
     - Rendering filters
-
+ 
 - 📐 **3D Physics**
     - BoundingBox
     - BoundingCylinder
@@ -91,7 +92,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - Rapier3D
 
 - 💥 **3D Material**
-    - Complete Phong reflection model
+    - Phong reflection model
     - Displacement texture map
     - Displacement texture scrolling
     - Diffuse map
@@ -216,9 +217,12 @@ If you have a suggestion that would make this better, please fork the repo and c
 - Human readable custom format for all graphics stuff
 - [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
+- Blender is the default for modeling
+- SpriteFusion is the default for tilemap
 
 ## Changelog
 ```
+- [Ver. 1.1.14] Tilemap SpriteFusion format added.
 - [Ver. 1.1.13] Cylinder collision class added.
 - [Ver. 1.1.12] Fix and optimize jnm.
 - [Ver. 1.1.10] Some added to fps demo.
@@ -244,9 +248,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 [CORE TASKS]
 1. Write tutorial for "programmez" mag.
-2. Handle the uppercap in Gfx3PhysicsJNM.
 3. Add binary format for 3D files.
-4. Add JSON Tilemap format to fit SpriteFusion.
 5. Add spot-light
 
 [DEADLINES]

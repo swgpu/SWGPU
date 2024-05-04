@@ -26,6 +26,7 @@ class Frag extends Gfx3BoundingBox {
 interface ResBox {
   move: vec3;
   collideFloor: boolean;
+  collideTop: boolean;
   collideWall: boolean;
   fragIndex: number
 };
@@ -161,6 +162,7 @@ class Gfx3PhysicsJNM {
     let fmy = my;
     let fmz = mz;
     let collideFloor = false;
+    let collideTop = false;
     let collideWall = false;
     let i = 0;
 
@@ -195,6 +197,21 @@ class Gfx3PhysicsJNM {
       i++;
     }
 
+    if (my > 0) {
+      const topIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
+        [x + fmx, min[1], z + fmz],
+        [x + fmx, max[1] + 0.1, z + fmz]
+      )) as Array<Frag>;
+      
+      const elevation = this.$getElevation(topIntersectedFrags, [x + fmx, min[1], z + fmz], [0, 1, 0]);
+      const delta = elevation ? elevation.value - max[1] : Infinity;
+  
+      if (delta < 0 && elevation) {
+        collideTop = true;
+        fmy = elevation.value - max[1];
+      }
+    }
+
     min[1] -= lift;
     snapFloorDistance = snapFloorDistance == 0 ? Math.abs(my) : snapFloorDistance;
 
@@ -214,6 +231,7 @@ class Gfx3PhysicsJNM {
     return {
       move: [fmx, fmy, fmz],
       collideWall: collideWall,
+      collideTop: collideTop,
       collideFloor: collideFloor,
       fragIndex: elevation ? elevation.fragIndex : -1
     };
@@ -363,14 +381,14 @@ class Gfx3PhysicsJNM {
     return { move: move };
   }
 
-  $getElevation(frags: Array<Frag>, point: vec3): { value: number, fragIndex: number } | null {
+  $getElevation(frags: Array<Frag>, point: vec3, dir: vec3 = [0, -1, 0]): { value: number, fragIndex: number } | null {
     let minFrag: Frag | null = null;
     let minFragLength = Infinity;
     let outIntersectPoint: vec3 = [0, 0, 0];
 
     for (const frag of frags) {
       const out: vec3 = [0, 0, 0];
-      if (UT.RAY_TRIANGLE(point, [0, -1, 0], frag.v1, frag.v2, frag.v3, true, out)) {
+      if (UT.RAY_TRIANGLE(point, dir, frag.v1, frag.v2, frag.v3, true, out)) {
         const pen = UT.VEC3_SUBSTRACT(out, point);
         const penLength = UT.VEC3_LENGTH(pen);
         if (penLength < minFragLength) {

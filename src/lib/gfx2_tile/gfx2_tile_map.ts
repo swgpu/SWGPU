@@ -22,31 +22,62 @@ class Gfx2TileMap {
   }
 
   /**
-   * Load asynchronously map data from a json file.
+   * Load asynchronously tilemap data from a json file (jtm).
    * 
    * @param {string} path - The file path.
    */
   async loadFromFile(path: string): Promise<void> {
-    let response = await fetch(path);
-    let json = await response.json();
+    const response = await fetch(path);
+    const json = await response.json();
 
-    this.rows = json['Rows'];
-    this.columns = json['Columns'];
-    this.tileHeight = json['TileHeight'];
-    this.tileWidth = json['TileWidth'];
+    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'JTM') {
+      throw new Error('Gfx2TileMap::loadFromFile(): File not valid !');
+    }
+
+    this.rows = parseInt(json['Rows']);
+    this.columns = parseInt(json['Columns']);
+    this.tileHeight = parseInt(json['TileHeight']);
+    this.tileWidth = parseInt(json['TileWidth']);
 
     this.tileLayers = [];
-    for (let obj of json['Layers']) {
-      let tileLayer = new Gfx2TileLayer();
-      await tileLayer.loadFromData(obj);
+    for (const obj of json['Layers']) {
+      const tileLayer = new Gfx2TileLayer();
+      tileLayer.loadFromData(obj);
       this.tileLayers.push(tileLayer);
     }
 
     this.tileset = new Gfx2Tileset();
-
     if (json['Tileset']) {
       await this.tileset.loadFromData(json['Tileset']);
     }
+  }
+
+  /**
+   * Load asynchronously tilemap data from a SpriteFusion json file.
+   * 
+   * @param {string} path - The file path.
+   * @param {string} texturePath - The texture file path.
+   */
+  async loadFromSpriteFusion(path: string, texturePath: string): Promise<void> {
+    const response = await fetch(path);
+    const json = await response.json();
+
+    this.rows = parseInt(json['mapHeight']);
+    this.columns = parseInt(json['mapWidth']);
+    this.tileHeight = parseInt(json['tileSize']);
+    this.tileWidth = parseInt(json['tileSize']);
+
+    this.tileLayers = [];
+    for (const obj of json['layers']) {
+      const tileLayer = new Gfx2TileLayer();
+      tileLayer.loadFromSpriteFusion(obj, this.rows, this.columns);
+      tileLayer.rows = this.rows;
+      tileLayer.columns = this.columns;
+      this.tileLayers.push(tileLayer);
+    }
+
+    this.tileset = new Gfx2Tileset();
+    await this.tileset.loadFromTexture(texturePath, this.tileWidth, this.tileHeight);
   }
 
   /**
@@ -215,7 +246,7 @@ class Gfx2TileLayer {
    * 
    * @param {any} data - The data object.
    */
-  async loadFromData(data: any): Promise<void> {
+  loadFromData(data: any): void {
     this.name = data['Name'];
     this.rows = data['Rows'];
     this.columns = data['Columns'];
@@ -224,6 +255,22 @@ class Gfx2TileLayer {
     this.visible = data['Visible'] ?? true;
     this.frameDuration = data['FrameDuration'] ?? 0;
     this.grid = data['Grid'];
+  }
+
+  /**
+   * Loads asynchronously tile layer from SpriteFusion data object.
+   * 
+   * @param {any} data - The data object.
+   */
+  loadFromSpriteFusion(data: any, rows: number, columns: number): void {
+    this.name = data['name'];
+    this.rows = rows;
+    this.columns = columns;
+
+    for (const obj of data['tiles']) {
+      const index = parseInt(obj['x']) + parseInt(obj['y']) * this.columns;
+      this.grid[index] = parseInt(obj['id']) + 1;
+    }
   }
 
   /**
@@ -326,6 +373,20 @@ class Gfx2Tileset {
     for (const tileId in data['Animations']) {
       this.animations.set(parseInt(tileId), data['Animations'][tileId] ?? []);
     }
+  }
+
+  /**
+   * Load asynchronously tileset from texture only.
+   * 
+   * @param {string} texturePath - The texture path.
+   * @param {number} tileWidth - The tile width.
+   * @param {number} tileHeight - The tile height.
+   */
+  async loadFromTexture(texturePath: string, tileWidth: number, tileHeight: number): Promise<void> {
+    this.texture = await gfx2TextureManager.loadTexture(texturePath);
+    this.columns = this.texture.width / tileWidth;
+    this.tileWidth = tileWidth;
+    this.tileHeight = tileHeight;
   }
 
   /**

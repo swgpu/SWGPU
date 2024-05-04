@@ -112,6 +112,10 @@ class PhysicsComponent {
         this.player.velocity[1] = 0;
       }
 
+      if (this.player.velocity[1] > 0 && navInfo.collideTop) {
+        this.player.velocity[1] = 0;
+      }
+
       if (!navInfo.collideFloor) {
         this.player.velocity[1] -= this.gravity;
       }

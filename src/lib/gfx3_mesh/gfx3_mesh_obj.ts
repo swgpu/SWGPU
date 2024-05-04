@@ -159,9 +159,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
    * @param {string} name - The name.
    */
   getMesh(name: string): Gfx3Mesh {
-    
     if (!this.meshes.has(name)) {
-      console.log('name', this.meshes);
       throw new Error('Gfx3MeshOBJ::getMesh(): The mesh object doesn\'t exist !');
     }
 
