@@ -33,7 +33,8 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 ## Table of content
 
 * [Features](#features)
-* [Getting Started](#getting-started)
+* [Getting Started - The engine way](#getting-started---the-engine-way)
+* [Getting Started - The boilerplate way](#getting-started---the-boilerplate-way)
 * [How to integrate your 3D models ?](#how-to-integrate-your-3d-models)
 * [Contributions](#contributions)
 * [Contributors](#contributors)
@@ -164,12 +165,20 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 - 🌆 **DNA**
     - ECS architecture implementation
 
-## Getting started 
-A good start is to download the engine repository here add a sample and work on it.
-A second way for serious project is to start from scratch with this [minimal boilerplate](https://github.com/jay19240/WARME-Y2K-Boilerplate) it's a complete environment including vite, typescript, warme and it's dependencies. Clone it and have fun !
-
-Run with the following commands
+## Getting started - The engine way
+A good start if you want make experimentation with samples and tutorials.
 ```
+# git clone https://github.com/jay19240/WarmeY2K.git
+# cd WarmeY2K
+# npm install
+# npm run dev
+```
+
+## Getting started - The boilerplate way
+A good start if you want make experimentation with samples and tutorials.
+```
+# git clone https://github.com/jay19240/WarmeY2K-Boilerplate.git
+# cd WarmeY2K-Boilerplate
 # npm install
 # npm run dev
 ```
