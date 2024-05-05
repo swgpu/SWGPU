@@ -175,7 +175,8 @@ A good start if you want make experimentation with samples and tutorials.
 ```
 
 ## Getting started - The boilerplate way
-A good start if you want make experimentation with samples and tutorials.
+The perfect solution for serious project.     
+It's included a complete environment including vite, typescript and the engine as dependency.
 ```
 # git clone https://github.com/jay19240/WarmeY2K-Boilerplate.git
 # cd WarmeY2K-Boilerplate
