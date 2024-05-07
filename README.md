@@ -1,13 +1,6 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/banner-brand.png" alt="logo"/>
+    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/banner-brand-mini.png" alt="logo"/>
 </p>
-
-![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
-![NPM Version](https://img.shields.io/npm/v/warme-y2k)
-![LibSize](https://img.shields.io/badge/LibSize-73KB-blue)
-![Size](https://img.shields.io/badge/DepSize-1MB-blue)
-![License](https://img.shields.io/badge/License-MIT-yellow)
-![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
 <p align="center">
     <a href="https://warme-engine.com/">Documentation</a> - <a href="https://demo.warme-engine.com/">Demos</a> - <a href="https://warme-engine.com/?Screenshots">Screenshots</a> - <a href="https://discord.gg/9PcFvg5f7P">Join our discord !</a>
@@ -15,6 +8,13 @@
 
 > [!TIP]
 > High luminosity is recommanded with scanlines filter (set enabled as default).
+
+![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
+![NPM Version](https://img.shields.io/npm/v/warme-y2k)
+![LibSize](https://img.shields.io/badge/LibSize-73KB-blue)
+![Size](https://img.shields.io/badge/DepSize-1MB-blue)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
 **WarmeY2K** is a fully packed **2D/3D game engine** dedicated to **Y2K games** on the web !     
 The first part of the name (W.A.R.M.E) is an acronym for **Web Against Regular Major Engines**, you can understand it like a tentative
