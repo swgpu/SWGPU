@@ -257,9 +257,8 @@ If you have a suggestion that would make this better, please fork the repo and c
 3. Task done one by one
 
 [CORE TASKS]
-1. Write tutorial for "programmez" mag.
-3. Add binary format for 3D files.
-5. Add spot-light
+1. Add binary format for 3D files.
+2. Add spot-light
 
 [DEADLINES]
 a. CORE_TASKS.1.2: 01 Juin
