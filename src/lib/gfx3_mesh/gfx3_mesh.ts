@@ -73,7 +73,7 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
         finalCoords.push([coords[f.v[1] * 3 + 0], coords[f.v[1] * 3 + 1], coords[f.v[1] * 3 + 2]]);
         finalCoords.push([coords[f.v[2] * 3 + 0], coords[f.v[2] * 3 + 1], coords[f.v[2] * 3 + 2]]);
 
-        if (texcoords) {
+        if (texcoords && texcoords.length > 0) {
           finalUVs.push([texcoords[f.t[0] * 2 + 0], texcoords[f.t[0] * 2 + 1]]);
           finalUVs.push([texcoords[f.t[1] * 2 + 0], texcoords[f.t[1] * 2 + 1]]);
           finalUVs.push([texcoords[f.t[2] * 2 + 0], texcoords[f.t[2] * 2 + 1]]);
@@ -84,7 +84,7 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
           finalUVs.push([0.0, 0.0]);
         }
 
-        if (colors) {
+        if (colors && colors.length > 0) {
           finalColors.push([colors[f.v[0] * 3 + 0], colors[f.v[0] * 3 + 1], colors[f.v[0] * 3 + 2]]);
           finalColors.push([colors[f.v[1] * 3 + 0], colors[f.v[1] * 3 + 1], colors[f.v[1] * 3 + 2]]);
           finalColors.push([colors[f.v[2] * 3 + 0], colors[f.v[2] * 3 + 1], colors[f.v[2] * 3 + 2]]);
@@ -100,7 +100,7 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
         const uv01 = UT.VEC2_SUBSTRACT(finalUVs.at(-2)!, finalUVs.at(-3)!);
         const uv02 = UT.VEC2_SUBSTRACT(finalUVs.at(-1)!, finalUVs.at(-3)!);
 
-        if (normals) {
+        if (normals && normals.length > 0) {
           finalNorms.push([normals[f.n[0] * 3 + 0], normals[f.n[0] * 3 + 1], normals[f.n[0] * 3 + 2]]);
           finalNorms.push([normals[f.n[1] * 3 + 0], normals[f.n[1] * 3 + 1], normals[f.n[1] * 3 + 2]]);
           finalNorms.push([normals[f.n[2] * 3 + 0], normals[f.n[2] * 3 + 1], normals[f.n[2] * 3 + 2]]);

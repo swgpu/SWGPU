@@ -17,7 +17,6 @@ class Motion {
 
   /**
    * @param {Array<vec3>} points - The serie of points.
-   * @param {number} speed - The moving speed.
    * @param {boolean} looped - Determine if path is closed, if closed then motion running in loop.
    */
   constructor(points: Array<vec3> = [], looped: boolean = false) {
@@ -32,7 +31,7 @@ class Motion {
   }
 
   /**
-   * Load asynchronously from a json file.
+   * Load asynchronously from a json file (jlm).
    * 
    * @param {string} path - The file path.
    */
@@ -44,23 +43,25 @@ class Motion {
       throw new Error('Motion::loadFromFile(): File not valid !');
     }
 
-    this.loadFromData(json);
+    this.setPoints(json['Points']);
   }
 
   /**
-   * Load from a data object.
+   * Load asynchronously from a binary file (jlmb).
    * 
-   * @param {any} data - The data object.
+   * @param {string} path - The file path.
    */
-  loadFromData(data: any): void {
-    this.points = [];
+  async loadFromBinaryFile(path: string): Promise<void> {
+    const response = await fetch(path);
+    const buffer = await response.arrayBuffer();
+    const data = new Float32Array(buffer);
 
-    for (const point of data['Points']) {
-      this.points.push(point);
+    const points: Array<vec3> = [];
+    for (var i = 0; i < data.length; i += 3) {
+      points.push([data[i + 0], data[i + 1], data[i + 2]])
     }
 
-    this.looped = UT.VEC3_ISEQUAL(data['Points'].at(-1), data['Points'].at(0));
-    this.running = false;
+    this.setPoints(points);
   }
 
   /**
@@ -99,7 +100,20 @@ class Motion {
   }
 
   /**
+   * Set the point list.
+   * 
+   * @param {Array<vec3>} points - The points.
+   */
+  setPoints(points: Array<vec3>): void {
+    this.points = points;
+    this.looped = UT.VEC3_ISEQUAL(points.at(-1)!, points.at(0)!);
+    this.running = false;
+  }
+
+  /**
    * Start moving along the path.
+   * 
+   * @param {number} speed - The moving speed.
    */
   run(speed: number): void {
     if (this.points.length < 2) {

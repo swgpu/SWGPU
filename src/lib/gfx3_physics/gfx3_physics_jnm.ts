@@ -49,7 +49,7 @@ interface ResElevation {
 class Gfx3PhysicsJNM {
   boundingBox: Gfx3BoundingBox;
   frags: Array<Frag>;
-  fragsData: Array<any>;
+  fragColors: Array<vec3>;
   btree: Gfx3TreePartition;
   debugMeshEnabled: boolean;
   debugBspEnabled: boolean;
@@ -59,7 +59,7 @@ class Gfx3PhysicsJNM {
   constructor() {
     this.boundingBox = new Gfx3BoundingBox();
     this.frags = [];
-    this.fragsData = [];
+    this.fragColors = [];
     this.btree = new Gfx3TreePartition(0, 0);
     this.debugBspEnabled = true;
     this.debugMeshEnabled = true;
@@ -86,17 +86,74 @@ class Gfx3PhysicsJNM {
     this.btree = new Gfx3TreePartition(bspMaxChildren, bspMaxDepth, this.boundingBox);
 
     this.frags = [];
-    for (let i = 0; i < json['Frags'].length; i++) {
+    for (let i = 0; i < json['NumFrags']; i++) {
       const obj = json['Frags'][i];
       const frag = new Frag(i, obj[0], obj[1], obj[2]);
       this.btree.addChild(frag);
       this.frags.push(frag);
     }
 
-    this.fragsData = [];
-    for (const obj of json['FragsData']) {
-      const fragIndex = obj['FragIndex'];
-      this.fragsData[fragIndex] = obj;
+    this.fragColors = [];
+    for (let i = 0; i < json['NumFragColors']; i++) {
+      const obj = json['FragColors'][i];
+      this.fragColors.push([
+        (obj[0][0] == obj[1][0] && obj[0][0] == obj[2][0]) ? obj[0][0] : 0,
+        (obj[0][1] == obj[1][1] && obj[0][1] == obj[2][1]) ? obj[0][1] : 0,
+        (obj[0][2] == obj[1][2] && obj[0][2] == obj[2][2]) ? obj[0][2] : 0
+      ]);
+    }
+  }
+
+  /**
+   * Load asynchronously navmesh data from a binary file (bnm).
+   * 
+   * @param {string} path - The file path.
+   * @param {number} bspMaxChildren - The maximum of children per bsp node.
+   * @param {number} bspMaxDepth - The maximum depth for bsp tree.
+   */
+  async loadFromBinaryFile(path: string, bspMaxChildren: number = 20, bspMaxDepth: number = 10): Promise<void> {
+    const response = await fetch(path);
+    const buffer = await response.arrayBuffer();
+    const data = new Float32Array(buffer);
+    let offset = 0;
+
+    const numFrags = data[0];
+    const numFragColors = data[1];
+    offset += 2;
+
+    const minX = data[offset + 0];
+    const minY = data[offset + 1];
+    const minZ = data[offset + 2];
+    const maxX = data[offset + 3];
+    const maxY = data[offset + 4];
+    const maxZ = data[offset + 5];
+    offset += 6;
+
+    this.boundingBox = new Gfx3BoundingBox([minX, minY, minZ], [maxX, maxY, maxZ]);
+    this.btree = new Gfx3TreePartition(bspMaxChildren, bspMaxDepth, this.boundingBox);
+
+    this.frags = [];
+    for (let i = 0; i < numFrags; i++) {
+      const v0: vec3 = [data[offset + (i * 9) + 0], data[offset + (i * 9) + 1], data[offset + (i * 9) + 2]];
+      const v1: vec3 = [data[offset + (i * 9) + 3], data[offset + (i * 9) + 4], data[offset + (i * 9) + 5]];
+      const v2: vec3 = [data[offset + (i * 9) + 6], data[offset + (i * 9) + 7], data[offset + (i * 9) + 8]];
+      const frag = new Frag(i, v0, v1, v2);
+      this.btree.addChild(frag);
+      this.frags.push(frag);
+    }
+
+    offset += numFrags * 9;
+
+    this.fragColors = [];
+    for (let i = 0; i < numFragColors; i++) {
+      const c0: vec3 = [data[offset + (i * 9) + 0], data[offset + (i * 9) + 1], data[offset + (i * 9) + 2]];
+      const c1: vec3 = [data[offset + (i * 9) + 3], data[offset + (i * 9) + 4], data[offset + (i * 9) + 5]];
+      const c2: vec3 = [data[offset + (i * 9) + 6], data[offset + (i * 9) + 7], data[offset + (i * 9) + 8]];
+      this.fragColors.push([
+        (c0[0] == c1[0] && c0[0] == c2[0]) ? c0[0] : 0,
+        (c0[1] == c1[1] && c0[1] == c2[1]) ? c0[1] : 0,
+        (c0[2] == c1[2] && c0[2] == c2[2]) ? c0[2] : 0
+      ]);
     }
   }
 
@@ -339,12 +396,12 @@ class Gfx3PhysicsJNM {
   }
 
   /**
-   * Return frag data.
+   * Return frag color.
    * 
    * @param {number} fragIndex - The frag index.
    */
-  getSectorData(fragIndex: number): any {
-    return this.fragsData[fragIndex];
+  getFragColor(fragIndex: number): vec3 {
+    return this.fragColors[fragIndex];
   }
 
   $moveXZ(frags: Array<Frag>, point: vec3, move: vec2, i: number = 0 ): { move: vec2 } {

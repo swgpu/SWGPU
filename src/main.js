@@ -20,7 +20,7 @@ class GameManager {
     this.then = 0;
   }
 
-  startup() {
+  async startup() {
     coreManager.enableScanlines(true);
     gfx3DebugRenderer.setShowDebug(true);
     this.run(0);

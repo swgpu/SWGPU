@@ -18,15 +18,15 @@ class ViewerScreen extends Screen {
   constructor() {
     super();
     this.camera = new Gfx3CameraOrbit(0);
-    this.mesh = new Gfx3MeshJSM();
     this.skybox = new Gfx3Skybox();
+    this.mesh = new Gfx3MeshJSM();
     this.handleKeyDownCb = this.handleKeyDown.bind(this);
   }
 
   async onEnter() {
     this.camera.setPosition(0, 0, 10);
-    this.mesh = await CREATE_CUBE();
     this.skybox = await CREATE_SKYBOX();
+    this.mesh = await CREATE_CUBE();
 
     uiManager.addNode(CREATE_UI_INFOBOX(), 'position:absolute; bottom:10px; right:10px');
     document.addEventListener('keydown', this.handleKeyDownCb);

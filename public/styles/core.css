@@ -5,6 +5,8 @@ body {
   margin: 0;
   background-color: #7f7f7f;
   height: 100vh;
+  background-image: url("../textures/bg.png");
+  background-size: cover;
 }
 
 *,
@@ -42,8 +44,8 @@ body {
 
 #METRICS {
   position: absolute;
-  right: 20px;
-  bottom: 20px;
+  left: 10px;
+  top: 10px;
   padding: 10px;
   color: white;
   width: 300px;
@@ -60,8 +62,7 @@ body {
   transform-origin: top left;
   user-select: none;
   box-sizing: content-box;
-  border: 20px solid #c1c1c1;
-  border-image: linear-gradient(to left, blue, gold, blue) 1;
+  border: 20px solid #323232;
 }
 
 #APP.scanlines::before {

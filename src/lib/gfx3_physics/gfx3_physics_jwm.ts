@@ -60,7 +60,7 @@ interface ResMovePoint {
 class Gfx3PhysicsJWM {
   boundingRect: Gfx2BoundingRect;
   sectors: Array<Sector>;
-  sectorsData: Array<any>;
+  sectorColors: Array<vec3>;
   neighborPool: Array<Neighbor>;
   sharedPool: Array<Shared>;
   btree: Gfx2TreePartition;
@@ -72,7 +72,7 @@ class Gfx3PhysicsJWM {
   constructor() {
     this.boundingRect = new Gfx2BoundingRect();
     this.sectors = [];
-    this.sectorsData = [];
+    this.sectorColors = [];
     this.neighborPool = [];
     this.sharedPool = [];
     this.btree = new Gfx2TreePartition(0, 0);
@@ -86,6 +86,8 @@ class Gfx3PhysicsJWM {
    * Load asynchronously walkmesh data from a json file (jwm).
    * 
    * @param {string} path - The file path.
+   * @param {number} bspMaxChildren - The maximum of children per bsp node.
+   * @param {number} bspMaxDepth - The maximum depth for bsp tree.
    */
   async loadFromFile(path: string, bspMaxChildren: number = 20, bspMaxDepth: number = 10): Promise<void> {
     const response = await fetch(path);
@@ -99,17 +101,21 @@ class Gfx3PhysicsJWM {
     this.btree = new Gfx2TreePartition(bspMaxChildren, bspMaxDepth, this.boundingRect);
 
     this.sectors = [];
-    for (let i = 0; i < json['Sectors'].length; i++) {
+    for (let i = 0; i < json['NumSectors']; i++) {
       const obj = json['Sectors'][i];
       const sector = new Sector(i, obj[0], obj[1], obj[2]);
       this.btree.addChild(sector);
       this.sectors.push(sector);
     }
 
-    this.sectorsData = [];
-    for (const obj of json['SectorsData']) {
-      const sectorIndex = obj['SectorIndex'];
-      this.sectorsData[sectorIndex] = obj;
+    this.sectorColors = [];
+    for (let i = 0; i < json['NumSectorColors']; i++) {
+      const obj = json['SectorColors'][i];
+      this.sectorColors.push([
+        (obj[0][0] == obj[1][0] && obj[0][0] == obj[2][0]) ? obj[0][0] : 0,
+        (obj[0][1] == obj[1][1] && obj[0][1] == obj[2][1]) ? obj[0][1] : 0,
+        (obj[0][2] == obj[1][2] && obj[0][2] == obj[2][2]) ? obj[0][2] : 0
+      ]);
     }
 
     this.neighborPool = [];
@@ -126,6 +132,79 @@ class Gfx3PhysicsJWM {
       this.sharedPool.push({
         sectorIds: obj
       });
+    }
+  }
+
+  /**
+   * Load asynchronously walkmesh data from a binary file (bwm).
+   * 
+   * @param {string} path - The file path.
+   * @param {number} bspMaxChildren - The maximum of children per bsp node.
+   * @param {number} bspMaxDepth - The maximum depth for bsp tree.
+   */
+  async loadFromBinaryFile(path: string, bspMaxChildren: number = 20, bspMaxDepth: number = 10): Promise<void> {
+    const response = await fetch(path);
+    const buffer = await response.arrayBuffer();
+    const data = new Float32Array(buffer);
+    let offset = 0;
+
+    const numSectors = data[0];
+    const numSectorColors = data[1];
+    offset += 2;
+
+    const minX = data[offset + 0];
+    const minZ = data[offset + 1];
+    const maxX = data[offset + 2];
+    const maxZ = data[offset + 3];
+    offset += 4;
+
+    this.boundingRect = new Gfx2BoundingRect([minX, minZ], [maxX, maxZ]);
+    this.btree = new Gfx2TreePartition(bspMaxChildren, bspMaxDepth, this.boundingRect);
+
+    this.sectors = [];
+    for (let i = 0; i < numSectors; i++) {
+      const v0: vec3 = [data[offset + (i * 9) + 0], data[offset + (i * 9) + 1], data[offset + (i * 9) + 2]];
+      const v1: vec3 = [data[offset + (i * 9) + 3], data[offset + (i * 9) + 4], data[offset + (i * 9) + 5]];
+      const v2: vec3 = [data[offset + (i * 9) + 6], data[offset + (i * 9) + 7], data[offset + (i * 9) + 8]];
+      const sector = new Sector(i, v0, v1, v2);
+      this.btree.addChild(sector);
+      this.sectors.push(sector);
+    }
+
+    offset += numSectors * 9;
+
+    this.sectorColors = [];
+    for (let i = 0; i < numSectorColors; i++) {
+      const c0: vec3 = [data[offset + (i * 9) + 0], data[offset + (i * 9) + 1], data[offset + (i * 9) + 2]];
+      const c1: vec3 = [data[offset + (i * 9) + 3], data[offset + (i * 9) + 4], data[offset + (i * 9) + 5]];
+      const c2: vec3 = [data[offset + (i * 9) + 6], data[offset + (i * 9) + 7], data[offset + (i * 9) + 8]];
+      this.sectorColors.push([
+        (c0[0] == c1[0] && c0[0] == c2[0]) ? c0[0] : 0,
+        (c0[1] == c1[1] && c0[1] == c2[1]) ? c0[1] : 0,
+        (c0[2] == c1[2] && c0[2] == c2[2]) ? c0[2] : 0
+      ]);
+    }
+
+    offset += numSectorColors * 9;
+
+    this.neighborPool = [];
+    for (let i = 0; i < numSectors; i++) {
+      this.neighborPool.push({
+        s1: data[offset + (i * 3) + 0],
+        s2: data[offset + (i * 3) + 1],
+        s3: data[offset + (i * 3) + 2]
+      });
+    }
+
+    offset += numSectors * 3;
+
+    this.sharedPool = [];
+    for (let i = 0; i < numSectors; i++) {
+      const size = data[offset];
+      const indexes = [];
+      offset += 1;
+      for (let j = 0; j < size; j++) indexes.push(data[offset++]);
+      this.sharedPool.push({ sectorIds:  indexes });
     }
   }
 
@@ -362,12 +441,12 @@ class Gfx3PhysicsJWM {
   }
 
   /**
-   * Return sector data.
+   * Return sector color.
    * 
    * @param {number} sectorIndex - The sector index.
    */
-  getSectorData(sectorIndex: number): any {
-    return this.sectorsData[sectorIndex];
+  getSectorColor(sectorIndex: number): vec3 {
+    return this.sectorColors[sectorIndex];
   }
 
   $utilsMove(sectorIndex: number, x: number, z: number, mx: number, mz: number, i: number = 0): { sectorIndex: number, mx: number, mz: number, elevation: number } {

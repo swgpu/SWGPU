@@ -32,6 +32,55 @@ class Gfx3MeshJSM extends Gfx3Mesh implements Poolable<Gfx3MeshJSM> {
   }
 
   /**
+   * Load asynchronously static mesh data from a binary file (bsm).
+   * 
+   * @param {string} path - The file path.
+   */
+  async loadFromBinaryFile(path: string): Promise<void> {
+    const response = await fetch(path);
+    const buffer = await response.arrayBuffer();
+    const data = new Float32Array(buffer);
+    let offset = 0;
+
+    const header = new Int32Array(buffer);
+    const numVertices = header[0];
+    const numTextureCoords = header[1];
+    const numNormals = header[2];
+    const numColors = header[3];
+    offset += 4;
+
+    const vertices = [];
+    for (let i = 0; i < numVertices * 3; i++) {
+      vertices.push(data[offset]);
+      offset++;
+    }
+
+    const textureCoords = [];
+    for (let i = 0; i < numTextureCoords * 2; i++) {
+      textureCoords.push(data[offset]);
+      offset++;
+    }  
+
+    const normals = [];
+    for (let i = 0; i < numNormals * 3; i++) {
+      normals.push(data[offset]);
+      offset++;
+    }
+
+    const colors = [];
+    for (let i = 0; i < numColors * 3; i++) {
+      colors.push(data[offset]);
+      offset++;
+    }
+
+    this.beginVertices(numVertices);
+    this.setVertices(Gfx3Mesh.buildVertices(numVertices, vertices, textureCoords, colors, normals));
+    this.endVertices();
+
+    this.boundingBox = Gfx3BoundingBox.createFromVertices(vertices, 3);
+  }
+
+  /**
    * Clone the object.
    * 
    * @param {Gfx3MeshJSM} jsm - The copy object.

@@ -99,8 +99,8 @@ fn main(
   @location(4) Tangent: vec3<f32>,
   @location(5) Binormal: vec3<f32>
 ) -> VertexOutput {
-  var posFromLight = LVP_MATRIX * MESH_INFOS.M_MATRIX * Position;
   var output: VertexOutput;
+  var posFromLight = LVP_MATRIX * MESH_INFOS.M_MATRIX * Position;
   output.Position = MESH_INFOS.MVPC_MATRIX * Position;
   output.FragPos = vec4(MESH_INFOS.M_MATRIX * Position).xyz;
   output.FragUV = TexUV;

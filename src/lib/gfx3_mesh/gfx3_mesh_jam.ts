@@ -97,6 +97,84 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
   }
 
   /**
+   * Load asynchronously animated mesh data from a binary file (bam).
+   * 
+   * @param {string} path - The file path.
+   */
+  async loadFromBinaryFile(path: string): Promise<void> {
+    const response = await fetch(path);
+    const buffer = await response.arrayBuffer();
+    const data = new Float32Array(buffer);
+    const dataInt = new Uint32Array(buffer);
+    let offset = 0;
+
+    const numVertices = dataInt[0];
+    const numFrames = dataInt[1];
+    const numAnimations = dataInt[2];
+    offset += 3;
+
+    const textureCoords = [];
+    for (let i = 0; i < numVertices * 2; i++) {
+      textureCoords.push(data[offset]);
+      offset++;
+    }
+
+    this.frames = [];
+    this.boundingBoxes = [];
+    for (let i = 0; i < numFrames; i++) {
+      const vertices = [];
+      for (let i = 0; i < numVertices * 3; i++) {
+        vertices.push(data[offset]);
+        offset++;
+      }
+
+      const normals = [];
+      for (let i = 0; i < numVertices * 3; i++) {
+        normals.push(data[offset]);
+        offset++;
+      }
+
+      this.frames.push({
+        vertices: Gfx3Mesh.buildVertices(numVertices, vertices, textureCoords, undefined, normals)
+      });
+
+      this.boundingBoxes.push(
+        Gfx3BoundingBox.createFromVertices(vertices, 3)
+      );
+    }
+
+    this.animations = [];
+    for (let i = 0; i < numAnimations; i++) {
+      const nameLength = dataInt[offset];
+      offset += 1;
+
+      let name = '';
+      for (let j = 0; j < nameLength; j++) {
+        name += String.fromCharCode(dataInt[offset++]);
+      }
+
+      this.animations.push({
+        name: name,
+        startFrame: dataInt[offset++],
+        endFrame: dataInt[offset++],
+        frameDuration: dataInt[offset++]
+      });
+    }
+
+    this.beginVertices(numVertices);
+    this.setVertices(this.frames[0].vertices);
+    this.endVertices();
+
+    this.boundingBox = this.boundingBoxes[0];
+    this.numVertices = numVertices;
+    this.currentAnimation = null;
+    this.interpolationEnabled = true;
+    this.looped = true;
+    this.currentFrameIndex = 0;
+    this.frameProgress = 0;
+  }
+
+  /**
    * The update function.
    * 
    * @param {number} ts - The timestep.

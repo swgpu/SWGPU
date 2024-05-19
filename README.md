@@ -58,17 +58,20 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - Orthographic tilemap (jtm)
     - Particles
     - Rendering filters
+    - Motion lines (jlm)
 
 - 📐 **2D Physics**
     - BoundingRect
     - Rapier2D
 
 - 🧊 **3D**
+    - Binary format (bsm, bam, bwm, bnm, blm)
     - Debug shapes
     - Static mesh (jsm and obj)
     - Animated mesh (jam)
     - Static sprite (jss)
     - Animated sprite (jas)
+    - Motion lines (jlm)
     - Billboarding
     - Cubemap skybox
     - Particules
@@ -227,11 +230,12 @@ If you have a suggestion that would make this better, please fork the repo and c
 - Human readable custom format for all graphics stuff
 - [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
-- Blender is the default for modeling
-- SpriteFusion is the default for tilemap
+- Compatible Blender for 3D
+- Compatible SpriteFusion for 2D
 
 ## Changelog
 ```
+- [Ver. 1.2.0]  Binary format for 3D files added.
 - [Ver. 1.1.14] Tilemap SpriteFusion format added.
 - [Ver. 1.1.13] Cylinder collision class added.
 - [Ver. 1.1.12] Fix and optimize jnm.
@@ -257,8 +261,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 3. Task done one by one
 
 [CORE TASKS]
-1. Add binary format for 3D files.
-2. Add spot-light
+1. Add shadow volume
+2. Add toon shading
+3. Add spot-light
 
 [DEADLINES]
 a. CORE_TASKS.1.2: 01 Juin
