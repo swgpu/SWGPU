@@ -1,8 +1,8 @@
 import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_mesh_shader';
 
-export const MESH_SHADOW_UNIFORM_ATTR_COUNT = 1;
+export const UNIFORM_ATTR_COUNT = 1;
 
-export const MESH_SHADOW_PIPELINE_DESC: any = {
+export const PIPELINE_DESC: any = {
   label: 'Mesh Shadow pipeline',
   layout: 'auto',
   vertex: {
@@ -28,7 +28,7 @@ export const MESH_SHADOW_PIPELINE_DESC: any = {
   }
 };
 
-export const MESH_SHADOW_VERTEX_SHADER = `
+export const VERTEX_SHADER = `
 @group(0) @binding(0) var<uniform> LVP_MATRIX: mat4x4<f32>;
 @group(0) @binding(1) var<uniform> M_MATRIX: mat4x4<f32>;
 

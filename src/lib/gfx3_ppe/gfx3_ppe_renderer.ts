@@ -1,6 +1,7 @@
 import { coreManager } from '../core/core_manager';
 import { eventManager } from '../core/event_manager';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
+import { gfx3ShadowVolumeRenderer } from '../gfx3_shadow_volume/gfx3_shadow_volume_renderer';
 import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
@@ -38,6 +39,9 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
   normalsTexture: Gfx3Texture;
   idsTexture: Gfx3Texture;
   depthTexture: Gfx3Texture;
+  grp1: Gfx3StaticGroup;
+  shadowTexture: Gfx3Texture;
+  shadowDepthTexture: Gfx3Texture;
 
   constructor() {
     super('PPE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
@@ -73,8 +77,14 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.idsTexture = this.grp0.setSampler(7, 'IDS_SAMPLER', this.idsTexture);
     this.depthTexture = this.grp0.setTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
     this.depthTexture = this.grp0.setSampler(9, 'DEPTH_SAMPLER', this.depthTexture);
-
     this.grp0.allocate();
+
+    this.grp1 = gfx3Manager.createStaticGroup('PPE_PIPELINE', 1);
+    this.shadowTexture = this.grp1.setTexture(0, 'SHADOW_TEXTURE', gfx3ShadowVolumeRenderer.getDestinationTexture());
+    this.shadowTexture = this.grp1.setSampler(1, 'SHADOW_SAMPLER', this.shadowTexture);
+    this.shadowDepthTexture = this.grp1.setTexture(2, 'SHADOW_DEPTH_TEXTURE', gfx3ShadowVolumeRenderer.getDepthTexture());
+    this.shadowDepthTexture = this.grp1.setSampler(3, 'SHADOW_DEPTH_SAMPLER', this.shadowDepthTexture);
+    this.grp1.allocate();
 
     this.device.queue.writeBuffer(this.vertexBuffer, 0, new Float32Array([
       -1.0, 1.0, 0.0, 0.0, // first tri -> top left
@@ -107,56 +117,22 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.grp0.write(1, this.size);
     this.grp0.endWrite();
     passEncoder.setBindGroup(0, this.grp0.getBindGroup());
+    passEncoder.setBindGroup(1, this.grp1.getBindGroup());
     passEncoder.setVertexBuffer(0, this.vertexBuffer);
     passEncoder.draw(6);
     passEncoder.end();
   }
 
   /**
-   * Load a new ppe pipeline, pretty cool when you want your own post-process effects.
-   * Note: Please, be careful to include these uniforms in your fragment shader, they are required:
+   * Reallocate and set values to params uniform.
    * 
-   * struct Params {
-   * // the place for your params
-   * };
-   * 
-   * @group(0) @binding(0) var<uniform> PARAMS: Params;
-   * @group(0) @binding(1) var<uniform> SIZE: vec2<f32>;
-   * @group(0) @binding(2) var SOURCE_TEXTURE: texture_2d<f32>;
-   * @group(0) @binding(3) var SOURCE_SAMPLER: sampler;
-   * @group(0) @binding(4) var NORMALS_TEXTURE: texture_2d<f32>;
-   * @group(0) @binding(5) var NORMALS_SAMPLER: sampler;
-   * @group(0) @binding(6) var IDS_TEXTURE: texture_2d<f32>;
-   * @group(0) @binding(7) var IDS_SAMPLER: sampler;
-   * @group(0) @binding(8) var DEPTH_TEXTURE: texture_2d<f32>;
-   * @group(0) @binding(9) var DEPTH_SAMPLER: sampler;
-   * 
-   * @param {string} fragmentShader - The fragment shader code.
    * @param {Array<number>} params - The params values.
    */
-  loadPipeline(fragmentShader: string, params: Array<number>) {
-    gfx3Manager.deletePipeline('PPE_PIPELINE');
-    this.pipeline = gfx3Manager.loadPipeline('PPE_PIPELINE', VERTEX_SHADER, fragmentShader, PIPELINE_DESC);
-
-    this.grp0 = gfx3Manager.createStaticGroup('PPE_PIPELINE', 0);
+  setParams(params: Array<number>) {
     this.params = this.grp0.setFloat(0, 'PARAMS', params.length);
-
     for (let i = 0; i < params.length; i++) {
       this.params[i] = params[i];
     }
-
-    this.size = this.grp0.setFloat(1, 'SIZE', 2);
-    this.size[0] = gfx3Manager.getWidth();
-    this.size[1] = gfx3Manager.getHeight();
-
-    this.sourceTexture = this.grp0.setTexture(2, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
-    this.sourceTexture = this.grp0.setSampler(3, 'SOURCE_SAMPLER', this.sourceTexture);
-    this.normalsTexture = this.grp0.setTexture(4, 'NORMALS_TEXTURE', gfx3Manager.getNormalsTexture());
-    this.normalsTexture = this.grp0.setSampler(5, 'NORMALS_SAMPLER', this.normalsTexture);
-    this.idsTexture = this.grp0.setTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
-    this.idsTexture = this.grp0.setSampler(7, 'IDS_SAMPLER', this.idsTexture);
-    this.depthTexture = this.grp0.setTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
-    this.depthTexture = this.grp0.setSampler(9, 'DEPTH_SAMPLER', this.depthTexture);
 
     this.grp0.allocate();
   }

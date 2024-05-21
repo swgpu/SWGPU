@@ -11,6 +11,8 @@ import { gfx2Manager } from './lib/gfx2/gfx2_manager';
 import { screenManager } from './lib/screen/screen_manager';
 import { uiManager } from './lib/ui/ui_manager';
 import { gfx3PPERenderer } from './lib/gfx3_ppe/gfx3_ppe_renderer';
+
+import { gfx3ShadowVolumeRenderer } from './lib/gfx3_shadow_volume/gfx3_shadow_volume_renderer';
 // ---------------------------------------------------------------------------------------
 import { TutorialsBootScreen } from './tutorials/boot/boot_screen';
 // ---------------------------------------------------------------------------------------
@@ -45,6 +47,7 @@ class GameManager {
     // render phase
     gfx3Manager.beginRender();
     gfx3MeshShadowRenderer.render();
+    gfx3ShadowVolumeRenderer.render();
     gfx3Manager.setDestinationTexture(gfx3PPERenderer.getSourceTexture());
     gfx3Manager.beginPassRender(0);
     gfx3SkyboxRenderer.render();

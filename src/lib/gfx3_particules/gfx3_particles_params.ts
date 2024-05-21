@@ -3,7 +3,7 @@ import { TweenNumber, TweenVEC3 } from '../core/tween';
 import { ParticlesOptions, PositionStyle, VelocityStyle } from './gfx3_particles';
 
 export const Fountain: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/star.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/star.png'),
   positionStyle: PositionStyle.CUBE,
   positionBase: [0, 5, 0],
   positionSpread: [10, 0, 10],
@@ -24,7 +24,7 @@ export const Fountain: Partial<ParticlesOptions> = {
 };
 
 export const Fireball: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/smokeparticle.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/smoke.png'),
   positionStyle: PositionStyle.SPHERE,
   positionBase: [0, 50, 0],
   positionSphereRadiusBase: 2,
@@ -40,7 +40,7 @@ export const Fireball: Partial<ParticlesOptions> = {
 };
 
 export const Smoke: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/smokeparticle.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/smoke.png'),
   positionStyle: PositionStyle.CUBE,
   positionBase: [0, 0, 0],
   positionSpread: [10, 0, 10],
@@ -61,7 +61,7 @@ export const Smoke: Partial<ParticlesOptions> = {
 };
 
 export const Clouds: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/smokeparticle.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/smoke.png'),
   positionStyle: PositionStyle.CUBE,
   positionBase: [-100, 100, 0],
   positionSpread: [0, 50, 60],
@@ -78,7 +78,7 @@ export const Clouds: Partial<ParticlesOptions> = {
 };
 
 export const Snow: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/snowflake.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/snowflake.png'),
   positionStyle: PositionStyle.CUBE,
   positionBase: [0, 200, 0],
   positionSpread: [500, 0, 500],
@@ -99,7 +99,7 @@ export const Snow: Partial<ParticlesOptions> = {
 };
 
 export const Rain: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/raindrop2flip.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/raindrop2flip.png'),
   positionStyle: PositionStyle.CUBE,
   positionBase: [0, 200, 0],
   positionSpread: [600, 0, 600],
@@ -118,7 +118,7 @@ export const Rain: Partial<ParticlesOptions> = {
 };
 
 export const Starfield: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/spikey.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/spikey.png'),
   positionStyle: PositionStyle.CUBE,
   positionBase: [0, 200, 0],
   positionSpread: [600, 400, 600],
@@ -140,7 +140,7 @@ export const Starfield: Partial<ParticlesOptions> = {
 };
 
 export const Fireflies: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/spark.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/spark.png'),
   positionStyle: PositionStyle.CUBE,
   positionBase: [0, 100, 0],
   positionSpread: [400, 200, 400],
@@ -158,7 +158,7 @@ export const Fireflies: Partial<ParticlesOptions> = {
 };
 
 export const Startunnel: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/spikey.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/spikey.png'),
   positionStyle: PositionStyle.CUBE,
   positionBase: [0, 0, 0],
   positionSpread: [10, 10, 10],
@@ -179,7 +179,7 @@ export const Startunnel: Partial<ParticlesOptions> = {
 };
 
 export const Firework: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/spark.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/spark.png'),
   positionStyle: PositionStyle.SPHERE,
   positionBase: [0, 100, 0],
   positionSphereRadiusBase: 2,
@@ -196,7 +196,7 @@ export const Firework: Partial<ParticlesOptions> = {
 };
 
 export const Candle: Partial<ParticlesOptions> = {
-  texture: await gfx3TextureManager.loadTexture('./textures/smokeparticle.png'),
+  texture: await gfx3TextureManager.loadTexture('./textures/particles/smoke.png'),
   positionStyle: PositionStyle.SPHERE,
   positionBase: [0, 5, 0],
   positionSphereRadiusBase: 1,

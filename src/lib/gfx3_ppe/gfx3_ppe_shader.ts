@@ -76,6 +76,10 @@ struct Params {
 @group(0) @binding(7) var IDS_SAMPLER: sampler;
 @group(0) @binding(8) var DEPTH_TEXTURE: texture_depth_2d;
 @group(0) @binding(9) var DEPTH_SAMPLER: sampler;
+@group(1) @binding(0) var SHADOW_TEXTURE: texture_2d<f32>;
+@group(1) @binding(1) var SHADOW_SAMPLER: sampler;
+@group(1) @binding(2) var SHADOW_DEPTH_TEXTURE: texture_depth_2d;
+@group(1) @binding(3) var SHADOW_DEPTH_SAMPLER: sampler;
 
 @fragment
 fn main(
@@ -85,6 +89,10 @@ fn main(
   var normal = textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, FragUV);
   var id = textureSample(IDS_TEXTURE, IDS_SAMPLER, FragUV);
   var depth = textureSample(DEPTH_TEXTURE, DEPTH_SAMPLER, FragUV);
+
+  var shadow = textureSample(SHADOW_TEXTURE, SHADOW_SAMPLER, FragUV);
+  var shadowDepth = textureSample(SHADOW_DEPTH_TEXTURE, SHADOW_DEPTH_SAMPLER, FragUV);
+
 
   if (PARAMS.ENABLED == 0.0)
   {
@@ -138,6 +146,7 @@ fn main(
     }
   }
 
+  outputColor *= shadow.r;
   return outputColor;
 }
 

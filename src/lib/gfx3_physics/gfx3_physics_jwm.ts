@@ -94,7 +94,7 @@ class Gfx3PhysicsJWM {
     const json = await response.json();
 
     if (!json.hasOwnProperty('Ident') || json['Ident'] != 'JWM') {
-      throw new Error('GfxJWM::loadFromFile(): File not valid !');
+      throw new Error('Gfx3PhysicsJWM::loadFromFile(): File not valid !');
     }
 
     this.boundingRect = new Gfx2BoundingRect(json['Min'], json['Max']);
@@ -111,11 +111,7 @@ class Gfx3PhysicsJWM {
     this.sectorColors = [];
     for (let i = 0; i < json['NumSectorColors']; i++) {
       const obj = json['SectorColors'][i];
-      this.sectorColors.push([
-        (obj[0][0] == obj[1][0] && obj[0][0] == obj[2][0]) ? obj[0][0] : 0,
-        (obj[0][1] == obj[1][1] && obj[0][1] == obj[2][1]) ? obj[0][1] : 0,
-        (obj[0][2] == obj[1][2] && obj[0][2] == obj[2][2]) ? obj[0][2] : 0
-      ]);
+      this.sectorColors.push([obj[0], obj[1], obj[2]]);
     }
 
     this.neighborPool = [];
@@ -175,14 +171,7 @@ class Gfx3PhysicsJWM {
 
     this.sectorColors = [];
     for (let i = 0; i < numSectorColors; i++) {
-      const c0: vec3 = [data[offset + (i * 9) + 0], data[offset + (i * 9) + 1], data[offset + (i * 9) + 2]];
-      const c1: vec3 = [data[offset + (i * 9) + 3], data[offset + (i * 9) + 4], data[offset + (i * 9) + 5]];
-      const c2: vec3 = [data[offset + (i * 9) + 6], data[offset + (i * 9) + 7], data[offset + (i * 9) + 8]];
-      this.sectorColors.push([
-        (c0[0] == c1[0] && c0[0] == c2[0]) ? c0[0] : 0,
-        (c0[1] == c1[1] && c0[1] == c2[1]) ? c0[1] : 0,
-        (c0[2] == c1[2] && c0[2] == c2[2]) ? c0[2] : 0
-      ]);
+      this.sectorColors.push([data[offset + (i * 3) + 0], data[offset + (i * 3) + 1], data[offset + (i * 3) + 2]]);
     }
 
     offset += numSectorColors * 9;

@@ -4,6 +4,7 @@ import { gfx3DebugRenderer } from '../../lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
 import { gfx3PPERenderer, PPEParam } from '../../lib/gfx3_ppe/gfx3_ppe_renderer';
 import { uiManager } from '../../lib/ui/ui_manager';
+import { coreManager } from '../../lib/core/core_manager';
 import { UT } from '../../lib/core/utils';
 import { Screen } from '../../lib/screen/screen';
 import { Gfx3CameraOrbit } from '../../lib/gfx3_camera/gfx3_camera_orbit';
@@ -11,7 +12,7 @@ import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3MeshOBJ } from '../../lib/gfx3_mesh/gfx3_mesh_obj';
 import { Gfx3Skybox } from '../../lib/gfx3_skybox/gfx3_skybox';
 import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
-import { coreManager } from '../../lib/core/core_manager';
+import { Gfx3ShadowVolume } from '../../lib/gfx3_shadow_volume/gfx3_shadow_volume';
 // ---------------------------------------------------------------------------------------
 
 class ViewerScreen extends Screen {
@@ -20,6 +21,8 @@ class ViewerScreen extends Screen {
     this.camera = new Gfx3CameraOrbit(0);
     this.skybox = new Gfx3Skybox();
     this.mesh = new Gfx3MeshJSM();
+
+    this.shadow = new Gfx3ShadowVolume();
     this.handleKeyDownCb = this.handleKeyDown.bind(this);
   }
 
@@ -27,6 +30,8 @@ class ViewerScreen extends Screen {
     this.camera.setPosition(0, 0, 10);
     this.skybox = await CREATE_SKYBOX();
     this.mesh = await CREATE_CUBE();
+
+    await this.shadow.loadFromFile('./samples/viewer/cube.jsv');
 
     uiManager.addNode(CREATE_UI_INFOBOX(), 'position:absolute; bottom:10px; right:10px');
     document.addEventListener('keydown', this.handleKeyDownCb);
@@ -38,12 +43,17 @@ class ViewerScreen extends Screen {
 
   update(ts) {
     const now = Date.now() / 10000;
+
+    // this.shadow.setRotation(Math.sin(now), Math.cos(now), 0);
+    // this.shadow.update(ts);
+
     this.mesh.setRotation(Math.sin(now), Math.cos(now), 0);
     this.mesh.update(ts);
     this.camera.update(ts);
   }
 
   draw() {
+    this.shadow.draw();
     this.mesh.draw();
     this.skybox.draw();
     gfx3MeshRenderer.drawPointLight([0, 30, 0], [1, 1, 1], [1, 0, 0], [0, 0, 0]);
@@ -57,19 +67,19 @@ class ViewerScreen extends Screen {
       return;
     }
 
-    if (e.key == 'o' || e.key == 'O') {
+    if (e.key == '1') {
       this.mesh = await CREATE_OBJ();
     }
-    else if (e.key == 'b' || e.key == 'B') {
+    else if (e.key == '2') {
       this.mesh = await CREATE_CUBE_BRICK();
     }
-    else if (e.key == 'c' || e.key == 'C') {
+    else if (e.key == '3') {
       this.mesh = await CREATE_CUBE();
     }
-    else if (e.key == 's' || e.key == 'S') {
+    else if (e.key == '4') {
       this.mesh = await CREATE_CUBE_SPRITE();
     }
-    else if (e.key == 'd' || e.key == 'D') {
+    else if (e.key == '5') {
       this.mesh = await CREATE_DUCK();
     }
     else if (e.key == 'f' || e.key == 'F') {
@@ -196,31 +206,31 @@ function CREATE_UI_INFOBOX() {
 
   {
     const li = document.createElement('li');
-    li.textContent = '[c] => Load Cube';  
+    li.textContent = '[1] => Load Obj Wavefront';
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[b] => Load Cube Normal Map';  
+    li.textContent = '[2] => Load Cube Normal Map';  
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[s] => Load Cube Texture Sprite';  
+    li.textContent = '[3] => Load Cube';  
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[d] => Load Duck';  
+    li.textContent = '[4] => Load Cube Texture Sprite';  
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[o] => Load Obj Wavefront';
+    li.textContent = '[5] => Load Duck';  
     ul.appendChild(li);
   }
 

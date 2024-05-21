@@ -1,20 +1,20 @@
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { UT } from '../core/utils';
 import { Gfx3DynamicGroup } from '../gfx3/gfx3_group';
+import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { Gfx3Mesh } from './gfx3_mesh';
-import { MESH_SHADOW_PIPELINE_DESC, MESH_SHADOW_VERTEX_SHADER } from './gfx3_mesh_shadow_shader';
+import { PIPELINE_DESC, VERTEX_SHADER } from './gfx3_mesh_shadow_shader';
 
 interface MeshCommand {
   mesh: Gfx3Mesh;
-  matrix: mat4 | null;
+  matrix: mat4;
 };
 
 /*
- * Singleton shadow renderer.
+ * Singleton shadow map renderer.
  */
-class Gfx3MeshShadowRenderer {
-  pipeline: GPURenderPipeline;
+class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
   depthTextureSize: number;
   depthTexture: GPUTexture
   depthTextureSampler: GPUSampler;
@@ -25,8 +25,7 @@ class Gfx3MeshShadowRenderer {
   mMatrix: Float32Array;
 
   constructor() {
-    this.pipeline = gfx3Manager.loadPipeline('MESH_SHADOW_PIPELINE', MESH_SHADOW_VERTEX_SHADER, '', MESH_SHADOW_PIPELINE_DESC);
-
+    super('MESH_SHADOW_MAP_PIPELINE', VERTEX_SHADER, '', PIPELINE_DESC);
     this.depthTextureSize = 1024.0;
     this.depthTexture = gfx3Manager.getDevice().createTexture({
       size: [this.depthTextureSize, this.depthTextureSize, 1],
@@ -38,7 +37,7 @@ class Gfx3MeshShadowRenderer {
     this.depthTextureSampler = gfx3Manager.getDevice().createSampler({ compare: 'less'});
     this.meshCommands = [];
 
-    this.grp0 = gfx3Manager.createDynamicGroup('MESH_SHADOW_PIPELINE', 0);
+    this.grp0 = gfx3Manager.createDynamicGroup('MESH_SHADOW_MAP_PIPELINE', 0);
     this.lvpMatrix = this.grp0.setFloat(0, 'LVP_MATRIX', 16);
     this.mMatrix = this.grp0.setFloat(1, 'M_MATRIX', 16);
   }
@@ -68,9 +67,8 @@ class Gfx3MeshShadowRenderer {
 
     for (let i = 0; i < this.meshCommands.length; i++) {
       const command = this.meshCommands[i];
-      const mMatrix = command.matrix ? command.matrix : command.mesh.getTransformMatrix();
       this.grp0.write(0, this.lvpMatrix);
-      this.grp0.write(1, UT.MAT4_COPY(mMatrix, this.mMatrix) as Uint32Array);
+      this.grp0.write(1, UT.MAT4_COPY(command.matrix, this.mMatrix) as Uint32Array);
       passEncoder.setBindGroup(0, this.grp0.getBindGroup(i));
       passEncoder.setVertexBuffer(0, gfx3Manager.getVertexBuffer(), command.mesh.getVertexSubBufferOffset(), command.mesh.getVertexSubBufferSize());
       passEncoder.draw(command.mesh.getVertexCount());
@@ -89,7 +87,8 @@ class Gfx3MeshShadowRenderer {
    * @param {mat4 | null} [matrix=null] - The transformation matrix.
    */
   drawMesh(mesh: Gfx3Mesh, matrix: mat4 | null = null): void {
-    this.meshCommands.push({ mesh: mesh, matrix: matrix });
+    const meshMatrix = matrix ? matrix : mesh.getTransformMatrix();
+    this.meshCommands.push({ mesh: mesh, matrix: meshMatrix });
   }
 
   /**
