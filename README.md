@@ -263,8 +263,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 3. Task done one by one
 
 [CORE TASKS]
-1. Add shadow volume
-2. Add toon shading
+1. Add sun flares (as external demo, for wipeout-like project)
 3. Add spot-light
 
 [DEADLINES]
