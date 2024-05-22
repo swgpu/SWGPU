@@ -105,4 +105,3 @@ export { uiManager } from './ui/ui_manager';
 export type { Gfx3Texture } from './gfx3/gfx3_texture';
 export type { ParticlesOptions } from './gfx2_particles/gfx2_particles';
 export type { Gfx3Viewport } from './gfx3/gfx3_view';
-export type { TriggerType } from './gfx3_physics/gfx3_physics_jtr';
