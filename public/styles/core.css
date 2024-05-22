@@ -5,7 +5,7 @@ body {
   margin: 0;
   background-color: #7f7f7f;
   height: 100vh;
-  background-image: url("../textures/bg.png");
+  background-image: url("../textures/bg.jpeg");
   background-size: cover;
 }
 
@@ -42,13 +42,25 @@ body {
 /* CORE ENGINE CLASS
 /*#############################################################################################*/
 
-#METRICS {
+#BRAND {
   position: absolute;
   left: 10px;
   top: 10px;
-  padding: 10px;
   color: white;
   width: 300px;
+}
+
+#BRAND_TITLE {
+  font-size: 40px;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-bottom:10px;
+  border-bottom: 2px solid white;
+}
+
+#BRAND_METRICS {
+  padding: 10px;
+  background-color: rgb(0 0 0 / 54%);
 }
 
 #APP {

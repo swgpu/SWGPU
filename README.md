@@ -79,7 +79,8 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - Fog
     - Vertex colorization
     - Decals
-    - Realtime shadowmap
+    - Shadow mapping
+    - Shadow volume
     - Multi-viewport
     - Camera orbit
     - Camera WASD
@@ -104,6 +105,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - Emissive map
     - Normal map
     - Env map
+    - Toon map
     - Texture scrolling
     - Animated UV
     - Specular shininess
@@ -188,7 +190,8 @@ It's included a complete environment including vite, typescript and the engine a
 ```
 
 ## How to integrate your 3D models
-The best way is to used the [Blender Exporter](https://github.com/jay19240/WARME-Y2K/bin/WARME-Blender-Exporter.zip), otherwise you can used any software that export file in wavefront obj format like Blender, Crocotile, Elit3D or whatever.    
+We've done a [Blender Exporter](https://github.com/jay19240/WARME-Y2K/bin/WARME-Blender-Exporter.zip)
+which is used to export your models as JSON-like or Binary format.   
 
 Important note: The Blender coordinate system and the engine don't match, see below the rule to translate.
 Don't forget to apply these changes when you export your obj file.
@@ -227,10 +230,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 ## Some parts taken for this work
 - DOM for UI elements
 - CanvasRenderingContext2D for 2D stuffs
-- Human readable custom format for all graphics stuff
 - [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
-- Compatible Blender for 3D
+- Compatible Blender for 3D with our addon
 - Compatible SpriteFusion for 2D
 
 ## Changelog

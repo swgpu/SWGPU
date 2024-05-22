@@ -21,7 +21,6 @@ class ViewerScreen extends Screen {
     this.camera = new Gfx3CameraOrbit(0);
     this.skybox = new Gfx3Skybox();
     this.mesh = new Gfx3MeshJSM();
-
     this.shadow = new Gfx3ShadowVolume();
     this.handleKeyDownCb = this.handleKeyDown.bind(this);
   }
@@ -31,7 +30,8 @@ class ViewerScreen extends Screen {
     this.skybox = await CREATE_SKYBOX();
     this.mesh = await CREATE_CUBE();
 
-    await this.shadow.loadFromFile('./samples/viewer/cube.jsv');
+    this.shadow = new Gfx3ShadowVolume();
+    await this.shadow.loadFromBinaryFile('./samples/viewer/shadow.bsv');
 
     uiManager.addNode(CREATE_UI_INFOBOX(), 'position:absolute; bottom:10px; right:10px');
     document.addEventListener('keydown', this.handleKeyDownCb);
@@ -43,10 +43,6 @@ class ViewerScreen extends Screen {
 
   update(ts) {
     const now = Date.now() / 10000;
-
-    // this.shadow.setRotation(Math.sin(now), Math.cos(now), 0);
-    // this.shadow.update(ts);
-
     this.mesh.setRotation(Math.sin(now), Math.cos(now), 0);
     this.mesh.update(ts);
     this.camera.update(ts);
@@ -82,6 +78,9 @@ class ViewerScreen extends Screen {
     else if (e.key == '5') {
       this.mesh = await CREATE_DUCK();
     }
+    else if (e.key == '6') {
+      this.mesh = await CREATE_TORUS();
+    }
     else if (e.key == 'f' || e.key == 'F') {
       gfx3Manager.hasFilter() ? gfx3Manager.setFilter('') : gfx3Manager.setFilter('grayscale(100%)');
     }
@@ -89,21 +88,24 @@ class ViewerScreen extends Screen {
       coreManager.toggleClass('scanlines');
     }
     else if (e.key == 'p' || e.key == 'P') {
-      gfx3PPERenderer.setParam(PPEParam.ENABLED, 1.0);
+      this.mesh.setSingleId(0, -1.0);
       gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 1.0);
       gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 1.0);
       gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 1.0);
       gfx3PPERenderer.setParam(PPEParam.OUTLINE_ENABLED, 0.0);
     }
     else if (e.key == 'l' || e.key == 'L') {
-      gfx3PPERenderer.setParam(PPEParam.ENABLED, 1.0);
+      this.mesh.setSingleId(0, -2.0);
       gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 0.0);
       gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 0.0);
       gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 0.0);
       gfx3PPERenderer.setParam(PPEParam.OUTLINE_ENABLED, 1.0);
     }
     else if (e.key == 'n' || e.key == 'L') {
-      gfx3PPERenderer.setParam(PPEParam.ENABLED, 0.0);
+      gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 0.0);
+      gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 0.0);
+      gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 0.0);
+      gfx3PPERenderer.setParam(PPEParam.OUTLINE_ENABLED, 0.0);
     }
   }
 }
@@ -123,7 +125,9 @@ async function CREATE_SKYBOX() {
 async function CREATE_OBJ() {
   const obj = new Gfx3MeshOBJ();
   await obj.loadFromFile('./samples/viewer/wavefront.obj', './samples/viewer/wavefront.mtl');
-  return obj.getMesh('letter-f');
+  const mesh = obj.getMesh('letter-f')
+  mesh.setId(-1.0, -1.0, -1.0, -1.0);
+  return mesh;
 }
 
 async function CREATE_CUBE_BRICK() {
@@ -193,6 +197,18 @@ async function CREATE_DUCK() {
   return mesh;
 }
 
+async function CREATE_TORUS() {
+  const mesh = new Gfx3MeshJSM();
+  await mesh.loadFromFile('./samples/viewer/torus.jsm');
+  mesh.setId(-1.0, -1.0, -1.0, -1.0);
+  mesh.setMaterial(new Gfx3Material({
+    toonMap: await gfx3TextureManager.loadTexture('./textures/toon_default.png', { minFilter: 'nearest', magFilter: 'nearest' }),
+    toonLightDir: [1.0, -1.0, -1.0]
+  }));
+
+  return mesh;
+}
+
 function CREATE_UI_INFOBOX() {
   const box = document.createElement('div');
   box.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
@@ -231,6 +247,12 @@ function CREATE_UI_INFOBOX() {
   {
     const li = document.createElement('li');
     li.textContent = '[5] => Load Duck';  
+    ul.appendChild(li);
+  }
+
+  {
+    const li = document.createElement('li');
+    li.textContent = '[6] => Load Toon Torus';  
     ul.appendChild(li);
   }
 

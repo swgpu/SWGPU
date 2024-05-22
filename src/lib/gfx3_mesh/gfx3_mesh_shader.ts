@@ -145,10 +145,12 @@ struct MaterialParams {
   HAS_EMISSIVE_MAP: f32,
   HAS_NORMAL_MAP: f32,
   HAS_ENV_MAP: f32,
+  HAS_TOON_MAP: f32,
   HAS_DECAL: f32,
   HAS_SHADOW: f32,
   SHININESS: f32,
-  EMISSIVE_FACTOR: f32
+  EMISSIVE_FACTOR: f32,
+  TOON_BLENDING: f32
 }
 
 struct MaterialUvs {
@@ -211,6 +213,7 @@ struct Decal {
 @group(2) @binding(0) var<uniform> MAT_COLORS: MaterialColors;
 @group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
 @group(2) @binding(2) var<uniform> MAT_UVS: MaterialUvs;
+@group(2) @binding(3) var<uniform> MAT_TOON_LIGHT_DIR: vec3<f32>;
 @group(3) @binding(0) var MAT_TEXTURE: texture_2d<f32>;
 @group(3) @binding(1) var MAT_SAMPLER: sampler;
 @group(3) @binding(2) var MAT_DISPLACEMENT_TEXTURE: texture_2d<f32>;
@@ -225,6 +228,8 @@ struct Decal {
 @group(3) @binding(11) var MAT_NORM_SAMPLER: sampler;
 @group(3) @binding(12) var MAT_ENV_MAP_TEXTURE: texture_cube<f32>;
 @group(3) @binding(13) var MAT_ENV_MAP_SAMPLER: sampler;
+@group(3) @binding(14) var MAT_TOON_TEXTURE: texture_2d<f32>;
+@group(3) @binding(15) var MAT_TOON_SAMPLER: sampler;
 
 @fragment
 fn main(
@@ -241,6 +246,7 @@ fn main(
   var outputColor = vec4(0.0, 0.0, 0.0, 1.0);
   var texel = vec4(1.0, 1.0, 1.0, 1.0);
   var textureUV = MAT_UVS.TEXTURE_SCROLL + MAT_UVS.TEXTURE_OFFSET + FragUV;
+  var shadow = 1.0;
 
   if (MAT_PARAMS.HAS_DISPLACEMENT_MAP == 1.0)
   {
@@ -278,15 +284,25 @@ fn main(
     normal = CalcNormalMap(normal, FragTangent, FragBinormal, textureUV);
   }
 
-  if (MAT_PARAMS.HAS_LIGHTNING == 1.0)
+  if (MAT_PARAMS.HAS_SHADOW == 1.0)
+  {
+    shadow = CalcShadow(FragShadowPos);
+  }
+
+  if (MAT_PARAMS.HAS_TOON_MAP == 1.0)
+  {
+    if (MAT_PARAMS.TOON_BLENDING == 1.0)
+    {
+      outputColor = CalcToon(normal, FragPos, shadow) * texel;
+    }
+    else
+    {
+      outputColor = CalcToon(normal, FragPos, shadow);
+    }
+  }
+  else if (MAT_PARAMS.HAS_LIGHTNING == 1.0)
   {
     var totalLight = vec4(0.0, 0.0, 0.0, 0.0);
-    var shadow = 1.0;
-    
-    if (MAT_PARAMS.HAS_SHADOW == 1.0)
-    {
-      shadow = CalcShadow(FragShadowPos);
-    }
 
     if (DIR_LIGHT.ENABLED == 1.0 && (DIR_LIGHT.MESH_ID == 0.0 || DIR_LIGHT.MESH_ID == MESH_INFOS.ID.r))
     {
@@ -417,7 +433,6 @@ fn CalcLightInternal(lightDir: vec3<f32>, lightAmbient: vec3<f32>, lightDiffuse:
   var matDiffuse = MAT_COLORS.DIFFUSE;
   var matSpecular = MAT_COLORS.SPECULAR;
   var matEmissive = MAT_COLORS.EMISSIVE * MAT_PARAMS.EMISSIVE_FACTOR;
-
   var diffuseFactor = max(dot(normal, -lightDir), 0.0);
 
   if (MAT_PARAMS.HAS_DIFFUSE_MAP == 1.0)
@@ -479,6 +494,20 @@ fn CalcPointLight(index: u32, normal: vec3<f32>, fragPos: vec3<f32>, textureUV: 
   var color = CalcLightInternal(lightDir, POINT_LIGHTS[index].AMBIENT, POINT_LIGHTS[index].DIFFUSE, POINT_LIGHTS[index].SPECULAR, POINT_LIGHTS[index].INTENSITY, normal, fragPos, textureUV, shadow);
   var attenuation = POINT_LIGHTS[index].ATTEN[0] + POINT_LIGHTS[index].ATTEN[1] * distance + POINT_LIGHTS[index].ATTEN[2] * distance * distance;
   return color / attenuation;
+}
+
+// *****************************************************************************************************************
+// CALC TOON
+// *****************************************************************************************************************
+fn CalcToon(normal: vec3<f32>, fragPos: vec3<f32>, shadow: f32) -> vec4<f32>
+{
+  var n = normalize(normal);
+  var lightDir = normalize(MAT_TOON_LIGHT_DIR);
+  var viewDir = normalize(CAMERA_POS - fragPos);
+  var s = max(dot(n, -lightDir), 0.0);
+  var t = max(dot(n, viewDir), 0.0);
+  var color = textureSample(MAT_TOON_TEXTURE, MAT_TOON_SAMPLER, vec2<f32>(s, t));
+  return color * shadow;
 }
 
 // *****************************************************************************************************************

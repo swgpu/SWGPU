@@ -229,6 +229,7 @@ class Gfx2TileLayer {
   visible: boolean;
   frameDuration: number;
   grid: Array<number>;
+  objects: Array<Gfx2TileObject>;
 
   constructor() {
     this.name = '';
@@ -239,6 +240,7 @@ class Gfx2TileLayer {
     this.visible = true;
     this.frameDuration = 0;
     this.grid = [];
+    this.objects = [];
   }
 
   /**
@@ -255,6 +257,14 @@ class Gfx2TileLayer {
     this.visible = data['Visible'] ?? true;
     this.frameDuration = data['FrameDuration'] ?? 0;
     this.grid = data['Grid'];
+
+    if (data['Objects'] && data['Objects'].length > 0) {
+      for (const obj of data['Objects']) {
+        const object = new Gfx2TileObject();
+        object.loadFromData(obj);
+        this.objects.push(object);
+      }  
+    }
   }
 
   /**
@@ -337,6 +347,13 @@ class Gfx2TileLayer {
    */
   getGrid(): Array<number> {
     return this.grid;
+  }
+
+  /**
+   * Returns the map object list.
+   */
+  getObjects(): Array<Gfx2TileObject> {
+    return this.objects;
   }
 }
 
@@ -445,6 +462,97 @@ class Gfx2Tileset {
   }
 }
 
+/**
+ * A tile object.
+ */
+class Gfx2TileObject {
+  id: string;
+  position: vec2;
+  name: string;
+  type: string;
+  visible: boolean;
+  size: vec2;
+  properties: Map<string, any>;
+
+  constructor() {
+    this.id = '';
+    this.position = [0, 0];
+    this.name = '';
+    this.type = '';
+    this.visible = true;
+    this.size = [0, 0];
+    this.properties = new Map<string, any>();
+  }
+
+  /**
+   * Load data from data object.
+   * 
+   * @param {any} data - The data object.
+   */
+  loadFromData(data: any): void {
+    this.id = data['Id'] ?? '';
+    this.position = data['Position'] ?? [0, 0];
+    this.name = data['Name'] ?? '';
+    this.type = data['Type'] ?? '';
+    this.visible = data['Visible'] ? true : false;
+    this.size = data['Size'] ?? [0, 0];
+
+    for (const key in data['Properties']) {
+      this.properties.set(key, data['Properties'][key]);
+    }
+  }
+
+  /**
+   * Returns the id.
+   */
+  getId(): string {
+    return this.id;
+  }
+
+  /**
+   * Returns the position (location or canvas position).
+   */
+  getPosition(): vec2 {
+    return this.position;
+  }
+
+  /**
+   * Returns the name.
+   */
+  getName(): string {
+    return this.name;
+  }
+
+  /**
+   * Returns the type.
+   */
+  getType(): string {
+    return this.type;
+  }
+
+  /**
+   * Returns the visible flag.
+   */
+  isVisible(): boolean {
+    return this.visible;
+  }
+
+  /**
+   * Returns the size.
+   */
+  getSize(): vec2 {
+    return this.size;
+  }
+
+  /**
+   * Returns the property list.
+   */
+  getProperties(): Map<string, any> {
+    return this.properties;
+  }
+}
+
 export { Gfx2TileMap };
 export { Gfx2TileLayer };
 export { Gfx2Tileset };
+export { Gfx2TileObject };

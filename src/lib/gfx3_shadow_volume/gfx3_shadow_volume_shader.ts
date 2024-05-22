@@ -1,8 +1,44 @@
 export const SHADER_VERTEX_ATTR_COUNT = 4;
 export const UNIFORM_ATTR_COUNT = 1;
 
-export const PIPELINE_DESC: any = {
-  label: 'Mesh Shadow Volume pipeline',
+export const PIPELINE_CW_DESC: any = {
+  label: 'Mesh Shadow Volume CW pipeline',
+  layout: 'auto',
+  vertex: {
+    entryPoint: 'main',
+    buffers: [{
+      arrayStride: SHADER_VERTEX_ATTR_COUNT * 4,
+      attributes: [{
+        shaderLocation: 0, /* position */
+        offset: 0,
+        format: 'float32x3'
+      },{
+        shaderLocation: 1, /* shadowFactor */
+        offset: 3 * 4,
+        format: 'float32'
+      }]
+    }]
+  },
+  fragment: {
+    entryPoint: 'main',
+    targets: [{
+      format: 'rgba16float'
+    }]
+  },
+  primitive: {
+    topology: 'triangle-list',
+    cullMode: 'back',
+    frontFace: 'cw'
+  },
+  depthStencil: {
+    depthWriteEnabled: true,
+    depthCompare: 'less',
+    format: 'depth24plus'
+  }
+};
+
+export const PIPELINE_CCW_DESC: any = {
+  label: 'Mesh Shadow Volume CCW pipeline',
   layout: 'auto',
   vertex: {
     entryPoint: 'main',

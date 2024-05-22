@@ -31,15 +31,18 @@ interface MATOptions {
   displacementMapScrollAngle?: number;
   displacementMapScrollRate?: number;
   displacementMapFactor?: number;
+  toonLightDir?: vec3;
   diffuseMap?: Gfx3Texture;
   specularMap?: Gfx3Texture;
   emissiveMap?: Gfx3Texture;
   normalMap?: Gfx3Texture;
   envMap?: Gfx3Texture;
+  toonMap?: Gfx3Texture;
   decalEnabled?: boolean;
   shadowEnabled?: boolean;
   shininess?: number;
   emissiveFactor?: number;
+  toonBlending?: boolean;
 };
 
 /**
@@ -62,6 +65,7 @@ class Gfx3Material {
   colors: Float32Array;
   params: Float32Array;
   uvs: Float32Array;
+  toonLightDir: Float32Array;
   grp3: Gfx3StaticGroup;
   texture: Gfx3Texture;
   displacementMap: Gfx3Texture;
@@ -70,6 +74,7 @@ class Gfx3Material {
   emissiveMap: Gfx3Texture;
   normalMap: Gfx3Texture;
   envMap: Gfx3Texture;
+  toonMap: Gfx3Texture;
 
   /**
    * @param {MATOptions} options - The options to configure the material.
@@ -105,7 +110,7 @@ class Gfx3Material {
     this.colors[13] = options.specular ? options.specular[1] : 0.0;
     this.colors[14] = options.specular ? options.specular[2] : 0.0;
     this.colors[15] = 0.0;
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 15);
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 17);
     this.params[0] = options.opacity ?? 1.0;
     this.params[1] = options.normalIntensity ?? 1.0;
     this.params[2] = options.lightning ? 1.0 : 0.0;
@@ -117,11 +122,17 @@ class Gfx3Material {
     this.params[8] = options.emissiveMap ? 1.0 : 0.0;
     this.params[9] = options.normalMap ? 1.0 : 0.0;
     this.params[10] = options.envMap ? 1.0 : 0.0;
-    this.params[11] = options.decalEnabled ? 1.0 : 0.0;
-    this.params[12] = options.shadowEnabled ? 1.0 : 0.0;
-    this.params[13] = options.shininess ?? 0.0;
-    this.params[14] = options.emissiveFactor ?? 1.0;
+    this.params[11] = options.toonMap ? 1.0 : 0.0;
+    this.params[12] = options.decalEnabled ? 1.0 : 0.0;
+    this.params[13] = options.shadowEnabled ? 1.0 : 0.0;
+    this.params[14] = options.shininess ?? 0.0;
+    this.params[15] = options.emissiveFactor ?? 1.0;
+    this.params[16] = options.toonBlending ? 1.0 : 0.0;
     this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 6);
+    this.toonLightDir = this.grp2.setFloat(3, 'MAT_TOON_LIGHT_DIR', 3);
+    this.toonLightDir[0] = options.toonLightDir ? options.toonLightDir[0] : 0.0;
+    this.toonLightDir[1] = options.toonLightDir ? options.toonLightDir[1] : 0.0;
+    this.toonLightDir[2] = options.toonLightDir ? options.toonLightDir[2] : 0.0;
 
     this.grp3 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 3);
     this.texture = this.grp3.setTexture(0, 'MAT_TEXTURE', options.texture ?? gfx3Manager.createTextureFromBitmap());
@@ -138,6 +149,8 @@ class Gfx3Material {
     this.normalMap = this.grp3.setSampler(11, 'MAT_NORM_SAMPLER', this.normalMap);
     this.envMap = this.grp3.setTexture(12, 'MAT_ENV_MAP_TEXTURE', options.envMap ?? gfx3Manager.createCubeMapFromBitmap(), { dimension: 'cube' });
     this.envMap = this.grp3.setSampler(13, 'MAT_ENV_MAP_SAMPLER', this.envMap);
+    this.toonMap = this.grp3.setTexture(14, 'MAT_TOON_TEXTURE', options.toonMap ?? gfx3Manager.createTextureFromBitmap());
+    this.toonMap = this.grp3.setSampler(15, 'MAT_TOON_SAMPLER', this.toonMap);
 
     this.grp2.allocate();
     this.grp3.allocate();
@@ -195,10 +208,13 @@ class Gfx3Material {
       emissiveMap: json['EmissiveMap'] ? await gfx3TextureManager.loadTexture(json['EmissiveMap']) : undefined,
       normalMap: json['NormalMap'] ? await gfx3TextureManager.loadTexture(json['NormalMap']) : undefined,
       envMap: json['EnvMap'] ? await gfx3TextureManager.loadTexture(json['EnvMap']) : undefined,
+      toonMap: json['ToonMap'] ? await gfx3TextureManager.loadTexture(json['ToonMap']): undefined,
       decalEnabled: json['DecalEnabled'],
       shadowEnabled: json['ShadowEnabled'],
       shininess: json['Shininess'],
-      emissiveFactor: json['EmissiveFactor']
+      emissiveFactor: json['EmissiveFactor'],
+      toonBlending: json['ToonBlending'],
+      toonLightDir: json['ToonLightDir']
     });
   }
 
@@ -487,12 +503,24 @@ class Gfx3Material {
   }
 
   /**
+   * Set the toon texture map.
+   * 
+   * @param {Gfx3Texture} toonMap - The toon texture map.
+   */
+  setToonMap(toonMap: Gfx3Texture): void {
+    this.toonMap = toonMap;
+    this.params[11] = 1;
+    this.texturesChanged = true;
+    this.dataChanged = true;
+  }
+
+  /**
    * Enable decals on the material surface.
    * 
    * @param {boolean} enabled - Indicating whether decals should be enabled or disabled.
    */
   enableDecal(enabled: boolean): void {
-    this.params[11] = enabled ? 1.0 : 0.0;
+    this.params[12] = enabled ? 1.0 : 0.0;
     this.dataChanged = true;
   }
 
@@ -502,7 +530,7 @@ class Gfx3Material {
    * @param {boolean} enabled - Indicating whether the shadow should be enabled or disabled.
    */
   enableShadow(enabled: boolean): void {
-    this.params[12] = enabled ? 1.0 : 0.0;
+    this.params[13] = enabled ? 1.0 : 0.0;
     this.dataChanged = true;
   }
 
@@ -512,7 +540,7 @@ class Gfx3Material {
    * @param {number} shininess - The shininess/specularity value (0-1)
    */
   setShininess(shininess: number): void {
-    this.params[13] = shininess;
+    this.params[14] = shininess;
     this.dataChanged = true;
   }
 
@@ -522,7 +550,29 @@ class Gfx3Material {
    * @param {number} emissiveFactor - The factor of emission color (0-1)
    */
   setEmissiveFactor(emissiveFactor: number): void {
-    this.params[14] = emissiveFactor;
+    this.params[15] = emissiveFactor;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the toon blending.
+   * 
+   * @param {boolean} toonBlending - Enable or disable the blending between texture and toon texture.
+   */
+  setToonBlending(toonBlending: boolean): void {
+    this.params[16] = toonBlending ? 1.0 : 0.0;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the toon light direction.
+   * 
+   * @param {vec3} direction - The toon light direction.
+   */
+  setToonLightDirection(direction: vec3): void {
+    this.toonLightDir[0] = direction[0];
+    this.toonLightDir[1] = direction[1];
+    this.toonLightDir[2] = direction[2];
     this.dataChanged = true;
   }
 
@@ -535,6 +585,7 @@ class Gfx3Material {
       this.grp2.write(0, this.colors);
       this.grp2.write(1, this.params);
       this.grp2.write(2, this.uvs);
+      this.grp2.write(3, this.toonLightDir);
       this.grp2.endWrite();
       this.dataChanged = false;
     }
@@ -554,6 +605,7 @@ class Gfx3Material {
       this.grp3.setTexture(8, 'MAT_EMISSIVE_TEXTURE', this.emissiveMap);
       this.grp3.setTexture(10, 'MAT_NORM_TEXTURE', this.normalMap);
       this.grp3.setTexture(12, 'MAT_ENV_MAP_TEXTURE', this.envMap, { dimension: 'cube' });
+      this.grp3.setTexture(14, 'MAT_TOON_TEXTURE', this.toonMap);
       this.grp3.allocate();
       this.texturesChanged = false;
     }
@@ -608,6 +660,13 @@ class Gfx3Material {
    */
   getEnvMap(): Gfx3Texture {
     return this.envMap;
+  }
+
+  /**
+   * Returns the toon texture map.
+   */
+  getToonMap(): Gfx3Texture {
+    return this.toonMap;
   }
 }
 

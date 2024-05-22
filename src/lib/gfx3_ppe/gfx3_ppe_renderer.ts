@@ -23,7 +23,9 @@ enum PPEParam {
   OUTLINE_THICKNESS = 12,
   OUTLINE_R = 13,
   OUTLINE_G = 14,
-  OUTLINE_B = 15
+  OUTLINE_B = 15,
+  OUTLINE_CONSTANT = 16,
+  SHADOW_VOLUME_ENABLED = 17
 };
 
 /**
@@ -40,8 +42,9 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
   idsTexture: Gfx3Texture;
   depthTexture: Gfx3Texture;
   grp1: Gfx3StaticGroup;
-  shadowTexture: Gfx3Texture;
-  shadowDepthTexture: Gfx3Texture;
+  shadowFactorTexture: Gfx3Texture;
+  shadowDepthCWTexture: Gfx3Texture;
+  shadowDepthCCWTexture: Gfx3Texture;
 
   constructor() {
     super('PPE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
@@ -49,7 +52,7 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.vertexBuffer = this.device.createBuffer({ size: 6 * SHADER_VERTEX_ATTR_COUNT * 4, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC });
 
     this.grp0 = gfx3Manager.createStaticGroup('PPE_PIPELINE', 0);
-    this.params = this.grp0.setFloat(0, 'PARAMS', 16);
+    this.params = this.grp0.setFloat(0, 'PARAMS', 18);
     this.params[PPEParam.ENABLED] = 1.0;
     this.params[PPEParam.PIXELATION_ENABLED] = 0.0;
     this.params[PPEParam.PIXELATION_WIDTH] = 400.0;
@@ -66,6 +69,8 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.params[PPEParam.OUTLINE_R] = 0.0;
     this.params[PPEParam.OUTLINE_G] = 0.0;
     this.params[PPEParam.OUTLINE_B] = 0.0;
+    this.params[PPEParam.OUTLINE_CONSTANT] = 0.0;
+    this.params[PPEParam.SHADOW_VOLUME_ENABLED] = 1.0;
     this.size = this.grp0.setFloat(1, 'SIZE', 2);
     this.size[0] = gfx3Manager.getWidth();
     this.size[1] = gfx3Manager.getHeight();
@@ -80,10 +85,12 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.grp0.allocate();
 
     this.grp1 = gfx3Manager.createStaticGroup('PPE_PIPELINE', 1);
-    this.shadowTexture = this.grp1.setTexture(0, 'SHADOW_TEXTURE', gfx3ShadowVolumeRenderer.getDestinationTexture());
-    this.shadowTexture = this.grp1.setSampler(1, 'SHADOW_SAMPLER', this.shadowTexture);
-    this.shadowDepthTexture = this.grp1.setTexture(2, 'SHADOW_DEPTH_TEXTURE', gfx3ShadowVolumeRenderer.getDepthTexture());
-    this.shadowDepthTexture = this.grp1.setSampler(3, 'SHADOW_DEPTH_SAMPLER', this.shadowDepthTexture);
+    this.shadowFactorTexture = this.grp1.setTexture(0, 'SHADOW_FACTOR_TEXTURE', gfx3ShadowVolumeRenderer.getFactorTexture());
+    this.shadowFactorTexture = this.grp1.setSampler(1, 'SHADOW_FACTOR_SAMPLER', this.shadowFactorTexture);
+    this.shadowDepthCCWTexture = this.grp1.setTexture(2, 'SHADOW_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
+    this.shadowDepthCCWTexture = this.grp1.setSampler(3, 'SHADOW_DEPTH_CCW_SAMPLER', this.shadowDepthCCWTexture);
+    this.shadowDepthCWTexture = this.grp1.setTexture(4, 'SHADOW_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
+    this.shadowDepthCWTexture = this.grp1.setSampler(5, 'SHADOW_DEPTH_CW_SAMPLER', this.shadowDepthCWTexture);
     this.grp1.allocate();
 
     this.device.queue.writeBuffer(this.vertexBuffer, 0, new Float32Array([
@@ -173,6 +180,11 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.idsTexture = this.grp0.setTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
     this.depthTexture = this.grp0.setTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
     this.grp0.allocate();
+
+    this.shadowFactorTexture = this.grp1.setTexture(0, 'SHADOW_FACTOR_TEXTURE', gfx3ShadowVolumeRenderer.getFactorTexture());
+    this.shadowDepthCCWTexture = this.grp1.setTexture(2, 'SHADOW_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
+    this.shadowDepthCWTexture = this.grp1.setTexture(4, 'SHADOW_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
+    this.grp1.allocate();
   }
 }
 

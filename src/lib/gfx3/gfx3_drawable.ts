@@ -123,9 +123,10 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
    * ■ lights group: r = n
    * ■ decals group: g = n
    * ■ pixelation: r = -1
+   * ■ outline: r = -2
    * ■ color limitation: g = -1
    * ■ dither: b = -1
-   * ■ outline: a = -1
+   * ■ shadow volume: a = -1
    * 
    * @param {number} r - The r integer value.
    * @param {number} g - The g integer value. Used by decals for group identification.
@@ -134,6 +135,16 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
    */
   setId(r: number, g: number, b: number, a: number): void {
     this.id = [r, g, b, a];
+  }
+
+  /**
+   * Set a single identifier component.
+   * 
+   * @param {number} index - The component index.
+   * @param {number} value - The identifier value.
+   */
+  setSingleId(index: number, value: number): void {
+    this.id[index] = value;
   }
 
   /**

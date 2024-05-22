@@ -8,6 +8,8 @@ class Sector extends Gfx2BoundingRect {
   v1: vec3;
   v2: vec3;
   v3: vec3;
+  n: vec3;
+  t: vec3;
 
   constructor(index: number, a: vec3, b: vec3, c: vec3) {
     super();
@@ -15,6 +17,8 @@ class Sector extends Gfx2BoundingRect {
     this.v1 = a;
     this.v2 = b;
     this.v3 = c;
+    this.n = UT.VEC3_NORMALIZE(UT.TRI3_NORMAL(this.v1, this.v2, this.v3));
+    this.t = UT.VEC3_NORMALIZE(UT.VEC3_CROSS([0, 1, 0], this.n));
     super.fromVertices([this.v1[0], this.v1[2], this.v2[0], this.v2[2], this.v3[0], this.v3[2]]);
   }
 }
@@ -427,6 +431,15 @@ class Gfx3PhysicsJWM {
    */
   clearWalkers(): void {
     this.walkers.clear();
+  }
+
+  /**
+   * Return sector.
+   * 
+   * @param {number} sectorIndex - The sector index.
+   */
+  getSector(sectorIndex: number): Sector {
+    return this.sectors[sectorIndex];
   }
 
   /**

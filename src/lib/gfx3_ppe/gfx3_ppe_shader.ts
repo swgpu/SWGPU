@@ -63,7 +63,9 @@ struct Params {
   OUTLINE_THICKNESS: f32,
   OUTLINE_R: f32,
   OUTLINE_G: f32,
-  OUTLINE_B: f32
+  OUTLINE_B: f32,
+  OUTLINE_CONSTANT: f32,
+  SHADOW_VOLUME_ENABLED: f32
 };
 
 @group(0) @binding(0) var<uniform> PARAMS: Params;
@@ -76,38 +78,45 @@ struct Params {
 @group(0) @binding(7) var IDS_SAMPLER: sampler;
 @group(0) @binding(8) var DEPTH_TEXTURE: texture_depth_2d;
 @group(0) @binding(9) var DEPTH_SAMPLER: sampler;
-@group(1) @binding(0) var SHADOW_TEXTURE: texture_2d<f32>;
-@group(1) @binding(1) var SHADOW_SAMPLER: sampler;
-@group(1) @binding(2) var SHADOW_DEPTH_TEXTURE: texture_depth_2d;
-@group(1) @binding(3) var SHADOW_DEPTH_SAMPLER: sampler;
+
+@group(1) @binding(0) var SHADOW_FACTOR_TEXTURE: texture_2d<f32>;
+@group(1) @binding(1) var SHADOW_FACTOR_SAMPLER: sampler;
+@group(1) @binding(2) var SHADOW_DEPTH_CCW_TEXTURE: texture_depth_2d;
+@group(1) @binding(3) var SHADOW_DEPTH_CCW_SAMPLER: sampler;
+@group(1) @binding(4) var SHADOW_DEPTH_CW_TEXTURE: texture_depth_2d;
+@group(1) @binding(5) var SHADOW_DEPTH_CW_SAMPLER: sampler;
 
 @fragment
 fn main(
   @location(0) FragUV: vec2<f32>
 ) -> @location(0) vec4<f32> {
+  var pixelCoord = FragUV;
   var outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, FragUV);
   var normal = textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, FragUV);
   var id = textureSample(IDS_TEXTURE, IDS_SAMPLER, FragUV);
   var depth = textureSample(DEPTH_TEXTURE, DEPTH_SAMPLER, FragUV);
-
-  var shadow = textureSample(SHADOW_TEXTURE, SHADOW_SAMPLER, FragUV);
-  var shadowDepth = textureSample(SHADOW_DEPTH_TEXTURE, SHADOW_DEPTH_SAMPLER, FragUV);
-
+  var shadowFactor = textureSample(SHADOW_FACTOR_TEXTURE, SHADOW_FACTOR_SAMPLER, FragUV);
+  var shadowDepthCW = textureSample(SHADOW_DEPTH_CW_TEXTURE, SHADOW_DEPTH_CW_SAMPLER, FragUV);
+  var shadowDepthCCW = textureSample(SHADOW_DEPTH_CCW_TEXTURE, SHADOW_DEPTH_CCW_SAMPLER, FragUV);
 
   if (PARAMS.ENABLED == 0.0)
   {
     return outputColor;
   }
 
-  var pixelCoord = FragUV;
-
   if (PARAMS.PIXELATION_ENABLED == 1.0 && id.r == -1.0)
-  {
+  {    
     pixelCoord.x = floor(FragUV.x * PARAMS.PIXELATION_WIDTH) / PARAMS.PIXELATION_WIDTH;
     pixelCoord.y = floor(FragUV.y * PARAMS.PIXELATION_HEIGHT) / PARAMS.PIXELATION_HEIGHT;
   }
 
   outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, pixelCoord);
+  normal = textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, pixelCoord);
+  id = textureSample(IDS_TEXTURE, IDS_SAMPLER, pixelCoord);
+  depth = textureSample(DEPTH_TEXTURE, DEPTH_SAMPLER, pixelCoord);
+  shadowFactor = textureSample(SHADOW_FACTOR_TEXTURE, SHADOW_FACTOR_SAMPLER, pixelCoord);
+  shadowDepthCW = textureSample(SHADOW_DEPTH_CW_TEXTURE, SHADOW_DEPTH_CW_SAMPLER, pixelCoord);
+  shadowDepthCCW = textureSample(SHADOW_DEPTH_CCW_TEXTURE, SHADOW_DEPTH_CCW_SAMPLER, pixelCoord);
 
   if (PARAMS.COLOR_ENABLED == 1.0 && id.g == -1.0)
   {
@@ -124,10 +133,15 @@ fn main(
     outputColor = outputColor * ditherPixel;
   }
 
-  if (PARAMS.OUTLINE_ENABLED == 1.0)
+  if (PARAMS.OUTLINE_ENABLED == 1.0 && id.r == -2.0)
   {
-    var t = PARAMS.OUTLINE_THICKNESS * (1.0 - depth);
+    var t = PARAMS.OUTLINE_THICKNESS * (depth - 1.0);
     var idDiff = 0.0;
+
+    if (PARAMS.OUTLINE_CONSTANT == 1.0)
+    {
+      t = PARAMS.OUTLINE_THICKNESS;
+    }
 
     idDiff += distance(id, getIdValue(FragUV, vec2<f32>( t,  0)));
     idDiff += distance(id, getIdValue(FragUV, vec2<f32>( 0,  t)));
@@ -138,7 +152,7 @@ fn main(
     idDiff += distance(id, getIdValue(FragUV, vec2<f32>(-t,  t)));
     idDiff += distance(id, getIdValue(FragUV, vec2<f32>(-t, -t)));
 
-    if (idDiff != 0.0 && id.a == -1)
+    if (idDiff != 0.0)
     {
       idDiff = 1.0;
       var outline = clamp(idDiff, 0, 1);
@@ -146,7 +160,14 @@ fn main(
     }
   }
 
-  outputColor *= shadow.r;
+  if (PARAMS.SHADOW_VOLUME_ENABLED == 1.0 && id.a == -1.0)
+  {
+    if (shadowDepthCW != 1.0 && shadowDepthCCW != 1.0 && depth >= shadowDepthCCW && depth <= shadowDepthCW)
+    {
+      outputColor *= shadowFactor;
+    }
+  }
+
   return outputColor;
 }
 

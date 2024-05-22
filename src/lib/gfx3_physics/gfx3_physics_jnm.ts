@@ -385,6 +385,15 @@ class Gfx3PhysicsJNM {
   }
 
   /**
+   * Return frag.
+   * 
+   * @param {number} fragIndex - The frag index.
+   */
+  getFrag(fragIndex: number): Frag {
+    return this.frags[fragIndex];
+  }
+
+  /**
    * Return frag color.
    * 
    * @param {number} fragIndex - The frag index.
