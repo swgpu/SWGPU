@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://warme-engine.com/image/pukiwiki.png" alt="logo"/>
+    <img src="https://warme-engine.com/image/pukiwiki.png" width="60px alt="logo"/>
 </p>
 
 <p align="center">
