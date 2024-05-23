@@ -304,14 +304,14 @@ fn main(
   {
     var totalLight = vec4(0.0, 0.0, 0.0, 0.0);
 
-    if (DIR_LIGHT.ENABLED == 1.0 && (DIR_LIGHT.MESH_ID == 0.0 || DIR_LIGHT.MESH_ID == MESH_INFOS.ID.r))
+    if (DIR_LIGHT.ENABLED == 1.0 && (DIR_LIGHT.MESH_ID == 0.0 || DIR_LIGHT.MESH_ID == MESH_INFOS.ID.b))
     {
       totalLight += CalcDirLight(normal, FragPos, textureUV, shadow);
     }
 
     for (var i: u32 = 0; i < POINT_LIGHT_COUNT; i++)
     {
-      if (POINT_LIGHTS[i].MESH_ID == 0.0 || POINT_LIGHTS[i].MESH_ID == MESH_INFOS.ID.r) {
+      if (POINT_LIGHTS[i].MESH_ID == 0.0 || POINT_LIGHTS[i].MESH_ID == MESH_INFOS.ID.b) {
         totalLight += CalcPointLight(i, normal, FragPos, textureUV, shadow);
       }
     }

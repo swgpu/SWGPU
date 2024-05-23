@@ -21,7 +21,7 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
    */
   constructor(vertexStride: number) {
     super();
-    this.id = [0, 0, 0, 1];
+    this.id = [0, 0, 0, 0];
     this.vertexSubBuffer = gfx3Manager.createVertexBuffer(0);
     this.vertices = [];
     this.vertexCount = 0;
@@ -120,18 +120,18 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
   /**
    * Set an identifier based on three components.
    * Note: WARME use some specials ID's in its internal pipeline, check the table below:
-   * ■ lights group: r = n
    * ■ decals group: g = n
-   * ■ pixelation: r = -1
-   * ■ outline: r = -2
-   * ■ color limitation: g = -1
-   * ■ dither: b = -1
-   * ■ shadow volume: a = -1
+   * ■ lights group: b = n
+   * ■ pixelation: a = 1
+   * ■ color limitation: a = 2
+   * ■ dither: a = 4
+   * ■ outline: a = 8
+   * ■ shadow volume: a = 16
    * 
-   * @param {number} r - The r integer value.
-   * @param {number} g - The g integer value. Used by decals for group identification.
-   * @param {number} b - The b integer value.
-   * @param {number} a - The a integer value.
+   * @param {number} r - The pur identifier you can use for custom stuff.
+   * @param {number} g - The decals group.
+   * @param {number} b - The lights group.
+   * @param {number} a - The flags value for specials effects.
    */
   setId(r: number, g: number, b: number, a: number): void {
     this.id = [r, g, b, a];

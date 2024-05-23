@@ -33,6 +33,11 @@ class ViewerScreen extends Screen {
     this.shadow = new Gfx3ShadowVolume();
     await this.shadow.loadFromBinaryFile('./samples/viewer/shadow.bsv');
 
+    gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 1.0);
+    gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 1.0);
+    gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 1.0);
+    gfx3PPERenderer.setParam(PPEParam.OUTLINE_ENABLED, 1.0);
+
     uiManager.addNode(CREATE_UI_INFOBOX(), 'position:absolute; bottom:10px; right:10px');
     document.addEventListener('keydown', this.handleKeyDownCb);
   }
@@ -88,24 +93,16 @@ class ViewerScreen extends Screen {
       coreManager.toggleClass('scanlines');
     }
     else if (e.key == 'p' || e.key == 'P') {
-      this.mesh.setSingleId(0, -1.0);
-      gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 1.0);
-      gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 1.0);
-      gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 1.0);
-      gfx3PPERenderer.setParam(PPEParam.OUTLINE_ENABLED, 0.0);
+      this.mesh.setSingleId(3, 7);
     }
     else if (e.key == 'l' || e.key == 'L') {
-      this.mesh.setSingleId(0, -2.0);
-      gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 0.0);
-      gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 0.0);
-      gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 0.0);
-      gfx3PPERenderer.setParam(PPEParam.OUTLINE_ENABLED, 1.0);
+      this.mesh.setSingleId(3, 8);
     }
-    else if (e.key == 'n' || e.key == 'L') {
-      gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 0.0);
-      gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 0.0);
-      gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 0.0);
-      gfx3PPERenderer.setParam(PPEParam.OUTLINE_ENABLED, 0.0);
+    else if (e.key == 's' || e.key == 'L') {
+      this.mesh.setSingleId(3, 16);
+    }
+    else if (e.key == 'n' || e.key == 'N') {
+      this.mesh.setSingleId(3, 0);
     }
   }
 }
@@ -126,14 +123,12 @@ async function CREATE_OBJ() {
   const obj = new Gfx3MeshOBJ();
   await obj.loadFromFile('./samples/viewer/wavefront.obj', './samples/viewer/wavefront.mtl');
   const mesh = obj.getMesh('letter-f')
-  mesh.setId(-1.0, -1.0, -1.0, -1.0);
   return mesh;
 }
 
 async function CREATE_CUBE_BRICK() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/cube_brick.jsm');
-  mesh.setId(-1.0, -1.0, -1.0, -1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/cube_brick.png'),
     normalMap: await gfx3TextureManager.loadTexture('./samples/viewer/cube_brick_normal.png'),
@@ -147,7 +142,6 @@ async function CREATE_CUBE_BRICK() {
 async function CREATE_CUBE() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/cube.jsm');
-  mesh.setId(-1.0, -1.0, -1.0, -1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/cube.png'),
     lightning: true
@@ -159,7 +153,6 @@ async function CREATE_CUBE() {
 async function CREATE_CUBE_SPRITE() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/cube_sprite.jsm');
-  mesh.setId(-1.0, -1.0, -1.0, -1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/cube_sprite.png'),
     lightning: false,
@@ -188,7 +181,6 @@ async function CREATE_CUBE_SPRITE() {
 async function CREATE_DUCK() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/duck.jsm');
-  mesh.setId(-1.0, -1.0, -1.0, -1.0);
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./samples/viewer/duck.png'),
     lightning: true
@@ -200,7 +192,6 @@ async function CREATE_DUCK() {
 async function CREATE_TORUS() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./samples/viewer/torus.jsm');
-  mesh.setId(-1.0, -1.0, -1.0, -1.0);
   mesh.setMaterial(new Gfx3Material({
     toonMap: await gfx3TextureManager.loadTexture('./textures/toon_default.png', { minFilter: 'nearest', magFilter: 'nearest' }),
     toonLightDir: [1.0, -1.0, -1.0]
@@ -283,6 +274,12 @@ function CREATE_UI_INFOBOX() {
   {
     const li = document.createElement('li');
     li.textContent = '[l] => Outline mode';
+    ul.appendChild(li);
+  }
+
+  {
+    const li = document.createElement('li');
+    li.textContent = '[s] => Shadow volume mode';
     ul.appendChild(li);
   }
 

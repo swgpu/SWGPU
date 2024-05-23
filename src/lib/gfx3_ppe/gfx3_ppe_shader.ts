@@ -98,13 +98,14 @@ fn main(
   var shadowFactor = textureSample(SHADOW_FACTOR_TEXTURE, SHADOW_FACTOR_SAMPLER, FragUV);
   var shadowDepthCW = textureSample(SHADOW_DEPTH_CW_TEXTURE, SHADOW_DEPTH_CW_SAMPLER, FragUV);
   var shadowDepthCCW = textureSample(SHADOW_DEPTH_CCW_TEXTURE, SHADOW_DEPTH_CCW_SAMPLER, FragUV);
+  var flags = u32(id.a);
 
   if (PARAMS.ENABLED == 0.0)
   {
     return outputColor;
   }
 
-  if (PARAMS.PIXELATION_ENABLED == 1.0 && id.r == -1.0)
+  if (PARAMS.PIXELATION_ENABLED == 1.0 && (flags & 1) == 1)
   {    
     pixelCoord.x = floor(FragUV.x * PARAMS.PIXELATION_WIDTH) / PARAMS.PIXELATION_WIDTH;
     pixelCoord.y = floor(FragUV.y * PARAMS.PIXELATION_HEIGHT) / PARAMS.PIXELATION_HEIGHT;
@@ -117,13 +118,14 @@ fn main(
   shadowFactor = textureSample(SHADOW_FACTOR_TEXTURE, SHADOW_FACTOR_SAMPLER, pixelCoord);
   shadowDepthCW = textureSample(SHADOW_DEPTH_CW_TEXTURE, SHADOW_DEPTH_CW_SAMPLER, pixelCoord);
   shadowDepthCCW = textureSample(SHADOW_DEPTH_CCW_TEXTURE, SHADOW_DEPTH_CCW_SAMPLER, pixelCoord);
+  flags = u32(id.a);
 
-  if (PARAMS.COLOR_ENABLED == 1.0 && id.g == -1.0)
+  if (PARAMS.COLOR_ENABLED == 1.0 && (flags & 2) == 2)
   {
     outputColor = floor(outputColor * PARAMS.COLOR_PRECISION) / PARAMS.COLOR_PRECISION;
   }
 
-  if (PARAMS.DITHER_ENABLED == 1.0 && id.b == -1.0)
+  if (PARAMS.DITHER_ENABLED == 1.0 && (flags & 4) == 4)
   {
     var brightness = GetPixelBrightness(outputColor.rgb);
     var ditherPattern = GetDitherPattern(PARAMS.DITHER_PATTERN_INDEX);
@@ -133,7 +135,7 @@ fn main(
     outputColor = outputColor * ditherPixel;
   }
 
-  if (PARAMS.OUTLINE_ENABLED == 1.0 && id.r == -2.0)
+  if (PARAMS.OUTLINE_ENABLED == 1.0 && (flags & 8) == 8)
   {
     var t = PARAMS.OUTLINE_THICKNESS * (depth - 1.0);
     var idDiff = 0.0;
@@ -160,7 +162,7 @@ fn main(
     }
   }
 
-  if (PARAMS.SHADOW_VOLUME_ENABLED == 1.0 && id.a == -1.0)
+  if (PARAMS.SHADOW_VOLUME_ENABLED == 1.0 && (flags & 16) == 16)
   {
     if (shadowDepthCW != 1.0 && shadowDepthCCW != 1.0 && depth >= shadowDepthCCW && depth <= shadowDepthCW)
     {
