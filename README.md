@@ -36,6 +36,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 * [Getting Started - The engine way](#getting-started---the-engine-way)
 * [Getting Started - The boilerplate way](#getting-started---the-boilerplate-way)
 * [How to integrate your 3D models ?](#how-to-integrate-your-3d-models)
+* [Table file formats](#table-file-formats)
 * [Contributions](#contributions)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
@@ -213,6 +214,18 @@ right = +x
 | ------ | ------------- | ------------ | ------ | ----------- | ------- | ------------- | -------- | ------- |
 | JSON   | JAM           | JSM          | JLM    | JPL         | JTR     | JSV           | JWM      | JNM     |
 | Binary | BAM           | BSM          | BLM    |             |         | BSV           | BWM      | BNM     |
+
+## Table specials mesh ids
+If you want enable *Color limit*, *Dithering* and *Shadow vol* you can sum all these values and set `2 + 4 + 16 = 22` to the channel `a`.
+| Usage        | r  | g  | b  | a  |
+| ------------ | -- | -- | -- | -- |
+| Decals group | n  |    |    |    |
+| Light group  |    | n  |    |    |
+| Pixelation   |    |    |    | 1  |
+| Color limit  |    |    |    | 2  |
+| Dithering    |    |    |    | 4  |
+| Outline      |    |    |    | 8  |
+| Shadow vol   |    |    |    | 16 |
 
 ## Contributions
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
