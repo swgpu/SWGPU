@@ -35,7 +35,6 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 * [Features](#features)
 * [Getting Started - The engine way](#getting-started---the-engine-way)
 * [Getting Started - The boilerplate way](#getting-started---the-boilerplate-way)
-* [How to integrate your 3D models ?](#how-to-integrate-your-3d-models)
 * [Table of file formats](#table-of-file-formats)
 * [Table of mesh ids](#table-of-mesh-ids)
 * [Contributions](#contributions)
@@ -191,26 +190,8 @@ It's included a complete environment including vite, typescript and the engine a
 # npm run dev
 ```
 
-## How to integrate your 3D models
-We've done a [Blender Exporter](https://github.com/jay19240/WARME-Y2K/bin/WARME-Blender-Exporter.zip)
-which is used to export your models as JSON-like or Binary format.   
-
-Important note: The Blender coordinate system and the engine don't match, see below the rule to translate.
-Don't forget to apply these changes when you export your obj file.
-```
-blender => engine
-----------------
-x = -x
-y = +z
-z = +y
-engine axis
-----------------
-forward = -z
-up = +y
-right = +x
-```
-
 ## Table of file formats
+We've done a Blender Exporter which is used to export your models as JSON-like or Binary format.
 | Output | Animated mesh | Static mesh  | Lines  | Point light | Trigger | Shadow volume | Walkmesh | Navmesh |
 | ------ | ------------- | ------------ | ------ | ----------- | ------- | ------------- | -------- | ------- |
 | JSON   | JAM           | JSM          | JLM    | JPL         | JTR     | JSV           | JWM      | JNM     |
