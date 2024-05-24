@@ -36,7 +36,8 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 * [Getting Started - The engine way](#getting-started---the-engine-way)
 * [Getting Started - The boilerplate way](#getting-started---the-boilerplate-way)
 * [How to integrate your 3D models ?](#how-to-integrate-your-3d-models)
-* [Table file formats](#table-file-formats)
+* [Table of file formats](#table-of-file-formats)
+* [Table of mesh ids](#table-of-mesh-ids)
 * [Contributions](#contributions)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
@@ -209,13 +210,13 @@ up = +y
 right = +x
 ```
 
-## Table file formats
+## Table of file formats
 | Output | Animated mesh | Static mesh  | Lines  | Point light | Trigger | Shadow volume | Walkmesh | Navmesh |
 | ------ | ------------- | ------------ | ------ | ----------- | ------- | ------------- | -------- | ------- |
 | JSON   | JAM           | JSM          | JLM    | JPL         | JTR     | JSV           | JWM      | JNM     |
 | Binary | BAM           | BSM          | BLM    |             |         | BSV           | BWM      | BNM     |
 
-## Table specials mesh ids
+## Table of mesh ids
 If you want enable *Color limit*, *Dithering* and *Shadow vol* you can sum all these values and set `2 + 4 + 16 = 22` to the channel `a`.
 | Usage        | r  | g  | b  | a  |
 | ------------ | -- | -- | -- | -- |
