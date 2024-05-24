@@ -208,6 +208,12 @@ up = +y
 right = +x
 ```
 
+## Table file formats
+| Animated mesh  | Static mesh   | Lines  | Point light  | Trigger | Shadow volume | Walkmesh | Navmesh |
+| -------------- | ------------- | ------ | ------------ | ------- | ------------- | -------- | ------- |
+| JAM            | JSM           | JLM    | JPL          | JTR     | JSV           | JWM      | JNM     |
+| BAM            | BSM           | BLM    |              |         | BSV           | BWM      | BNM     |
+
 ## Contributions
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
