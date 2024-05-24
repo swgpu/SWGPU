@@ -192,10 +192,21 @@ It's included a complete environment including vite, typescript and the engine a
 
 ## Table of file formats
 We've done a [Blender Exporter](https://github.com/jay19240/WarmeY2K/tree/main/bin#:~:text=WARME%2DBlender%2DExporter.zip) which is used to export your models as JSON-like or Binary format.
-| Output | Animated mesh | Static mesh  | Lines  | Point light | Trigger | Shadow volume | Walkmesh | Navmesh |
-| ------ | ------------- | ------------ | ------ | ----------- | ------- | ------------- | -------- | ------- |
-| JSON   | JAM           | JSM          | JLM    | JPL         | JTR     | JSV           | JWM      | JNM     |
-| Binary | BAM           | BSM          | BLM    |             |         | BSV           | BWM      | BNM     |
+
+| Type            | JSON | Binary |
+| --------------- | ---- | ------ |
+| Animated mesh   | JAM  | BAM    |
+| Static mesh     | JSM  | BSM    |
+| Lines           | JLM  | BLM    |
+| Point light     | JPL  |        |
+| Trigger         | JTR  |        |
+| Shadow volume   | JSV  | BSV    |
+| Walkmesh        | JWM  | BWM    |
+| Navmesh         | JNM  | BNM    |
+| Animated sprite | JAS  |        |
+| Static sprite   | JSS  |        |
+| Tilemap         | JTM  |        |
+| Script          | JSC  |        |
 
 ## Table of mesh ids
 If you want enable *Color limit*, *Dithering* and *Shadow vol* you can sum all these values and set `2 + 4 + 16 = 22` to the channel `a`.
