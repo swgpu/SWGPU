@@ -191,7 +191,7 @@ It's included a complete environment including vite, typescript and the engine a
 ```
 
 ## Table of file formats
-We've done a Blender Exporter which is used to export your models as JSON-like or Binary format.
+We've done a [Blender Exporter](https://github.com/jay19240/WarmeY2K/tree/main/bin#:~:text=WARME%2DBlender%2DExporter.zip) which is used to export your models as JSON-like or Binary format.
 | Output | Animated mesh | Static mesh  | Lines  | Point light | Trigger | Shadow volume | Walkmesh | Navmesh |
 | ------ | ------------- | ------------ | ------ | ----------- | ------- | ------------- | -------- | ------- |
 | JSON   | JAM           | JSM          | JLM    | JPL         | JTR     | JSV           | JWM      | JNM     |
