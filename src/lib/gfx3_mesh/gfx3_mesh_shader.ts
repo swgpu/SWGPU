@@ -68,7 +68,7 @@ export const PIPELINE_DESC: any = {
   }
 };
 
-export const VERTEX_SHADER = /* wgsl */`
+export const VERTEX_SHADER = (ext: string) => /* wgsl */`
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
   @location(0) FragPos: vec3<f32>,
@@ -109,10 +109,11 @@ fn main(
   output.FragTangent = MESH_INFOS.NORM_MATRIX * Tangent;
   output.FragBinormal = MESH_INFOS.NORM_MATRIX * Binormal;
   output.FragShadowPos = vec3(posFromLight.xy * vec2(0.5, -0.5) + vec2(0.5), posFromLight.z); // Convert XY to (0, 1) and Y is flipped because texture coords are Y-down.
+  ${ext ?? ''}
   return output;
 }`;
 
-export const FRAGMENT_SHADER = /* wgsl */`
+export const FRAGMENT_SHADER = (ext: string) => /* wgsl */`
 struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
@@ -341,6 +342,7 @@ fn main(
   output.Base = outputColor;
   output.Normal = vec4(normalize(FragNormal), 1.0);
   output.Id = MESH_INFOS.ID;
+  ${ext ?? ''}
   return output;
 }
 

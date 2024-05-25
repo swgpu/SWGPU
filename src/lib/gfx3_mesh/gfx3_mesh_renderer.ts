@@ -33,8 +33,12 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   grp1: Gfx3DynamicGroup;
   meshInfos: Float32Array;
 
-  constructor() {
-    super('MESH_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
+  /**
+   * @param {string} vertExt - Vertex extension code insert at the tail of vertex shader.
+   * @param {string} fragExt - Fragment extension code insert at the tail of fragment shader.
+   */
+  constructor(vertExt: string = '', fragExt: string = '') {
+    super('MESH_PIPELINE', VERTEX_SHADER(vertExt), FRAGMENT_SHADER(fragExt), PIPELINE_DESC);
     this.shadowEnabled = false;
     this.decalAtlasChanged = false;
     this.meshCommands = [];
