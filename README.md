@@ -270,7 +270,6 @@ If you need add some extra variables, take a look at material custom params.
 | MAT_TOON_TEXTURE         | Uniform | Texture        | Toon details texture                          |
 | outputColor              | var     | vec4           | The fragment shader output color              |
 | normal                   | var     | vec3           | The normalized normal                         |
-| normal                   | var     | vec3           | The normalized normal                         |
 | texel                    | var     | vec4           | The current texture pixel - after decals      |
 | textureUV                | var     | vec2           | The current texture uv - after scrolling      |
 | shadow                   | var     | float          | The shadow factor                             |
