@@ -229,8 +229,8 @@ Set your shader extension in your .env with the following variables :
 | MESH_VERT_EXT | Append a string to the mesh vertex shader   |
 | MESH_FRAG_EXT | Append a string to the mesh fragment shader |
 
-You can check allowed variables you can work with just below.
-If you need add some variables, take a look to material custom params.
+You can check variables you can work with just below.      
+If you need add some extra variables, take a look at material custom params.
 | Vert Variables | Scope   | Type           | Description                                   |
 | -------------  | ------- | -------------- | --------------------------------------------- |
 | LVP_MATRIX     | Uniform | mat4x4         | Light view projection (shadow-map)            |
