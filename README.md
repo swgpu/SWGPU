@@ -38,6 +38,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 * [Table of file formats](#table-of-file-formats)
 * [Table of mesh ids](#table-of-mesh-ids)
 * [Env](#env)
+* [Mesh shader variables](#mesh-shader-variables)
 * [Contributions](#contributions)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
@@ -227,6 +228,22 @@ Environnement variables (for now) are:
 | ------------- | ------------------------------------------- |
 | MESH_VERT_EXT | Append a string to the mesh vertex shader   |
 | MESH_FRAG_EXT | Append a string to the mesh fragment shader |
+
+## Mesh vertex shader variables
+| Variables     | Scope   | Type           | Description                                   |
+| ------------- | ------- | -------------- | --------------------------------------------- |
+| LVP_MATRIX    | Uniform | mat4x4         | Light view projection (shadow-map)            |
+| MESH_INFOS    | Uniform | MeshInfos      | Contains matrices and mesh identifier         |
+| MAT_PARAMS    | Uniform | MaterialParams | List of float material parameters             |
+| MAT_PARAMS    | Uniform | MaterialParams | List of float material parameters             |
+| MAT_PARAMS    | Uniform | MaterialParams | List of float material parameters             |
+| out           | var     | VertexOutput   | The vertex shader output                      |
+| posFromLight  | var     | vec4           | Vertex position from light source (shadow-map |
+
+## Mesh fragment shader variables
+| Variables     | Scope   | Type           | Description                                   |
+| ------------- | ------- | -------------- | --------------------------------------------- |
+
 
 ## Contributions
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
