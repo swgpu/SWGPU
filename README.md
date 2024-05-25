@@ -259,7 +259,7 @@ If you need add some extra variables, take a look at material custom params.
 | MAT_UVS                  | Uniform | MaterialUvs    | Material uv scrolling                         |
 | MAT_TOON_LIGHT_DIR       | Uniform | vec3           | Material toon light direction                 |
 | MAT_TEXTURE              | Uniform | Texture        | Color texture                                 |
-| MAT_DISPLACEMENT_TEXTURE | Uniform | Texture        | Displacement texture - displace color texture |
+| MAT_DISPLACEMENT_TEXTURE | Uniform | Texture        | Displace the color texture                    |
 | MAT_DIFFUSE_TEXTURE      | Uniform | Texture        | Diffuse color texture                         |
 | MAT_DIFFUSE_TEXTURE      | Uniform | Texture        | Diffuse color texture                         |
 | MAT_SPECULAR_TEXTURE     | Uniform | Texture        | Specular texture (color and specularity)      |
