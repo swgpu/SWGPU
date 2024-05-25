@@ -241,9 +241,39 @@ Environnement variables (for now) are:
 | posFromLight  | var     | vec4           | Vertex position from light source (shadow-map |
 
 ## Mesh fragment shader variables
-| Variables     | Scope   | Type           | Description                                   |
-| ------------- | ------- | -------------- | --------------------------------------------- |
-
+| Variables                | Scope   | Type           | Description                                   |
+| ------------------------ | ------- | -------------- | --------------------------------------------- |
+| MESH_INFOS               | Uniform | MeshInfos      | Contains matrices and mesh identifier         |
+| CAMERA_POS               | Uniform | vec3           | Camera position                               |
+| DIR_LIGHT                | Uniform | DirLight       | Directionnal light informations               |
+| FOG                      | Uniform | Fog            | Fog informations                              |
+| POINT_LIGHT_COUNT        | Uniform | int            | Number of point lights                        |
+| POINT_LIGHTS             | Uniform | PointLight[]   | Point light list                              |
+| DECAL_COUNT              | Uniform | int            | Number of decals                              |
+| DECALS                   | Uniform | Decal[]        | Decal list                                    |
+| DECAL_ATLAS_TEXTURE      | Uniform | Texture        | Decals texture                                |
+| DECAL_ATLAS_TEXTURE      | Uniform | Texture        | Decals texture                                |
+| SHADOW_MAP_TEXTURE       | Uniform | Texture        | Shadow map texture                            |
+| MAT_COLORS               | Uniform | MaterialColors | Material colors (ambiant, diffuse, etc...)    |
+| MAT_PARAMS               | Uniform | MaterialParams | Material parameters for some settings         |
+| MAT_UVS                  | Uniform | MaterialUvs    | Material uv scrolling                         |
+| MAT_TOON_LIGHT_DIR       | Uniform | vec3           | Material toon light direction                 |
+| MAT_TEXTURE              | Uniform | Texture        | Color texture                                 |
+| MAT_DISPLACEMENT_TEXTURE | Uniform | Texture        | Displacement texture - displace color texture |
+| MAT_DIFFUSE_TEXTURE      | Uniform | Texture        | Diffuse color texture                         |
+| MAT_DIFFUSE_TEXTURE      | Uniform | Texture        | Diffuse color texture                         |
+| MAT_SPECULAR_TEXTURE     | Uniform | Texture        | Specular texture (color and specularity)      |
+| MAT_EMISSIVE_TEXTURE     | Uniform | Texture        | Emissive color texture                        |
+| MAT_NORM_TEXTURE         | Uniform | Texture        | Normal map texture                            |
+| MAT_ENV_MAP_TEXTURE      | Uniform | Texture        | Env map texture                               |
+| MAT_TOON_TEXTURE         | Uniform | Texture        | Toon details texture                          |
+| MAT_TOON_TEXTURE         | Uniform | Texture        | Toon details texture                          |
+| outputColor              | var     | vec4           | The fragment shader output color              |
+| normal                   | var     | vec3           | The normalized normal                         |
+| normal                   | var     | vec3           | The normalized normal                         |
+| texel                    | var     | vec4           | The current texture pixel - after decals      |
+| textureUV                | var     | vec2           | The current texture uv - after scrolling      |
+| shadow                   | var     | float          | The shadow factor                             |
 
 ## Contributions
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
