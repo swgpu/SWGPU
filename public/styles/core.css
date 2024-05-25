@@ -74,7 +74,7 @@ body {
   transform-origin: top left;
   user-select: none;
   box-sizing: content-box;
-  border: 20px solid #323232;
+  border: 20px solid #00abff73;
 }
 
 #APP.scanlines::before {
