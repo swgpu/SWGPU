@@ -214,8 +214,9 @@ We've done a [Blender Exporter](https://github.com/jay19240/WarmeY2K/tree/main/b
 If you want enable *Color limit*, *Dithering* and *Shadow vol* you can sum all these values and set `2 + 4 + 16 = 22` to the channel `a`.
 | Usage        | r  | g  | b  | a  |
 | ------------ | -- | -- | -- | -- |
-| Decals group | n  |    |    |    |
-| Light group  |    | n  |    |    |
+| Identifier   | n  |    |    |    |
+| Decals group |    | n  |    |    |
+| Light group  |    |    | n  |    |
 | Pixelation   |    |    |    | 1  |
 | Color limit  |    |    |    | 2  |
 | Dithering    |    |    |    | 4  |
