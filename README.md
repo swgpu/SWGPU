@@ -37,6 +37,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 * [Getting Started - The boilerplate way](#getting-started---the-boilerplate-way)
 * [Table of file formats](#table-of-file-formats)
 * [Table of mesh ids](#table-of-mesh-ids)
+* [Env](#env)
 * [Contributions](#contributions)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
@@ -219,6 +220,13 @@ If you want enable *Color limit*, *Dithering* and *Shadow vol* you can sum all t
 | Dithering    |    |    |    | 4  |
 | Outline      |    |    |    | 8  |
 | Shadow vol   |    |    |    | 16 |
+
+## Env
+Environnement variables (for now) are:
+| Name          | Description                                 |
+| ------------- | ------------------------------------------- |
+| MESH_VERT_EXT | Append a string to the mesh vertex shader   |
+| MESH_FRAG_EXT | Append a string to the mesh fragment shader |
 
 ## Contributions
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.

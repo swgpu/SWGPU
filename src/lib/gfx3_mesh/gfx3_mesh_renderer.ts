@@ -12,8 +12,9 @@ interface MeshCommand {
   matrix: mat4;
 };
 
-const VERT_EXT = (window as any).__VERT_EXT__ ?? '';
-const FRAG_EXT = (window as any).__VERT_EXT__ ?? '';
+const WINDOW = window as any;
+const VERT_EXT = WINDOW.__MESH_VERT_EXT__ ? WINDOW.__MESH_VERT_EXT__ : '';
+const FRAG_EXT = WINDOW.__MESH_FRAG_EXT__ ? WINDOW.__MESH_FRAG_EXT__ : '';
 
 /**
  * Singleton mesh renderer.
