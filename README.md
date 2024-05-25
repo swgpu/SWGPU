@@ -37,8 +37,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 * [Getting Started - The boilerplate way](#getting-started---the-boilerplate-way)
 * [Table of file formats](#table-of-file-formats)
 * [Table of mesh ids](#table-of-mesh-ids)
-* [Env](#env)
-* [Mesh shader variables](#mesh-shader-variables)
+* [Shader extension](#shader-extension)
 * [Contributions](#contributions)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
@@ -223,26 +222,26 @@ If you want enable *Color limit*, *Dithering* and *Shadow vol* you can sum all t
 | Outline      |    |    |    | 8  |
 | Shadow vol   |    |    |    | 16 |
 
-## Env
-Environnement variables (for now) are:
+## Shader extension
+Set your shader extension in your .env with the following variables :
 | Name          | Description                                 |
 | ------------- | ------------------------------------------- |
 | MESH_VERT_EXT | Append a string to the mesh vertex shader   |
 | MESH_FRAG_EXT | Append a string to the mesh fragment shader |
 
-## Mesh vertex shader variables
-| Variables     | Scope   | Type           | Description                                   |
-| ------------- | ------- | -------------- | --------------------------------------------- |
-| LVP_MATRIX    | Uniform | mat4x4         | Light view projection (shadow-map)            |
-| MESH_INFOS    | Uniform | MeshInfos      | Contains matrices and mesh identifier         |
-| MAT_PARAMS    | Uniform | MaterialParams | List of float material parameters             |
-| MAT_PARAMS    | Uniform | MaterialParams | List of float material parameters             |
-| MAT_PARAMS    | Uniform | MaterialParams | List of float material parameters             |
-| out           | var     | VertexOutput   | The vertex shader output                      |
-| posFromLight  | var     | vec4           | Vertex position from light source (shadow-map |
+You can check allowed variables you can work with just below.
+If you need add some variables, take a look to material custom params.
+| Vert Variables | Scope   | Type           | Description                                   |
+| -------------  | ------- | -------------- | --------------------------------------------- |
+| LVP_MATRIX     | Uniform | mat4x4         | Light view projection (shadow-map)            |
+| MESH_INFOS     | Uniform | MeshInfos      | Contains matrices and mesh identifier         |
+| MAT_PARAMS     | Uniform | MaterialParams | List of float material parameters             |
+| MAT_PARAMS     | Uniform | MaterialParams | List of float material parameters             |
+| MAT_PARAMS     | Uniform | MaterialParams | List of float material parameters             |
+| out            | var     | VertexOutput   | The vertex shader output                      |
+| posFromLight   | var     | vec4           | Vertex position from light source (shadow-map |
 
-## Mesh fragment shader variables
-| Variables                | Scope   | Type           | Description                                   |
+| Frag Variables           | Scope   | Type           | Description                                   |
 | ------------------------ | ------- | -------------- | --------------------------------------------- |
 | MESH_INFOS               | Uniform | MeshInfos      | Contains matrices and mesh identifier         |
 | CAMERA_POS               | Uniform | vec3           | Camera position                               |
