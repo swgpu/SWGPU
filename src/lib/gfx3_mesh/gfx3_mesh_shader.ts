@@ -87,8 +87,45 @@ struct MeshInfos {
   ID: vec4<f32>
 }
 
+struct MaterialParams {
+  OPACITY: f32,
+  NORMAL_INTENSITY: f32,
+  HAS_LIGHTNING: f32,
+  HAS_TEXTURE: f32,
+  HAS_DISPLACEMENT_MAP: f32,
+  DISPLACEMENT_MAP_FACTOR: f32,
+  HAS_DIFFUSE_MAP: f32,
+  HAS_SPECULAR_MAP: f32,
+  HAS_EMISSIVE_MAP: f32,
+  HAS_NORMAL_MAP: f32,
+  HAS_ENV_MAP: f32,
+  HAS_TOON_MAP: f32,
+  HAS_DECAL: f32,
+  HAS_SHADOW: f32,
+  SHININESS: f32,
+  EMISSIVE_FACTOR: f32,
+  TOON_BLENDING: f32,
+  S00: f32,
+  S01: f32,
+  S02: f32,
+  S03: f32,
+  S10: f32,
+  S11: f32,
+  S12: f32,
+  S13: f32,
+  S20: f32,
+  S21: f32,
+  S22: f32,
+  S23: f32,
+  S30: f32,
+  S31: f32,
+  S32: f32,
+  S33: f32
+}
+
 @group(0) @binding(7) var<uniform> LVP_MATRIX: mat4x4<f32>;
 @group(1) @binding(0) var<uniform> MESH_INFOS: MeshInfos;
+@group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
 
 @vertex
 fn main(
@@ -151,7 +188,23 @@ struct MaterialParams {
   HAS_SHADOW: f32,
   SHININESS: f32,
   EMISSIVE_FACTOR: f32,
-  TOON_BLENDING: f32
+  TOON_BLENDING: f32,
+  S00: f32,
+  S01: f32,
+  S02: f32,
+  S03: f32,
+  S10: f32,
+  S11: f32,
+  S12: f32,
+  S13: f32,
+  S20: f32,
+  S21: f32,
+  S22: f32,
+  S23: f32,
+  S30: f32,
+  S31: f32,
+  S32: f32,
+  S33: f32
 }
 
 struct MaterialUvs {

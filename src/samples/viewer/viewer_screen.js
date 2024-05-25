@@ -98,7 +98,7 @@ class ViewerScreen extends Screen {
     else if (e.key == 'l' || e.key == 'L') {
       this.mesh.setSingleId(3, 8);
     }
-    else if (e.key == 's' || e.key == 'L') {
+    else if (e.key == 's' || e.key == 'S') {
       this.mesh.setSingleId(3, 16);
     }
     else if (e.key == 'n' || e.key == 'N') {

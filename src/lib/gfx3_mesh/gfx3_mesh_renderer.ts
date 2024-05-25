@@ -12,6 +12,9 @@ interface MeshCommand {
   matrix: mat4;
 };
 
+const VERT_EXT = (window as any).__VERT_EXT__ ?? '';
+const FRAG_EXT = (window as any).__VERT_EXT__ ?? '';
+
 /**
  * Singleton mesh renderer.
  */
@@ -37,7 +40,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {string} vertExt - Vertex extension code insert at the tail of vertex shader.
    * @param {string} fragExt - Fragment extension code insert at the tail of fragment shader.
    */
-  constructor(vertExt: string = '', fragExt: string = '') {
+  constructor(vertExt: string = VERT_EXT, fragExt: string = FRAG_EXT) {
     super('MESH_PIPELINE', VERTEX_SHADER(vertExt), FRAGMENT_SHADER(fragExt), PIPELINE_DESC);
     this.shadowEnabled = false;
     this.decalAtlasChanged = false;
@@ -58,7 +61,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.shadowMap = this.grp0.setSampler(11, 'SHADOW_MAP_SAMPLER', this.shadowMap);
 
     this.grp1 = gfx3Manager.createDynamicGroup('MESH_PIPELINE', 1);
-    this.meshInfos = this.grp1.setFloat(0, 'MESH_MATRICES', 16 * 4);
+    this.meshInfos = this.grp1.setFloat(0, 'MESH_MATRICES', 16 * 5);
 
     this.grp0.allocate();
     this.grp1.allocate();

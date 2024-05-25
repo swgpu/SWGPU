@@ -43,6 +43,7 @@ interface MATOptions {
   shininess?: number;
   emissiveFactor?: number;
   toonBlending?: boolean;
+  customs?: mat4;
 };
 
 /**
@@ -110,7 +111,7 @@ class Gfx3Material {
     this.colors[13] = options.specular ? options.specular[1] : 0.0;
     this.colors[14] = options.specular ? options.specular[2] : 0.0;
     this.colors[15] = 0.0;
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 17);
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 33);
     this.params[0] = options.opacity ?? 1.0;
     this.params[1] = options.normalIntensity ?? 1.0;
     this.params[2] = options.lightning ? 1.0 : 0.0;
@@ -128,6 +129,22 @@ class Gfx3Material {
     this.params[14] = options.shininess ?? 0.0;
     this.params[15] = options.emissiveFactor ?? 1.0;
     this.params[16] = options.toonBlending ? 1.0 : 0.0;
+    this.params[17] = options.customs ? options.customs[0] : 0.0;
+    this.params[18] = options.customs ? options.customs[1] : 0.0;
+    this.params[19] = options.customs ? options.customs[2] : 0.0;
+    this.params[20] = options.customs ? options.customs[3] : 0.0;
+    this.params[21] = options.customs ? options.customs[4] : 0.0;
+    this.params[22] = options.customs ? options.customs[5] : 0.0;
+    this.params[23] = options.customs ? options.customs[6] : 0.0;
+    this.params[24] = options.customs ? options.customs[7] : 0.0;
+    this.params[25] = options.customs ? options.customs[8] : 0.0;
+    this.params[26] = options.customs ? options.customs[9] : 0.0;
+    this.params[27] = options.customs ? options.customs[10] : 0.0;
+    this.params[28] = options.customs ? options.customs[11] : 0.0;
+    this.params[29] = options.customs ? options.customs[12] : 0.0;
+    this.params[30] = options.customs ? options.customs[13] : 0.0;
+    this.params[31] = options.customs ? options.customs[14] : 0.0;
+    this.params[32] = options.customs ? options.customs[15] : 0.0;
     this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 6);
     this.toonLightDir = this.grp2.setFloat(3, 'MAT_TOON_LIGHT_DIR', 3);
     this.toonLightDir[0] = options.toonLightDir ? options.toonLightDir[0] : 0.0;
@@ -214,7 +231,8 @@ class Gfx3Material {
       shininess: json['Shininess'],
       emissiveFactor: json['EmissiveFactor'],
       toonBlending: json['ToonBlending'],
-      toonLightDir: json['ToonLightDir']
+      toonLightDir: json['ToonLightDir'],
+      customs: json['Customs']
     });
   }
 
@@ -561,6 +579,18 @@ class Gfx3Material {
    */
   setToonBlending(toonBlending: boolean): void {
     this.params[16] = toonBlending ? 1.0 : 0.0;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set custom params.
+   * 
+   * @param {number} i - Index row of custom param.
+   * @param {number} j - Index col of custom param.
+   * @param {number} value - Value of custom param.
+   */
+  setCustomParam(i: number, j: number, value: number): void {
+    this.params[16 + (i * 4) + j] = value;
     this.dataChanged = true;
   }
 

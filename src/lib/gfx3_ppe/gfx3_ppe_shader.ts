@@ -145,14 +145,14 @@ fn main(
       t = PARAMS.OUTLINE_THICKNESS;
     }
 
-    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( t,  0)));
-    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( 0,  t)));
-    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( 0,  t)));
-    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( 0, -t)));
-    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( t,  t)));
-    idDiff += distance(id, getIdValue(FragUV, vec2<f32>( t, -t)));
-    idDiff += distance(id, getIdValue(FragUV, vec2<f32>(-t,  t)));
-    idDiff += distance(id, getIdValue(FragUV, vec2<f32>(-t, -t)));
+    idDiff += distance(id, getIdValue(pixelCoord, vec2<f32>( t,  0)));
+    idDiff += distance(id, getIdValue(pixelCoord, vec2<f32>( 0,  t)));
+    idDiff += distance(id, getIdValue(pixelCoord, vec2<f32>( 0,  t)));
+    idDiff += distance(id, getIdValue(pixelCoord, vec2<f32>( 0, -t)));
+    idDiff += distance(id, getIdValue(pixelCoord, vec2<f32>( t,  t)));
+    idDiff += distance(id, getIdValue(pixelCoord, vec2<f32>( t, -t)));
+    idDiff += distance(id, getIdValue(pixelCoord, vec2<f32>(-t,  t)));
+    idDiff += distance(id, getIdValue(pixelCoord, vec2<f32>(-t, -t)));
 
     if (idDiff != 0.0)
     {
