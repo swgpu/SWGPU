@@ -7,7 +7,7 @@ class PlayScreen extends Screen {
   }
 
   async onEnter() {
-    // alert('start your project here');
+    alert('start your project here');
     // initialization codes.
   }
 
@@ -15,11 +15,11 @@ class PlayScreen extends Screen {
     // release codes.
   }
 
-  onUpdate(ts: number) {
+  update(ts: number) {
     // update loop.
   }
 
-  onDraw() {
+  draw() {
     // draw loop.
   }
 }
