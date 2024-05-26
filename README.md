@@ -182,7 +182,7 @@ Clone and install this repository to work directly on it:
 ```
 
 ## Table of file formats
-We've done a [Blender Exporter](https://github.com/jay19240/WarmeY2K/tree/main/bin#:~:text=WARME%2DBlender%2DExporter.zip) which is used to export your models as JSON-like or Binary format.
+We've done a [Blender Exporter](https://github.com/jay19240/WarmeY2K/blob/main/bin/WARME-Blender-Exporter.zip) which is used to export your models as JSON-like or Binary format.
 
 | Type            | JSON | Binary |
 | --------------- | ---- | ------ |
