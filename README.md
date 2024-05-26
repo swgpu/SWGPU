@@ -33,8 +33,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 ## Table of content
 
 * [Features](#features)
-* [Getting Started - The engine way](#getting-started---the-engine-way)
-* [Getting Started - The boilerplate way](#getting-started---the-boilerplate-way)
+* [Getting Started](#getting-started)
 * [Table of file formats](#table-of-file-formats)
 * [Table of mesh ids](#table-of-mesh-ids)
 * [Shader extension](#shader-extension)
