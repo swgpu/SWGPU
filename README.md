@@ -172,21 +172,11 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 - 🌆 **DNA**
     - ECS architecture implementation
 
-## Getting started - The engine way
-A good start if you want make experimentation with samples and tutorials.
+## Getting started
+Clone and install this repository to work directly on it:
 ```
 # git clone https://github.com/jay19240/WarmeY2K.git
 # cd WarmeY2K
-# npm install
-# npm run dev
-```
-
-## Getting started - The boilerplate way
-The perfect solution for serious project.     
-It's included a complete environment including vite, typescript and the engine as dependency.
-```
-# git clone https://github.com/jay19240/WarmeY2K-Boilerplate.git
-# cd WarmeY2K-Boilerplate
 # npm install
 # npm run dev
 ```
