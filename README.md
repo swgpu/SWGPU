@@ -182,7 +182,7 @@ Clone and install this repository to work directly on it:
 Let's go, start your new project !      
 We've created a built-in boilerplate in the `src/play` folder.      
 Go in it and start your writing in the `play_screen` file !      
-For running your game go to `http://localhost:5173/` and select the "Play" button.     
+For running your game you must going to the following url `http://localhost:5173/` and select the "Play" button.     
 Have fun !
 
 ## Table of file formats
