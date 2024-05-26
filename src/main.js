@@ -13,7 +13,7 @@ import { uiManager } from './lib/ui/ui_manager';
 import { gfx3PPERenderer } from './lib/gfx3_ppe/gfx3_ppe_renderer';
 import { gfx3ShadowVolumeRenderer } from './lib/gfx3_shadow_volume/gfx3_shadow_volume_renderer';
 // ---------------------------------------------------------------------------------------
-import { TutorialsBootScreen } from './tutorials/boot/boot_screen';
+import { BootScreen } from './boot_screen';
 // ---------------------------------------------------------------------------------------
 
 class GameManager {
@@ -68,4 +68,4 @@ class GameManager {
 
 export const gameManager = new GameManager();
 gameManager.startup();
-screenManager.requestSetScreen(new TutorialsBootScreen());
+screenManager.requestSetScreen(new BootScreen());

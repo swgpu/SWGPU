@@ -7,9 +7,9 @@
     "game-engine-3d",
     "webgpu"
   ],
-  "repository": { 
-    "type": "git", 
-    "url": "https://github.com/jay19240/WARME-Y2K.git" 
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jay19240/WARME-Y2K.git"
   },
   "email": "aliyah.raijin@gmail.com",
   "author": "Julien Rongiere",
@@ -17,7 +17,9 @@
   "version": "1.2.3",
   "type": "module",
   "main": "src/lib/index.ts",
-  "files": ["src/lib/*"],
+  "files": [
+    "src/lib/*"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -26,6 +28,7 @@
     "pukiwiki": "python3 bin/converter-typedoc-to-pukiwiki.py --json docs/doc.json --output docs/pukiwiki"
   },
   "devDependencies": {
+    "@types/node": "^20.12.12",
     "@vitejs/plugin-basic-ssl": "^1.0.2",
     "typedoc": "^0.25.1",
     "typedoc-plugin-markdown": "^3.16.0",

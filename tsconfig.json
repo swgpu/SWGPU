@@ -5,6 +5,10 @@
       "./node_modules/@types",
       "./src/lib/core"
     ],
+    "baseUrl": ".",
+    "paths": {
+      "@lib/*": ["src/lib/*"]
+    },
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",

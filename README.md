@@ -179,6 +179,11 @@ Clone and install this repository to work directly on it:
 # npm install
 # npm run dev
 ```
+Let's go, start your new project !      
+We've created a build-in boilerplate folder in `src/play`.      
+Go in it and start to write in the `play_screen` file !      
+For running your game go to `http://localhost:5173/` and select the "Play" button.     
+Have fun !
 
 ## Table of file formats
 We've done a [Blender Exporter](https://github.com/jay19240/WarmeY2K/blob/main/bin/WARME-Blender-Exporter.zip) which is used to export your models as JSON-like or Binary format.
