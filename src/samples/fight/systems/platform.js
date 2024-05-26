@@ -1,4 +1,4 @@
-import { DNAComponent } from '../../../lib/dna/dna_component';
+import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 
 export class PlatformComponent extends DNAComponent {

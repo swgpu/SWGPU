@@ -1,7 +1,7 @@
-import { dnaManager } from '../../../lib/dna/dna_manager';
-import { inputManager } from '../../../lib/input/input_manager';
-import { DNASystem } from '../../../lib/dna/dna_system';
-import { DNAComponent } from '../../../lib/dna/dna_component';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { inputManager } from '@lib/input/input_manager';
+import { DNASystem } from '@lib/dna/dna_system';
+import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { RunComponent } from './run';
 import { JumpComponent } from './jump';

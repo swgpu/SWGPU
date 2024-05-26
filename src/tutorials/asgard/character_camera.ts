@@ -1,11 +1,11 @@
-import { dnaManager } from '../../lib/dna/dna_manager';
-import { UT } from '../../lib/core/utils';
-import { DNASystem } from '../../lib/dna/dna_system';
-import { DNAComponent } from '../../lib/dna/dna_component';
-import { Gfx3CameraOrbit } from '../../lib/gfx3_camera/gfx3_camera_orbit';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { UT } from '@lib/core/utils';
+import { DNASystem } from '@lib/dna/dna_system';
+import { DNAComponent } from '@lib/dna/dna_component';
+import { Gfx3CameraOrbit } from '@lib/gfx3_camera/gfx3_camera_orbit';
 // ---------------------------------------------------------------------------------------
 import { CharacterComponent } from './character';
-import { Gfx3PhysicsJNM } from '../../lib/gfx3_physics/gfx3_physics_jnm';
+import { Gfx3PhysicsJNM } from '@lib/gfx3_physics/gfx3_physics_jnm';
 // ---------------------------------------------------------------------------------------
 
 export class CharacterCameraComponent extends DNAComponent {

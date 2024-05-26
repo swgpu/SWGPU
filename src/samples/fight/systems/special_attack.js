@@ -1,10 +1,10 @@
-import { dnaManager } from '../../../lib/dna/dna_manager';
-import { gfx2Manager } from '../../../lib/gfx2/gfx2_manager';
-import { UT } from '../../../lib/core/utils';
-import { TweenNumber } from '../../../lib/core/tween';
-import { DNASystem } from '../../../lib/dna/dna_system';
-import { DNAComponent } from '../../../lib/dna/dna_component';
-import { Gfx2Drawable } from '../../../lib/gfx2/gfx2_drawable';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
+import { UT } from '@lib/core/utils';
+import { TweenNumber } from '@lib/core/tween';
+import { DNASystem } from '@lib/dna/dna_system';
+import { DNAComponent } from '@lib/dna/dna_component';
+import { Gfx2Drawable } from '@lib/gfx2/gfx2_drawable';
 // ---------------------------------------------------------------------------------------
 import { DrawableComponent } from './drawable';
 import { PositionComponent } from './position';

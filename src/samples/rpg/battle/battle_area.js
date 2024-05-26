@@ -1,7 +1,7 @@
-import { eventManager } from '../../../lib/core/event_manager';
-import { gfx3TextureManager } from '../../../lib/gfx3/gfx3_texture_manager';
-import { Gfx3MeshJSM } from '../../../lib/gfx3_mesh/gfx3_mesh_jsm';
-import { Gfx3Material } from '../../../lib/gfx3_mesh/gfx3_mesh_material';
+import { eventManager } from '@lib/core/event_manager';
+import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
+import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
+import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 // ---------------------------------------------------------------------------------------
 import { BattleAreaFighter } from './battle_area_fighter';
 import { BattleCamera } from './battle_camera';

@@ -1,5 +1,5 @@
-import { eventManager } from '../../../lib/core/event_manager';
-import { UIMenu } from '../../../lib/ui_menu/ui_menu';
+import { eventManager } from '@lib/core/event_manager';
+import { UIMenu } from '@lib/ui_menu/ui_menu';
 
 class UICardMenu extends UIMenu {
   constructor(options: {}) {

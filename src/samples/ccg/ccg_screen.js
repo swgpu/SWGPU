@@ -1,7 +1,7 @@
-import { eventManager } from '../../lib/core/event_manager';
-import { uiManager } from '../../lib/ui/ui_manager';
-import { UIMenuText } from '../../lib/ui_menu_text/ui_menu_text';
-import { Screen } from '../../lib/screen/screen';
+import { eventManager } from '@lib/core/event_manager';
+import { uiManager } from '@lib/ui/ui_manager';
+import { UIMenuText } from '@lib/ui_menu_text/ui_menu_text';
+import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
 import { Duel } from './core/duel';
 import { CREATE_COMMAND, HumanDuelist } from './core/human_duelist';

@@ -1,4 +1,4 @@
-import { Screen } from '../../lib/screen/screen';
+import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
 import { Room } from './room';
 

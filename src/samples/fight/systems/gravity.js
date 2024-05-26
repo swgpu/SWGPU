@@ -1,6 +1,6 @@
-import { dnaManager } from '../../../lib/dna/dna_manager';
-import { DNASystem } from '../../../lib/dna/dna_system';
-import { DNAComponent } from '../../../lib/dna/dna_component';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { DNASystem } from '@lib/dna/dna_system';
+import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 
 const GRAVITY_SPEED_MAX = 20;

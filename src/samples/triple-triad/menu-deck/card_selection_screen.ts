@@ -1,7 +1,7 @@
-import { uiManager } from '../../../lib/ui/ui_manager';
+import { uiManager } from '@lib/ui/ui_manager';
 import { screenManager } from "../../../lib/screen/screen_manager";
-import { eventManager } from '../../../lib/core/event_manager';
-import { Screen } from '../../../lib/screen/screen';
+import { eventManager } from '@lib/core/event_manager';
+import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
 import { Card } from '../core/card';
 import { UICardMenu } from './ui_card_menu';

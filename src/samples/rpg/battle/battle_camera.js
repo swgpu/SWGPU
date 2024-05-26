@@ -1,6 +1,6 @@
-import { eventManager } from '../../../lib/core/event_manager';
-import { Gfx3Camera } from '../../../lib/gfx3_camera/gfx3_camera';
-import { UT } from '../../../lib/core/utils';
+import { eventManager } from '@lib/core/event_manager';
+import { Gfx3Camera } from '@lib/gfx3_camera/gfx3_camera';
+import { UT } from '@lib/core/utils';
 // ---------------------------------------------------------------------------------------
 
 class BattleCamera extends Gfx3Camera {

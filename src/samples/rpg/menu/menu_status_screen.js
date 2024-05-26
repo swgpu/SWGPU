@@ -1,7 +1,7 @@
-import { screenManager } from '../../../lib/screen/screen_manager';
-import { uiManager } from '../../../lib/ui/ui_manager';
-import { Screen } from '../../../lib/screen/screen';
-import { UIText } from '../../../lib/ui_text/ui_text';
+import { screenManager } from '@lib/screen/screen_manager';
+import { uiManager } from '@lib/ui/ui_manager';
+import { Screen } from '@lib/screen/screen';
+import { UIText } from '@lib/ui_text/ui_text';
 // ---------------------------------------------------------------------------------------
 import { UIStatus } from './ui_status';
 // ---------------------------------------------------------------------------------------

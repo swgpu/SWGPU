@@ -1,5 +1,5 @@
-import { eventManager } from '../../../lib/core/event_manager';
-import { UIWidget } from '../../../lib/ui/ui_widget';
+import { eventManager } from '@lib/core/event_manager';
+import { UIWidget } from '@lib/ui/ui_widget';
 import { UIPiece } from './ui_piece';
 
 let ELEMENT_TO_BG = {

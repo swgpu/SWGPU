@@ -1,5 +1,5 @@
-import { UIWidget } from '../../../lib/ui/ui_widget';
-import { UIMenuListView } from '../../../lib/ui_menu_list_view/ui_menu_list_view';
+import { UIWidget } from '@lib/ui/ui_widget';
+import { UIMenuListView } from '@lib/ui_menu_list_view/ui_menu_list_view';
 // ---------------------------------------------------------------------------------------
 
 class UIHeroesEquipment extends UIMenuListView {

@@ -1,17 +1,17 @@
-import { coreManager } from './lib/core/core_manager';
-import { gfx3Manager } from './lib/gfx3/gfx3_manager';
-import { gfx3DebugRenderer } from './lib/gfx3/gfx3_debug_renderer';
-import { gfx3MeshRenderer } from './lib/gfx3_mesh/gfx3_mesh_renderer';
-import { gfx3MeshShadowRenderer } from './lib/gfx3_mesh/gfx3_mesh_shadow_renderer';
-import { gfx3SpriteRenderer } from './lib/gfx3_sprite/gfx3_sprite_renderer';
-import { gfx3SkyboxRenderer } from './lib/gfx3_skybox/gfx3_skybox_renderer';
-import { gfx3FlareRenderer } from './lib/gfx3_flare/gfx3_flare_renderer';
-import { gfx3ParticlesRenderer } from './lib/gfx3_particules/gfx3_particles_renderer';   
-import { gfx2Manager } from './lib/gfx2/gfx2_manager';
-import { screenManager } from './lib/screen/screen_manager';
-import { uiManager } from './lib/ui/ui_manager';
-import { gfx3PPERenderer } from './lib/gfx3_ppe/gfx3_ppe_renderer';
-import { gfx3ShadowVolumeRenderer } from './lib/gfx3_shadow_volume/gfx3_shadow_volume_renderer';
+import { coreManager } from '@lib/core/core_manager';
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
+import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
+import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
+import { gfx3MeshShadowRenderer } from '@lib/gfx3_mesh/gfx3_mesh_shadow_renderer';
+import { gfx3SpriteRenderer } from '@lib/gfx3_sprite/gfx3_sprite_renderer';
+import { gfx3SkyboxRenderer } from '@lib/gfx3_skybox/gfx3_skybox_renderer';
+import { gfx3FlareRenderer } from '@lib/gfx3_flare/gfx3_flare_renderer';
+import { gfx3ParticlesRenderer } from '@lib/gfx3_particules/gfx3_particles_renderer';   
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
+import { screenManager } from '@lib/screen/screen_manager';
+import { uiManager } from '@lib/ui/ui_manager';
+import { gfx3PPERenderer } from '@lib/gfx3_ppe/gfx3_ppe_renderer';
+import { gfx3ShadowVolumeRenderer } from '@lib/gfx3_shadow_volume/gfx3_shadow_volume_renderer';
 // ---------------------------------------------------------------------------------------
 import { BootScreen } from './boot_screen';
 // ---------------------------------------------------------------------------------------

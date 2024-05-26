@@ -1,5 +1,5 @@
-import { eventManager } from '../../../lib/core/event_manager';
-import { ArrayCollection } from '../../../lib/core/array_collection';
+import { eventManager } from '@lib/core/event_manager';
+import { ArrayCollection } from '@lib/core/array_collection';
 // ---------------------------------------------------------------------------------------
 import { EquipmentItem } from './equipment_item';
 import { CommonItem } from './common_item';

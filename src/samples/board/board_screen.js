@@ -1,6 +1,6 @@
-import { uiManager } from '../../lib/ui/ui_manager';
-import { eventManager } from '../../lib/core/event_manager';
-import { Screen } from '../../lib/screen/screen';
+import { uiManager } from '@lib/ui/ui_manager';
+import { eventManager } from '@lib/core/event_manager';
+import { Screen } from '@lib/screen/screen';
 import { COLOR } from './core/enums';
 import { Game } from './core/game';
 import { HumanPlayer, AIPlayer } from './core/player';

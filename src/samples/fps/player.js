@@ -1,10 +1,10 @@
-import { uiManager } from '../../lib/ui/ui_manager';
-import { eventManager } from '../../lib/core/event_manager';
-import { inputManager } from '../../lib/input/input_manager';
-import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
-import { UT } from '../../lib/core/utils';
-import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
-import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
+import { uiManager } from '@lib/ui/ui_manager';
+import { eventManager } from '@lib/core/event_manager';
+import { inputManager } from '@lib/input/input_manager';
+import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
+import { UT } from '@lib/core/utils';
+import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
+import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 // ---------------------------------------------------------------------------------------
 
 class InputComponent {

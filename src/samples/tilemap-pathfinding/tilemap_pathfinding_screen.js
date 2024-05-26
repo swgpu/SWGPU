@@ -1,11 +1,11 @@
-import { gfx2Manager } from '../../lib/gfx2/gfx2_manager';
-import { UT } from '../../lib/core/utils';
-import { Screen } from '../../lib/screen/screen';
-import { Gfx2Drawable } from '../../lib/gfx2/gfx2_drawable';
-import { Gfx2TileMap } from '../../lib/gfx2_tile/gfx2_tile_map';
-import { Gfx2TileMapLayer } from '../../lib/gfx2_tile/gfx2_tile_map_layer';
-import { AIPathGrid2D } from '../../lib/ai/ai_path_grid';
-import { AIPathGridSolver } from '../../lib/ai/ai_path_grid_solver';
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
+import { UT } from '@lib/core/utils';
+import { Screen } from '@lib/screen/screen';
+import { Gfx2Drawable } from '@lib/gfx2/gfx2_drawable';
+import { Gfx2TileMap } from '@lib/gfx2_tile/gfx2_tile_map';
+import { Gfx2TileMapLayer } from '@lib/gfx2_tile/gfx2_tile_map_layer';
+import { AIPathGrid2D } from '@lib/ai/ai_path_grid';
+import { AIPathGridSolver } from '@lib/ai/ai_path_grid_solver';
 // ---------------------------------------------------------------------------------------
 import { Controller } from './controller';
 // ---------------------------------------------------------------------------------------

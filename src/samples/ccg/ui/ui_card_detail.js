@@ -1,4 +1,4 @@
-import { UIWidget } from '../../../lib/ui/ui_widget';
+import { UIWidget } from '@lib/ui/ui_widget';
 // ---------------------------------------------------------------------------------------
 import { CARD_TYPE, CARD_ELEMENT, SPELL_CARD_NATURE, SPELL_CARD_MODE, MONSTER_CARD_RACE } from '../core/enums';
 // ---------------------------------------------------------------------------------------

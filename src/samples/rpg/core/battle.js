@@ -1,4 +1,4 @@
-import { eventManager } from '../../../lib/core/event_manager';
+import { eventManager } from '@lib/core/event_manager';
 // ---------------------------------------------------------------------------------------
 import { EnemyCharacter } from './enemy_character';
 import { NewTurnBattleAction, ApplyEffectBattleAction, LetBattleAction } from './battle_actions';

@@ -1,9 +1,9 @@
-import { eventManager } from '../../lib/core/event_manager';
-import { uiManager } from '../../lib/ui/ui_manager';
-import { UIDialog } from '../../lib/ui_dialog/ui_dialog';
-import { UIMenuText } from '../../lib/ui_menu_text/ui_menu_text';
-import { Screen } from '../../lib/screen/screen';
-import { ScriptMachine } from '../../lib/script/script_machine';
+import { eventManager } from '@lib/core/event_manager';
+import { uiManager } from '@lib/ui/ui_manager';
+import { UIDialog } from '@lib/ui_dialog/ui_dialog';
+import { UIMenuText } from '@lib/ui_menu_text/ui_menu_text';
+import { Screen } from '@lib/screen/screen';
+import { ScriptMachine } from '@lib/script/script_machine';
 // ---------------------------------------------------------------------------------------
 import { Player } from './player';
 import { UIAvatar } from './ui_avatar';

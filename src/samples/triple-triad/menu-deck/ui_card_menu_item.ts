@@ -1,4 +1,4 @@
-import { UIWidget } from '../../../lib/ui/ui_widget';
+import { UIWidget } from '@lib/ui/ui_widget';
 
 class UICardMenuItem extends UIWidget {
   name: string;

@@ -1,4 +1,4 @@
-import { eventManager } from '../../../lib/core/event_manager';
+import { eventManager } from '@lib/core/event_manager';
 // ---------------------------------------------------------------------------------------
 import { DuelistAbstract } from './duelist_abstract';
 import { DrawAction, SummonAction, SetAction, ChangePositionAction, BattleAction, NextPhaseAction, ActivateAction, DirectAttackAction } from './duel_actions';

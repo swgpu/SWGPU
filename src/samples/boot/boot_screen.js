@@ -1,8 +1,8 @@
-import { eventManager } from '../../lib/core/event_manager';
-import { uiManager } from '../../lib/ui/ui_manager';
-import { screenManager } from '../../lib/screen/screen_manager';
-import { Screen } from '../../lib/screen/screen';
-import { UIMenuText } from '../../lib/ui_menu_text/ui_menu_text';
+import { eventManager } from '@lib/core/event_manager';
+import { uiManager } from '@lib/ui/ui_manager';
+import { screenManager } from '@lib/screen/screen_manager';
+import { Screen } from '@lib/screen/screen';
+import { UIMenuText } from '@lib/ui_menu_text/ui_menu_text';
 // ---------------------------------------------------------------------------------------
 import { ViewerScreen } from '../viewer/viewer_screen';
 import { UserInterfaceScreen } from '../user-interface/user_interface_screen';

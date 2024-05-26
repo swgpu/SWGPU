@@ -1,4 +1,4 @@
-import { eventManager } from '../../../lib/core/event_manager';
+import { eventManager } from '@lib/core/event_manager';
 // ---------------------------------------------------------------------------------------
 import { LOCATION, PHASE, CARD_POS, EFFECT_TARGET_TYPE, SPELL_CARD_NATURE, CARD_TYPE, HAND_MAX } from './enums';
 import { HumanDuelist } from './human_duelist';

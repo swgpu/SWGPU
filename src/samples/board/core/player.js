@@ -1,5 +1,5 @@
-import { AIMinMaxLeaf, AIMinMaxNode } from '../../../lib/ai/ai_minmax_tree';
-import { AIMinMaxSolver } from '../../../lib/ai/ai_minmax_solver';
+import { AIMinMaxLeaf, AIMinMaxNode } from '@lib/ai/ai_minmax_tree';
+import { AIMinMaxSolver } from '@lib/ai/ai_minmax_solver';
 import { COLOR, PIECE_TYPE } from './enums';
 
 class PlayerAbstract {

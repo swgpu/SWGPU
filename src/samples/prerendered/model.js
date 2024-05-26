@@ -1,9 +1,9 @@
-import { eventManager } from '../../lib/core/event_manager';
-import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
-import { UT } from '../../lib/core/utils';
-import { Gfx3Transformable } from '../../lib/gfx3/gfx3_transformable';
-import { Gfx3MeshJAM } from '../../lib/gfx3_mesh/gfx3_mesh_jam';
-import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
+import { eventManager } from '@lib/core/event_manager';
+import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
+import { UT } from '@lib/core/utils';
+import { Gfx3Transformable } from '@lib/gfx3/gfx3_transformable';
+import { Gfx3MeshJAM } from '@lib/gfx3_mesh/gfx3_mesh_jam';
+import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 // ---------------------------------------------------------------------------------------
 
 class Model extends Gfx3Transformable {

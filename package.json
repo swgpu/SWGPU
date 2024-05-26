@@ -36,8 +36,8 @@
     "vite": "^4.5.0"
   },
   "dependencies": {
-    "@dimforge/rapier2d": "^0.12.0",
-    "@dimforge/rapier3d": "^0.12.0",
+    "@dimforge/rapier2d": "*",
+    "@dimforge/rapier3d": "*",
     "@webgpu/types": "^0.1.21",
     "curve-interpolator": "^3.3.1",
     "dotenv": "^16.4.5",

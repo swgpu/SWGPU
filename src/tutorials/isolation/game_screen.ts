@@ -1,10 +1,10 @@
-import { uiManager } from '../../lib/ui/ui_manager';
-import { eventManager } from '../../lib/core/event_manager';
-import { screenManager } from '../../lib/screen/screen_manager';
-import { dnaManager } from '../../lib/dna/dna_manager';
-import { gfx2TextureManager } from '../../lib/gfx2/gfx2_texture_manager';
-import { UIText } from '../../lib/ui_text/ui_text';
-import { Screen } from '../../lib/screen/screen';
+import { uiManager } from '@lib/ui/ui_manager';
+import { eventManager } from '@lib/core/event_manager';
+import { screenManager } from '@lib/screen/screen_manager';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { gfx2TextureManager } from '@lib/gfx2/gfx2_texture_manager';
+import { UIText } from '@lib/ui_text/ui_text';
+import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
 import { GameOverScreen } from './game_over_screen';
 import { ShipComponent, ShipSystem } from './ship';

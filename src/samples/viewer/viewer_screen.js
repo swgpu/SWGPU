@@ -1,18 +1,18 @@
-import { gfx3Manager } from '../../lib/gfx3/gfx3_manager';
-import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
-import { gfx3DebugRenderer } from '../../lib/gfx3/gfx3_debug_renderer';
-import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
-import { gfx3PPERenderer, PPEParam } from '../../lib/gfx3_ppe/gfx3_ppe_renderer';
-import { uiManager } from '../../lib/ui/ui_manager';
-import { coreManager } from '../../lib/core/core_manager';
-import { UT } from '../../lib/core/utils';
-import { Screen } from '../../lib/screen/screen';
-import { Gfx3CameraOrbit } from '../../lib/gfx3_camera/gfx3_camera_orbit';
-import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
-import { Gfx3MeshOBJ } from '../../lib/gfx3_mesh/gfx3_mesh_obj';
-import { Gfx3Skybox } from '../../lib/gfx3_skybox/gfx3_skybox';
-import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
-import { Gfx3ShadowVolume } from '../../lib/gfx3_shadow_volume/gfx3_shadow_volume';
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
+import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
+import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
+import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
+import { gfx3PPERenderer, PPEParam } from '@lib/gfx3_ppe/gfx3_ppe_renderer';
+import { uiManager } from '@lib/ui/ui_manager';
+import { coreManager } from '@lib/core/core_manager';
+import { UT } from '@lib/core/utils';
+import { Screen } from '@lib/screen/screen';
+import { Gfx3CameraOrbit } from '@lib/gfx3_camera/gfx3_camera_orbit';
+import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
+import { Gfx3MeshOBJ } from '@lib/gfx3_mesh/gfx3_mesh_obj';
+import { Gfx3Skybox } from '@lib/gfx3_skybox/gfx3_skybox';
+import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
+import { Gfx3ShadowVolume } from '@lib/gfx3_shadow_volume/gfx3_shadow_volume';
 // ---------------------------------------------------------------------------------------
 
 class ViewerScreen extends Screen {

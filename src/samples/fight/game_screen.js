@@ -1,8 +1,8 @@
-import { dnaManager } from '../../lib/dna/dna_manager';
-import { gfx2TextureManager } from '../../lib/gfx2/gfx2_texture_manager';
-import { Screen } from '../../lib/screen/screen';
-import { Gfx2SpriteJAS } from '../../lib/gfx2_sprite/gfx2_sprite_jas';
-import { Gfx2SpriteJSS } from '../../lib/gfx2_sprite/gfx2_sprite_jss';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { gfx2TextureManager } from '@lib/gfx2/gfx2_texture_manager';
+import { Screen } from '@lib/screen/screen';
+import { Gfx2SpriteJAS } from '@lib/gfx2_sprite/gfx2_sprite_jas';
+import { Gfx2SpriteJSS } from '@lib/gfx2_sprite/gfx2_sprite_jss';
 // ---------------------------------------------------------------------------------------
 import { UISystem } from './systems/ui';
 import { CameraSystem, CameraComponent } from './systems/camera';

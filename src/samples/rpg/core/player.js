@@ -1,4 +1,4 @@
-import { eventManager } from '../../../lib/core/event_manager';
+import { eventManager } from '@lib/core/event_manager';
 // ---------------------------------------------------------------------------------------
 import { HeroCharacter } from './hero_character';
 import { Inventory } from './inventory';

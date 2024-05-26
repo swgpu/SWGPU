@@ -1,4 +1,4 @@
-import { UIWidget } from '../../../lib/ui/ui_widget';
+import { UIWidget } from '@lib/ui/ui_widget';
 
 let PIECE_TO_BG = {
   'BLACK_PAWN': './samples/checker/black_pawn.png',

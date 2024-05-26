@@ -1,9 +1,9 @@
-import { dnaManager } from '../../../lib/dna/dna_manager';
-import { gfx2Manager } from '../../../lib/gfx2/gfx2_manager';
-import { eventManager } from '../../../lib/core/event_manager';
-import { UT } from '../../../lib/core/utils';
-import { DNASystem } from '../../../lib/dna/dna_system';
-import { DNAComponent } from '../../../lib/dna/dna_component';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
+import { eventManager } from '@lib/core/event_manager';
+import { UT } from '@lib/core/utils';
+import { DNASystem } from '@lib/dna/dna_system';
+import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { DamageComponent } from './damage';
 // ---------------------------------------------------------------------------------------

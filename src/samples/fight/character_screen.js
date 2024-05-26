@@ -1,9 +1,9 @@
-import { uiManager } from '../../lib/ui/ui_manager';
-import { eventManager } from '../../lib/core/event_manager';
-import { screenManager } from '../../lib/screen/screen_manager';
-import { Screen } from '../../lib/screen/screen';
-import { UIWidget } from '../../lib/ui/ui_widget';
-import { UIMenu, MenuAxis } from '../../lib/ui_menu/ui_menu';
+import { uiManager } from '@lib/ui/ui_manager';
+import { eventManager } from '@lib/core/event_manager';
+import { screenManager } from '@lib/screen/screen_manager';
+import { Screen } from '@lib/screen/screen';
+import { UIWidget } from '@lib/ui/ui_widget';
+import { UIMenu, MenuAxis } from '@lib/ui_menu/ui_menu';
 // ------------------------------------------------------------------
 import { GameScreen } from './game_screen';
 import { MapScreen } from './map_screen';

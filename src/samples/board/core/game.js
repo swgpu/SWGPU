@@ -1,4 +1,4 @@
-import { eventManager } from '../../../lib/core/event_manager';
+import { eventManager } from '@lib/core/event_manager';
 import { COLOR, PIECE_TYPE } from './enums';
 import { Queen } from './piece';
 import { Board } from './board';

@@ -1,6 +1,6 @@
-import { eventManager } from '../../../lib/core/event_manager';
-import { UIWidget } from '../../../lib/ui/ui_widget';
-import { UT } from '../../../lib/core/utils';
+import { eventManager } from '@lib/core/event_manager';
+import { UIWidget } from '@lib/ui/ui_widget';
+import { UT } from '@lib/core/utils';
 // ---------------------------------------------------------------------------------------
 import { LOCATION } from '../core/enums';
 import { UICardSlot } from './ui_card_slot';

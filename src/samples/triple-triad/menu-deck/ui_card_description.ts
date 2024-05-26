@@ -1,4 +1,4 @@
-import { UIWidget } from '../../../lib/ui/ui_widget';
+import { UIWidget } from '@lib/ui/ui_widget';
 import { Card } from '../core/card';
 import { UICard } from '../ui/ui_card';
 

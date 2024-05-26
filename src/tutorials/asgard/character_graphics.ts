@@ -1,8 +1,8 @@
-import { dnaManager } from '../../lib/dna/dna_manager';
-import { UT } from '../../lib/core/utils';
-import { Gfx3MeshJAM } from '../../lib/gfx3_mesh/gfx3_mesh_jam';
-import { DNASystem } from '../../lib/dna/dna_system';
-import { DNAComponent } from '../../lib/dna/dna_component';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { UT } from '@lib/core/utils';
+import { Gfx3MeshJAM } from '@lib/gfx3_mesh/gfx3_mesh_jam';
+import { DNASystem } from '@lib/dna/dna_system';
+import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { CharacterComponent } from './character';
 // ---------------------------------------------------------------------------------------

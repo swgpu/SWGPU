@@ -1,15 +1,15 @@
-import { eventManager } from '../../lib/core/event_manager';
-import { uiManager } from '../../lib/ui/ui_manager';
-import { inputManager } from '../../lib/input/input_manager';
-import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
-import { UT } from '../../lib/core/utils';
-import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
-import { Gfx3PhysicsJWM } from '../../lib/gfx3_physics/gfx3_physics_jwm';
-import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
-import { Motion } from '../../lib/motion/motion';
-import { ScriptMachine } from '../../lib/script/script_machine';
-import { UIDialog } from '../../lib/ui_dialog/ui_dialog';
-import { UIMenuText } from '../../lib/ui_menu_text/ui_menu_text';
+import { eventManager } from '@lib/core/event_manager';
+import { uiManager } from '@lib/ui/ui_manager';
+import { inputManager } from '@lib/input/input_manager';
+import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
+import { UT } from '@lib/core/utils';
+import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
+import { Gfx3PhysicsJWM } from '@lib/gfx3_physics/gfx3_physics_jwm';
+import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
+import { Motion } from '@lib/motion/motion';
+import { ScriptMachine } from '@lib/script/script_machine';
+import { UIDialog } from '@lib/ui_dialog/ui_dialog';
+import { UIMenuText } from '@lib/ui_menu_text/ui_menu_text';
 // ---------------------------------------------------------------------------------------
 import { Spawn } from './spawn';
 import { Model } from './model';

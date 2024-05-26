@@ -7,7 +7,7 @@ class PlayScreen extends Screen {
   }
 
   async onEnter() {
-    alert('start your project here');
+    // alert('start your project here');
     // initialization codes.
   }
 

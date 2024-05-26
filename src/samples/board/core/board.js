@@ -1,4 +1,4 @@
-import { UT } from '../../../lib/core/utils';
+import { UT } from '@lib/core/utils';
 import { COLOR } from './enums';
 import { Pawn } from './piece';
 import { Tile } from './tile';

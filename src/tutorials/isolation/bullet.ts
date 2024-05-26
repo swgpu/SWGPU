@@ -1,9 +1,9 @@
-import { dnaManager } from '../../lib/dna/dna_manager';
-import { gfx2TextureManager } from '../../lib/gfx2/gfx2_texture_manager';
-import { eventManager } from '../../lib/core/event_manager';
-import { Gfx2SpriteJSS } from '../../lib/gfx2_sprite/gfx2_sprite_jss';
-import { DNASystem } from '../../lib/dna/dna_system';
-import { DNAComponent } from '../../lib/dna/dna_component';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { gfx2TextureManager } from '@lib/gfx2/gfx2_texture_manager';
+import { eventManager } from '@lib/core/event_manager';
+import { Gfx2SpriteJSS } from '@lib/gfx2_sprite/gfx2_sprite_jss';
+import { DNASystem } from '@lib/dna/dna_system';
+import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { AsteroidComponent } from './asteroid';
 // ---------------------------------------------------------------------------------------

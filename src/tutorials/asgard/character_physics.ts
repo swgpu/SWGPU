@@ -1,9 +1,9 @@
-import { gfx3DebugRenderer } from '../../lib/gfx3/gfx3_debug_renderer';
-import { dnaManager } from '../../lib/dna/dna_manager';
-import { UT } from '../../lib/core/utils';
-import { Gfx3PhysicsJNM } from '../../lib/gfx3_physics/gfx3_physics_jnm';
-import { DNASystem } from '../../lib/dna/dna_system';
-import { DNAComponent } from '../../lib/dna/dna_component';
+import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { UT } from '@lib/core/utils';
+import { Gfx3PhysicsJNM } from '@lib/gfx3_physics/gfx3_physics_jnm';
+import { DNASystem } from '@lib/dna/dna_system';
+import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { CharacterComponent } from './character';
 // ---------------------------------------------------------------------------------------

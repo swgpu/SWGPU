@@ -1,4 +1,4 @@
-import { eventManager } from '../../../lib/core/event_manager';
+import { eventManager } from '@lib/core/event_manager';
 // ---------------------------------------------------------------------------------------
 import { Attributes } from './attributes';
 import { Effect } from './effect';

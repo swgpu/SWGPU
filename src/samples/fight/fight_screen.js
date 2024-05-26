@@ -1,7 +1,7 @@
-import { uiManager } from '../../lib/ui/ui_manager';
-import { screenManager } from '../../lib/screen/screen_manager';
-import { inputManager } from '../../lib/input/input_manager';
-import { Screen } from '../../lib/screen/screen';
+import { uiManager } from '@lib/ui/ui_manager';
+import { screenManager } from '@lib/screen/screen_manager';
+import { inputManager } from '@lib/input/input_manager';
+import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
 import { MapScreen } from './map_screen';
 // ---------------------------------------------------------------------------------------

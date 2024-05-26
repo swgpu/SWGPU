@@ -1,4 +1,4 @@
-import { eventManager } from '../../../lib/core/event_manager';
+import { eventManager } from '@lib/core/event_manager';
 // ---------------------------------------------------------------------------------------
 import { CHAR_CONDITION } from './mappings/char_condition_mapping';
 import { MECHANIC } from './mappings/mechanic_mapping';

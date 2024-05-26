@@ -1,5 +1,5 @@
-import { eventManager } from '../../../lib/core/event_manager';
-import { UIWidget } from '../../../lib/ui/ui_widget';
+import { eventManager } from '@lib/core/event_manager';
+import { UIWidget } from '@lib/ui/ui_widget';
 // ---------------------------------------------------------------------------------------
 import { GameState } from '../core/game_state';
 

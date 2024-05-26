@@ -1,8 +1,8 @@
-import { dnaManager } from '../../../lib/dna/dna_manager';
-import { eventManager } from '../../../lib/core/event_manager';
-import { DNASystem } from '../../../lib/dna/dna_system';
-import { DNAComponent } from '../../../lib/dna/dna_component';
-import { Gfx2SpriteJAS } from '../../../lib/gfx2_sprite/gfx2_sprite_jas';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { eventManager } from '@lib/core/event_manager';
+import { DNASystem } from '@lib/dna/dna_system';
+import { DNAComponent } from '@lib/dna/dna_component';
+import { Gfx2SpriteJAS } from '@lib/gfx2_sprite/gfx2_sprite_jas';
 // ---------------------------------------------------------------------------------------
 import { PositionComponent } from './position';
 import { HitComponent } from './hit';

@@ -1,7 +1,7 @@
-import { eventManager } from '../../lib/core/event_manager';
-import { gfx2TextureManager } from '../../lib/gfx2/gfx2_texture_manager';
-import { Gfx2Drawable } from '../../lib/gfx2/gfx2_drawable';
-import { Gfx2SpriteJAS } from '../../lib/gfx2_sprite/gfx2_sprite_jas';
+import { eventManager } from '@lib/core/event_manager';
+import { gfx2TextureManager } from '@lib/gfx2/gfx2_texture_manager';
+import { Gfx2Drawable } from '@lib/gfx2/gfx2_drawable';
+import { Gfx2SpriteJAS } from '@lib/gfx2_sprite/gfx2_sprite_jas';
 // ---------------------------------------------------------------------------------------
 
 class Controller extends Gfx2Drawable {

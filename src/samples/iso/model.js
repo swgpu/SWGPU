@@ -1,8 +1,8 @@
-import { eventManager } from '../../lib/core/event_manager';
-import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
-import { UT } from '../../lib/core/utils';
-import { Gfx3Transformable } from '../../lib/gfx3/gfx3_transformable';
-import { Gfx3SpriteJAS } from '../../lib/gfx3_sprite/gfx3_sprite_jas';
+import { eventManager } from '@lib/core/event_manager';
+import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
+import { UT } from '@lib/core/utils';
+import { Gfx3Transformable } from '@lib/gfx3/gfx3_transformable';
+import { Gfx3SpriteJAS } from '@lib/gfx3_sprite/gfx3_sprite_jas';
 // ---------------------------------------------------------------------------------------
 import { DIRECTION, DIRECTION_TO_VEC3, PIXEL_PER_UNIT } from './enums';
 // ---------------------------------------------------------------------------------------

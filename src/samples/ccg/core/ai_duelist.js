@@ -1,4 +1,4 @@
-import { UT } from '../../../lib/core/utils';
+import { UT } from '@lib/core/utils';
 // ---------------------------------------------------------------------------------------
 import { DuelistAbstract } from './duelist_abstract';
 import { DirectAttackAction, DrawAction, SummonAction, SetAction, ChangePositionAction, BattleAction, NextPhaseAction, ActivateAction } from './duel_actions';

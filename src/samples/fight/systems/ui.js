@@ -1,6 +1,6 @@
-import { dnaManager } from '../../../lib/dna/dna_manager';
-import { uiManager } from '../../../lib/ui/ui_manager';
-import { DNASystem } from '../../../lib/dna/dna_system';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { uiManager } from '@lib/ui/ui_manager';
+import { DNASystem } from '@lib/dna/dna_system';
 // ---------------------------------------------------------------------------------------
 import { UIHealthBar } from '../ui/ui_health_bar';
 import { MAX_HEALTH } from '../enums';

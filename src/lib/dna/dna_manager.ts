@@ -210,7 +210,7 @@ class DNAManager {
    * @param {number} eid - The entity's id.
    * @param {string} typename - The component typename.
    */
-  getComponent(eid: number, typename: string): DNAComponent {
+  getComponent<T extends DNAComponent>(eid: number, typename: string): T {
     const components = this.entities.get(eid);
     if (!components) {
       throw new Error('DNAManager::getComponent(): Entity not found');
@@ -221,7 +221,7 @@ class DNAManager {
       throw new Error('DNAManager::getComponent(): Entity has not ' + typename);
     }
 
-    return found;
+    return found as T;
   }
 
   /**

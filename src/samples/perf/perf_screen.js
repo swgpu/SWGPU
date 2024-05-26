@@ -1,14 +1,14 @@
-import { gfx3TextureManager } from '../../lib/gfx3/gfx3_texture_manager';
-import { gfx3Manager } from '../../lib/gfx3/gfx3_manager';
-import { gfx3MeshRenderer } from '../../lib/gfx3_mesh/gfx3_mesh_renderer';
-import { UT } from '../../lib/core/utils';
-import { Quaternion } from '../../lib/core/quaternion';
-import { Screen } from '../../lib/screen/screen';
-import { Gfx3CameraWASD } from '../../lib/gfx3_camera/gfx3_camera_wasd';
-import { SHADER_VERTEX_ATTR_COUNT } from '../../lib/gfx3_mesh/gfx3_mesh_shader';
-import { Gfx3Mesh } from '../../lib/gfx3_mesh/gfx3_mesh';
-import { Gfx3MeshJSM } from '../../lib/gfx3_mesh/gfx3_mesh_jsm';
-import { Gfx3Material } from '../../lib/gfx3_mesh/gfx3_mesh_material';
+import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
+import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
+import { UT } from '@lib/core/utils';
+import { Quaternion } from '@lib/core/quaternion';
+import { Screen } from '@lib/screen/screen';
+import { Gfx3CameraWASD } from '@lib/gfx3_camera/gfx3_camera_wasd';
+import { SHADER_VERTEX_ATTR_COUNT } from '@lib/gfx3_mesh/gfx3_mesh_shader';
+import { Gfx3Mesh } from '@lib/gfx3_mesh/gfx3_mesh';
+import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
+import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 // ---------------------------------------------------------------------------------------
 
 const GRID_WIDTH = 100;

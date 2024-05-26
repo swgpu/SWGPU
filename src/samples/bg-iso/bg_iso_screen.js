@@ -1,16 +1,16 @@
-import { inputManager } from '../../lib/input/input_manager';
-import { eventManager } from '../../lib/core/event_manager';
-import { gfx2Manager } from '../../lib/gfx2/gfx2_manager';
-import { gfx2TextureManager } from '../../lib/gfx2/gfx2_texture_manager';
-import { UT } from '../../lib/core/utils';
-import { Screen } from '../../lib/screen/screen';
-import { Gfx2TileMap } from '../../lib/gfx2_tile/gfx2_tile_map';
-import { Gfx2SpriteJSS } from '../../lib/gfx2_sprite/gfx2_sprite_jss';
-import { Gfx2SpriteJAS } from '../../lib/gfx2_sprite/gfx2_sprite_jas';
-import { Gfx2Drawer } from '../../lib/gfx2/gfx2_drawer';
-import { Gfx2IsoTileMapLayer } from '../../lib/gfx2_iso/gfx2_iso_tile_map_layer';
-import { AIPathGrid2D } from '../../lib/ai/ai_path_grid';
-import { AIPathGridSolver } from '../../lib/ai/ai_path_grid_solver';
+import { inputManager } from '@lib/input/input_manager';
+import { eventManager } from '@lib/core/event_manager';
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
+import { gfx2TextureManager } from '@lib/gfx2/gfx2_texture_manager';
+import { UT } from '@lib/core/utils';
+import { Screen } from '@lib/screen/screen';
+import { Gfx2TileMap } from '@lib/gfx2_tile/gfx2_tile_map';
+import { Gfx2SpriteJSS } from '@lib/gfx2_sprite/gfx2_sprite_jss';
+import { Gfx2SpriteJAS } from '@lib/gfx2_sprite/gfx2_sprite_jas';
+import { Gfx2Drawer } from '@lib/gfx2/gfx2_drawer';
+import { Gfx2IsoTileMapLayer } from '@lib/gfx2_iso/gfx2_iso_tile_map_layer';
+import { AIPathGrid2D } from '@lib/ai/ai_path_grid';
+import { AIPathGridSolver } from '@lib/ai/ai_path_grid_solver';
 // ---------------------------------------------------------------------------------------
 import { Controller } from './controller';
 // ---------------------------------------------------------------------------------------

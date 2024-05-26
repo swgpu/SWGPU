@@ -1,7 +1,7 @@
-import { gfx2Manager } from '../../lib/gfx2/gfx2_manager';
-import { Gfx2SpriteJAS } from '../../lib/gfx2_sprite/gfx2_sprite_jas';
-import { Gfx2Drawable } from '../../lib/gfx2/gfx2_drawable';
-import { Motion } from '../../lib/motion/motion';
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
+import { Gfx2SpriteJAS } from '@lib/gfx2_sprite/gfx2_sprite_jas';
+import { Gfx2Drawable } from '@lib/gfx2/gfx2_drawable';
+import { Motion } from '@lib/motion/motion';
 // ---------------------------------------------------------------------------------------
 
 const JUMP_STRENGHT = 16;

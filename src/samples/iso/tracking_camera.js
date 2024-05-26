@@ -1,6 +1,6 @@
-import { gfx3Manager } from '../../lib/gfx3/gfx3_manager';
-import { UT } from '../../lib/core/utils';
-import { ProjectionMode } from '../../lib/gfx3/gfx3_view';
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
+import { UT } from '@lib/core/utils';
+import { ProjectionMode } from '@lib/gfx3/gfx3_view';
 // ---------------------------------------------------------------------------------------
 import { ORTHO_SIZE, ORTHO_DEPTH, CAMERA_MATRIX } from './enums';
 // ---------------------------------------------------------------------------------------

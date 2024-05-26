@@ -1,4 +1,4 @@
-import { UISprite } from '../../lib/ui_sprite/ui_sprite';
+import { UISprite } from '@lib/ui_sprite/ui_sprite';
 
 const AVATAR_LOCATION = {
   LEFT: 'LEFT',

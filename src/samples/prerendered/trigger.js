@@ -1,5 +1,5 @@
-import { gfx3DebugRenderer } from '../../lib/gfx3/gfx3_debug_renderer';
-import { Gfx3Transformable } from '../../lib/gfx3/gfx3_transformable';
+import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
+import { Gfx3Transformable } from '@lib/gfx3/gfx3_transformable';
 // ---------------------------------------------------------------------------------------
 
 class Trigger extends Gfx3Transformable {

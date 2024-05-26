@@ -1,10 +1,10 @@
-import { eventManager } from '../../../lib/core/event_manager';
-import { uiManager } from '../../../lib/ui/ui_manager';
-import { screenManager } from '../../../lib/screen/screen_manager';
-import { Screen } from '../../../lib/screen/screen';
-import { UIMenuText } from '../../../lib/ui_menu_text/ui_menu_text';
-import { UIText } from '../../../lib/ui_text/ui_text';
-import { ArrayCollection } from '../../../lib/core/array_collection';
+import { eventManager } from '@lib/core/event_manager';
+import { uiManager } from '@lib/ui/ui_manager';
+import { screenManager } from '@lib/screen/screen_manager';
+import { Screen } from '@lib/screen/screen';
+import { UIMenuText } from '@lib/ui_menu_text/ui_menu_text';
+import { UIText } from '@lib/ui_text/ui_text';
+import { ArrayCollection } from '@lib/core/array_collection';
 // ---------------------------------------------------------------------------------------
 import { gameManager } from '../game_manager';
 import { UIHeroes } from '../shared/ui_heroes';

@@ -1,11 +1,11 @@
-import { uiManager } from '../../../lib/ui/ui_manager';
-import { eventManager } from '../../../lib/core/event_manager';
-import { gfx3Manager } from '../../../lib/gfx3/gfx3_manager';
-import { gfx3TextureManager } from '../../../lib/gfx3/gfx3_texture_manager';
-import { Gfx3Transformable } from '../../../lib/gfx3/gfx3_transformable';
-import { Gfx3MeshJAM } from '../../../lib/gfx3_mesh/gfx3_mesh_jam';
-import { Gfx3Material } from '../../../lib/gfx3_mesh/gfx3_mesh_material';
-import { Gfx3SpriteJAS } from '../../../lib/gfx3_sprite/gfx3_sprite_jas';
+import { uiManager } from '@lib/ui/ui_manager';
+import { eventManager } from '@lib/core/event_manager';
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
+import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
+import { Gfx3Transformable } from '@lib/gfx3/gfx3_transformable';
+import { Gfx3MeshJAM } from '@lib/gfx3_mesh/gfx3_mesh_jam';
+import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
+import { Gfx3SpriteJAS } from '@lib/gfx3_sprite/gfx3_sprite_jas';
 // ---------------------------------------------------------------------------------------
 
 class BattleAreaFighter extends Gfx3Transformable {

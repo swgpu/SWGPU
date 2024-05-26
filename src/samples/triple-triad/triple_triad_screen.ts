@@ -1,7 +1,7 @@
-import { eventManager } from '../../lib/core/event_manager';
-import { uiManager } from '../../lib/ui/ui_manager';
-import { coreManager, SizeMode } from '../../lib/core/core_manager';
-import { Screen } from '../../lib/screen/screen';
+import { eventManager } from '@lib/core/event_manager';
+import { uiManager } from '@lib/ui/ui_manager';
+import { coreManager, SizeMode } from '@lib/core/core_manager';
+import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
 import { GameState } from './core/game_state';
 import { UIHands } from './ui/ui_hands';

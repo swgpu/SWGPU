@@ -1,10 +1,10 @@
-import { inputManager } from '../../lib/input/input_manager';
-import { gfx2Manager } from '../../lib/gfx2/gfx2_manager';
-import { UT } from '../../lib/core/utils';
-import { Screen } from '../../lib/screen/screen';
-import { Gfx2TileMap, Gfx2TileLayer } from '../../lib/gfx2_tile/gfx2_tile_map';
-import { Gfx2IsoTileMapLayer } from '../../lib/gfx2_iso/gfx2_iso_tile_map_layer';
-import { Gfx2IsoDrawer } from '../../lib/gfx2_iso/gfx2_iso_drawer';
+import { inputManager } from '@lib/input/input_manager';
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
+import { UT } from '@lib/core/utils';
+import { Screen } from '@lib/screen/screen';
+import { Gfx2TileMap, Gfx2TileLayer } from '@lib/gfx2_tile/gfx2_tile_map';
+import { Gfx2IsoTileMapLayer } from '@lib/gfx2_iso/gfx2_iso_tile_map_layer';
+import { Gfx2IsoDrawer } from '@lib/gfx2_iso/gfx2_iso_drawer';
 // ---------------------------------------------------------------------------------------
 import { Controller } from './controller';
 // ---------------------------------------------------------------------------------------
