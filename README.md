@@ -10,9 +10,6 @@
 > High luminosity is recommanded with scanlines filter (set enabled as default).
 
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
-![NPM Version](https://img.shields.io/npm/v/warme-y2k)
-![LibSize](https://img.shields.io/badge/LibSize-73KB-blue)
-![Size](https://img.shields.io/badge/DepSize-1MB-blue)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
