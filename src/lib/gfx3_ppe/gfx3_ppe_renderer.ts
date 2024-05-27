@@ -7,6 +7,10 @@ import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_VERTEX_ATTR_COUNT } from './gfx3_ppe_shader';
 
+const WINDOW = window as any;
+const VERT_EXT = WINDOW.__PPE_VERT_EXT__ ? WINDOW.__PPE_VERT_EXT__ : '';
+const FRAG_EXT = WINDOW.__PPE_FRAG_EXT__ ? WINDOW.__PPE_FRAG_EXT__ : '';
+
 enum PPEParam {
   ENABLED = 0,
   PIXELATION_ENABLED = 1,
@@ -47,7 +51,7 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
   shadowDepthCCWTexture: Gfx3Texture;
 
   constructor() {
-    super('PPE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
+    super('PPE_PIPELINE', VERTEX_SHADER(VERT_EXT), FRAGMENT_SHADER(FRAG_EXT), PIPELINE_DESC);
     this.device = gfx3Manager.getDevice();
     this.vertexBuffer = this.device.createBuffer({ size: 6 * SHADER_VERTEX_ATTR_COUNT * 4, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC });
 

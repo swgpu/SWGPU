@@ -29,7 +29,7 @@ export const PIPELINE_DESC: any = {
   }
 };
 
-export const VERTEX_SHADER = /* wgsl */`
+export const VERTEX_SHADER = (ext: string) => /* wgsl */`
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
   @location(0) FragUV: vec2<f32>
@@ -43,10 +43,11 @@ fn main(
   var output: VertexOutput;
   output.Position = vec4(Position, 0.0, 1.0);
   output.FragUV = TexUV;
+  ${ext}
   return output;
 }`;
 
-export const FRAGMENT_SHADER = /* wgsl */`
+export const FRAGMENT_SHADER = (ext: string) => /* wgsl */`
 struct Params {
   ENABLED: f32,
   PIXELATION_ENABLED: f32,
@@ -170,6 +171,7 @@ fn main(
     }
   }
 
+  ${ext}
   return outputColor;
 }
 

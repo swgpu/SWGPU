@@ -7,14 +7,14 @@ import { Gfx3StaticGroup, Gfx3DynamicGroup } from '../gfx3/gfx3_group';
 import { Gfx3Mesh } from './gfx3_mesh';
 import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER, MAX_POINT_LIGHTS, MAX_DECALS } from './gfx3_mesh_shader';
 
+const WINDOW = window as any;
+const VERT_EXT = WINDOW.__MESH_VERT_EXT__ ? WINDOW.__MESH_VERT_EXT__ : '';
+const FRAG_EXT = WINDOW.__MESH_FRAG_EXT__ ? WINDOW.__MESH_FRAG_EXT__ : '';
+
 interface MeshCommand {
   mesh: Gfx3Mesh;
   matrix: mat4;
 };
-
-const WINDOW = window as any;
-const VERT_EXT = WINDOW.__MESH_VERT_EXT__ ? WINDOW.__MESH_VERT_EXT__ : '';
-const FRAG_EXT = WINDOW.__MESH_FRAG_EXT__ ? WINDOW.__MESH_FRAG_EXT__ : '';
 
 /**
  * Singleton mesh renderer.
