@@ -215,17 +215,15 @@ If you want enable *Color limit*, *Dithering* and *Shadow vol* you can sum all t
 
 ## Shader extension
 Set your shader extension in `vite.config.ts` with the following global variables:
-| Name          | Description                                 |
-| ------------- | ------------------------------------------- |
-| MESH_VERT_EXT | Append a string to the mesh vertex shader   |
-| MESH_FRAG_EXT | Append a string to the mesh fragment shader |
-| PPE_VERT_EXT  | Append a string to the ppe vertex shader    |
-| PPE_FRAG_EXT  | Append a string to the ppe fragment shader  |
-
 You can check variables you can work with just below.      
 If you need add some extra variables, take a look at material custom params.
 
 ### Mesh shader
+| Vite Defines  | Description                                 |
+| ------------- | ------------------------------------------- |
+| MESH_VERT_EXT | Append a string to the mesh vertex shader   |
+| MESH_FRAG_EXT | Append a string to the mesh fragment shader |
+
 | Vert Variables | Scope   | Type           | Description                                   |
 | -------------  | ------- | -------------- | --------------------------------------------- |
 | LVP_MATRIX     | Uniform | mat4x4         | Light view projection (shadow-map)            |
