@@ -214,9 +214,9 @@ If you want enable *Color limit*, *Dithering* and *Shadow vol* you can sum all t
 | Shadow vol   |    |    |    | 16 |
 
 ## Shader extension
-Set your shader extension in `vite.config.ts` with the following global variables:
-You can check variables you can work with just below.      
-If you need add some extra variables, take a look at material custom params.
+Set your shader extension in `vite.config.ts` in the define variables declaration.     
+You can check for shader variables you can work with just below.      
+If you need add some extra variables, take a look at material params.
 
 ### Mesh shader
 | Vite Defines  | Description                                 |
