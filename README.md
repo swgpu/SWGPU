@@ -267,6 +267,34 @@ If you need add some extra variables, take a look at material params.
 | textureUV                | var     | vec2           | The current texture uv - after scrolling      |
 | shadow                   | var     | float          | The shadow factor                             |
 
+### Post-process effect shader
+| Vite Defines | Description                                |
+| ------------ | -------------------------------------------|
+| PPE_VERT_EXT | Append a string to the ppe vertex shader   |
+| PPE_FRAG_EXT | Append a string to the ppe fragment shader |
+
+| Frag Variables           | Scope   | Type           | Description                                   |
+| ------------------------ | ------- | -------------- | --------------------------------------------- |
+| FragUV                   | Attr    | vec2           | The pixel coord                               |
+| PARAMS                   | Uniform | Params         | Global parameters                             |
+| SIZE                     | Uniform | vec2           | The resolution screen size                    |
+| SOURCE_TEXTURE           | Uniform | Texture        | The colored source texture (with lit)         |
+| NORMALS_TEXTURE          | Uniform | Texture        | The normals source texture                    |
+| IDS_TEXTURE              | Uniform | Texture        | The indexes source texture                    |
+| DEPTH_TEXTURE            | Uniform | Texture        | The depth source texture                      |
+| SHADOW_FACTOR_TEXTURE    | Uniform | Texture        | The shadow-volume texture                     |
+| SHADOW_DEPTH_CCW_TEXTURE | Uniform | Texture        | The shadow-volume ccw depth texture           |
+| SHADOW_DEPTH_CW_TEXTURE  | Uniform | Texture        | The shadow-volume cw depth texture            |
+| outputColor              | var     | vec4           | The fragment shader output color              |
+| normal                   | var     | vec3           | The pixel's normal                            |
+| id                       | var     | vec4           | The pixel's id                                |
+| depth                    | var     | int            | The pixel's depth                             |
+| shadowFactor             | var     | vec4           | The pixel's shadow-volume factor              |
+| shadowDepthCW            | var     | int            | The pixel's shadow-volume cw depth            |
+| shadowDepthCCW           | var     | int            | The pixel's shadow-volume ccw depth           |
+| flags                    | var     | int            | The pixel's filter flags                      |
+| pixelCoord               | var     | vec2           | The pixel's coord after pixelation            |
+
 ## Contributions
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
