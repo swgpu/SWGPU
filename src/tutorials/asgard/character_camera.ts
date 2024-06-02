@@ -29,8 +29,8 @@ export class CharacterCameraSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const camera = dnaManager.getComponent(eid, 'CharacterCamera') as CharacterCameraComponent;
-    const character = dnaManager.getComponent(eid, 'Character') as CharacterComponent;
+    const camera = dnaManager.getComponent<CharacterCameraComponent>(eid, 'CharacterCamera');
+    const character = dnaManager.getComponent<CharacterComponent>(eid, 'Character');
 
     const targetPos: vec3 = [character.x, character.y + 1, character.z];
     const targetToCamera = UT.VEC3_SUBSTRACT(camera.rec.getPosition(), targetPos);

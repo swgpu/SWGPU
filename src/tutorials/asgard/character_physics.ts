@@ -39,8 +39,8 @@ export class CharacterPhysicsSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const physics = dnaManager.getComponent(eid, 'CharacterPhysics') as CharacterPhysicsComponent;
-    const character = dnaManager.getComponent(eid, 'Character') as CharacterComponent;
+    const physics = dnaManager.getComponent<CharacterPhysicsComponent>(eid, 'CharacterPhysics');
+    const character = dnaManager.getComponent<CharacterComponent>(eid, 'Character');
 
     const moveDir = UT.VEC3_NORMALIZE(character.moveDir);
     character.velocity[0] = moveDir[0] * physics.speed;
@@ -62,8 +62,8 @@ export class CharacterPhysicsSystem extends DNASystem {
   }
 
   onEntityDraw(eid: number): void {
-    const physics = dnaManager.getComponent(eid, 'CharacterPhysics') as CharacterPhysicsComponent;
-    const character = dnaManager.getComponent(eid, 'Character') as CharacterComponent;
+    const physics = dnaManager.getComponent<CharacterPhysicsComponent>(eid, 'CharacterPhysics');
+    const character = dnaManager.getComponent<CharacterComponent>(eid, 'Character');
 
     const min: vec3 = [
       character.x - physics.radius,

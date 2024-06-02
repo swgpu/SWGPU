@@ -24,8 +24,8 @@ export class CharacterGraphicsSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const graphics = dnaManager.getComponent(eid, 'CharacterGraphics') as CharacterGraphicsComponent;
-    const character = dnaManager.getComponent(eid, 'Character') as CharacterComponent;
+    const graphics = dnaManager.getComponent<CharacterGraphicsComponent>(eid, 'CharacterGraphics');
+    const character = dnaManager.getComponent<CharacterComponent>(eid, 'Character');
 
     graphics.jam.setRotation(0, character.rotation, 0);
     graphics.jam.setPosition(character.x, character.y, character.z); 
@@ -41,7 +41,7 @@ export class CharacterGraphicsSystem extends DNASystem {
   }
 
   onEntityDraw(eid: number): void {
-    const graphics = dnaManager.getComponent(eid, 'CharacterGraphics') as CharacterGraphicsComponent;
+    const graphics = dnaManager.getComponent<CharacterGraphicsComponent>(eid, 'CharacterGraphics');
     graphics.jam.draw();
   }
 }

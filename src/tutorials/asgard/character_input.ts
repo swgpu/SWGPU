@@ -46,10 +46,10 @@ export class CharacterInputSystem extends DNASystem {
       moving = true;
     }
 
-    const character = dnaManager.getComponent(eid, 'Character') as CharacterComponent;
+    const character = dnaManager.getComponent<CharacterComponent>(eid, 'Character');
 
     if (moving) {
-      const camera = dnaManager.getComponent(eid, 'CharacterCamera') as CharacterCameraComponent;
+      const camera = dnaManager.getComponent<CharacterCameraComponent>(eid, 'CharacterCamera');
       const phi = camera.rec.getPhi();
       const x = Math.cos(phi + moveAngle);
       const z = Math.sin(phi + moveAngle);      
