@@ -31,6 +31,7 @@ export class PhysicsSystem extends DNASystem {
     const rigidBodyDesc = RigidBodyDesc.fixed();
     const rigidBody = this.world.createRigidBody(rigidBodyDesc);
 
+    physics.jsm.getVertices();
 
 
     ColliderDesc.trimesh()
