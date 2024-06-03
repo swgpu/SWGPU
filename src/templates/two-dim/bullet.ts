@@ -14,7 +14,7 @@ export class BulletComponent extends DNAComponent {
   constructor() {
     super('Bullet');
     this.jss = new Gfx2SpriteJSS();
-    this.jss.setTexture(gfx2TextureManager.getTexture('./tutorials/isolation/bullet.png'));
+    this.jss.setTexture(gfx2TextureManager.getTexture('./templates/two-dim/bullet.png'));
   }
 }
 

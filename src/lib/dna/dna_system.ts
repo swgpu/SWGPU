@@ -42,9 +42,13 @@ class DNASystem {
    * The draw function.
    */
   draw(): void {
+    this.onBeforeDraw();
+
     for (const eid of this.eids) {
       this.onEntityDraw(eid);
     }
+
+    this.onAfterDraw();
   }
 
   /**
@@ -207,11 +211,21 @@ class DNASystem {
   onAfterUpdate(ts: number): void {}
 
   /**
+   * Virtual method that is called before the entities draw phase.
+   */
+  onBeforeDraw(): void {}
+
+  /**
    * Virtual method that is called for each entity during the draw phase.
    * 
    * @param {number} eid - The entity's id.
    */
   onEntityDraw(eid: number): void {}
+
+  /**
+   * Virtual method that is called after the entities draw phase.
+   */
+  onAfterDraw(): void {}
 
   /**
    * Virtual method that is called during entity binding.

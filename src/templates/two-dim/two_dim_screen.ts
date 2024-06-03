@@ -19,7 +19,7 @@ const NB_COLS = 8;
 const HOLES = [1, 2, 3, 4, 3];
 const WAVE_GENERATION_INTERVAL = 20000;
 
-class GameScreen extends Screen {
+class TwoDimScreen extends Screen {
   shipSystem: ShipSystem;
   asteroidSystem: AsteroidSystem;
   bulletSystem: BulletSystem;
@@ -38,9 +38,9 @@ class GameScreen extends Screen {
   }
 
   async onEnter() {
-    await gfx2TextureManager.loadTexture('./tutorials/isolation/asteroid.png');
-    await gfx2TextureManager.loadTexture('./tutorials/isolation/bullet.png');
-    await gfx2TextureManager.loadTexture('./tutorials/isolation/ship.png');
+    await gfx2TextureManager.loadTexture('./templates/two-dim/asteroid.png');
+    await gfx2TextureManager.loadTexture('./templates/two-dim/bullet.png');
+    await gfx2TextureManager.loadTexture('./templates/two-dim/ship.png');
 
     dnaManager.setup([
       this.shipSystem,
@@ -103,4 +103,4 @@ class GameScreen extends Screen {
   }
 }
 
-export { GameScreen };
+export { TwoDimScreen };

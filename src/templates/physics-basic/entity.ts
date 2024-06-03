@@ -1,20 +1,20 @@
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 
-export class CharacterComponent extends DNAComponent {
+export class EntityComponent extends DNAComponent {
   x: number;
   y: number;
   z: number;
-  moveDir: vec3;
+  speed: number;
   velocity: vec3;
   rotation: number;
 
   constructor() {
-    super('Character');
+    super('Entity');
     this.x = 0;
     this.y = 0;
     this.z = 0;
-    this.moveDir = [0, 0, 0];
+    this.speed = 7;
     this.velocity = [0, 0, 0];
     this.rotation = 0;
   }

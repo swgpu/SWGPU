@@ -173,7 +173,7 @@ class Gfx3PhysicsJNM {
     }
 
     if (this.debugMeshEnabled) {
-      gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount, UT.MAT4_IDENTITY());
+      gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount);
     }
   }
 

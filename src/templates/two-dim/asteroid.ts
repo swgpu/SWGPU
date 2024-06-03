@@ -15,7 +15,7 @@ export class AsteroidComponent extends DNAComponent {
     super('Asteroid');
     this.jss = new Gfx2SpriteJSS();
     this.jss.setPosition(x, y);
-    this.jss.setTexture(gfx2TextureManager.getTexture('./tutorials/isolation/asteroid.png'));
+    this.jss.setTexture(gfx2TextureManager.getTexture('./templates/two-dim/asteroid.png'));
   }
 }
 

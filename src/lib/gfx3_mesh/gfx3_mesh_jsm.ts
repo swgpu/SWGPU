@@ -24,10 +24,13 @@ class Gfx3MeshJSM extends Gfx3Mesh implements Poolable<Gfx3MeshJSM> {
       throw new Error('Gfx3MeshJSM::loadFromFile(): File not valid !');
     }
 
+    const geo = Gfx3Mesh.buildVertices(json['NumVertices'], json['Vertices'], json['TextureCoords'], json['Colors'], json['Normals']);
+
     this.beginVertices(json['NumVertices']);
-    this.setVertices(Gfx3Mesh.buildVertices(json['NumVertices'], json['Vertices'], json['TextureCoords'], json['Colors'], json['Normals']));
+    this.setVertices(geo.vertices);
     this.endVertices();
 
+    this.geo = geo;
     this.boundingBox = Gfx3BoundingBox.createFromVertices(json['Vertices'], 3);
   }
 

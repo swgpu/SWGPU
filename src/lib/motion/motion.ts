@@ -6,6 +6,7 @@ import { UT } from '../core/utils';
  * It emit 'E_FINISHED'
  */
 class Motion {
+  vertices: Array<number>;
   points: Array<vec3>;
   speed: number;
   looped: boolean;
@@ -20,6 +21,7 @@ class Motion {
    * @param {boolean} looped - Determine if path is closed, if closed then motion running in loop.
    */
   constructor(points: Array<vec3> = [], looped: boolean = false) {
+    this.vertices = [];
     this.points = points;
     this.speed = 1;
     this.looped = looped;
@@ -100,6 +102,32 @@ class Motion {
   }
 
   /**
+   * Start moving along the path.
+   */
+  run(): void {
+    if (this.points.length < 2) {
+      throw new Error('Motion::play(): points is not defined.');
+    }
+
+    this.running = true;
+    this.currentPosition[0] = this.points[0][0];
+    this.currentPosition[1] = this.points[0][1];
+    this.currentPosition[2] = this.points[0][2];
+    this.currentMove = [0, 0, 0];
+    this.currentPointIndex = 1;
+    this.currentSegmentTime = 0;
+  }
+
+  /**
+   * Set the moving speed.
+   * 
+   * @param {number} speed - The moving speed.
+   */
+  setSpeed(speed: number): void {
+    this.speed = speed;
+  }
+
+  /**
    * Set the point list.
    * 
    * @param {Array<vec3>} points - The points.
@@ -108,26 +136,11 @@ class Motion {
     this.points = points;
     this.looped = UT.VEC3_ISEQUAL(points.at(-1)!, points.at(0)!);
     this.running = false;
-  }
 
-  /**
-   * Start moving along the path.
-   * 
-   * @param {number} speed - The moving speed.
-   */
-  run(speed: number): void {
-    if (this.points.length < 2) {
-      throw new Error('Motion::play(): points is not defined.');
+    this.vertices = [];
+    for (const point of points) {
+      this.vertices.push(point[0], point[0], point[2]);
     }
-
-    this.speed = speed;
-    this.running = true;
-    this.currentPosition[0] = this.points[0][0];
-    this.currentPosition[1] = this.points[0][1];
-    this.currentPosition[2] = this.points[0][2];
-    this.currentMove = [0, 0, 0];
-    this.currentPointIndex = 1;
-    this.currentSegmentTime = 0;
   }
 
   /**
@@ -142,6 +155,13 @@ class Motion {
    */
   isRunning(): boolean {
     return this.running;
+  }
+
+  /**
+   * Returns vertices.
+   */
+  getVertices(): Array<number> {
+    return this.vertices;
   }
 
   /**

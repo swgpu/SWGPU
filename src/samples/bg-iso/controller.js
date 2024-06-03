@@ -89,8 +89,10 @@ class Controller extends Gfx2Drawable {
 
   moveAlong(path, pathElevation, onRunning) {
     this.pathElevation = pathElevation;
-    this.motion = new Motion(path);
-    this.motion.run(this.speed);
+    this.motion = new Motion();
+    this.motion.setPoints(path);
+    this.motion.setSpeed(this.speed);
+    this.motion.run();
     this.onRunning = onRunning;
   }
 

@@ -235,7 +235,7 @@ class Gfx3PhysicsJWM {
    * The draw function.
    */
   draw(): void {
-    gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount, UT.MAT4_IDENTITY());
+    gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount);
 
     for (const point of this.points.values()) {
       gfx3DebugRenderer.drawSphere(UT.MAT4_TRANSLATE(point.x, point.y, point.z), 0.01, 2);

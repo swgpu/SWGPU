@@ -471,8 +471,9 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
         const normals = object.normals.length > 0 ? this.normals : undefined; // normals are optionnals
         const colors = object.colors.length > 0 ? this.colors : undefined; // colors are optionnals
 
+        mesh.geo = Gfx3Mesh.buildVertices(object.vertexCount, this.coords, texcoords, colors, normals, object.groups);
         mesh.beginVertices(object.vertexCount);
-        mesh.setVertices(Gfx3Mesh.buildVertices(object.vertexCount, this.coords, texcoords, colors, normals, object.groups));
+        mesh.setVertices(mesh.geo.vertices);
         mesh.endVertices();
         mesh.setBoundingBox(Gfx3BoundingBox.createFromVertices(this.coords, 3));
         this.meshes.set(object.name, mesh);
