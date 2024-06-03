@@ -13,7 +13,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
-**WarmeY2K** is a fully packed **2D/3D game engine** dedicated to **Y2K games** on the web !     
+**WarmeY2K** is a fully packed **2D/3D game engine** dedicated to **indie games** powered by web technology !     
 The first part of the name (W.A.R.M.E) is an acronym for **Web Against Regular Major Engines**, you can understand it like a tentative
 to make a complete game engine for the web. The second part (Y.2.K) is the common acronym used to define the era covers **1998-2004** and define the technics limitation intentionally taken. These limitations are guarants of a human scaled tool and help a lot of to reduce the learning curve.
 
