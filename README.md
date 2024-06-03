@@ -30,10 +30,6 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 ## Table of content
 
 * [Features](#features)
-* [Getting Started](#getting-started)
-* [Table of file formats](#table-of-file-formats)
-* [Table of mesh ids](#table-of-mesh-ids)
-* [Shader extension](#shader-extension)
 * [Contributions](#contributions)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
@@ -168,133 +164,6 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 - 🌆 **DNA**
     - ECS architecture implementation
 
-## Getting started
-Clone and install this repository to work directly on it:
-```
-# git clone https://github.com/jay19240/WarmeY2K.git
-# cd WarmeY2K
-# npm install
-# npm run dev
-```
-Let's go, start your new project !      
-We've created a built-in boilerplate in the `src/play` folder.      
-Go in it and start your writing in the `play_screen` file !      
-For running your game you must going to the following url `http://localhost:5173/` and select the "Play" button.     
-Have fun !
-
-## Table of file formats
-We've done a [Blender Exporter](https://github.com/jay19240/WarmeY2K/blob/main/bin/WARME-Blender-Exporter.zip) which is used to export your models as JSON-like or Binary format.
-
-| Type            | JSON | Binary |
-| --------------- | ---- | ------ |
-| Animated mesh   | JAM  | BAM    |
-| Static mesh     | JSM  | BSM    |
-| Lines           | JLM  | BLM    |
-| Point light     | JPL  |        |
-| Trigger         | JTR  |        |
-| Shadow volume   | JSV  | BSV    |
-| Walkmesh        | JWM  | BWM    |
-| Navmesh         | JNM  | BNM    |
-| Animated sprite | JAS  |        |
-| Static sprite   | JSS  |        |
-| Tilemap         | JTM  |        |
-| Script          | JSC  |        |
-
-## Table of mesh ids
-If you want enable *Color limit*, *Dithering* and *Shadow vol* you can sum all these values and set `2 + 4 + 16 = 22` to the channel `a`.
-| Usage        | r  | g  | b  | a  |
-| ------------ | -- | -- | -- | -- |
-| Identifier   | n  |    |    |    |
-| Decals group |    | n  |    |    |
-| Light group  |    |    | n  |    |
-| Pixelation   |    |    |    | 1  |
-| Color limit  |    |    |    | 2  |
-| Dithering    |    |    |    | 4  |
-| Outline      |    |    |    | 8  |
-| Shadow vol   |    |    |    | 16 |
-
-## Shader extension
-Set your shader extension in `vite.config.ts` in the define variables declaration.     
-You can check for shader variables you can work with just below.      
-If you need add some extra variables, take a look at material params.
-
-### Mesh shader
-| Vite Defines  | Description                                 |
-| ------------- | ------------------------------------------- |
-| MESH_VERT_EXT | Append a string to the mesh vertex shader   |
-| MESH_FRAG_EXT | Append a string to the mesh fragment shader |
-
-| Vert Variables | Scope   | Type           | Description                                   |
-| -------------  | ------- | -------------- | --------------------------------------------- |
-| LVP_MATRIX     | Uniform | mat4x4         | Light view projection (shadow-map)            |
-| MESH_INFOS     | Uniform | MeshInfos      | Contains matrices and mesh identifier         |
-| MAT_PARAMS     | Uniform | MaterialParams | List of float material parameters             |
-| MAT_PARAMS     | Uniform | MaterialParams | List of float material parameters             |
-| MAT_PARAMS     | Uniform | MaterialParams | List of float material parameters             |
-| out            | var     | VertexOutput   | The vertex shader output                      |
-| posFromLight   | var     | vec4           | Vertex position from light source (shadow-map |
-
-| Frag Variables           | Scope   | Type           | Description                                   |
-| ------------------------ | ------- | -------------- | --------------------------------------------- |
-| MESH_INFOS               | Uniform | MeshInfos      | Contains matrices and mesh identifier         |
-| CAMERA_POS               | Uniform | vec3           | Camera position                               |
-| DIR_LIGHT                | Uniform | DirLight       | Directionnal light informations               |
-| FOG                      | Uniform | Fog            | Fog informations                              |
-| POINT_LIGHT_COUNT        | Uniform | int            | Number of point lights                        |
-| POINT_LIGHTS             | Uniform | PointLight[]   | Point light list                              |
-| DECAL_COUNT              | Uniform | int            | Number of decals                              |
-| DECALS                   | Uniform | Decal[]        | Decal list                                    |
-| DECAL_ATLAS_TEXTURE      | Uniform | Texture        | Decals texture                                |
-| DECAL_ATLAS_TEXTURE      | Uniform | Texture        | Decals texture                                |
-| SHADOW_MAP_TEXTURE       | Uniform | Texture        | Shadow map texture                            |
-| MAT_COLORS               | Uniform | MaterialColors | Material colors (ambiant, diffuse, etc...)    |
-| MAT_PARAMS               | Uniform | MaterialParams | Material parameters for some settings         |
-| MAT_UVS                  | Uniform | MaterialUvs    | Material uv scrolling                         |
-| MAT_TOON_LIGHT_DIR       | Uniform | vec3           | Material toon light direction                 |
-| MAT_TEXTURE              | Uniform | Texture        | Color texture                                 |
-| MAT_DISPLACEMENT_TEXTURE | Uniform | Texture        | Displace the color texture                    |
-| MAT_DIFFUSE_TEXTURE      | Uniform | Texture        | Diffuse color texture                         |
-| MAT_DIFFUSE_TEXTURE      | Uniform | Texture        | Diffuse color texture                         |
-| MAT_SPECULAR_TEXTURE     | Uniform | Texture        | Specular texture (color and specularity)      |
-| MAT_EMISSIVE_TEXTURE     | Uniform | Texture        | Emissive color texture                        |
-| MAT_NORM_TEXTURE         | Uniform | Texture        | Normal map texture                            |
-| MAT_ENV_MAP_TEXTURE      | Uniform | Texture        | Env map texture                               |
-| MAT_TOON_TEXTURE         | Uniform | Texture        | Toon details texture                          |
-| MAT_TOON_TEXTURE         | Uniform | Texture        | Toon details texture                          |
-| outputColor              | var     | vec4           | The fragment shader output color              |
-| normal                   | var     | vec3           | The normalized normal                         |
-| texel                    | var     | vec4           | The current texture pixel - after decals      |
-| textureUV                | var     | vec2           | The current texture uv - after scrolling      |
-| shadow                   | var     | float          | The shadow factor                             |
-
-### Post-process effect shader
-| Vite Defines | Description                                |
-| ------------ | -------------------------------------------|
-| PPE_VERT_EXT | Append a string to the ppe vertex shader   |
-| PPE_FRAG_EXT | Append a string to the ppe fragment shader |
-
-| Frag Variables           | Scope   | Type           | Description                                   |
-| ------------------------ | ------- | -------------- | --------------------------------------------- |
-| FragUV                   | Attr    | vec2           | The pixel coord                               |
-| PARAMS                   | Uniform | Params         | Global parameters                             |
-| SIZE                     | Uniform | vec2           | The resolution screen size                    |
-| SOURCE_TEXTURE           | Uniform | Texture        | The colored source texture (with lit)         |
-| NORMALS_TEXTURE          | Uniform | Texture        | The normals source texture                    |
-| IDS_TEXTURE              | Uniform | Texture        | The indexes source texture                    |
-| DEPTH_TEXTURE            | Uniform | Texture        | The depth source texture                      |
-| SHADOW_FACTOR_TEXTURE    | Uniform | Texture        | The shadow-volume texture                     |
-| SHADOW_DEPTH_CCW_TEXTURE | Uniform | Texture        | The shadow-volume ccw depth texture           |
-| SHADOW_DEPTH_CW_TEXTURE  | Uniform | Texture        | The shadow-volume cw depth texture            |
-| outputColor              | var     | vec4           | The fragment shader output color              |
-| normal                   | var     | vec3           | The pixel's normal                            |
-| id                       | var     | vec4           | The pixel's id                                |
-| depth                    | var     | int            | The pixel's depth                             |
-| shadowFactor             | var     | vec4           | The pixel's shadow-volume factor              |
-| shadowDepthCW            | var     | int            | The pixel's shadow-volume cw depth            |
-| shadowDepthCCW           | var     | int            | The pixel's shadow-volume ccw depth           |
-| flags                    | var     | int            | The pixel's filter flags                      |
-| pixelCoord               | var     | vec2           | The pixel's coord after pixelation            |
-
 ## Contributions
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
@@ -350,11 +219,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 3. Task done one by one
 
 [CORE TASKS]
-1. Add sun flares (as external demo, for wipeout-like project)
-3. Add spot-light
-
-[DEADLINES]
-a. CORE_TASKS.1.2: 01 Juin
+1. Add spot-light
 ```
 
 ## License 
