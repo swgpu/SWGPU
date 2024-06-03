@@ -19,7 +19,7 @@ export class ShipComponent extends DNAComponent {
     this.speed = 0.5;
     this.jss = new Gfx2SpriteJSS();
     this.jss.setPosition(0, 280 - 32);
-    this.jss.setTexture(gfx2TextureManager.getTexture('./tutorials/isolation/ship.png'));
+    this.jss.setTexture(gfx2TextureManager.getTexture('./templates/two-dim/ship.png'));
   }
 }
 
@@ -30,7 +30,7 @@ export class ShipSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number): void {
-    const ship = dnaManager.getComponent(eid, 'Ship') as ShipComponent;
+    const ship = dnaManager.getComponent<ShipComponent>(eid, 'Ship');
     let mx = 0;
 
     if (inputManager.isActiveAction('LEFT')) {
@@ -48,7 +48,7 @@ export class ShipSystem extends DNASystem {
   }
 
   onEntityDraw(eid: number): void {
-    const ship = dnaManager.getComponent(eid, 'Ship') as ShipComponent;
+    const ship = dnaManager.getComponent<ShipComponent>(eid, 'Ship');
     ship.jss.draw();    
   }
 
@@ -57,7 +57,7 @@ export class ShipSystem extends DNASystem {
       return;
     }
 
-    const ship = dnaManager.getComponent(eid, 'Ship') as ShipComponent;
+    const ship = dnaManager.getComponent<ShipComponent>(eid, 'Ship');
     const bulletEnts = dnaManager.findEntities('Bullet');
 
     if (bulletEnts.length >= MAX_BULLETS) {

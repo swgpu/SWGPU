@@ -77,7 +77,7 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
    * @param {number} vertexCount - The number of vertices.
    * @param {mat4} matrix - The transformation matrix.
    */
-  drawVertices(vertices: Array<number>, vertexCount: number, matrix: mat4): void {
+  drawVertices(vertices: Array<number>, vertexCount: number, matrix: mat4 = UT.MAT4_IDENTITY()): void {
     this.commands.push({
       vertices: new Float32Array(vertices),
       vertexCount: vertexCount,

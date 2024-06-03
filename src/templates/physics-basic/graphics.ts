@@ -4,33 +4,33 @@ import { Gfx3MeshJAM } from '@lib/gfx3_mesh/gfx3_mesh_jam';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
-import { CharacterComponent } from './character';
+import { EntityComponent } from './entity';
 // ---------------------------------------------------------------------------------------
 
-export class CharacterGraphicsComponent extends DNAComponent {
+export class GraphicsComponent extends DNAComponent {
   jam: Gfx3MeshJAM;
 
   constructor() {
-    super('CharacterGraphics');
+    super('Graphics');
     this.jam = new Gfx3MeshJAM();
   }
 }
 
-export class CharacterGraphicsSystem extends DNASystem {
+export class GraphicsSystem extends DNASystem {
   constructor() {
     super();
-    super.addRequiredComponentTypename('CharacterGraphics');
-    super.addRequiredComponentTypename('Character');
+    super.addRequiredComponentTypename('Graphics');
+    super.addRequiredComponentTypename('Entity');
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const graphics = dnaManager.getComponent(eid, 'CharacterGraphics') as CharacterGraphicsComponent;
-    const character = dnaManager.getComponent(eid, 'Character') as CharacterComponent;
+    const graphics = dnaManager.getComponent<GraphicsComponent>(eid, 'Graphics');
+    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
 
-    graphics.jam.setRotation(0, character.rotation, 0);
-    graphics.jam.setPosition(character.x, character.y, character.z); 
+    graphics.jam.setRotation(0, entity.rotation, 0);
+    graphics.jam.setPosition(entity.x, entity.y, entity.z); 
 
-    if (UT.VEC3_LENGTH(character.velocity) > 0.1) {
+    if (UT.VEC3_LENGTH(entity.velocity) > 0) {
       graphics.jam.play('RUN', true, true);
     }
     else {
@@ -41,7 +41,7 @@ export class CharacterGraphicsSystem extends DNASystem {
   }
 
   onEntityDraw(eid: number): void {
-    const graphics = dnaManager.getComponent(eid, 'CharacterGraphics') as CharacterGraphicsComponent;
+    const graphics = dnaManager.getComponent<GraphicsComponent>(eid, 'Graphics');
     graphics.jam.draw();
   }
 }

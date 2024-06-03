@@ -4,22 +4,22 @@ import { UT } from '@lib/core/utils';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
-import { CharacterComponent } from './character';
-import { CharacterCameraComponent } from './character_camera';
+import { EntityComponent } from './entity';
+import { CameraComponent } from './camera';
 // ---------------------------------------------------------------------------------------
 
-export class CharacterInputComponent extends DNAComponent {
+export class InputComponent extends DNAComponent {
   constructor() {
-    super('CharacterInput');
+    super('Input');
   }
 }
 
-export class CharacterInputSystem extends DNASystem {
+export class InputSystem extends DNASystem {
   constructor() {
     super();
-    super.addRequiredComponentTypename('CharacterInput');
-    super.addRequiredComponentTypename('CharacterCamera');
-    super.addRequiredComponentTypename('Character');
+    super.addRequiredComponentTypename('Input');
+    super.addRequiredComponentTypename('Camera');
+    super.addRequiredComponentTypename('Entity');
   }
 
   onEntityUpdate(ts: number, eid: number) {
@@ -46,18 +46,19 @@ export class CharacterInputSystem extends DNASystem {
       moving = true;
     }
 
-    const character = dnaManager.getComponent(eid, 'Character') as CharacterComponent;
+    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
+    let mx = 0;
+    let mz = 0;
 
     if (moving) {
-      const camera = dnaManager.getComponent(eid, 'CharacterCamera') as CharacterCameraComponent;
+      const camera = dnaManager.getComponent<CameraComponent>(eid, 'Camera');
       const phi = camera.rec.getPhi();
-      const x = Math.cos(phi + moveAngle);
-      const z = Math.sin(phi + moveAngle);      
-      character.moveDir = [-x, 0, -z];
-      character.rotation = UT.VEC2_ANGLE([-x, -z]);
+      mx = -Math.cos(phi + moveAngle) * entity.speed * (ts / 1000);
+      mz = -Math.sin(phi + moveAngle) * entity.speed * (ts / 1000);
+      entity.rotation = UT.VEC2_ANGLE([mx, mz]);  
     }
-    else {
-      character.moveDir = [0, 0, 0];
-    }
+
+    entity.velocity[0] = mx;
+    entity.velocity[2] = mz;
   }
 }

@@ -14,7 +14,7 @@ export class BulletComponent extends DNAComponent {
   constructor() {
     super('Bullet');
     this.jss = new Gfx2SpriteJSS();
-    this.jss.setTexture(gfx2TextureManager.getTexture('./tutorials/isolation/bullet.png'));
+    this.jss.setTexture(gfx2TextureManager.getTexture('./templates/two-dim/bullet.png'));
   }
 }
 
@@ -25,7 +25,7 @@ export class BulletSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number): void {
-    const bullet = dnaManager.getComponent(eid, 'Bullet') as BulletComponent;
+    const bullet = dnaManager.getComponent<BulletComponent>(eid, 'Bullet');
 
     bullet.jss.translate(0, -0.6);
     if (bullet.jss.getPositionY() < -300) {
@@ -33,8 +33,8 @@ export class BulletSystem extends DNASystem {
       return;
     }
 
-    for (const asteroidEnt of dnaManager.findEntities('Asteroid')) {
-      const asteroid = dnaManager.getComponent(asteroidEnt, 'Asteroid') as AsteroidComponent;
+    for (const asteroidEid of dnaManager.findEntities('Asteroid')) {
+      const asteroid = dnaManager.getComponent<AsteroidComponent>(asteroidEid, 'Asteroid');
       const bulletRect = bullet.jss.getWorldBoundingRect();
       const asteroidRect = asteroid.jss.getWorldBoundingRect();
 
@@ -43,7 +43,7 @@ export class BulletSystem extends DNASystem {
           dnaManager.removeEntity(eid);
         }
 
-        dnaManager.removeEntity(asteroidEnt);
+        dnaManager.removeEntity(asteroidEid);
         eventManager.emit(this, 'E_ASTEROID_DESTROYED');
       }
     }
@@ -52,7 +52,7 @@ export class BulletSystem extends DNASystem {
   }
 
   onEntityDraw(eid: number): void {
-    const bulletCmp = dnaManager.getComponent(eid, 'Bullet') as BulletComponent;
+    const bulletCmp = dnaManager.getComponent<BulletComponent>(eid, 'Bullet');
     bulletCmp.jss.draw();
   }
 }

@@ -88,8 +88,10 @@ class Room {
 
     this.motions = [];
     for (let obj of json['Motions']) {
-      let mover = new Motion(obj['Points'], obj['Speed'], obj['Looped']);
-      this.motions.push(mover);
+      const motion = new Motion();
+      motion.setSpeed(CHAR_SPEED);
+      motion.setPoints(obj['Points']);
+      this.motions.push(motion);
     }
 
     this.triggers = [];
@@ -292,7 +294,7 @@ class Room {
   async $modelPlayMotion(motionIndex, modelIndex) {
     this.scriptMachine.setEnabled(false);
     this.motionModelMapping.set(motionIndex, modelIndex);
-    this.motions[motionIndex].run(CHAR_SPEED);
+    this.motions[motionIndex].run();
 
     await eventManager.wait(this.motions[motionIndex], 'E_FINISHED');
     this.motionModelMapping.delete(motionIndex);

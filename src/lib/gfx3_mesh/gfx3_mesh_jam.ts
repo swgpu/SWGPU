@@ -2,7 +2,7 @@ import { eventManager } from '../core/event_manager';
 import { UT } from '../core/utils';
 import { Poolable } from '../core/object_pool';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
-import { Gfx3Mesh } from './gfx3_mesh';
+import { Gfx3Mesh, MeshBuild } from './gfx3_mesh';
 import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_mesh_shader';
 
 interface JAMFrame {
@@ -29,6 +29,7 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
   currentAnimation: JAMAnimation | null;
   currentFrameIndex: number;
   frameProgress: number;
+  geos: Array<MeshBuild>;
   boundingBoxes: Array<Gfx3BoundingBox>;
 
   constructor() {
@@ -41,6 +42,7 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
     this.currentAnimation = null;
     this.currentFrameIndex = 0;
     this.frameProgress = 0;
+    this.geos = [];
     this.boundingBoxes = [];
   }
 
@@ -64,13 +66,10 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
       const textureCoords = obj['TextureCoords'] ?? json['TextureCoords'];
       const colors = obj['Colors'] ?? json['Colors'];
       const normals = obj['Normals'] ?? json['Normals'];
-      this.frames.push({
-        vertices: Gfx3Mesh.buildVertices(json['NumVertices'], vertices, textureCoords, colors, normals)
-      });
-
-      this.boundingBoxes.push(
-        Gfx3BoundingBox.createFromVertices(vertices, 3)
-      );
+      const geo = Gfx3Mesh.buildVertices(json['NumVertices'], vertices, textureCoords, colors, normals);
+      this.geos.push(geo);
+      this.frames.push({ vertices: geo.vertices });
+      this.boundingBoxes.push(Gfx3BoundingBox.createFromVertices(vertices, 3));
     }
 
     this.animations = [];
@@ -87,6 +86,7 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
     this.setVertices(this.frames[0].vertices);
     this.endVertices();
 
+    this.geo = this.geos[0];
     this.boundingBox = this.boundingBoxes[0];
     this.numVertices = json['NumVertices'];
     this.currentAnimation = null;

@@ -36,6 +36,11 @@ GAME_PAD_KEY_MAPPING.set('PadRight', '15');
  * It emit 'E_MOUSE_MOVE' with data { movementX, movementY }
  * It emit 'E_MOUSE_DRAG' with data { movementX, movementY }
  * It emit 'E_MOUSE_WHEEL' with data { delta }
+ * It emit 'E_POINTER_LOCK_CHANGED' with data { lockChanged }
+ * It emit 'E_GAMEPAD_CONNECTED' with data { id }
+ * It emit 'E_GAMEPAD_DISCONNECTED' with data { id }
+ * It emit 'E_GAMEPAD_REMOVED' with data { id }
+ * 
  * Default actions table:
  * ■ ACTION => KEYBOARD => GAMEPAD
  * ■ OK => Enter => 0
@@ -51,7 +56,7 @@ class InputManager {
   actionmap: Map<string, boolean>;
   actionRegister: Map<string, Action>;
   pads: Array<Pad>;
-  padsInterval: number | undefined;
+  padsInterval: NodeJS.Timeout | number | undefined;
   mouseDown: boolean;
   mousePosition: vec2;
   mouseWheel: number;
@@ -207,6 +212,18 @@ class InputManager {
   }
 
   /**
+   * Returns a pad axis value or zero if not found.
+   * 
+   * @param {number} index - The index of the pad.
+   * @param {number} axis - The index of the pad.
+   */
+  getPadAxis(index: number, axis: number): number {
+    const pad = this.pads.find(p => p.index == index);
+    if (!pad) return 0;
+    return pad.axes[axis];
+  }
+
+  /**
    * Removes a pad.
    * 
    * @param {string} id - The unique identifier of the pad
@@ -217,6 +234,8 @@ class InputManager {
       clearInterval(this.padsInterval);
       this.padsInterval = undefined;
     }
+
+    eventManager.emit(this, 'E_GAMEPAD_REMOVED', { id: id });
   }
 
   $addPad(pad: Pad): void {
@@ -304,14 +323,17 @@ class InputManager {
 
     if (document.pointerLockElement == document.body) {
       this.pointerLockCaptured = true;
+      eventManager.emit(this, 'E_POINTER_LOCK_CHANGED', { lockCaptured: true });
     }
     else {
       this.pointerLockCaptured = false;
+      eventManager.emit(this, 'E_POINTER_LOCK_CHANGED', { lockCaptured: false });
     }
   }
 
   $handleGamePadDisconnected(e: GamepadEvent): void {
     this.removePad(e.gamepad.id);
+    eventManager.emit(this, 'E_GAMEPAD_DISCONNECTED', { id: e.gamepad.id });
   }
 
   $handleGamePadConnected(e: GamepadEvent): void {
@@ -329,6 +351,7 @@ class InputManager {
     }
 
     this.$addPad(pad);
+    eventManager.emit(this, 'E_GAMEPAD_CONNECTED', { id: e.gamepad.id });
   }
 
   $updatePadsStatus(): void {

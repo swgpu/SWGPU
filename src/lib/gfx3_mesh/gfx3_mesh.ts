@@ -18,6 +18,15 @@ export interface Group {
   vertexCount: number;
 };
 
+export interface MeshBuild {
+  vertices: Array<number>;
+  indexes: Array<number>;
+  coords: Array<number>;
+  texcoords?: Array<number>;
+  colors?: Array<number>;
+  normals?: Array<number>;
+};
+
 /**
  * A 3D base mesh object.
  */
@@ -25,12 +34,14 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
   shadowCasting: boolean;
   billboard: boolean;
   material: Gfx3Material;
+  geo: MeshBuild;
 
   constructor() {
     super(SHADER_VERTEX_ATTR_COUNT);
     this.shadowCasting = false;
     this.billboard = false;
     this.material = new Gfx3Material({});
+    this.geo = { vertices: [], indexes: [], coords: [] };
   }
 
   /**
@@ -43,8 +54,9 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
    * @param [normals] - A list of vertex normal.
    * @param [groups] - A list of vertex group.
    */
-  static buildVertices(vertexCount: number, coords: Array<number>, texcoords?: Array<number>, colors?: Array<number>, normals?: Array<number>, groups?: Array<Group>): Array<number> {
+  static buildVertices(vertexCount: number, coords: Array<number>, texcoords?: Array<number>, colors?: Array<number>, normals?: Array<number>, groups?: Array<Group>): MeshBuild {
     const vertices = new Array<number>();
+    const indexes = new Array<number>();
     const finalCoords = new Array<vec3>();
     const finalUVs = new Array<vec2>();
     const finalColors = new Array<vec3>();
@@ -131,6 +143,8 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
           finalTangsByGroup[f.smoothGroup][f.v[1]] = finalTangsByGroup[f.smoothGroup][f.v[1]] ? UT.VEC3_ADD(finalTangsByGroup[f.smoothGroup][f.v[1]], ftang) : ftang;
           finalTangsByGroup[f.smoothGroup][f.v[2]] = finalTangsByGroup[f.smoothGroup][f.v[2]] ? UT.VEC3_ADD(finalTangsByGroup[f.smoothGroup][f.v[2]], ftang) : ftang;
         }
+
+        indexes.push(f.v[0], f.v[1], f.v[2]);
       }
     }
 
@@ -149,7 +163,14 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
       }
     }
 
-    return vertices;
+    return {
+      vertices: vertices,
+      indexes: indexes,
+      coords: coords,
+      texcoords: texcoords,
+      colors: colors,
+      normals: normals      
+    };
   }
 
   /**
@@ -233,6 +254,13 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
    */
   getMaterial(): Gfx3Material {
     return this.material;
+  }
+
+  /**
+   * Returns all geometry informations.
+   */
+  getGeo(): MeshBuild {
+    return this.geo;
   }
 
   /**
