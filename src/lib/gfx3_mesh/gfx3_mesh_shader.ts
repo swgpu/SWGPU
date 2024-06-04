@@ -1,5 +1,6 @@
 export const SHADER_VERTEX_ATTR_COUNT = 17;
 export const MAX_POINT_LIGHTS = 64;
+export const MAX_SPOT_LIGHTS = 16;
 export const MAX_DECALS = 64;
 
 export const PIPELINE_DESC: any = {
@@ -233,6 +234,17 @@ struct DirLight {
   MESH_ID: f32
 }
 
+struct SpotLight {
+  POSITION: vec3<f32>,
+  DIRECTION: vec3<f32>,
+  AMBIENT: vec3<f32>,
+  DIFFUSE: vec3<f32>,
+  SPECULAR: vec3<f32>,
+  ATTEN: vec3<f32>,
+  CUTOFF: f32,
+  MESH_ID: f32
+}
+
 struct Fog {
   ENABLED: f32,
   NEAR: f32,
@@ -260,6 +272,10 @@ struct Decal {
 @group(0) @binding(4) var<uniform> POINT_LIGHTS: array<PointLight, ${MAX_POINT_LIGHTS}>;
 @group(0) @binding(5) var<uniform> DECAL_COUNT: u32;
 @group(0) @binding(6) var<uniform> DECALS: array<Decal, ${MAX_DECALS}>;
+
+@group(0) @binding(7) var<uniform> SPOT_LIGHT_COUNT: u32;
+@group(0) @binding(8) var<uniform> SPOT_LIGHTS: array<SpotLight, ${MAX_SPOT_LIGHTS}>;
+
 @group(0) @binding(8) var DECAL_ATLAS_TEXTURE: texture_2d<f32>;
 @group(0) @binding(9) var DECAL_ATLAS_SAMPLER: sampler;
 @group(0) @binding(10) var SHADOW_MAP_TEXTURE: texture_depth_2d;
@@ -549,6 +565,13 @@ fn CalcPointLight(index: u32, normal: vec3<f32>, fragPos: vec3<f32>, textureUV: 
   var color = CalcLightInternal(lightDir, POINT_LIGHTS[index].AMBIENT, POINT_LIGHTS[index].DIFFUSE, POINT_LIGHTS[index].SPECULAR, POINT_LIGHTS[index].INTENSITY, normal, fragPos, textureUV, shadow);
   var attenuation = POINT_LIGHTS[index].ATTEN[0] + POINT_LIGHTS[index].ATTEN[1] * distance + POINT_LIGHTS[index].ATTEN[2] * distance * distance;
   return color / attenuation;
+}
+
+// *****************************************************************************************************************
+// CALC SPOT LIGHT
+// *****************************************************************************************************************
+fn CalcSpotLight(index: u32, normal: vec3<f32>, fragPos: vec3<f32>, textureUV: vec2<f32>, shadow: f32) -> vec4<f32>
+{
 }
 
 // *****************************************************************************************************************
