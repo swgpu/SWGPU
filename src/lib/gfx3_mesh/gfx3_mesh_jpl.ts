@@ -5,7 +5,6 @@ import { Gfx3Transformable } from '../gfx3/gfx3_transformable';
  * A 3D point light.
  */
 class Gfx3MeshJPL extends Gfx3Transformable {
-  ambient: vec3;
   diffuse: vec3;
   specular: vec3;
   intensity: number;
@@ -16,7 +15,6 @@ class Gfx3MeshJPL extends Gfx3Transformable {
 
   constructor() {
     super();
-    this.ambient = [0.3, 0.3, 0.3];
     this.diffuse = [0.7, 0.7, 0.7];
     this.specular = [1.0, 1.0, 1.0];
     this.intensity = 1.0;
@@ -40,7 +38,6 @@ class Gfx3MeshJPL extends Gfx3Transformable {
     }
 
     this.position = json['Position'];
-    this.ambient = json['AmbientColor'];
     this.diffuse = json['DiffuseColor'];
     this.specular = json['SpecularColor'];
     this.intensity = json['Intensity'];
@@ -56,7 +53,6 @@ class Gfx3MeshJPL extends Gfx3Transformable {
   draw(): void {
     gfx3MeshRenderer.drawPointLight(
       this.position,
-      this.ambient,
       this.diffuse,
       this.specular,
       this.intensity,
@@ -65,19 +61,6 @@ class Gfx3MeshJPL extends Gfx3Transformable {
       this.linear,
       this.exp
     );
-  }
-
-  /**
-   * Set ambient color.
-   * 
-   * @param {number} r - The red channel.
-   * @param {number} g - The green channel.
-   * @param {number} b - The blue channel.
-   */
-  setAmbient(r: number, g: number, b: number): void {
-    this.ambient[0] = r;
-    this.ambient[1] = g;
-    this.ambient[2] = b;
   }
 
   /**
@@ -150,13 +133,6 @@ class Gfx3MeshJPL extends Gfx3Transformable {
    */
   setExp(exp: number): void {
     this.exp = exp;
-  }
-
-  /**
-   * Returns the ambient color.
-   */
-  getAmbient(): vec3 {
-    return this.ambient;
   }
 
   /**

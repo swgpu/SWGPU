@@ -15,8 +15,28 @@ interface MATAnimation {
   frameDuration: number;
 };
 
+interface MATCustom {
+  S00?: number;
+  S01?: number;
+  S02?: number;
+  S03?: number;
+  S10?: number;
+  S11?: number;
+  S12?: number;
+  S13?: number;
+  S20?: number;
+  S21?: number;
+  S22?: number;
+  S23?: number;
+  S30?: number;
+  S31?: number;
+  S32?: number;
+  S33?: number;
+};
+
 interface MATOptions {
   animations?: Array<MATAnimation>;
+  id?: number;
   opacity?: number;
   normalIntensity?: number;
   lightning?: boolean;
@@ -42,8 +62,8 @@ interface MATOptions {
   shadowEnabled?: boolean;
   shininess?: number;
   emissiveFactor?: number;
-  toonBlending?: boolean;
-  customs?: mat4;
+  toonBlending?: number;
+  customs?: MATCustom;
 };
 
 /**
@@ -111,40 +131,41 @@ class Gfx3Material {
     this.colors[13] = options.specular ? options.specular[1] : 0.0;
     this.colors[14] = options.specular ? options.specular[2] : 0.0;
     this.colors[15] = 0.0;
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 33);
-    this.params[0] = options.opacity ?? 1.0;
-    this.params[1] = options.normalIntensity ?? 1.0;
-    this.params[2] = options.lightning ? 1.0 : 0.0;
-    this.params[3] = options.texture ? 1.0 : 0.0;
-    this.params[4] = options.displacementMap ? 1.0 : 0.0;
-    this.params[5] = options.displacementMapFactor ?? 0.0;
-    this.params[6] = options.diffuseMap ? 1.0 : 0.0;
-    this.params[7] = options.specularMap ? 1.0 : 0.0;
-    this.params[8] = options.emissiveMap ? 1.0 : 0.0;
-    this.params[9] = options.normalMap ? 1.0 : 0.0;
-    this.params[10] = options.envMap ? 1.0 : 0.0;
-    this.params[11] = options.toonMap ? 1.0 : 0.0;
-    this.params[12] = options.decalEnabled ? 1.0 : 0.0;
-    this.params[13] = options.shadowEnabled ? 1.0 : 0.0;
-    this.params[14] = options.shininess ?? 0.0;
-    this.params[15] = options.emissiveFactor ?? 1.0;
-    this.params[16] = options.toonBlending ? 1.0 : 0.0;
-    this.params[17] = options.customs ? options.customs[0] : 0.0;
-    this.params[18] = options.customs ? options.customs[1] : 0.0;
-    this.params[19] = options.customs ? options.customs[2] : 0.0;
-    this.params[20] = options.customs ? options.customs[3] : 0.0;
-    this.params[21] = options.customs ? options.customs[4] : 0.0;
-    this.params[22] = options.customs ? options.customs[5] : 0.0;
-    this.params[23] = options.customs ? options.customs[6] : 0.0;
-    this.params[24] = options.customs ? options.customs[7] : 0.0;
-    this.params[25] = options.customs ? options.customs[8] : 0.0;
-    this.params[26] = options.customs ? options.customs[9] : 0.0;
-    this.params[27] = options.customs ? options.customs[10] : 0.0;
-    this.params[28] = options.customs ? options.customs[11] : 0.0;
-    this.params[29] = options.customs ? options.customs[12] : 0.0;
-    this.params[30] = options.customs ? options.customs[13] : 0.0;
-    this.params[31] = options.customs ? options.customs[14] : 0.0;
-    this.params[32] = options.customs ? options.customs[15] : 0.0;
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 34);
+    this.params[0] = options.id ?? 0;
+    this.params[1] = options.opacity ?? 1.0;
+    this.params[2] = options.normalIntensity ?? 1.0;
+    this.params[3] = options.lightning ? 1.0 : 0.0;
+    this.params[4] = options.texture ? 1.0 : 0.0;
+    this.params[5] = options.displacementMap ? 1.0 : 0.0;
+    this.params[6] = options.displacementMapFactor ?? 0.0;
+    this.params[7] = options.diffuseMap ? 1.0 : 0.0;
+    this.params[8] = options.specularMap ? 1.0 : 0.0;
+    this.params[9] = options.emissiveMap ? 1.0 : 0.0;
+    this.params[10] = options.normalMap ? 1.0 : 0.0;
+    this.params[11] = options.envMap ? 1.0 : 0.0;
+    this.params[12] = options.toonMap ? 1.0 : 0.0;
+    this.params[13] = options.decalEnabled ? 1.0 : 0.0;
+    this.params[14] = options.shadowEnabled ? 1.0 : 0.0;
+    this.params[15] = options.shininess ?? 0.0;
+    this.params[16] = options.emissiveFactor ?? 1.0;
+    this.params[17] = options.toonBlending ?? 1.0;
+    this.params[18] = options.customs && options.customs.S00 ? options.customs.S00 : 0.0;
+    this.params[19] = options.customs && options.customs.S01 ? options.customs.S01 : 0.0;
+    this.params[20] = options.customs && options.customs.S02 ? options.customs.S02 : 0.0;
+    this.params[21] = options.customs && options.customs.S03 ? options.customs.S03 : 0.0;
+    this.params[22] = options.customs && options.customs.S10 ? options.customs.S10 : 0.0;
+    this.params[23] = options.customs && options.customs.S11 ? options.customs.S11 : 0.0;
+    this.params[24] = options.customs && options.customs.S12 ? options.customs.S12 : 0.0;
+    this.params[25] = options.customs && options.customs.S13 ? options.customs.S13 : 0.0;
+    this.params[26] = options.customs && options.customs.S20 ? options.customs.S20 : 0.0;
+    this.params[27] = options.customs && options.customs.S21 ? options.customs.S21 : 0.0;
+    this.params[28] = options.customs && options.customs.S22 ? options.customs.S22 : 0.0;
+    this.params[29] = options.customs && options.customs.S23 ? options.customs.S23 : 0.0;
+    this.params[30] = options.customs && options.customs.S30 ? options.customs.S30 : 0.0;
+    this.params[31] = options.customs && options.customs.S31 ? options.customs.S31 : 0.0;
+    this.params[32] = options.customs && options.customs.S32 ? options.customs.S32 : 0.0;
+    this.params[33] = options.customs && options.customs.S33 ? options.customs.S33 : 0.0;
     this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 6);
     this.toonLightDir = this.grp2.setFloat(3, 'MAT_TOON_LIGHT_DIR', 3);
     this.toonLightDir[0] = options.toonLightDir ? options.toonLightDir[0] : 0.0;
@@ -206,6 +227,7 @@ class Gfx3Material {
 
     return new Gfx3Material({
       animations: animations,
+      id: json['Id'],
       opacity: json['Opacity'],
       normalIntensity: json['NormalIntensity'],
       lightning: json['Lightning'],
@@ -325,7 +347,7 @@ class Gfx3Material {
    * @param {number} opacity - The opacity (from 0 to 1).
    */
   setOpacity(opacity: number): void {
-    this.params[0] = opacity;
+    this.params[1] = opacity;
     this.dataChanged = true;
   }
 
@@ -335,7 +357,7 @@ class Gfx3Material {
    * @param {number} normalIntensity - The normal intensity.
    */
   setNormalIntensity(normalIntensity: number): void {
-    this.params[1] = normalIntensity;
+    this.params[2] = normalIntensity;
     this.dataChanged = true;
   }
 
@@ -345,7 +367,7 @@ class Gfx3Material {
    * @param {boolean} lightning - Indicates if light is applied or not to the material.
    */
   setLightning(lightning: boolean): void {
-    this.params[2] = lightning ? 1.0 : 0.0;
+    this.params[3] = lightning ? 1.0 : 0.0;
     this.dataChanged = true;
   }
 
@@ -433,7 +455,7 @@ class Gfx3Material {
     this.texture = texture;
     this.textureScrollAngle = angle;
     this.textureScrollRate = rate;
-    this.params[3] = 1;
+    this.params[4] = 1;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -454,8 +476,8 @@ class Gfx3Material {
     this.displacementMap = displacementMap;
     this.displacementMapScrollAngle = angle;
     this.displacementMapScrollRate = rate;
-    this.params[4] = 1;
-    this.params[5] = factor;
+    this.params[5] = 1;
+    this.params[6] = factor;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -467,7 +489,7 @@ class Gfx3Material {
    */
   setDiffuseMap(diffuseMap: Gfx3Texture): void {
     this.diffuseMap = diffuseMap;
-    this.params[6] = 1;
+    this.params[7] = 1;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -479,7 +501,7 @@ class Gfx3Material {
    */
   setSpecularMap(specularMap: Gfx3Texture): void {
     this.specularMap = specularMap;
-    this.params[7] = 1;
+    this.params[8] = 1;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -491,7 +513,7 @@ class Gfx3Material {
    */
   setEmissiveMap(emissiveMap: Gfx3Texture): void {
     this.emissiveMap = emissiveMap;
-    this.params[8] = 1;
+    this.params[9] = 1;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -503,7 +525,7 @@ class Gfx3Material {
    */
   setNormalMap(normalMap: Gfx3Texture): void {
     this.normalMap = normalMap;
-    this.params[9] = 1;
+    this.params[10] = 1;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -515,7 +537,7 @@ class Gfx3Material {
    */
   setEnvMap(envMap: Gfx3Texture): void {
     this.envMap = envMap;
-    this.params[10] = 1;
+    this.params[11] = 1;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -527,7 +549,7 @@ class Gfx3Material {
    */
   setToonMap(toonMap: Gfx3Texture): void {
     this.toonMap = toonMap;
-    this.params[11] = 1;
+    this.params[12] = 1;
     this.texturesChanged = true;
     this.dataChanged = true;
   }
@@ -538,7 +560,7 @@ class Gfx3Material {
    * @param {boolean} enabled - Indicating whether decals should be enabled or disabled.
    */
   enableDecal(enabled: boolean): void {
-    this.params[12] = enabled ? 1.0 : 0.0;
+    this.params[13] = enabled ? 1.0 : 0.0;
     this.dataChanged = true;
   }
 
@@ -548,7 +570,7 @@ class Gfx3Material {
    * @param {boolean} enabled - Indicating whether the shadow should be enabled or disabled.
    */
   enableShadow(enabled: boolean): void {
-    this.params[13] = enabled ? 1.0 : 0.0;
+    this.params[14] = enabled ? 1.0 : 0.0;
     this.dataChanged = true;
   }
 
@@ -558,7 +580,7 @@ class Gfx3Material {
    * @param {number} shininess - The shininess/specularity value (0-1)
    */
   setShininess(shininess: number): void {
-    this.params[14] = shininess;
+    this.params[15] = shininess;
     this.dataChanged = true;
   }
 
@@ -568,7 +590,7 @@ class Gfx3Material {
    * @param {number} emissiveFactor - The factor of emission color (0-1)
    */
   setEmissiveFactor(emissiveFactor: number): void {
-    this.params[15] = emissiveFactor;
+    this.params[16] = emissiveFactor;
     this.dataChanged = true;
   }
 
@@ -578,7 +600,7 @@ class Gfx3Material {
    * @param {boolean} toonBlending - Enable or disable the blending between texture and toon texture.
    */
   setToonBlending(toonBlending: boolean): void {
-    this.params[16] = toonBlending ? 1.0 : 0.0;
+    this.params[17] = toonBlending ? 1.0 : 0.0;
     this.dataChanged = true;
   }
 
@@ -590,7 +612,7 @@ class Gfx3Material {
    * @param {number} value - Value of custom param.
    */
   setCustomParam(i: number, j: number, value: number): void {
-    this.params[16 + (i * 4) + j] = value;
+    this.params[18 + (i * 4) + j] = value;
     this.dataChanged = true;
   }
 

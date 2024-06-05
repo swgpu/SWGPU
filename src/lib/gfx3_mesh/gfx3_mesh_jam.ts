@@ -134,9 +134,8 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
         offset++;
       }
 
-      this.frames.push({
-        vertices: Gfx3Mesh.buildVertices(numVertices, vertices, textureCoords, undefined, normals)
-      });
+      const geo = Gfx3Mesh.buildVertices(numVertices, vertices, textureCoords, undefined, normals);
+      this.frames.push({ vertices: geo.vertices });
 
       this.boundingBoxes.push(
         Gfx3BoundingBox.createFromVertices(vertices, 3)

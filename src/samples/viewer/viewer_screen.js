@@ -57,9 +57,10 @@ class ViewerScreen extends Screen {
     this.shadow.draw();
     this.mesh.draw();
     this.skybox.draw();
-    gfx3MeshRenderer.drawPointLight([0, 30, 0], [1, 1, 1], [1, 0, 0], [0, 0, 0]);
-    gfx3MeshRenderer.drawPointLight([30, 0, 0], [0, 0, 0], [0, 1, 0], [0, 0, 0]);
-    gfx3MeshRenderer.drawPointLight([-30, 0, 0], [0, 0, 0], [0, 0, 1], [0, 0, 0]);
+    gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
+    gfx3MeshRenderer.drawPointLight([0, 30, 0], [1, 0, 0], [0, 0, 0]);
+    gfx3MeshRenderer.drawPointLight([30, 0, 0], [0, 1, 0], [0, 0, 0]);
+    gfx3MeshRenderer.drawPointLight([-30, 0, 0], [0, 0, 1], [0, 0, 0]);
     gfx3DebugRenderer.drawGrid(UT.MAT4_ROTATE_X(Math.PI * 0.5), 20, 1);
   }
 

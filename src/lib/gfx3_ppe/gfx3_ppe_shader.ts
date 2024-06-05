@@ -1,5 +1,9 @@
 export const SHADER_VERTEX_ATTR_COUNT = 4;
 
+const WINDOW = window as any;
+const VERT_EXT = WINDOW.__PPE_VERT_EXT__ ? WINDOW.__PPE_VERT_EXT__ : '';
+const FRAG_EXT = WINDOW.__PPE_FRAG_EXT__ ? WINDOW.__PPE_FRAG_EXT__ : '';
+
 export const PIPELINE_DESC: any = {
   label: 'PPE pipeline',
   layout: 'auto',
@@ -29,7 +33,7 @@ export const PIPELINE_DESC: any = {
   }
 };
 
-export const VERTEX_SHADER = (ext: string) => /* wgsl */`
+export const VERTEX_SHADER = /* wgsl */`
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
   @location(0) FragUV: vec2<f32>
@@ -43,11 +47,11 @@ fn main(
   var output: VertexOutput;
   output.Position = vec4(Position, 0.0, 1.0);
   output.FragUV = TexUV;
-  ${ext}
+  ${VERT_EXT}
   return output;
 }`;
 
-export const FRAGMENT_SHADER = (ext: string) => /* wgsl */`
+export const FRAGMENT_SHADER = /* wgsl */`
 struct Params {
   ENABLED: f32,
   PIXELATION_ENABLED: f32,
@@ -171,7 +175,7 @@ fn main(
     }
   }
 
-  ${ext}
+  ${FRAG_EXT}
   return outputColor;
 }
 
