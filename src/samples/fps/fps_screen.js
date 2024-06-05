@@ -32,7 +32,8 @@ class FPSScreen extends Screen {
   }
 
   draw() {
-    gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [1, 1, 1], [0, 0, 0]);
+    gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
+    gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [0, 0, 0]);
     this.map.mesh.draw();
     this.player.draw();
   }

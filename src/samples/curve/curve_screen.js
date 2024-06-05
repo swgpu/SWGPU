@@ -59,7 +59,8 @@ class CurveScreen extends Screen {
 
   draw() {
     gfx3DebugRenderer.drawVertices(this.curveVertices, this.curveVertexCount);
-    gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [1, 1, 1], [0, 0, 0]);
+    gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
+    gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [0, 0, 0]);
     this.obj.draw();
     this.skySphere.draw();
   }

@@ -76,8 +76,9 @@ class Gfx3MeshJSM extends Gfx3Mesh implements Poolable<Gfx3MeshJSM> {
       offset++;
     }
 
+    const geo = Gfx3Mesh.buildVertices(numVertices, vertices, textureCoords, colors, normals);
     this.beginVertices(numVertices);
-    this.setVertices(Gfx3Mesh.buildVertices(numVertices, vertices, textureCoords, colors, normals));
+    this.setVertices(geo.vertices);
     this.endVertices();
 
     this.boundingBox = Gfx3BoundingBox.createFromVertices(vertices, 3);

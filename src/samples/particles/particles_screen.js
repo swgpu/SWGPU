@@ -42,9 +42,10 @@ class ParticlesScreen extends Screen {
     this.floor.draw();
     this.particles0.draw();
     this.particles1.draw();
-    gfx3MeshRenderer.drawDirLight([0, -1, 0.2], [1, 1, 1], [0.8, 0.8, 0.8], [0.8, 0.8, 0.8]);
-    gfx3MeshRenderer.drawPointLight([Math.cos(this.colFac * 0.2) * 45.0, 18, Math.cos(this.colFac * 0.2) * 45.0], [0, 0, 0], [0.8, 0.8, 0.4], [0.8, 0.8, 0.4]);
-    gfx3MeshRenderer.drawPointLight([Math.sin(this.colFac * 0.2) * 45.0, 18, Math.sin(this.colFac * 0.2) * 45.0], [0, 0, 0], [0.8, 0.8, 0.4], [0.8, 0.8, 0.4]);
+    gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
+    gfx3MeshRenderer.drawDirLight([0, -1, 0.2], [0.8, 0.8, 0.8], [0.8, 0.8, 0.8]);
+    gfx3MeshRenderer.drawPointLight([Math.cos(this.colFac * 0.2) * 45.0, 18, Math.cos(this.colFac * 0.2) * 45.0], [0.8, 0.8, 0.4], [0.8, 0.8, 0.4]);
+    gfx3MeshRenderer.drawPointLight([Math.sin(this.colFac * 0.2) * 45.0, 18, Math.sin(this.colFac * 0.2) * 45.0], [0.8, 0.8, 0.4], [0.8, 0.8, 0.4]);
   }
 }
 

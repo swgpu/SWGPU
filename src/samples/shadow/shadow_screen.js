@@ -37,7 +37,8 @@ class ShadowScreen extends Screen {
   }
 
   draw() {
-    gfx3MeshRenderer.drawDirLight([100, -100, 0], [0.8, 0.8, 0.8], [1, 1, 1], [0, 0, 0]);
+    gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
+    gfx3MeshRenderer.drawDirLight([100, -100, 0], [1, 1, 1], [0, 0, 0]);
     this.skySphere.draw();
     this.floor.draw();
     this.cube.draw();

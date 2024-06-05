@@ -3,6 +3,10 @@ export const MAX_POINT_LIGHTS = 64;
 export const MAX_SPOT_LIGHTS = 16;
 export const MAX_DECALS = 64;
 
+const WINDOW = window as any;
+const VERT_EXT = WINDOW.__MESH_VERT_EXT__ ? WINDOW.__MESH_VERT_EXT__ : '';
+const FRAG_EXT = WINDOW.__MESH_FRAG_EXT__ ? WINDOW.__MESH_FRAG_EXT__ : '';
+
 export const PIPELINE_DESC: any = {
   label: 'Mesh pipeline',
   layout: 'auto',
@@ -69,7 +73,7 @@ export const PIPELINE_DESC: any = {
   }
 };
 
-export const VERTEX_SHADER = (ext: string) => /* wgsl */`
+export const VERTEX_SHADER = /* wgsl */`
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
   @location(0) FragPos: vec3<f32>,
@@ -89,6 +93,7 @@ struct MeshInfos {
 }
 
 struct MaterialParams {
+  ID: f32,
   OPACITY: f32,
   NORMAL_INTENSITY: f32,
   HAS_LIGHTNING: f32,
@@ -124,7 +129,7 @@ struct MaterialParams {
   S33: f32
 }
 
-@group(0) @binding(7) var<uniform> LVP_MATRIX: mat4x4<f32>;
+@group(0) @binding(1) var<uniform> LVP_MATRIX: mat4x4<f32>;
 @group(1) @binding(0) var<uniform> MESH_INFOS: MeshInfos;
 @group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
 
@@ -147,15 +152,23 @@ fn main(
   output.FragTangent = MESH_INFOS.NORM_MATRIX * Tangent;
   output.FragBinormal = MESH_INFOS.NORM_MATRIX * Binormal;
   output.FragShadowPos = vec3(posFromLight.xy * vec2(0.5, -0.5) + vec2(0.5), posFromLight.z); // Convert XY to (0, 1) and Y is flipped because texture coords are Y-down.
-  ${ext ?? ''}
+  ${VERT_EXT}
   return output;
 }`;
 
-export const FRAGMENT_SHADER = (ext: string) => /* wgsl */`
+export const FRAGMENT_SHADER = /* wgsl */`
 struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
   @location(2) Id: vec4f
+}
+
+struct SceneInfos {
+  CAMERA_POS: vec3<f32>,
+  AMBIENT_COLOR: vec3<f32>,
+  POINT_LIGHT_COUNT: f32,
+  SPOT_LIGHT_COUNT: f32,
+  DECAL_COUNT: f32
 }
 
 struct MeshInfos {
@@ -173,6 +186,7 @@ struct MaterialColors {
 }
 
 struct MaterialParams {
+  ID: f32,
   OPACITY: f32,
   NORMAL_INTENSITY: f32,
   HAS_LIGHTNING: f32,
@@ -216,20 +230,9 @@ struct MaterialUvs {
 
 struct PointLight {
   POSITION: vec3<f32>,
-  AMBIENT: vec3<f32>,
   DIFFUSE: vec3<f32>,
   SPECULAR: vec3<f32>,
   ATTEN: vec3<f32>,
-  INTENSITY: f32,
-  MESH_ID: f32
-}
-
-struct DirLight {
-  DIR: vec3<f32>,
-  ENABLED: f32,
-  AMBIENT: vec3<f32>,
-  DIFFUSE: vec3<f32>,
-  SPECULAR: vec3<f32>,
   INTENSITY: f32,
   MESH_ID: f32
 }
@@ -237,11 +240,20 @@ struct DirLight {
 struct SpotLight {
   POSITION: vec3<f32>,
   DIRECTION: vec3<f32>,
-  AMBIENT: vec3<f32>,
   DIFFUSE: vec3<f32>,
   SPECULAR: vec3<f32>,
   ATTEN: vec3<f32>,
-  CUTOFF: f32,
+  INTENSITY: f32,
+  MESH_ID: f32,
+  CUTOFF: f32
+}
+
+struct DirLight {
+  DIR: vec3<f32>,
+  ENABLED: f32,
+  DIFFUSE: vec3<f32>,
+  SPECULAR: vec3<f32>,
+  INTENSITY: f32,
   MESH_ID: f32
 }
 
@@ -265,21 +277,16 @@ struct Decal {
 }
 
 @group(1) @binding(0) var<uniform> MESH_INFOS: MeshInfos;
-@group(0) @binding(0) var<uniform> CAMERA_POS: vec3<f32>;
-@group(0) @binding(1) var<uniform> DIR_LIGHT: DirLight;
-@group(0) @binding(2) var<uniform> FOG: Fog;
-@group(0) @binding(3) var<uniform> POINT_LIGHT_COUNT: u32;
-@group(0) @binding(4) var<uniform> POINT_LIGHTS: array<PointLight, ${MAX_POINT_LIGHTS}>;
-@group(0) @binding(5) var<uniform> DECAL_COUNT: u32;
-@group(0) @binding(6) var<uniform> DECALS: array<Decal, ${MAX_DECALS}>;
-
-@group(0) @binding(7) var<uniform> SPOT_LIGHT_COUNT: u32;
-@group(0) @binding(8) var<uniform> SPOT_LIGHTS: array<SpotLight, ${MAX_SPOT_LIGHTS}>;
-
-@group(0) @binding(8) var DECAL_ATLAS_TEXTURE: texture_2d<f32>;
-@group(0) @binding(9) var DECAL_ATLAS_SAMPLER: sampler;
-@group(0) @binding(10) var SHADOW_MAP_TEXTURE: texture_depth_2d;
-@group(0) @binding(11) var SHADOW_MAP_SAMPLER: sampler_comparison;
+@group(0) @binding(0) var<uniform> SCENE_INFOS: SceneInfos;
+@group(0) @binding(2) var<uniform> DIR_LIGHT: DirLight;
+@group(0) @binding(3) var<uniform> POINT_LIGHTS: array<PointLight, ${MAX_POINT_LIGHTS}>;
+@group(0) @binding(4) var<uniform> SPOT_LIGHTS: array<SpotLight, ${MAX_SPOT_LIGHTS}>;
+@group(0) @binding(5) var<uniform> DECALS: array<Decal, ${MAX_DECALS}>;
+@group(0) @binding(6) var<uniform> FOG: Fog;
+@group(0) @binding(7) var DECAL_ATLAS_TEXTURE: texture_2d<f32>;
+@group(0) @binding(8) var DECAL_ATLAS_SAMPLER: sampler;
+@group(0) @binding(9) var SHADOW_MAP_TEXTURE: texture_depth_2d;
+@group(0) @binding(10) var SHADOW_MAP_SAMPLER: sampler_comparison;
 @group(2) @binding(0) var<uniform> MAT_COLORS: MaterialColors;
 @group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
 @group(2) @binding(2) var<uniform> MAT_UVS: MaterialUvs;
@@ -335,15 +342,7 @@ fn main(
 
   if (MAT_PARAMS.HAS_DECAL == 1.0)
   {
-    var decalsColor = vec4(0.0, 0.0, 0.0, 0.0);
-    for (var i: u32 = 0; i < DECAL_COUNT; i++)
-    {
-      if (MESH_INFOS.ID.g == DECALS[i].GROUP)
-      {
-        decalsColor += CalcDecal(i, FragPos);
-      }
-    }
-
+    var decalsColor = CalcDecals(FragPos);
     var alpha = min(texel.a + decalsColor.a, 1.0);
     texel = mix(texel, decalsColor, decalsColor.a);
     texel.a = alpha;
@@ -361,31 +360,12 @@ fn main(
 
   if (MAT_PARAMS.HAS_TOON_MAP == 1.0)
   {
-    if (MAT_PARAMS.TOON_BLENDING == 1.0)
-    {
-      outputColor = CalcToon(normal, FragPos, shadow) * texel;
-    }
-    else
-    {
-      outputColor = CalcToon(normal, FragPos, shadow);
-    }
+    var toonColor = CalcToon(normal, FragPos, shadow);
+    outputColor = mix(texel, toonColor, MAT_PARAMS.TOON_BLENDING);
   }
   else if (MAT_PARAMS.HAS_LIGHTNING == 1.0)
   {
-    var totalLight = vec4(0.0, 0.0, 0.0, 0.0);
-
-    if (DIR_LIGHT.ENABLED == 1.0 && (DIR_LIGHT.MESH_ID == 0.0 || DIR_LIGHT.MESH_ID == MESH_INFOS.ID.b))
-    {
-      totalLight += CalcDirLight(normal, FragPos, textureUV, shadow);
-    }
-
-    for (var i: u32 = 0; i < POINT_LIGHT_COUNT; i++)
-    {
-      if (POINT_LIGHTS[i].MESH_ID == 0.0 || POINT_LIGHTS[i].MESH_ID == MESH_INFOS.ID.b) {
-        totalLight += CalcPointLight(i, normal, FragPos, textureUV, shadow);
-      }
-    }
-
+    var totalLight = CalcLights(normal, FragPos, textureUV, shadow);
     outputColor = texel * totalLight;
   }
   else
@@ -411,7 +391,7 @@ fn main(
   output.Base = outputColor;
   output.Normal = vec4(normalize(FragNormal), 1.0);
   output.Id = MESH_INFOS.ID;
-  ${ext ?? ''}
+  ${FRAG_EXT}
   return output;
 }
 
@@ -431,31 +411,48 @@ fn CalcFog(inputColor: vec3<f32>, inputAlpha: f32, fragPos: vec3<f32>) -> vec4<f
 }
 
 // *****************************************************************************************************************
+// CALC DECALS
+// *****************************************************************************************************************
+fn CalcDecals(fragPos: vec3<f32>) -> vec4<f32>
+{
+  var decalsColor = vec4(0.0, 0.0, 0.0, 0.0);
+  for (var i: u32 = 0; i < u32(SCENE_INFOS.DECAL_COUNT); i++)
+  {
+    if (MESH_INFOS.ID.g == DECALS[i].GROUP)
+    {
+      decalsColor += CalcDecal(DECALS[i], fragPos);
+    }
+  }
+
+  return decalsColor;
+}
+
+// *****************************************************************************************************************
 // CALC DECAL
 // *****************************************************************************************************************
-fn CalcDecal(index: u32, fragPos: vec3<f32>) -> vec4<f32>
+fn CalcDecal(decal: Decal, fragPos: vec3<f32>) -> vec4<f32>
 {
   var ctrlColor = vec4(1.0, 1.0, 1.0, 1.0);
-  var clipPos = DECALS[index].VP_MATRIX * vec4<f32>(fragPos, 1.0);
+  var clipPos = decal.VP_MATRIX * vec4<f32>(fragPos, 1.0);
   if (clipPos.z < -1.0 || clipPos.z > 1.0)
   {
     ctrlColor = vec4(0.0, 0.0, 0.0, 0.0);
   }
 
-  var ndcPos = vec3<f32>(clipPos.xyz / clipPos.w).xy * DECALS[index].ASPECT_RATIO;
+  var ndcPos = vec3<f32>(clipPos.xyz / clipPos.w).xy * decal.ASPECT_RATIO;
   if (ndcPos.x < -1.0 || ndcPos.x > 1.0 || ndcPos.y < -1.0 || ndcPos.y > 1.0)
   {
     ctrlColor = vec4(0.0, 0.0, 0.0, 0.0);
   }
 
   var uvx = ndcPos.x * 0.5 + 0.5;
-  uvx = (uvx * DECALS[index].TEXTURE_WIDTH) + DECALS[index].TEXTURE_LEFT;
+  uvx = (uvx * decal.TEXTURE_WIDTH) + decal.TEXTURE_LEFT;
 
   var uvy = 1.0 - (ndcPos.y * 0.5 + 0.5);
-  uvy = (uvy * DECALS[index].TEXTURE_HEIGHT) + DECALS[index].TEXTURE_TOP;
+  uvy = (uvy * decal.TEXTURE_HEIGHT) + decal.TEXTURE_TOP;
 
   var texColor = textureSample(DECAL_ATLAS_TEXTURE, DECAL_ATLAS_SAMPLER, vec2<f32>(uvx, uvy));
-  texColor.a = max(texColor.a - (1.0 - DECALS[index].OPACITY), 0.0);
+  texColor.a = max(texColor.a - (1.0 - decal.OPACITY), 0.0);
   return texColor * ctrlColor;
 }
 
@@ -474,7 +471,7 @@ fn CalcNormalMap(normal: vec3<f32>, fragTangent: vec3<f32>, fragBinormal: vec3<f
 // *****************************************************************************************************************
 fn CalcEnvMap(normal: vec3<f32>, fragPos: vec3<f32>) -> vec4<f32>
 {
-  var viewDir = normalize(CAMERA_POS - fragPos);
+  var viewDir = normalize(SCENE_INFOS.CAMERA_POS - fragPos);
   var rvec = normalize(reflect(viewDir, normal));
   return textureSample(MAT_ENV_MAP_TEXTURE, MAT_ENV_MAP_SAMPLER, vec3<f32>(rvec.x, rvec.y, rvec.z));
 }
@@ -493,17 +490,55 @@ fn CalcDisplacementMap(fragUV: vec2<f32>) -> vec2<f32>
 }
 
 // *****************************************************************************************************************
+// CALC LIGHTS
+// *****************************************************************************************************************
+fn CalcLights(normal: vec3<f32>, fragPos: vec3<f32>, textureUV: vec2<f32>, shadow: f32) -> vec4<f32>
+{
+  var totalLight = vec4(0.0, 0.0, 0.0, 0.0);
+  var matEmissive = MAT_COLORS.EMISSIVE * MAT_PARAMS.EMISSIVE_FACTOR;
+
+  if (DIR_LIGHT.ENABLED == 1.0 && (DIR_LIGHT.MESH_ID == 0.0 || DIR_LIGHT.MESH_ID == MESH_INFOS.ID.b))
+  {
+    totalLight += CalcDirLight(normal, fragPos, textureUV, shadow);
+  }
+
+  for (var i: u32 = 0; i < u32(SCENE_INFOS.POINT_LIGHT_COUNT); i++)
+  {
+    if (POINT_LIGHTS[i].MESH_ID == 0.0 || POINT_LIGHTS[i].MESH_ID == MESH_INFOS.ID.b) {
+      totalLight += CalcPointLight(POINT_LIGHTS[i], normal, fragPos, textureUV, shadow);
+    }
+  }
+
+  for (var i: u32 = 0; i < u32(SCENE_INFOS.SPOT_LIGHT_COUNT); i++)
+  {
+    if (SPOT_LIGHTS[i].MESH_ID == 0.0 || SPOT_LIGHTS[i].MESH_ID == MESH_INFOS.ID.b) {
+      totalLight += CalcSpotLight(SPOT_LIGHTS[i], normal, fragPos, textureUV, shadow);
+    }
+  }
+
+  if (MAT_PARAMS.HAS_EMISSIVE_MAP == 1.0)
+  {
+    matEmissive = textureSample(MAT_EMISSIVE_TEXTURE, MAT_EMISSIVE_SAMPLER, textureUV).rgb * MAT_PARAMS.EMISSIVE_FACTOR;
+  }
+
+  if (length(matEmissive) > 0)
+  {
+    return vec4(matEmissive, 1.0);
+  }
+
+  return totalLight + vec4(SCENE_INFOS.AMBIENT_COLOR, 1.0);
+}
+
+// *****************************************************************************************************************
 // CALC LIGHT INTERNAL
 // *****************************************************************************************************************
-fn CalcLightInternal(lightDir: vec3<f32>, lightAmbient: vec3<f32>, lightDiffuse: vec3<f32>, lightSpecular: vec3<f32>, lightIntensity: f32, normal: vec3<f32>, fragPos: vec3<f32>, textureUV: vec2<f32>, shadow: f32) -> vec4<f32>
+fn CalcLightInternal(lightDir: vec3<f32>, lightDiffuse: vec3<f32>, lightSpecular: vec3<f32>, lightIntensity: f32, normal: vec3<f32>, fragPos: vec3<f32>, textureUV: vec2<f32>, shadow: f32) -> vec4<f32>
 {
-  var ambientColor = lightAmbient * lightIntensity * MAT_COLORS.AMBIENT; // change for lightambiantintensity
   var diffuseColor = vec3(0.0, 0.0, 0.0);
   var specularColor = vec3(0.0, 0.0, 0.0);
-  var emissiveColor = vec3(0.0, 0.0, 0.0);
   var matDiffuse = MAT_COLORS.DIFFUSE;
   var matSpecular = MAT_COLORS.SPECULAR;
-  var matEmissive = MAT_COLORS.EMISSIVE * MAT_PARAMS.EMISSIVE_FACTOR;
+  var matShininess = MAT_PARAMS.SHININESS;
   var diffuseFactor = max(dot(normal, -lightDir), 0.0);
 
   if (MAT_PARAMS.HAS_DIFFUSE_MAP == 1.0)
@@ -514,35 +549,26 @@ fn CalcLightInternal(lightDir: vec3<f32>, lightAmbient: vec3<f32>, lightDiffuse:
   if (MAT_PARAMS.HAS_SPECULAR_MAP == 1.0)
   {
     matSpecular = textureSample(MAT_SPECULAR_TEXTURE, MAT_SPECULAR_SAMPLER, textureUV).rgb;
-  }
-
-  if (MAT_PARAMS.HAS_EMISSIVE_MAP == 1.0)
-  {
-    matEmissive = textureSample(MAT_EMISSIVE_TEXTURE, MAT_EMISSIVE_SAMPLER, textureUV).rgb * MAT_PARAMS.EMISSIVE_FACTOR;
+    matShininess = textureSample(MAT_SPECULAR_TEXTURE, MAT_SPECULAR_SAMPLER, textureUV).a;
   }
 
   if (diffuseFactor > 0.0)
   {
     diffuseColor = lightDiffuse * lightIntensity * matDiffuse * diffuseFactor;
-    if (MAT_PARAMS.SHININESS > 0.0)
+    if (matShininess > 0.0)
     {
       var reflectDir = reflect(lightDir, normal);
-      var viewDir = normalize(CAMERA_POS - fragPos);
+      var viewDir = normalize(SCENE_INFOS.CAMERA_POS - fragPos);
       var specularFactor = max(dot(viewDir, reflectDir), 0.0);
       if (specularFactor > 0.0)
       {
-        specularFactor = pow(specularFactor, MAT_PARAMS.SHININESS);
+        specularFactor = pow(specularFactor, matShininess);
         specularColor = lightSpecular * lightIntensity * matSpecular * specularFactor;
       }
     }
   }
 
-  if (specularColor.r > 0.0)
-  {
-    emissiveColor = matEmissive;
-  }
-
-  return vec4(ambientColor + (diffuseColor * shadow) + (specularColor * shadow) + emissiveColor, 1.0);
+  return vec4((diffuseColor * shadow) + (specularColor * shadow), 1.0);
 }
 
 // *****************************************************************************************************************
@@ -550,28 +576,44 @@ fn CalcLightInternal(lightDir: vec3<f32>, lightAmbient: vec3<f32>, lightDiffuse:
 // *****************************************************************************************************************
 fn CalcDirLight(normal: vec3<f32>, fragPos: vec3<f32>, textureUV: vec2<f32>, shadow: f32) -> vec4<f32>
 {
-  return CalcLightInternal(normalize(DIR_LIGHT.DIR), DIR_LIGHT.AMBIENT, DIR_LIGHT.DIFFUSE, DIR_LIGHT.SPECULAR, DIR_LIGHT.INTENSITY, normal, fragPos, textureUV, shadow);
+  var lightDir = normalize(DIR_LIGHT.DIR);
+  return CalcLightInternal(lightDir, DIR_LIGHT.DIFFUSE, DIR_LIGHT.SPECULAR, DIR_LIGHT.INTENSITY, normal, fragPos, textureUV, shadow);
 }
 
 // *****************************************************************************************************************
 // CALC POINT LIGHT
 // *****************************************************************************************************************
-fn CalcPointLight(index: u32, normal: vec3<f32>, fragPos: vec3<f32>, textureUV: vec2<f32>, shadow: f32) -> vec4<f32>
+fn CalcPointLight(light: PointLight, normal: vec3<f32>, fragPos: vec3<f32>, textureUV: vec2<f32>, shadow: f32) -> vec4<f32>
 {
-  var lightDir = fragPos - POINT_LIGHTS[index].POSITION;
+  var lightDir = fragPos - light.POSITION;
   var distance = length(lightDir);
-  lightDir = normalize(lightDir);
 
-  var color = CalcLightInternal(lightDir, POINT_LIGHTS[index].AMBIENT, POINT_LIGHTS[index].DIFFUSE, POINT_LIGHTS[index].SPECULAR, POINT_LIGHTS[index].INTENSITY, normal, fragPos, textureUV, shadow);
-  var attenuation = POINT_LIGHTS[index].ATTEN[0] + POINT_LIGHTS[index].ATTEN[1] * distance + POINT_LIGHTS[index].ATTEN[2] * distance * distance;
+  var color = CalcLightInternal(normalize(lightDir), light.DIFFUSE, light.SPECULAR, light.INTENSITY, normal, fragPos, textureUV, shadow);
+  var attenuation = light.ATTEN[0] + light.ATTEN[1] * distance + light.ATTEN[2] * distance * distance;
   return color / attenuation;
 }
 
 // *****************************************************************************************************************
 // CALC SPOT LIGHT
 // *****************************************************************************************************************
-fn CalcSpotLight(index: u32, normal: vec3<f32>, fragPos: vec3<f32>, textureUV: vec2<f32>, shadow: f32) -> vec4<f32>
+fn CalcSpotLight(light: SpotLight, normal: vec3<f32>, fragPos: vec3<f32>, textureUV: vec2<f32>, shadow: f32) -> vec4<f32>
 {
+  var lightDir = fragPos - light.POSITION;
+  var normLightDir = normalize(lightDir);
+  var distance = length(lightDir);
+  var spotFactor = dot(normLightDir, normalize(light.DIRECTION));
+  var color = CalcLightInternal(normalize(lightDir), light.DIFFUSE, light.SPECULAR, light.INTENSITY, normal, fragPos, textureUV, shadow);
+
+  if (spotFactor > light.CUTOFF)
+  {
+    var attenuation = light.ATTEN[0] + light.ATTEN[1] * distance + light.ATTEN[2] * distance * distance;
+    var spotIntensity = (1.0 - (1.0 - spotFactor) / (1.0 - light.CUTOFF));
+    return (color / attenuation) * spotIntensity;
+  }
+  else
+  {
+    return vec4(0.0, 0.0, 0.0, 0.0);
+  }
 }
 
 // *****************************************************************************************************************
@@ -581,7 +623,7 @@ fn CalcToon(normal: vec3<f32>, fragPos: vec3<f32>, shadow: f32) -> vec4<f32>
 {
   var n = normalize(normal);
   var lightDir = normalize(MAT_TOON_LIGHT_DIR);
-  var viewDir = normalize(CAMERA_POS - fragPos);
+  var viewDir = normalize(SCENE_INFOS.CAMERA_POS - fragPos);
   var s = max(dot(n, -lightDir), 0.0);
   var t = max(dot(n, viewDir), 0.0);
   var color = textureSample(MAT_TOON_TEXTURE, MAT_TOON_SAMPLER, vec2<f32>(s, t));
