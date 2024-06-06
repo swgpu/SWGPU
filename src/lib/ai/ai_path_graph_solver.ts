@@ -32,9 +32,6 @@ class AIPathGraphSolver<T extends vec2 | vec3> {
 
       for (let nid of currentNode.children) {
         const childNode = graph.getNode(nid);
-        if (!childNode.walkable) {
-          continue;
-        }
 
         const isInCloseList = closeList.indexOf(childNode) != -1;
         if (isInCloseList) {

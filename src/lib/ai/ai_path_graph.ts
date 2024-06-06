@@ -2,7 +2,6 @@ import { UT } from '../core/utils';
 
 export interface AIPathNode<T> {
   pos: T;
-  walkable: boolean;
   children: Array<string>;
   parent?: AIPathNode<T> | null;
   data?: Object | null;
@@ -18,12 +17,14 @@ export interface AIPathNode<T> {
  */
 abstract class AIPathGraph<T> {
   nodes: Map<string, AIPathNode<T>>;
+  groups: Map<string, Array<string>>;
 
   /**
    * @param nodes - The graph data.
    */
   constructor(nodes = new Map<string, AIPathNode<T>>()) {
     this.nodes = nodes;
+    this.groups = new Map<string, Array<string>>();
   }
 
   /**
@@ -32,7 +33,8 @@ abstract class AIPathGraph<T> {
   abstract getDistance(a: AIPathNode<T>, b: AIPathNode<T>): number;
 
   /**
-   * Asynchronously loads graph data from a json file.
+   * Asynchronously loads graph data from a json file (grf).
+   * Note: For uni-directionnal graph-node, in Blender assign the `NOBACK` group to the vertex.
    * 
    * @param {string} path - The file path.
    */
@@ -40,21 +42,24 @@ abstract class AIPathGraph<T> {
     const response = await fetch(path);
     const json = await response.json();
 
-    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'PATH_GRAPH') {
+    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'GRF') {
       throw new Error('AIPathGraph<T>::loadFromFile(): File not valid !');
     }
 
     this.nodes.clear();
-
     for (const nid in json['Nodes']) {
       this.nodes.set(nid, {
         pos: json['Nodes'][nid]['Pos'],
-        walkable: json['Nodes'][nid]['Walkable'],
         children: json['Nodes'][nid]['Children'],
         g: 0,
         h: 0,
         f: 0
       });
+    }
+
+    this.groups.clear();
+    for (const nid in json['Groups']) {
+      this.groups.set(nid, json['Groups'][nid]);
     }
   }
 
@@ -70,6 +75,20 @@ abstract class AIPathGraph<T> {
     }
 
     return node;
+  }
+
+  /**
+   * Return the node group list.
+   * 
+   * @param {string} nid - The unique identifier.
+   */
+  getNodeGroupList(nid: string): Array<string> {
+    const groupList = this.groups.get(nid);
+    if (!groupList) {
+      throw new Error('AIPathGraph::getNodeGroups(): Node not exist !');
+    }
+
+    return groupList;
   }
 
   /**
