@@ -17,7 +17,7 @@ class ShadowScreen extends Screen {
   }
 
   async onEnter() {
-    gfx3MeshShadowRenderer.setShadowProjection([-100, 100, 0], [0, 0, 0], 600, 600);
+    gfx3MeshShadowRenderer.setShadowProjection([-20, 20, 0], [0, 0, 0], 600, 600);
     gfx3MeshRenderer.enableShadow(true);
 
     this.camera.setPosition(0, 40, 0);

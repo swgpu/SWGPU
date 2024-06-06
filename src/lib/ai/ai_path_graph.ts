@@ -40,8 +40,8 @@ abstract class AIPathGraph<T> {
     const response = await fetch(path);
     const json = await response.json();
 
-    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'ASTAR_GRAPH') {
-      throw new Error('AStarGraph<T>::loadFromFile(): File not valid !');
+    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'PATH_GRAPH') {
+      throw new Error('AIPathGraph<T>::loadFromFile(): File not valid !');
     }
 
     this.nodes.clear();
@@ -66,7 +66,7 @@ abstract class AIPathGraph<T> {
   getNode(nid: string): AIPathNode<T> {
     const node = this.nodes.get(nid);
     if (!node) {
-      throw new Error('AStarGraph::getNode(): Node not exist !');
+      throw new Error('AIPathGraph::getNode(): Node not exist !');
     }
 
     return node;
@@ -82,7 +82,7 @@ abstract class AIPathGraph<T> {
   addNode(nid: string, node: AIPathNode<T>, biRelations: boolean = true): AIPathNode<T> {
     const found = this.nodes.get(nid);
     if (found) {
-      throw new Error('AStarGraph::addNode(): Node already exist !');
+      throw new Error('AIPathGraph::addNode(): Node already exist !');
     }
 
     this.nodes.set(nid, node);
@@ -107,7 +107,7 @@ abstract class AIPathGraph<T> {
   removeNode(nid: string): void {
     const node = this.nodes.get(nid);
     if (!node) {
-      throw new Error('AStarGraph::removeNode(): Node not found !');
+      throw new Error('AIPathGraph::removeNode(): Node not found !');
     }
 
     this.nodes.delete(nid);
@@ -134,7 +134,7 @@ abstract class AIPathGraph<T> {
   setNodeProperties(nid: string, properties: Partial<AIPathNode<T>>): void {
     const node = this.nodes.get(nid);
     if (!node) {
-      throw new Error('AStarGraph::setNodeProperties(): Node not found !');
+      throw new Error('AIPathGraph::setNodeProperties(): Node not found !');
     }
 
     Object.assign(node, properties);
@@ -150,12 +150,12 @@ abstract class AIPathGraph<T> {
   removeNodeRelation(nid: string, cnid: string, biRelations: boolean = true): void {
     const node = this.nodes.get(nid);
     if (!node) {
-      throw new Error('AStarGraph::removeNodeRelation(): Node not found !');
+      throw new Error('AIPathGraph::removeNodeRelation(): Node not found !');
     }
 
     const index = node.children.indexOf(cnid);
     if (index == -1) {
-      throw new Error('AStarGraph::removeNodeRelation(): Node children not found !');
+      throw new Error('AIPathGraph::removeNodeRelation(): Node children not found !');
     }
 
     const child = this.nodes.get(cnid);

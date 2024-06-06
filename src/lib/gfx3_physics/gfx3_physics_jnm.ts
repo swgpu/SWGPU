@@ -43,7 +43,7 @@ interface ResElevation {
 };
 
 /**
- * A 3D navigation mesh.
+ * A 3D hit mesh.
  * In collision case, the collision response sliding along wall polygons to keep a good feeling for the player.
  */
 class Gfx3PhysicsJNM {

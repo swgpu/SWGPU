@@ -67,6 +67,13 @@ class TreePartition<T> {
   getMaxDepth(): number {
     return this.maxDepth;
   }
+
+  /**
+   * Returns the root node.
+   */
+  getRoot(): TreePartitionNode<T> {
+    return this.root;
+  }
 }
 
 /**

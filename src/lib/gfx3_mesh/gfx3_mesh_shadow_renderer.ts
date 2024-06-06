@@ -18,7 +18,6 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
   depthTextureSize: number;
   depthTexture: GPUTexture
   depthTextureSampler: GPUSampler;
-  depthTextureView: GPUTextureView;
   meshCommands: Array<MeshCommand>;
   grp0: Gfx3DynamicGroup;
   lvpMatrix: Float32Array;
@@ -26,14 +25,13 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
 
   constructor() {
     super('MESH_SHADOW_MAP_PIPELINE', VERTEX_SHADER, '', PIPELINE_DESC);
-    this.depthTextureSize = 1024.0;
+    this.depthTextureSize = 2048.0;
     this.depthTexture = gfx3Manager.getDevice().createTexture({
       size: [this.depthTextureSize, this.depthTextureSize, 1],
       usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.TEXTURE_BINDING,
       format: 'depth32float'
     });
 
-    this.depthTextureView = this.depthTexture.createView();
     this.depthTextureSampler = gfx3Manager.getDevice().createSampler({ compare: 'less'});
     this.meshCommands = [];
 
@@ -50,7 +48,7 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
     const passEncoder = commandEncoder.beginRenderPass({
       colorAttachments: [],
       depthStencilAttachment: {
-        view: this.depthTextureView,
+        view: this.depthTexture.createView(),
         depthClearValue: 1.0,
         depthLoadOp: 'clear',
         depthStoreOp: 'store',
@@ -118,7 +116,6 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
       format: 'depth32float'
     });
 
-    this.depthTextureView = this.depthTexture.createView();
     this.depthTextureSampler = gfx3Manager.getDevice().createSampler({ compare: 'less'});
     this.depthTextureSize = depthTextureSize;
   }

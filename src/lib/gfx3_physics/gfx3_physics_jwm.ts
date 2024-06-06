@@ -451,6 +451,13 @@ class Gfx3PhysicsJWM {
     return this.sectorColors[sectorIndex];
   }
 
+  /**
+   * Return the binary tree.
+   */
+  getBinaryTree(): Gfx2TreePartition {
+    return this.btree;
+  }
+
   $utilsMove(sectorIndex: number, x: number, z: number, mx: number, mz: number, i: number = 0): { sectorIndex: number, mx: number, mz: number, elevation: number } {
     if (mx > -UT.BIG_EPSILON && mx < +UT.BIG_EPSILON && mz > -UT.BIG_EPSILON && mz < +UT.BIG_EPSILON) {
       return { sectorIndex: sectorIndex, mx: 0, mz: 0, elevation: Infinity };

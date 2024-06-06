@@ -54,8 +54,8 @@ abstract class AIPathGrid<T extends vec2 | vec3> {
     const response = await fetch(path);
     const json = await response.json();
 
-    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'ASTAR_GRID') {
-      throw new Error('AStarGrid<T>::loadFromFile(): File not valid !');
+    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'PATH_GRID') {
+      throw new Error('AIPathGrid<T>::loadFromFile(): File not valid !');
     }
 
     this.grid = json['Grid'];
