@@ -66,6 +66,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - Static sprite (jss)
     - Animated sprite (jas)
     - Motion lines (jlm)
+    - Djikstra graph (grf)
     - Billboarding
     - Cubemap skybox
     - Particules
@@ -109,6 +110,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 - 🌞 **3D Light**
     - Directional light
     - Point lights (max : 64)
+    - Spot lights (max: 16)
 
 - 🖼️ **3D Post-processing**
     - Outline
