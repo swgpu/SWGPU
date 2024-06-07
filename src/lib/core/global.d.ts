@@ -1,5 +1,3 @@
-export { };
-
 declare global {
   type vec1 = Float32Array | Uint32Array | [number];
   type vec2 = Float32Array | Uint32Array | [number, number];
@@ -22,3 +20,15 @@ declare global {
     number, number, number, number
   ];
 }
+
+export {
+  vec1,
+  vec2,
+  vec3,
+  vec4,
+  vec5,
+  vec6,
+  vec_any,
+  mat3,
+  mat4
+};
