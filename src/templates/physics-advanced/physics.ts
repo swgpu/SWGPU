@@ -1,14 +1,13 @@
-import RAPIER from '@dimforge/rapier3d';
-import { ColliderDesc, RigidBodyDesc, RigidBody, Collider } from '@dimforge/rapier3d';
+import type { RigidBody, Collider, World } from '@dimforge/rapier3d';
 // ---------------------------------------------------------------------------------------
 import { dnaManager } from '@lib/dna/dna_manager';
+import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
 import { Rapier3D } from '@lib/gfx3_physics/gfx3_physics_rapier';
 import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { EntityComponent } from './entity';
-import { gfx3DebugRenderer } from '@lib/index';
 // ---------------------------------------------------------------------------------------
 
 export enum PhysicsType {
@@ -36,7 +35,7 @@ export class PhysicsComponent extends DNAComponent {
 }
 
 export class PhysicsSystem extends DNASystem {
-  world: RAPIER.World;
+  world: World;
 
   constructor() {
     super();
@@ -50,18 +49,18 @@ export class PhysicsSystem extends DNASystem {
     const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
 
     if (physics.type == PhysicsType.STATIC) {
-      const bodyDesc = RigidBodyDesc.fixed();
+      const bodyDesc = Rapier3D.RigidBodyDesc.fixed();
       bodyDesc.setTranslation(entity.x, entity.y, entity.z);
       const body = this.world.createRigidBody(bodyDesc);
       const geo = physics.jsm.getGeo();
-      const colliderDesc = ColliderDesc.trimesh(new Float32Array(geo.coords), new Uint32Array(geo.indexes));
+      const colliderDesc = Rapier3D.ColliderDesc.trimesh(new Float32Array(geo.coords), new Uint32Array(geo.indexes));
       physics.collider = this.world.createCollider(colliderDesc, body);
     }
     else if (physics.type == PhysicsType.ENTITY) {
-      const bodyDesc = RigidBodyDesc.dynamic();
+      const bodyDesc = Rapier3D.RigidBodyDesc.dynamic();
       bodyDesc.setTranslation(entity.x, entity.y, entity.z);
       physics.body = this.world.createRigidBody(bodyDesc);
-      const colliderDesc = ColliderDesc.ball(physics.radius);
+      const colliderDesc = Rapier3D.ColliderDesc.ball(physics.radius);
       physics.collider = this.world.createCollider(colliderDesc, physics.body);
     }
   }
@@ -75,6 +74,7 @@ export class PhysicsSystem extends DNASystem {
     if (physics.body) {
       const vy = physics.body.linvel().y;
       physics.body.setLinvel({ x: entity.velocity[0], y: vy, z: entity.velocity[2] }, true);  
+
       const translation = physics.body.translation();
       entity.x = translation.x;
       entity.y = translation.y;

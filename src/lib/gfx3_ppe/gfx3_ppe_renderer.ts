@@ -7,7 +7,7 @@ import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_VERTEX_ATTR_COUNT } from './gfx3_ppe_shader';
 
-enum PPEParam {
+enum PostParam {
   ENABLED = 0,
   PIXELATION_ENABLED = 1,
   PIXELATION_WIDTH = 2,
@@ -25,7 +25,23 @@ enum PPEParam {
   OUTLINE_G = 14,
   OUTLINE_B = 15,
   OUTLINE_CONSTANT = 16,
-  SHADOW_VOLUME_ENABLED = 17
+  SHADOW_VOLUME_ENABLED = 17,
+  S00 = 18,
+  S01 = 19,
+  S02 = 20,
+  S03 = 21,
+  S10 = 22,
+  S11 = 23,
+  S12 = 24,
+  S13 = 25,
+  S20 = 26,
+  S21 = 27,
+  S22 = 28,
+  S23 = 29,
+  S30 = 30,
+  S31 = 31,
+  S32 = 32,
+  S33 = 33
 };
 
 /**
@@ -36,7 +52,7 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
   vertexBuffer: GPUBuffer;
   grp0: Gfx3StaticGroup;
   params: Float32Array;
-  size: Float32Array;
+  infos: Float32Array;
   sourceTexture: Gfx3Texture;
   normalsTexture: Gfx3Texture;
   idsTexture: Gfx3Texture;
@@ -52,28 +68,28 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.vertexBuffer = this.device.createBuffer({ size: 6 * SHADER_VERTEX_ATTR_COUNT * 4, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC });
 
     this.grp0 = gfx3Manager.createStaticGroup('PPE_PIPELINE', 0);
-    this.params = this.grp0.setFloat(0, 'PARAMS', 18);
-    this.params[PPEParam.ENABLED] = 1.0;
-    this.params[PPEParam.PIXELATION_ENABLED] = 0.0;
-    this.params[PPEParam.PIXELATION_WIDTH] = 400.0;
-    this.params[PPEParam.PIXELATION_HEIGHT] = 400.0;
-    this.params[PPEParam.COLOR_ENABLED] = 0.0;
-    this.params[PPEParam.COLOR_PRECISION] = 32.0;
-    this.params[PPEParam.DITHER_ENABLED] = 0.0;
-    this.params[PPEParam.DITHER_PATTERN_INDEX] = 0.0;
-    this.params[PPEParam.DITHER_THRESHOLD] = 1.0;
-    this.params[PPEParam.DITHER_SCALE_X] = 1.0;
-    this.params[PPEParam.DITHER_SCALE_Y] = 1.0;
-    this.params[PPEParam.OUTLINE_ENABLED] = 0.0;
-    this.params[PPEParam.OUTLINE_THICKNESS] = 120.0;
-    this.params[PPEParam.OUTLINE_R] = 0.0;
-    this.params[PPEParam.OUTLINE_G] = 0.0;
-    this.params[PPEParam.OUTLINE_B] = 0.0;
-    this.params[PPEParam.OUTLINE_CONSTANT] = 0.0;
-    this.params[PPEParam.SHADOW_VOLUME_ENABLED] = 1.0;
-    this.size = this.grp0.setFloat(1, 'SIZE', 2);
-    this.size[0] = gfx3Manager.getWidth();
-    this.size[1] = gfx3Manager.getHeight();
+    this.params = this.grp0.setFloat(0, 'PARAMS', 34);
+    this.params[PostParam.ENABLED] = 1.0;
+    this.params[PostParam.PIXELATION_ENABLED] = 0.0;
+    this.params[PostParam.PIXELATION_WIDTH] = 400.0;
+    this.params[PostParam.PIXELATION_HEIGHT] = 400.0;
+    this.params[PostParam.COLOR_ENABLED] = 0.0;
+    this.params[PostParam.COLOR_PRECISION] = 32.0;
+    this.params[PostParam.DITHER_ENABLED] = 0.0;
+    this.params[PostParam.DITHER_PATTERN_INDEX] = 0.0;
+    this.params[PostParam.DITHER_THRESHOLD] = 1.0;
+    this.params[PostParam.DITHER_SCALE_X] = 1.0;
+    this.params[PostParam.DITHER_SCALE_Y] = 1.0;
+    this.params[PostParam.OUTLINE_ENABLED] = 0.0;
+    this.params[PostParam.OUTLINE_THICKNESS] = 120.0;
+    this.params[PostParam.OUTLINE_R] = 0.0;
+    this.params[PostParam.OUTLINE_G] = 0.0;
+    this.params[PostParam.OUTLINE_B] = 0.0;
+    this.params[PostParam.OUTLINE_CONSTANT] = 0.0;
+    this.params[PostParam.SHADOW_VOLUME_ENABLED] = 1.0;
+    this.infos = this.grp0.setFloat(1, 'INFOS', 4);
+    this.infos[0] = gfx3Manager.getWidth();
+    this.infos[1] = gfx3Manager.getHeight();
     this.sourceTexture = this.grp0.setTexture(2, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
     this.sourceTexture = this.grp0.setSampler(3, 'SOURCE_SAMPLER', this.sourceTexture);
     this.normalsTexture = this.grp0.setTexture(4, 'NORMALS_TEXTURE', gfx3Manager.getNormalsTexture());
@@ -108,7 +124,7 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
   /**
    * The render function.
    */
-  render(destinationTexture: GPUTexture): void {
+  render(ts: number, destinationTexture: GPUTexture): void {    
     const commandEncoder = gfx3Manager.getCommandEncoder();
     const passEncoder = commandEncoder.beginRenderPass({
       colorAttachments: [{
@@ -118,30 +134,19 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
       }]
     });
 
+    this.infos[2] = ts / 1000;
+    this.infos[3] += this.infos[2];
+
     passEncoder.setPipeline(this.pipeline);
     this.grp0.beginWrite();
     this.grp0.write(0, this.params);
-    this.grp0.write(1, this.size);
+    this.grp0.write(1, this.infos);
     this.grp0.endWrite();
     passEncoder.setBindGroup(0, this.grp0.getBindGroup());
     passEncoder.setBindGroup(1, this.grp1.getBindGroup());
     passEncoder.setVertexBuffer(0, this.vertexBuffer);
     passEncoder.draw(6);
     passEncoder.end();
-  }
-
-  /**
-   * Reallocate and set values to params uniform.
-   * 
-   * @param {Array<number>} params - The params values.
-   */
-  setParams(params: Array<number>) {
-    this.params = this.grp0.setFloat(0, 'PARAMS', params.length);
-    for (let i = 0; i < params.length; i++) {
-      this.params[i] = params[i];
-    }
-
-    this.grp0.allocate();
   }
 
   /**
@@ -171,8 +176,8 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
   }
 
   $handleWindowResize(): void {
-    this.size[0] = gfx3Manager.getWidth();
-    this.size[1] = gfx3Manager.getHeight();
+    this.infos[0] = gfx3Manager.getWidth();
+    this.infos[1] = gfx3Manager.getHeight();
 
     this.sourceTexture.gpuTexture.destroy();
     this.sourceTexture = this.grp0.setTexture(2, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
@@ -188,5 +193,5 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
   }
 }
 
-export { Gfx3PPERenderer, PPEParam };
+export { Gfx3PPERenderer, PostParam };
 export const gfx3PPERenderer = new Gfx3PPERenderer();

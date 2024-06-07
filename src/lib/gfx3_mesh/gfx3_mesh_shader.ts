@@ -4,8 +4,10 @@ export const MAX_SPOT_LIGHTS = 16;
 export const MAX_DECALS = 64;
 
 const WINDOW = window as any;
-const VERT_EXT = WINDOW.__MESH_VERT_EXT__ ? WINDOW.__MESH_VERT_EXT__ : '';
-const FRAG_EXT = WINDOW.__MESH_FRAG_EXT__ ? WINDOW.__MESH_FRAG_EXT__ : '';
+const VERT_BEFORE = WINDOW.__MESH_VERT_BEFORE__ ? WINDOW.__MESH_VERT_BEFORE__ : '';
+const FRAG_BEFORE = WINDOW.__MESH_FRAG_BEFORE__ ? WINDOW.__MESH_FRAG_BEFORE__ : '';
+const VERT_AFTER = WINDOW.__MESH_VERT_AFTER__ ? WINDOW.__MESH_VERT_AFTER__ : '';
+const FRAG_AFTER = WINDOW.__MESH_FRAG_AFTER__ ? WINDOW.__MESH_FRAG_AFTER__ : '';
 
 export const PIPELINE_DESC: any = {
   label: 'Mesh pipeline',
@@ -142,17 +144,26 @@ fn main(
   @location(4) Tangent: vec3<f32>,
   @location(5) Binormal: vec3<f32>
 ) -> VertexOutput {
+  var position = Position;
+  var texUV = TexUV;
+  var color = Color;
+  var normal = Normal;
+  var tangent = Tangent;
+  var binormal = Binormal;
+
+  ${VERT_BEFORE}
+  var posFromLight = LVP_MATRIX * MESH_INFOS.M_MATRIX * position;
+  ${VERT_AFTER}
+
   var output: VertexOutput;
-  var posFromLight = LVP_MATRIX * MESH_INFOS.M_MATRIX * Position;
-  output.Position = MESH_INFOS.MVPC_MATRIX * Position;
-  output.FragPos = vec4(MESH_INFOS.M_MATRIX * Position).xyz;
-  output.FragUV = TexUV;
-  output.FragColor = Color;
-  output.FragNormal = MESH_INFOS.NORM_MATRIX * Normal;
-  output.FragTangent = MESH_INFOS.NORM_MATRIX * Tangent;
-  output.FragBinormal = MESH_INFOS.NORM_MATRIX * Binormal;
+  output.Position = MESH_INFOS.MVPC_MATRIX * position;
+  output.FragPos = vec4(MESH_INFOS.M_MATRIX * position).xyz;
+  output.FragUV = texUV;
+  output.FragColor = color;
+  output.FragNormal = MESH_INFOS.NORM_MATRIX * normal;
+  output.FragTangent = MESH_INFOS.NORM_MATRIX * tangent;
+  output.FragBinormal = MESH_INFOS.NORM_MATRIX * binormal;
   output.FragShadowPos = vec3(posFromLight.xy * vec2(0.5, -0.5) + vec2(0.5), posFromLight.z); // Convert XY to (0, 1) and Y is flipped because texture coords are Y-down.
-  ${VERT_EXT}
   return output;
 }`;
 
@@ -168,7 +179,9 @@ struct SceneInfos {
   AMBIENT_COLOR: vec3<f32>,
   POINT_LIGHT_COUNT: f32,
   SPOT_LIGHT_COUNT: f32,
-  DECAL_COUNT: f32
+  DECAL_COUNT: f32,
+  DELTA_TIME: f32,
+  TIME: f32
 }
 
 struct MeshInfos {
@@ -319,20 +332,29 @@ fn main(
   @location(5) FragBinormal: vec3<f32>,
   @location(6) FragShadowPos: vec3<f32>
 ) -> FragOutput {
-  var normal = normalize(FragNormal);
+  var fragPos = FragPos;
+  var fragUV = FragUV;
+  var fragColor = FragColor;
+  var fragNormal = normalize(FragNormal);
+  var fragTangent = FragTangent;
+  var fragBinormal = FragBinormal;
+  var fragShadowPos = FragShadowPos;
   var outputColor = vec4(0.0, 0.0, 0.0, 1.0);
   var texel = vec4(1.0, 1.0, 1.0, 1.0);
-  var textureUV = MAT_UVS.TEXTURE_SCROLL + MAT_UVS.TEXTURE_OFFSET + FragUV;
+
+  ${FRAG_BEFORE}
+
+  var textureUV = MAT_UVS.TEXTURE_SCROLL + MAT_UVS.TEXTURE_OFFSET + fragUV;
   var shadow = 1.0;
 
   if (MAT_PARAMS.HAS_DISPLACEMENT_MAP == 1.0)
   {
-    textureUV += CalcDisplacementMap(FragUV);
+    textureUV += CalcDisplacementMap(fragUV);
   }
 
   if (MAT_PARAMS.HAS_TEXTURE == 1.0)
   {
-    texel = textureSample(MAT_TEXTURE, MAT_SAMPLER, textureUV) * vec4<f32>(FragColor, 1.0);
+    texel = textureSample(MAT_TEXTURE, MAT_SAMPLER, textureUV) * vec4<f32>(fragColor, 1.0);
   }
 
   if (texel.a == 0)
@@ -342,7 +364,7 @@ fn main(
 
   if (MAT_PARAMS.HAS_DECAL == 1.0)
   {
-    var decalsColor = CalcDecals(FragPos);
+    var decalsColor = CalcDecals(fragPos);
     var alpha = min(texel.a + decalsColor.a, 1.0);
     texel = mix(texel, decalsColor, decalsColor.a);
     texel.a = alpha;
@@ -350,22 +372,22 @@ fn main(
 
   if (MAT_PARAMS.HAS_NORMAL_MAP == 1.0)
   {
-    normal = CalcNormalMap(normal, FragTangent, FragBinormal, textureUV);
+    fragNormal = CalcNormalMap(fragNormal, fragTangent, fragBinormal, textureUV);
   }
 
   if (MAT_PARAMS.HAS_SHADOW == 1.0)
   {
-    shadow = CalcShadow(FragShadowPos);
+    shadow = CalcShadow(fragShadowPos);
   }
 
   if (MAT_PARAMS.HAS_TOON_MAP == 1.0)
   {
-    var toonColor = CalcToon(normal, FragPos, shadow);
+    var toonColor = CalcToon(fragNormal, fragPos, shadow);
     outputColor = mix(texel, toonColor, MAT_PARAMS.TOON_BLENDING);
   }
   else if (MAT_PARAMS.HAS_LIGHTNING == 1.0)
   {
-    var totalLight = CalcLights(normal, FragPos, textureUV, shadow);
+    var totalLight = CalcLights(fragNormal, fragPos, textureUV, shadow);
     outputColor = texel * totalLight;
   }
   else
@@ -375,23 +397,24 @@ fn main(
 
   if (MAT_PARAMS.HAS_ENV_MAP == 1.0)
   {
-    outputColor += CalcEnvMap(normal, FragPos);
+    outputColor += CalcEnvMap(fragNormal, fragPos);
   }
 
   if (FOG.ENABLED == 1.0)
   {
-    outputColor = CalcFog(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY, FragPos);
+    outputColor = CalcFog(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY, fragPos);
   }
   else
   {
     outputColor = vec4(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY);
   }
 
+  ${FRAG_AFTER}
+
   var output: FragOutput;
   output.Base = outputColor;
-  output.Normal = vec4(normalize(FragNormal), 1.0);
+  output.Normal = vec4(normalize(fragNormal), 1.0);
   output.Id = MESH_INFOS.ID;
-  ${FRAG_EXT}
   return output;
 }
 

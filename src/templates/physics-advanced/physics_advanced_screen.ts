@@ -10,11 +10,6 @@ import { EntityComponent } from './entity';
 import { InputComponent, InputSystem } from './input';
 // ---------------------------------------------------------------------------------------
 
-// Note:
-// This template is just a way to start your game. For more efficient workflow you
-// must add some things like entities serialization and other things specific to your
-// game.
-
 class PhysicsAdvancedScreen extends Screen {
   camera: Gfx3CameraOrbit;
   floorEid: number;

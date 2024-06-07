@@ -51,12 +51,12 @@ class GameManager {
     gfx3Manager.beginPassRender(0);
     gfx3SkyboxRenderer.render();
     gfx3DebugRenderer.render();
-    gfx3MeshRenderer.render();
+    gfx3MeshRenderer.render(ts);
     gfx3SpriteRenderer.render();
     gfx3ParticlesRenderer.render();
     gfx3FlareRenderer.render();
     gfx3Manager.endPassRender();
-    gfx3PPERenderer.render(gfx3Manager.getCurrentRenderingTexture());
+    gfx3PPERenderer.render(ts, gfx3Manager.getCurrentRenderingTexture());
     gfx3Manager.endRender();
 
     document.getElementById('fps').textContent = (1000 / ts).toFixed(2);

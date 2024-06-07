@@ -39,7 +39,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.meshCommands = [];
 
     this.grp0 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 0);
-    this.sceneInfos = this.grp0.setFloat(0, 'SCENE_INFOS', 12);
+    this.sceneInfos = this.grp0.setFloat(0, 'SCENE_INFOS', 14);
     this.lvpMatrix = this.grp0.setFloat(1, 'LVP_MATRIX', 16);
     this.dirLight = this.grp0.setFloat(2, 'DIR_LIGHT', 16);
     this.pointLights = this.grp0.setFloat(3, 'POINT_LIGHTS', 20 * MAX_POINT_LIGHTS);
@@ -61,7 +61,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   /**
    * The render function.
    */
-  render(): void {
+  render(ts: number): void {
     const currentView = gfx3Manager.getCurrentView();
     const passEncoder = gfx3Manager.getPassEncoder();
 
@@ -81,7 +81,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     }
 
     this.grp0.beginWrite();
-    this.grp0.write(0, BUILD_SCENE_INFOS(currentView.getCameraPosition(), this.sceneInfos));
+    this.grp0.write(0, BUILD_SCENE_INFOS(currentView.getCameraPosition(), ts, this.sceneInfos));
     this.grp0.write(1, gfx3MeshShadowRenderer.getLVPMatrix());
     this.grp0.write(2, this.dirLight);
     this.grp0.write(3, this.pointLights);
@@ -393,11 +393,13 @@ export const gfx3MeshRenderer = new Gfx3MeshRenderer();
 // HELPFUL
 // -------------------------------------------------------------------------------------------
 
-function BUILD_SCENE_INFOS(camPos: vec3, out: Float32Array): Float32Array {
+function BUILD_SCENE_INFOS(camPos: vec3, ts: number, out: Float32Array): Float32Array {
   out[0] = camPos[0];
   out[1] = camPos[1];
   out[2] = camPos[2];
   out[3] = 0;
+  out[10] = ts / 1000;
+  out[11] += out[10];
   return out;
 }
 
