@@ -44,9 +44,11 @@ class CoreManager {
 
     if (sizeMode == SizeMode.FIT) {
       this.container.style.transform = 'scale(' + window.innerWidth / resWidth + ',' + window.innerHeight / resHeight + ')';
+      this.container.style.margin = '0';
     }
     else if (sizeMode == SizeMode.ADJUST) {
       this.container.style.transform = 'scale(' + Math.min(window.innerWidth / resWidth, window.innerHeight / resHeight) + ')';
+      this.container.style.margin = '0';
     }
     else if (sizeMode == SizeMode.FIXED) {
       this.container.style.transform = 'none';
@@ -55,6 +57,7 @@ class CoreManager {
     else if (sizeMode == SizeMode.FULL) {
       this.container.style.width = '100vw';
       this.container.style.height = '100vh';
+      this.container.style.margin = '0';
     }
 
     this.resWidth = resWidth;
