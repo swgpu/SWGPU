@@ -81,22 +81,22 @@ struct Params {
   S01: f32,
   S02: f32,
   S03: f32,
+  S04: f32,
+  S05: f32,
+  S06: f32,
+  S07: f32,
+  S08: f32,
+  S09: f32,
   S10: f32,
   S11: f32,
   S12: f32,
   S13: f32,
-  S20: f32,
-  S21: f32,
-  S22: f32,
-  S23: f32,
-  S30: f32,
-  S31: f32,
-  S32: f32,
-  S33: f32
+  S14: f32,
+  S15: f32
 };
 
 @group(0) @binding(0) var<uniform> PARAMS: Params;
-@group(0) @binding(1) var<uniform> SIZE: vec2<f32>;
+@group(0) @binding(1) var<uniform> INFOS: Infos;
 @group(0) @binding(2) var SOURCE_TEXTURE: texture_2d<f32>;
 @group(0) @binding(3) var SOURCE_SAMPLER: sampler;
 @group(0) @binding(4) var NORMALS_TEXTURE: texture_2d<f32>;
@@ -112,6 +112,11 @@ struct Params {
 @group(1) @binding(3) var SHADOW_DEPTH_CCW_SAMPLER: sampler;
 @group(1) @binding(4) var SHADOW_DEPTH_CW_TEXTURE: texture_depth_2d;
 @group(1) @binding(5) var SHADOW_DEPTH_CW_SAMPLER: sampler;
+
+@group(2) @binding(0) var S0_TEXTURE: texture_2d<f32>;
+@group(2) @binding(1) var S0_SAMPLER: sampler;
+@group(2) @binding(2) var S1_TEXTURE: texture_2d<f32>;
+@group(2) @binding(3) var S1_SAMPLER: sampler;
 
 @fragment
 fn main(
@@ -145,6 +150,8 @@ fn main(
   var shadowFactor = textureSample(SHADOW_FACTOR_TEXTURE, SHADOW_FACTOR_SAMPLER, fragUV);
   var shadowDepthCW = textureSample(SHADOW_DEPTH_CW_TEXTURE, SHADOW_DEPTH_CW_SAMPLER, fragUV);
   var shadowDepthCCW = textureSample(SHADOW_DEPTH_CCW_TEXTURE, SHADOW_DEPTH_CCW_SAMPLER, fragUV);
+  var s0 = textureSample(S0_TEXTURE, S0_SAMPLER, fragUV);
+  var s1 = textureSample(S1_TEXTURE, S1_SAMPLER, fragUV);
 
   if (PARAMS.COLOR_ENABLED == 1.0 && (flags & 2) == 2)
   {
@@ -155,8 +162,8 @@ fn main(
   {
     var brightness = GetPixelBrightness(outputColor.rgb);
     var ditherPattern = GetDitherPattern(PARAMS.DITHER_PATTERN_INDEX);
-    var ditherX = u32((FragUV.x * SIZE.x) / PARAMS.DITHER_SCALE_X);
-    var ditherY = u32((FragUV.y * SIZE.y) / PARAMS.DITHER_SCALE_Y);
+    var ditherX = u32((FragUV.x * INFOS.RES_WIDTH) / PARAMS.DITHER_SCALE_X);
+    var ditherY = u32((FragUV.y * INFOS.RES_HEIGHT) / PARAMS.DITHER_SCALE_Y);
     var ditherPixel = GetDitherValue(ditherX, ditherY, brightness, ditherPattern);
     outputColor = outputColor * ditherPixel;
   }
@@ -206,7 +213,7 @@ fn main(
 // *****************************************************************************************************************
 fn getTexelValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 {
-  var ps = vec2<f32>(1.0 / SIZE.x, 1.0 / SIZE.y);
+  var ps = vec2<f32>(1.0 / INFOS.RES_WIDTH, 1.0 / INFOS.RES_HEIGHT);
   return textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, textureUV + ps * offset);
 }
 
@@ -215,7 +222,7 @@ fn getTexelValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 // *****************************************************************************************************************
 fn getNormalValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 {
-  var ps = vec2<f32>(1.0 / SIZE.x, 1.0 / SIZE.y);
+  var ps = vec2<f32>(1.0 / INFOS.RES_WIDTH, 1.0 / INFOS.RES_HEIGHT);
   return textureSampleBaseClampToEdge(NORMALS_TEXTURE, NORMALS_SAMPLER, textureUV + ps * offset);
 }
 
@@ -224,7 +231,7 @@ fn getNormalValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 // *****************************************************************************************************************
 fn getIdValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 {
-  var ps = vec2<f32>(1.0 / SIZE.x, 1.0 / SIZE.y);
+  var ps = vec2<f32>(1.0 / INFOS.RES_WIDTH, 1.0 / INFOS.RES_HEIGHT);
   return textureSampleBaseClampToEdge(IDS_TEXTURE, IDS_SAMPLER, textureUV + ps * offset);
 }
 
@@ -233,7 +240,7 @@ fn getIdValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 // *****************************************************************************************************************
 fn getDepthValue(textureUV: vec2<f32>, offset: vec2<f32>) -> f32
 {
-  var ps = vec2<f32>(1.0 / SIZE.x, 1.0 / SIZE.y);
+  var ps = vec2<f32>(1.0 / INFOS.RES_WIDTH, 1.0 / INFOS.RES_HEIGHT);
   return textureSample(DEPTH_TEXTURE, DEPTH_SAMPLER, textureUV + ps * offset);
 }
 

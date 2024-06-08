@@ -75,25 +75,7 @@ export const PIPELINE_DESC: any = {
   }
 };
 
-export const VERTEX_SHADER = /* wgsl */`
-struct VertexOutput {
-  @builtin(position) Position: vec4<f32>,
-  @location(0) FragPos: vec3<f32>,
-  @location(1) FragUV: vec2<f32>,
-  @location(2) FragColor: vec3<f32>,
-  @location(3) FragNormal: vec3<f32>,
-  @location(4) FragTangent: vec3<f32>,
-  @location(5) FragBinormal: vec3<f32>,
-  @location(6) FragShadowPos: vec3<f32>
-}
-
-struct MeshInfos {
-  MVPC_MATRIX: mat4x4<f32>,
-  M_MATRIX: mat4x4<f32>,
-  NORM_MATRIX: mat3x3<f32>,
-  ID: vec4<f32>
-}
-
+const INCLUDE_MAT_PARAMS = `
 struct MaterialParams {
   ID: f32,
   OPACITY: f32,
@@ -117,20 +99,72 @@ struct MaterialParams {
   S01: f32,
   S02: f32,
   S03: f32,
+  S04: f32,
+  S05: f32,
+  S06: f32,
+  S07: f32,
+  S08: f32,
+  S09: f32,
   S10: f32,
   S11: f32,
   S12: f32,
   S13: f32,
-  S20: f32,
-  S21: f32,
-  S22: f32,
-  S23: f32,
-  S30: f32,
-  S31: f32,
-  S32: f32,
-  S33: f32
+  S14: f32,
+  S15: f32
+};`;
+
+const INCLUDE_SCENE_INFOS = `
+struct SceneInfos {
+  CAMERA_POS: vec3<f32>,
+  AMBIENT_COLOR: vec3<f32>,
+  POINT_LIGHT_COUNT: f32,
+  SPOT_LIGHT_COUNT: f32,
+  DECAL_COUNT: f32,
+  DELTA_TIME: f32,
+  TIME: f32,
+  S00: f32,
+  S01: f32,
+  S02: f32,
+  S03: f32,
+  S04: f32,
+  S05: f32,
+  S06: f32,
+  S07: f32,
+  S08: f32,
+  S09: f32,
+  S10: f32,
+  S11: f32,
+  S12: f32,
+  S13: f32,
+  S14: f32,
+  S15: f32
+};`;
+
+const INCLUDE_MESH_INFOS = `
+struct MeshInfos {
+  MVPC_MATRIX: mat4x4<f32>,
+  M_MATRIX: mat4x4<f32>,
+  NORM_MATRIX: mat3x3<f32>,
+  ID: vec4<f32>
+};`;
+
+export const VERTEX_SHADER = /* wgsl */`
+struct VertexOutput {
+  @builtin(position) Position: vec4<f32>,
+  @location(0) FragPos: vec3<f32>,
+  @location(1) FragUV: vec2<f32>,
+  @location(2) FragColor: vec3<f32>,
+  @location(3) FragNormal: vec3<f32>,
+  @location(4) FragTangent: vec3<f32>,
+  @location(5) FragBinormal: vec3<f32>,
+  @location(6) FragShadowPos: vec3<f32>
 }
 
+${INCLUDE_MESH_INFOS}
+${INCLUDE_MAT_PARAMS}
+${INCLUDE_SCENE_INFOS}
+
+@group(0) @binding(0) var<uniform> SCENE_INFOS: SceneInfos;
 @group(0) @binding(1) var<uniform> LVP_MATRIX: mat4x4<f32>;
 @group(1) @binding(0) var<uniform> MESH_INFOS: MeshInfos;
 @group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
@@ -174,23 +208,6 @@ struct FragOutput {
   @location(2) Id: vec4f
 }
 
-struct SceneInfos {
-  CAMERA_POS: vec3<f32>,
-  AMBIENT_COLOR: vec3<f32>,
-  POINT_LIGHT_COUNT: f32,
-  SPOT_LIGHT_COUNT: f32,
-  DECAL_COUNT: f32,
-  DELTA_TIME: f32,
-  TIME: f32
-}
-
-struct MeshInfos {
-  MVPC_MATRIX: mat4x4<f32>,
-  M_MATRIX: mat4x4<f32>,
-  NORM_MATRIX: mat3x3<f32>,
-  ID: vec4<f32>
-}
-
 struct MaterialColors {
   EMISSIVE: vec3<f32>,
   AMBIENT: vec3<f32>,
@@ -198,42 +215,9 @@ struct MaterialColors {
   SPECULAR: vec3<f32>
 }
 
-struct MaterialParams {
-  ID: f32,
-  OPACITY: f32,
-  NORMAL_INTENSITY: f32,
-  HAS_LIGHTNING: f32,
-  HAS_TEXTURE: f32,
-  HAS_DISPLACEMENT_MAP: f32,
-  DISPLACEMENT_MAP_FACTOR: f32,
-  HAS_DIFFUSE_MAP: f32,
-  HAS_SPECULAR_MAP: f32,
-  HAS_EMISSIVE_MAP: f32,
-  HAS_NORMAL_MAP: f32,
-  HAS_ENV_MAP: f32,
-  HAS_TOON_MAP: f32,
-  HAS_DECAL: f32,
-  HAS_SHADOW: f32,
-  SHININESS: f32,
-  EMISSIVE_FACTOR: f32,
-  TOON_BLENDING: f32,
-  S00: f32,
-  S01: f32,
-  S02: f32,
-  S03: f32,
-  S10: f32,
-  S11: f32,
-  S12: f32,
-  S13: f32,
-  S20: f32,
-  S21: f32,
-  S22: f32,
-  S23: f32,
-  S30: f32,
-  S31: f32,
-  S32: f32,
-  S33: f32
-}
+${INCLUDE_MESH_INFOS}
+${INCLUDE_MAT_PARAMS}
+${INCLUDE_SCENE_INFOS}
 
 struct MaterialUvs {
   TEXTURE_SCROLL: vec2<f32>,
@@ -289,7 +273,6 @@ struct Decal {
   GROUP: f32
 }
 
-@group(1) @binding(0) var<uniform> MESH_INFOS: MeshInfos;
 @group(0) @binding(0) var<uniform> SCENE_INFOS: SceneInfos;
 @group(0) @binding(2) var<uniform> DIR_LIGHT: DirLight;
 @group(0) @binding(3) var<uniform> POINT_LIGHTS: array<PointLight, ${MAX_POINT_LIGHTS}>;
@@ -300,6 +283,11 @@ struct Decal {
 @group(0) @binding(8) var DECAL_ATLAS_SAMPLER: sampler;
 @group(0) @binding(9) var SHADOW_MAP_TEXTURE: texture_depth_2d;
 @group(0) @binding(10) var SHADOW_MAP_SAMPLER: sampler_comparison;
+@group(0) @binding(11) var S0_TEXTURE: texture_2d<f32>;
+@group(0) @binding(12) var S0_SAMPLER: sampler;
+@group(0) @binding(13) var S1_TEXTURE: texture_2d<f32>;
+@group(0) @binding(14) var S1_SAMPLER: sampler;
+@group(1) @binding(0) var<uniform> MESH_INFOS: MeshInfos;
 @group(2) @binding(0) var<uniform> MAT_COLORS: MaterialColors;
 @group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
 @group(2) @binding(2) var<uniform> MAT_UVS: MaterialUvs;
@@ -320,6 +308,10 @@ struct Decal {
 @group(3) @binding(13) var MAT_ENV_MAP_SAMPLER: sampler;
 @group(3) @binding(14) var MAT_TOON_TEXTURE: texture_2d<f32>;
 @group(3) @binding(15) var MAT_TOON_SAMPLER: sampler;
+@group(3) @binding(16) var MAT_S0_TEXTURE: texture_2d<f32>;
+@group(3) @binding(17) var MAT_S0_SAMPLER: sampler;
+@group(3) @binding(18) var MAT_S1_TEXTURE: texture_2d<f32>;
+@group(3) @binding(19) var MAT_S1_SAMPLER: sampler;
 
 @fragment
 fn main(
@@ -409,6 +401,10 @@ fn main(
     outputColor = vec4(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY);
   }
 
+  var matS0 = textureSample(MAT_S0_TEXTURE, MAT_S0_SAMPLER, fragUV);
+  var matS1 = textureSample(MAT_S1_TEXTURE, MAT_S1_SAMPLER, fragUV);
+  var s0 = textureSample(S0_TEXTURE, S0_SAMPLER, fragUV);
+  var s1 = textureSample(S1_TEXTURE, S1_SAMPLER, fragUV);
   ${FRAG_AFTER}
 
   var output: FragOutput;

@@ -15,25 +15,6 @@ interface MATAnimation {
   frameDuration: number;
 };
 
-interface MATCustom {
-  S00?: number;
-  S01?: number;
-  S02?: number;
-  S03?: number;
-  S10?: number;
-  S11?: number;
-  S12?: number;
-  S13?: number;
-  S20?: number;
-  S21?: number;
-  S22?: number;
-  S23?: number;
-  S30?: number;
-  S31?: number;
-  S32?: number;
-  S33?: number;
-};
-
 interface MATOptions {
   animations?: Array<MATAnimation>;
   id?: number;
@@ -63,7 +44,6 @@ interface MATOptions {
   shininess?: number;
   emissiveFactor?: number;
   toonBlending?: number;
-  customs?: MATCustom;
 };
 
 /**
@@ -96,6 +76,9 @@ class Gfx3Material {
   normalMap: Gfx3Texture;
   envMap: Gfx3Texture;
   toonMap: Gfx3Texture;
+
+  s0Texture: Gfx3Texture;
+  s1Texture: Gfx3Texture;
 
   /**
    * @param {MATOptions} options - The options to configure the material.
@@ -150,22 +133,6 @@ class Gfx3Material {
     this.params[15] = options.shininess ?? 0.0;
     this.params[16] = options.emissiveFactor ?? 1.0;
     this.params[17] = options.toonBlending ?? 1.0;
-    this.params[18] = options.customs && options.customs.S00 ? options.customs.S00 : 0.0;
-    this.params[19] = options.customs && options.customs.S01 ? options.customs.S01 : 0.0;
-    this.params[20] = options.customs && options.customs.S02 ? options.customs.S02 : 0.0;
-    this.params[21] = options.customs && options.customs.S03 ? options.customs.S03 : 0.0;
-    this.params[22] = options.customs && options.customs.S10 ? options.customs.S10 : 0.0;
-    this.params[23] = options.customs && options.customs.S11 ? options.customs.S11 : 0.0;
-    this.params[24] = options.customs && options.customs.S12 ? options.customs.S12 : 0.0;
-    this.params[25] = options.customs && options.customs.S13 ? options.customs.S13 : 0.0;
-    this.params[26] = options.customs && options.customs.S20 ? options.customs.S20 : 0.0;
-    this.params[27] = options.customs && options.customs.S21 ? options.customs.S21 : 0.0;
-    this.params[28] = options.customs && options.customs.S22 ? options.customs.S22 : 0.0;
-    this.params[29] = options.customs && options.customs.S23 ? options.customs.S23 : 0.0;
-    this.params[30] = options.customs && options.customs.S30 ? options.customs.S30 : 0.0;
-    this.params[31] = options.customs && options.customs.S31 ? options.customs.S31 : 0.0;
-    this.params[32] = options.customs && options.customs.S32 ? options.customs.S32 : 0.0;
-    this.params[33] = options.customs && options.customs.S33 ? options.customs.S33 : 0.0;
     this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 6);
     this.toonLightDir = this.grp2.setFloat(3, 'MAT_TOON_LIGHT_DIR', 3);
     this.toonLightDir[0] = options.toonLightDir ? options.toonLightDir[0] : 0.0;
@@ -189,6 +156,10 @@ class Gfx3Material {
     this.envMap = this.grp3.setSampler(13, 'MAT_ENV_MAP_SAMPLER', this.envMap);
     this.toonMap = this.grp3.setTexture(14, 'MAT_TOON_TEXTURE', options.toonMap ?? gfx3Manager.createTextureFromBitmap());
     this.toonMap = this.grp3.setSampler(15, 'MAT_TOON_SAMPLER', this.toonMap);
+    this.s0Texture = this.grp3.setTexture(16, 'MAT_S0_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.s0Texture = this.grp3.setSampler(17, 'MAT_S0_SAMPLER', this.s0Texture);
+    this.s1Texture = this.grp3.setTexture(18, 'MAT_S1_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.s1Texture = this.grp3.setSampler(19, 'MAT_S1_SAMPLER', this.s1Texture);
 
     this.grp2.allocate();
     this.grp3.allocate();
@@ -253,8 +224,7 @@ class Gfx3Material {
       shininess: json['Shininess'],
       emissiveFactor: json['EmissiveFactor'],
       toonBlending: json['ToonBlending'],
-      toonLightDir: json['ToonLightDir'],
-      customs: json['Customs']
+      toonLightDir: json['ToonLightDir']
     });
   }
 
@@ -605,15 +575,37 @@ class Gfx3Material {
   }
 
   /**
-   * Set custom params.
+   * Set a custom parameter value.
    * 
-   * @param {number} i - Index row of custom param.
-   * @param {number} j - Index col of custom param.
-   * @param {number} value - Value of custom param.
+   * @param {number} index - The param index.
+   * @param {number} value - The value.
    */
-  setCustomParam(i: number, j: number, value: number): void {
-    this.params[18 + (i * 4) + j] = value;
-    this.dataChanged = true;
+  setCustomParam(index: number, value: number): void {
+    this.params[18 + index] = value;
+  }
+
+  /**
+   * Returns the specified custom param value.
+   */
+  getCustomParam(index: number): number {
+    return this.params[18 + index];
+  }
+
+  /**
+   * Set custom textures.
+   * 
+   * @param {any} textures - The textures list.
+   */
+  setCustomTextures(textures: {0?: Gfx3Texture, 1?: Gfx3Texture }): void {
+    if (textures[0]) {
+      this.s0Texture = textures[0];
+      this.texturesChanged = true;
+    }
+
+    if (textures[1]) {
+      this.s1Texture = textures[1];
+      this.texturesChanged = true;
+    }
   }
 
   /**
@@ -658,6 +650,8 @@ class Gfx3Material {
       this.grp3.setTexture(10, 'MAT_NORM_TEXTURE', this.normalMap);
       this.grp3.setTexture(12, 'MAT_ENV_MAP_TEXTURE', this.envMap, { dimension: 'cube' });
       this.grp3.setTexture(14, 'MAT_TOON_TEXTURE', this.toonMap);
+      this.grp3.setTexture(16, 'MAT_S0_TEXTURE', this.s0Texture);
+      this.grp3.setTexture(18, 'MAT_S1_TEXTURE', this.s1Texture);
       this.grp3.allocate();
       this.texturesChanged = false;
     }

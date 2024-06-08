@@ -366,6 +366,7 @@ class Gfx2Tileset {
   tileHeight: number;
   texture: ImageBitmap | HTMLImageElement;
   animations: Map<number, Array<number>>;
+  properties: Map<number, any>;
 
   constructor() {
     this.columns = 0;
@@ -373,6 +374,7 @@ class Gfx2Tileset {
     this.tileHeight = 0;
     this.texture = gfx2Manager.getDefaultTexture();
     this.animations = new Map<number, Array<number>>;
+    this.properties = new Map<number, any>();
   }
 
   /**
@@ -389,6 +391,11 @@ class Gfx2Tileset {
     this.animations.clear();
     for (const tileId in data['Animations']) {
       this.animations.set(parseInt(tileId), data['Animations'][tileId] ?? []);
+    }
+
+    this.properties.clear();
+    for (const tileId in data['Properties']) {
+      this.properties.set(parseInt(tileId), data['Properties'][tileId]);
     }
   }
 
@@ -453,12 +460,41 @@ class Gfx2Tileset {
   }
 
   /**
-   * Returns a tile animation as a list of tile index.
+   * Returns a tile animation as a list of tile index or undefined if not exist.
    * 
    * @param {number} tileId - The tile index.
    */
   getAnimation(tileId: number): Array<number> | undefined {
     return this.animations.get(tileId);
+  }
+
+  /**
+   * Returns a tile properties.
+   * 
+   * @param {number} tileId - The tile index.
+   */
+  getProperties(tileId: number): any {
+    const properties = this.properties.get(tileId);
+    if (!properties) {
+      throw new Error('Gfx2TileMap::getProperties(): Properties not found for this tile');
+    }
+
+    return properties;
+  }
+
+  /**
+   * Returns a tile property.
+   * 
+   * @param {number} tileId - The tile index.
+   * @param {string} key - The property key.
+   */
+  getProperty(tileId: number, key: string): any {
+    const properties = this.properties.get(tileId);
+    if (!properties) {
+      throw new Error('Gfx2TileMap::getProperty(): Properties not found for this tile');
+    }
+
+    return properties[key];
   }
 }
 

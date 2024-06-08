@@ -17,7 +17,7 @@ interface MeshCommand {
  */
 class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   shadowEnabled: boolean;
-  decalAtlasChanged: boolean;
+  textureChanged: boolean;
   meshCommands: Array<MeshCommand>;
   grp0: Gfx3StaticGroup;
   sceneInfos: Float32Array;
@@ -29,17 +29,19 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   fog: Float32Array;
   decalAtlas: Gfx3Texture;
   shadowMap: Gfx3Texture;
+  s0Texture: Gfx3Texture;
+  s1Texture: Gfx3Texture;
   grp1: Gfx3DynamicGroup;
   meshInfos: Float32Array;
 
   constructor() {
     super('MESH_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.shadowEnabled = false;
-    this.decalAtlasChanged = false;
+    this.textureChanged = false;
     this.meshCommands = [];
 
     this.grp0 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 0);
-    this.sceneInfos = this.grp0.setFloat(0, 'SCENE_INFOS', 14);
+    this.sceneInfos = this.grp0.setFloat(0, 'SCENE_INFOS', 28); // 14
     this.lvpMatrix = this.grp0.setFloat(1, 'LVP_MATRIX', 16);
     this.dirLight = this.grp0.setFloat(2, 'DIR_LIGHT', 16);
     this.pointLights = this.grp0.setFloat(3, 'POINT_LIGHTS', 20 * MAX_POINT_LIGHTS);
@@ -50,6 +52,10 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.decalAtlas = this.grp0.setSampler(8, 'DECAL_ATLAS_SAMPLER', this.decalAtlas);
     this.shadowMap = this.grp0.setTexture(9, 'SHADOW_MAP_TEXTURE', gfx3MeshShadowRenderer.getDepthTexture());
     this.shadowMap = this.grp0.setSampler(10, 'SHADOW_MAP_SAMPLER', this.shadowMap);
+    this.s0Texture = this.grp0.setTexture(11, 'S0_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.s0Texture = this.grp0.setSampler(12, 'S0_SAMPLER', this.s0Texture);
+    this.s1Texture = this.grp0.setTexture(13, 'S1_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.s1Texture = this.grp0.setSampler(14, 'S1_SAMPLER', this.s1Texture);
 
     this.grp1 = gfx3Manager.createDynamicGroup('MESH_PIPELINE', 1);
     this.meshInfos = this.grp1.setFloat(0, 'MESH_MATRICES', 16 * 5);
@@ -69,15 +75,12 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     const vpcMatrix = currentView.getViewProjectionClipMatrix();
     passEncoder.setPipeline(this.pipeline);
 
-    if (this.decalAtlasChanged) {
+    if (this.textureChanged) {
       this.grp0.setTexture(7, 'DECAL_ATLAS_TEXTURE', this.decalAtlas);
+      this.grp0.setTexture(11, 'S0_TEXTURE', this.s0Texture);
+      this.grp0.setTexture(13, 'S1_TEXTURE', this.s1Texture);
       this.grp0.allocate();
-      this.decalAtlasChanged = false;
-    }
-
-    if (this.shadowEnabled) {
-      this.grp0.setTexture(9, 'SHADOW_MAP_TEXTURE', gfx3MeshShadowRenderer.getDepthTexture());
-      this.grp0.allocate();
+      this.textureChanged = false;
     }
 
     this.grp0.beginWrite();
@@ -140,7 +143,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    */
   setDecalAtlas(decalAtlas: Gfx3Texture): void {
     this.decalAtlas = decalAtlas;
-    this.decalAtlasChanged = true;
+    this.textureChanged = true;
   }
 
   /**
@@ -191,6 +194,40 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.sceneInfos[4] = ambientColor[0];
     this.sceneInfos[5] = ambientColor[1];
     this.sceneInfos[6] = ambientColor[2];
+  }
+
+  /**
+   * Set a custom parameter value.
+   * 
+   * @param {number} index - The param index.
+   * @param {number} value - The value.
+   */
+  setCustomParam(index: number, value: number): void {
+    this.sceneInfos[12 + index] = value;
+  }
+
+  /**
+   * Returns the specified custom param value.
+   */
+  getCustomParam(index: number): number {
+    return this.sceneInfos[12 + index];
+  }
+
+  /**
+   * Set custom textures.
+   * 
+   * @param {any} textures - The textures list.
+   */
+  setCustomTextures(textures: {0?: Gfx3Texture, 1?: Gfx3Texture }): void {
+    if (textures[0]) {
+      this.s0Texture = textures[0];
+      this.textureChanged = true;
+    }
+
+    if (textures[1]) {
+      this.s1Texture = textures[1];
+      this.textureChanged = true;
+    }
   }
 
   /**
