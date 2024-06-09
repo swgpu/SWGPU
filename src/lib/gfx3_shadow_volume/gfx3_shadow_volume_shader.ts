@@ -1,4 +1,4 @@
-export const SHADER_VERTEX_ATTR_COUNT = 4;
+export const SHADER_VERTEX_ATTR_COUNT = 6;
 export const UNIFORM_ATTR_COUNT = 1;
 
 export const PIPELINE_CW_DESC: any = {
@@ -13,9 +13,9 @@ export const PIPELINE_CW_DESC: any = {
         offset: 0,
         format: 'float32x3'
       },{
-        shaderLocation: 1, /* shadowFactor */
+        shaderLocation: 1, /* colors */
         offset: 3 * 4,
-        format: 'float32'
+        format: 'float32x3'
       }]
     }]
   },
@@ -49,9 +49,9 @@ export const PIPELINE_CCW_DESC: any = {
         offset: 0,
         format: 'float32x3'
       },{
-        shaderLocation: 1, /* shadowFactor */
+        shaderLocation: 1, /* colors */
         offset: 3 * 4,
-        format: 'float32'
+        format: 'float32x3'
       }]
     }]
   },
@@ -76,7 +76,7 @@ export const PIPELINE_CCW_DESC: any = {
 export const VERTEX_SHADER = `
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
-  @location(0) FragShadowFactor: f32
+  @location(0) Color: vec3<f32>
 }
 
 @group(0) @binding(0) var<uniform> MVPC_MATRIX: mat4x4<f32>;
@@ -84,11 +84,11 @@ struct VertexOutput {
 @vertex
 fn main(
   @location(0) Position: vec4<f32>,
-  @location(1) ShadowFactor: f32
+  @location(1) Color: vec3<f32>
 ) -> VertexOutput {
   var output: VertexOutput;
   output.Position = MVPC_MATRIX * Position;
-  output.FragShadowFactor = ShadowFactor;
+  output.Color = Color;
   return output;
 }`;
 
@@ -96,7 +96,7 @@ export const FRAGMENT_SHADER = /* wgsl */`
 @fragment
 fn main(
   @builtin(position) Position: vec4<f32>,
-  @location(0) FragShadowFactor: f32
+  @location(0) Color: vec3<f32>
 ) -> @location(0) vec4f {
-  return vec4<f32>(FragShadowFactor, FragShadowFactor, FragShadowFactor, 1.0);
+  return vec4<f32>(Color.r, Color.g, Color.b, 1.0);
 }`;

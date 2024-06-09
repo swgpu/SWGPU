@@ -1,11 +1,11 @@
 export const SHADER_VERTEX_ATTR_COUNT = 4;
 
 const WINDOW = window as any;
-const FRAG_BEFORE = WINDOW.__PPE_FRAG_BEFORE__ ? WINDOW.__PPE_FRAG_BEFORE__ : '';
-const FRAG_AFTER = WINDOW.__PPE_FRAG_AFTER__ ? WINDOW.__PPE_FRAG_AFTER__ : '';
+const FRAG_BEFORE = WINDOW.__POST_FRAG_BEFORE__ ? WINDOW.__POST_FRAG_BEFORE__ : '';
+const FRAG_AFTER = WINDOW.__POST_FRAG_AFTER__ ? WINDOW.__POST_FRAG_AFTER__ : '';
 
 export const PIPELINE_DESC: any = {
-  label: 'PPE pipeline',
+  label: 'POST pipeline',
   layout: 'auto',
   vertex: {
     entryPoint: 'main',
@@ -77,6 +77,7 @@ struct Params {
   OUTLINE_B: f32,
   OUTLINE_CONSTANT: f32,
   SHADOW_VOLUME_ENABLED: f32,
+  SHADOW_VOLUME_BLEND_MODE: f32,
   S00: f32,
   S01: f32,
   S02: f32,
@@ -106,12 +107,12 @@ struct Params {
 @group(0) @binding(8) var DEPTH_TEXTURE: texture_depth_2d;
 @group(0) @binding(9) var DEPTH_SAMPLER: sampler;
 
-@group(1) @binding(0) var SHADOW_FACTOR_TEXTURE: texture_2d<f32>;
-@group(1) @binding(1) var SHADOW_FACTOR_SAMPLER: sampler;
-@group(1) @binding(2) var SHADOW_DEPTH_CCW_TEXTURE: texture_depth_2d;
-@group(1) @binding(3) var SHADOW_DEPTH_CCW_SAMPLER: sampler;
-@group(1) @binding(4) var SHADOW_DEPTH_CW_TEXTURE: texture_depth_2d;
-@group(1) @binding(5) var SHADOW_DEPTH_CW_SAMPLER: sampler;
+@group(1) @binding(0) var SHADOW_VOL_TEXTURE: texture_2d<f32>;
+@group(1) @binding(1) var SHADOW_VOL_SAMPLER: sampler;
+@group(1) @binding(2) var SHADOW_VOL_DEPTH_CCW_TEXTURE: texture_depth_2d;
+@group(1) @binding(3) var SHADOW_VOL_DEPTH_CCW_SAMPLER: sampler;
+@group(1) @binding(4) var SHADOW_VOL_DEPTH_CW_TEXTURE: texture_depth_2d;
+@group(1) @binding(5) var SHADOW_VOL_DEPTH_CW_SAMPLER: sampler;
 
 @group(2) @binding(0) var S0_TEXTURE: texture_2d<f32>;
 @group(2) @binding(1) var S0_SAMPLER: sampler;
@@ -147,9 +148,9 @@ fn main(
 
   var normal = textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, fragUV);
   var depth = textureSample(DEPTH_TEXTURE, DEPTH_SAMPLER, fragUV);
-  var shadowFactor = textureSample(SHADOW_FACTOR_TEXTURE, SHADOW_FACTOR_SAMPLER, fragUV);
-  var shadowDepthCW = textureSample(SHADOW_DEPTH_CW_TEXTURE, SHADOW_DEPTH_CW_SAMPLER, fragUV);
-  var shadowDepthCCW = textureSample(SHADOW_DEPTH_CCW_TEXTURE, SHADOW_DEPTH_CCW_SAMPLER, fragUV);
+  var shadowVol = textureSample(SHADOW_VOL_TEXTURE, SHADOW_VOL_SAMPLER, fragUV);
+  var shadowVolDepthCW = textureSample(SHADOW_VOL_DEPTH_CW_TEXTURE, SHADOW_VOL_DEPTH_CW_SAMPLER, fragUV);
+  var shadowVolDepthCCW = textureSample(SHADOW_VOL_DEPTH_CCW_TEXTURE, SHADOW_VOL_DEPTH_CCW_SAMPLER, fragUV);
   var s0 = textureSample(S0_TEXTURE, S0_SAMPLER, fragUV);
   var s1 = textureSample(S1_TEXTURE, S1_SAMPLER, fragUV);
 
@@ -197,9 +198,16 @@ fn main(
 
   if (PARAMS.SHADOW_VOLUME_ENABLED == 1.0 && (flags & 16) == 16)
   {
-    if (shadowDepthCW != 1.0 && shadowDepthCCW != 1.0 && depth >= shadowDepthCCW && depth <= shadowDepthCW)
+    if (shadowVolDepthCW != 1.0 && shadowVolDepthCCW != 1.0 && depth >= shadowVolDepthCCW && depth <= shadowVolDepthCW)
     {
-      outputColor *= shadowFactor;
+      if (PARAMS.SHADOW_VOLUME_BLEND_MODE == 1.0)
+      {
+        outputColor += shadowVol;
+      }
+      else
+      {
+        outputColor *= shadowVol;
+      }
     }
   }
 

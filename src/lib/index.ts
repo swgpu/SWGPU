@@ -93,7 +93,7 @@ export { gfx3FlareRenderer } from './gfx3_flare/gfx3_flare_renderer';
 export { gfx3MeshRenderer } from './gfx3_mesh/gfx3_mesh_renderer';
 export { gfx3MeshShadowRenderer } from './gfx3_mesh/gfx3_mesh_shadow_renderer';
 export { gfx3ParticlesRenderer } from './gfx3_particules/gfx3_particles_renderer';
-export { gfx3PPERenderer } from './gfx3_ppe/gfx3_ppe_renderer';
+export { gfx3PostRenderer } from './gfx3_post/gfx3_post_renderer';
 export { gfx3ShadowVolumeRenderer } from './gfx3_shadow_volume/gfx3_shadow_volume_renderer';
 export { gfx3SkyboxRenderer } from './gfx3_skybox/gfx3_skybox_renderer';
 export { gfx3SpriteRenderer } from './gfx3_sprite/gfx3_sprite_renderer';

@@ -10,7 +10,7 @@ import { gfx3ParticlesRenderer } from '@lib/gfx3_particules/gfx3_particles_rende
 import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
 import { screenManager } from '@lib/screen/screen_manager';
 import { uiManager } from '@lib/ui/ui_manager';
-import { gfx3PPERenderer } from '@lib/gfx3_ppe/gfx3_ppe_renderer';
+import { gfx3PostRenderer } from '@lib/gfx3_post/gfx3_post_renderer';
 import { gfx3ShadowVolumeRenderer } from '@lib/gfx3_shadow_volume/gfx3_shadow_volume_renderer';
 // ---------------------------------------------------------------------------------------
 import { BootScreen } from './boot_screen';
@@ -47,7 +47,7 @@ class GameManager {
     gfx3Manager.beginRender();
     gfx3MeshShadowRenderer.render();
     gfx3ShadowVolumeRenderer.render();
-    gfx3Manager.setDestinationTexture(gfx3PPERenderer.getSourceTexture());
+    gfx3Manager.setDestinationTexture(gfx3PostRenderer.getSourceTexture());
     gfx3Manager.beginPassRender(0);
     gfx3SkyboxRenderer.render();
     gfx3DebugRenderer.render();
@@ -56,7 +56,7 @@ class GameManager {
     gfx3ParticlesRenderer.render();
     gfx3FlareRenderer.render();
     gfx3Manager.endPassRender();
-    gfx3PPERenderer.render(ts, gfx3Manager.getCurrentRenderingTexture());
+    gfx3PostRenderer.render(ts, gfx3Manager.getCurrentRenderingTexture());
     gfx3Manager.endRender();
 
     document.getElementById('fps').textContent = (1000 / ts).toFixed(2);

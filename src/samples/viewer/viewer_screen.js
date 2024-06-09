@@ -2,7 +2,7 @@ import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
 import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
 import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
-import { gfx3PPERenderer, PPEParam } from '@lib/gfx3_ppe/gfx3_ppe_renderer';
+import { gfx3PostRenderer, PostParam } from '@lib/gfx3_post/gfx3_post_renderer';
 import { uiManager } from '@lib/ui/ui_manager';
 import { coreManager } from '@lib/core/core_manager';
 import { UT } from '@lib/core/utils';
@@ -31,12 +31,12 @@ class ViewerScreen extends Screen {
     this.mesh = await CREATE_CUBE();
 
     this.shadow = new Gfx3ShadowVolume();
-    await this.shadow.loadFromBinaryFile('./samples/viewer/shadow.bsv');
+    await this.shadow.loadFromFile('./samples/viewer/shadow.jsv');
 
-    gfx3PPERenderer.setParam(PPEParam.COLOR_ENABLED, 1.0);
-    gfx3PPERenderer.setParam(PPEParam.PIXELATION_ENABLED, 1.0);
-    gfx3PPERenderer.setParam(PPEParam.DITHER_ENABLED, 1.0);
-    gfx3PPERenderer.setParam(PPEParam.OUTLINE_ENABLED, 1.0);
+    gfx3PostRenderer.setParam(PostParam.COLOR_ENABLED, 1.0);
+    gfx3PostRenderer.setParam(PostParam.PIXELATION_ENABLED, 1.0);
+    gfx3PostRenderer.setParam(PostParam.DITHER_ENABLED, 1.0);
+    gfx3PostRenderer.setParam(PostParam.OUTLINE_ENABLED, 1.0);
 
     uiManager.addNode(CREATE_UI_INFOBOX(), 'position:absolute; bottom:10px; right:10px');
     document.addEventListener('keydown', this.handleKeyDownCb);

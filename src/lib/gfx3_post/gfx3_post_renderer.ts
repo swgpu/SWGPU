@@ -5,9 +5,14 @@ import { gfx3ShadowVolumeRenderer } from '../gfx3_shadow_volume/gfx3_shadow_volu
 import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
-import { VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_VERTEX_ATTR_COUNT } from './gfx3_ppe_shader';
+import { VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_VERTEX_ATTR_COUNT } from './gfx3_post_shader';
 
-enum PPEParam {
+enum PostShadowVolumeBlendMode {
+  MUL = 0,
+  ADD = 1
+};
+
+enum PostParam {
   ENABLED = 0,
   PIXELATION_ENABLED = 1,
   PIXELATION_WIDTH = 2,
@@ -25,13 +30,14 @@ enum PPEParam {
   OUTLINE_G = 14,
   OUTLINE_B = 15,
   OUTLINE_CONSTANT = 16,
-  SHADOW_VOLUME_ENABLED = 17
+  SHADOW_VOLUME_ENABLED = 17,
+  SHADOW_VOLUME_BLEND_MODE = 18
 };
 
 /**
  * Singleton post-processing effects renderer.
  */
-class Gfx3PPERenderer extends Gfx3RendererAbstract {
+class Gfx3PostRenderer extends Gfx3RendererAbstract {
   device: GPUDevice;
   vertexBuffer: GPUBuffer;
   grp0: Gfx3StaticGroup;
@@ -42,38 +48,39 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
   idsTexture: Gfx3Texture;
   depthTexture: Gfx3Texture;
   grp1: Gfx3StaticGroup;
-  shadowFactorTexture: Gfx3Texture;
-  shadowDepthCWTexture: Gfx3Texture;
-  shadowDepthCCWTexture: Gfx3Texture;
+  shadowVolFactorTexture: Gfx3Texture;
+  shadowVolDepthCWTexture: Gfx3Texture;
+  shadowVolDepthCCWTexture: Gfx3Texture;
   grp2: Gfx3StaticGroup;
   s0Texture: Gfx3Texture;
   s1Texture: Gfx3Texture;
 
   constructor() {
-    super('PPE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
+    super('POST_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
     this.device = gfx3Manager.getDevice();
     this.vertexBuffer = this.device.createBuffer({ size: 6 * SHADER_VERTEX_ATTR_COUNT * 4, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC });
 
-    this.grp0 = gfx3Manager.createStaticGroup('PPE_PIPELINE', 0);
-    this.params = this.grp0.setFloat(0, 'PARAMS', 34);
-    this.params[PPEParam.ENABLED] = 1.0;
-    this.params[PPEParam.PIXELATION_ENABLED] = 0.0;
-    this.params[PPEParam.PIXELATION_WIDTH] = 400.0;
-    this.params[PPEParam.PIXELATION_HEIGHT] = 400.0;
-    this.params[PPEParam.COLOR_ENABLED] = 0.0;
-    this.params[PPEParam.COLOR_PRECISION] = 32.0;
-    this.params[PPEParam.DITHER_ENABLED] = 0.0;
-    this.params[PPEParam.DITHER_PATTERN_INDEX] = 0.0;
-    this.params[PPEParam.DITHER_THRESHOLD] = 1.0;
-    this.params[PPEParam.DITHER_SCALE_X] = 1.0;
-    this.params[PPEParam.DITHER_SCALE_Y] = 1.0;
-    this.params[PPEParam.OUTLINE_ENABLED] = 0.0;
-    this.params[PPEParam.OUTLINE_THICKNESS] = 120.0;
-    this.params[PPEParam.OUTLINE_R] = 0.0;
-    this.params[PPEParam.OUTLINE_G] = 0.0;
-    this.params[PPEParam.OUTLINE_B] = 0.0;
-    this.params[PPEParam.OUTLINE_CONSTANT] = 0.0;
-    this.params[PPEParam.SHADOW_VOLUME_ENABLED] = 1.0;
+    this.grp0 = gfx3Manager.createStaticGroup('POST_PIPELINE', 0);
+    this.params = this.grp0.setFloat(0, 'PARAMS', 35);
+    this.params[PostParam.ENABLED] = 1.0;
+    this.params[PostParam.PIXELATION_ENABLED] = 0.0;
+    this.params[PostParam.PIXELATION_WIDTH] = 400.0;
+    this.params[PostParam.PIXELATION_HEIGHT] = 400.0;
+    this.params[PostParam.COLOR_ENABLED] = 0.0;
+    this.params[PostParam.COLOR_PRECISION] = 32.0;
+    this.params[PostParam.DITHER_ENABLED] = 0.0;
+    this.params[PostParam.DITHER_PATTERN_INDEX] = 0.0;
+    this.params[PostParam.DITHER_THRESHOLD] = 1.0;
+    this.params[PostParam.DITHER_SCALE_X] = 1.0;
+    this.params[PostParam.DITHER_SCALE_Y] = 1.0;
+    this.params[PostParam.OUTLINE_ENABLED] = 0.0;
+    this.params[PostParam.OUTLINE_THICKNESS] = 120.0;
+    this.params[PostParam.OUTLINE_R] = 0.0;
+    this.params[PostParam.OUTLINE_G] = 0.0;
+    this.params[PostParam.OUTLINE_B] = 0.0;
+    this.params[PostParam.OUTLINE_CONSTANT] = 0.0;
+    this.params[PostParam.SHADOW_VOLUME_ENABLED] = 1.0;
+    this.params[PostParam.SHADOW_VOLUME_BLEND_MODE] = PostShadowVolumeBlendMode.MUL;
     this.infos = this.grp0.setFloat(1, 'INFOS', 4);
     this.infos[0] = gfx3Manager.getWidth();
     this.infos[1] = gfx3Manager.getHeight();
@@ -87,16 +94,16 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.depthTexture = this.grp0.setSampler(9, 'DEPTH_SAMPLER', this.depthTexture);
     this.grp0.allocate();
 
-    this.grp1 = gfx3Manager.createStaticGroup('PPE_PIPELINE', 1);
-    this.shadowFactorTexture = this.grp1.setTexture(0, 'SHADOW_FACTOR_TEXTURE', gfx3ShadowVolumeRenderer.getFactorTexture());
-    this.shadowFactorTexture = this.grp1.setSampler(1, 'SHADOW_FACTOR_SAMPLER', this.shadowFactorTexture);
-    this.shadowDepthCCWTexture = this.grp1.setTexture(2, 'SHADOW_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
-    this.shadowDepthCCWTexture = this.grp1.setSampler(3, 'SHADOW_DEPTH_CCW_SAMPLER', this.shadowDepthCCWTexture);
-    this.shadowDepthCWTexture = this.grp1.setTexture(4, 'SHADOW_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
-    this.shadowDepthCWTexture = this.grp1.setSampler(5, 'SHADOW_DEPTH_CW_SAMPLER', this.shadowDepthCWTexture);
+    this.grp1 = gfx3Manager.createStaticGroup('POST_PIPELINE', 1);
+    this.shadowVolFactorTexture = this.grp1.setTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());
+    this.shadowVolFactorTexture = this.grp1.setSampler(1, 'SHADOW_VOL_SAMPLER', this.shadowVolFactorTexture);
+    this.shadowVolDepthCCWTexture = this.grp1.setTexture(2, 'SHADOW_VOL_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
+    this.shadowVolDepthCCWTexture = this.grp1.setSampler(3, 'SHADOW_VOL_DEPTH_CCW_SAMPLER', this.shadowVolDepthCCWTexture);
+    this.shadowVolDepthCWTexture = this.grp1.setTexture(4, 'SHADOW_VOL_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
+    this.shadowVolDepthCWTexture = this.grp1.setSampler(5, 'SHADOW_VOL_DEPTH_CW_SAMPLER', this.shadowVolDepthCWTexture);
     this.grp1.allocate();
 
-    this.grp2 = gfx3Manager.createStaticGroup('PPE_PIPELINE', 2);
+    this.grp2 = gfx3Manager.createStaticGroup('POST_PIPELINE', 2);
     this.s0Texture = this.grp2.setTexture(0, 'S0_TEXTURE', gfx3Manager.createTextureFromBitmap());
     this.s0Texture = this.grp2.setSampler(1, 'S0_SAMPLER', this.s0Texture);
     this.s1Texture = this.grp2.setTexture(2, 'S1_TEXTURE', gfx3Manager.createTextureFromBitmap());
@@ -168,14 +175,14 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
    * @param {number} value - The value.
    */
   setCustomParam(index: number, value: number): void {
-    this.params[18 + index] = value;
+    this.params[19 + index] = value;
   }
 
   /**
    * Returns the specified custom param value.
    */
   getCustomParam(index: number): number {
-    return this.params[18 + index];
+    return this.params[19 + index];
   }
 
   /**
@@ -215,12 +222,12 @@ class Gfx3PPERenderer extends Gfx3RendererAbstract {
     this.depthTexture = this.grp0.setTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
     this.grp0.allocate();
 
-    this.shadowFactorTexture = this.grp1.setTexture(0, 'SHADOW_FACTOR_TEXTURE', gfx3ShadowVolumeRenderer.getFactorTexture());
-    this.shadowDepthCCWTexture = this.grp1.setTexture(2, 'SHADOW_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
-    this.shadowDepthCWTexture = this.grp1.setTexture(4, 'SHADOW_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
+    this.shadowVolFactorTexture = this.grp1.setTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());
+    this.shadowVolDepthCCWTexture = this.grp1.setTexture(2, 'SHADOW_VOL_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
+    this.shadowVolDepthCWTexture = this.grp1.setTexture(4, 'SHADOW_VOL_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
     this.grp1.allocate();
   }
 }
 
-export { Gfx3PPERenderer, PPEParam };
-export const gfx3PPERenderer = new Gfx3PPERenderer();
+export { Gfx3PostRenderer, PostParam, PostShadowVolumeBlendMode };
+export const gfx3PostRenderer = new Gfx3PostRenderer();

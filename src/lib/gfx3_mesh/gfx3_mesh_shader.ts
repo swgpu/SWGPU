@@ -8,6 +8,17 @@ const VERT_BEFORE = WINDOW.__MESH_VERT_BEFORE__ ? WINDOW.__MESH_VERT_BEFORE__ : 
 const FRAG_BEFORE = WINDOW.__MESH_FRAG_BEFORE__ ? WINDOW.__MESH_FRAG_BEFORE__ : '';
 const VERT_AFTER = WINDOW.__MESH_VERT_AFTER__ ? WINDOW.__MESH_VERT_AFTER__ : '';
 const FRAG_AFTER = WINDOW.__MESH_FRAG_AFTER__ ? WINDOW.__MESH_FRAG_AFTER__ : '';
+const VERT_OUT_POSITION = WINDOW.__MESH_VERT_OUT_POSITION__;
+const VERT_OUT_FRAG_POS = WINDOW.__MESH_VERT_OUT_FRAG_POS__;
+const VERT_OUT_FRAG_UV = WINDOW.__MESH_VERT_OUT_FRAG_UV__;
+const VERT_OUT_FRAG_COLOR = WINDOW.__MESH_VERT_OUT_FRAG_COLOR__;
+const VERT_OUT_FRAG_NORMAL = WINDOW.__MESH_VERT_OUT_FRAG_NORMAL__;
+const VERT_OUT_FRAG_TANGENT = WINDOW.__MESH_VERT_OUT_FRAG_TANGENT__;
+const VERT_OUT_FRAG_BINORMAL = WINDOW.__MESH_VERT_OUT_FRAG_BINORMAL__;
+const VERT_OUT_FRAG_SHADOW_POS = WINDOW.__MESH_VERT_OUT_FRAG_SHADOW_POS__;
+const FRAG_OUT_BASE = WINDOW.__MESH_FRAG_OUT_BASE__;
+const FRAG_OUT_NORMAL = WINDOW.__MESH_FRAG_OUT_NORMAL__;
+const FRAG_OUT_ID = WINDOW.__MESH_FRAG_OUT_ID__;
 
 export const PIPELINE_DESC: any = {
   label: 'Mesh pipeline',
@@ -190,14 +201,14 @@ fn main(
   ${VERT_AFTER}
 
   var output: VertexOutput;
-  output.Position = MESH_INFOS.MVPC_MATRIX * position;
-  output.FragPos = vec4(MESH_INFOS.M_MATRIX * position).xyz;
-  output.FragUV = texUV;
-  output.FragColor = color;
-  output.FragNormal = MESH_INFOS.NORM_MATRIX * normal;
-  output.FragTangent = MESH_INFOS.NORM_MATRIX * tangent;
-  output.FragBinormal = MESH_INFOS.NORM_MATRIX * binormal;
-  output.FragShadowPos = vec3(posFromLight.xy * vec2(0.5, -0.5) + vec2(0.5), posFromLight.z); // Convert XY to (0, 1) and Y is flipped because texture coords are Y-down.
+  ${VERT_OUT_POSITION ??        `output.Position = MESH_INFOS.MVPC_MATRIX * position;`}
+  ${VERT_OUT_FRAG_POS ??        `output.FragPos = vec4(MESH_INFOS.M_MATRIX * position).xyz;`}
+  ${VERT_OUT_FRAG_UV ??         `output.FragUV = texUV;`}
+  ${VERT_OUT_FRAG_COLOR ??      `output.FragColor = color;`}
+  ${VERT_OUT_FRAG_NORMAL ??     `output.FragNormal = MESH_INFOS.NORM_MATRIX * normal;`}
+  ${VERT_OUT_FRAG_TANGENT ??    `output.FragTangent = MESH_INFOS.NORM_MATRIX * tangent;`}
+  ${VERT_OUT_FRAG_BINORMAL ??   `output.FragBinormal = MESH_INFOS.NORM_MATRIX * binormal;`}
+  ${VERT_OUT_FRAG_SHADOW_POS ?? `output.FragShadowPos = vec3(posFromLight.xy * vec2(0.5, -0.5) + vec2(0.5), posFromLight.z); // Convert XY to (0, 1) and Y is flipped because texture coords are Y-down.`}
   return output;
 }`;
 
@@ -408,9 +419,9 @@ fn main(
   ${FRAG_AFTER}
 
   var output: FragOutput;
-  output.Base = outputColor;
-  output.Normal = vec4(normalize(fragNormal), 1.0);
-  output.Id = MESH_INFOS.ID;
+  ${FRAG_OUT_BASE ??   `output.Base = outputColor;`}
+  ${FRAG_OUT_NORMAL ?? `output.Normal = vec4(normalize(fragNormal), 1.0);`}
+  ${FRAG_OUT_ID ??     `output.Id = MESH_INFOS.ID;`}
   return output;
 }
 

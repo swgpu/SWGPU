@@ -10,7 +10,7 @@ import { Gfx3ShadowVolume } from './gfx3_shadow_volume';
 interface Pipeline {
   gpu: GPURenderPipeline;
   grp0: Gfx3DynamicGroup;
-  factorTexture: Gfx3Texture;
+  shadowTexture: Gfx3Texture;
   depthTexture: Gfx3Texture;
 };
 
@@ -27,14 +27,14 @@ class Gfx3ShadowVolumeRenderer {
     this.pipelineCW = {
       gpu: gfx3Manager.loadPipeline('SHADOW_VOLUME_CW_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_CW_DESC),
       grp0: gfx3Manager.createDynamicGroup('SHADOW_VOLUME_CW_PIPELINE', 0),
-      factorTexture: gfx3Manager.createRenderingTexture('rgba16float'),
+      shadowTexture: gfx3Manager.createRenderingTexture('rgba16float'),
       depthTexture: gfx3Manager.createRenderingTexture('depth24plus')
     };
 
     this.pipelineCCW = {
       gpu: gfx3Manager.loadPipeline('SHADOW_VOLUME_CCW_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_CCW_DESC),
       grp0: gfx3Manager.createDynamicGroup('SHADOW_VOLUME_CCW_PIPELINE', 0),
-      factorTexture: gfx3Manager.createRenderingTexture('rgba16float'),
+      shadowTexture: gfx3Manager.createRenderingTexture('rgba16float'),
       depthTexture: gfx3Manager.createRenderingTexture('depth24plus')
     };
 
@@ -67,10 +67,10 @@ class Gfx3ShadowVolumeRenderer {
   }
 
   /**
-   * Returns the factor texture.
+   * Returns the shadow texture.
    */
-  getFactorTexture(): Gfx3Texture {
-    return this.pipelineCCW.factorTexture;
+  getShadowTexture(): Gfx3Texture {
+    return this.pipelineCCW.shadowTexture;
   }
 
   /**
@@ -92,7 +92,7 @@ class Gfx3ShadowVolumeRenderer {
     const commandEncoder = gfx3Manager.getCommandEncoder();
     const passEncoder = commandEncoder.beginRenderPass({
       colorAttachments: [{
-        view: pipeline.factorTexture.gpuTexture.createView(),
+        view: pipeline.shadowTexture.gpuTexture.createView(),
         clearValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 },
         loadOp: 'clear',
         storeOp: 'store'
@@ -128,13 +128,13 @@ class Gfx3ShadowVolumeRenderer {
   }
 
   $handleWindowResize(): void {
-    this.pipelineCCW.factorTexture.gpuTexture.destroy();
-    this.pipelineCCW.factorTexture = gfx3Manager.createRenderingTexture('rgba16float');
+    this.pipelineCCW.shadowTexture.gpuTexture.destroy();
+    this.pipelineCCW.shadowTexture = gfx3Manager.createRenderingTexture('rgba16float');
     this.pipelineCCW.depthTexture.gpuTexture.destroy();
     this.pipelineCCW.depthTexture = gfx3Manager.createRenderingTexture('depth24plus');
 
-    this.pipelineCW.factorTexture.gpuTexture.destroy();
-    this.pipelineCW.factorTexture = gfx3Manager.createRenderingTexture('rgba16float');
+    this.pipelineCW.shadowTexture.gpuTexture.destroy();
+    this.pipelineCW.shadowTexture = gfx3Manager.createRenderingTexture('rgba16float');
     this.pipelineCW.depthTexture.gpuTexture.destroy();
     this.pipelineCW.depthTexture = gfx3Manager.createRenderingTexture('depth24plus');
   }

@@ -38,7 +38,9 @@ class Gfx3ShadowVolume extends Gfx3Drawable {
         json['Vertices'][i * 3 + 0],
         json['Vertices'][i * 3 + 1],
         json['Vertices'][i * 3 + 2],
-        json['ShadowFactors'][i]
+        json['Colors'][i * 3 + 0],
+        json['Colors'][i * 3 + 1],
+        json['Colors'][i * 3 + 2]
       );
     }
 
@@ -68,9 +70,9 @@ class Gfx3ShadowVolume extends Gfx3Drawable {
 
     offset += numVertices * 3;
 
-    const shadowFactors = [];
+    const colors = [];
     for (let i = 0; i < numVertices; i++) {
-      shadowFactors.push(data[offset + i]);
+      colors.push(data[offset + (i * 3) + 0], data[offset + (i * 3) + 1], data[offset + (i * 3) + 2]);
     }
 
     this.beginVertices(numVertices);
@@ -80,7 +82,9 @@ class Gfx3ShadowVolume extends Gfx3Drawable {
         vertices[i * 3 + 0],
         vertices[i * 3 + 1],
         vertices[i * 3 + 2],
-        shadowFactors[i]
+        colors[i * 3 + 0],
+        colors[i * 3 + 1],
+        colors[i * 3 + 2],
       );
     }
 
