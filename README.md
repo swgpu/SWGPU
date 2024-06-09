@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/imgs/brand2.png" width="300px alt="logo"/>
+    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/banner-brand-mini.png" alt="logo"/>
 </p>
 
 <p align="center">
@@ -66,7 +66,6 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - Static sprite (jss)
     - Animated sprite (jas)
     - Motion lines (jlm)
-    - Djikstra graph (grf)
     - Billboarding
     - Cubemap skybox
     - Particules
@@ -124,6 +123,7 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
 
 - 🧠 **AI**
     - A* for 2D/3D with graph and grid
+    - Djikstra graph (grf)
     - Min-max with alpha-beta pruning
 
 - 📺 **Screen**
