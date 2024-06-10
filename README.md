@@ -79,14 +79,15 @@ For a more concret overview on it, you can play examples [here](http://demo.warm
     - Camera orbit
     - Camera WASD
     - Auto mipmap
-    - Post-process rendering (gbuffers: depth/normal/ids)
+    - Post rendering (gbuffers: depth/normal/ids)
     - Rendering filters
+    - Shader customizable
  
 - 📐 **3D Physics**
     - BoundingBox
     - BoundingCylinder
     - Walkmesh (jwm)
-    - Navigation mesh (jnm)
+    - Hitmesh (jnm)
     - Ray-testing
     - Rapier3D
 
