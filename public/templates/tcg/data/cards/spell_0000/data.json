@@ -1,0 +1,31 @@
+{
+  "TypeName": "SpellCard",
+  "Id": "spell_0000",
+  "Type": "SPELL",
+  "Name": "Benediction des mages",
+  "Text": "Ciblez un monstre de type magicien sur votre terrain; Il gagne 500 ATK.",
+  "CoverFile": "templates/tcg/data/cards/spell_0000/cover.png",
+  "Attributes": {
+    "ELEMENT": "LIGHT"
+  },
+  "Mode": "ACTIVATE",
+  "Nature": "NORMAL",
+  "Effects": [
+    {
+      "TargetType": "SINGLE",
+      "TargetRange": [["MZONE"], 0],
+      "TargetCardConditionId": "IS_RACE",
+      "TargetCardConditionOpts": { "race": "SPELLCASTER" },
+      "MechanicId": "ADD_CARD_MODIFIER",
+      "MechanicOpts": {
+        "modifierData": {
+          "Type": "ADD",
+          "AttributeKey": "ATK",
+          "Value": 500,
+          "Stackable": false,
+          "Linked": false
+        }
+      }
+    }
+  ]
+}

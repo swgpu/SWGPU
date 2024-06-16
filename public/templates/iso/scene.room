@@ -1,0 +1,47 @@
+{
+  "Ident": "ROOM",
+  "Id": "Room0000",
+  "Name": "Sample 00",
+  "Description": "The room",
+  "ScriptFile": "templates/iso/scene.jsc",
+  "MusicFile": "templates/iso/scene.mp3",
+  "WalkmeshFile": "templates/iso/scene.jwm",
+  "MapFile": "templates/iso/scene.jsm",
+  "MapTextureFile": "templates/iso/scene.png",
+  "Camera": {
+    "MinClipOffsetX": 0,
+    "MinClipOffsetY": 0,
+    "MaxClipOffsetX": 0,
+    "MaxClipOffsetY": 0
+  },
+  "Controller": {
+    "JASFile": "templates/iso/kid.jas",
+    "TextureFile": "templates/iso/kid.png",
+    "Radius": 0.1,
+    "Height": 1,
+    "OffsetX": 8,
+    "OffsetY": 16
+  },
+  "Spawns": [{
+    "Name": "Spawn0000",
+    "PositionX": 1.4345,
+    "PositionY":-1.5012,
+    "PositionZ":-3.4306 ,
+    "Direction": "LEFT"
+  }],
+  "Models": [{
+    "JASFile": "templates/iso/princess.jas",
+    "TextureFile": "templates/iso/princess.png",
+    "PositionX": 1.4345,
+    "PositionY":-1.5012,
+    "PositionZ":-4.5306,
+    "Radius": 0.2,
+    "Height": 1,
+    "OffsetX": 12,
+    "OffsetY": 17.5,
+    "Direction": "LEFT",
+    "OnActionBlockId": "0000"
+  }],
+  "Movers": [],
+  "Triggers": []
+}

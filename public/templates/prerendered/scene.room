@@ -1,0 +1,55 @@
+{
+  "Ident": "ROOM",
+  "Id": "Room0000",
+  "Name": "Sample 00",
+  "Description": "A cold and metallic piece that feel like inside an machine",
+  "ScriptFile": "templates/prerendered/scene.jsc",
+  "MusicFile": "templates/prerendered/music.mp3",
+  "MapFile": "templates/prerendered/scene.jsm",
+  "MapTextureFile": "templates/prerendered/scene.png",
+  "WalkmeshFile": "templates/prerendered/scene.jwm",
+  "Camera": {
+    "Matrix": [0.8391, -0.0012,  0.5439, 0.0000, 0.2993,  0.8360, -0.4599, 0.0000, -0.4542,  0.5487,  0.7019, 0.0000, -14.2880, 15.4892, 17.9114, 1.0000],
+    "Fovy": 10,
+    "MinClipOffsetX": -1.35,
+    "MinClipOffsetY": -0.5,
+    "MaxClipOffsetX": 1.35,
+    "MaxClipOffsetY": 0.5
+  },
+  "Controller": {
+    "JAMFile": "templates/prerendered/barret.jam",
+    "TextureFile": "templates/prerendered/barret.png",
+    "Radius": 0.20,
+    "Height": 1
+  },
+  "Spawns": [{
+    "Name": "Spawn0000",
+    "PositionX": -1.5,
+    "PositionY": -14.3,
+    "PositionZ": -16.5,
+    "DirectionX": 1,
+    "DirectionZ": 0
+  }],
+  "Models": [{
+    "JAMFile": "templates/prerendered/unit.jam",
+    "TextureFile": "templates/prerendered/unit.png",
+    "PositionX": 15,
+    "PositionY": -13.5,
+    "PositionZ": -23,
+    "RotationX": 0,
+    "RotationY": 3.14,
+    "RotationZ": 0,
+    "Radius": 0.80,
+    "Height": 1,
+    "OnActionBlockId": "0000"
+  }],
+  "Motions": [{
+    "Points": [
+      [15, -13.5, -23],
+      [16, -13.5, -23],
+      [17, -13.5, -23],
+      [17, -13.5, -22]
+    ]
+  }],
+  "Triggers": []
+}

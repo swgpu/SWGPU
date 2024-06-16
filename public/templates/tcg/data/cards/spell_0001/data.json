@@ -1,0 +1,33 @@
+{
+  "TypeName": "SpellCard",
+  "Id": "spell_0001",
+  "Type": "SPELL",
+  "Name": "Tourmenteur",
+  "Text": "Tant que cette carte est sur le terrain; Tous les monstres sur le terrain adverse perdent 300 DEF.",
+  "CoverFile": "templates/tcg/data/cards/spell_0001/cover.png",
+  "Attributes": {
+    "ELEMENT": "DARK"
+  },
+  "Mode": "ACTIVATE",
+  "Nature": "CONTINUOUS",
+  "ReleaseConditionId": "IS_ENDLESS",
+  "ReleaseConditionOpts": {},
+  "Effects": [
+    {
+      "TargetType": "FIELD",
+      "TargetRange": [0, ["MZONE"]],
+      "TargetCardConditionId": "IS_TYPE",
+      "TargetCardConditionOpts": { "type": "MONSTER" },
+      "MechanicId": "ADD_CARD_MODIFIER",
+      "MechanicOpts": {
+        "modifierData": {
+          "Type": "SUB",
+          "AttributeKey": "DEF",
+          "Value": "300",
+          "Stackable": false,
+          "Linked": true
+        }
+      }
+    }
+  ]
+}

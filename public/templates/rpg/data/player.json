@@ -1,0 +1,104 @@
+{
+  "Gils": 9000,
+  "Inventory": [
+    {
+      "ItemTypeName": "CommonItem",
+      "ItemId": "common_item_0000",
+      "Quantity": 2
+    },
+    {
+      "ItemTypeName": "EquipmentItem",
+      "ItemId": "equipment_item_0000",
+      "Quantity": 1
+    },
+    {
+      "ItemTypeName": "EquipmentItem",
+      "ItemId": "equipment_item_0001",
+      "Quantity": 1
+    }
+  ],
+  "Heroes": [
+    {
+      "Id": "hero_0000",
+      "Name": "Cloud",
+      "Description": "Description de Cloud...",
+      "PictureFile": "templates/rpg/data/hero_0000/picture.png",
+      "JAMFile": "templates/rpg/data/hero_0000/body.jam",
+      "JAMTextureFile": "templates/rpg/data/hero_0000/body.png",
+      "Attributes": {
+        "LV": 1,
+        "LV_MAX": 99,
+        "XP": 30,
+        "XP_MAX": 99,
+        "HP": 30,
+        "HP_MAX": 100,
+        "MP": 50,
+        "MP_MAX": 50,
+        "ATK": 10,
+        "DEF": 10,
+        "MAGIC_ATK": 10,
+        "MAGIC_DEF": 10,
+        "AGILITY": 2,
+        "ELEMENT": "WHITE"
+      },
+      "AttackEffectIds": [
+        "0000",
+        "0000"
+      ],
+      "MagicEffectIds": [
+        "0000",
+        "0000",
+        "0000"
+      ],
+      "WeaponId": null,
+      "HelmetId": null,
+      "ArmorId": null,
+      "RelicId": null,
+      "AllowedEquipmentItemSubTypes": [
+        "WEAPON_DAGGER"
+      ],
+      "CastId": "0000"
+    },
+    {
+      "Id": "hero_0001",
+      "Name": "Aeris",
+      "Description": "Description de Aeris...",
+      "PictureFile": "templates/rpg/data/hero_0001/picture.png",
+      "JAMFile": "templates/rpg/data/hero_0001/body.jam",
+      "JAMTextureFile": "templates/rpg/data/hero_0001/body.png",
+      "Attributes": {
+        "LV": 1,
+        "LV_MAX": 99,
+        "XP": 30,
+        "XP_MAX": 99,
+        "HP": 10,
+        "HP_MAX": 100,
+        "MP": 50,
+        "MP_MAX": 50,
+        "ATK": 10,
+        "DEF": 10,
+        "MAGIC_ATK": 10,
+        "MAGIC_DEF": 10,
+        "AGILITY": 33,
+        "ELEMENT": "WHITE"
+      },
+      "AttackEffectIds": [
+        "0000",
+        "0000"
+      ],
+      "MagicEffectIds": [
+        "0000",
+        "0000",
+        "0000"
+      ],
+      "WeaponId": null,
+      "HelmetId": null,
+      "ArmorId": null,
+      "RelicId": null,
+      "AllowedEquipmentItemSubTypes": [
+        "WEAPON_DAGGER"
+      ],
+      "CastId": "0000"
+    }
+  ]
+}

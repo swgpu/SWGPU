@@ -1,0 +1,20 @@
+{
+  "Id": "seal_0000",
+  "Name": "Status Poison",
+  "Description": "Un poison mortel se déverse lentelement dans les veines de la cible",
+  "IconFile": "templates/rpg/data/seal_0000/icon.png",
+  "Stackable": true,
+  "NumTurns": 1,
+  "OnTurnEffect": {
+    "Id": "effect_0000",
+    "Name": "Damage HP-5",
+    "Description": "Damage HP-5",
+    "SpriteAnimationName": "CUT",
+    "AvailabilityType": "ALL",
+    "MechanicId": "DAMAGE",
+    "MechanicOpts": { "amount": "5", "element": "WHITE" },
+    "TargetCharConditionId": "SELF",
+    "TargetCharConditionOpts": {}
+  },
+  "Modifiers": []
+}

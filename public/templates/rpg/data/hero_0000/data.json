@@ -1,0 +1,41 @@
+{
+  "Id": "hero_0000",
+  "Name": "Cloud",
+  "Description": "Description de Ren...",
+  "PictureFile": "templates/rpg/data/hero_0000/picture.png",
+  "JAMFile": "templates/rpg/data/hero_0000/body.jam",
+  "JAMTextureFile": "templates/rpg/data/hero_0000/body.png",
+  "Attributes": {
+    "LV": 1,
+    "LV_MAX": 99,
+    "XP": 30,
+    "XP_MAX": 99,
+    "HP": 30,
+    "HP_MAX": 100,
+    "MP": 50,
+    "MP_MAX": 50,
+    "ATK": 10,
+    "DEF": 10,
+    "MAGIC_ATK": 10,
+    "MAGIC_DEF": 10,
+    "AGILITY": 2,
+    "ELEMENT": "WHITE"
+  },
+  "AttackEffectIds": [
+    "0000",
+    "0000"
+  ],
+  "MagicEffectIds": [
+    "0000",
+    "0000",
+    "0000"
+  ],
+  "WeaponId": null,
+  "HelmetId": null,
+  "ArmorId": null,
+  "RelicId": null,
+  "AllowedEquipmentItemSubTypes": [
+    "WEAPON_DAGGER"
+  ],
+  "CastId": "0000"
+}

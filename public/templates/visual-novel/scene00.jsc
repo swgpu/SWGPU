@@ -1,0 +1,65 @@
+[
+  {
+    "Id": "ON_INIT",
+    "Description": "ON INIT",
+    "Calls": [
+      {
+        "Name": "UI_CREATE_BACKGROUND",
+        "Args": ["templates/visual-novel/scene00.png", "templates/visual-novel/scene00.jas", "IDLE", true, "ui-background-fade-in 1s ease 0s 1 normal forwards"]
+      },
+      {
+        "Name": "UI_CREATE_AVATAR",
+        "Args": ["templates/visual-novel/ren.png", "templates/visual-novel/ren.jas", "IDLE", true, "RIGHT", "ui-avatar-fade-in 1s ease 0s 1 normal forwards"]
+      },
+      {
+        "Name": "UI_CREATE_DIALOG",
+        "Args": ["Ren", "Bienvenue dans notre lycée le nouveau !"]
+      },
+      {
+        "Name": "UI_CREATE_CHOICES",
+        "Args": ["Ren", "Souhaites-tu visiter le campus avec moi ?", [
+          {
+            "Text": "Oui bien-surs, allons voir ça !",
+            "Jumpto": "0000"
+          },
+          {
+            "Text": "Non merci, aurevoir !",
+            "Jumpto": "0001"
+          }
+        ]]
+      }
+    ]
+  },
+  {
+    "Id": "0000",
+    "Description": "INIT CHOICE 0",
+    "Calls": [
+      {
+        "Name": "UI_CREATE_AVATAR",
+        "Args": ["templates/visual-novel/yuri.png", "templates/visual-novel/yuri.jas", "IDLE", true, "LEFT", "ui-background-fade-in 1s ease 0s 1 normal forwards"]
+      },
+      {
+        "Name": "UI_CREATE_DIALOG",
+        "Args": ["Yuri", "Ouah ! Ce campus est vraiment immense !"]
+      }
+    ]
+  },
+  {
+    "Id": "0001",
+    "Description": "INIT CHOICE 1",
+    "Calls": [
+      {
+        "Name": "UI_CREATE_DIALOG",
+        "Args": ["Ren", "C'est dommage, t'es un peu asociale comme mec !"]
+      },
+      {
+        "Name": "UI_DESTROY_BACKGROUND",
+        "Args": [0, "ui-background-fade-out 1s ease 0s 1 normal forwards"]
+      },
+      {
+        "Name": "UI_DESTROY_AVATAR",
+        "Args": [0, "ui-background-fade-out 1s ease 0s 1 normal forwards"]
+      }
+    ]
+  }
+]

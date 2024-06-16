@@ -1,0 +1,6 @@
+{
+  "Id": "model_0000",
+  "JAMFile": "templates/rpg/data/model_0000/body.jam",
+  "JAMTextureFile": "templates/rpg/data/model_0000/body.png",
+  "Radius": 0.80
+}

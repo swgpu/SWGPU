@@ -1,0 +1,24 @@
+{
+  "TypeName": "HumanDuelist",
+  "Id": "duelist_0001",
+  "Name": "Yugi",
+  "PictureFile": "templates/tcg/data/duelist_0001/picture.png",
+  "Deck": [
+    "monster_0001",
+    "monster_0001",
+    "spell_0000",
+    "spell_0000",
+    "monster_0001",
+    "monster_0000",
+    "spell_0001"
+  ],
+  "Attributes": {
+    "LIFEPOINTS": 4000,
+    "DRAW_COUNT": 0,
+    "DRAW_COUNT_LIMIT": 1,
+    "SUMMON_COUNT": 0,
+    "SUMMON_COUNT_LIMIT": 1,
+    "STATE_CANNOT_SET": 0,
+    "STATE_CANNOT_SUMMON": 0
+  }
+}

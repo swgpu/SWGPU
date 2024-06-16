@@ -1,0 +1,17 @@
+{
+  "TypeName": "MonsterCard",
+  "Id": "monster_0001",
+  "Type": "MONSTER",
+  "Name": "Kenshin",
+  "Text": "Samourai louant ses services de pays en pays au gré du vent et de la guerre.",
+  "CoverFile": "templates/tcg/data/cards/monster_0001/cover.png",
+  "Attributes": {
+    "ELEMENT": "DARK",
+    "RACE": "WARRIOR",
+    "ATK": 1200,
+    "DEF": 700,
+    "ATK_COUNT": 0,
+    "ATK_COUNT_LIMIT": 1,
+    "STATE_FREEZE": 0
+  }
+}

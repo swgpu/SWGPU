@@ -1,0 +1,30 @@
+[
+  {
+    "Id": "ON_INIT",
+    "Description": "ON INIT",
+    "Calls": [
+      {
+        "Name": "MODEL_PLAY_ANIMATION",
+        "Args": [0, "IDLE_LEFT", true]
+      }
+    ]
+  },
+  {
+    "Id": "0000",
+    "Description": "UNIT TALK",
+    "Calls": [
+      {
+        "Name": "STOP",
+        "Args": []
+      },
+      {
+        "Name": "UI_CREATE_DIALOG",
+        "Args": ["Princess :", "templates/iso/princess-avatar.jpg", "Bienvenue dans le monde d'Ivalice jeune aventurier.", "500", "10px", "10px"]
+      },
+      {
+        "Name": "CONTINUE",
+        "Args": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "JASFile": "templates/tilemap/bernard.jas",
+  "TextureFile": "templates/tilemap/bernard.png",
+  "OffsetX": 8,
+  "OffsetY": 8,
+  "Width": 16,
+  "Height": 16,
+  "Collider1X": -4,
+  "Collider1Y": 8,
+  "Collider2X": 4,
+  "Collider2Y": 8
+}

@@ -1,0 +1,17 @@
+{
+  "TypeName": "MonsterCard",
+  "Id": "monster_0000",
+  "Type": "MONSTER",
+  "Name": "Oliarc",
+  "Text": "Magicien nécromanciens de talent; il vit depuis plusieurs siècles grace à sa magie et ses connaissances",
+  "CoverFile": "templates/tcg/data/cards/monster_0000/cover.png",
+  "Attributes": {
+    "ELEMENT": "DARK",
+    "RACE": "SPELLCASTER",
+    "ATK": 800,
+    "DEF": 1200,
+    "ATK_COUNT": 0,
+    "ATK_COUNT_LIMIT": 1,
+    "STATE_FREEZE": 0
+  }
+}

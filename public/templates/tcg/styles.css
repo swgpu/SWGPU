@@ -1,0 +1,267 @@
+/*---------------------------------------------------------------------------------------------*/
+/* UI DUELIST
+/*---------------------------------------------------------------------------------------------*/
+.UIDuelist {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  padding: 10px;
+}
+.UIDuelist.u-shake {
+  animation: ui-duelist-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+.UIDuelist-toast {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index:2;
+  font-size: 16px;
+  text-shadow: rgb(0 0 0) 2px 2px 2px;
+}
+.UIDuelist-picture {
+  position: relative;
+  width:100%;
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  margin-bottom: 5px;
+}
+.UIDuelist-infos {
+  display: block;
+  text-align: center;
+}
+.UIDuelist-infos-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.UIDuelist.u-showSelection .UIDuelist-infos-name {
+  animation-name: ui-duelist-infos-name-selected;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+}
+
+@keyframes ui-duelist-infos-name-selected {
+  from {
+    color: #62abff;
+  }
+  to {
+    color: #a3ceff;
+  }
+}
+
+@keyframes ui-duelist-shake {
+  10%, 90% {
+    transform: translateX(-1px);
+  }
+  20%, 80% {
+    transform: translateX(2px);
+  }
+  30%, 50%, 70% {
+    transform: translateX(-4px);
+  }
+  40%, 60% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes ui-duelist-toast {
+  from {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(0, calc(-151px + 100%));
+  }
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI CARD SLOT
+/*---------------------------------------------------------------------------------------------*/
+.UICardSlot {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 60px;
+  border: 1px solid white;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.UICardSlot-bg {
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background-size: cover;
+}
+.UICardSlot.u-focused {
+  border-color: #74ff52;
+  box-shadow: 6px 0 8px -4px #74ff52, -6px 0 8px -4px #74ff52;
+}
+.UICardSlot.u-selectable {
+  box-shadow: 2px 2px 2px 1px rgb(255 0 0);
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI STACK SLOT
+/*---------------------------------------------------------------------------------------------*/
+.UIStackSlot {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 60px;
+  border: 1px solid white;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.UIStackSlot-bg {
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background-size: cover;
+}
+.UIStackSlot-numCards {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:10;
+}
+.UIStackSlot.u-focused {
+  border-color: #74ff52;
+  box-shadow: 6px 0 8px -4px #74ff52, -6px 0 8px -4px #74ff52;
+}
+.UIStackSlot.u-selectable {
+  box-shadow: 2px 2px 2px 1px rgb(255 0 0);
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI BOARD
+/*---------------------------------------------------------------------------------------------*/
+.UIBoard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  transform: perspective(370px) rotateX(45deg) scale(0.8);
+  animation-name: ui-board-fade-in;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+}
+.UIBoard-fields {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.UIBoard-field {
+  display: block;
+}
+.UIBoard-field-zone {
+  position: absolute;
+}
+.UIBoard-field-zone[data-location="MZONE"] {
+  width: 40px;
+  height: 60px;
+  background-image: url('/templates/tcg/zone_monster.png');
+}
+.UIBoard-field-zone[data-location="SZONE"] {
+  width: 40px;
+  height: 60px;
+  background-image: url('/templates/tcg/zone_magic.png');
+}
+.UIBoard-field-zone[data-location="FZONE"] {
+  width: 40px;
+  height: 60px;
+  background-image: url('/templates/tcg/zone_unique_field.png');
+}
+.UIBoard-field-zone[data-location="DECK"] {
+  width: 40px;
+  height: 60px;
+  background-image: url('/templates/tcg/zone_deck.png');
+}
+.UIBoard-field-zone[data-location="GRAVEYARD"] {
+  width: 40px;
+  height: 60px;
+  background-image: url('/templates/tcg/zone_graveyard.png');
+}
+.UIBoard-field-zone[data-location="HAND"] {
+  position: absolute;
+  display: flex;
+}
+.UIBoard-field-zone[data-location="HAND"] .UICardSlot {
+  margin-left: 5px;
+}
+.UIBoard-field-zone[data-location="HAND"] .UICardSlot:first-of-type {
+  margin-left: 0;
+}
+@keyframes ui-board-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI TURN
+/*---------------------------------------------------------------------------------------------*/
+.UITurn {
+  display: flex;
+  justify-content: center;
+}
+.UITurn-phase {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.UITurn-phase.u-active {
+  color: red;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI CARD DETAIL
+/*---------------------------------------------------------------------------------------------*/
+.UICardDetail {
+  display: block;
+}
+.UICardDetail-title {
+  display: block;
+  color: #FFF;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+  background-color: #000;
+}
+.UICardDetail-body {
+  display: flex;
+}
+.UICardDetail-body-coverImg {
+  position: relative;
+  max-height: 220px;
+}
+.UICardDetail-body-infos {
+  padding: 5px;
+  color: #FFF;
+  white-space: pre-line;
+}
+.UICardDetail-body-infos-stats {
+  display:flex;
+  justify-content:space-between;
+  padding-top:5px;
+  margin-top: auto;
+  border-top: 1px solid #FFF;
+}
+.UICardDetail-body-infos-stats-item {
+ margin-left:10px
+}
