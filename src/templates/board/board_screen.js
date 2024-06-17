@@ -53,6 +53,7 @@ class BoardScreen extends Screen {
         if (moveCmd.isConditionCheck()) uiTile.addAction('MOVE');
         let powerupCmd = CommandFactory.create('POWERUP', this.game, data.coord);
         if (powerupCmd.isConditionCheck()) uiTile.addAction('POWERUP');
+
       });
 
       eventManager.subscribe(this.uiBoard, 'E_TILE_ACTION', this, async (data) => {

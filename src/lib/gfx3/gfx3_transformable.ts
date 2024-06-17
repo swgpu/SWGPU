@@ -1,6 +1,15 @@
 import { UT } from '../core/utils';
 import { Quaternion } from '../core/quaternion';
 
+enum Axis {
+  FORWARD = 'FORWARD',
+  BACKWARD = 'BACKWARD',
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
+  UP = 'UP',
+  DOWN = 'DOWN'
+};
+
 /**
  * A transformable object with position, rotation, scale and more.
  */
@@ -9,6 +18,7 @@ class Gfx3Transformable {
   rotation: vec3;
   scale: vec3;
   quaternion: Quaternion;
+  lookTarget: vec3 | null;
   transformMatrix: mat4;
 
   constructor() {
@@ -16,6 +26,7 @@ class Gfx3Transformable {
     this.rotation = [0.0, 0.0, 0.0];
     this.scale = [1.0, 1.0, 1.0];
     this.quaternion = new Quaternion();
+    this.lookTarget = null;
     this.transformMatrix = UT.MAT4_IDENTITY();
   }
 
@@ -112,6 +123,7 @@ class Gfx3Transformable {
     this.rotation[0] = x;
     this.rotation[1] = y;
     this.rotation[2] = z;
+    this.lookTarget = null;
   }
 
   /**
@@ -125,6 +137,7 @@ class Gfx3Transformable {
     this.rotation[0] += x;
     this.rotation[1] += y;
     this.rotation[2] += z;
+    this.lookTarget = null;
   }
 
   /**
@@ -134,6 +147,7 @@ class Gfx3Transformable {
    */
   setQuaternion(quaternion: Quaternion) : void {
     this.quaternion = quaternion.clone();
+    this.lookTarget = null;
   }
 
   /**
@@ -201,12 +215,15 @@ class Gfx3Transformable {
    * Returns the transformation matrix from position, rotation, scale and quaternion values.
    */
   getTransformMatrix(): mat4 {
-    UT.MAT4_TRANSFORM(this.position, this.rotation, this.scale, this.quaternion, this.transformMatrix);
-    return this.transformMatrix;
-  }
+    if (this.lookTarget) {
+      UT.MAT4_LOOKAT(this.position, this.lookTarget, [0, 1, 0], this.transformMatrix);
+      UT.MAT4_MULTIPLY(this.transformMatrix, UT.MAT4_SCALE(this.scale[0], this.scale[1], this.scale[2]), this.transformMatrix);  
+    }
+    else {
+      UT.MAT4_TRANSFORM(this.position, this.rotation, this.scale, this.quaternion, this.transformMatrix);
+    }
 
-  setTransformMatrix(transformMatrix: mat4): void {
-    this.transformMatrix = transformMatrix;
+    return this.transformMatrix;
   }
 
   /**
@@ -218,15 +235,11 @@ class Gfx3Transformable {
    * @param {number} z - The z-coordinate of the target position that the transformable should look at.
    */
   lookAt(x: number, y: number, z:number, up: vec3 = [0, 1, 0]): void {
-    UT.MAT4_LOOKAT(this.position, [x, y, z], up, this.transformMatrix);
-    UT.MAT4_MULTIPLY(this.transformMatrix, UT.MAT4_SCALE(this.scale[0], this.scale[1], this.scale[2]), this.transformMatrix);
-    this.rotation[0] = -Math.asin(y);
-    this.rotation[1] = Math.atan2(x, z);
-    this.rotation[2] = 0;
+    this.lookTarget = [x, y, z];
   }
 
   /**
-   * Returns the three local axes of the transformable.
+   * Returns three local axies of the transformable.
    */
   getAxies(): Array<vec3> {
     const matrix = this.getTransformMatrix();
@@ -236,6 +249,32 @@ class Gfx3Transformable {
       [matrix[8], matrix[9], matrix[10]]
     ];
   }
+
+  /**
+   * Returns the specified local axis of the transformable.
+   */
+  getAxis(axis: Axis): vec3 {
+    const axies = this.getAxies();
+
+    if (axis == Axis.FORWARD) {
+      return [-axies[2][0], -axies[2][1], -axies[2][2]];
+    }
+    else if (axis == Axis.BACKWARD) {
+      return [axies[2][0], axies[2][1], axies[2][2]];
+    }
+    else if (axis == Axis.LEFT) {
+      return [-axies[0][0], -axies[0][1], -axies[0][2]];
+    }
+    else if (axis == Axis.RIGHT) {
+      return [axies[0][0], axies[0][1], axies[0][2]];
+    }
+    else if (axis == Axis.UP) {
+      return [axies[1][0], axies[1][1], axies[1][2]];
+    }
+    else {
+      return [-axies[1][0], -axies[1][1], -axies[1][2]];
+    }
+  }
 }
 
-export { Gfx3Transformable };
+export { Gfx3Transformable, Axis };
