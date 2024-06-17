@@ -18,7 +18,7 @@ class RPGScreen extends Screen {
 
   async onEnter() {
     await gameManager.init();
-    
+
     this.uiMenu.add('0', 'Battle');
     this.uiMenu.add('1', 'Menu');
     this.uiMenu.add('2', 'Shop items');

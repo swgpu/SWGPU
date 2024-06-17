@@ -117,7 +117,7 @@ class Gfx3Camera extends Gfx3Transformable {
    */
   lookAt(x: number, y: number, z:number, up: vec3 = [0, 1, 0]): void {
     super.lookAt(x, y, z, up);
-    this.view.setCameraMatrix(this.transformMatrix);
+    this.view.setCameraMatrix(this.getTransformMatrix());
   }
 
   /**

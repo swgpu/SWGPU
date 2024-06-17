@@ -55,7 +55,7 @@ export class InputSystem extends DNASystem {
       const phi = camera.rec.getPhi();
       mx = -Math.cos(phi + moveAngle) * entity.speed * (ts / 1000);
       mz = -Math.sin(phi + moveAngle) * entity.speed * (ts / 1000);
-      entity.rotation = UT.VEC2_ANGLE([mx, mz]);  
+      entity.rotation = UT.VEC2_ANGLE([mx, mz]);
     }
 
     entity.velocity[0] = mx;

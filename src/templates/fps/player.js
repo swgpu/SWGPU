@@ -72,6 +72,19 @@ class InputComponent {
   handleMouseMove(e) {
     this.player.rotation[0] += e.movementY * this.player.rotationSpeed / 1000;
     this.player.rotation[1] += e.movementX * this.player.rotationSpeed / 1000;
+
+    if(this.player.rotation[0] > Math.PI / 2) {
+      this.player.rotation[0] = Math.PI / 2;
+    }
+    else if(this.player.rotation[0] < -Math.PI / 2) {
+      this.player.rotation[0] = -Math.PI / 2;
+    }
+    if(this.player.rotation[1] >= Math.PI * 2) {
+      this.player.rotation[1] -= Math.PI * 2;
+    }
+    else if(this.player.rotation[1] <= -Math.PI * 2) {
+      this.player.rotation[1] += Math.PI * 2;
+    }
   }
 
   handleActionOnce(e) {

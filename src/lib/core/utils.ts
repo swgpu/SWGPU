@@ -124,6 +124,20 @@ class UT {
   }
 
   /**
+   * @param angle - Angle in radians.
+   */
+  static SIGNED_ANGLE(angle: number) {
+    if (angle >= 0 && angle <= Math.PI) {
+      return angle;
+    }
+    else if (angle > Math.PI && angle <= Math.PI*2) {
+      return angle - Math.PI*2;
+    }
+
+    return angle;
+  }
+
+  /**
    * @param a - The begin.
    * @param b - The end.
    * @param t - The time.
@@ -229,8 +243,8 @@ class UT {
    * @param spread - The spread vector.
    */
   static VEC2_SPREAD(base: vec2, spread: vec2): vec2 {
-    const rand2 = UT.VEC2_CREATE(Math.random() - 0.5, Math.random() - 0.5);
-    return UT.VEC2_ADD(base, UT.VEC2_MULTIPLY(spread, rand2));
+    const rand: vec2 = [Math.random() - 0.5, Math.random() - 0.5];
+    return UT.VEC2_ADD(base, UT.VEC2_MULTIPLY(spread, rand));
   }
 
   /**
