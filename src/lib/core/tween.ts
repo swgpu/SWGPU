@@ -93,7 +93,11 @@ class Tween<T> {
   /**
    * Returns the current interpolated value.
    */
-  getCurrentValue(): T {
+  get(index: number = 0): T {
+    if (Array.isArray(this.currentValue)) {
+      return this.currentValue[index];
+    }
+
     return this.currentValue;
   }
 
