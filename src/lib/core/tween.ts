@@ -37,7 +37,12 @@ class TweenAbstract<T> {
    * @param {number} ts - The timestep.
    */
   update(ts: number): void {
-    if (this.looped && this.timeElapsed == this.times.at(-1)) {
+    if (this.times.length == 0) {
+      return;
+    }
+
+    if (this.looped && this.timeElapsed > this.times[this.times.length - 1]) {
+      console.log('gniark');
       this.timeElapsed = 0;
     }
 
