@@ -9,6 +9,10 @@ class TweenAbstract<T> {
   values: Array<T>;
   fns: Array<Function>;
   defaultFn: Function;
+  // --
+  timeElapsed: number;
+  looped: boolean;
+  currentValue: T;
 
   /**
    * @param {Array<number>} times - Times intervals.
@@ -21,12 +25,30 @@ class TweenAbstract<T> {
     this.values = values;
     this.fns = fns;
     this.defaultFn = defaultFn;
+    // --
+    this.timeElapsed = 0;
+    this.looped = false;
+    this.currentValue = this.values[0];
+  }
+
+  /**
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
+   */
+  update(ts: number): void {
+    if (this.looped && this.timeElapsed == this.times.at(-1)) {
+      this.timeElapsed = 0;
+    }
+
+    this.currentValue = this.interpolate(this.timeElapsed);
+    this.timeElapsed += ts / 1000;
   }
 
   /**
    * Returns the interpolated value based on the given times and values.
    * 
-   * @param {number} t - The time (0 - 1).
+   * @param {number} t - The elapsed time.
    */
   interpolate(t: number): T {
     let i = 0;
@@ -46,6 +68,22 @@ class TweenAbstract<T> {
     }
 
     return this.defaultFn(currentT, beginValue, endValue, currentDuration);
+  }
+
+  /**
+   * Set the animation in loop.
+   * 
+   * @param {boolean} looped - The loop flag.
+   */
+  setLooped(looped: boolean): void {
+    this.looped = looped;
+  }
+
+  /**
+   * Returns the current interpolated value.
+   */
+  getCurrentValue(): T {
+    return this.currentValue;
   }
 
   /**

@@ -35,7 +35,7 @@ export { Gfx3BoundingBox } from './gfx3/gfx3_bounding_box';
 export { Gfx3Drawable } from './gfx3/gfx3_drawable';
 export { Gfx3StaticGroup, Gfx3DynamicGroup } from './gfx3/gfx3_group';
 export { Gfx3RendererAbstract } from './gfx3/gfx3_renderer_abstract';
-export { Gfx3Transformable } from './gfx3/gfx3_transformable';
+export { Gfx3Transformable, Axis } from './gfx3/gfx3_transformable';
 export { Gfx3TreePartition, Gfx3TreePartitionMethod } from './gfx3/gfx3_tree_partition';
 export { Gfx3View } from './gfx3/gfx3_view';
 export { Gfx3Camera } from './gfx3_camera/gfx3_camera';
