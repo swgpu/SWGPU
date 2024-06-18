@@ -62,7 +62,7 @@ class Gfx3CameraWASD extends Gfx3Camera {
       move = UT.VEC3_ADD_SCALED(move, cameraAxies[2], +this.movementSpeed);
     }
 
-    this.velocity = UT.LINEAR_VEC3(Math.pow(1 - this.frictionCoefficient, ts / 1000), move, this.velocity);
+    this.velocity = UT.VEC3_LERP(move, this.velocity, Math.pow(1 - this.frictionCoefficient, ts / 1000));
     const finalMove = UT.VEC3_SCALE(this.velocity, ts / 1000);
 
     this.translate(finalMove[0], finalMove[1], finalMove[2]);

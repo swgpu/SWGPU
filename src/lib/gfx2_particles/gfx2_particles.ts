@@ -1,6 +1,6 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
 import { UT } from '../core/utils';
-import { TweenNumber, TweenVEC2 } from '../core/tween';
+import { Tween } from '../core/tween';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 
 enum VelocityStyle {
@@ -20,14 +20,14 @@ class Particle {
   position: vec2;
   velocity: vec2; // units per second
   acceleration: vec2;
-  accelerationTween: TweenVEC2;
+  accelerationTween: Tween<vec2>;
   angle: number;
   angleVelocity: number; // degrees per second
   angleAcceleration: number; // degrees per second, per second
   size: number;
-  sizeTween: TweenNumber;
+  sizeTween: Tween<number>;
   opacity: number;
-  opacityTween: TweenNumber;
+  opacityTween: Tween<number>;
   age: number;
   alive: number; // use float instead of boolean for shader purposes	
 
@@ -35,14 +35,14 @@ class Particle {
     this.position = [0, 0];
     this.velocity = [0, 0];
     this.acceleration = [0, 0];
-    this.accelerationTween = new TweenVEC2();
+    this.accelerationTween = new Tween<vec2>();
     this.angle = 0;
     this.angleVelocity = 0;
     this.angleAcceleration = 0;
     this.size = 16.0;
-    this.sizeTween = new TweenNumber();
+    this.sizeTween = new Tween<number>();
     this.opacity = 1.0;
-    this.opacityTween = new TweenNumber();
+    this.opacityTween = new Tween<number>();
     this.age = 0;
     this.alive = 0;
   }
@@ -88,13 +88,13 @@ interface ParticlesOptions {
   velocityExplodeSpeedSpread: number;
   sizeBase: number;
   sizeSpread: number;
-  sizeTween: TweenNumber;
+  sizeTween: Tween<number>;
   opacityBase: number;
   opacitySpread: number;
-  opacityTween: TweenNumber;
+  opacityTween: Tween<number>;
   accelerationBase: vec2;
   accelerationSpread: vec2;
-  accelerationTween: TweenVEC2;
+  accelerationTween: Tween<vec2>;
   angleBase: number;
   angleSpread: number;
   angleVelocityBase: number;
@@ -123,13 +123,13 @@ class Gfx2Particles extends Gfx2Drawable {
   velocityExplodeSpeedSpread: number;
   sizeBase: number;
   sizeSpread: number;
-  sizeTween: TweenNumber;
+  sizeTween: Tween<number>;
   opacityBase: number;
   opacitySpread: number;
-  opacityTween: TweenNumber;
+  opacityTween: Tween<number>;
   accelerationBase: vec2;
   accelerationSpread: vec2;
-  accelerationTween: TweenVEC2;
+  accelerationTween: Tween<vec2>;
   angleBase: number;
   angleSpread: number;
   angleVelocityBase: number;
@@ -163,13 +163,13 @@ class Gfx2Particles extends Gfx2Drawable {
     this.velocityExplodeSpeedSpread = options.velocityExplodeSpeedSpread ?? 0.0;
     this.sizeBase = options.sizeBase ?? 1.0;
     this.sizeSpread = options.sizeSpread ?? 0.0;
-    this.sizeTween = options.sizeTween ?? new TweenNumber();
+    this.sizeTween = options.sizeTween ?? new Tween<number>();
     this.opacityBase = options.opacityBase ?? 1.0;
     this.opacitySpread = options.opacitySpread ?? 0.0;
-    this.opacityTween = options.opacityTween ?? new TweenNumber();
+    this.opacityTween = options.opacityTween ?? new Tween<number>();
     this.accelerationBase = options.accelerationBase ?? [0, 0];
     this.accelerationSpread = options.accelerationSpread ?? [0, 0];
-    this.accelerationTween = options.accelerationTween ?? new TweenVEC2();
+    this.accelerationTween = options.accelerationTween ?? new Tween<vec2>();
     this.angleBase = options.angleBase ?? 0.0;
     this.angleSpread = options.angleSpread ?? 0.0;
     this.angleVelocityBase = options.angleVelocityBase ?? 0.0;

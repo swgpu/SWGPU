@@ -2,9 +2,9 @@ import { UT } from './utils';
 
 /**
  * Generic values interpolator.
- * @typeParam T - The interpolate value type.
+ * @typeParam T - The interpolate value type as a number or array of numbers.
  */
-class TweenAbstract<T> {
+class Tween<T> {
   times: Array<number>;
   values: Array<T>;
   fns: Array<Function>;
@@ -20,7 +20,7 @@ class TweenAbstract<T> {
    * @param {Function} defaultFn - The interpolate function that will be used as a fallback if none of the functions in the `fns` array match the given time.
    * @param {Array<Function>} fns - Interpolate functions that will be associated with each time values.
    */
-  constructor(times: Array<number>, values: Array<T>, defaultFn: Function, fns: Array<Function> = []) {
+  constructor(times: Array<number> = [], values: Array<T> = [], defaultFn: Function = UT.LINEAR, fns: Array<Function> = []) {
     this.times = times;
     this.values = values;
     this.fns = fns;
@@ -42,7 +42,6 @@ class TweenAbstract<T> {
     }
 
     if (this.looped && this.timeElapsed > this.times[this.times.length - 1]) {
-      console.log('gniark');
       this.timeElapsed = 0;
     }
 
@@ -67,12 +66,19 @@ class TweenAbstract<T> {
     const endValue = this.values[i];
     const currentT = t - this.times[i - 1];
     const currentDuration = this.times[i] - this.times[i - 1];
+    const currentFunction = this.fns[i] ? this.fns[i] : this.defaultFn;
 
-    if (this.fns[i]) {
-      return this.fns[i](currentT, beginValue, endValue, currentDuration);
+    if (Array.isArray(beginValue) && Array.isArray(endValue)) {
+      const value = [];
+
+      for (let j = 0; j < beginValue.length; j++) {
+        value.push(currentFunction(currentT, beginValue[j], endValue[j], currentDuration));
+      }
+
+      return value as T;
     }
 
-    return this.defaultFn(currentT, beginValue, endValue, currentDuration);
+    return currentFunction(currentT, beginValue, endValue, currentDuration);
   }
 
   /**
@@ -99,49 +105,4 @@ class TweenAbstract<T> {
   }
 }
 
-/**
- * Interpolate number values.
- */
-class TweenNumber extends TweenAbstract<number> {
-  /**
-   * @param {Array<number>} times - Times intervals.
-   * @param {Array<number>} values - Values that will be associated with each time values.
-   * @param {Function} defaultFn - The interpolate function that will be used as a fallback if none of the functions in the `fns` array match the given time.
-   * @param {Array<Function>} fns - Interpolate functions that will be associated with each time values.
-   */
-  constructor(times: Array<number> = [], values: Array<number> = [], fns: Array<Function> = []) {
-    super(times, values, UT.LINEAR, fns);
-  }
-}
-
-/**
- * Interpolate vec2 values.
- */
-class TweenVEC2 extends TweenAbstract<vec2> {
-  /**
-   * @param {Array<number>} times - Times intervals.
-   * @param {Array<vec2>} values - Values that will be associated with each time values.
-   * @param {Function} defaultFn - The interpolate function that will be used as a fallback if none of the functions in the `fns` array match the given time.
-   * @param {Array<Function>} fns - Interpolate functions that will be associated with each time values.
-   */
-  constructor(times: Array<number> = [], values: Array<vec2> = [], fns: Array<Function> = []) {
-    super(times, values, UT.LINEAR_VEC2, fns);
-  }
-}
-
-/**
- * Interpolate vec3 values.
- */
-class TweenVEC3 extends TweenAbstract<vec3> {
-  /**
-   * @param {Array<number>} times - Times intervals.
-   * @param {Array<vec3>} values - Values that will be associated with each time values.
-   * @param {Function} defaultFn - The interpolate function that will be used as a fallback if none of the functions in the `fns` array match the given time.
-   * @param {Array<Function>} fns - Interpolate functions that will be associated with each time values.
-   */
-  constructor(times: Array<number> = [], values: Array<vec3> = [], fns: Array<Function> = []) {
-    super(times, values, UT.LINEAR_VEC3, fns);
-  }
-}
-
-export { TweenNumber, TweenVEC2, TweenVEC3 };
+export { Tween };

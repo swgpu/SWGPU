@@ -11,7 +11,7 @@ export { Curve } from './core/curve';
 export { ObjectPool } from './core/object_pool';
 export { Quaternion } from './core/quaternion';
 export { TreePartition, TreePartitionNode } from './core/tree_partition';
-export { TweenNumber, TweenVEC2, TweenVEC3 } from './core/tween';
+export { Tween } from './core/tween';
 export { UT } from './core/utils';
 // dna ---------------------------------------------------------------------------------------
 export { DNAComponent } from './dna/dna_component';

@@ -248,6 +248,18 @@ class UT {
   }
 
   /**
+   * @param b - The begin vector.
+   * @param e - The end vector.
+   * @param t - The time.
+   * @param d - The divide.
+   */
+  static VEC2_LERP(b: vec2, e: vec2, t: number, d: number = 1): vec2 {
+    const c = UT.VEC2_SUBSTRACT(e, b);
+    const p = t / d;
+    return [b[0] + c[0] * p, b[1] + c[1] * p];
+  }
+
+  /**
    * @param center - The position you want to rotate around.
    * @param radius - The radius relative to the center of the rotation.
    * @param angle - The angle rotation.
@@ -550,6 +562,18 @@ class UT {
   static VEC3_SPREAD(base: vec3, spread: vec3): vec3 {
     const rand3 = UT.VEC3_CREATE(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
     return UT.VEC3_ADD(base, UT.VEC3_MULTIPLY(spread, rand3));
+  }
+
+  /**
+   * @param b - The begin.
+   * @param e - The end.
+   * @param t - The time.
+   * @param d - The divide.
+   */
+  static VEC3_LERP(b: vec3, e: vec3, t: number, d: number = 1): vec3 {
+    const c = UT.VEC3_SUBSTRACT(e, b);
+    const p = t / d;
+    return [b[0] + c[0] * p, b[1] + c[1] * p, b[2] + c[2] * p];
   }
 
   /**
@@ -1939,30 +1963,6 @@ class UT {
     const c = e - b;
     if ((t /= d / 2) < 1) return c / 2 * t * t + b;
     return -c / 2 * ((--t) * (t - 2) - 1) + b;
-  }
-
-  /**
-   * @param t - The time.
-   * @param b - The begin vector.
-   * @param e - The end vector.
-   * @param d - The divide.
-   */
-  static LINEAR_VEC2(t: number, b: vec2, e: vec2, d: number = 1): vec2 {
-    const c = UT.VEC2_SUBSTRACT(e, b);
-    const p = t / d;
-    return [b[0] + c[0] * p, b[1] + c[1] * p];
-  }
-
-  /**
-   * @param t - The time.
-   * @param b - The begin.
-   * @param e - The end.
-   * @param d - The divide.
-   */
-  static LINEAR_VEC3(t: number, b: vec3, e: vec3, d: number = 1): vec3 {
-    const c = UT.VEC3_SUBSTRACT(e, b);
-    const p = t / d;
-    return [b[0] + c[0] * p, b[1] + c[1] * p, b[2] + c[2] * p];
   }
 }
 

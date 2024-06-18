@@ -1,7 +1,7 @@
 import { gfx3ParticlesRenderer } from './gfx3_particles_renderer';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { UT } from '../core/utils';
-import { TweenNumber, TweenVEC3 } from '../core/tween';
+import { Tween } from '../core/tween';
 import { Gfx3Drawable } from '../gfx3/gfx3_drawable';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
@@ -30,16 +30,16 @@ class Particle {
   position: vec3;
   velocity: vec3; // units per second
   acceleration: vec3;
-  accelerationTween: TweenVEC3;
+  accelerationTween: Tween<vec3>;
   angle: number;
   angleVelocity: number; // degrees per second
   angleAcceleration: number; // degrees per second, per second
   size: number;
-  sizeTween: TweenNumber;
+  sizeTween: Tween<number>;
   color: vec3;
-  colorTween: TweenVEC3;
+  colorTween: Tween<vec3>;
   opacity: number;
-  opacityTween: TweenNumber;
+  opacityTween: Tween<number>;
   age: number;
   alive: number; // use float instead of boolean for shader purposes	
 
@@ -47,16 +47,16 @@ class Particle {
     this.position = [0, 0, 0];
     this.velocity = [0, 0, 0];
     this.acceleration = [0, 0, 0];
-    this.accelerationTween = new TweenVEC3();
+    this.accelerationTween = new Tween<vec3>();
     this.angle = 0;
     this.angleVelocity = 0;
     this.angleAcceleration = 0;
     this.size = 16.0;
-    this.sizeTween = new TweenNumber();
+    this.sizeTween = new Tween<number>();
     this.color = [0, 0, 0];
-    this.colorTween = new TweenVEC3();
+    this.colorTween = new Tween<vec3>();
     this.opacity = 1.0;
-    this.opacityTween = new TweenNumber();
+    this.opacityTween = new Tween<number>();
     this.age = 0;
     this.alive = 0;
   }
@@ -107,16 +107,16 @@ interface ParticlesOptions {
   velocityExplodeSpeedSpread: number;
   colorBase: vec3;
   colorSpread: vec3;
-  colorTween: TweenVEC3;
+  colorTween: Tween<vec3>;
   sizeBase: number;
   sizeSpread: number;
-  sizeTween: TweenNumber;
+  sizeTween: Tween<number>;
   opacityBase: number;
   opacitySpread: number;
-  opacityTween: TweenNumber;
+  opacityTween: Tween<number>;
   accelerationBase: vec3;
   accelerationSpread: vec3;
-  accelerationTween: TweenVEC3;
+  accelerationTween: Tween<vec3>;
   angleBase: number;
   angleSpread: number;
   angleVelocityBase: number;
@@ -146,16 +146,16 @@ class Gfx3Particles extends Gfx3Drawable {
   velocityExplodeSpeedSpread: number;
   colorBase: vec3;
   colorSpread: vec3;
-  colorTween: TweenVEC3;
+  colorTween: Tween<vec3>;
   sizeBase: number;
   sizeSpread: number;
-  sizeTween: TweenNumber;
+  sizeTween: Tween<number>;
   opacityBase: number;
   opacitySpread: number;
-  opacityTween: TweenNumber;
+  opacityTween: Tween<number>;
   accelerationBase: vec3;
   accelerationSpread: vec3;
-  accelerationTween: TweenVEC3;
+  accelerationTween: Tween<vec3>;
   angleBase: number;
   angleSpread: number;
   angleVelocityBase: number;
@@ -191,16 +191,16 @@ class Gfx3Particles extends Gfx3Drawable {
     this.velocityExplodeSpeedSpread = options.velocityExplodeSpeedSpread ?? 0.0;
     this.colorBase = options.colorBase ?? [0.0, 1.0, 0.5];
     this.colorSpread = options.colorSpread ?? [0.0, 0.0, 0.0];
-    this.colorTween = options.colorTween ?? new TweenVEC3();
+    this.colorTween = options.colorTween ?? new Tween<vec3>();
     this.sizeBase = options.sizeBase ?? 1.0;
     this.sizeSpread = options.sizeSpread ?? 0.0;
-    this.sizeTween = options.sizeTween ?? new TweenNumber();
+    this.sizeTween = options.sizeTween ?? new Tween<number>();
     this.opacityBase = options.opacityBase ?? 1.0;
     this.opacitySpread = options.opacitySpread ?? 0.0;
-    this.opacityTween = options.opacityTween ?? new TweenNumber();
+    this.opacityTween = options.opacityTween ?? new Tween<number>();
     this.accelerationBase = options.accelerationBase ?? [0, 0, 0];
     this.accelerationSpread = options.accelerationSpread ?? [0, 0, 0];
-    this.accelerationTween = options.accelerationTween ?? new TweenVEC3();
+    this.accelerationTween = options.accelerationTween ?? new Tween<vec3>();
     this.angleBase = options.angleBase ?? 0.0;
     this.angleSpread = options.angleSpread ?? 0.0;
     this.angleVelocityBase = options.angleVelocityBase ?? 0.0;

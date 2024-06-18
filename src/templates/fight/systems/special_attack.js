@@ -1,7 +1,7 @@
 import { dnaManager } from '@lib/dna/dna_manager';
 import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
 import { UT } from '@lib/core/utils';
-import { TweenNumber } from '@lib/core/tween';
+import { Tween } from '@lib/core/tween';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 import { Gfx2Drawable } from '@lib/gfx2/gfx2_drawable';
@@ -79,9 +79,9 @@ class GfxSpecialAttack extends Gfx2Drawable {
     this.bgJSS = null;
     this.avatarJSS = null;
     this.age = 0;
-    this.tweenOpacity = new TweenNumber([0, 0.5, this.duration - 0.5, this.duration], [0, 1, 1, 0]);
-    this.textTweenX = new TweenNumber([0, 0.5], [-300, 300]);
-    this.avatarTweenX = new TweenNumber([0, 0.5], [600, 0], UT.EASE_OUT_QUAD);
+    this.tweenOpacity = new Tween([0, 0.5, this.duration - 0.5, this.duration], [0, 1, 1, 0]);
+    this.textTweenX = new Tween([0, 0.5], [-300, 300]);
+    this.avatarTweenX = new Tween([0, 0.5], [600, 0], UT.EASE_OUT_QUAD);
   }
 
   setBackgroundJSS(backgroundJSS) {
