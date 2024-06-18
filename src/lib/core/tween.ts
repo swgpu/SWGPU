@@ -93,12 +93,19 @@ class Tween<T> {
   /**
    * Returns the current interpolated value.
    */
-  get(index: number = 0): T {
-    if (Array.isArray(this.currentValue)) {
-      return this.currentValue[index];
+  getCurrentValue(): T {
+    return this.currentValue;
+  }
+
+  /**
+   * Returns the current interpolated value at specific array index.
+   */
+  get(index: number = 0): number {
+    if (!Array.isArray(this.currentValue)) {
+      throw new Error('Tween::get(): You cannot call get on a non-array values based');
     }
 
-    return this.currentValue;
+    return this.currentValue[index];
   }
 
   /**
