@@ -126,12 +126,14 @@ class UT {
   /**
    * @param angle - Angle in radians.
    */
-  static SIGNED_ANGLE(angle: number) {
-    if (angle >= 0 && angle <= Math.PI) {
-      return angle;
+  static NORMALIZE_ANGLE(angle: number) {
+    angle = angle % Math.PI * 2;
+
+    if (angle > Math.PI) {
+      angle -= Math.PI * 2;
     }
-    else if (angle > Math.PI && angle <= Math.PI*2) {
-      return angle - Math.PI*2;
+    else if (angle < -Math.PI) {
+      angle += Math.PI * 2;
     }
 
     return angle;

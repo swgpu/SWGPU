@@ -7,7 +7,6 @@ export class EntityComponent extends DNAComponent {
   z: number;
   speed: number;
   velocity: vec3;
-  rotation: number;
 
   constructor() {
     super('Entity');
@@ -16,6 +15,5 @@ export class EntityComponent extends DNAComponent {
     this.z = 0;
     this.speed = 7;
     this.velocity = [0, 0, 0];
-    this.rotation = 0;
   }
 }

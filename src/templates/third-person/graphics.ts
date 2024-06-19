@@ -27,11 +27,22 @@ export class GraphicsSystem extends DNASystem {
     const graphics = dnaManager.getComponent<GraphicsComponent>(eid, 'Graphics');
     const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
 
-    const rotation = UT.SIGNED_ANGLE(entity.rotation);
-    const yaw = UT.LERP(graphics.jam.getRotationY(), rotation, (ts / 1000) * 20);
+    if (entity.velocity[0] != 0 || entity.velocity[2] != 0) {
+      const rotation = UT.VEC2_ANGLE([entity.velocity[0], entity.velocity[2]]);
+      let delta = rotation - graphics.jam.getRotationY();
 
-    graphics.jam.setRotation(0, yaw, 0);
-    graphics.jam.setPosition(entity.x, entity.y, entity.z); 
+      if (delta > Math.PI) {
+        delta -= Math.PI * 2;
+      }
+      else if (delta < -Math.PI) {
+        delta += Math.PI * 2;
+      }
+
+      const ry = UT.LERP(0, delta, (ts / 1000) * 20);  
+      graphics.jam.rotate(0, ry, 0);
+    }
+
+    graphics.jam.setPosition(entity.x, entity.y, entity.z);
 
     if (UT.VEC3_LENGTH(entity.velocity) > 0) {
       graphics.jam.play('RUN', true, true);

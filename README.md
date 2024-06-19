@@ -7,15 +7,14 @@
 </p>
 
 > [!NOTE]
-> This project is finally stable, with only minor future changes expected.
+> This project is finally stable, only minor changes in the futur.
 
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
-**WarmeY2K** is a fully packed **2D/3D game engine** dedicated to **indie games** !     
-The first part of the name (W.A.R.M.E) is an acronym for **Web Against Regular Major Engines**, you can understand it like a tentative
-to make a complete game engine for the web. The second part (Y.2.K) is the common acronym used to define the era covers **1998-2004** and define the technics limitation intentionally taken. These limitations are guarants of a human scaled tool and help a lot of to reduce the learning curve.
+**WarmeY2K** is a fully free **2D/3D** game engine dedicated to **indie games** !      
+It provide an easy way to build web based "old-school" games like the **PS1/PS2/XBOX** era in a modern **Typescript & HTML5, CSS3** environement. The core engine is freely available as a [npm package](https://www.npmjs.com/package/warme-y2k) or starter-kit. You can also have full access to the [documentation](http://warme-engine.com/).
 
 Some words about our philosophy:
 - **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
@@ -24,8 +23,7 @@ Some words about our philosophy:
 - **Performance:** We used WebGPU API for a blazing fast rendering.
 - **Lightweight:** The lib minzipped size is just 73 kB (1Mb with Rapier2D & Rapier3D).
 
-You can check the documentation [here](http://warme-engine.com/).          
-For a more concret overview on it, you can play examples [here](http://demo.warme-engine.com/) and check the demo source code [here](https://github.com/jay19240/WARME/tree/main/src/samples).    
+For a more concret overview on it, you can play [examples](http://demo.warme-engine.com/).
 
 ## Table of content
 

@@ -19,6 +19,7 @@ class Gfx3Transformable {
   scale: vec3;
   quaternion: Quaternion;
   lookTarget: vec3 | null;
+  lookUp: vec3;
   transformMatrix: mat4;
 
   constructor() {
@@ -27,6 +28,7 @@ class Gfx3Transformable {
     this.scale = [1.0, 1.0, 1.0];
     this.quaternion = new Quaternion();
     this.lookTarget = null;
+    this.lookUp = [0, 1, 0];
     this.transformMatrix = UT.MAT4_IDENTITY();
   }
 
@@ -216,7 +218,7 @@ class Gfx3Transformable {
    */
   getTransformMatrix(): mat4 {
     if (this.lookTarget) {
-      UT.MAT4_LOOKAT(this.position, this.lookTarget, [0, 1, 0], this.transformMatrix);
+      UT.MAT4_LOOKAT(this.position, this.lookTarget, this.lookUp, this.transformMatrix);
       UT.MAT4_MULTIPLY(this.transformMatrix, UT.MAT4_SCALE(this.scale[0], this.scale[1], this.scale[2]), this.transformMatrix);  
     }
     else {
@@ -236,6 +238,7 @@ class Gfx3Transformable {
    */
   lookAt(x: number, y: number, z:number, up: vec3 = [0, 1, 0]): void {
     this.lookTarget = [x, y, z];
+    this.lookUp = up;
   }
 
   /**

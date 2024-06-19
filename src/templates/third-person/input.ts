@@ -24,38 +24,41 @@ export class InputSystem extends DNASystem {
 
   onEntityUpdate(ts: number, eid: number) {
     let moving = false;
-    let moveAngle = 0;
+    let mx = 0;
+    let mz = 0;
+
+    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
+    const camera = dnaManager.getComponent<CameraComponent>(eid, 'Camera');
+    const axies = camera.rec.getAxies();
 
     if (inputManager.isActiveAction('LEFT')) {
-      moveAngle = -Math.PI / 2;
+      mx += axies[0][0] * -1;
+      mz += axies[0][2] * -1;
       moving = true;
     }
 
     if (inputManager.isActiveAction('RIGHT')) {
-      moveAngle = Math.PI / 2;
+      mx += axies[0][0];
+      mz += axies[0][2];
       moving = true;
     }
 
     if (inputManager.isActiveAction('UP')) {
-      moveAngle = 0;
+      mx += axies[2][0] * -1;
+      mz += axies[2][2] * -1;
       moving = true;
     }
 
     if (inputManager.isActiveAction('DOWN')) {
-      moveAngle = -Math.PI;
+      mx += axies[2][0];
+      mz += axies[2][2];
       moving = true;
     }
 
-    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
-    let mx = 0;
-    let mz = 0;
-
     if (moving) {
-      const camera = dnaManager.getComponent<CameraComponent>(eid, 'Camera');
-      const phi = camera.rec.getPhi();
-      mx = -Math.cos(phi + moveAngle) * entity.speed * (ts / 1000);
-      mz = -Math.sin(phi + moveAngle) * entity.speed * (ts / 1000);
-      entity.rotation = UT.VEC2_ANGLE([mx, mz]);
+      const moveAngle = UT.VEC2_ANGLE([mx, mz]);
+      mx = Math.cos(moveAngle) * entity.speed * (ts / 1000);
+      mz = Math.sin(moveAngle) * entity.speed * (ts / 1000);
     }
 
     entity.velocity[0] = mx;
