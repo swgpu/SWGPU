@@ -1,6 +1,5 @@
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { Quaternion } from '../core/quaternion';
-import { UT } from '../core/utils';
 import { Gfx3View } from '../gfx3/gfx3_view';
 import { Gfx3Transformable } from '../gfx3/gfx3_transformable';
 
