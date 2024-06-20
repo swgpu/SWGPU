@@ -211,6 +211,18 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     return this.sourceTexture.gpuTexture;
   }
 
+  /**
+   * Set the source texture.
+   * 
+   * @param {Gfx3Texture} sourceTexture - The source texture.
+   */
+  setSourceTexture(sourceTexture: Gfx3Texture): void {
+    this.sourceTexture.gpuTexture.destroy();
+    this.sourceTexture = this.grp0.setTexture(2, 'SOURCE_TEXTURE', sourceTexture);
+    this.sourceTexture = this.grp0.setSampler(3, 'SOURCE_SAMPLER', this.sourceTexture);
+    this.grp0.allocate();
+  }
+
   $handleWindowResize(): void {
     this.infos[0] = gfx3Manager.getWidth();
     this.infos[1] = gfx3Manager.getHeight();

@@ -38,13 +38,13 @@ interface ResRaycast {
 };
 
 interface ResElevation {
-  yMove: number,
+  hit: vec3;
+  distance: number;
   fragIndex: number
 };
 
 /**
  * A 3D hit mesh.
- * In collision case, the collision response sliding along wall polygons to keep a good feeling for the player.
  */
 class Gfx3PhysicsJNM {
   boundingBox: Gfx3BoundingBox;
@@ -184,7 +184,7 @@ class Gfx3PhysicsJNM {
    * @param {number} x - The x position of the box center.
    * @param {number} y - The y position of the box center.
    * @param {number} z - The z position of the box center.
-   * @param {number} radius - The radius of the box.
+   * @param {number} size - The size of the box.
    * @param {number} height - The height of the box.
    * @param {number} mx - The movement in the x-axis.
    * @param {number} my - The movement in the y-axis.
@@ -193,9 +193,9 @@ class Gfx3PhysicsJNM {
    * @param {number} snapFloor - Enable or disable floor snapping.
    * @param {number} snapFloorDistance - Minimum distance to snap the floor.
    */
-  box(x: number, y: number, z: number, radius: number, height: number, mx: number, my: number, mz: number, lift: number = 0.2, snapFloor: boolean = true, snapFloorDistance: number = 1): ResBox {
-    const min: vec3 = [x - radius, y - height * 0.5, z - radius];
-    const max: vec3 = [x + radius, y + height * 0.5, z + radius];
+  box(x: number, y: number, z: number, size: number, height: number, mx: number, my: number, mz: number, lift: number = 0.2, snapFloor: boolean = true, snapFloorDistance: number = 1): ResBox {
+    const min: vec3 = [x - size, y - height * 0.5, z - size];
+    const max: vec3 = [x + size, y + height * 0.5, z + size];
 
     min[1] += lift;
 
@@ -263,11 +263,11 @@ class Gfx3PhysicsJNM {
 
     const floorIntersectedFrags = this.btree.search(new Gfx3BoundingBox(
       [x + fmx, min[1] - snapFloorDistance, z + fmz],
-      [x + fmx, max[1] + lift, z + fmz]
+      [x + fmx, max[1], z + fmz]
     )) as Array<Frag>;
 
     const elevation = this.$getElevation(floorIntersectedFrags, [x + fmx, max[1], z + fmz]);
-    const delta = elevation ? min[1] - elevation.value : Infinity; // on negative we climbing, on positive we check for descent
+    const delta = elevation ? min[1] - elevation.value : Infinity; // climbing on negative, descent on positive
 
     if (snapFloor && delta < snapFloorDistance && elevation) {
       collideFloor = true;
@@ -285,17 +285,16 @@ class Gfx3PhysicsJNM {
 
   /**
    * Returns the ray hit point or null if no hit occured.
-   * Note: Utility used to handle collisions manually for full flexibility.
    * 
    * @param {vec3} origin - The ray origin.
    * @param {vec3} dir - The ray direction.
-   * @param {number} radius - The radius of ray area.
+   * @param {number} size - The size of ray area.
    * @param {number} height - The height of ray area.
    */
-  raycast(origin: vec3, dir: vec3, radius: number, height: number): ResRaycast | null {
+  raycast(origin: vec3, dir: vec3, size: number, height: number): ResRaycast | null {
     const frags = this.btree.search(new Gfx3BoundingBox(
-      [origin[0] - radius, origin[1] - height * 0.5, origin[2] - radius],
-      [origin[0] + radius, origin[1] + height * 0.5, origin[2] + radius]
+      [origin[0] - size, origin[1] - height * 0.5, origin[2] - size],
+      [origin[0] + size, origin[1] + height * 0.5, origin[2] + size]
     )) as Array<Frag>;
 
     let minFrag = null;
@@ -320,27 +319,30 @@ class Gfx3PhysicsJNM {
   }
 
   /**
-   * Returns a new y-move to fix the point on the floor.
-   * Note: Utility used to handle collisions manually for full flexibility.
+   * Returns the field elevation.
    * 
    * @param {number} x - The x position of sensor.
    * @param {number} y - The y position of sensor.
    * @param {number} z - The z position of sensor.
-   * @param {number} radius - The radius of sensor area.
+   * @param {number} size - The size of sensor area.
    * @param {number} height - The height of sensor area.
    * @param {number} mx - The movement in x-axis.
    * @param {number} mz - The movement in z-axis.
    */
-  getElevation(x: number, y: number, z: number, radius: number, height: number, mx: number, mz: number): ResElevation {
+  getElevation(x: number, y: number, z: number, size: number, height: number, mx: number, mz: number): ResElevation | null {
     const floors = this.btree.search(new Gfx3BoundingBox(
-      [x - radius, y - height * 0.5, z - radius],
-      [x + radius, y + height * 0.5, z + radius]
+      [x - size, y - height * 0.5, z - size],
+      [x + size, y + height * 0.5, z + size]
     )) as Array<Frag>;
 
     const elevation = this.$getElevation(floors, [x + mx, y + height, z + mz]);
+    if (!elevation) {
+      return null;
+    }
 
     return {
-      yMove: elevation ? elevation.value - y : 0,
+      hit: [x + mx, elevation.value, z + mz],
+      distance: elevation.value - y,
       fragIndex: elevation ? elevation.fragIndex : -1
     };
   }

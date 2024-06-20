@@ -45,6 +45,7 @@ class ThirdPersonScreen extends Screen {
 
   draw() {
     this.mapJSM.draw();
+    this.mapJNM.enableDebugMesh(true);
     dnaManager.draw();
   }
 
@@ -68,6 +69,8 @@ class ThirdPersonScreen extends Screen {
     const player = dnaManager.createEntity();
 
     const character = new EntityComponent();
+    character.x = 0.1;
+    character.z = 0.1;
     dnaManager.addComponent(player, character);
 
     const input = new InputComponent();

@@ -312,21 +312,21 @@ class Gfx3PhysicsJWM {
    * @param {string} id - A unique identifier.
    * @param {number} x - The x-coordinate of the walker's starting position.
    * @param {number} z - The z-coordinate of the walker's starting position.
-   * @param {number} radius - The radius.
+   * @param {number} size - The size.
    */
-  addWalker(id: string, x: number, z: number, radius: number): Walker {
+  addWalker(id: string, x: number, z: number, size: number): Walker {
     if (this.walkers.has(id)) {
-      throw new Error('Gfx3PhysicsJWM::addWalkerFromRadius: walker with id ' + id + ' already exist.');
+      throw new Error('Gfx3PhysicsJWM::addWalker: walker with id ' + id + ' already exist.');
     }
 
     const walker: Walker = {
       id: id,
       points: [
         this.$utilsCreatePoint(x, z),
-        this.$utilsCreatePoint(x + radius, z + radius),
-        this.$utilsCreatePoint(x + radius, z - radius),
-        this.$utilsCreatePoint(x - radius, z - radius),
-        this.$utilsCreatePoint(x - radius, z + radius)
+        this.$utilsCreatePoint(x + size, z + size),
+        this.$utilsCreatePoint(x + size, z - size),
+        this.$utilsCreatePoint(x - size, z - size),
+        this.$utilsCreatePoint(x - size, z + size)
       ]
     };
 

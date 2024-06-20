@@ -123,11 +123,11 @@ struct Params {
 fn main(
   @location(0) FragUV: vec2<f32>
 ) -> @location(0) vec4<f32> {
+  var outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, FragUV);
   var fragUV = FragUV;
 
   ${FRAG_BEFORE}
 
-  var outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, fragUV);
   if (PARAMS.ENABLED == 0.0)
   {
     return outputColor;
