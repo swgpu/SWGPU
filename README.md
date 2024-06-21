@@ -212,16 +212,5 @@ If you have a suggestion that would make this better, please fork the repo and c
 - [Ver. 1.0.3]  Camera orbit has been added.
 ```
 
-## Roadmap
-```
-[INFO]
-1. This roadmap can changed.
-2. Ordered by priority
-3. Task done one by one
-
-[CORE TASKS]
-1. Add spot-light
-```
-
 ## License 
 WARME Y2K is released under the [MIT](https://opensource.org/licenses/MIT) license. 
