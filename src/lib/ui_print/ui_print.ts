@@ -30,7 +30,7 @@ class UIPrint extends UIWidget {
     this.timeElapsed = 0;
     this.finished = false;
 
-    this.node.addEventListener('click', () => this.$handleClick());
+    this.node.addEventListener('click', () => this.#handleClick());
   }
 
   /**
@@ -94,7 +94,7 @@ class UIPrint extends UIWidget {
     }
   }
 
-  $handleClick(): void {
+  #handleClick(): void {
     if (this.isFocused() && this.finished) {
       eventManager.emit(this, 'E_OK');
     }

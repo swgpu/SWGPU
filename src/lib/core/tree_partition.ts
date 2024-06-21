@@ -139,7 +139,7 @@ class TreePartitionNode<T> {
    */
   addChild(object: T): void {
     if (this.children.length >= this.tree.getMaxChildren() && this.depth < this.tree.getMaxDepth()) {
-      this.$createSubNodes();
+      this.#createSubNodes();
     }
 
     if (this.left === null && this.right === null) {
@@ -200,7 +200,7 @@ class TreePartitionNode<T> {
     this.depth = depth;
   }
 
-  $createSubNodes(): void {
+  #createSubNodes(): void {
     const results = this.method.split(this.children);
 
     this.left = new TreePartitionNode(

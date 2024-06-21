@@ -254,7 +254,7 @@ class Gfx3PhysicsJWM {
       throw new Error('Gfx3PhysicsJWM::addPoint: point with id ' + id + ' already exist.');
     }
 
-    this.points.set(id, this.$utilsCreatePoint(x, z));
+    this.points.set(id, this.#utilsCreatePoint(x, z));
   }
 
   /**
@@ -292,7 +292,7 @@ class Gfx3PhysicsJWM {
    * @param {number} mz - The movement in the z-axis.
    */
   movePoint(point: Point, mx: number, mz: number): ResMovePoint {
-    const moveInfo = this.$utilsMove(point.sectorIndex, point.x, point.z, mx, mz);
+    const moveInfo = this.#utilsMove(point.sectorIndex, point.x, point.z, mx, mz);
     point.sectorIndex = moveInfo.sectorIndex;
     point.x += moveInfo.mx;
     point.y = moveInfo.elevation;
@@ -322,11 +322,11 @@ class Gfx3PhysicsJWM {
     const walker: Walker = {
       id: id,
       points: [
-        this.$utilsCreatePoint(x, z),
-        this.$utilsCreatePoint(x + size, z + size),
-        this.$utilsCreatePoint(x + size, z - size),
-        this.$utilsCreatePoint(x - size, z - size),
-        this.$utilsCreatePoint(x - size, z + size)
+        this.#utilsCreatePoint(x, z),
+        this.#utilsCreatePoint(x + size, z + size),
+        this.#utilsCreatePoint(x + size, z - size),
+        this.#utilsCreatePoint(x - size, z - size),
+        this.#utilsCreatePoint(x - size, z + size)
       ]
     };
 
@@ -380,7 +380,7 @@ class Gfx3PhysicsJWM {
       let deviation = false;
 
       if (!deviantPoints[i]) {
-        const moveInfo = this.$utilsMove(walker.points[i].sectorIndex, walker.points[i].x, walker.points[i].z, fmx, fmz);
+        const moveInfo = this.#utilsMove(walker.points[i].sectorIndex, walker.points[i].x, walker.points[i].z, fmx, fmz);
         if (moveInfo.mx == 0 && moveInfo.mz == 0) {
           fmx = 0;
           fmz = 0;
@@ -458,7 +458,7 @@ class Gfx3PhysicsJWM {
     return this.btree;
   }
 
-  $utilsMove(sectorIndex: number, x: number, z: number, mx: number, mz: number, i: number = 0): { sectorIndex: number, mx: number, mz: number, elevation: number } {
+  #utilsMove(sectorIndex: number, x: number, z: number, mx: number, mz: number, i: number = 0): { sectorIndex: number, mx: number, mz: number, elevation: number } {
     if (mx > -UT.BIG_EPSILON && mx < +UT.BIG_EPSILON && mz > -UT.BIG_EPSILON && mz < +UT.BIG_EPSILON) {
       return { sectorIndex: sectorIndex, mx: 0, mz: 0, elevation: Infinity };
     }
@@ -484,22 +484,22 @@ class Gfx3PhysicsJWM {
 
     if (this.neighborPool[sharedSectorIndex].s1 == -1 && UT.COLLIDE_LINE_TO_LINE([a[0], a[2]], [b[0], b[2]], [x, z], [x + mx, z + mz])) {
       [mx, mz] = UT.VEC2_PROJECTION_COS([mx, mz], ab);
-      return this.$utilsMove(sectorIndex, x, z, mx, mz, 0);
+      return this.#utilsMove(sectorIndex, x, z, mx, mz, 0);
     }
     else if (this.neighborPool[sharedSectorIndex].s2 == -1 && UT.COLLIDE_LINE_TO_LINE([b[0], b[2]], [c[0], c[2]], [x, z], [x + mx, z + mz])) {
       [mx, mz] = UT.VEC2_PROJECTION_COS([mx, mz], bc);
-      return this.$utilsMove(sectorIndex, x, z, mx, mz, 0);
+      return this.#utilsMove(sectorIndex, x, z, mx, mz, 0);
     }
     else if (this.neighborPool[sharedSectorIndex].s3 == -1 && UT.COLLIDE_LINE_TO_LINE([c[0], c[2]], [a[0], a[2]], [x, z], [x + mx, z + mz])) {
       [mx, mz] = UT.VEC2_PROJECTION_COS([mx, mz], ca);
-      return this.$utilsMove(sectorIndex, x, z, mx, mz, 0);
+      return this.#utilsMove(sectorIndex, x, z, mx, mz, 0);
     }
 
-    return this.$utilsMove(sectorIndex, x, z, mx, mz, i + 1);
+    return this.#utilsMove(sectorIndex, x, z, mx, mz, i + 1);
   }
 
-  $utilsCreatePoint(x: number, z: number): Point {
-    const loc = this.$utilsFindLocationInfo(x, z);
+  #utilsCreatePoint(x: number, z: number): Point {
+    const loc = this.#utilsFindLocationInfo(x, z);
     return {
       sectorIndex: loc.sectorIndex,
       x: x,
@@ -508,7 +508,7 @@ class Gfx3PhysicsJWM {
     };
   }
 
-  $utilsFindLocationInfo(x: number, z: number): { sectorIndex: number, elev: number } {
+  #utilsFindLocationInfo(x: number, z: number): { sectorIndex: number, elev: number } {
     const sectors = this.btree.search(new Gfx2BoundingRect(
       [x - 1, z - 1],
       [x + 1, z + 1]

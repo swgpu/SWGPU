@@ -144,7 +144,7 @@ class UIMenuListView<T> extends UIMenu {
     return this.views;
   }
 
-  $handleItemAdded(data: any): void {
+  #handleItemAdded(data: any): void {
     const items = this.collection.getItems();
     this.views = items.sort(this.sortPredicate).filter(this.filterPredicate);
 
@@ -152,7 +152,7 @@ class UIMenuListView<T> extends UIMenu {
     this.addItem(data.item, this.enablePredicate(data.item), index);
   }
 
-  $handleItemRemoved(data: any): void {
+  #handleItemRemoved(data: any): void {
     const index = this.views.indexOf(data.item);
     this.removeWidget(index);
 

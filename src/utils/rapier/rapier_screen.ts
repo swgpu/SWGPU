@@ -31,9 +31,9 @@ class RapierScreen extends Screen {
       new GraphicsSystem()
     ]);
 
-    this.floorEid = await this.$createFloor();
-    this.shipEid = await this.$createShip();
-    this.wallEid = await this.$createWall();
+    this.floorEid = await this.#createFloor();
+    this.shipEid = await this.#createShip();
+    this.wallEid = await this.#createWall();
   }
 
   update(ts: number) {
@@ -47,7 +47,7 @@ class RapierScreen extends Screen {
     dnaManager.draw();
   }
 
-  async $createWall(): Promise<number> {
+  async #createWall(): Promise<number> {
     const wall = dnaManager.createEntity();
 
     const graphics = new GraphicsComponent();
@@ -67,7 +67,7 @@ class RapierScreen extends Screen {
     return wall;
   }
 
-  async $createFloor(): Promise<number> {
+  async #createFloor(): Promise<number> {
     const floor = dnaManager.createEntity();
 
     const graphics = new GraphicsComponent();
@@ -86,7 +86,7 @@ class RapierScreen extends Screen {
     return floor;
   }
 
-  async $createShip(): Promise<number> {
+  async #createShip(): Promise<number> {
     const ship = dnaManager.createEntity();
 
     const graphics = new GraphicsComponent();

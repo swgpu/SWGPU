@@ -45,7 +45,7 @@ class Gfx3ShadowVolume extends Gfx3Drawable {
     }
 
     this.endVertices();
-    this.$generateDebugVertices(json['NumVertices'], json['Vertices']);
+    this.#generateDebugVertices(json['NumVertices'], json['Vertices']);
   }
 
   /**
@@ -89,7 +89,7 @@ class Gfx3ShadowVolume extends Gfx3Drawable {
     }
 
     this.endVertices();
-    this.$generateDebugVertices(numVertices, vertices);
+    this.#generateDebugVertices(numVertices, vertices);
   }
 
   /**
@@ -111,7 +111,7 @@ class Gfx3ShadowVolume extends Gfx3Drawable {
     gfx3ShadowVolumeRenderer.drawShadowVolume(this);
   }
 
-  $generateDebugVertices(numVertices: number, vertices: Array<number>): void {
+  #generateDebugVertices(numVertices: number, vertices: Array<number>): void {
     this.debugVertices = [];
     this.debugVertexCount = 0;
 

@@ -40,9 +40,9 @@ class UIDamier extends UIWidget {
     });
 
     this.gameState = gameState;
-    this.uiCards = this.$createCards();
-    this.uiVWalls = this.$createVWalls(this.gameState.getVWalls());
-    this.uiHWalls = this.$createHWalls(this.gameState.getHWalls());
+    this.uiCards = this.#createCards();
+    this.uiVWalls = this.#createVWalls(this.gameState.getVWalls());
+    this.uiHWalls = this.#createHWalls(this.gameState.getHWalls());
     this.focusedCellPos = [0, 0];
 
     eventManager.subscribe(gameState, 'E_BOARD_CARD_PLACED', this, this.handleBoardCardPlaced);
@@ -120,7 +120,7 @@ class UIDamier extends UIWidget {
     cell.appendChild(uiCard.getNode());
   }
 
-  $createVWalls(vWalls: Array<Array<boolean>>): Array<Array<UIWall>> {
+  #createVWalls(vWalls: Array<Array<boolean>>): Array<Array<UIWall>> {
     const uiWalls = new Array<Array<UIWall>>();
 
     for (let i = 0; i < SIZE_BOARD; i++) {
@@ -149,7 +149,7 @@ class UIDamier extends UIWidget {
     return uiWalls;
   }
 
-  $createHWalls(hWalls: Array<Array<boolean>>): Array<Array<UIWall>> {
+  #createHWalls(hWalls: Array<Array<boolean>>): Array<Array<UIWall>> {
     const uiWalls = new Array<Array<UIWall>>();
 
     for (let i = 0; i < SIZE_BOARD; i++) {
@@ -178,7 +178,7 @@ class UIDamier extends UIWidget {
     return uiWalls;
   }
 
-  $createCards(): Array<Array<UICard | null>> {
+  #createCards(): Array<Array<UICard | null>> {
     const uiCards = new Array<Array<UICard | null>>();
     for (let i = 0; i < SIZE_BOARD; i++) {
       uiCards[i] = [];

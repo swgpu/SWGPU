@@ -232,7 +232,7 @@ class Gfx3PhysicsJNM {
     ];
 
     while (i < points.length) {
-      const xz = this.$moveXZ(wallIntersectedFrags, points[i], [fmx, fmz]);
+      const xz = this.#moveXZ(wallIntersectedFrags, points[i], [fmx, fmz]);
       if (xz.move[0] != fmx || xz.move[1] != fmz) {
         fmx = xz.move[0];
         fmz = xz.move[1];
@@ -249,7 +249,7 @@ class Gfx3PhysicsJNM {
         [x + fmx, max[1] + 0.1, z + fmz]
       )) as Array<Frag>;
       
-      const elevation = this.$getElevation(topIntersectedFrags, [x + fmx, min[1], z + fmz], [0, 1, 0]);
+      const elevation = this.#getElevation(topIntersectedFrags, [x + fmx, min[1], z + fmz], [0, 1, 0]);
       const delta = elevation ? elevation.value - max[1] : Infinity;
   
       if (delta < 0 && elevation) {
@@ -266,7 +266,7 @@ class Gfx3PhysicsJNM {
       [x + fmx, max[1], z + fmz]
     )) as Array<Frag>;
 
-    const elevation = this.$getElevation(floorIntersectedFrags, [x + fmx, max[1], z + fmz]);
+    const elevation = this.#getElevation(floorIntersectedFrags, [x + fmx, max[1], z + fmz]);
     const delta = elevation ? min[1] - elevation.value : Infinity; // climbing on negative, descent on positive
 
     if (snapFloor && delta < snapFloorDistance && elevation) {
@@ -335,7 +335,7 @@ class Gfx3PhysicsJNM {
       [x + size, y + height * 0.5, z + size]
     )) as Array<Frag>;
 
-    const elevation = this.$getElevation(floors, [x + mx, y + height, z + mz]);
+    const elevation = this.#getElevation(floors, [x + mx, y + height, z + mz]);
     if (!elevation) {
       return null;
     }
@@ -404,7 +404,7 @@ class Gfx3PhysicsJNM {
     return this.fragColors[fragIndex];
   }
 
-  $moveXZ(frags: Array<Frag>, point: vec3, move: vec2, i: number = 0 ): { move: vec2 } {
+  #moveXZ(frags: Array<Frag>, point: vec3, move: vec2, i: number = 0 ): { move: vec2 } {
     let minFrag: Frag | null = null;
     let minPenLength = Infinity;
 
@@ -432,13 +432,13 @@ class Gfx3PhysicsJNM {
 
     if (minFrag) {
       const newMove = UT.VEC2_PROJECTION_COS([move[0], move[1]], [minFrag.t[0], minFrag.t[2]]);
-      return this.$moveXZ(frags, point, newMove, i + 1);
+      return this.#moveXZ(frags, point, newMove, i + 1);
     }
 
     return { move: move };
   }
 
-  $getElevation(frags: Array<Frag>, point: vec3, dir: vec3 = [0, -1, 0]): { value: number, fragIndex: number } | null {
+  #getElevation(frags: Array<Frag>, point: vec3, dir: vec3 = [0, -1, 0]): { value: number, fragIndex: number } | null {
     let minFrag: Frag | null = null;
     let minFragLength = Infinity;
     let outIntersectPoint: vec3 = [0, 0, 0];

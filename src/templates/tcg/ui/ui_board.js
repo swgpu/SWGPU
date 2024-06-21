@@ -252,20 +252,20 @@ class UIBoard extends UIWidget {
       eventManager.emit(this, 'E_OK_PRESSED');
     }
     else if (actionId == 'UP') {
-      this.$moveFocus(0, -1, true);
+      this.#moveFocus(0, -1, true);
     }
     else if (actionId == 'DOWN') {
-      this.$moveFocus(0, 1, true);
+      this.#moveFocus(0, 1, true);
     }
     else if (actionId == 'LEFT') {
-      this.$moveFocus(-1, 0, true);
+      this.#moveFocus(-1, 0, true);
     }
     else if (actionId == 'RIGHT') {
-      this.$moveFocus(1, 0, true);
+      this.#moveFocus(1, 0, true);
     }
   }
 
-  $moveFocus(mx, my, emit = false) {
+  #moveFocus(mx, my, emit = false) {
     let focusedNode = this.focusedSlot.getNode();
     let focusedPos = getOffset(focusedNode);
     let centerX = focusedPos.left + (focusedNode.offsetWidth * 0.5);

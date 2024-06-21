@@ -83,9 +83,9 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
    * @param {string} mtlPath - The mtl file path.
    */
   async loadFromFile(objPath: string, mtlPath: string) {
-    await this.$loadMaterials(mtlPath);
-    await this.$loadObjects(objPath);
-    this.$build();
+    await this.#loadMaterials(mtlPath);
+    await this.#loadObjects(objPath);
+    this.#build();
   }
 
   /**
@@ -240,7 +240,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
    * The "$loadMaterials" function asynchronously loads materials from a specified file (mtl).
    * @param {string} path - The `path` parameter is the `mtl` file path.
    */
-  async $loadMaterials(path: string) {
+  async #loadMaterials(path: string) {
     const response = await fetch(path);
     const text = await response.text();
     const lines = text.split('\n');
@@ -329,7 +329,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
    * The "$loadObjects" function asynchronously loads objects from a specified file (obj).
    * @param {string} path - The `path` parameter is the `obj` file path.
    */
-  async $loadObjects(path: string): Promise<void> {
+  async #loadObjects(path: string): Promise<void> {
     const response = await fetch(path);
     const text = await response.text();
     const lines = text.split('\n');
@@ -448,7 +448,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
     }
   }
 
-  $build(): void {
+  #build(): void {
     this.meshes.clear();
     this.debugVertices = [];
     this.debugVertexCount = 0;

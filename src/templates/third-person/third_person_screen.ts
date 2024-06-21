@@ -30,11 +30,11 @@ class ThirdPersonScreen extends Screen {
       new CameraSystem()
     ]);
 
-    const { jsm, jnm } = await this.$createMap();
+    const { jsm, jnm } = await this.#createMap();
     this.mapJSM = jsm;
     this.mapJNM = jnm;
 
-    await this.$createPlayer(this.mapJNM);
+    await this.#createPlayer(this.mapJNM);
   }
 
   update(ts: number) {
@@ -49,7 +49,7 @@ class ThirdPersonScreen extends Screen {
     dnaManager.draw();
   }
 
-  async $createMap(): Promise<{jsm: Gfx3MeshJSM, jnm: Gfx3PhysicsJNM }> {
+  async #createMap(): Promise<{jsm: Gfx3MeshJSM, jnm: Gfx3PhysicsJNM }> {
     const jsm = new Gfx3MeshJSM();
     await jsm.loadFromFile('./templates/third-person/map.jsm');
     jsm.setMaterial(new Gfx3Material({
@@ -65,7 +65,7 @@ class ThirdPersonScreen extends Screen {
     return { jsm, jnm };
   }
 
-  async $createPlayer(jnm: Gfx3PhysicsJNM): Promise<number> {
+  async #createPlayer(jnm: Gfx3PhysicsJNM): Promise<number> {
     const player = dnaManager.createEntity();
 
     const character = new EntityComponent();

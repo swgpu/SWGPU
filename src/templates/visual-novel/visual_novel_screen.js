@@ -31,21 +31,21 @@ class VisualNovelScreen extends Screen {
     this.scriptMachine.registerCommand('UI_FADE_OUT', this.$uiFadeOut.bind(this));
 
     await this.player.loadFromFile('./templates/visual-novel/player.json');
-    await this.$loadScript('./templates/visual-novel/scene00.jsc');
+    await this.#loadScript('./templates/visual-novel/scene00.jsc');
   }
 
   update(ts) {
     this.scriptMachine.update(ts);
   }
 
-  async $loadScript(path) {
+  async #loadScript(path) {
     await this.scriptMachine.loadFromFile(path);
     this.scriptMachine.loadVariantFromData(this.player.getVariant());
     this.scriptMachine.jump('ON_INIT');
     this.scriptMachine.setEnabled(true);
   }
 
-  async $uiCreateDialog(author, text) {
+  async #uiCreateDialog(author, text) {
     this.scriptMachine.setEnabled(false);
     let uiDialog = new UIDialog();
     uiDialog.setAuthor(author);
@@ -57,7 +57,7 @@ class VisualNovelScreen extends Screen {
     this.scriptMachine.setEnabled(true);
   }
 
-  async $uiCreateChoices(author, text, choices = []) {
+  async #uiCreateChoices(author, text, choices = []) {
     this.scriptMachine.setEnabled(false);
     let uiDialog = new UIDialog();
     uiDialog.setAuthor(author);
@@ -79,7 +79,7 @@ class VisualNovelScreen extends Screen {
     this.scriptMachine.setEnabled(true);
   }
 
-  async $uiCreateAvatar(imageFile, jasFile, animation, isLooped, location, animate) {
+  async #uiCreateAvatar(imageFile, jasFile, animation, isLooped, location, animate) {
     this.scriptMachine.setEnabled(false);
     let uiAvatar = new UIAvatar();
     uiAvatar.changeLocation(location);
@@ -95,7 +95,7 @@ class VisualNovelScreen extends Screen {
     this.scriptMachine.setEnabled(true);
   }
 
-  async $uiCreateBackground(imageFile, jasFile, animation, isLooped, animate) {
+  async #uiCreateBackground(imageFile, jasFile, animation, isLooped, animate) {
     this.scriptMachine.setEnabled(false);
     let uiBackground = new UIBackground();
 
@@ -110,7 +110,7 @@ class VisualNovelScreen extends Screen {
     this.scriptMachine.setEnabled(true);
   }
 
-  async $uiDestroyAvatar(avatarIndex, animate) {
+  async #uiDestroyAvatar(avatarIndex, animate) {
     this.scriptMachine.setEnabled(false);
     let widgets = uiManager.getWidgets();
     let uiAvatar = widgets.filter(w => w instanceof UIAvatar).at(avatarIndex);
@@ -121,7 +121,7 @@ class VisualNovelScreen extends Screen {
     this.scriptMachine.setEnabled(true);
   }
 
-  async $uiDestroyBackground(backgroundIndex, animate) {
+  async #uiDestroyBackground(backgroundIndex, animate) {
     this.scriptMachine.setEnabled(false);
     let widgets = uiManager.getWidgets();
     let uiBackground = widgets.filter(w => w instanceof UIBackground).at(backgroundIndex);
@@ -132,24 +132,24 @@ class VisualNovelScreen extends Screen {
     this.scriptMachine.setEnabled(true);
   }
 
-  $uiPlayAvatar(avatarIndex, animation, isLooped) {
+  #uiPlayAvatar(avatarIndex, animation, isLooped) {
     let widgets = uiManager.getWidgets();
     let uiAvatars = widgets.filter(w => w instanceof UIAvatar);
     uiAvatars[avatarIndex].play(animation, isLooped);
   }
 
-  $uiPlayBackground(backgroundIndex, animation, isLooped) {
+  #uiPlayBackground(backgroundIndex, animation, isLooped) {
     let widgets = uiManager.getWidgets();
     let uiBackgrounds = widgets.filter(w => w instanceof UIBackground);
     uiBackgrounds[backgroundIndex].play(animation, isLooped);
   }
 
-  async $uiFadeIn(delay, ms, timingFunction) {
+  async #uiFadeIn(delay, ms, timingFunction) {
     this.scriptMachine.setEnabled(false);
     uiManager.fadeIn(delay, ms, timingFunction, () => this.scriptMachine.setEnabled(true));
   }
 
-  async $uiFadeOut(delay, ms, timingFunction) {
+  async #uiFadeOut(delay, ms, timingFunction) {
     this.scriptMachine.setEnabled(false);
     uiManager.fadeOut(delay, ms, timingFunction, () => this.scriptMachine.setEnabled(true));
   }

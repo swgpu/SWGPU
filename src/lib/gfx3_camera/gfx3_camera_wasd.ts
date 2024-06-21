@@ -149,7 +149,7 @@ class Gfx3CameraWASD extends Gfx3Camera {
     return this.minPitch;
   }
 
-  $handleMouseDrag(delta: any): void {
+  #handleMouseDrag(delta: any): void {
     let newRotationX = this.rotation[0] + (delta.movementY / 1000 * this.rotationSpeed);
     let newRotationY = this.rotation[1] + (delta.movementX / 1000 * this.rotationSpeed);
 

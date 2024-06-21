@@ -11,9 +11,11 @@ interface Pad {
 
 interface Action {
   id: string;
-  inputSource: string;
+  inputSource: InputString;
   eventKey: string;
 }
+
+type InputString = 'keyboard' | 'gamepad0' | 'gamepad1' | 'gamepad2' | 'gamepad3';
 
 // standard mapping https://w3c.github.io/gamepad/#remapping
 const GAME_PAD_KEY_MAPPING = new Map<string, string>();
@@ -77,15 +79,15 @@ class InputManager {
     this.pointerLockEnabled = false;
     this.pointerLockCaptured = false;
 
-    document.addEventListener('keydown', (e) => this.$handleKeyDown(e));
-    document.addEventListener('keyup', (e) => this.$handleKeyUp(e));
-    document.addEventListener('pointerdown', (e) => this.$handlePointerDown(e));
-    document.addEventListener('pointerup', () => this.$handlePointerUp());
-    document.addEventListener('pointermove', (e) => this.$handlePointerMove(e));
-    document.addEventListener('wheel', (e) => this.$handleWheel(e), { passive: false });
-    document.addEventListener('pointerlockchange', (e) => this.$handlePointerLockChanged(e), false);
-    window.addEventListener('gamepadconnected', (e) => this.$handleGamePadConnected(e));
-    window.addEventListener('gamepaddisconnected', (e) => this.$handleGamePadDisconnected(e));
+    document.addEventListener('keydown', (e) => this.#handleKeyDown(e));
+    document.addEventListener('keyup', (e) => this.#handleKeyUp(e));
+    document.addEventListener('pointerdown', (e) => this.#handlePointerDown(e));
+    document.addEventListener('pointerup', () => this.#handlePointerUp());
+    document.addEventListener('pointermove', (e) => this.#handlePointerMove(e));
+    document.addEventListener('wheel', (e) => this.#handleWheel(e), { passive: false });
+    document.addEventListener('pointerlockchange', (e) => this.#handlePointerLockChanged(e), false);
+    window.addEventListener('gamepadconnected', (e) => this.#handleGamePadConnected(e));
+    window.addEventListener('gamepaddisconnected', (e) => this.#handleGamePadDisconnected(e));
 
     this.registerAction('keyboard', 'Enter', 'OK');
     this.registerAction('keyboard', 'Escape', 'BACK');
@@ -102,6 +104,30 @@ class InputManager {
     this.registerAction('gamepad0', 'PadRight', 'RIGHT');
     this.registerAction('gamepad0', 'PadTop', 'UP');
     this.registerAction('gamepad0', 'PadBottom', 'DOWN');
+
+    this.registerAction('gamepad1', '0', 'OK');
+    this.registerAction('gamepad1', '1', 'BACK');
+    this.registerAction('gamepad1', 'BtnSelect', 'SELECT');
+    this.registerAction('gamepad1', 'PadLeft', 'LEFT');
+    this.registerAction('gamepad1', 'PadRight', 'RIGHT');
+    this.registerAction('gamepad1', 'PadTop', 'UP');
+    this.registerAction('gamepad1', 'PadBottom', 'DOWN');
+
+    this.registerAction('gamepad2', '0', 'OK');
+    this.registerAction('gamepad2', '1', 'BACK');
+    this.registerAction('gamepad2', 'BtnSelect', 'SELECT');
+    this.registerAction('gamepad2', 'PadLeft', 'LEFT');
+    this.registerAction('gamepad2', 'PadRight', 'RIGHT');
+    this.registerAction('gamepad2', 'PadTop', 'UP');
+    this.registerAction('gamepad2', 'PadBottom', 'DOWN');
+
+    this.registerAction('gamepad3', '0', 'OK');
+    this.registerAction('gamepad3', '1', 'BACK');
+    this.registerAction('gamepad3', 'BtnSelect', 'SELECT');
+    this.registerAction('gamepad3', 'PadLeft', 'LEFT');
+    this.registerAction('gamepad3', 'PadRight', 'RIGHT');
+    this.registerAction('gamepad3', 'PadTop', 'UP');
+    this.registerAction('gamepad3', 'PadBottom', 'DOWN');
   }
 
   /**
@@ -111,7 +137,7 @@ class InputManager {
    * @param {string} eventKey - The key or button that triggers the action.
    * @param {string} actionId - The unique action identifier.
    */
-  registerAction(inputSource: string, eventKey: string, actionId: string): void {
+  registerAction(inputSource: InputString, eventKey: string, actionId: string): void {
     const found = this.actionRegister.has(inputSource + eventKey);
     if (found) {
       throw new Error('InputManager::registerAction(): you cannot register action with same event source & key.');
@@ -130,7 +156,7 @@ class InputManager {
    * @param {string} inputSource - The device from which the input is received.
    * @param {string} eventKey - The key or button that triggers the action.
    */
-  unregisterAction(inputSource: string, eventKey: string): void {
+  unregisterAction(inputSource: InputString, eventKey: string): void {
     this.actionRegister.delete(inputSource + eventKey);
   }
 
@@ -238,17 +264,17 @@ class InputManager {
     eventManager.emit(this, 'E_GAMEPAD_REMOVED', { id: id });
   }
 
-  $addPad(pad: Pad): void {
+  #addPad(pad: Pad): void {
     this.pads.push(pad);
     if (this.padsInterval === null) {
-      this.padsInterval = setInterval(() => this.$updatePadsStatus(), 50);
+      this.padsInterval = setInterval(() => this.#updatePadsStatus(), 50);
     }
   }
 
-  $handleKeyDown(e: KeyboardEvent): boolean {
-    const action = this.actionRegister.get('keyboard' + e.key);
+  #handleKeyDown(e: KeyboardEvent): boolean {
+    const action = this.actionRegister.get('keyboard' + e.code);
 
-    if (!this.keymap.get(e.key) && action) {      
+    if (!this.keymap.get(e.code) && action) {      
       eventManager.emit(this, 'E_ACTION_ONCE', { actionId: action.id });
       this.actionmap.set(action.id, true);
     }
@@ -258,25 +284,25 @@ class InputManager {
       this.actionmap.set(action.id, true);
     }
 
-    this.keymap.set(e.key, true);
+    this.keymap.set(e.code, true);
 
     e.preventDefault();
     e.stopPropagation();
     return false;
   }
 
-  $handleKeyUp(e: KeyboardEvent): void {
-    const action = this.actionRegister.get('keyboard' + e.key);
+  #handleKeyUp(e: KeyboardEvent): void {
+    const action = this.actionRegister.get('keyboard' + e.code);
 
     if (action) {
       eventManager.emit(this, 'E_ACTION_RELEASED', { actionId: action.id });
       this.actionmap.set(action.id, false);  
     }
 
-    this.keymap.set(e.key, false);
+    this.keymap.set(e.code, false);
   }
 
-  async $handlePointerDown(e: PointerEvent): Promise<void> {
+  async #handlePointerDown(e: PointerEvent): Promise<void> {
     if (this.pointerLockEnabled && !document.pointerLockElement) {
       await document.body.requestPointerLock();
     }
@@ -287,14 +313,14 @@ class InputManager {
     eventManager.emit(this, 'E_MOUSE_DOWN', { buttons: e.buttons });
   }
 
-  $handlePointerUp(): void {
+  #handlePointerUp(): void {
     this.mouseDown = false;
     this.dragStartPosition[0] = 0;
     this.dragStartPosition[1] = 0;
     eventManager.emit(this, 'E_MOUSE_UP');
   }
 
-  $handlePointerMove(e: PointerEvent): void {
+  #handlePointerMove(e: PointerEvent): void {
     if (this.pointerLockEnabled && !this.pointerLockCaptured) {
       return;
     }
@@ -308,7 +334,7 @@ class InputManager {
     }
   }
 
-  $handleWheel(e: WheelEvent): void {
+  #handleWheel(e: WheelEvent): void {
     this.mouseDown = (e.buttons & 1) !== 0;
     this.mouseWheel += Math.sign(e.deltaY);
     e.preventDefault();
@@ -316,7 +342,7 @@ class InputManager {
     eventManager.emit(this, 'E_MOUSE_WHEEL', { delta: Math.sign(e.deltaY) });
   }
 
-  $handlePointerLockChanged(e: Event): void {
+  #handlePointerLockChanged(e: Event): void {
     if (!this.pointerLockEnabled) {
       return;
     }
@@ -331,12 +357,12 @@ class InputManager {
     }
   }
 
-  $handleGamePadDisconnected(e: GamepadEvent): void {
+  #handleGamePadDisconnected(e: GamepadEvent): void {
     this.removePad(e.gamepad.id);
     eventManager.emit(this, 'E_GAMEPAD_DISCONNECTED', { id: e.gamepad.id });
   }
 
-  $handleGamePadConnected(e: GamepadEvent): void {
+  #handleGamePadConnected(e: GamepadEvent): void {
     const pad: Pad = {
       index: e.gamepad.index,
       id: e.gamepad.id,
@@ -350,11 +376,11 @@ class InputManager {
       pad.pressed[i] = e.gamepad.buttons[i].pressed;
     }
 
-    this.$addPad(pad);
+    this.#addPad(pad);
     eventManager.emit(this, 'E_GAMEPAD_CONNECTED', { id: e.gamepad.id });
   }
 
-  $updatePadsStatus(): void {
+  #updatePadsStatus(): void {
     const navigator: any = window.navigator;
     const gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
 

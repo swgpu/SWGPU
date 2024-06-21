@@ -261,16 +261,16 @@ class ScriptMachine {
     return this.variants[varloc];
   }
 
-  $waitPad(): void {
+  #waitPad(): void {
     this.setEnabled(false);
     document.addEventListener('keydown', (e) => e.key == 'Enter' ? this.setEnabled(true) : '', { once: true });
   }
 
-  $goto(jumpto: string): string {
+  #goto(jumpto: string): string {
     return jumpto;
   }
 
-  $gotoIf(varloc: string, cond: string, value: any, jumpto: string): string | null {
+  #gotoIf(varloc: string, cond: string, value: any, jumpto: string): string | null {
     if (CHECK_CONDITION(this.getVariant(varloc), cond, value)) {
       return jumpto;
     }
@@ -278,27 +278,27 @@ class ScriptMachine {
     return null;
   }
 
-  $execIf(varloc: string, cond: string, value: any, cmd: { CommandName: string, CommandArgs: Array<any> } = { CommandName: '', CommandArgs: [] }): void {
+  #execIf(varloc: string, cond: string, value: any, cmd: { CommandName: string, CommandArgs: Array<any> } = { CommandName: '', CommandArgs: [] }): void {
     if (CHECK_CONDITION(this.getVariant(varloc), cond, value)) {
       this.runCommand(cmd['CommandName'], cmd['CommandArgs']);
     }
   }
 
-  $varSet(varloc: string, value: any): void {
+  #varSet(varloc: string, value: any): void {
     this.setVariant(varloc, value);
   }
 
-  $varAdd(varloc: string, value: any): void {
+  #varAdd(varloc: string, value: any): void {
     const variant = this.getVariant(varloc);
     this.setVariant(varloc, variant + value);
   }
 
-  $varSub(varloc: string, value: any): void {
+  #varSub(varloc: string, value: any): void {
     const variant = this.getVariant(varloc);
     this.setVariant(varloc, variant - value);
   }
 
-  $delay(ms: number): void {
+  #delay(ms: number): void {
     this.setEnabled(false);
     window.setTimeout(() => this.setEnabled(true), ms);
   }

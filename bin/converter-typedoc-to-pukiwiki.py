@@ -229,7 +229,7 @@ def get_class_group_function_content(id):
     function = search_by_property(docs_file, "id", id)
     function_content = ""
     if function != None:
-        if function["signatures"][0]["name"].startswith("$"):
+        if function["signatures"][0]["name"].startswith("#"):
             return ""
         try:
             test = function["signatures"][0]["inheritedFrom"]

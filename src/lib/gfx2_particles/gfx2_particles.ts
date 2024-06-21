@@ -187,7 +187,7 @@ class Gfx2Particles extends Gfx2Drawable {
     this.texture = options.texture ?? gfx2Manager.getDefaultTexture();
 
     for (let i = 0; i < this.particleQuantity; i++) {
-      this.particleArray[i] = this.$createParticle();
+      this.particleArray[i] = this.#createParticle();
     }
   }
 
@@ -230,7 +230,7 @@ class Gfx2Particles extends Gfx2Drawable {
 
     for (let i = 0; i < recycleIndices.length; i++) { // if any particles have died while the emitter is still running, we imediately recycle them
       const idx = recycleIndices[i];
-      this.particleArray[idx] = this.$createParticle();
+      this.particleArray[idx] = this.#createParticle();
       this.particleArray[idx].alive = 1.0; // activate right away
       this.particleAlivedCount++;
     }
@@ -291,7 +291,7 @@ class Gfx2Particles extends Gfx2Drawable {
   /**
    * Creates a particle with various properties such as position, velocity, size, opacity, acceleration, angle, and age.
    */
-  $createParticle(): Particle {
+  #createParticle(): Particle {
     const particle = new Particle();
 
     if (this.positionStyle == PositionStyle.SQUARE) {

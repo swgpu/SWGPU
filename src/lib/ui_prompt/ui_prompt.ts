@@ -92,7 +92,7 @@ class UIPrompt extends UIWidget {
     this.uiMenu.clear();
   }
 
-  $handleMenuItemSelected(data: any) {
+  #handleMenuItemSelected(data: any) {
     eventManager.emit(this, 'E_ITEM_SELECTED', data);
   }
 }

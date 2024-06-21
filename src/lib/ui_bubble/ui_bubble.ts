@@ -190,7 +190,7 @@ class UIBubble extends UIWidget {
     }
   }
 
-  $handleMenuItemSelected(data: any): void {
+  #handleMenuItemSelected(data: any): void {
     eventManager.emit(this, 'E_MENU_ITEM_SELECTED', data);
   }
 }

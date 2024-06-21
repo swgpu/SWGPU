@@ -123,8 +123,8 @@ class UIMenu extends UIWidget {
       this.node.insertBefore(widgetNode, this.node.children[index]);
     }
 
-    widgetNode.addEventListener('click', () => this.$handleWidgetClicked(widget));
-    widgetNode.addEventListener('mousemove', () => this.$handleWidgetHover(widget));
+    widgetNode.addEventListener('click', () => this.#handleWidgetClicked(widget));
+    widgetNode.addEventListener('mousemove', () => this.#handleWidgetHover(widget));
   }
 
   /**
@@ -165,7 +165,7 @@ class UIMenu extends UIWidget {
     }
 
     if (!preventScroll) {
-      const rect = this.$getViewRectWidget(index);
+      const rect = this.#getViewRectWidget(index);
       if (rect.top < 0) {
         this.node.scrollTop += rect.top;
       }
@@ -398,7 +398,7 @@ class UIMenu extends UIWidget {
     }
   }
 
-  $handleWidgetClicked(widget: UIWidget) {
+  #handleWidgetClicked(widget: UIWidget) {
     if (!this.isFocused()) {
       return;
     }
@@ -406,7 +406,7 @@ class UIMenu extends UIWidget {
     this.selectWidget(this.widgets.indexOf(widget), true);
   }
 
-  $handleWidgetHover(widget: UIWidget) {
+  #handleWidgetHover(widget: UIWidget) {
     if (!this.isFocused()) {
       return;
     }
@@ -414,7 +414,7 @@ class UIMenu extends UIWidget {
     this.focusWidget(this.widgets.indexOf(widget), false, true);
   }
 
-  $getViewRectWidget(index: number): { top: number, bottom: number } {
+  #getViewRectWidget(index: number): { top: number, bottom: number } {
     const el = this.node.children[index] as HTMLElement;
     const top = el.offsetTop - this.node.scrollTop;
     const bottom = top + el.offsetHeight;

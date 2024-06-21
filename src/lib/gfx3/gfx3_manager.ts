@@ -631,7 +631,7 @@ class Gfx3Manager {
   /**
    * Resizes the canvas, recreates the depth texture and view, and updates the screen size for each view.
    */
-  $handleWindowResize(): void {
+  #handleWindowResize(): void {
     const devicePixelRatio = window.devicePixelRatio || 1;
     this.canvas.width = this.canvas.clientWidth * devicePixelRatio;
     this.canvas.height = this.canvas.clientHeight * devicePixelRatio;

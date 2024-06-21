@@ -33,7 +33,7 @@ class UIMessage extends UIWidget {
     this.timeElapsed = 0;
     this.finished = false;
 
-    this.node.addEventListener('click', () => this.$handleClick());
+    this.node.addEventListener('click', () => this.#handleClick());
   }
 
   /**
@@ -115,7 +115,7 @@ class UIMessage extends UIWidget {
     }
   }
 
-  $handleClick(): void {
+  #handleClick(): void {
     if (this.isFocused() && this.finished) {
       eventManager.emit(this, 'E_OK');
     }

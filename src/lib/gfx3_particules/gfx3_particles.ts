@@ -220,7 +220,7 @@ class Gfx3Particles extends Gfx3Drawable {
     this.texture = this.grp2.setSampler(1, 'SAMPLER', this.texture);
 
     for (let i = 0; i < this.particleQuantity; i++) {
-      this.particleArray[i] = this.$createParticle();
+      this.particleArray[i] = this.#createParticle();
     }
 
     this.grp2.allocate();
@@ -241,8 +241,8 @@ class Gfx3Particles extends Gfx3Drawable {
    * @param {number} ts - The timestep.
    */
   update(ts: number): void {
-    this.$updateLifeCycle(ts);
-    this.$updateGeometry(ts);
+    this.#updateLifeCycle(ts);
+    this.#updateGeometry(ts);
   }
 
   /**
@@ -282,7 +282,7 @@ class Gfx3Particles extends Gfx3Drawable {
     return this.grp2;
   }
 
-  $updateLifeCycle(ts: number): void {
+  #updateLifeCycle(ts: number): void {
     const recycleIndices = [];
 
     for (let i = 0; i < this.particleQuantity; i++) {
@@ -316,7 +316,7 @@ class Gfx3Particles extends Gfx3Drawable {
 
     for (let i = 0; i < recycleIndices.length; i++) { // if any particles have died while the emitter is still running, we imediately recycle them
       const idx = recycleIndices[i];
-      this.particleArray[idx] = this.$createParticle();
+      this.particleArray[idx] = this.#createParticle();
       this.particleArray[idx].alive = 1.0; // activate right away
       this.particleAlivedCount++;
     }
@@ -327,7 +327,7 @@ class Gfx3Particles extends Gfx3Drawable {
     }
   }
 
-  $updateGeometry(ts: number): void {
+  #updateGeometry(ts: number): void {
     this.beginVertices(this.particleAlivedCount * 6);
 
     for (let i = 0; i < this.particleQuantity; i++) {
@@ -350,7 +350,7 @@ class Gfx3Particles extends Gfx3Drawable {
     this.endVertices();
   }
 
-  $createParticle(): Particle {
+  #createParticle(): Particle {
     const particle = new Particle();
 
     if (this.positionStyle == PositionStyle.CUBE) {

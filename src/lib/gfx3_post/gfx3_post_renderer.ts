@@ -223,7 +223,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     this.grp0.allocate();
   }
 
-  $handleWindowResize(): void {
+  #handleWindowResize(): void {
     this.infos[0] = gfx3Manager.getWidth();
     this.infos[1] = gfx3Manager.getHeight();
 

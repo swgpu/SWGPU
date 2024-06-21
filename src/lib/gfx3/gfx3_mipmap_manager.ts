@@ -56,7 +56,7 @@ class Gfx3MipmapManager {
       throw new Error('Gfx3MipmapManager::generateMipmap(): Generating mipmaps for non-2d textures is currently unsupported!');
     }
 
-    const pipeline = this.$getMipmapPipeline(texture.format);
+    const pipeline = this.#getMipmapPipeline(texture.format);
     const encoder = this.device.createCommandEncoder();
 
     let width = texture.width;
@@ -95,7 +95,7 @@ class Gfx3MipmapManager {
     this.device.queue.submit([commandBuffer]);
   }
 
-  $getMipmapPipeline(format: GPUTextureFormat) {
+  #getMipmapPipeline(format: GPUTextureFormat) {
     const found = this.pipelines.get(format);
     if (found) {
       return found;

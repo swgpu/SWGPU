@@ -200,7 +200,7 @@ class Gfx3CameraOrbit extends Gfx3Camera {
     return this.phi;
   }
 
-  $handleMouseUp(): void {
+  #handleMouseUp(): void {
     const delta = Date.now()  - this.lastDragTimestamp;
     if (delta >= 100) {
       this.velocityTheta = 0;
@@ -208,12 +208,12 @@ class Gfx3CameraOrbit extends Gfx3Camera {
     }
   }
 
-  $handleMouseDown(): void {
+  #handleMouseDown(): void {
     this.velocityPhi = 0;
     this.velocityTheta = 0;
   }
 
-  $handleMouseDrag(data: any): void {
+  #handleMouseDrag(data: any): void {
     this.velocityTheta = data.movementY * this.rotationSpeed / 1000;
     this.velocityPhi = data.movementX * this.rotationSpeed / 1000;
 
@@ -223,7 +223,7 @@ class Gfx3CameraOrbit extends Gfx3Camera {
     this.lastDragTimestamp = Date.now();
   }
 
-  $handleMouseWheel(data: any): void {
+  #handleMouseWheel(data: any): void {
     this.distance *= 1 + data.delta * this.zoomSpeed;
   }
 }

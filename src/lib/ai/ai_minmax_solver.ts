@@ -10,7 +10,7 @@ class AIMinMaxSolver {
    * @param {AIMinMaxNode} node - The scored graph.
    */
   solve(node: AIMinMaxNode): AIMinMaxTreeAbstract {
-    this.$generateValues(node, true);
+    this.#generateValues(node, true);
     let children = node.getChildren();
     let maxNode = children[0];
 
@@ -31,7 +31,7 @@ class AIMinMaxSolver {
    * @param {number} alpha - The alpha.
    * @param {number} beta - The beta.
    */
-  $generateValues(parentNode: AIMinMaxTreeAbstract, isMaxPlayer: boolean, alpha: number = -Infinity, beta: number = Infinity): AIMinMaxTreeAbstract {
+  #generateValues(parentNode: AIMinMaxTreeAbstract, isMaxPlayer: boolean, alpha: number = -Infinity, beta: number = Infinity): AIMinMaxTreeAbstract {
     if (parentNode instanceof AIMinMaxLeaf) {
       return parentNode;
     }
@@ -39,7 +39,7 @@ class AIMinMaxSolver {
     parentNode.setValue(isMaxPlayer ? -Infinity : Infinity);
 
     for (let childNode of (parentNode as AIMinMaxNode).children) {
-      const node = this.$generateValues(childNode, !isMaxPlayer, alpha, beta);
+      const node = this.#generateValues(childNode, !isMaxPlayer, alpha, beta);
       const val = node.getValue();
 
       if (isMaxPlayer) {

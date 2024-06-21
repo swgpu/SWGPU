@@ -210,21 +210,21 @@ class Room {
     }
   }
 
-  async $loadRoom(path, spawnName) {
+  async #loadRoom(path, spawnName) {
     this.controller.setControllable(false);
     await this.loadFromFile(path, spawnName);
     this.controller.setControllable(true);
   }
 
-  $continue() {
+  #continue() {
     this.pause = false;
   }
 
-  $stop() {
+  #stop() {
     this.pause = true;
   }
 
-  async $uiCreateDialog(author, picture, text, width, x, y) {
+  async #uiCreateDialog(author, picture, text, width, x, y) {
     this.scriptMachine.setEnabled(false);
     let uiBubble = new UIBubble();
 
@@ -241,7 +241,7 @@ class Room {
     this.scriptMachine.setEnabled(true);
   }
 
-  $modelPlayAnimation(modelIndex, animationName, isLooped) {
+  #modelPlayAnimation(modelIndex, animationName, isLooped) {
     let model = this.models[modelIndex];
     model.play(animationName, isLooped);
   }

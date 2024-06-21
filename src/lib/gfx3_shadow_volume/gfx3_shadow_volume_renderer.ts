@@ -52,8 +52,8 @@ class Gfx3ShadowVolumeRenderer {
    * The render function.
    */
   render(): void {
-    this.$renderPipeline(this.pipelineCW);
-    this.$renderPipeline(this.pipelineCCW);
+    this.#renderPipeline(this.pipelineCW);
+    this.#renderPipeline(this.pipelineCCW);
     this.shadowVolumes = [];
   }
 
@@ -87,7 +87,7 @@ class Gfx3ShadowVolumeRenderer {
     return this.pipelineCCW.depthTexture;
   }
 
-  $renderPipeline(pipeline: Pipeline): void {
+  #renderPipeline(pipeline: Pipeline): void {
     const currentView = gfx3Manager.getCurrentView();
     const commandEncoder = gfx3Manager.getCommandEncoder();
     const passEncoder = commandEncoder.beginRenderPass({
@@ -127,7 +127,7 @@ class Gfx3ShadowVolumeRenderer {
     passEncoder.end();
   }
 
-  $handleWindowResize(): void {
+  #handleWindowResize(): void {
     this.pipelineCCW.shadowTexture.gpuTexture.destroy();
     this.pipelineCCW.shadowTexture = gfx3Manager.createRenderingTexture('rgba16float');
     this.pipelineCCW.depthTexture.gpuTexture.destroy();

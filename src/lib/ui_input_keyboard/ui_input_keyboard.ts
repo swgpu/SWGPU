@@ -161,16 +161,16 @@ class UIInputKeyboard extends UIWidget {
    */
   onAction(actionId: string): void {
     if (actionId == 'UP') {
-      this.$moveCursor('UP');
+      this.#moveCursor('UP');
     }
     else if (actionId == 'RIGHT') {
-      this.$moveCursor('RIGHT');
+      this.#moveCursor('RIGHT');
     }
     else if (actionId == 'DOWN') {
-      this.$moveCursor('DOWN');
+      this.#moveCursor('DOWN');
     }
     else if (actionId == 'LEFT') {
-      this.$moveCursor('LEFT');
+      this.#moveCursor('LEFT');
     }
     else if (actionId == 'OK') {
       const items = this.node.querySelectorAll<HTMLElement>('.js-item');
@@ -190,7 +190,7 @@ class UIInputKeyboard extends UIWidget {
     }
   }
 
-  $moveCursor(direction: 'UP' | 'RIGHT' | 'DOWN' | 'LEFT') {
+  #moveCursor(direction: 'UP' | 'RIGHT' | 'DOWN' | 'LEFT') {
     const items = this.node.querySelectorAll('.js-item');
     items.forEach(item => item.classList.remove('u-focused'));
 

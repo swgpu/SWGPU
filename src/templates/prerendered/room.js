@@ -242,21 +242,21 @@ class Room {
     }
   }
 
-  async $loadRoom(path, spawnName) {
+  async #loadRoom(path, spawnName) {
     this.pause = true;
     await this.loadFromFile(path, spawnName);
     this.pause = false;
   }
 
-  $continue() {
+  #continue() {
     this.pause = false;
   }
 
-  $stop() {
+  #stop() {
     this.pause = true;
   }
 
-  async $uiCreateChoices(author, text, choices = []) {
+  async #uiCreateChoices(author, text, choices = []) {
     this.scriptMachine.setEnabled(false);
     let uiDialog = new UIDialog();
     uiDialog.setAuthor(author);
@@ -278,7 +278,7 @@ class Room {
     this.scriptMachine.setEnabled(true);
   }
 
-  async $uiCreateDialog(author, text) {
+  async #uiCreateDialog(author, text) {
     this.scriptMachine.setEnabled(false);
     let uiDialog = new UIDialog();
     uiDialog.setAuthor(author);
@@ -291,7 +291,7 @@ class Room {
     this.scriptMachine.setEnabled(true);
   }
 
-  async $modelPlayMotion(motionIndex, modelIndex) {
+  async #modelPlayMotion(motionIndex, modelIndex) {
     this.scriptMachine.setEnabled(false);
     this.motionModelMapping.set(motionIndex, modelIndex);
     this.motions[motionIndex].run();
@@ -301,7 +301,7 @@ class Room {
     this.scriptMachine.setEnabled(true);
   }
 
-  $modelPlayAnimation(modelIndex, animationName, isLooped) {
+  #modelPlayAnimation(modelIndex, animationName, isLooped) {
     this.models[modelIndex].play(animationName);
   }
 }
