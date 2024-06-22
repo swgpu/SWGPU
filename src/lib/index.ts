@@ -104,5 +104,5 @@ export { uiManager } from './ui/ui_manager';
 // types -------------------------------------------------------------------------------------
 export type { Gfx3Texture } from './gfx3/gfx3_texture';
 export type { ParticlesOptions } from './gfx2_particles/gfx2_particles';
-export type { Gfx3Viewport } from './gfx3/gfx3_view';
+export type { Gfx3Viewport, ProjectionMode } from './gfx3/gfx3_view';
 export type { vec1, vec2, vec3, vec4, vec5, vec6, vec_any, mat3, mat4 } from './core/global';
