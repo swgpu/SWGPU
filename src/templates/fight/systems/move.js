@@ -2,6 +2,9 @@ import { dnaManager } from '@lib/dna/dna_manager';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
+import { DrawableComponent } from './drawable';
+import { PositionComponent } from './position';
+// ---------------------------------------------------------------------------------------
 
 export class MoveComponent extends DNAComponent {
   constructor(direction) {
@@ -20,10 +23,10 @@ export class MoveSystem extends DNASystem {
     super.addRequiredComponentTypename('Position');
   }
 
-  onEntityUpdate(ts, entity) {
-    const move = dnaManager.getComponent(entity, 'Move');
-    const drawable = dnaManager.getComponent(entity, 'Drawable');
-    const position = dnaManager.getComponent(entity, 'Position');
+  onEntityUpdate(ts, eid) {
+    const move = dnaManager.getComponent(eid, MoveComponent);
+    const drawable = dnaManager.getComponent(eid, DrawableComponent);
+    const position = dnaManager.getComponent(eid, PositionComponent);
     position.x += move.velocityX;
     position.y += move.velocityY;
 

@@ -26,7 +26,7 @@ export class AsteroidSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number): void {
-    const asteroid = dnaManager.getComponent<AsteroidComponent>(eid, 'Asteroid');
+    const asteroid = dnaManager.getComponent(eid, AsteroidComponent);
 
     asteroid.jss.translate(0, 0.2);
     if (asteroid.jss.getPositionY() > 300) {
@@ -34,8 +34,8 @@ export class AsteroidSystem extends DNASystem {
       return;
     }
 
-    const shipEnt = dnaManager.findEntity('Ship');
-    const ship = dnaManager.getComponent<ShipComponent>(shipEnt, 'Ship');
+    const shipEnt = dnaManager.findEntity(ShipComponent);
+    const ship = dnaManager.getComponent<ShipComponent>(shipEnt, ShipComponent);
 
     const shipRect = ship.jss.getWorldBoundingRect();
     const asteroidRect = asteroid.jss.getWorldBoundingRect();
@@ -49,7 +49,7 @@ export class AsteroidSystem extends DNASystem {
   }
 
   onEntityDraw(eid: number): void {
-    const asteroid = dnaManager.getComponent<AsteroidComponent>(eid, 'Asteroid');
+    const asteroid = dnaManager.getComponent(eid, AsteroidComponent);
     asteroid.jss.draw();
   }
 }

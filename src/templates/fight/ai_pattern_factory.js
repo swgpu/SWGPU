@@ -1,8 +1,12 @@
+// ---------------------------------------------------------------------------------------
+import { DownComponent } from './systems/down';
+// ---------------------------------------------------------------------------------------
+
 const AIPatternFactory = {
   BASE: () => {
     return [{
       name: 'WAKE_UP',
-      agentHasComponent: 'Down',
+      agentHasComponent: DownComponent,
       enemyAction: null,
       enemyMinDistance: 0,
       enemyMaxDistance: Infinity,

@@ -35,8 +35,8 @@ export class PhysicsSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const physics = dnaManager.getComponent<PhysicsComponent>(eid, 'Physics');
-    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
+    const physics = dnaManager.getComponent(eid, PhysicsComponent);
+    const entity = dnaManager.getComponent(eid, EntityComponent);
 
     const navInfo = physics.map.box(
       entity.x,
@@ -63,8 +63,8 @@ export class PhysicsSystem extends DNASystem {
   }
 
   onEntityDraw(eid: number): void {
-    const physics = dnaManager.getComponent<PhysicsComponent>(eid, 'Physics');
-    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
+    const physics = dnaManager.getComponent(eid, PhysicsComponent);
+    const entity = dnaManager.getComponent(eid, EntityComponent);
 
     const min: vec3 = [
       entity.x - physics.radius,

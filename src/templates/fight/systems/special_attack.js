@@ -27,33 +27,33 @@ export class SpecialAttackSystem extends DNASystem {
     super.addRequiredComponentTypename('SpecialAttack');
   }
 
-  async onEntityBind(entity) {
-    const specialAttack = dnaManager.getComponent(entity, 'SpecialAttack');
+  async onEntityBind(eid) {
+    const specialAttack = dnaManager.getComponent(eid, SpecialAttackComponent);
 
     const gfx = new GfxSpecialAttack(this.duration);
     gfx.setBackgroundJSS(specialAttack.bgJSS);
     gfx.setAvatarJSS(specialAttack.avatarJSS);
     gfx.setText(specialAttack.name);
 
-    const effectEntity = dnaManager.createEntity();
-    dnaManager.addComponent(effectEntity, new PositionComponent(0, 0));
-    dnaManager.addComponent(effectEntity, new DrawableComponent({ jss: gfx, zIndex: 1 }));
+    const effectId = dnaManager.createEntity();
+    dnaManager.addComponent(effectId, new PositionComponent(0, 0));
+    dnaManager.addComponent(effectId, new DrawableComponent({ jss: gfx, zIndex: 1 }));
 
     const uiRoot = document.querySelector('#UI_ROOT');
     uiRoot.style.display = 'none';
 
-    for (const [eid, components] of dnaManager.entities.entries()) {
-      const drawable = components.get('Drawable');
-      if (drawable && eid != effectEntity) {
+    for (const [eid, components] of dnaManager.entities.entries()) { // #todo: getAllComponents
+      const drawable = components.get(DrawableComponent);
+      if (drawable && eid != effectId) {
         drawable.updated = false;
       }
     }
 
     this.gameScreen.pause();
-    setTimeout(() => this.handleTimeout(effectEntity), this.duration * 1000);
+    setTimeout(() => this.handleTimeout(effectId), this.duration * 1000);
   }
 
-  handleTimeout(effectEntity) {
+  handleTimeout(effectId) {
     const uiRoot = document.querySelector('#UI_ROOT');
     uiRoot.style.display = 'block';
 
@@ -65,7 +65,7 @@ export class SpecialAttackSystem extends DNASystem {
     }
 
     this.gameScreen.resume();
-    dnaManager.removeEntity(effectEntity);
+    dnaManager.removeEntity(effectId);
   }
 }
 

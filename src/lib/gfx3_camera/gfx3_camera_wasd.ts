@@ -26,7 +26,7 @@ class Gfx3CameraWASD extends Gfx3Camera {
     this.maxPitch = Math.PI * 0.5 - 0.01;
     this.minPitch = Math.PI * -0.5 + 0.01;
 
-    eventManager.subscribe(inputManager, 'E_MOUSE_DRAG', this, this.$handleMouseDrag);
+    eventManager.subscribe(inputManager, 'E_MOUSE_DRAG', this, this.#handleMouseDrag);
   }
 
   /**

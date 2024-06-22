@@ -38,10 +38,10 @@ class Gfx3CameraOrbit extends Gfx3Camera {
     this.theta = 0;
     this.lastDragTimestamp = 0;
 
-    eventManager.subscribe(inputManager, 'E_MOUSE_WHEEL', this, this.$handleMouseWheel);
-    eventManager.subscribe(inputManager, 'E_MOUSE_UP', this, this.$handleMouseUp);
-    eventManager.subscribe(inputManager, 'E_MOUSE_DOWN', this, this.$handleMouseDown);
-    eventManager.subscribe(inputManager, 'E_MOUSE_DRAG', this, this.$handleMouseDrag);
+    eventManager.subscribe(inputManager, 'E_MOUSE_WHEEL', this, this.#handleMouseWheel);
+    eventManager.subscribe(inputManager, 'E_MOUSE_UP', this, this.#handleMouseUp);
+    eventManager.subscribe(inputManager, 'E_MOUSE_DOWN', this, this.#handleMouseDown);
+    eventManager.subscribe(inputManager, 'E_MOUSE_DRAG', this, this.#handleMouseDrag);
   }
 
   /**

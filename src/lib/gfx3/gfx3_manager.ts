@@ -100,7 +100,7 @@ class Gfx3Manager {
     this.depthTexture = this.createRenderingTexture('depth24plus');
     this.vertexBuffer = this.device.createBuffer({ size: 0, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST });
 
-    eventManager.subscribe(coreManager, 'E_RESIZE', this, this.$handleWindowResize);
+    eventManager.subscribe(coreManager, 'E_RESIZE', this, this.#handleWindowResize);
   }
 
   /**

@@ -33,11 +33,11 @@ class Room {
     this.triggers = [];
     this.pause = false;
 
-    this.scriptMachine.registerCommand('LOAD_ROOM', this.$loadRoom.bind(this));
-    this.scriptMachine.registerCommand('CONTINUE', this.$continue.bind(this));
-    this.scriptMachine.registerCommand('STOP', this.$stop.bind(this));
-    this.scriptMachine.registerCommand('UI_CREATE_DIALOG', this.$uiCreateDialog.bind(this));
-    this.scriptMachine.registerCommand('MODEL_PLAY_ANIMATION', this.$modelPlayAnimation.bind(this));
+    this.scriptMachine.registerCommand('LOAD_ROOM', this.#loadRoom.bind(this));
+    this.scriptMachine.registerCommand('CONTINUE', this.#continue.bind(this));
+    this.scriptMachine.registerCommand('STOP', this.#stop.bind(this));
+    this.scriptMachine.registerCommand('UI_CREATE_DIALOG', this.#uiCreateDialog.bind(this));
+    this.scriptMachine.registerCommand('MODEL_PLAY_ANIMATION', this.#modelPlayAnimation.bind(this));
 
     eventManager.subscribe(inputManager, 'E_ACTION_ONCE', this, this.handleActionOnce);
     eventManager.subscribe(this.controller, 'E_MOVED', this, this.handleControllerMoved);

@@ -18,17 +18,17 @@ class VisualNovelScreen extends Screen {
   }
 
   async onEnter() {
-    this.scriptMachine.registerCommand('LOAD_SCRIPT', this.$loadScript.bind(this));
-    this.scriptMachine.registerCommand('UI_CREATE_DIALOG', this.$uiCreateDialog.bind(this));
-    this.scriptMachine.registerCommand('UI_CREATE_CHOICES', this.$uiCreateChoices.bind(this));
-    this.scriptMachine.registerCommand('UI_CREATE_AVATAR', this.$uiCreateAvatar.bind(this));
-    this.scriptMachine.registerCommand('UI_CREATE_BACKGROUND', this.$uiCreateBackground.bind(this));
-    this.scriptMachine.registerCommand('UI_PLAY_AVATAR', this.$uiPlayAvatar.bind(this));
-    this.scriptMachine.registerCommand('UI_PLAY_BACKGROUND', this.$uiPlayBackground.bind(this));
-    this.scriptMachine.registerCommand('UI_DESTROY_AVATAR', this.$uiDestroyAvatar.bind(this));
-    this.scriptMachine.registerCommand('UI_DESTROY_BACKGROUND', this.$uiDestroyBackground.bind(this));
-    this.scriptMachine.registerCommand('UI_FADE_IN', this.$uiFadeIn.bind(this));
-    this.scriptMachine.registerCommand('UI_FADE_OUT', this.$uiFadeOut.bind(this));
+    this.scriptMachine.registerCommand('LOAD_SCRIPT', this.#loadScript.bind(this));
+    this.scriptMachine.registerCommand('UI_CREATE_DIALOG', this.#uiCreateDialog.bind(this));
+    this.scriptMachine.registerCommand('UI_CREATE_CHOICES', this.#uiCreateChoices.bind(this));
+    this.scriptMachine.registerCommand('UI_CREATE_AVATAR', this.#uiCreateAvatar.bind(this));
+    this.scriptMachine.registerCommand('UI_CREATE_BACKGROUND', this.#uiCreateBackground.bind(this));
+    this.scriptMachine.registerCommand('UI_PLAY_AVATAR', this.#uiPlayAvatar.bind(this));
+    this.scriptMachine.registerCommand('UI_PLAY_BACKGROUND', this.#uiPlayBackground.bind(this));
+    this.scriptMachine.registerCommand('UI_DESTROY_AVATAR', this.#uiDestroyAvatar.bind(this));
+    this.scriptMachine.registerCommand('UI_DESTROY_BACKGROUND', this.#uiDestroyBackground.bind(this));
+    this.scriptMachine.registerCommand('UI_FADE_IN', this.#uiFadeIn.bind(this));
+    this.scriptMachine.registerCommand('UI_FADE_OUT', this.#uiFadeOut.bind(this));
 
     await this.player.loadFromFile('./templates/visual-novel/player.json');
     await this.#loadScript('./templates/visual-novel/scene00.jsc');

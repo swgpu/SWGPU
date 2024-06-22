@@ -45,8 +45,8 @@ export class PhysicsSystem extends DNASystem {
   }
 
   onEntityBind(eid: number): void {
-    const physics = dnaManager.getComponent<PhysicsComponent>(eid, 'Physics');
-    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
+    const physics = dnaManager.getComponent(eid, PhysicsComponent);
+    const entity = dnaManager.getComponent(eid, EntityComponent);
 
     if (physics.type == PhysicsType.STATIC) {
       const bodyDesc = Rapier3D.RigidBodyDesc.fixed();
@@ -68,8 +68,8 @@ export class PhysicsSystem extends DNASystem {
   onEntityUpdate(ts: number, eid: number): void {
     this.world.step();
 
-    const physics = dnaManager.getComponent<PhysicsComponent>(eid, 'Physics');
-    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
+    const physics = dnaManager.getComponent(eid, PhysicsComponent);
+    const entity = dnaManager.getComponent(eid, EntityComponent);
 
     if (physics.body) {
       const vy = physics.body.linvel().y;

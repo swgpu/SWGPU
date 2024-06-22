@@ -2,6 +2,11 @@ import { dnaManager } from '@lib/dna/dna_manager';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
+import { MoveComponent } from './move';
+import { PositionComponent } from './position';
+import { FighterComponent } from './fighter';
+import { PlatformComponent } from './platform';
+// ---------------------------------------------------------------------------------------
 
 const GRAVITY_SPEED_MAX = 20;
 
@@ -24,11 +29,11 @@ export class GravitySystem extends DNASystem {
     super.addRequiredComponentTypename('Drawable');
   }
 
-  onEntityUpdate(ts, entity) {
-    const gravity = dnaManager.getComponent(entity, 'Gravity');
-    const move = dnaManager.getComponent(entity, 'Move');
-    const position = dnaManager.getComponent(entity, 'Position');
-    const fighter = dnaManager.getComponent(entity, 'Fighter');
+  onEntityUpdate(ts, eid) {
+    const gravity = dnaManager.getComponent(eid, GravityComponent);
+    const move = dnaManager.getComponent(eid, MoveComponent);
+    const position = dnaManager.getComponent(eid, PositionComponent);
+    const fighter = dnaManager.getComponent(eid, FighterComponent);
 
     const footLocalPos = fighter.h * 0.5;
     const footPos = position.y + move.velocityY + footLocalPos;
@@ -36,9 +41,10 @@ export class GravitySystem extends DNASystem {
     let minDelta = Math.abs(footPos - this.floorElevation);
     let minElevation = this.floorElevation;
 
-    for (const entity of dnaManager.findEntities('Platform')) {
-      const platform = dnaManager.getComponent(entity, 'Platform');
-      const platformPos = dnaManager.getComponent(entity, 'Position');
+    for (const platformId of dnaManager.findEntities(PlatformComponent)) {
+      const platform = dnaManager.getComponent(platformId, PlatformComponent);
+      const platformPos = dnaManager.getComponent(platformId, PositionComponent);
+
       const delta = Math.abs(footPos - platform.elevation);
       const minX = platformPos.x - (platform.w / 2);
       const maxX = platformPos.x + (platform.w / 2);

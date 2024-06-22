@@ -42,7 +42,7 @@ class UIBubble extends UIWidget {
     this.finished = false;
 
     this.node.querySelector<HTMLElement>('.js-menu')!.replaceWith(this.uiMenu.getNode());
-    eventManager.subscribe(this.uiMenu, 'E_ITEM_SELECTED', this, this.$handleMenuItemSelected);
+    eventManager.subscribe(this.uiMenu, 'E_ITEM_SELECTED', this, this.#handleMenuItemSelected);
   }
 
   /**

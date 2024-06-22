@@ -20,7 +20,7 @@ class UIPrompt extends UIWidget {
 
     this.uiMenu = new UIMenuText({ axis: MenuAxis.X });
     this.node.querySelector('.js-menu')!.replaceWith(this.uiMenu.getNode());
-    eventManager.subscribe(this.uiMenu, 'E_ITEM_SELECTED', this, this.$handleMenuItemSelected);
+    eventManager.subscribe(this.uiMenu, 'E_ITEM_SELECTED', this, this.#handleMenuItemSelected);
   }
 
   /**

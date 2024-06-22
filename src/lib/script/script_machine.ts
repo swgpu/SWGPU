@@ -36,14 +36,14 @@ class ScriptMachine {
     this.onBeforeCommandExec = () => { };
     this.onAfterCommandExec = () => { };
 
-    this.registerCommand('WAITPAD', this.$waitPad.bind(this));
-    this.registerCommand('GOTO', this.$goto.bind(this));
-    this.registerCommand('GOTO_IF', this.$gotoIf.bind(this));
-    this.registerCommand('EXEC_IF', this.$execIf.bind(this));
-    this.registerCommand('VAR_SET', this.$varSet.bind(this));
-    this.registerCommand('VAR_ADD', this.$varAdd.bind(this));
-    this.registerCommand('VAR_SUB', this.$varSub.bind(this));
-    this.registerCommand('DELAY', this.$delay.bind(this));
+    this.registerCommand('WAITPAD', this.#waitPad.bind(this));
+    this.registerCommand('GOTO', this.#goto.bind(this));
+    this.registerCommand('GOTO_IF', this.#gotoIf.bind(this));
+    this.registerCommand('EXEC_IF', this.#execIf.bind(this));
+    this.registerCommand('VAR_SET', this.#varSet.bind(this));
+    this.registerCommand('VAR_ADD', this.#varAdd.bind(this));
+    this.registerCommand('VAR_SUB', this.#varSub.bind(this));
+    this.registerCommand('DELAY', this.#delay.bind(this));
   }
 
   /**

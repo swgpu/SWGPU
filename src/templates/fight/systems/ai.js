@@ -3,9 +3,15 @@ import { UT } from '@lib/core/utils';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
+import { PositionComponent } from './position';
+import { MoveComponent } from './move';
+import { DownComponent } from './down';
 import { IdleComponent } from './idle';
 import { JumpComponent } from './jump';
 import { RunComponent } from './run';
+import { DamageComponent } from './damage';
+import { CASComponent } from './combo';
+import { FighterComponent } from './fighter';
 // ---------------------------------------------------------------------------------------
 
 export class AIComponent extends DNAComponent {
@@ -24,111 +30,114 @@ export class AISystem extends DNASystem {
     this.commandRegister = {};
     this.conditionRegister = {};
 
-    this.commandRegister['CMD_WAKEUP'] = function(entity) {
-      if (dnaManager.hasComponent(entity, 'Down')) {
-        dnaManager.removeComponentIfExist(entity, 'Down');
-        dnaManager.removeComponentIfExist(entity, 'Idle');
-        dnaManager.addComponent(entity, new IdleComponent());
+    this.commandRegister['CMD_WAKEUP'] = function(eid) {
+      if (dnaManager.hasComponent(eid, DownComponent)) {
+        dnaManager.removeComponentIfExist(eid, DownComponent);
+        dnaManager.removeComponentIfExist(eid, IdleComponent);
+        dnaManager.addComponent(eid, new IdleComponent());
         return true;
       }
 
       return false;
     }
 
-    this.commandRegister['CMD_JUMP'] = function(entity) {
-      if (dnaManager.hasComponent(entity, 'Idle') || dnaManager.hasComponent(entity, 'Run')) {
-        dnaManager.removeComponentIfExist(entity, 'Idle');
-        dnaManager.removeComponentIfExist(entity, 'Run');
-        dnaManager.addComponent(entity, new JumpComponent(-25, 10));
+    this.commandRegister['CMD_JUMP'] = function(eid) {
+      if (dnaManager.hasComponent(eid, IdleComponent) || dnaManager.hasComponent(eid, RunComponent)) {
+        dnaManager.removeComponentIfExist(eid, IdleComponent);
+        dnaManager.removeComponentIfExist(eid, RunComponent);
+        dnaManager.addComponent(eid, new JumpComponent(-25, 10));
         return true;
       }
 
       return false;
     }
 
-    this.commandRegister['CMD_RUN'] = function(entity, enemyEntity) {
-      if (dnaManager.hasComponent(entity, 'Idle') || dnaManager.hasComponent(entity, 'Run')) {
-        const position = dnaManager.getComponent(entity, 'Position');
-        const move = dnaManager.getComponent(entity, 'Move');
-        const positionEnemy = dnaManager.getComponent(enemyEntity, 'Position');
+    this.commandRegister['CMD_RUN'] = function(eid, enemyId) {
+      if (dnaManager.hasComponent(eid, IdleComponent) || dnaManager.hasComponent(eid, RunComponent)) {
+        const position = dnaManager.getComponent(eid, PositionComponent);
+        const move = dnaManager.getComponent(eid, MoveComponent);
+        const positionEnemy = dnaManager.getComponent(enemyId, PositionComponent);
         const delta = positionEnemy.x - position.x;
-
+  
         if (delta > 0) {
           move.direction = +1;
         }
         else if (delta < 0) {
           move.direction = -1;
         }
-
-        dnaManager.removeComponentIfExist(entity, 'Idle');
-        dnaManager.removeComponentIfExist(entity, 'Run');
-        dnaManager.addComponent(entity, new RunComponent(6, 0));
+  
+        dnaManager.removeComponentIfExist(eid, IdleComponent);
+        dnaManager.removeComponentIfExist(eid, RunComponent);
+        dnaManager.addComponent(eid, new RunComponent(6, 0));
         return true;
       }
 
       return false;
     }
 
-    this.commandRegister['CMD_IDLE'] = function(entity) {
-      if (dnaManager.hasComponent(entity, 'Run')) {
-        dnaManager.removeComponentIfExist(entity, 'Run');
-        dnaManager.removeComponentIfExist(entity, 'Idle');
-        dnaManager.addComponent(entity, new IdleComponent());
+    this.commandRegister['CMD_IDLE'] = function(eid) {
+      if (dnaManager.hasComponent(eid, RunComponent)) {
+        dnaManager.removeComponentIfExist(eid, RunComponent);
+        dnaManager.removeComponentIfExist(eid, IdleComponent);
+        dnaManager.addComponent(eid, new IdleComponent());
         return true;
       }
 
       return false;
     }
 
-    this.commandRegister['CMD_COMBO'] = function(entity, enemyEntity, comboName) {
-      if (dnaManager.hasComponent(enemyEntity, 'Down')) {
+    this.commandRegister['CMD_COMBO'] = function(eid, enemyId, comboName) {
+      if (dnaManager.hasComponent(enemyId, DownComponent)) {
         return false;
       }
 
-      if (dnaManager.hasComponent(enemyEntity, 'Damage')) {
+      if (dnaManager.hasComponent(enemyId, DamageComponent)) {
         return false;
       }
 
-      if (dnaManager.hasComponent(entity, 'Idle') || dnaManager.hasComponent(entity, 'Run')) {
-        const move = dnaManager.getComponent(entity, 'Move');
-        const cas = dnaManager.getComponent(entity, 'CAS');
+      if (dnaManager.hasComponent(eid, IdleComponent) || dnaManager.hasComponent(eid, RunComponent)) {
+        const move = dnaManager.getComponent(eid, MoveComponent);
+        const cas = dnaManager.getComponent(eid, CASComponent);
         const combo = cas.comboComponents.find(c => c.name == comboName);
-
+  
         if (combo) {
           move.velocityX = 0;
           cas.currentActionAge = 0;
           cas.currentAction = '';
-          dnaManager.removeComponentIfExist(entity, 'Idle');
-          dnaManager.removeComponentIfExist(entity, 'Run');
-          dnaManager.addComponent(entity, combo);
-          return true;
+          dnaManager.removeComponentIfExist(eid, IdleComponent);
+          dnaManager.removeComponentIfExist(eid, RunComponent);
+          dnaManager.addComponent(eid, combo);
         }
+  
+        return true;
       }
 
       return false;
     }
 
-    this.conditionRegister['COND_HEALTH_LESS_THAN'] = function(entity, enemyEntity, health) {
-      const fighter = dnaManager.getComponent(entity, 'Fighter');
+    this.conditionRegister['COND_HEALTH_LESS_THAN'] = function(eid, enemyId, health) {
+      const fighter = dnaManager.getComponent(eid, FighterComponent);
       return fighter.health < health;
     } 
   }
 
-  onEntityUpdate(ts, entity) {
-    const ai = dnaManager.getComponent(entity, 'AI');
-    const position = dnaManager.getComponent(entity, 'Position');
+  onEntityUpdate(ts, eid) {
+    const ai = dnaManager.getComponent(eid, AIComponent);
+    const position = dnaManager.getComponent(eid, PositionComponent);
 
-    let enemyEntity = null;
+    let enemyId = null;
     let enemyDistance = Infinity;
 
-    for (const targetEntity of dnaManager.findEntities('Fighter')) {
-      if (entity != targetEntity) {
-        const targetPos = dnaManager.getComponent(targetEntity, 'Position');
-        const distance = UT.VEC2_DISTANCE([targetPos.x, targetPos.y], [position.x, position.y]);
-        if (distance < enemyDistance) {
-          enemyDistance = distance;
-          enemyEntity = targetEntity;
-        }
+    for (const targetId of dnaManager.findEntities(FighterComponent)) {
+      if (eid == targetId) {
+        continue;
+      }
+
+      const targetPos = dnaManager.getComponent(targetId, PositionComponent);
+      const distance = UT.VEC2_DISTANCE([targetPos.x, targetPos.y], [position.x, position.y]);
+      if (distance < enemyDistance) {
+        enemyDistance = distance;
+        enemyId = targetId;
       }
     }
 
@@ -137,7 +146,7 @@ export class AISystem extends DNASystem {
         continue;
       }
 
-      if (pattern.agentHasComponent && !dnaManager.hasComponent(entity, pattern.agentHasComponent)) {
+      if (pattern.agentHasComponent && !dnaManager.hasComponent(eid, pattern.agentHasComponent)) {
         continue;
       }
 
@@ -150,11 +159,11 @@ export class AISystem extends DNASystem {
       }
 
       const condition = this.conditionRegister[pattern.conditionName];
-      if (condition && !condition.apply(this, [entity, enemyEntity, ...pattern.conditionArgs])) {
+      if (condition && !condition.apply(this, [eid, enemyId, ...pattern.conditionArgs])) {
         continue;
       }
 
-      const cas = dnaManager.getComponent(enemyEntity, 'CAS');
+      const cas = dnaManager.getComponent(enemyId, CASComponent);
       if (pattern.enemyAction && cas.currentAction.search(new RegExp(pattern.enemyAction + '$')) == -1) {
         continue;
       }
@@ -165,7 +174,7 @@ export class AISystem extends DNASystem {
       }
 
       const cmd = this.commandRegister[pattern.commandName];
-      if (cmd && cmd.apply(this, [entity, enemyEntity, ...pattern.commandArgs])) {
+      if (cmd && cmd.apply(this, [eid, enemyId, ...pattern.commandArgs])) {
         pattern.then = 0;
         break;
       }

@@ -45,7 +45,7 @@ class Gfx3ShadowVolumeRenderer {
     this.pipelineCW.grp0.allocate();
     this.pipelineCCW.grp0.allocate();
 
-    eventManager.subscribe(coreManager, 'E_RESIZE', this, this.$handleWindowResize);
+    eventManager.subscribe(coreManager, 'E_RESIZE', this, this.#handleWindowResize);
   }
 
   /**

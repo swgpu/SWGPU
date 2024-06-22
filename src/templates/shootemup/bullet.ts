@@ -25,7 +25,7 @@ export class BulletSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number): void {
-    const bullet = dnaManager.getComponent<BulletComponent>(eid, 'Bullet');
+    const bullet = dnaManager.getComponent(eid, BulletComponent);
 
     bullet.jss.translate(0, -0.6);
     if (bullet.jss.getPositionY() < -300) {
@@ -33,8 +33,8 @@ export class BulletSystem extends DNASystem {
       return;
     }
 
-    for (const asteroidEid of dnaManager.findEntities('Asteroid')) {
-      const asteroid = dnaManager.getComponent<AsteroidComponent>(asteroidEid, 'Asteroid');
+    for (const asteroidEid of dnaManager.findEntities(AsteroidComponent)) {
+      const asteroid = dnaManager.getComponent(asteroidEid, AsteroidComponent);
       const bulletRect = bullet.jss.getWorldBoundingRect();
       const asteroidRect = asteroid.jss.getWorldBoundingRect();
 
@@ -52,7 +52,7 @@ export class BulletSystem extends DNASystem {
   }
 
   onEntityDraw(eid: number): void {
-    const bulletCmp = dnaManager.getComponent<BulletComponent>(eid, 'Bullet');
+    const bulletCmp = dnaManager.getComponent(eid, BulletComponent);
     bulletCmp.jss.draw();
   }
 }

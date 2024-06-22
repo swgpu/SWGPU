@@ -30,7 +30,7 @@ export class ShipSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number): void {
-    const ship = dnaManager.getComponent<ShipComponent>(eid, 'Ship');
+    const ship = dnaManager.getComponent(eid, ShipComponent);
     let mx = 0;
 
     if (inputManager.isActiveAction('LEFT')) {
@@ -48,7 +48,7 @@ export class ShipSystem extends DNASystem {
   }
 
   onEntityDraw(eid: number): void {
-    const ship = dnaManager.getComponent<ShipComponent>(eid, 'Ship');
+    const ship = dnaManager.getComponent(eid, ShipComponent);
     ship.jss.draw();    
   }
 
@@ -57,8 +57,8 @@ export class ShipSystem extends DNASystem {
       return;
     }
 
-    const ship = dnaManager.getComponent<ShipComponent>(eid, 'Ship');
-    const bulletEnts = dnaManager.findEntities('Bullet');
+    const ship = dnaManager.getComponent(eid, ShipComponent);
+    const bulletEnts = dnaManager.findEntities(BulletComponent);
 
     if (bulletEnts.length >= MAX_BULLETS) {
       return;

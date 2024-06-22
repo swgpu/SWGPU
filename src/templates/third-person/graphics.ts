@@ -24,8 +24,8 @@ export class GraphicsSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const graphics = dnaManager.getComponent<GraphicsComponent>(eid, 'Graphics');
-    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
+    const graphics = dnaManager.getComponent(eid, GraphicsComponent);
+    const entity = dnaManager.getComponent(eid, EntityComponent);
 
     if (entity.velocity[0] != 0 || entity.velocity[2] != 0) {
       const rotation = UT.VEC2_ANGLE([entity.velocity[0], entity.velocity[2]]);
@@ -55,7 +55,7 @@ export class GraphicsSystem extends DNASystem {
   }
 
   onEntityDraw(eid: number): void {
-    const graphics = dnaManager.getComponent<GraphicsComponent>(eid, 'Graphics');
+    const graphics = dnaManager.getComponent(eid, GraphicsComponent);
     graphics.jam.draw();
   }
 }

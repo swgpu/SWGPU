@@ -37,7 +37,7 @@ class RapierScreen extends Screen {
   }
 
   update(ts: number) {
-    const entity = dnaManager.getComponent<EntityComponent>(this.shipEid, 'Entity');
+    const entity = dnaManager.getComponent(this.shipEid, EntityComponent);
     this.camera.setTarget([entity.x, entity.y, entity.z]);
     this.camera.update(ts);
     dnaManager.update(ts);

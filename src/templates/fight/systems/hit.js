@@ -6,6 +6,12 @@ import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { DamageComponent } from './damage';
+import { PositionComponent } from './position';
+import { DrawableComponent } from './drawable';
+import { FighterComponent } from './fighter';
+import { RunComponent } from './run';
+import { IdleComponent } from './idle';
+import { JumpComponent } from './jump';
 // ---------------------------------------------------------------------------------------
 
 export class HitComponent extends DNAComponent {
@@ -45,36 +51,38 @@ export class HitSystem extends DNASystem {
     super.addRequiredComponentTypename('Drawable');
   }
 
-  onEntityBind(entity) {
-    const hit = dnaManager.getComponent(entity, 'Hit');
-    const position = dnaManager.getComponent(entity, 'Position');
+  onEntityBind(eid) {
+    const hit = dnaManager.getComponent(eid, HitComponent);
+    const position = dnaManager.getComponent(eid, PositionComponent);
+
     position.x += hit.relativeX * hit.direction;
     position.y += hit.relativeY;
 
     if (hit.spriteAnimationOnLaunch) {
-      const drawable = dnaManager.getComponent(entity, 'Drawable');
+      const drawable = dnaManager.getComponent(eid, DrawableComponent);
       drawable.jas.setVisible(true);
       drawable.jas.setOffset(hit.spriteOffsetX, hit.spriteOffsetY);
       drawable.jas.play(hit.spriteAnimationOnLaunch, false, false);
     }
   }
 
-  async onEntityUpdate(ts, entity) {
-    const hit = dnaManager.getComponent(entity, 'Hit');
+  async onEntityUpdate(ts, eid) {
+    const hit = dnaManager.getComponent(eid, HitComponent);
     if (hit.marked) {
       return;
     }
 
-    const position = dnaManager.getComponent(entity, 'Position');
-    const drawable = dnaManager.getComponent(entity, 'Drawable');
+    const position = dnaManager.getComponent(eid, PositionComponent);
+    const drawable = dnaManager.getComponent(eid, DrawableComponent);
 
     if (hit.isCollide) {
-      const fighters = dnaManager.findEntities('Fighter');
+      const fighters = dnaManager.findEntities(FighterComponent);
       const enemies = fighters.filter(f => f != hit.owner);
 
-      for (let enemy of enemies) {
-        const enemyFighter = dnaManager.getComponent(enemy, 'Fighter');
-        const enemyPosition = dnaManager.getComponent(enemy, 'Position');
+      for (let enemyId of enemies) {
+        const enemyFighter = dnaManager.getComponent(enemyId, FighterComponent);
+        const enemyPosition = dnaManager.getComponent(enemyId, PositionComponent);
+
         const min1 = [position.x - (hit.w / 2), position.y - (hit.h / 2)];
         const max1 = [position.x + (hit.w / 2), position.y + (hit.h / 2)];
         const min2 = [enemyPosition.x - (enemyFighter.w / 2), enemyPosition.y - (enemyFighter.h / 2)];
@@ -82,11 +90,12 @@ export class HitSystem extends DNASystem {
   
         if (UT.COLLIDE_RECT_TO_RECT(min1, max1, min2, max2)) {
           hit.marked = true;
-          dnaManager.removeComponentIfExist(enemy, 'Damage');
-          dnaManager.removeComponentIfExist(enemy, 'Run');
-          dnaManager.removeComponentIfExist(enemy, 'Idle');
-          dnaManager.removeComponentIfExist(enemy, 'Jump');
-          dnaManager.addComponent(enemy, new DamageComponent(
+          dnaManager.removeComponentIfExist(enemyId, DamageComponent);
+          dnaManager.removeComponentIfExist(enemyId, RunComponent);
+          dnaManager.removeComponentIfExist(enemyId, IdleComponent);
+          dnaManager.removeComponentIfExist(enemyId, JumpComponent);
+
+          dnaManager.addComponent(enemyId, new DamageComponent(
             [hit.velocityImpact[0] * hit.direction, hit.velocityImpact[1]],
             hit.damageHP,
             hit.damageMaxAge,
@@ -102,14 +111,14 @@ export class HitSystem extends DNASystem {
             drawable.jas.setVisible(false);
           }
   
-          dnaManager.removeEntity(entity);
+          dnaManager.removeEntity(eid);
           return;
         }
       }
     }
 
     if (hit.age > hit.maxAge) {
-      dnaManager.removeEntity(entity);
+      dnaManager.removeEntity(eid);
       return;
     }
 
@@ -122,9 +131,9 @@ export class HitSystem extends DNASystem {
     hit.age += ts / 1000;
   }
 
-  onEntityDraw(entity) {
-    const hit = dnaManager.getComponent(entity, 'Hit');
-    const position = dnaManager.getComponent(entity, 'Position');
+  onEntityDraw(eid) {
+    const hit = dnaManager.getComponent(eid, HitComponent);
+    const position = dnaManager.getComponent(eid, PositionComponent);
     const ctx = gfx2Manager.getContext();
     ctx.fillStyle = 'red';
     ctx.fillRect(position.x - (hit.w / 2), position.y - (hit.h / 2), hit.w, hit.h);

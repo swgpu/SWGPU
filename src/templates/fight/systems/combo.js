@@ -8,6 +8,9 @@ import { PositionComponent } from './position';
 import { HitComponent } from './hit';
 import { DrawableComponent } from './drawable';
 import { IdleComponent } from './idle';
+import { RunComponent } from './run';
+import { MoveComponent } from './move';
+import { SpecialAttackComponent } from './special_attack';
 // ---------------------------------------------------------------------------------------
 
 export class CASComponent extends DNAComponent {
@@ -22,7 +25,7 @@ export class CASComponent extends DNAComponent {
 }
 
 export class ComboComponent extends DNAComponent {
-  constructor(name = '', requiredComponent = '', actions = '', animationName = '', specialAttack = null, hits = []) {
+  constructor(name = '', requiredComponent = null, actions = '', animationName = '', specialAttack = null, hits = []) {
     super('Combo');
     this.name = name;
     this.requiredComponent = requiredComponent;
@@ -40,9 +43,9 @@ export class CASSystem extends DNASystem {
     super.addRequiredComponentTypename('CAS');
   }
 
-  onEntityUpdate(ts, entity) {
-    const cas = dnaManager.getComponent(entity, 'CAS');
-    if (dnaManager.hasComponent(entity, 'Combo')) {
+  onEntityUpdate(ts, eid) {
+    const cas = dnaManager.getComponent(eid, CASComponent);
+    if (dnaManager.hasComponent(eid, ComboComponent)) {
       return;
     }
 
@@ -51,30 +54,30 @@ export class CASSystem extends DNASystem {
       cas.currentAction = '';
     }
 
-    for (let combo of cas.comboComponents) {
+    for (const combo of cas.comboComponents) {
       const found = cas.currentAction.indexOf(combo.actions);
       if (found == -1) {
         continue;
       }
 
       const match = cas.currentAction.endsWith(combo.actions);
-      if (match && dnaManager.hasComponent(entity, combo.requiredComponent)) {
-        dnaManager.removeComponentIfExist(entity, 'Idle');
-        dnaManager.removeComponentIfExist(entity, 'Run');
+      if (match && dnaManager.hasComponent(eid, combo.requiredComponent)) {
+        dnaManager.removeComponentIfExist(eid, IdleComponent);
+        dnaManager.removeComponentIfExist(eid, RunComponent);
 
-        const move = dnaManager.getComponent(entity, 'Move');
+        const move = dnaManager.getComponent(eid, MoveComponent);
         move.velocityX = 0;
         cas.currentActionAge = 0;
         cas.currentAction = '';
-        dnaManager.addComponent(entity, combo);
+        dnaManager.addComponent(eid, combo);
       }
     }
 
     cas.currentActionAge += ts;
   }
 
-  onActionOnce(actionId, entity) {
-    const cas = dnaManager.getComponent(entity, 'CAS');
+  onActionOnce(actionId, eid) {
+    const cas = dnaManager.getComponent(eid, CASComponent);
     cas.currentAction += actionId;
     cas.currentActionAge = 0;
   }
@@ -90,31 +93,31 @@ export class ComboSystem extends DNASystem {
     super.addRequiredComponentTypename('Move');
   }
 
-  async onEntityBind(entity) {
-    const combo = dnaManager.getComponent(entity, 'Combo');
-    const drawable = dnaManager.getComponent(entity, 'Drawable');
+  async onEntityBind(eid) {
+    const combo = dnaManager.getComponent(eid, ComboComponent);
+    const drawable = dnaManager.getComponent(eid, DrawableComponent);
 
     if (combo.specialAttack) {
-      dnaManager.addComponent(entity, combo.specialAttack);
+      dnaManager.addComponent(eid, combo.specialAttack);
     }
 
     drawable.jas.play(combo.animationName, false, true);
     await eventManager.wait(drawable.jas, 'E_FINISHED');
 
     if (combo.specialAttack) {
-      dnaManager.removeComponent(entity, 'SpecialAttack');
+      dnaManager.removeComponent(eid, SpecialAttackComponent);
     }
 
-    dnaManager.removeComponent(entity, 'Combo');
-    dnaManager.addComponent(entity, new IdleComponent());
+    dnaManager.removeComponent(eid, ComboComponent);
+    dnaManager.addComponent(eid, new IdleComponent());
   }
 
-  onEntityUpdate(ts, entity) {
-    const cas = dnaManager.getComponent(entity, 'CAS');
-    const combo = dnaManager.getComponent(entity, 'Combo');
-    const drawable = dnaManager.getComponent(entity, 'Drawable');
-    const position = dnaManager.getComponent(entity, 'Position');
-    const move = dnaManager.getComponent(entity, 'Move');
+  onEntityUpdate(ts, eid) {
+    const cas = dnaManager.getComponent(eid, CASComponent);
+    const combo = dnaManager.getComponent(eid, ComboComponent);
+    const drawable = dnaManager.getComponent(eid, DrawableComponent);
+    const position = dnaManager.getComponent(eid, PositionComponent);
+    const move = dnaManager.getComponent(eid, MoveComponent);
 
     if (drawable.jas.getCurrentAnimationFrameIndex() == drawable.lastAnimationFrameIndex) {
       return;
@@ -132,11 +135,11 @@ export class ComboSystem extends DNASystem {
       jas.setAnimations(cas.animations);
       jas.setTexture(cas.texture);
 
-      const hitEntity = dnaManager.createEntity();
-      dnaManager.addComponent(hitEntity, new PositionComponent(position.x, position.y));
-      dnaManager.addComponent(hitEntity, new DrawableComponent({ jas: jas }));
-      dnaManager.addComponent(hitEntity, new HitComponent(Object.assign(hit, {
-        owner: entity,
+      const hitId = dnaManager.createEntity();
+      dnaManager.addComponent(hitId, new PositionComponent(position.x, position.y));
+      dnaManager.addComponent(hitId, new DrawableComponent({ jas: jas }));
+      dnaManager.addComponent(hitId, new HitComponent(Object.assign(hit, {
+        owner: eid,
         direction: move.direction
       })));
     }

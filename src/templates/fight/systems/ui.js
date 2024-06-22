@@ -4,6 +4,8 @@ import { DNASystem } from '@lib/dna/dna_system';
 // ---------------------------------------------------------------------------------------
 import { UIHealthBar } from '../ui/ui_health_bar';
 import { MAX_HEALTH } from '../enums';
+import { DamageComponent } from './damage';
+import { FighterComponent } from './fighter';
 // ---------------------------------------------------------------------------------------
 
 export class UISystem extends DNASystem {
@@ -25,9 +27,9 @@ export class UISystem extends DNASystem {
     this.healthBar2.setHealth(MAX_HEALTH);
   }
 
-  onEntityBind(entity) {
-    const dmg = dnaManager.getComponent(entity, 'Damage');
-    const fighter = dnaManager.getComponent(entity, 'Fighter');
+  onEntityBind(eid) {
+    const dmg = dnaManager.getComponent(eid, DamageComponent);
+    const fighter = dnaManager.getComponent(eid, FighterComponent);
 
     if (fighter.id == 1) {
       this.healthBar1.setHealth(fighter.health - dmg.damageHP);

@@ -3,13 +3,14 @@ import { Gfx2SpriteJSS } from '@lib/gfx2_sprite/gfx2_sprite_jss';
 // ---------------------------------------------------------------------------------------
 import { SpecialAttackComponent } from './systems/special_attack';
 import { ComboComponent } from './systems/combo';
+import { RunComponent } from './systems/run';
 // ---------------------------------------------------------------------------------------
 
 const ComboFactory = {
   PUNCH: async (charName) => {
     return new ComboComponent(
       'PUNCH',
-      'Run', 
+      RunComponent,
       'OKOK', 
       'PUNCH1',
       null,
@@ -38,7 +39,7 @@ const ComboFactory = {
   
     return new ComboComponent(
       'SPECIAL',
-      'Run', 
+      RunComponent, 
       'OKOK', 
       'PUNCH1',
       new SpecialAttackComponent(

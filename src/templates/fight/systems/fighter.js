@@ -2,6 +2,8 @@ import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
 import { dnaManager } from '@lib/dna/dna_manager';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
+import { PositionComponent } from './position';
+import { MoveComponent } from './move';
 // ---------------------------------------------------------------------------------------
 
 export class FighterComponent extends DNAComponent {
@@ -25,10 +27,11 @@ export class FighterSystem extends DNASystem {
     super.addRequiredComponentTypename('Move');
   }
 
-  onEntityUpdate(ts, entity) {
-    const fighter = dnaManager.getComponent(entity, 'Fighter');
-    const position = dnaManager.getComponent(entity, 'Position');
-    const move = dnaManager.getComponent(entity, 'Move');
+  onEntityUpdate(ts, eid) {
+    const fighter = dnaManager.getComponent(eid, FighterComponent);
+    const position = dnaManager.getComponent(eid, PositionComponent);
+    const move = dnaManager.getComponent(eid, MoveComponent);
+
     const nextPositionX = position.x + move.velocityX;
     const halfWidth = fighter.w * 0.5;
 
@@ -40,9 +43,10 @@ export class FighterSystem extends DNASystem {
     }
   }
 
-  onEntityDraw(entity) {
-    const fighter = dnaManager.getComponent(entity, 'Fighter');
-    const position = dnaManager.getComponent(entity, 'Position');
+  onEntityDraw(eid) {
+    const fighter = dnaManager.getComponent(eid, FighterComponent);
+    const position = dnaManager.getComponent(eid, PositionComponent);
+
     const ctx = gfx2Manager.getContext();
     ctx.globalAlpha = 0.2;
     ctx.fillStyle = '#000';

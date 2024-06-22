@@ -22,8 +22,8 @@ export class InputSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
-    const physics = dnaManager.getComponent<PhysicsComponent>(eid, 'Physics');
+    const entity = dnaManager.getComponent(eid, EntityComponent);
+    const physics = dnaManager.getComponent(eid, PhysicsComponent);
 
     if (!physics.body) {
       return;

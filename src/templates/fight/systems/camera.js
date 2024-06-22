@@ -4,6 +4,9 @@ import { UT } from '@lib/core/utils';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
+import { FighterComponent } from './fighter';
+import { PositionComponent } from './position';
+// ---------------------------------------------------------------------------------------
 
 export class CameraComponent extends DNAComponent {
   constructor() {
@@ -19,13 +22,13 @@ export class CameraSystem extends DNASystem {
     super.addRequiredComponentTypename('Camera');
   }
 
-  onEntityUpdate(ts, entity) {
-    const fighters = dnaManager.findEntities('Fighter');
+  onEntityUpdate(ts, eid) {
+    const fighters = dnaManager.findEntities(FighterComponent);
     let minX = Infinity, minY = Infinity;
     let maxX = 0, maxY = 0;
 
     for (let fighter of fighters) {
-      const position = dnaManager.getComponent(fighter, 'Position');
+      const position = dnaManager.getComponent(fighter, PositionComponent);
       if (minX > position.x) minX = position.x;
       if (maxX < position.x) maxX = position.x;
       if (minY > position.y) minY = position.y;

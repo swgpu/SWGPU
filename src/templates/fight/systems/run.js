@@ -5,6 +5,8 @@ import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { JumpComponent } from './jump';
 import { IdleComponent } from './idle';
+import { MoveComponent } from './move';
+import { DrawableComponent } from './drawable';
 // ---------------------------------------------------------------------------------------
 
 export class RunControlsComponent extends DNAComponent {
@@ -28,8 +30,8 @@ export class RunControlsSystem extends DNASystem {
     super.addRequiredComponentTypename('Move');
   }
 
-  onEntityUpdate(ts, entity) {
-    const move = dnaManager.getComponent(entity, 'Move');
+  onEntityUpdate(ts, eid) {
+    const move = dnaManager.getComponent(eid, MoveComponent);
     let action = false;
 
     if (inputManager.isActiveAction('LEFT')) {
@@ -43,13 +45,13 @@ export class RunControlsSystem extends DNASystem {
 
     if (inputManager.isActiveAction('UP')) {
       action = true;
-      dnaManager.removeComponent(entity, 'Run');
-      dnaManager.addComponent(entity, new JumpComponent(-25, 10));
+      dnaManager.removeComponent(eid, RunComponent);
+      dnaManager.addComponent(eid, new JumpComponent(-25, 10));
     }
 
     if (!action) {
-      dnaManager.removeComponent(entity, 'Run');
-      dnaManager.addComponent(entity, new IdleComponent());
+      dnaManager.removeComponent(eid, RunComponent);
+      dnaManager.addComponent(eid, new IdleComponent());
     }
   }
 }
@@ -62,15 +64,15 @@ export class RunSystem extends DNASystem {
     super.addRequiredComponentTypename('Move');
   }
 
-  onEntityBind(entity) {
-    const drawable = dnaManager.getComponent(entity, 'Drawable');
+  onEntityBind(eid) {
+    const drawable = dnaManager.getComponent(eid, DrawableComponent);
     drawable.jas.play('RUN', true, true);
   }
 
-  onEntityUpdate(ts, entity) {
-    const run = dnaManager.getComponent(entity, 'Run');
-    const move = dnaManager.getComponent(entity, 'Move');
-    const drawable = dnaManager.getComponent(entity, 'Drawable');
+  onEntityUpdate(ts, eid) {
+    const run = dnaManager.getComponent(eid, RunComponent);
+    const move = dnaManager.getComponent(eid, MoveComponent);
+    const drawable = dnaManager.getComponent(eid, DrawableComponent);
     let velocity = 0;
 
     if (move.velocityY > 0) {

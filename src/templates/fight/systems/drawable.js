@@ -1,6 +1,7 @@
 import { dnaManager } from '@lib/dna/dna_manager';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
+import { PositionComponent } from './position';
 // ---------------------------------------------------------------------------------------
 
 export class DrawableComponent extends DNAComponent {
@@ -24,15 +25,15 @@ export class DrawableSystem extends DNASystem {
 
   onBeforeUpdate(ts) {
     this.eids.sort((a, b) => {
-      const aDrawable = dnaManager.getComponent(a, 'Drawable');
-      const bDrawable = dnaManager.getComponent(b, 'Drawable');
+      const aDrawable = dnaManager.getComponent(a, DrawableComponent);
+      const bDrawable = dnaManager.getComponent(b, DrawableComponent);
       return aDrawable.zIndex - bDrawable.zIndex
     });
   }
 
-  onEntityUpdate(ts, entity) {
-    const position = dnaManager.getComponent(entity, 'Position');
-    const drawable = dnaManager.getComponent(entity, 'Drawable');
+  onEntityUpdate(ts, eid) {
+    const position = dnaManager.getComponent(eid, PositionComponent);
+    const drawable = dnaManager.getComponent(eid, DrawableComponent);
 
     if (!drawable.updated) {
       return;
@@ -49,8 +50,8 @@ export class DrawableSystem extends DNASystem {
     }
   }
 
-  onEntityDraw(entity) {
-    const drawable = dnaManager.getComponent(entity, 'Drawable');
+  onEntityDraw(eid) {
+    const drawable = dnaManager.getComponent(eid, DrawableComponent);
 
     if (drawable.jss) {
       drawable.jss.draw();

@@ -4,6 +4,10 @@ import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { IdleComponent } from './idle';
 import { DownComponent } from './down';
+import { FighterComponent } from './fighter';
+import { MoveComponent } from './move';
+import { DrawableComponent } from './drawable';
+import { PositionComponent } from './position';
 // ---------------------------------------------------------------------------------------
 
 export class DamageComponent extends DNAComponent {
@@ -30,10 +34,10 @@ export class DamageSystem extends DNASystem {
     this.frictionX = 0.5;
   }
 
-  onEntityBind(entity) {
-    const dmg = dnaManager.getComponent(entity, 'Damage');
-    const fighter = dnaManager.getComponent(entity, 'Fighter');
-    const move = dnaManager.getComponent(entity, 'Move');
+  onEntityBind(eid) {
+    const dmg = dnaManager.getComponent(eid, DamageComponent);
+    const fighter = dnaManager.getComponent(eid, FighterComponent);
+    const move = dnaManager.getComponent(eid, MoveComponent);
 
     if (dmg.velocityImpact) {
       move.velocityX = dmg.velocityImpact[0];
@@ -48,23 +52,23 @@ export class DamageSystem extends DNASystem {
     }
   }
 
-  async onEntityUpdate(ts, entity) {
+  async onEntityUpdate(ts, eid) {
     if (this.paused) {
       return;
     }
 
-    const dmg = dnaManager.getComponent(entity, 'Damage');
-    const move = dnaManager.getComponent(entity, 'Move');
-    const drawable = dnaManager.getComponent(entity, 'Drawable');
+    const dmg = dnaManager.getComponent(eid, DamageComponent);
+    const move = dnaManager.getComponent(eid, MoveComponent);
+    const drawable = dnaManager.getComponent(eid, DrawableComponent);
 
     if (dmg.age > dmg.maxAge) {
-      dnaManager.removeComponent(entity, 'Damage');
+      dnaManager.removeComponent(eid, DamageComponent);
 
       if (!dmg.airDropped) {
-        dnaManager.addComponent(entity, new IdleComponent());
+        dnaManager.addComponent(eid, new IdleComponent());
       }
       else {
-        dnaManager.addComponent(entity, new DownComponent());
+        dnaManager.addComponent(eid, new DownComponent());
       }
 
       return;
@@ -97,10 +101,10 @@ export class DamageSystem extends DNASystem {
     dmg.age += ts / 1000.0;
   }
 
-  onEntityDraw(entity) {
-    const dmg = dnaManager.getComponent(entity, 'Damage');
-    const fighter = dnaManager.getComponent(entity, 'Fighter');
-    const position = dnaManager.getComponent(entity, 'Position');
+  onEntityDraw(eid) {
+    const dmg = dnaManager.getComponent(eid, DamageComponent);
+    const fighter = dnaManager.getComponent(eid, FighterComponent);
+    const position = dnaManager.getComponent(eid, PositionComponent);
 
     if (dmg.spriteAnimation) {
       fighter.dmgSprite.setPosition(position.x, position.y);

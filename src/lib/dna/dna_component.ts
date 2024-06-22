@@ -2,20 +2,20 @@
  * A component in a pure ECS data-driven implementation.
  */
 class DNAComponent {
-  static typename: string;
+  typename: string;
 
   /**
    * @param {string} typename - The component identifier.
    */
   constructor(typename: string) {
-    DNAComponent.typename = typename;
+    this.typename = typename;
   }
 
   /**
    * Returns the typename.
    */
   getTypename(): string {
-    return DNAComponent.typename;
+    return this.typename;
   }
 }
 

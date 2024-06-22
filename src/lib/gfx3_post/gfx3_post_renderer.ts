@@ -119,7 +119,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
       1.0, -1.0, 1.0, 1.0 // second tri -> bottom right
     ]));
 
-    eventManager.subscribe(coreManager, 'E_RESIZE', this, this.$handleWindowResize);
+    eventManager.subscribe(coreManager, 'E_RESIZE', this, this.#handleWindowResize);
   }
 
   /**

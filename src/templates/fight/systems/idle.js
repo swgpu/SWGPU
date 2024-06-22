@@ -5,6 +5,8 @@ import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { RunComponent } from './run';
 import { JumpComponent } from './jump';
+import { MoveComponent } from './move';
+import { DrawableComponent } from './drawable';
 // ---------------------------------------------------------------------------------------
 
 export class IdleControlsComponent extends DNAComponent {
@@ -26,17 +28,17 @@ export class IdleControlsSystem extends DNASystem {
     super.addRequiredComponentTypename('Idle');
   }
 
-  onEntityUpdate(ts, entity) {
+  onEntityUpdate(ts, eid) {
     if (inputManager.isActiveAction('LEFT') || inputManager.isActiveAction('RIGHT')) {
-      dnaManager.removeComponent(entity, 'Idle');
-      dnaManager.addComponent(entity, new RunComponent(6, 0));
+      dnaManager.removeComponent(eid, IdleComponent);
+      dnaManager.addComponent(eid, new RunComponent(6, 0));
     }
   }
 
-  onActionOnce(actionId, entity) {
+  onActionOnce(actionId, eid) {
     if (actionId == 'UP') {
-      dnaManager.removeComponent(entity, 'Idle');
-      dnaManager.addComponent(entity, new JumpComponent(-25, 10));
+      dnaManager.removeComponent(eid, IdleComponent);
+      dnaManager.addComponent(eid, new JumpComponent(-25, 10));
     }
   }
 }
@@ -47,9 +49,9 @@ export class IdleSystem extends DNASystem {
     super.addRequiredComponentTypename('Idle');
   }
 
-  onEntityUpdate(ts, entity) {
-    const move = dnaManager.getComponent(entity, 'Move');
-    const drawable = dnaManager.getComponent(entity, 'Drawable');
+  onEntityUpdate(ts, eid) {
+    const move = dnaManager.getComponent(eid, MoveComponent);
+    const drawable = dnaManager.getComponent(eid, DrawableComponent);
     move.velocityX = 0;
     drawable.jas.play('IDLE', true, true);
   }

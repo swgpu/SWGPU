@@ -27,8 +27,8 @@ export class InputSystem extends DNASystem {
     let mx = 0;
     let mz = 0;
 
-    const entity = dnaManager.getComponent<EntityComponent>(eid, 'Entity');
-    const camera = dnaManager.getComponent<CameraComponent>(eid, 'Camera');
+    const entity = dnaManager.getComponent(eid, EntityComponent);
+    const camera = dnaManager.getComponent(eid, CameraComponent);
     const axies = camera.rec.getAxies();
 
     if (inputManager.isActiveAction('LEFT')) {

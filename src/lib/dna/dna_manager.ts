@@ -10,12 +10,12 @@ type Constructor<T> = new (...args: any[]) => T;
  */
 class DNAManager {
   count: number;
-  entities: Map<number, Set<DNAComponent>>;
+  entities: Map<number, Map<string, DNAComponent>>;
   systems: Array<DNASystem>;
 
   constructor() {
     this.count = 0;
-    this.entities = new Map<number, Set<DNAComponent>>();
+    this.entities = new Map<number, Map<string, DNAComponent>>();
     this.systems = [];
 
     eventManager.subscribe(inputManager, 'E_ACTION', this, (data: any) => {
@@ -74,7 +74,7 @@ class DNAManager {
    * Creates a new entity and returns its uid.
    */
   createEntity(): number {
-    this.entities.set(this.count, new Set<DNAComponent>());
+    this.entities.set(this.count, new Map<string, DNAComponent>());
     return this.count++;
   }
 
@@ -110,13 +110,13 @@ class DNAManager {
   /**
    * Find entities having that component.
    * 
-   * @param {string} component - The component typename.
+   * @param {Constructor<T>} component - The component class.
    */
-  findEntities<T extends DNAComponent>(component: Constructor<T extends DNAComponent>): Array<number> {
+  findEntities<T extends DNAComponent>(component: Constructor<T>): Array<number> {
     const eids = Array<number>();
 
     for (let [eid, components] of this.entities) {
-      if (components.has(component)) {
+      if (components.has(component.name)) {
         eids.push(eid);
       }
     }
@@ -127,11 +127,11 @@ class DNAManager {
   /**
    * Find the first entity having that component. If no match is found, it returns -1.
    * 
-   * @param {string} componentTypeName - The component typename.
+   * @param {Constructor<T>} component - The component class.
    */
-  findEntity(componentTypeName: string): number {
+  findEntity<T extends DNAComponent>(component: Constructor<T>): number {
     for (let [eid, components] of this.entities) {
-      if (components.has(componentTypeName)) {
+      if (components.has(component.name)) {
         return eid;
       }
     }
@@ -151,12 +151,12 @@ class DNAManager {
       throw new Error('DNAManager::addComponent(): Entity not found');
     }
 
-    const found = components.has(component.getTypename());
+    const found = components.has(component.constructor.name);
     if (found) {
-      throw new Error('ECSEntity::addComponent(): Entity already has ' + component.getTypename());
+      throw new Error('DNAManager::addComponent(): Entity already has ' + component.constructor.name);
     }
 
-    components.set(component.getTypename(), component);
+    components.set(component.constructor.name, component);
 
     for (const system of this.systems) {
       if (system.isMatchingComponentRequirements(components.values()) && !system.hasEntity(eid)) {
@@ -169,20 +169,20 @@ class DNAManager {
    * Removes component to an entity.
    * 
    * @param {number} eid - The entity's id.
-   * @param {string} typename - The component typename.
+   * @param {Constructor<T>} component - The component class.
    */
-  removeComponent(eid: number, typename: string): void {
+  removeComponent<T extends DNAComponent>(eid: number, component: Constructor<T>): void {
     const components = this.entities.get(eid);
     if (!components) {
       throw new Error('DNAManager::removeComponent(): Entity not found');
     }
 
-    const found = components.has(typename);
+    const found = components.has(component.name);
     if (!found) {
-      throw new Error('DNAManager::removeComponent(): Entity has not ' + typename);
+      throw new Error('DNAManager::removeComponent(): Entity has not ' + component.name);
     }
 
-    components.delete(typename);
+    components.delete(component.name);
 
     for (const system of this.systems) {
       if (!system.isMatchingComponentRequirements(components.values()) && system.hasEntity(eid)) {
@@ -195,11 +195,11 @@ class DNAManager {
    * Removes a component from an entity if it exists and returns true, otherwise it returns false.
    * 
    * @param {number} eid - The entity's id.
-   * @param {string} typename - The component typename.
+   * @param {Constructor<T>} component - The component class.
    */
-  removeComponentIfExist(eid: number, typename: string): boolean {
-    if (this.hasComponent(eid, typename)) {
-      this.removeComponent(eid, typename);
+  removeComponentIfExist<T extends DNAComponent>(eid: number, component: Constructor<T>): boolean {
+    if (this.hasComponent(eid, component)) {
+      this.removeComponent(eid, component);
       return true;
     }
 
@@ -210,7 +210,7 @@ class DNAManager {
    * Returns component from an entity.
    * 
    * @param {number} eid - The entity's id.
-   * @param {string} typename - The component typename.
+   * @param {Constructor<T>} component - The component class.
    */
   getComponent<T extends DNAComponent>(eid: number, component: Constructor<T>): T {
     const components = this.entities.get(eid);
@@ -218,7 +218,7 @@ class DNAManager {
       throw new Error('DNAManager::getComponent(): Entity not found');
     }
 
-    const found = components.get(component);
+    const found = components.get(component.name);
     if (!found) {
       throw new Error('DNAManager::getComponent(): Entity has not ' + component.name);
     }
@@ -228,30 +228,31 @@ class DNAManager {
 
   /**
    * Returns all components from an entity.
+   * 
    * @param {number} eid - The entity's id.
    */
-  getComponents(eid: number): Map<string, DNAComponent> {
+  getComponents(eid: number): IterableIterator<DNAComponent> {
     const found = this.entities.get(eid);
     if (!found) {
       throw new Error('DNAManager::getEntity(): Entity not found');
     }
 
-    return found;
+    return found.values();
   }
 
   /**
    * Check if an entity has a specific component.
    * 
    * @param {number} eid - The entity's id.
-   * @param {string} typename - The component typename.
+   * @param {Constructor<T>} component - The component typename.
    */
-  hasComponent(eid: number, typename: string): boolean {
+  hasComponent<T extends DNAComponent>(eid: number, component: Constructor<T>): boolean {
     const components = this.entities.get(eid);
     if (!components) {
       throw new Error('DNAManager::hasComponent(): Entity not found');
     }
 
-    return components.has(typename);
+    return components.has(component.name);
   }
 
   /**

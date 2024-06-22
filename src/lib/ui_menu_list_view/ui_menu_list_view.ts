@@ -50,8 +50,8 @@ class UIMenuListView<T> extends UIMenu {
       const items = collection.getItems();
       const views = items.sort(this.sortPredicate).filter(this.filterPredicate);
       views.forEach(item => this.addItem(item, this.enablePredicate(item)));
-      eventManager.subscribe(collection, 'E_ITEM_ADDED', this, this.$handleItemAdded);
-      eventManager.subscribe(collection, 'E_ITEM_REMOVED', this, this.$handleItemRemoved);
+      eventManager.subscribe(collection, 'E_ITEM_ADDED', this, this.#handleItemAdded);
+      eventManager.subscribe(collection, 'E_ITEM_REMOVED', this, this.#handleItemRemoved);
       this.collection = collection;
       this.views = views;
     }
