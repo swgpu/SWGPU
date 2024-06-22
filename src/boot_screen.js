@@ -21,6 +21,7 @@ import { TripleTriadScreen } from './templates/triple-triad/triple_triad_screen'
 import { VisualNovelScreen } from './templates/visual-novel/visual_novel_screen';
 // ---------------------------------------------------------------------------------------
 import { CurveScreen } from './utils/curve/curve_screen';
+import { MenuRingScreen } from './utils/menu-ring/menu_ring_screen';
 import { ParticlesScreen } from './utils/particles/particles_screen';
 import { PerfScreen } from './utils/perf/perf_screen';
 import { RapierScreen } from './utils/rapier/rapier_screen';
@@ -67,6 +68,7 @@ class BootScreen extends Screen {
     this.uiUtils.add('4', '3D Shadow Map');
     this.uiUtils.add('5', 'UI Menu');
     this.uiUtils.add('6', '3D Viewer');
+    this.uiUtils.add('7', '3D Menu Ring');
     this.uiUtils.setVisible(false);
     uiManager.addWidget(this.uiUtils, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
@@ -163,6 +165,9 @@ class BootScreen extends Screen {
     }
     else if (data.id == 6) {
       screenManager.requestSetScreen(new ViewerScreen());
+    }
+    else if (data.id == 7) {
+      screenManager.requestSetScreen(new MenuRingScreen());
     }
   }
 }

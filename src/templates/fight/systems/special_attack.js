@@ -42,8 +42,7 @@ export class SpecialAttackSystem extends DNASystem {
     const uiRoot = document.querySelector('#UI_ROOT');
     uiRoot.style.display = 'none';
 
-    for (const [eid, components] of dnaManager.entities.entries()) { // #todo: getAllComponents
-      const drawable = components.get(DrawableComponent);
+    for (const [eid, drawable] of dnaManager.getAllComponents(DrawableComponent)) {
       if (drawable && eid != effectId) {
         drawable.updated = false;
       }
@@ -57,11 +56,8 @@ export class SpecialAttackSystem extends DNASystem {
     const uiRoot = document.querySelector('#UI_ROOT');
     uiRoot.style.display = 'block';
 
-    for (const [eid, components] of dnaManager.entities.entries()) {
-      const drawable = components.get('Drawable');
-      if (drawable) {
-        drawable.updated = true;
-      }
+    for (const [eid, drawable] of dnaManager.getAllComponents(DrawableComponent)) {
+      drawable.updated = true;
     }
 
     this.gameScreen.resume();

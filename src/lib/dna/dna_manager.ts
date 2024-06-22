@@ -79,6 +79,20 @@ class DNAManager {
   }
 
   /**
+   * Creates a new entity and returns its uid.
+   * 
+   * @param {Array<DNAComponent>} components - The component list.
+   */
+  createEntityWith(components: Array<DNAComponent>): number {
+    this.entities.set(this.count, new Map<string, DNAComponent>());
+    for (const component of components) {
+      this.addComponent(this.count, component);
+    }
+
+    return this.count++;
+  }
+
+  /**
    * Removes entity.
    * 
    * @param {number} eid - The entity's id.
@@ -163,6 +177,16 @@ class DNAManager {
         system.bindEntity(eid);
       }
     }
+  }
+
+  /**
+   * Replace a component by another.
+   * 
+   * @param {DNAComponent} component - The .
+   */
+  replaceComponent<T extends DNAComponent>(eid: number, oldComponent: Constructor<T>, newComponent: DNAComponent): void {
+    this.removeComponentIfExist(eid, oldComponent);
+    this.addComponent(eid, newComponent);
   }
 
   /**
@@ -253,6 +277,22 @@ class DNAManager {
     }
 
     return components.has(component.name);
+  }
+
+  /**
+   * Returns all components of specified type as a list of pair like <eid, component>.
+   * 
+   * @param {Constructor<T>} component - The component class.
+   */
+  getAllComponents<T extends DNAComponent>(component: Constructor<T>): Map<number, DNAComponent> {
+    const res = new Map<number, DNAComponent>();
+
+    for (const [eid, components] of this.entities.entries()) {
+      const c = components.get(component.name);
+      if (c) res.set(eid, c);
+    }
+
+    return res;
   }
 
   /**

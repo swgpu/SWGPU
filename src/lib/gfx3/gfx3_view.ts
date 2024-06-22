@@ -38,7 +38,7 @@ class Gfx3View {
     this.perspectiveFar = 2000;
     this.orthographicSize = 1;
     this.orthographicDepth = 700;
-    this.bgColor = [0.0, 0.0, 0.0, 0.0];
+    this.bgColor = [0.0, 0.0, 0.0, 1.0];
     this.screenSize = [0, 0];
   }
 

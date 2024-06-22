@@ -5,6 +5,9 @@ import { Gfx3View } from './gfx3_view';
 import { Gfx3Texture } from './gfx3_texture';
 import { Gfx3StaticGroup, Gfx3DynamicGroup } from './gfx3_group';
 
+const WINDOW = window as any;
+const ALPHA_MODE = WINDOW.__ALPHA_MODE__ ? WINDOW.__ALPHA_MODE__ : 'opaque';
+
 export interface VertexSubBuffer {
   vertices: Float32Array;
   offset: number;
@@ -88,7 +91,7 @@ class Gfx3Manager {
     this.ctx.configure({
       device: this.device,
       format: navigator.gpu.getPreferredCanvasFormat(),
-      alphaMode: 'opaque'
+      alphaMode: ALPHA_MODE
     });
 
     const devicePixelRatio = window.devicePixelRatio || 1;
