@@ -285,9 +285,6 @@ class InputManager {
     }
 
     this.keymap.set(e.code, true);
-
-    e.preventDefault();
-    e.stopPropagation();
     return false;
   }
 
@@ -337,8 +334,6 @@ class InputManager {
   #handleWheel(e: WheelEvent): void {
     this.mouseDown = (e.buttons & 1) !== 0;
     this.mouseWheel += Math.sign(e.deltaY);
-    e.preventDefault();
-    e.stopPropagation();
     eventManager.emit(this, 'E_MOUSE_WHEEL', { delta: Math.sign(e.deltaY) });
   }
 
