@@ -212,5 +212,18 @@ If you have a suggestion that would make this better, please fork the repo and c
 - [Ver. 1.0.3]  Camera orbit has been added.
 ```
 
+## Roadmap (fr)
+```
+- Créer un système de queries découplé des systèmes ecs
+- Ajouter une fonction static createFromFile pour toute classe valide
+- Ajouter un loadFromAsesprite & https://codemanu.itch.io/spritemancer
+- Ajouter multi-canvas (gfx2)
+- Corriger SetOffsetNormalized dans JAS
+- Inversion de l'axe Y (gfx2)
+- VEC2_MIN, VEC2_MAX, VEC2_CLAMP, VEC_FLOOR et VEC_CEIL dans UT
+- Ajouter justPressed ou justReleased dans inputManager
+- Ajouter pooling soundManager
+```
+
 ## License 
 WARME Y2K is released under the [MIT](https://opensource.org/licenses/MIT) license. 
