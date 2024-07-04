@@ -223,6 +223,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 - VEC2_MIN, VEC2_MAX, VEC2_CLAMP, VEC_FLOOR et VEC_CEIL dans UT
 - Ajouter justPressed ou justReleased dans inputManager
 - Ajouter pooling soundManager
+- Ajouter export MAT dans l'addon blender
 ```
 
 ## License 
