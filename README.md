@@ -225,6 +225,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 - Ajouter justPressed ou justReleased dans inputManager
 - Ajouter pooling soundManager
 - Ajouter export MAT dans l'addon blender
+- Ajouter export pack dans l'addon blender (export tous les objets présent dans les catégories valides (jam, jsm, jwm, etc...)
 - Test des lumières sur le shader toon
 ```
 
