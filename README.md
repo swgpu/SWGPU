@@ -216,6 +216,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 ```
 - Créer un système de queries découplé des systèmes ecs
 - Passer de SpriteFusion à https://rxi.itch.io/tilekit
+- Ajouter fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master
 - Ajouter une fonction static createFromFile pour toute classe valide
 - Ajouter un loadFromAsesprite & https://codemanu.itch.io/spritemancer
 - Ajouter multi-canvas (gfx2)
