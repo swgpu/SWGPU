@@ -16,7 +16,7 @@ export class RunControlsComponent extends DNAComponent {
 }
 
 export class RunComponent extends DNAComponent {
-  constructor(speed) {
+  constructor(speed = 40) {
     super('Run');
     this.speed = speed;
   }
@@ -46,7 +46,7 @@ export class RunControlsSystem extends DNASystem {
     if (inputManager.isActiveAction('UP')) {
       action = true;
       dnaManager.removeComponent(eid, RunComponent);
-      dnaManager.addComponent(eid, new JumpComponent(-25, 10));
+      dnaManager.addComponent(eid, new JumpComponent());
     }
 
     if (!action) {
@@ -83,11 +83,11 @@ export class RunSystem extends DNASystem {
     }
 
     if (move.direction == -1) {
-      velocity += run.speed * move.direction;
+      velocity += run.speed * move.direction * (ts / 100);
       move.velocityX = velocity;
     }
     else if (move.direction == +1) {
-      velocity += run.speed * move.direction;
+      velocity += run.speed * move.direction * (ts / 100);
       move.velocityX = velocity;
     }
   }

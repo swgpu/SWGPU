@@ -45,7 +45,7 @@ export class AISystem extends DNASystem {
       if (dnaManager.hasComponent(eid, IdleComponent) || dnaManager.hasComponent(eid, RunComponent)) {
         dnaManager.removeComponentIfExist(eid, IdleComponent);
         dnaManager.removeComponentIfExist(eid, RunComponent);
-        dnaManager.addComponent(eid, new JumpComponent(-25, 10));
+        dnaManager.addComponent(eid, new JumpComponent());
         return true;
       }
 
@@ -68,7 +68,7 @@ export class AISystem extends DNASystem {
   
         dnaManager.removeComponentIfExist(eid, IdleComponent);
         dnaManager.removeComponentIfExist(eid, RunComponent);
-        dnaManager.addComponent(eid, new RunComponent(6, 0));
+        dnaManager.addComponent(eid, new RunComponent());
         return true;
       }
 

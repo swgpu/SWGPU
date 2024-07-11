@@ -1,0 +1,29 @@
+{
+	"Ident": "JAS",
+	"Animations": [
+		{
+			"Name": "explode",
+			"FrameDuration": 100,
+			"Frames": [
+				{
+					"Width": 12,
+					"Height": 12,
+					"X": 0,
+					"Y": 0
+				},
+				{
+					"Width": 12,
+					"Height": 12,
+					"X": 12,
+					"Y": 0
+				},
+				{
+					"Width": 12,
+					"Height": 12,
+					"X": 24,
+					"Y": 0
+				}
+			]
+		}
+	]
+}

@@ -8,7 +8,7 @@ interface JSCBlockCall {
   commandName: string;
   commandArgs: Array<any>;
 }
-
+//@todo: add continue & pause
 /**
  * Is a script machine that parse and execute blocks from a JSON file.
  */

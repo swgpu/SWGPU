@@ -1,4 +1,5 @@
 import { coreManager } from '@lib/core/core_manager';
+import { inputManager } from '@lib/input/input_manager';
 import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
 import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
@@ -16,9 +17,14 @@ import { gfx3ShadowVolumeRenderer } from '@lib/gfx3_shadow_volume/gfx3_shadow_vo
 import { BootScreen } from './boot_screen';
 // ---------------------------------------------------------------------------------------
 
+const FPS = 60;
+const MS_PER_FRAME = 1000 / FPS;
+const FPS_FIXED = false;
+
 class GameManager {
   constructor() {
     this.then = 0;
+    this.elapsedTime = 0;
   }
 
   async startup() {
@@ -32,9 +38,14 @@ class GameManager {
     this.then = timeStamp;
 
     // update phase
-    gfx2Manager.update(ts);
-    uiManager.update(ts);
-    screenManager.update(ts);
+    // if (this.elapsedTime > MS_PER_FRAME) {
+      inputManager.update(ts);
+      gfx2Manager.update(ts);
+      uiManager.update(ts);
+      screenManager.update(ts);
+    // }
+
+    // this.elapsedTime += ts;
 
     // draw phase
     gfx3Manager.beginDrawing();

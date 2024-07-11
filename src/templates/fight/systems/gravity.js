@@ -1,4 +1,5 @@
 import { dnaManager } from '@lib/dna/dna_manager';
+import { UT } from '@lib/core/utils';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
@@ -8,12 +9,11 @@ import { FighterComponent } from './fighter';
 import { PlatformComponent } from './platform';
 // ---------------------------------------------------------------------------------------
 
-const GRAVITY_SPEED_MAX = 20;
-
 export class GravityComponent extends DNAComponent {
   constructor(gravityFactor = 1) {
     super('Gravity');
     this.gravityFactor = gravityFactor;
+    this.gravityValue = 25;
     this.onFloor = true;
   }
 }
@@ -61,7 +61,7 @@ export class GravitySystem extends DNASystem {
       gravity.onFloor = true;
     }
     else {
-      move.velocityY = Math.min(move.velocityY + gravity.gravityFactor, GRAVITY_SPEED_MAX);
+      move.velocityY = UT.LERP(move.velocityY, gravity.gravityValue * gravity.gravityFactor, ts / 1000);
       gravity.onFloor = false;
     }
   }

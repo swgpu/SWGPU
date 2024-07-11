@@ -10,6 +10,7 @@ class Gfx2Drawable implements Poolable<Gfx2Drawable> {
   position: vec2;
   rotation: number;
   scale: vec2;
+  flip: [boolean, boolean];
   offset: vec2;
   visible: boolean;
   opacity: number;
@@ -21,6 +22,7 @@ class Gfx2Drawable implements Poolable<Gfx2Drawable> {
     this.position = [0, 0];
     this.rotation = 0;
     this.scale = [1, 1];
+    this.flip = [false, false];
     this.offset = [0, 0];
     this.visible = true;
     this.opacity = 1;
@@ -171,6 +173,45 @@ class Gfx2Drawable implements Poolable<Gfx2Drawable> {
   zoom(x: number, y: number): void {
     this.scale[0] += x;
     this.scale[1] += y;
+  }
+
+  /**
+   * Returns the flip flag on x-axis.
+   */
+  getFlipX(): boolean {
+    return this.flip[0];
+  }
+
+  /**
+   * Returns the flip flag on y-axis.
+   */
+  getFlipY(): boolean {
+    return this.flip[1];
+  }
+
+  /**
+   * Returns two booleans, first is the x-axis flip flag, second is the y-axis flip flag.
+   */
+  getFlip(): [boolean, boolean] {
+    return this.flip;
+  }
+
+  /**
+   * Set flipX.
+   * 
+   * @param {boolean} x - The x-axis flip flag.
+   */
+  setFlipX(x: boolean): void {
+    this.flip[0] = x;
+  }
+
+  /**
+   * Set flipY.
+   * 
+   * @param {boolean} y - The y-axis flip flag.
+   */
+  setFlipY(y: boolean): void {
+    this.flip[1] = y;
   }
 
   /**

@@ -35,6 +35,9 @@ class Gfx3SpriteJSS extends Gfx3Sprite implements Poolable<Gfx3SpriteJSS> {
     this.flip[0] = json['FlipX'] ?? false;
     this.flip[1] = json['FlipY'] ?? false;
 
+    this.offsetFactor[0] = json['OffsetFactorX'] ?? 0;
+    this.offsetFactor[1] = json['OffsetFactorY'] ?? 0;
+
     this.boundingBox = Gfx3BoundingBox.createFromCoord(
       json['X'],
       json['Y'],
@@ -65,6 +68,14 @@ class Gfx3SpriteJSS extends Gfx3Sprite implements Poolable<Gfx3SpriteJSS> {
     const fuy = this.flip[1] ? 1 - uy : uy;
     const fvx = this.flip[0] ? 1 - vx : vx;
     const fvy = this.flip[1] ? 1 - vy : vy;
+
+    if (this.offsetFactor[0] != 0) {
+      this.offset[0] = this.textureRect[2] * this.offsetFactor[0];
+    }
+
+    if (this.offsetFactor[1] != 0) {
+      this.offset[1] = this.textureRect[3] * this.offsetFactor[1];
+    }
 
     this.beginVertices(6);
     this.defineVertex(minX, maxY, 0, fux, fuy);
@@ -107,17 +118,6 @@ class Gfx3SpriteJSS extends Gfx3Sprite implements Poolable<Gfx3SpriteJSS> {
    */
   setTextureRect(left: number, top: number, width: number, height: number): void {
     this.textureRect = [left, top, width, height];
-  }
-
-  /**
-   * Set the normalized offset value.
-   * 
-   * @param {number} offsetXFactor - The normalized x-coordinate offset value.
-   * @param {number} offsetYFactor - The normalized y-coordinate offset value.
-   */
-  setOffsetNormalized(offsetXFactor: number, offsetYFactor: number) {
-    this.offset[0] = this.textureRect[2] * offsetXFactor;
-    this.offset[1] = this.textureRect[3] * offsetYFactor;
   }
 
   /**

@@ -104,10 +104,6 @@ export class ComboSystem extends DNASystem {
     drawable.jas.play(combo.animationName, false, true);
     await eventManager.wait(drawable.jas, 'E_FINISHED');
 
-    if (combo.specialAttack) {
-      dnaManager.removeComponent(eid, SpecialAttackComponent);
-    }
-
     dnaManager.removeComponent(eid, ComboComponent);
     dnaManager.addComponent(eid, new IdleComponent());
   }

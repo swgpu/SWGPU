@@ -16,7 +16,7 @@ export class JumpControlsComponent extends DNAComponent {
 }
 
 export class JumpComponent extends DNAComponent {
-  constructor(accelerationY, doubleJumpGapTime = 5, numJump = 1) {
+  constructor(accelerationY = -15, doubleJumpGapTime = 10, numJump = 1) {
     super('Jump');
     this.doubleJumpGapTime = doubleJumpGapTime;
     this.numJump = numJump;

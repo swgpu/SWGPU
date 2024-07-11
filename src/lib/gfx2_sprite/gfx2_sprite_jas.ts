@@ -24,9 +24,9 @@ interface JASAnimation {
  * It emit 'E_FINISHED'
  */
 class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
-  flip: [boolean, boolean];
   animations: Array<JASAnimation>;
   texture: ImageBitmap | HTMLImageElement;
+  offsetFactor: vec2;
   currentAnimation: JASAnimation | null;
   currentAnimationFrameIndex: number;
   looped: boolean;
@@ -34,9 +34,9 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
 
   constructor() {
     super();
-    this.flip = [false, false];
     this.animations = [];
     this.texture = gfx2Manager.getDefaultTexture();
+    this.offsetFactor = [0, 0];
     this.currentAnimation = null;
     this.currentAnimationFrameIndex = 0;
     this.looped = false;    
@@ -57,6 +57,9 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
 
     this.flip[0] = json['FlipX'] ?? false;
     this.flip[1] = json['FlipY'] ?? false;
+
+    this.offsetFactor[0] = json['OffsetFactorX'] ?? 0;
+    this.offsetFactor[1] = json['OffsetFactorY'] ?? 0;
 
     this.animations = [];
     for (const obj of json['Animations']) {
@@ -130,6 +133,15 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
     const currentFrame = this.currentAnimation.frames[this.currentAnimationFrameIndex];
 
     ctx.scale(this.flip[0] ? -1 : 1, this.flip[1] ? -1 : 1);
+
+    if (this.offsetFactor[0] != 0) {
+      ctx.translate(-currentFrame.width * this.offsetFactor[0], 0);
+    }
+
+    if (this.offsetFactor[1] != 0) {
+      ctx.translate(0, -currentFrame.height * this.offsetFactor[1]);
+    }
+
     ctx.drawImage(
       this.texture,
       currentFrame.x,
@@ -164,31 +176,6 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
     this.currentAnimationFrameIndex = 0;
     this.looped = looped;
     this.frameProgress = 0;
-  }
-
-  /**
-   * Returns two booleans, first is the x-axis flip flag, second is the y-axis flip flag.
-   */
-  getFlip(): [boolean, boolean] {
-    return this.flip;
-  }
-
-  /**
-   * Set flipX.
-   * 
-   * @param {boolean} x - The x-axis flip flag.
-   */
-  setFlipX(x: boolean): void {
-    this.flip[0] = x;
-  }
-
-  /**
-   * Set flipY.
-   * 
-   * @param {boolean} y - The y-axis flip flag.
-   */
-  setFlipY(y: boolean): void {
-    this.flip[1] = y;
   }
 
   /**
@@ -235,6 +222,18 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
    */
   setTexture(texture: ImageBitmap): void {
     this.texture = texture;
+  }
+
+  /**
+   * Set the normalized offset value.
+   * Note: this offset is independant from the regular drawable pixel based offset.
+   * 
+   * @param {number} offsetXFactor - The normalized x-coordinate offset value.
+   * @param {number} offsetYFactor - The normalized y-coordinate offset value.
+   */
+  setOffsetNormalized(offsetXFactor: number, offsetYFactor: number) {
+    this.offsetFactor[0] = offsetXFactor;
+    this.offsetFactor[1] = offsetYFactor;
   }
 
   /**

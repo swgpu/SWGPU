@@ -11,11 +11,11 @@ interface Pad {
 
 interface Action {
   id: string;
-  inputSource: InputString;
+  inputSource: InputSource;
   eventKey: string;
 }
 
-type InputString = 'keyboard' | 'gamepad0' | 'gamepad1' | 'gamepad2' | 'gamepad3';
+type InputSource = 'keyboard' | 'gamepad0' | 'gamepad1' | 'gamepad2' | 'gamepad3';
 
 // standard mapping https://w3c.github.io/gamepad/#remapping
 const GAME_PAD_KEY_MAPPING = new Map<string, string>();
@@ -54,8 +54,9 @@ GAME_PAD_KEY_MAPPING.set('PadRight', '15');
  * ■ DOWN => ArrowDown => PadBottom
  */
 class InputManager {
-  keymap: Map<string, boolean>;
-  actionmap: Map<string, boolean>;
+  keyMap: Map<string, boolean>;
+  actionMap: Map<string, boolean>;
+  actionOnceMap: Map<string, number>;
   actionRegister: Map<string, Action>;
   pads: Array<Pad>;
   padsInterval: NodeJS.Timeout | number | undefined;
@@ -67,8 +68,9 @@ class InputManager {
   pointerLockCaptured: boolean;
 
   constructor() {
-    this.keymap = new Map<string, boolean>;
-    this.actionmap = new Map<string, boolean>;
+    this.keyMap = new Map<string, boolean>;
+    this.actionMap = new Map<string, boolean>;
+    this.actionOnceMap = new Map<string, number>;
     this.actionRegister = new Map<string, Action>;
     this.pads = [];
     this.padsInterval;
@@ -131,13 +133,29 @@ class InputManager {
   }
 
   /**
+   * The update function.
+   * 
+   * @param {number} ts - The timestep.
+   */
+  update(ts: number): void {
+    for (const actionId of this.actionOnceMap.keys()) {
+      const state = this.actionOnceMap.get(actionId);
+      if (state == 1) {
+        this.actionOnceMap.delete(actionId);
+      } else {
+        this.actionOnceMap.set(actionId, 1);
+      }
+    }
+  }
+
+  /**
    * Add an action mapping.
    * 
    * @param {string} inputSource - The device from which the input is received.
    * @param {string} eventKey - The key or button that triggers the action.
    * @param {string} actionId - The unique action identifier.
    */
-  registerAction(inputSource: InputString, eventKey: string, actionId: string): void {
+  registerAction(inputSource: InputSource, eventKey: string, actionId: string): void {
     const found = this.actionRegister.has(inputSource + eventKey);
     if (found) {
       throw new Error('InputManager::registerAction(): you cannot register action with same event source & key.');
@@ -156,7 +174,7 @@ class InputManager {
    * @param {string} inputSource - The device from which the input is received.
    * @param {string} eventKey - The key or button that triggers the action.
    */
-  unregisterAction(inputSource: InputString, eventKey: string): void {
+  unregisterAction(inputSource: InputSource, eventKey: string): void {
     this.actionRegister.delete(inputSource + eventKey);
   }
 
@@ -166,7 +184,16 @@ class InputManager {
    * @param {string} actionId - The action identifier.
    */
   isActiveAction(actionId: string): boolean | undefined {
-    return this.actionmap.get(actionId);
+    return this.actionMap.get(actionId);
+  }
+
+  /**
+   * Checks if an action is currently active.
+   * 
+   * @param {string} actionId - The action identifier.
+   */
+  isJustActiveAction(actionId: string): boolean {
+    return this.actionOnceMap.get(actionId) == 1;
   }
 
   /**
@@ -274,17 +301,18 @@ class InputManager {
   #handleKeyDown(e: KeyboardEvent): boolean {
     const action = this.actionRegister.get('keyboard' + e.code);
 
-    if (!this.keymap.get(e.code) && action) {      
+    if (!this.keyMap.get(e.code) && action) {      
       eventManager.emit(this, 'E_ACTION_ONCE', { actionId: action.id });
-      this.actionmap.set(action.id, true);
+      this.actionMap.set(action.id, true);
+      this.actionOnceMap.set(action.id, 0);
     }
 
     if (action) {
       eventManager.emit(this, 'E_ACTION', { actionId: action.id });
-      this.actionmap.set(action.id, true);
+      this.actionMap.set(action.id, true);
     }
 
-    this.keymap.set(e.code, true);
+    this.keyMap.set(e.code, true);
     return false;
   }
 
@@ -293,10 +321,10 @@ class InputManager {
 
     if (action) {
       eventManager.emit(this, 'E_ACTION_RELEASED', { actionId: action.id });
-      this.actionmap.set(action.id, false);  
+      this.actionMap.set(action.id, false);  
     }
 
-    this.keymap.set(e.code, false);
+    this.keyMap.set(e.code, false);
   }
 
   async #handlePointerDown(e: PointerEvent): Promise<void> {
@@ -394,13 +422,13 @@ class InputManager {
           const action = this.actionRegister.get('gamepad' + gamepad.index + n.toString());
 
           if (action) {
-            this.actionmap.set(action.id, gamepad.buttons[n].pressed);
+            this.actionMap.set(action.id, gamepad.buttons[n].pressed);
             if (gamepad.buttons[n].pressed) {
               eventManager.emit(this, 'E_ACTION', { actionId: action.id });
             }
           }
 
-          this.keymap.set('gamepad' + gamepad.index + '-' + n, gamepad.buttons[n].pressed);
+          this.keyMap.set('gamepad' + gamepad.index + '-' + n, gamepad.buttons[n].pressed);
           pad.pressed[n] = gamepad.buttons[n].pressed;
         }
       }

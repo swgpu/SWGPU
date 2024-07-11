@@ -6,16 +6,12 @@ import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 import { Gfx2Drawable } from '@lib/gfx2/gfx2_drawable';
 // ---------------------------------------------------------------------------------------
-import { DrawableComponent } from './drawable';
-import { PositionComponent } from './position';
-// ---------------------------------------------------------------------------------------
 
 export class SpecialAttackComponent extends DNAComponent {
-  constructor(name, bgJSS, avatarJSS) {
+  constructor(name, bgJSS, avatarJSS, duration = 3) {
     super('SpecialAttack');
-    this.name = name;
-    this.bgJSS = bgJSS;
-    this.avatarJSS = avatarJSS;
+    this.gfx = new GfxSpecialAttack(bgJSS, avatarJSS, name, duration);
+    this.duration = duration;
   }
 }
 
@@ -23,73 +19,60 @@ export class SpecialAttackSystem extends DNASystem {
   constructor(gameScreen) {
     super();
     this.gameScreen = gameScreen;
-    this.duration = 3;
     super.addRequiredComponentTypename('SpecialAttack');
   }
 
   async onEntityBind(eid) {
-    const specialAttack = dnaManager.getComponent(eid, SpecialAttackComponent);
-
-    const gfx = new GfxSpecialAttack(this.duration);
-    gfx.setBackgroundJSS(specialAttack.bgJSS);
-    gfx.setAvatarJSS(specialAttack.avatarJSS);
-    gfx.setText(specialAttack.name);
-
-    const effectId = dnaManager.createEntity();
-    dnaManager.addComponent(effectId, new PositionComponent(0, 0));
-    dnaManager.addComponent(effectId, new DrawableComponent({ jss: gfx, zIndex: 1 }));
-
     const uiRoot = document.querySelector('#UI_ROOT');
     uiRoot.style.display = 'none';
 
-    for (const [eid, drawable] of dnaManager.getAllComponents(DrawableComponent)) {
-      if (drawable && eid != effectId) {
-        drawable.updated = false;
+    for (const system of dnaManager.getSystems()) {
+      if (system != this) {
+        system.pause();
       }
     }
 
-    this.gameScreen.pause();
-    setTimeout(() => this.handleTimeout(effectId), this.duration * 1000);
+    const specialAttack = dnaManager.getComponent(eid, SpecialAttackComponent);
+    setTimeout(() => this.handleTimeout(eid), specialAttack.duration * 1000);
   }
 
-  handleTimeout(effectId) {
+  onEntityUpdate(ts, eid) {
+    const specialAttack = dnaManager.getComponent(eid, SpecialAttackComponent);
+    specialAttack.gfx.update(ts);
+  }
+
+  onEntityDraw(eid) {
+    const specialAttack = dnaManager.getComponent(eid, SpecialAttackComponent);
+    specialAttack.gfx.draw();
+  }
+
+  handleTimeout(eid) {
     const uiRoot = document.querySelector('#UI_ROOT');
     uiRoot.style.display = 'block';
 
-    for (const [eid, drawable] of dnaManager.getAllComponents(DrawableComponent)) {
-      drawable.updated = true;
+    for (const system of dnaManager.getSystems()) {
+      if (system != this) {
+        system.resume();
+      }
     }
 
-    this.gameScreen.resume();
-    dnaManager.removeEntity(effectId);
+    dnaManager.removeComponent(eid, SpecialAttackComponent);
   }
 }
 
 class GfxSpecialAttack extends Gfx2Drawable {
-  constructor(duration) {
+  constructor(bgJSS, avatarJSS, text, duration) {
     super();
+    this.bgJSS = bgJSS;
+    this.avatarJSS = avatarJSS;
+    this.text = text;
     this.duration = duration;
-    this.text = '';
     this.textX = 0;
     this.opacity = 0;
-    this.bgJSS = null;
-    this.avatarJSS = null;
     this.age = 0;
     this.tweenOpacity = new Tween([0, 0.5, this.duration - 0.5, this.duration], [0, 1, 1, 0]);
     this.textTweenX = new Tween([0, 0.5], [-300, 300]);
     this.avatarTweenX = new Tween([0, 0.5], [600, 0], UT.EASE_OUT_QUAD);
-  }
-
-  setBackgroundJSS(backgroundJSS) {
-    this.bgJSS = backgroundJSS;
-  }
-
-  setAvatarJSS(avatarJSS) {
-    this.avatarJSS = avatarJSS;
-  }
-
-  setText(text) {
-    this.text = text;
   }
 
   update(ts) {

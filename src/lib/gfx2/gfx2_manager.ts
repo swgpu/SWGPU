@@ -25,8 +25,6 @@ class Gfx2Manager {
       UT.FAIL('This browser does not support canvas');
       throw new Error('Gfx2Manager::Gfx2Manager: Your browser not support 2D');
     }
-
-    this.ctx.imageSmoothingEnabled = false;
   }
 
   /**
@@ -46,6 +44,8 @@ class Gfx2Manager {
    * Warning: You need to call this method before any draw calls.
    */
   beginDrawing(): void {
+    this.ctx.imageSmoothingEnabled = false;
+
     this.ctx.save();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 

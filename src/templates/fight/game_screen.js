@@ -25,39 +25,35 @@ import { ComboFactory } from './combo_factory';
 import { AIPatternFactory } from './ai_pattern_factory';
 // ---------------------------------------------------------------------------------------
 
-const FPS = 60;
-const MS_PER_FRAME = 1000 / FPS;
-
 class GameScreen extends Screen {
   constructor() {
     super();
-    this.elapsedTime = 0;
     this.systems = {};
   }
 
   async onEnter(args = { map, characters }) {
-    this.systems['ui'] = new UISystem(args.characters);
-    this.systems['camera'] = new CameraSystem(800, 600);
-    this.systems['idleCtrl'] = new IdleControlsSystem();
-    this.systems['idle'] = new IdleSystem();
-    this.systems['runCtrl'] = new RunControlsSystem();
-    this.systems['run'] = new RunSystem();
-    this.systems['jumpCtrl'] = new JumpControlsSystem();
-    this.systems['jump'] = new JumpSystem();
-    this.systems['downCtrl'] = new DownControlsSystem();
-    this.systems['down'] = new DownSystem();
-    this.systems['cas'] = new CASSystem();
-    this.systems['combo'] = new ComboSystem();
-    this.systems['fighter'] = new FighterSystem(800, 600);
-    this.systems['gravity'] = new GravitySystem();
-    this.systems['move'] = new MoveSystem();
-    this.systems['hit'] = new HitSystem();
-    this.systems['damage'] = new DamageSystem();
-    this.systems['specialAttack'] = new SpecialAttackSystem(this);
-    this.systems['drawable'] = new DrawableSystem();
-    this.systems['ai'] = new AISystem();
-
-    dnaManager.setup(Object.values(this.systems));
+    dnaManager.setup([
+      new UISystem(args.characters),
+      new CameraSystem(800, 600),
+      new IdleControlsSystem(),
+      new IdleSystem(),
+      new RunControlsSystem(),
+      new RunSystem(),
+      new JumpControlsSystem(),
+      new JumpSystem(),
+      new DownControlsSystem(),
+      new DownSystem(),
+      new CASSystem(),
+      new ComboSystem(),
+      new FighterSystem(800, 600),
+      new GravitySystem(),
+      new MoveSystem(),
+      new HitSystem(),
+      new DamageSystem(),
+      new DrawableSystem(),
+      new SpecialAttackSystem(this),
+      new AISystem()
+    ]);
 
     await CREATE_SCENE(args.map);
     await CREATE_PLAYER1(args.characters[0]);
@@ -65,58 +61,11 @@ class GameScreen extends Screen {
   }
 
   update(ts) {
-    if (this.elapsedTime > MS_PER_FRAME) {
-      dnaManager.update(this.elapsedTime);
-      this.elapsedTime = 0;
-    }
-
-    this.elapsedTime += ts;
+    dnaManager.update(ts);
   }
 
   draw() {
     dnaManager.draw();
-  }
-
-  pause() {
-    this.systems['ui'].pause();
-    this.systems['camera'].pause();
-    this.systems['idleCtrl'].pause();
-    this.systems['idle'].pause();
-    this.systems['runCtrl'].pause();
-    this.systems['run'].pause();
-    this.systems['jumpCtrl'].pause();
-    this.systems['jump'].pause();
-    this.systems['downCtrl'].pause();
-    this.systems['down'].pause();
-    this.systems['cas'].pause();
-    this.systems['combo'].pause();
-    this.systems['fighter'].pause();
-    this.systems['gravity'].pause();
-    this.systems['move'].pause();
-    this.systems['hit'].pause();
-    this.systems['damage'].pause();
-    this.systems['ai'].pause();
-  }
-
-  resume() {
-    this.systems['ui'].resume();
-    this.systems['camera'].resume();
-    this.systems['idleCtrl'].resume();
-    this.systems['idle'].resume();
-    this.systems['runCtrl'].resume();
-    this.systems['run'].resume();
-    this.systems['jumpCtrl'].resume();
-    this.systems['jump'].resume();
-    this.systems['downCtrl'].pause();
-    this.systems['down'].pause();
-    this.systems['cas'].resume();
-    this.systems['combo'].resume();
-    this.systems['fighter'].resume();
-    this.systems['gravity'].resume();
-    this.systems['move'].resume();
-    this.systems['hit'].resume();
-    this.systems['damage'].resume();
-    this.systems['ai'].resume();
   }
 }
 

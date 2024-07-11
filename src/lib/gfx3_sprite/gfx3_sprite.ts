@@ -13,6 +13,7 @@ import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_sprite_shader';
 class Gfx3Sprite extends Gfx3Drawable implements Poolable<Gfx3Sprite> {
   textureChanged: boolean;
   offset: vec2;
+  offsetFactor: vec2;
   flip: [boolean, boolean];
   pixelsPerUnit: number;
   billboardMode: boolean;
@@ -23,6 +24,7 @@ class Gfx3Sprite extends Gfx3Drawable implements Poolable<Gfx3Sprite> {
     super(SHADER_VERTEX_ATTR_COUNT);
     this.textureChanged = false;
     this.offset = [0, 0];
+    this.offsetFactor = [0, 0];
     this.flip = [false, false];
     this.pixelsPerUnit = 100;
     this.billboardMode = false;
@@ -92,6 +94,17 @@ class Gfx3Sprite extends Gfx3Drawable implements Poolable<Gfx3Sprite> {
    */
   setOffset(offsetX: number, offsetY: number): void {
     this.offset = [offsetX, offsetY];
+  }
+
+  /**
+   * Set the normalized offset value.
+   * 
+   * @param {number} offsetXFactor - The normalized x-coordinate offset value.
+   * @param {number} offsetYFactor - The normalized y-coordinate offset value.
+   */
+  setOffsetNormalized(offsetXFactor: number, offsetYFactor: number) {
+    this.offsetFactor[0] = offsetXFactor;
+    this.offsetFactor[1] = offsetYFactor;
   }
 
   /**

@@ -124,8 +124,8 @@ export class HitSystem extends DNASystem {
 
     if (hit.velocityTween) {
       const v = hit.velocityTween.interpolate(hit.age);
-      position.x += v[0] * hit.direction;
-      position.y += v[1];
+      position.x += v[0] * hit.direction * (ts / 100);
+      position.y += v[1] * (ts / 100);
     }
 
     hit.age += ts / 1000;

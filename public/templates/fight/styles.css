@@ -81,6 +81,7 @@
 .UIHealthBar-picture {
   width:95px;
   height: 95px;
+  image-rendering: pixelated;
 }
 .UIHealthBar-name {
   margin-bottom: 10px;
@@ -95,6 +96,7 @@
   width: 120px;
   height: 50px;
   margin-bottom: 10px;
+  image-rendering: pixelated;
 }
 .UIHealthBar-bar-progress {
   position: absolute;

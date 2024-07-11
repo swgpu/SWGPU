@@ -9,13 +9,13 @@ import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
 class Gfx2SpriteJSS extends Gfx2Drawable implements Poolable<Gfx2SpriteJSS> {
   texture: ImageBitmap | HTMLImageElement;
   textureRect: vec4;
-  flip: [boolean, boolean];
+  offsetFactor: vec2;
 
   constructor() {
     super();
     this.texture = gfx2Manager.getDefaultTexture();
     this.textureRect = [0, 0, 0, 0];
-    this.flip = [false, false];
+    this.offsetFactor = [0, 0];
   }
 
   /**
@@ -38,6 +38,9 @@ class Gfx2SpriteJSS extends Gfx2Drawable implements Poolable<Gfx2SpriteJSS> {
     this.flip[0] = json['FlipX'] ?? false;
     this.flip[1] = json['FlipY'] ?? false;
 
+    this.offsetFactor[0] = json['OffsetFactorX'] ?? 0;
+    this.offsetFactor[1] = json['OffsetFactorY'] ?? 0;
+
     this.boundingRect = Gfx2BoundingRect.createFromCoord(
       json['X'],
       json['Y'],
@@ -52,6 +55,15 @@ class Gfx2SpriteJSS extends Gfx2Drawable implements Poolable<Gfx2SpriteJSS> {
   paint(): void {
     const ctx = gfx2Manager.getContext();
     ctx.scale(this.flip[0] ? -1 : 1, this.flip[1] ? -1 : 1);
+
+    if (this.offsetFactor[0] != 0) {
+      ctx.translate(-this.textureRect[2] * this.offsetFactor[0], 0);
+    }
+
+    if (this.offsetFactor[1] != 0) {
+      ctx.translate(0, -this.textureRect[3] * this.offsetFactor[1]);
+    }
+
     ctx.drawImage(
       this.texture,
       this.textureRect[0],
@@ -100,38 +112,14 @@ class Gfx2SpriteJSS extends Gfx2Drawable implements Poolable<Gfx2SpriteJSS> {
 
   /**
    * Set the normalized offset value.
+   * Note: this offset is independant from the regular drawable pixel based offset.
    * 
    * @param {number} offsetXFactor - The normalized x-coordinate offset value.
    * @param {number} offsetYFactor - The normalized y-coordinate offset value.
    */
   setOffsetNormalized(offsetXFactor: number, offsetYFactor: number) {
-    this.offset[0] = this.textureRect[2] * offsetXFactor;
-    this.offset[1] = this.textureRect[3] * offsetYFactor;
-  }
-
-  /**
-   * Returns two booleans, first is the x-axis flip flag, second is the y-axis flip flag.
-   */
-  getFlip(): [boolean, boolean] {
-    return this.flip;
-  }
-
-  /**
-   * Set flipX.
-   * 
-   * @param {boolean} x - The x-axis flip flag.
-   */
-  setFlipX(x: boolean): void {
-    this.flip[0] = x;
-  }
-
-  /**
-   * Set flipY.
-   * 
-   * @param {boolean} y - The y-axis flip flag.
-   */
-  setFlipY(y: boolean): void {
-    this.flip[1] = y;
+    this.offsetFactor[0] = offsetXFactor;
+    this.offsetFactor[1] = offsetYFactor;
   }
 
   /**

@@ -31,14 +31,14 @@ export class IdleControlsSystem extends DNASystem {
   onEntityUpdate(ts, eid) {
     if (inputManager.isActiveAction('LEFT') || inputManager.isActiveAction('RIGHT')) {
       dnaManager.removeComponent(eid, IdleComponent);
-      dnaManager.addComponent(eid, new RunComponent(6, 0));
+      dnaManager.addComponent(eid, new RunComponent());
     }
   }
 
   onActionOnce(actionId, eid) {
     if (actionId == 'UP') {
       dnaManager.removeComponent(eid, IdleComponent);
-      dnaManager.addComponent(eid, new JumpComponent(-25, 10));
+      dnaManager.addComponent(eid, new JumpComponent());
     }
   }
 }

@@ -28,8 +28,6 @@ class Gfx3SpriteJAS extends Gfx3Sprite implements Poolable<Gfx3SpriteJAS> {
   currentAnimationFrameIndex: number;
   looped: boolean;
   frameProgress: number;
-  offsetXFactor: number;
-  offsetYFactor: number;
 
   constructor() {
     super();
@@ -38,8 +36,6 @@ class Gfx3SpriteJAS extends Gfx3Sprite implements Poolable<Gfx3SpriteJAS> {
     this.currentAnimationFrameIndex = 0;
     this.looped = false;
     this.frameProgress = 0;
-    this.offsetXFactor = 0;
-    this.offsetYFactor = 0;
   }
 
   /**
@@ -54,6 +50,15 @@ class Gfx3SpriteJAS extends Gfx3Sprite implements Poolable<Gfx3SpriteJAS> {
     if (!json.hasOwnProperty('Ident') || json['Ident'] != 'JAS') {
       throw new Error('Gfx3SpriteJAS::loadFromFile(): File not valid !');
     }
+
+    this.offset[0] = json['OffsetX'] ?? 0;
+    this.offset[1] = json['OffsetY'] ?? 0;
+
+    this.flip[0] = json['FlipX'] ?? false;
+    this.flip[1] = json['FlipY'] ?? false;
+
+    this.offsetFactor[0] = json['OffsetFactorX'] ?? 0;
+    this.offsetFactor[1] = json['OffsetFactorY'] ?? 0;
 
     this.animations = [];
     for (const obj of json['Animations']) {
@@ -115,9 +120,12 @@ class Gfx3SpriteJAS extends Gfx3Sprite implements Poolable<Gfx3SpriteJAS> {
     const fvx = this.flip[0] ? 1 - vx : vx;
     const fvy = this.flip[1] ? 1 - vy : vy;
 
-    if (this.offsetXFactor != 0 || this.offsetYFactor != 0) {
-      this.offset[0] = currentFrame.width * this.offsetXFactor;
-      this.offset[1] = currentFrame.height * this.offsetYFactor;
+    if (this.offsetFactor[0] != 0) {
+      this.offset[0] = currentFrame.width * this.offsetFactor[0];
+    }
+
+    if (this.offsetFactor[1] != 0) {
+      this.offset[1] = currentFrame.height * this.offsetFactor[1];
     }
 
     this.beginVertices(6);
@@ -196,17 +204,6 @@ class Gfx3SpriteJAS extends Gfx3Sprite implements Poolable<Gfx3SpriteJAS> {
    */
   getCurrentAnimationFrameIndex(): number {
     return this.currentAnimationFrameIndex;
-  }
-
-  /**
-   * Set the normalized offset value.
-   * 
-   * @param {number} offsetXFactor - The offsetXFactor represent the normalized x-coordinate offset value.
-   * @param {number} offsetYFactor - The offsetYFactor represent the normalized y-coordinate offset value.
-   */
-  setOffsetNormalized(offsetXFactor: number, offsetYFactor: number) {
-    this.offsetXFactor = offsetXFactor;
-    this.offsetYFactor = offsetYFactor;
   }
 
   /**

@@ -194,6 +194,13 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## Changelog
 ```
+- [Ver. 1.2.1]  Default engine manager added.
+- [Ver. 1.2.1]  ECS Components check optimized with the use of Set.
+- [Ver. 1.2.1]  ECS query is added.
+- [Ver. 1.2.1]  ECS nice sugar methods is added.
+- [Ver. 1.2.1]  Fix offset factor on all sprite classes.
+- [Ver. 1.2.1]  Tile collision method added to Gfx2TileMap.
+- [Ver. 1.2.1]  Platformer template added.
 - [Ver. 1.2.0]  Binary format for 3D files added.
 - [Ver. 1.1.14] Tilemap SpriteFusion format added.
 - [Ver. 1.1.13] Cylinder collision class added.
@@ -212,8 +219,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 - [Ver. 1.0.3]  Camera orbit has been added.
 ```
 
-## Roadmap (fr)
+## Roadmap
 ```
+<<<<<<< HEAD
 - Créer un système de queries découplé des systèmes ecs
 - Passer de SpriteFusion à https://rxi.itch.io/tilekit
 - Ajouter fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master
@@ -228,6 +236,25 @@ If you have a suggestion that would make this better, please fork the repo and c
 - Ajouter export MAT dans l'addon blender
 - Ajouter export pack dans l'addon blender (export tous les objets présent dans les catégories valides (jam, jsm, jwm, etc...)
 - Test des lumières sur le shader toon
+=======
+- Ajouter parallax scrolling
+
+- VEC2_MIN, VEC2_MAX, VEC2_CLAMP, VEC_FLOOR et VEC_CEIL dans UT
+- Ajouter multi-canvas (gfx2)
+- Ajouter une fonction render sur gfx2 (analogue à gfx3)
+
+Export:
+- Replace SpriteFusion import by Tilekit (https://rxi.itch.io/tilekit). [Ari]
+- Add AseSprite import. [Ari]
+- Add Spritemancer import (https://codemanu.itch.io/spritemancer). [Ari]
+- Add export MAT on Blender addon.
+- Add export pack on Blender addon (export tous les objets présent dans les catégories valides (jam, jsm, jwm, etc...)
+
+Extra:
+- Add fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master.
+- Add pooling soundManager.
+- Test light on toon shader.
+>>>>>>> 9ca93b4 (update to 1.2.1 (not-stable))
 ```
 
 ## License 

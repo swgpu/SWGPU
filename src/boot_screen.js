@@ -9,6 +9,7 @@ import { BoardScreen } from './templates/board/board_screen';
 import { FightScreen } from './templates/fight/fight_screen';
 import { FPSScreen } from './templates/fps/fps_screen';
 import { IsoScreen } from './templates/iso/iso_screen';
+import { PlatformerScreen } from './templates/platformer/platformer_screen';
 import { PrerenderedScreen } from './templates/prerendered/prerendered_screen';
 import { RPGScreen } from './templates/rpg/rpg_screen';
 import { ShootemupScreen } from './templates/shootemup/shootemup_screen';
@@ -58,6 +59,7 @@ class BootScreen extends Screen {
     this.uiTemplates.add('12', '2D Tilemap Pathfinding');
     this.uiTemplates.add('13', '2D Triple Triad');
     this.uiTemplates.add('14', '2D Visual Novel');
+    this.uiTemplates.add('15', '2D Platformer');
     this.uiTemplates.setVisible(false);
     uiManager.addWidget(this.uiTemplates, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
@@ -141,6 +143,9 @@ class BootScreen extends Screen {
     }
     else if (data.id == 14) {
       screenManager.requestSetScreen(new VisualNovelScreen());
+    }
+    else if (data.id == 15) {
+      screenManager.requestSetScreen(new PlatformerScreen());
     }
   }
 
