@@ -1,6 +1,6 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
 import { UT } from '../core/utils';
-import { Gfx2SpriteJSS } from '../gfx2_sprite/gfx2_sprite_jss';
+import { Gfx2SpriteJSS } from './gfx2_sprite_jss';
 
 type ParallaxDirection = 'horizontal' | 'vertical';
 

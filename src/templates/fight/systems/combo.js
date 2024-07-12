@@ -9,8 +9,7 @@ import { HitComponent } from './hit';
 import { DrawableComponent } from './drawable';
 import { IdleComponent } from './idle';
 import { RunComponent } from './run';
-import { MoveComponent } from './move';
-import { SpecialAttackComponent } from './special_attack';
+import { VelocityComponent } from './velocity';
 // ---------------------------------------------------------------------------------------
 
 export class CASComponent extends DNAComponent {
@@ -65,8 +64,8 @@ export class CASSystem extends DNASystem {
         dnaManager.removeComponentIfExist(eid, IdleComponent);
         dnaManager.removeComponentIfExist(eid, RunComponent);
 
-        const move = dnaManager.getComponent(eid, MoveComponent);
-        move.velocityX = 0;
+        const velocity = dnaManager.getComponent(eid, VelocityComponent);
+        velocity.x = 0;
         cas.currentActionAge = 0;
         cas.currentAction = '';
         dnaManager.addComponent(eid, combo);
@@ -113,7 +112,7 @@ export class ComboSystem extends DNASystem {
     const combo = dnaManager.getComponent(eid, ComboComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
     const position = dnaManager.getComponent(eid, PositionComponent);
-    const move = dnaManager.getComponent(eid, MoveComponent);
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
 
     if (drawable.jas.getCurrentAnimationFrameIndex() == drawable.lastAnimationFrameIndex) {
       return;
@@ -136,7 +135,7 @@ export class ComboSystem extends DNASystem {
       dnaManager.addComponent(hitId, new DrawableComponent({ jas: jas }));
       dnaManager.addComponent(hitId, new HitComponent(Object.assign(hit, {
         owner: eid,
-        direction: move.direction
+        direction: velocity.direction
       })));
     }
   }

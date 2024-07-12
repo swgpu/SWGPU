@@ -5,7 +5,7 @@ import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { RunComponent } from './run';
 import { JumpComponent } from './jump';
-import { MoveComponent } from './move';
+import { VelocityComponent } from './velocity';
 import { DrawableComponent } from './drawable';
 // ---------------------------------------------------------------------------------------
 
@@ -47,12 +47,14 @@ export class IdleSystem extends DNASystem {
   constructor() {
     super();
     super.addRequiredComponentTypename('Idle');
+    super.addRequiredComponentTypename('Velocity');
+    super.addRequiredComponentTypename('Drawable');
   }
 
   onEntityUpdate(ts, eid) {
-    const move = dnaManager.getComponent(eid, MoveComponent);
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
-    move.velocityX = 0;
+    velocity.x = 0;
     drawable.jas.play('IDLE', true, true);
   }
 }

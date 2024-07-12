@@ -188,12 +188,42 @@ class InputManager {
   }
 
   /**
-   * Checks if an action is currently active.
+   * Checks if an action is just active.
    * 
    * @param {string} actionId - The action identifier.
    */
   isJustActiveAction(actionId: string): boolean {
     return this.actionOnceMap.get(actionId) == 1;
+  }
+
+  /**
+   * Checks if all specified actions is currently active.
+   * 
+   * @param {Array<string>} actionIds - The action identifier.
+   */
+  isActiveActions(actionIds: Array<string>): boolean {
+    for (const actionId of actionIds) {
+      if (!this.actionMap.get(actionId)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Checks if all specified actions is just active.
+   * 
+   * @param {Array<string>} actionIds - The action identifier.
+   */
+  isJustActiveActions(actionIds: Array<string>): boolean {
+    for (const actionId of actionIds) {
+      if (this.actionOnceMap.get(actionId) != 1) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /**

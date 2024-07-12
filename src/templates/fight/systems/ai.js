@@ -5,6 +5,7 @@ import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { PositionComponent } from './position';
 import { MoveComponent } from './move';
+import { VelocityComponent } from './velocity';
 import { DownComponent } from './down';
 import { IdleComponent } from './idle';
 import { JumpComponent } from './jump';
@@ -55,15 +56,15 @@ export class AISystem extends DNASystem {
     this.commandRegister['CMD_RUN'] = function(eid, enemyId) {
       if (dnaManager.hasComponent(eid, IdleComponent) || dnaManager.hasComponent(eid, RunComponent)) {
         const position = dnaManager.getComponent(eid, PositionComponent);
-        const move = dnaManager.getComponent(eid, MoveComponent);
+        const velocity = dnaManager.getComponent(eid, VelocityComponent);
         const positionEnemy = dnaManager.getComponent(enemyId, PositionComponent);
         const delta = positionEnemy.x - position.x;
   
         if (delta > 0) {
-          move.direction = +1;
+          velocity.direction = +1;
         }
         else if (delta < 0) {
-          move.direction = -1;
+          velocity.direction = -1;
         }
   
         dnaManager.removeComponentIfExist(eid, IdleComponent);
@@ -96,12 +97,12 @@ export class AISystem extends DNASystem {
       }
 
       if (dnaManager.hasComponent(eid, IdleComponent) || dnaManager.hasComponent(eid, RunComponent)) {
-        const move = dnaManager.getComponent(eid, MoveComponent);
+        const velocity = dnaManager.getComponent(eid, VelocityComponent);
         const cas = dnaManager.getComponent(eid, CASComponent);
         const combo = cas.comboComponents.find(c => c.name == comboName);
   
         if (combo) {
-          move.velocityX = 0;
+          velocity.x = 0;
           cas.currentActionAge = 0;
           cas.currentAction = '';
           dnaManager.removeComponentIfExist(eid, IdleComponent);

@@ -57,8 +57,8 @@ export class InputSystem extends DNASystem {
 
     if (moving) {
       const moveAngle = UT.VEC2_ANGLE([mx, mz]);
-      mx = Math.cos(moveAngle) * entity.speed * (ts / 1000);
-      mz = Math.sin(moveAngle) * entity.speed * (ts / 1000);
+      mx = Math.cos(moveAngle) * entity.speed;
+      mz = Math.sin(moveAngle) * entity.speed;
     }
 
     entity.velocity[0] = mx;

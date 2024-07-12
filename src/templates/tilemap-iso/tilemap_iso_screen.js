@@ -39,16 +39,16 @@ class TilemapIsoScreen extends Screen {
 
   update(ts) {
     if (inputManager.isActiveAction('LEFT')) {
-      this.movePlayer(UT.VEC2_ISO_FORWARD, 'FORWARD');
+      this.move(ts, this.controller, UT.VEC2_ISO_FORWARD, 'FORWARD');
     }
     else if (inputManager.isActiveAction('RIGHT')) {
-      this.movePlayer(UT.VEC2_ISO_BACKWARD, 'BACKWARD');
+      this.move(ts, this.controller, UT.VEC2_ISO_BACKWARD, 'BACKWARD');
     }
     else if (inputManager.isActiveAction('UP')) {
-      this.movePlayer(UT.VEC2_ISO_RIGHT, 'RIGHT');
+      this.move(ts, this.controller, UT.VEC2_ISO_RIGHT, 'RIGHT');
     }
     else if (inputManager.isActiveAction('DOWN')) {
-      this.movePlayer(UT.VEC2_ISO_LEFT, 'LEFT');
+      this.move(ts, this.controller, UT.VEC2_ISO_LEFT, 'LEFT');
     }
     else {
       this.controller.play('IDLE_' + this.controller.getDirection(), true);
@@ -69,18 +69,21 @@ class TilemapIsoScreen extends Screen {
     this.collisionLayer.draw();
   }
 
-  movePlayer(vdir, direction) {
-    const move = UT.VEC2_2D_TO_ISO(vdir);
-    this.controller.translate(move[0], move[1]);
-    this.controller.setDirection(direction);
-    this.controller.play('RUN_' + direction, true);
+  move(ts, controller, dir, direction) {
+    const move = UT.VEC2_2D_TO_ISO(dir);
+    const mx = move[0] * controller.getSpeed() * (ts / 100);
+    const mz = move[1] * controller.getSpeed() * (ts / 100);
 
-    const pts = this.controller.getCollisionPoints();
+    controller.translate(mx, mz);
+    controller.setDirection(direction);
+    controller.play('RUN_' + direction, true);  
+
+    const pts = controller.getCollisionPoints();
     const loc0 = this.tilemap.getLocationFromIso(pts[0][0], pts[0][1]);
     const loc1 = this.tilemap.getLocationFromIso(pts[1][0], pts[1][1]);
 
     if (this.collisionTileLayer.getTile(loc0[0], loc0[1]) == 1 || this.collisionTileLayer.getTile(loc1[0], loc1[1]) == 1) {
-      this.controller.translate(-move[0], -move[1]);
+      controller.translate(-mx, -mz);
     }
   }
 }

@@ -25,6 +25,14 @@ export class PhysicsComponent extends DNAComponent {
     this.gravityCoefficient = 0.8;
     this.gravityMax = 10;
   }
+
+  getMinBound(x: number, y: number, z: number): vec3 {
+    return [x - this.radius, y, z - this.radius];
+  }
+
+  getMaxBound(x: number, y: number, z: number): vec3 {
+    return [x + this.radius, y + this.height, z + this.radius];
+  }
 }
 
 export class PhysicsSystem extends DNASystem {
@@ -44,9 +52,9 @@ export class PhysicsSystem extends DNASystem {
       entity.z,
       physics.radius,
       physics.height,
-      entity.velocity[0],
-      entity.velocity[1],
-      entity.velocity[2],
+      entity.velocity[0] * (ts / 1000),
+      entity.velocity[1] * (ts / 1000),
+      entity.velocity[2] * (ts / 1000),
       physics.lift
     );
 
@@ -58,26 +66,15 @@ export class PhysicsSystem extends DNASystem {
       entity.velocity[1] = 0;
     }
     else {
-      entity.velocity[1] -= 0.01;
+      entity.velocity[1] -= 0.1 * (ts / 1000);
     }
   }
 
   onEntityDraw(eid: number): void {
     const physics = dnaManager.getComponent(eid, PhysicsComponent);
     const entity = dnaManager.getComponent(eid, EntityComponent);
-
-    const min: vec3 = [
-      entity.x - physics.radius,
-      entity.y,
-      entity.z - physics.radius
-    ];
-
-    const max: vec3 = [
-      entity.x + physics.radius,
-      entity.y + physics.height,
-      entity.z + physics.radius
-    ];
-  
+    const min = physics.getMinBound(entity.x, entity.y, entity.z);
+    const max = physics.getMaxBound(entity.x, entity.y, entity.z); 
     gfx3DebugRenderer.drawBoundingBox(UT.MAT4_IDENTITY(), min, max);
   }
 }

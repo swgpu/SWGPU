@@ -5,7 +5,7 @@ import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { JumpComponent } from './jump';
 import { IdleComponent } from './idle';
-import { MoveComponent } from './move';
+import { VelocityComponent } from './velocity';
 import { DrawableComponent } from './drawable';
 // ---------------------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ export class RunControlsComponent extends DNAComponent {
 }
 
 export class RunComponent extends DNAComponent {
-  constructor(speed = 40) {
+  constructor(speed = 20) {
     super('Run');
     this.speed = speed;
   }
@@ -27,29 +27,28 @@ export class RunControlsSystem extends DNASystem {
     super();
     super.addRequiredComponentTypename('RunControls');
     super.addRequiredComponentTypename('Run');
-    super.addRequiredComponentTypename('Move');
+    super.addRequiredComponentTypename('Velocity');
   }
 
   onEntityUpdate(ts, eid) {
-    const move = dnaManager.getComponent(eid, MoveComponent);
-    let action = false;
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
+    const leftActive = inputManager.isActiveAction('LEFT');
+    const rightActive = inputManager.isActiveAction('RIGHT');
+    const upJustActive = inputManager.isJustActiveAction('UP');
 
-    if (inputManager.isActiveAction('LEFT')) {
-      action = true;
-      move.direction = -1;
+    if (leftActive) {
+      velocity.direction = -1;
     }
-    else if (inputManager.isActiveAction('RIGHT')) {
-      action = true;
-      move.direction = +1;
+    else if (rightActive) {
+      velocity.direction = +1;
     }
 
-    if (inputManager.isActiveAction('UP')) {
-      action = true;
+    if (upJustActive) {
       dnaManager.removeComponent(eid, RunComponent);
       dnaManager.addComponent(eid, new JumpComponent());
     }
 
-    if (!action) {
+    if (!leftActive && !rightActive && !upJustActive) {
       dnaManager.removeComponent(eid, RunComponent);
       dnaManager.addComponent(eid, new IdleComponent());
     }
@@ -61,7 +60,7 @@ export class RunSystem extends DNASystem {
     super();
     super.addRequiredComponentTypename('Run');
     super.addRequiredComponentTypename('Drawable');
-    super.addRequiredComponentTypename('Move');
+    super.addRequiredComponentTypename('Velocity');
   }
 
   onEntityBind(eid) {
@@ -71,24 +70,10 @@ export class RunSystem extends DNASystem {
 
   onEntityUpdate(ts, eid) {
     const run = dnaManager.getComponent(eid, RunComponent);
-    const move = dnaManager.getComponent(eid, MoveComponent);
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
-    let velocity = 0;
 
-    if (move.velocityY > 0) {
-      drawable.jas.play('FALLOF', false, true);
-    }
-    else {
-      drawable.jas.play('RUN', true, true);
-    }
-
-    if (move.direction == -1) {
-      velocity += run.speed * move.direction * (ts / 100);
-      move.velocityX = velocity;
-    }
-    else if (move.direction == +1) {
-      velocity += run.speed * move.direction * (ts / 100);
-      move.velocityX = velocity;
-    }
+    drawable.jas.play('RUN', true, true);
+    velocity.x = run.speed * velocity.direction;
   }
 }

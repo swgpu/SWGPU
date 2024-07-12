@@ -27,8 +27,8 @@ export class AsteroidSystem extends DNASystem {
 
   onEntityUpdate(ts: number, eid: number): void {
     const asteroid = dnaManager.getComponent(eid, AsteroidComponent);
+    asteroid.jss.translate(0, 7 * (ts / 100));
 
-    asteroid.jss.translate(0, 0.2);
     if (asteroid.jss.getPositionY() > 300) {
       dnaManager.removeEntity(eid);
       return;

@@ -18,8 +18,8 @@ export class SpecialAttackComponent extends DNAComponent {
 export class SpecialAttackSystem extends DNASystem {
   constructor(gameScreen) {
     super();
-    this.gameScreen = gameScreen;
     super.addRequiredComponentTypename('SpecialAttack');
+    this.gameScreen = gameScreen;
   }
 
   async onEntityBind(eid) {
@@ -33,6 +33,8 @@ export class SpecialAttackSystem extends DNASystem {
     }
 
     const specialAttack = dnaManager.getComponent(eid, SpecialAttackComponent);
+    specialAttack.gfx.reset();
+
     setTimeout(() => this.handleTimeout(eid), specialAttack.duration * 1000);
   }
 
@@ -102,5 +104,11 @@ class GfxSpecialAttack extends Gfx2Drawable {
     ctx.globalAlpha = 1;
 
     ctx.restore();
+  }
+
+  reset() {
+    this.textX = 0;
+    this.opacity = 0;
+    this.age = 0;
   }
 }

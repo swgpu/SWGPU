@@ -1,7 +1,9 @@
 import { dnaManager } from '@lib/dna/dna_manager';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
+// ---------------------------------------------------------------------------------------
 import { PositionComponent } from './position';
+import { VelocityComponent } from './velocity';
 // ---------------------------------------------------------------------------------------
 
 export class DrawableComponent extends DNAComponent {
@@ -11,7 +13,6 @@ export class DrawableComponent extends DNAComponent {
     this.jss = options.jss;
     this.zIndex = options.zIndex;
     this.lastAnimationFrameIndex = -1;
-    this.updated = true;
   }
 }
 
@@ -34,31 +35,25 @@ export class DrawableSystem extends DNASystem {
   onEntityUpdate(ts, eid) {
     const position = dnaManager.getComponent(eid, PositionComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
+    const sprite = drawable.jss ?? drawable.jas;
 
-    if (!drawable.updated) {
-      return;
+    if (dnaManager.hasComponent(eid, VelocityComponent)) {
+      const velocity = dnaManager.getComponent(eid, VelocityComponent);
+      if (velocity.x > 0.01) {
+        sprite.setFlipX(false);
+      }
+      if (velocity.x < -0.01) {
+        sprite.setFlipX(true);
+      }
     }
 
-    if (drawable.jss) {
-      drawable.jss.setPosition(position.x, position.y);
-      drawable.jss.update(ts);
-    }
-
-    if (drawable.jas) {
-      drawable.jas.setPosition(position.x, position.y);
-      drawable.jas.update(ts);
-    }
+    sprite.setPosition(position.x, position.y);
+    sprite.update(ts);
   }
 
   onEntityDraw(eid) {
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
-
-    if (drawable.jss) {
-      drawable.jss.draw();
-    }
-
-    if (drawable.jas) {
-      drawable.jas.draw();
-    }
+    const sprite = drawable.jss ?? drawable.jas;
+    sprite.draw();
   }
 }

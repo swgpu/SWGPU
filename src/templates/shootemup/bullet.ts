@@ -26,8 +26,8 @@ export class BulletSystem extends DNASystem {
 
   onEntityUpdate(ts: number, eid: number): void {
     const bullet = dnaManager.getComponent(eid, BulletComponent);
+    bullet.jss.translate(0, -6 * (ts / 100));
 
-    bullet.jss.translate(0, -0.6);
     if (bullet.jss.getPositionY() < -300) {
       dnaManager.removeEntity(eid);
       return;

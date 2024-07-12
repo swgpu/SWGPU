@@ -3,7 +3,6 @@ import { dnaManager } from '@lib/dna/dna_manager';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 import { PositionComponent } from './position';
-import { MoveComponent } from './move';
 // ---------------------------------------------------------------------------------------
 
 export class FighterComponent extends DNAComponent {
@@ -18,29 +17,11 @@ export class FighterComponent extends DNAComponent {
 }
 
 export class FighterSystem extends DNASystem {
-  constructor(bgWidth, bgHeight) {
+  constructor() {
     super();
-    this.bgWidth = bgWidth;
-    this.bgHeight = bgHeight;
     super.addRequiredComponentTypename('Fighter');
     super.addRequiredComponentTypename('Position');
-    super.addRequiredComponentTypename('Move');
-  }
-
-  onEntityUpdate(ts, eid) {
-    const fighter = dnaManager.getComponent(eid, FighterComponent);
-    const position = dnaManager.getComponent(eid, PositionComponent);
-    const move = dnaManager.getComponent(eid, MoveComponent);
-
-    const nextPositionX = position.x + move.velocityX;
-    const halfWidth = fighter.w * 0.5;
-
-    if (nextPositionX - halfWidth < 0) {
-      move.velocityX = 0;
-    }
-    else if (nextPositionX + halfWidth > this.bgWidth) {
-      move.velocityX = 0;
-    }
+    super.addRequiredComponentTypename('Velocity');
   }
 
   onEntityDraw(eid) {

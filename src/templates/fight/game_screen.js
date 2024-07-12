@@ -11,7 +11,6 @@ import { RunControlsSystem, RunSystem, RunControlsComponent } from './systems/ru
 import { JumpControlsSystem, JumpSystem, JumpControlsComponent } from './systems/jump';
 import { CASSystem, ComboSystem, CASComponent } from './systems/combo';
 import { MoveSystem, MoveComponent } from './systems/move';
-import { GravitySystem, GravityComponent } from './systems/gravity';
 import { HitSystem } from './systems/hit';
 import { DamageSystem } from './systems/damage';
 import { DrawableSystem, DrawableComponent } from './systems/drawable';
@@ -19,6 +18,7 @@ import { FighterSystem, FighterComponent } from './systems/fighter';
 import { SpecialAttackSystem } from './systems/special_attack';
 import { PlatformComponent } from './systems/platform';
 import { PositionComponent } from './systems/position';
+import { VelocityComponent } from './systems/velocity';
 import { AIComponent, AISystem } from './systems/ai';
 import { DownSystem, DownControlsComponent, DownControlsSystem } from './systems/down';
 import { ComboFactory } from './combo_factory';
@@ -45,9 +45,8 @@ class GameScreen extends Screen {
       new DownSystem(),
       new CASSystem(),
       new ComboSystem(),
-      new FighterSystem(800, 600),
-      new GravitySystem(),
-      new MoveSystem(),
+      new FighterSystem(),
+      new MoveSystem(800, 600),
       new HitSystem(),
       new DamageSystem(),
       new DrawableSystem(),
@@ -112,6 +111,7 @@ async function CREATE_PLAYER1(name) {
   const player = dnaManager.createEntity();
   dnaManager.addComponent(player, new FighterComponent(1, 100, damageJAS, 88, 88));
   dnaManager.addComponent(player, new PositionComponent(190, 490));
+  dnaManager.addComponent(player, new VelocityComponent());
   dnaManager.addComponent(player, new DrawableComponent({ jas: playerJAS, zIndex: 2 }));
   dnaManager.addComponent(player, new MoveComponent());
   dnaManager.addComponent(player, new IdleControlsComponent());
@@ -119,7 +119,6 @@ async function CREATE_PLAYER1(name) {
   dnaManager.addComponent(player, new JumpControlsComponent());
   dnaManager.addComponent(player, new DownControlsComponent());
   dnaManager.addComponent(player, new IdleComponent());
-  dnaManager.addComponent(player, new GravityComponent(2));
   dnaManager.addComponent(player, new CASComponent(playerJAS.animations, playerJAS.texture, [
     await ComboFactory.PUNCH(name)
   ]));
@@ -141,10 +140,10 @@ async function CREATE_PLAYER2(name) {
   const player = dnaManager.createEntity();
   dnaManager.addComponent(player, new FighterComponent(2, 100, damageJAS, 88, 88));
   dnaManager.addComponent(player, new PositionComponent(490, 490));
+  dnaManager.addComponent(player, new VelocityComponent());
   dnaManager.addComponent(player, new DrawableComponent({ jas: playerJAS, zIndex: 2 }));
   dnaManager.addComponent(player, new IdleComponent());
   dnaManager.addComponent(player, new MoveComponent());
-  dnaManager.addComponent(player, new GravityComponent(2));
   dnaManager.addComponent(player, new AIComponent(60, AIPatternFactory.BASE()));
   dnaManager.addComponent(player, new CASComponent(playerJAS.animations, playerJAS.texture, [
     await ComboFactory.PUNCH(name),

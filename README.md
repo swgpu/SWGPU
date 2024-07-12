@@ -194,7 +194,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## Changelog
 ```
-- [Ver. 1.2.1]  Default engine manager added.
+- [Ver. 1.2.1]  Engine manager added.
 - [Ver. 1.2.1]  ECS Components check optimized with the use of Set.
 - [Ver. 1.2.1]  ECS query is added.
 - [Ver. 1.2.1]  ECS nice sugar methods is added.
@@ -221,40 +221,21 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## Roadmap
 ```
-<<<<<<< HEAD
-- Créer un système de queries découplé des systèmes ecs
-- Passer de SpriteFusion à https://rxi.itch.io/tilekit
-- Ajouter fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master
-- Ajouter une fonction static createFromFile pour toute classe valide
-- Ajouter un loadFromAsesprite & https://codemanu.itch.io/spritemancer
-- Ajouter multi-canvas (gfx2)
-- Corriger SetOffsetNormalized dans JAS
-- Inversion de l'axe Y (gfx2)
-- VEC2_MIN, VEC2_MAX, VEC2_CLAMP, VEC_FLOOR et VEC_CEIL dans UT
-- Ajouter justPressed ou justReleased dans inputManager
-- Ajouter pooling soundManager
-- Ajouter export MAT dans l'addon blender
-- Ajouter export pack dans l'addon blender (export tous les objets présent dans les catégories valides (jam, jsm, jwm, etc...)
-- Test des lumières sur le shader toon
-=======
-- Ajouter parallax scrolling
-
-- VEC2_MIN, VEC2_MAX, VEC2_CLAMP, VEC_FLOOR et VEC_CEIL dans UT
-- Ajouter multi-canvas (gfx2)
+- VEC2_MIN, VEC2_MAX, VEC2_CLAMP, VEC_FLOOR et VEC_CEIL dans UT UT.GET_BOUNDS
 - Ajouter une fonction render sur gfx2 (analogue à gfx3)
 
 Export:
-- Replace SpriteFusion import by Tilekit (https://rxi.itch.io/tilekit). [Ari]
-- Add AseSprite import. [Ari]
-- Add Spritemancer import (https://codemanu.itch.io/spritemancer). [Ari]
-- Add export MAT on Blender addon.
-- Add export pack on Blender addon (export tous les objets présent dans les catégories valides (jam, jsm, jwm, etc...)
+- Replace SpriteFusion import by Tilekit (https://rxi.itch.io/tilekit). [Black]
+- Add AseSprite import. [Black]
+- Add Spritemancer import (https://codemanu.itch.io/spritemancer). [Black]
+- Add export MAT on Blender addon. [Black]
+- Add export pack on Blender addon (export tous les objets présent dans les catégories valides (jam, jsm, jwm, etc...) [Black]
 
 Extra:
+- Add second normal-map and possibility to scroll normal-maps
 - Add fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master.
 - Add pooling soundManager.
 - Test light on toon shader.
->>>>>>> 9ca93b4 (update to 1.2.1 (not-stable))
 ```
 
 ## License 

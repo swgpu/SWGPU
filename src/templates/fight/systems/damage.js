@@ -5,7 +5,7 @@ import { DNAComponent } from '@lib/dna/dna_component';
 import { IdleComponent } from './idle';
 import { DownComponent } from './down';
 import { FighterComponent } from './fighter';
-import { MoveComponent } from './move';
+import { VelocityComponent } from './velocity';
 import { DrawableComponent } from './drawable';
 import { PositionComponent } from './position';
 // ---------------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ export class DamageSystem extends DNASystem {
     super();
     super.addRequiredComponentTypename('Damage');
     super.addRequiredComponentTypename('Position');
-    super.addRequiredComponentTypename('Move');
+    super.addRequiredComponentTypename('Velocity');
     super.addRequiredComponentTypename('Drawable');
     this.paused = false;
     this.frictionX = 0.5;
@@ -37,11 +37,11 @@ export class DamageSystem extends DNASystem {
   onEntityBind(eid) {
     const dmg = dnaManager.getComponent(eid, DamageComponent);
     const fighter = dnaManager.getComponent(eid, FighterComponent);
-    const move = dnaManager.getComponent(eid, MoveComponent);
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
 
     if (dmg.velocityImpact) {
-      move.velocityX = dmg.velocityImpact[0];
-      move.velocityY = dmg.velocityImpact[1];
+      velocity.x = dmg.velocityImpact[0];
+      velocity.y = dmg.velocityImpact[1];
     }
 
     fighter.health -= dmg.damageHP;
@@ -58,7 +58,7 @@ export class DamageSystem extends DNASystem {
     }
 
     const dmg = dnaManager.getComponent(eid, DamageComponent);
-    const move = dnaManager.getComponent(eid, MoveComponent);
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
 
     if (dmg.age > dmg.maxAge) {
@@ -74,28 +74,28 @@ export class DamageSystem extends DNASystem {
       return;
     }
 
-    if (move.velocityY < 0) {
+    if (velocity.y < 0) {
       dmg.airDropped = true;
       drawable.jas.play('PAIN_UP', false, true);
     }
-    else if (move.velocityY > 0) {
+    else if (velocity.y > 0) {
       dmg.airDropped = true;
       drawable.jas.play('PAIN_DOWN', false, true);
     }
 
-    if (move.velocityY == 0 && dmg.airDropped) {
+    if (velocity.y == 0 && dmg.airDropped) {
       drawable.jas.play('PAIN_GROUND', false, true);
     }
-    else if (move.velocityY == 0) {
+    else if (velocity.y == 0) {
       drawable.jas.play('PAIN', false, false);
     }
 
-    if (move.velocityX > 0) {
-      move.velocityX = Math.max(move.velocityX - this.frictionX, 0);
+    if (velocity.x > 0) {
+      velocity.x = Math.max(velocity.x - this.frictionX, 0);
     }
 
-    if (move.velocityX < 0) {
-      move.velocityX = Math.min(move.velocityX + this.frictionX, 0);
+    if (velocity.x < 0) {
+      velocity.x = Math.min(velocity.x + this.frictionX, 0);
     }
 
     dmg.age += ts / 1000.0;

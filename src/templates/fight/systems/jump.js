@@ -4,9 +4,9 @@ import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { IdleComponent } from './idle';
-import { MoveComponent } from './move';
+import { VelocityComponent } from './velocity';
 import { DrawableComponent } from './drawable';
-import { GravityComponent } from './gravity';
+import { MoveComponent } from './move';
 // ---------------------------------------------------------------------------------------
 
 export class JumpControlsComponent extends DNAComponent {
@@ -16,7 +16,7 @@ export class JumpControlsComponent extends DNAComponent {
 }
 
 export class JumpComponent extends DNAComponent {
-  constructor(accelerationY = -15, doubleJumpGapTime = 10, numJump = 1) {
+  constructor(accelerationY = -100, doubleJumpGapTime = 10, numJump = 1) {
     super('Jump');
     this.doubleJumpGapTime = doubleJumpGapTime;
     this.numJump = numJump;
@@ -29,28 +29,29 @@ export class JumpControlsSystem extends DNASystem {
   constructor() {
     super();
     super.addRequiredComponentTypename('JumpControls');
-    super.addRequiredComponentTypename('Jump');    
+    super.addRequiredComponentTypename('Jump');
+    super.addRequiredComponentTypename('Velocity');
   }
 
   onEntityUpdate(ts, eid) {
-    const move = dnaManager.getComponent(eid, MoveComponent);
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
     if (inputManager.isActiveAction('LEFT')) {
-      move.direction = -1;
+      velocity.direction = -1;
     }
     else if (inputManager.isActiveAction('RIGHT')) {
-      move.direction = +1;
+      velocity.direction = +1;
     }
   }
 
   onActionOnce(actionId, eid) {
     const jump = dnaManager.getComponent(eid, JumpComponent);
-    const move = dnaManager.getComponent(eid, MoveComponent);
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
     const age = Date.now() - jump.createdAt;
 
-    if (actionId == 'UP' && age > jump.doubleJumpGapTime && move.velocityY < 0 && jump.numJump <= 1) {
-      move.velocityY = 0;
+    if (actionId == 'UP' && age > jump.doubleJumpGapTime && velocity.y < 0 && jump.numJump <= 1) {
+      velocity.y = 0;
       dnaManager.removeComponent(eid, JumpComponent);
-      dnaManager.addComponent(eid, new JumpComponent(-15, 3, 2));
+      dnaManager.addComponent(eid, new JumpComponent(-90, 3, 2));
     }
   }
 }
@@ -59,30 +60,32 @@ export class JumpSystem extends DNASystem {
   constructor() {
     super();
     super.addRequiredComponentTypename('Jump');
-    super.addRequiredComponentTypename('Move');
+    super.addRequiredComponentTypename('Velocity');
     super.addRequiredComponentTypename('Drawable');
-    super.addRequiredComponentTypename('Gravity');
+    super.addRequiredComponentTypename('Move');
   }
 
   onEntityBind(eid) {
     const jump = dnaManager.getComponent(eid, JumpComponent);
-    const move = dnaManager.getComponent(eid, MoveComponent);
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
+    const move = dnaManager.getComponent(eid, MoveComponent);
 
-    move.velocityY += jump.accelerationY;
+    move.onFloor = false;
+    velocity.y += jump.accelerationY;
     drawable.jas.play('JUMP', false, true);
   }
 
   onEntityUpdate(ts, eid) {
-    const move = dnaManager.getComponent(eid, MoveComponent);
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
-    const gravity = dnaManager.getComponent(eid, GravityComponent);
+    const move = dnaManager.getComponent(eid, MoveComponent);
 
-    if (move.velocityY > 0) {
+    if (velocity.y > 0) {
       drawable.jas.play('FALLOF', false, true);
     }
 
-    if (move.velocityY == 0 && gravity.onFloor) {
+    if (move.onFloor) {
       dnaManager.removeComponent(eid, JumpComponent);
       dnaManager.addComponent(eid, new IdleComponent());
     }

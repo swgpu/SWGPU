@@ -11,6 +11,7 @@ class Controller extends Gfx2Drawable {
     this.direction = 'FORWARD';
     this.depth = 20;
     this.width = 20;
+    this.speed = 8;
   }
 
   async load() {
@@ -52,6 +53,10 @@ class Controller extends Gfx2Drawable {
     return this.width;
   }
 
+  getSpeed() {
+    return this.speed;
+  }
+  
   getCollisionPoints() {
     const c = UT.VEC2_ISO_CARDINAL_POINTS(this.direction, this.depth, this.width);
     const a = UT.VEC2_ADD(this.position, UT.VEC2_ADD(c.f, c.l));

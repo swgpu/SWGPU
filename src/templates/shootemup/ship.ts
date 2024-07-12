@@ -16,7 +16,7 @@ export class ShipComponent extends DNAComponent {
 
   constructor() {
     super('Ship');
-    this.speed = 0.5;
+    this.speed = 25;
     this.jss = new Gfx2SpriteJSS();
     this.jss.setPosition(0, 280 - 32);
     this.jss.setTexture(gfx2TextureManager.getTexture('./templates/shootemup/ship.png'));
@@ -34,14 +34,14 @@ export class ShipSystem extends DNASystem {
     let mx = 0;
 
     if (inputManager.isActiveAction('LEFT')) {
-      mx = -ship.speed * ts;
+      mx -= ship.speed;
     }
     else if (inputManager.isActiveAction('RIGHT')) {
-      mx = +ship.speed * ts;
+      mx += ship.speed;
     }
 
     if (mx != 0 && ship.jss.getPositionX() + mx >= -300 && ship.jss.getPositionX() + mx <= (300 - 32)) {
-      ship.jss.translate(mx, 0);
+      ship.jss.translate(mx * (ts / 100), 0);
     }
 
     ship.jss.update(ts);

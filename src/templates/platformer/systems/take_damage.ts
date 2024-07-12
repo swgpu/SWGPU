@@ -1,9 +1,7 @@
 import { dnaManager } from '@lib/dna/dna_manager';
-import { screenManager } from '@lib/screen/screen_manager';
 import { Gfx2TileMap } from '@lib/gfx2_tile/gfx2_tile_map';
 import { DNASystem } from '@lib/dna/dna_system';
 // ---------------------------------------------------------------------------------------
-import { PlatformerScreen } from '../platformer_screen';
 import { Collider } from '../components/collider';
 import { Enemy } from '../components/enemy';
 import { Health } from '../components/health';
@@ -46,7 +44,7 @@ export class TakeDamageSytem extends DNASystem {
     }
 
     if (health.currentHealth === 0) {
-      screenManager.requestSetScreen(new PlatformerScreen());
+      console.log('you are die !');
     }
   }
 }

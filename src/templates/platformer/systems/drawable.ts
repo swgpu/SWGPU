@@ -19,10 +19,10 @@ export class DrawableSystem extends DNASystem {
 
     if (dnaManager.hasComponent(eid, Velocity)) {
       const velocity = dnaManager.getComponent(eid, Velocity);
-      if (velocity.x > 0.1 && Math.sign(velocity.x) === 1) {
+      if (velocity.x > 0.01) {
         drawable.sprite.setFlipX(false);
       }
-      if (velocity.x < 0.1 && Math.sign(velocity.x) === -1) {
+      if (velocity.x < -0.01) {
         drawable.sprite.setFlipX(true);
       }
     }

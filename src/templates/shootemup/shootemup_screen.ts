@@ -17,7 +17,7 @@ const LEFT_PADDING = 75;
 const NB_ROWS = 5;
 const NB_COLS = 8;
 const HOLES = [1, 2, 3, 4, 3];
-const WAVE_GENERATION_INTERVAL = 20000;
+const WAVE_GENERATION_INTERVAL = 10000;
 
 class ShootemupScreen extends Screen {
   shipSystem: ShipSystem;

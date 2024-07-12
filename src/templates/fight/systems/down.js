@@ -3,7 +3,7 @@ import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { IdleComponent } from './idle';
-import { MoveComponent } from './move';
+import { VelocityComponent } from './velocity';
 import { DrawableComponent } from './drawable';
 import { RunComponent } from './run';
 import { JumpComponent } from './jump';
@@ -40,12 +40,12 @@ export class DownSystem extends DNASystem {
   constructor() {
     super();
     super.addRequiredComponentTypename('Down');
-    super.addRequiredComponentTypename('Move');
+    super.addRequiredComponentTypename('Velocity');
     super.addRequiredComponentTypename('Drawable');
   }
 
   onEntityBind(eid) {
-    const move = dnaManager.getComponent(eid, MoveComponent);
+    const velocity = dnaManager.getComponent(eid, VelocityComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
 
     dnaManager.removeComponentIfExist(eid, IdleComponent);
@@ -53,7 +53,7 @@ export class DownSystem extends DNASystem {
     dnaManager.removeComponentIfExist(eid, JumpComponent);
 
     drawable.jas.play('PAIN_GROUND', false, true);
-    move.velocityX = 0;
-    move.velocityY = 0;
+    velocity.x = 0;
+    velocity.y = 0;
   }
 }

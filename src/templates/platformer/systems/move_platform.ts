@@ -28,8 +28,10 @@ export class MovePlatformSystem extends DNASystem {
       platform.direction = !platform.direction;
     }
     else {
-      position.x += velocity.x = Math.sign(deltaX) * 0.01 * ts;
-      position.y += velocity.y = Math.sign(deltaY) * 0.01 * ts;
+      velocity.x = Math.sign(deltaX) * platform.speed;
+      velocity.y = Math.sign(deltaY) * platform.speed;
+      position.x += velocity.x * (ts / 100);
+      position.y += velocity.y * (ts / 100);
     }
   }
 }

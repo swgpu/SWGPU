@@ -15,6 +15,8 @@ import { Drawable } from '../components/drawable';
 import { Velocity } from '../components/velocity';
 // ---------------------------------------------------------------------------------------
 
+const GRAVITY_VALUE = 10;
+
 export class PlayerControllerSystem extends DNASystem {
   map: Gfx2TileMap;
   collisionLayerIndex: number;
@@ -48,7 +50,7 @@ export class PlayerControllerSystem extends DNASystem {
 
     this.updateInput(ts, collisions, drawable, jump, velocity, player);
     this.updateGravity(ts, jump, velocity);
-    this.updatePosition(position, velocity, jump);
+    this.updatePosition(ts, position, velocity, jump);
 
     const nextBounds = collider.getBounds(position);
     const nextCollisions = this.map.getCollisions(this.collisionLayerIndex, nextBounds.left, nextBounds.right, nextBounds.top, nextBounds.bottom);
@@ -58,57 +60,65 @@ export class PlayerControllerSystem extends DNASystem {
   }
 
   updateInput(ts: number, collisions: TileCollision, drawable: Drawable<Gfx2SpriteJAS>, jump: Jump, velocity: Velocity, player: Player) {
-    let inputForce = 0;
+    let accelerationX = 0;
+    let accelerationY = 0;
 
-    if (inputManager.isActiveAction('DOWN')) {
-      drawable.sprite.play('crouch', true, true);
-    }
-    else {
-      if (inputManager.isActiveAction('LEFT')) {
-        inputForce -= player.accel;
-        if (!jump.jumping) drawable.sprite.play('walk', true, true);
-      }
-      if (inputManager.isActiveAction('RIGHT')) {
-        inputForce += player.accel;
-        if (!jump.jumping) drawable.sprite.play('walk', true, true);
-      }
-      if (inputForce === 0 && !jump.jumping && !player.shooting) {
-        drawable.sprite.play('idle', true, true);
-      }
+    if (inputManager.isActiveAction('LEFT')) {
+      accelerationX -= player.accel;
     }
 
-    velocity.x = UT.CLAMP(velocity.x + (inputForce * ts), -player.maxSpeed * ts, player.maxSpeed * ts);
-    velocity.x = UT.LERP(velocity.x, 0, ts / 100);
+    if (inputManager.isActiveAction('RIGHT')) {
+      accelerationX += player.accel;
+    }
 
     if (inputManager.isJustActiveAction('JUMP') && (collisions.isGrounded || jump.platform !== -1)) {
-      velocity.y -= player.jumpStrenght * (ts / 100);
-      drawable.sprite.play('jump', false);
+      accelerationY = player.jumpStrenght * -1;
       jump.jumping = true;
       collisions.bottom = null;
     }
 
     if (inputManager.isJustActiveAction('JUMP') && collisions.isAgainstWall && jump.jumping && !collisions.isGrounded) {
-      drawable.sprite.play('jump', false);
+      accelerationY = player.wallJumpStrenght * -1;
+      accelerationX = (collisions.isAgainstWall === 'right' ? -player.maxSpeed : player.maxSpeed) * 10;
       jump.wallJumping = true;
-      velocity.y = -player.wallJumpStrenght * ts;
-      velocity.x += (collisions.isAgainstWall === 'right' ? -player.maxSpeed : player.maxSpeed) * ts;
       collisions[collisions.isAgainstWall] = null;
     }
+
+    if (jump.jumping || jump.wallJumping) {
+      drawable.sprite.play('jump', false);
+    } 
+
+    if (accelerationX !== 0 && !jump.jumping) {
+      drawable.sprite.play('walk', true, true);
+    }
+
+    if (accelerationX === 0 && !jump.jumping && !player.shooting) {
+      drawable.sprite.play('idle', true, true);
+    }
+
+    if (accelerationX === 0 && inputManager.isActiveAction('DOWN')) {
+      drawable.sprite.play('crouch', true, true);
+    }
+
+    velocity.x += accelerationX * (ts / 100);
+    velocity.x = UT.CLAMP(velocity.x, -player.maxSpeed, player.maxSpeed);
+    velocity.x *= 0.9;
+    velocity.y += accelerationY * (ts / 100);
   }
 
   updateGravity(ts: number, jump: Jump, velocity: Velocity) {
-    const gravMultiplier = jump.jumping && inputManager.isActiveAction('JUMP') ? 1 : 3;
-    velocity.y = UT.LERP(velocity.y, 5 * gravMultiplier, ts / 1000);
+    const gravityFactor = jump.jumping && inputManager.isActiveAction('JUMP') ? 1 : 3;
+    velocity.y = UT.LERP(velocity.y, GRAVITY_VALUE * gravityFactor, ts / 1000);
   }
 
-  updatePosition(position: Position, velocity: Velocity, jump: Jump) {
-    position.x += velocity.x;
-    position.y += velocity.y;
+  updatePosition(ts: number, position: Position, velocity: Velocity, jump: Jump) {
+    position.x += velocity.x * (ts / 100);
+    position.y += velocity.y * (ts / 100);
 
     if (jump.platform !== -1) {
       const platformVelocity = dnaManager.getComponent(jump.platform, Velocity);
-      position.x += platformVelocity.x;
-      position.y += platformVelocity.y;
+      position.x += platformVelocity.x * (ts / 100);
+      position.y += platformVelocity.y * (ts / 100);
     }
   }
 
