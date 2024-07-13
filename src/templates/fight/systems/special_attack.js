@@ -89,21 +89,17 @@ class GfxSpecialAttack extends Gfx2Drawable {
     this.age += ts / 1000;
   }
 
-  onDraw() {
+  onRender() {
     const ctx = gfx2Manager.getContext();
-    ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-    this.bgJSS.draw();
-    this.avatarJSS.draw();
+    this.bgJSS.render();
+    this.avatarJSS.render();
     ctx.globalAlpha = this.opacity;
     ctx.font = '48px Ninja Naruto';
     ctx.textAlign = 'center';
     ctx.fillStyle = 'orange';
     ctx.fillText(this.text, this.textX, 60, 600);
     ctx.globalAlpha = 1;
-
-    ctx.restore();
   }
 
   reset() {

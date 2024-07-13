@@ -58,15 +58,12 @@ class Gfx2SpriteScrolling extends Gfx2Drawable {
   /**
    * The draw function.
    */
-  onDraw(): void {
+  onRender(): void {
     const ctx = gfx2Manager.getContext();
     ctx.translate(gfx2Manager.getCameraPositionX(), gfx2Manager.getCameraPositionY());
 
     for (const sprite of this.sprites) {
-      ctx.save();
-      ctx.translate(sprite.position[0], sprite.position[1]);
-      sprite.onDraw();
-      ctx.restore();
+      sprite.render();
     }
   }
 

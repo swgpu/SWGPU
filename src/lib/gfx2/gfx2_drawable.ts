@@ -41,7 +41,28 @@ class Gfx2Drawable implements Poolable<Gfx2Drawable> {
   /**
    * This method is called during the render phase (after transforms).
    */
-  onDraw(): void {}
+  onRender(): void {}
+
+  /**
+   * The render function.
+   */
+  render(): void {
+    if (!this.isVisible()) {
+      return;
+    }
+
+    const ctx = gfx2Manager.getContext();
+
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
+    ctx.translate(-this.offset[0], -this.offset[1]);
+    ctx.translate(this.position[0], this.position[1]);
+    ctx.rotate(this.rotation);
+    ctx.scale(this.scale[0], this.scale[1]);
+    this.onRender();
+    ctx.globalAlpha = 1.0;
+    ctx.restore();  
+  }
 
   /**
    * The draw function.

@@ -38,7 +38,7 @@ class DrawAction extends Action {
   }
 
   async exec() {
-    await this.duel.operationDraw(this.duel.getCurrentDuelistIndex(), 1);
+    await this.duel.operationRender(this.duel.getCurrentDuelistIndex(), 1);
     await this.duel.operationIncDuelistAttribute(this.duel.getCurrentDuelistIndex(), 'DRAW_COUNT');
   }
 }

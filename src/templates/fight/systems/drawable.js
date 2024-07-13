@@ -24,14 +24,6 @@ export class DrawableSystem extends DNASystem {
     this.onlySpecialAttack = false;
   }
 
-  onBeforeUpdate(ts) {
-    this.eids.sort((a, b) => {
-      const aDrawable = dnaManager.getComponent(a, DrawableComponent);
-      const bDrawable = dnaManager.getComponent(b, DrawableComponent);
-      return aDrawable.zIndex - bDrawable.zIndex
-    });
-  }
-
   onEntityUpdate(ts, eid) {
     const position = dnaManager.getComponent(eid, PositionComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);

@@ -77,19 +77,7 @@ class Gfx2Manager {
     this.drawables.sort(sortFn);
 
     for (const drawable of this.drawables) {
-      if (!drawable.isVisible()) {
-        return;
-      }
-  
-      this.ctx.save();
-      this.ctx.globalAlpha = drawable.getOpacity();
-      this.ctx.translate(-drawable.getOffsetX(), -drawable.getOffsetY());
-      this.ctx.translate(drawable.getPositionX(), drawable.getPositionY());
-      this.ctx.rotate(drawable.getRotation());
-      this.ctx.scale(drawable.getScaleX(), drawable.getScaleY());
-      drawable.onDraw();
-      this.ctx.globalAlpha = 1.0;
-      this.ctx.restore();  
+      drawable.render();
     }
   }
 
