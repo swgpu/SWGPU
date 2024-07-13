@@ -62,13 +62,10 @@ class Controller extends Gfx2Drawable {
     this.motion.update(ts);
   }
 
-  draw() {
+  onDraw() {
     const ctx = gfx2Manager.getContext();
-    ctx.save();
-    ctx.translate(this.position[0], this.position[1]);
     ctx.translate(-8, -32 - 4);
-    this.sprite.draw();
-    ctx.restore();
+    this.sprite.onDraw();
   }
 
   play(animation, looped) {

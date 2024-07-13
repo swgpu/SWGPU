@@ -4,7 +4,6 @@ import { UT } from '@lib/core/utils';
 import { Screen } from '@lib/screen/screen';
 import { Gfx2TileMap, Gfx2TileLayer } from '@lib/gfx2_tile/gfx2_tile_map';
 import { Gfx2IsoTileMapLayer } from '@lib/gfx2_iso/gfx2_iso_tile_map_layer';
-import { Gfx2IsoDrawer } from '@lib/gfx2_iso/gfx2_iso_drawer';
 // ---------------------------------------------------------------------------------------
 import { Controller } from './controller';
 // ---------------------------------------------------------------------------------------
@@ -25,6 +24,7 @@ class TilemapIsoScreen extends Screen {
     await this.tilemap.loadFromFile('./templates/tilemap-iso/tilemap.json');
     this.collisionLayer.loadFromTileMap(this.tilemap, 3);
     this.collisionLayer.setShowDebug(true);
+    this.collisionLayer.setElevation(3);
     this.occludersLayer.loadFromTileMap(this.tilemap, 2);
     this.wallsLayer.loadFromTileMap(this.tilemap, 1);
     this.floorLayer.loadFromTileMap(this.tilemap, 0);
@@ -58,14 +58,22 @@ class TilemapIsoScreen extends Screen {
   }
 
   draw() {
+    gfx2Manager.setMode('ISOMETRIC');
     gfx2Manager.setCameraPosition(this.controller.getPositionX(), this.controller.getPositionY());
-    Gfx2IsoDrawer.draw([
-      ...this.occludersLayer.getTiles(),
-      ...this.wallsLayer.getTiles(),
-      ...this.floorLayer.getTiles(),
-      this.controller
-    ]);
 
+    for (const drawable of this.occludersLayer.getTiles()) {
+      drawable.draw();
+    }
+
+    for (const drawable of this.wallsLayer.getTiles()) {
+      drawable.draw();
+    }
+
+    for (const drawable of this.floorLayer.getTiles()) {
+      drawable.draw();
+    }
+
+    this.controller.draw();
     this.collisionLayer.draw();
   }
 

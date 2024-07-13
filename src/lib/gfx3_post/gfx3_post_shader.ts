@@ -1,8 +1,8 @@
 export const SHADER_VERTEX_ATTR_COUNT = 4;
 
 const WINDOW = window as any;
-const FRAG_BEFORE = WINDOW.__POST_FRAG_BEFORE__ ? WINDOW.__POST_FRAG_BEFORE__ : '';
-const FRAG_AFTER = WINDOW.__POST_FRAG_AFTER__ ? WINDOW.__POST_FRAG_AFTER__ : '';
+const FRAG_BEGIN = WINDOW.__POST_FRAG_BEGIN__ ? WINDOW.__POST_FRAG_BEGIN__ : '';
+const FRAG_END = WINDOW.__POST_FRAG_END__ ? WINDOW.__POST_FRAG_END__ : '';
 
 export const PIPELINE_DESC: any = {
   label: 'POST pipeline',
@@ -126,7 +126,7 @@ fn main(
   var outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, FragUV);
   var fragUV = FragUV;
 
-  ${FRAG_BEFORE}
+  ${FRAG_BEGIN}
 
   if (PARAMS.ENABLED == 0.0)
   {
@@ -211,7 +211,7 @@ fn main(
     }
   }
 
-  ${FRAG_AFTER}
+  ${FRAG_END}
 
   return outputColor;
 }

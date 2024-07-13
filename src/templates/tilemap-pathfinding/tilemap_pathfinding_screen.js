@@ -111,10 +111,10 @@ class SelectionRect extends Gfx2Drawable {
     super();
   }
 
-  draw() {
+  onDraw() {
     const ctx = gfx2Manager.getContext();
     ctx.fillStyle = 'rgba(225,225,225,0.5)';
-    ctx.fillRect(this.position[0], this.position[1], 16, 16);
+    ctx.fillRect(0, 0, 16, 16);
   }
 }
 

@@ -53,7 +53,7 @@ class Gfx2SpriteJSS extends Gfx2Drawable implements Poolable<Gfx2SpriteJSS> {
   /**
    * The paint function.
    */
-  paint(): void {
+  onDraw(): void {
     const ctx = gfx2Manager.getContext();
     ctx.scale(this.flip[0] ? -1 : 1, this.flip[1] ? -1 : 1);
 

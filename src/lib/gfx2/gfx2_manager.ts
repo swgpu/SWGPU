@@ -1,6 +1,11 @@
 import { UT } from '../core/utils';
 import { Gfx2Drawable } from './gfx2_drawable';
 
+enum Gfx2RenderingMode {
+  ISOMETRIC = 'ISOMETRIC',
+  ORTHOGRAPHIC = 'ORTHOGRAPHIC'
+};
+
 /**
  * Singleton 2D graphics manager.
  */
@@ -8,6 +13,7 @@ class Gfx2Manager {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   drawables: Array<Gfx2Drawable>;
+  mode: Gfx2RenderingMode;
   cameraTransform: mat3;
   cameraScale: vec2;
   cameraRotation: number;
@@ -18,6 +24,7 @@ class Gfx2Manager {
     this.canvas = <HTMLCanvasElement>document.getElementById('CANVAS_2D')!;
     this.ctx = this.canvas.getContext('2d')!;
     this.drawables = [];
+    this.mode = Gfx2RenderingMode.ORTHOGRAPHIC;
     this.cameraTransform = UT.MAT3_IDENTITY();
     this.cameraScale = [1, 1];
     this.cameraRotation = 0;
@@ -43,10 +50,10 @@ class Gfx2Manager {
   }
 
   /**
-   * Begin the draw phase. Prepares the canvas for drawing.
+   * Begin the render phase. Prepares the canvas for rendering.
    * Warning: You need to call this method before any draw calls.
    */
-  beginDrawing(): void {
+  beginRender(): void {
     this.ctx.imageSmoothingEnabled = false;
 
     this.ctx.save();
@@ -66,6 +73,9 @@ class Gfx2Manager {
    * The render method.
    */
   render(): void {
+    const sortFn = this.mode == Gfx2RenderingMode.ISOMETRIC ? ISOMETRIC_SORT : ORTHOGRAPHIC_SORT;
+    this.drawables.sort(sortFn);
+
     for (const drawable of this.drawables) {
       if (!drawable.isVisible()) {
         return;
@@ -77,19 +87,36 @@ class Gfx2Manager {
       this.ctx.translate(drawable.getPositionX(), drawable.getPositionY());
       this.ctx.rotate(drawable.getRotation());
       this.ctx.scale(drawable.getScaleX(), drawable.getScaleY());
-      drawable.draw();
+      drawable.onDraw();
       this.ctx.globalAlpha = 1.0;
       this.ctx.restore();  
     }
+  }
 
+  /**
+   * End the render phase.
+   */
+  endRender(): void {
+    this.ctx.restore();
     this.drawables = [];
   }
 
   /**
-   * End the draw phase.
+   * Add drawable to the draw list.
+   * 
+   * @param {Gfx2Drawable} drawable - The drawable.
    */
-  endDrawing(): void {
-    this.ctx.restore();
+  draw(drawable: Gfx2Drawable): void {
+    this.drawables.push(drawable);
+  }
+
+  /**
+   * Set the renderer sorting mode.
+   * 
+   * @param {Gfx2RenderingMode} mode - The mode.
+   */
+  setMode(mode: Gfx2RenderingMode): void {
+    this.mode = mode;
   }
 
   /**
@@ -296,5 +323,26 @@ class Gfx2Manager {
   }
 }
 
+export type { Gfx2RenderingMode };
 export { Gfx2Manager };
 export const gfx2Manager = new Gfx2Manager();
+
+// -------------------------------------------------------------------------------------------
+// HELPFUL
+// -------------------------------------------------------------------------------------------
+
+function ISOMETRIC_SORT(a: Gfx2Drawable, b: Gfx2Drawable): number {
+  if (a.getElevation() < b.getElevation()) {
+    return -1;
+  }
+
+  if (a.getElevation() > b.getElevation()) {
+    return 1;
+  }
+
+  return a.getPositionY() - b.getPositionY();
+}
+
+function ORTHOGRAPHIC_SORT(a: Gfx2Drawable, b: Gfx2Drawable): number {
+  return a.getPositionZ() - b.getPositionZ();
+}

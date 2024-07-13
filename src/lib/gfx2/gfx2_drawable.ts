@@ -1,7 +1,7 @@
-import { gfx2Manager } from './gfx2_manager';
 import { Poolable } from '../core/object_pool';
 import { UT } from '../core/utils';
 import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
+import { gfx2Manager } from './gfx2_manager';
 
 /**
  * A 2D drawable object.
@@ -32,37 +32,23 @@ class Gfx2Drawable implements Poolable<Gfx2Drawable> {
   }
 
   /**
-   * The draw function.
-   */
-  draw(): void {
-    if (!this.visible) {
-      return;
-    }
-
-    const ctx = gfx2Manager.getContext();
-
-    ctx.save();
-    ctx.globalAlpha = this.opacity;
-    ctx.translate(-this.offset[0], -this.offset[1]);
-    ctx.translate(this.position[0], this.position[1]);
-    ctx.rotate(this.rotation);
-    ctx.scale(this.scale[0], this.scale[1]);
-    this.paint();
-    ctx.globalAlpha = 1.0;
-    ctx.restore();
-  }
-
-  /**
-   * Virtual update function.
+   * The update function.
    * 
    * @param {number} ts - The timestep.
    */
   update(ts: number): void {}
 
   /**
-   * Virtual method that is called during the draw phase (after transforms).
+   * This method is called during the render phase (after transforms).
    */
-  paint() {}
+  onDraw(): void {}
+
+  /**
+   * The draw function.
+   */
+  draw(): void {
+    gfx2Manager.draw(this);
+  }
 
   /**
    * Returns the position.

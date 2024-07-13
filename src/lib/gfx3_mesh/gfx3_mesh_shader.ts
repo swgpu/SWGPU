@@ -4,10 +4,8 @@ export const MAX_SPOT_LIGHTS = 16;
 export const MAX_DECALS = 64;
 
 const WINDOW = window as any;
-const VERT_BEFORE = WINDOW.__MESH_VERT_BEFORE__ ? WINDOW.__MESH_VERT_BEFORE__ : '';
-const FRAG_BEFORE = WINDOW.__MESH_FRAG_BEFORE__ ? WINDOW.__MESH_FRAG_BEFORE__ : '';
-const VERT_AFTER = WINDOW.__MESH_VERT_AFTER__ ? WINDOW.__MESH_VERT_AFTER__ : '';
-const FRAG_AFTER = WINDOW.__MESH_FRAG_AFTER__ ? WINDOW.__MESH_FRAG_AFTER__ : '';
+const VERT_BEGIN = WINDOW.__MESH_VERT_BEGIN__ ? WINDOW.__MESH_VERT_BEGIN__ : '';
+const VERT_END = WINDOW.__MESH_VERT_END__ ? WINDOW.__MESH_VERT_END__ : '';
 const VERT_OUT_POSITION = WINDOW.__MESH_VERT_OUT_POSITION__;
 const VERT_OUT_FRAG_POS = WINDOW.__MESH_VERT_OUT_FRAG_POS__;
 const VERT_OUT_FRAG_UV = WINDOW.__MESH_VERT_OUT_FRAG_UV__;
@@ -16,6 +14,11 @@ const VERT_OUT_FRAG_NORMAL = WINDOW.__MESH_VERT_OUT_FRAG_NORMAL__;
 const VERT_OUT_FRAG_TANGENT = WINDOW.__MESH_VERT_OUT_FRAG_TANGENT__;
 const VERT_OUT_FRAG_BINORMAL = WINDOW.__MESH_VERT_OUT_FRAG_BINORMAL__;
 const VERT_OUT_FRAG_SHADOW_POS = WINDOW.__MESH_VERT_OUT_FRAG_SHADOW_POS__;
+
+const FRAG_BEGIN = WINDOW.__MESH_FRAG_BEGIN__ ? WINDOW.__MESH_FRAG_BEGIN__ : '';
+const FRAG_PRE_TEXTURE = WINDOW.__MESH_FRAG_PRE_TEXTURE__ ? WINDOW.__MESH_FRAG_PRE_TEXTURE__ : '';
+const FRAG_POST_TEXTURE = WINDOW.__MESH_FRAG_POST_TEXTURE__ ? WINDOW.__MESH_FRAG_POST_TEXTURE__ : '';
+const FRAG_END = WINDOW.__MESH_FRAG_END__ ? WINDOW.__MESH_FRAG_END__ : '';
 const FRAG_OUT_BASE = WINDOW.__MESH_FRAG_OUT_BASE__;
 const FRAG_OUT_NORMAL = WINDOW.__MESH_FRAG_OUT_NORMAL__;
 const FRAG_OUT_ID = WINDOW.__MESH_FRAG_OUT_ID__;
@@ -196,9 +199,9 @@ fn main(
   var tangent = Tangent;
   var binormal = Binormal;
 
-  ${VERT_BEFORE}
+  ${VERT_BEGIN}
   var posFromLight = LVP_MATRIX * MESH_INFOS.M_MATRIX * position;
-  ${VERT_AFTER}
+  ${VERT_END}
 
   var output: VertexOutput;
   ${VERT_OUT_POSITION ??        `output.Position = MESH_INFOS.MVPC_MATRIX * position;`}
@@ -344,8 +347,16 @@ fn main(
   var fragShadowPos = FragShadowPos;
   var outputColor = vec4(0.0, 0.0, 0.0, 1.0);
   var texel = vec4(1.0, 1.0, 1.0, 1.0);
+  var normalUV = FragUV;
 
-  ${FRAG_BEFORE}
+  ${FRAG_BEGIN}
+
+  ${FRAG_PRE_TEXTURE}
+  var matS0 = textureSample(MAT_S0_TEXTURE, MAT_S0_SAMPLER, fragUV);
+  var matS1 = textureSample(MAT_S1_TEXTURE, MAT_S1_SAMPLER, fragUV);
+  var s0 = textureSample(S0_TEXTURE, S0_SAMPLER, fragUV);
+  var s1 = textureSample(S1_TEXTURE, S1_SAMPLER, fragUV);
+  ${FRAG_POST_TEXTURE}
 
   var textureUV = MAT_UVS.TEXTURE_SCROLL + MAT_UVS.TEXTURE_OFFSET + fragUV;
   var shadow = 1.0;
@@ -375,7 +386,7 @@ fn main(
 
   if (MAT_PARAMS.HAS_NORMAL_MAP == 1.0)
   {
-    fragNormal = CalcNormalMap(fragNormal, fragTangent, fragBinormal, textureUV);
+    fragNormal = CalcNormalMap(fragNormal, fragTangent, fragBinormal, normalUV);
   }
 
   if (MAT_PARAMS.HAS_SHADOW == 1.0)
@@ -412,11 +423,7 @@ fn main(
     outputColor = vec4(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY);
   }
 
-  var matS0 = textureSample(MAT_S0_TEXTURE, MAT_S0_SAMPLER, fragUV);
-  var matS1 = textureSample(MAT_S1_TEXTURE, MAT_S1_SAMPLER, fragUV);
-  var s0 = textureSample(S0_TEXTURE, S0_SAMPLER, fragUV);
-  var s1 = textureSample(S1_TEXTURE, S1_SAMPLER, fragUV);
-  ${FRAG_AFTER}
+  ${FRAG_END}
 
   var output: FragOutput;
   ${FRAG_OUT_BASE ??   `output.Base = outputColor;`}

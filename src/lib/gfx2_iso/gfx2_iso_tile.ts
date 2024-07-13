@@ -59,7 +59,7 @@ class Gfx2IsoTile extends Gfx2Drawable {
   /**
    * The paint function.
    */
-  paint(): void {
+  onDraw(): void {
     if (!this.texture) {
       return;
     }

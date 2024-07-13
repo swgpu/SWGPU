@@ -5,9 +5,6 @@ import { Gfx2IsoTile } from './gfx2_iso_tile';
 
 /**
  * A isometric tilemap layer drawable.
- * Note: You can draw the layer or get all tiles and draw them in Gfx2IsoDrawer.
- * It depends of your usage.
- * In both cases don't forget to call the update function to run animations.
  */
 class Gfx2IsoTileMapLayer extends Gfx2Drawable {
   tilemap: Gfx2TileMap;
@@ -92,7 +89,7 @@ class Gfx2IsoTileMapLayer extends Gfx2Drawable {
   /**
    * The paint function.
    */
-  paint(): void {
+  onDraw(): void {
     const tilelayer = this.tilemap.getTileLayer(this.layerIndex);
     if (!tilelayer) {
       return;

@@ -58,7 +58,7 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
   /**
    * The paint function.
    */
-  paint(): void {
+  onDraw(): void {
     const tilelayer = this.tilemap.getTileLayer(this.layerIndex);
     if (!tilelayer) {
       return;

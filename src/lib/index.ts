@@ -9,6 +9,7 @@ export { AIPathGrid2D, AIPathGrid3D } from './ai/ai_path_grid';
 export { ArrayCollection } from './core/array_collection';
 export { Curve } from './core/curve';
 export { ObjectPool } from './core/object_pool';
+export { StraightFlow, StraightFlowEntry } from './core/straight_flow';
 export { Quaternion } from './core/quaternion';
 export { TreePartition, TreePartitionNode } from './core/tree_partition';
 export { Tween } from './core/tween';
@@ -19,15 +20,14 @@ export { DNASystem } from './dna/dna_system';
 // gfx2 --------------------------------------------------------------------------------------
 export { Gfx2BoundingRect } from './gfx2/gfx2_bounding_rect';
 export { Gfx2Drawable } from './gfx2/gfx2_drawable';
-export { Gfx2Drawer } from './gfx2/gfx2_drawer';
 export { Gfx2TreePartition, Gfx2TreePartitionMethod } from './gfx2/gfx2_tree_partition';
-export { Gfx2IsoDrawer } from './gfx2_iso/gfx2_iso_drawer';
 export { Gfx2IsoTileMapLayer } from './gfx2_iso/gfx2_iso_tile_map_layer';
 export { Gfx2IsoTile } from './gfx2_iso/gfx2_iso_tile';
 export { Gfx2Particles, PositionStyle, VelocityStyle } from './gfx2_particles/gfx2_particles';
 export { Rapier2D } from './gfx2_physics/gfx2_physics_rapier';
 export { Gfx2SpriteJAS } from './gfx2_sprite/gfx2_sprite_jas';
 export { Gfx2SpriteJSS } from './gfx2_sprite/gfx2_sprite_jss';
+export { Gfx2SpriteScrolling } from './gfx2_sprite/gfx2_sprite_scrolling';
 export { Gfx2TileMapLayer } from './gfx2_tile/gfx2_tile_map_layer';
 export { Gfx2TileMap, Gfx2TileLayer, Gfx2Tileset, Gfx2TileObject } from './gfx2_tile/gfx2_tile_map';
 // gfx3 --------------------------------------------------------------------------------------
@@ -101,8 +101,11 @@ export { inputManager } from './input/input_manager';
 export { screenManager } from './screen/screen_manager';
 export { soundManager } from './sound/sound_manager';
 export { uiManager } from './ui/ui_manager';
+export { engineManager } from './engine_manager';
 // types -------------------------------------------------------------------------------------
-export type { Gfx3Texture } from './gfx3/gfx3_texture';
+export type { StraightFlowState } from './core/straight_flow';
+export type { Gfx2RenderingMode } from './gfx2/gfx2_manager';
 export type { ParticlesOptions } from './gfx2_particles/gfx2_particles';
+export type { Gfx3Texture } from './gfx3/gfx3_texture';
 export type { Gfx3Viewport, ProjectionMode } from './gfx3/gfx3_view';
-export type { vec1, vec2, vec3, vec4, vec5, vec6, vec_any, mat3, mat4 } from './core/global';
+export type { vec1, vec2, vec3, vec4, vec5, vec6, vec_any, mat3, mat4, bounds2, bounds3 } from './core/global';

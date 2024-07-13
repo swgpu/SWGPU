@@ -122,9 +122,9 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
   }
 
   /**
-   * The paint function.
+   * The draw function.
    */
-  paint(): void {
+  onDraw(): void {
     if (!this.currentAnimation) {
       return;
     }

@@ -1,12 +1,14 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
+import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2SpriteJSS } from './gfx2_sprite_jss';
 import { Gfx2SpriteJAS } from './gfx2_sprite_jas';
 
-class Gfx2SpriteScrolling {
+class Gfx2SpriteScrolling extends Gfx2Drawable {
   sprites: Array<Gfx2SpriteJSS | Gfx2SpriteJAS>;
   move: vec2;
 
   constructor() {
+    super();
     this.sprites = [];
     this.move = [0, 0];
   }
@@ -14,7 +16,7 @@ class Gfx2SpriteScrolling {
   /**
    * The update function.
    */
-  update() {
+  update(): void {
     for (const sprite of this.sprites) {
       const newX = sprite.position[0] + this.move[0];
       const newY = sprite.position[1] + this.move[1];
@@ -30,39 +32,42 @@ class Gfx2SpriteScrolling {
 
     for (const sprite of this.sprites) {
       const rect = sprite.getWorldBoundingRect();
+      let x = sprite.getPositionX();
+      let y = sprite.getPositionY();
 
       if (rect.max[0] < -screenHalfWidth) {
-        sprite.position[0] = maxRight + rect.getWidth();
+        x = maxRight + rect.getWidth();
       }
 
       if (rect.min[0] > screenHalfWidth) {        
-        sprite.position[0] = maxLeft - rect.getWidth();
+        x = maxLeft - rect.getWidth();
       }
 
       if (rect.min[1] > screenHalfHeight) {
-        sprite.position[1] = maxBottom - rect.getHeight();
+        y = maxBottom - rect.getHeight();
       }
 
       if (rect.max[1] < -screenHalfHeight) {
-        sprite.position[1] = maxTop + rect.getHeight();
+        y = maxTop + rect.getHeight();
       }
+
+      sprite.setPosition(x, y);
     }
   }
 
   /**
    * The draw function.
    */
-  draw() {
+  onDraw(): void {
     const ctx = gfx2Manager.getContext();
-
-    ctx.save();
     ctx.translate(gfx2Manager.getCameraPositionX(), gfx2Manager.getCameraPositionY());
 
     for (const sprite of this.sprites) {
-      sprite.draw()
+      ctx.save();
+      ctx.translate(sprite.position[0], sprite.position[1]);
+      sprite.onDraw();
+      ctx.restore();
     }
-
-    ctx.restore();
   }
 
   /**

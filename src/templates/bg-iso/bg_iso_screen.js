@@ -7,7 +7,6 @@ import { Screen } from '@lib/screen/screen';
 import { Gfx2TileMap } from '@lib/gfx2_tile/gfx2_tile_map';
 import { Gfx2SpriteJSS } from '@lib/gfx2_sprite/gfx2_sprite_jss';
 import { Gfx2SpriteJAS } from '@lib/gfx2_sprite/gfx2_sprite_jas';
-import { Gfx2Drawer } from '@lib/gfx2/gfx2_drawer';
 import { Gfx2IsoTileMapLayer } from '@lib/gfx2_iso/gfx2_iso_tile_map_layer';
 import { AIPathGrid2D } from '@lib/ai/ai_path_grid';
 import { AIPathGridSolver } from '@lib/ai/ai_path_grid_solver';
@@ -73,13 +72,10 @@ class BgIsoScreen extends Screen {
   }
 
   draw() {
-    Gfx2Drawer.draw([
-      this.bg0,
-      this.bg1,
-      this.cursor,
-      this.controller
-    ]);
-
+    this.bg0.draw();
+    this.bg1.draw();
+    this.cursor.draw();
+    this.controller.draw();
     this.layer1.draw();
   }
 

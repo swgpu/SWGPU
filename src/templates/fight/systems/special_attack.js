@@ -89,7 +89,7 @@ class GfxSpecialAttack extends Gfx2Drawable {
     this.age += ts / 1000;
   }
 
-  paint() {
+  onDraw() {
     const ctx = gfx2Manager.getContext();
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);

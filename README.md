@@ -221,18 +221,14 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## Roadmap
 ```
-- Ajouter texture scrolling sur normal map
-- Ajouter une fonction render sur gfx2 (analogue à gfx3)
-
-Export:
+Importation:
 - Replace SpriteFusion import by Tilekit (https://rxi.itch.io/tilekit). [Black]
 - Add AseSprite import. [Black]
 - Add Spritemancer import (https://codemanu.itch.io/spritemancer). [Black]
-- Add export MAT on Blender addon. [Black]
-- Add export pack on Blender addon (export tous les objets présent dans les catégories valides (jam, jsm, jwm, etc...) [Black]
+- Add export MAT on Blender addon. [Me]
+- Add export pack on Blender addon (export tous les objets présent dans les catégories valides (jam, jsm, jwm, etc...) [Me]
 
 Extra:
-- Add second normal-map and possibility to scroll normal-maps
 - Add fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master.
 - Add pooling soundManager.
 - Test light on toon shader.
