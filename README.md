@@ -194,13 +194,14 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## Changelog
 ```
-- [Ver. 1.2.1]  Engine manager added.
-- [Ver. 1.2.1]  ECS Components check optimized with the use of Set.
-- [Ver. 1.2.1]  ECS query is added.
-- [Ver. 1.2.1]  ECS nice sugar methods is added.
-- [Ver. 1.2.1]  Fix offset factor on all sprite classes.
-- [Ver. 1.2.1]  Tile collision method added to Gfx2TileMap.
-- [Ver. 1.2.1]  Platformer template added.
+- [Ver. 1.5.0]  New mesh shader hook added.
+- [Ver. 1.5.0]  Engine manager added.
+- [Ver. 1.5.0]  ECS Components check optimized with the use of Set.
+- [Ver. 1.5.0]  ECS query is added.
+- [Ver. 1.5.0]  ECS nice sugar methods is added.
+- [Ver. 1.5.0]  Fix offset factor on all sprite classes.
+- [Ver. 1.5.0]  Tile collision method added to Gfx2TileMap.
+- [Ver. 1.5.0]  Platformer template added.
 - [Ver. 1.2.0]  Binary format for 3D files added.
 - [Ver. 1.1.14] Tilemap SpriteFusion format added.
 - [Ver. 1.1.13] Cylinder collision class added.
