@@ -246,8 +246,8 @@ class Gfx3SpriteJAS extends Gfx3Sprite implements Poolable<Gfx3SpriteJAS> {
     jas.currentAnimationFrameIndex = 0;
     jas.looped = false;
     jas.frameProgress = 0;
-    jas.offsetXFactor = this.offsetXFactor;
-    jas.offsetYFactor = this.offsetYFactor;
+    jas.offsetFactor[0] = this.offsetFactor[0];
+    jas.offsetFactor[1] = this.offsetFactor[1];
     return jas;
   }
 }
