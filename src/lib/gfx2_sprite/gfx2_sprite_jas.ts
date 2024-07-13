@@ -257,7 +257,9 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
   getWorldBoundingRect(dynamicMode: boolean = false): Gfx2BoundingRect {
     if (dynamicMode && this.currentAnimation) {
       const rect = this.currentAnimation.boundingRects[this.currentAnimationFrameIndex];
-      return rect.transform(UT.MAT3_TRANSFORM(this.position, this.offset, this.rotation, this.scale));
+      const x = this.position[0] - rect.getWidth() * this.offsetFactor[0];
+      const y = this.position[1] - rect.getHeight() * this.offsetFactor[1];
+      return rect.transform(UT.MAT3_TRANSFORM([x, y], this.offset, this.rotation, this.scale));
     }
 
     return this.boundingRect.transform(UT.MAT3_TRANSFORM(this.position, this.offset, this.rotation, this.scale));

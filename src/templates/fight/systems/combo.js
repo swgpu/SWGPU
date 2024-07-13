@@ -4,8 +4,8 @@ import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 import { Gfx2SpriteJAS } from '@lib/gfx2_sprite/gfx2_sprite_jas';
 // ---------------------------------------------------------------------------------------
+import { spawnHit } from '../entities/hit';
 import { PositionComponent } from './position';
-import { HitComponent } from './hit';
 import { DrawableComponent } from './drawable';
 import { IdleComponent } from './idle';
 import { RunComponent } from './run';
@@ -129,14 +129,7 @@ export class ComboSystem extends DNASystem {
       const jas = new Gfx2SpriteJAS();
       jas.setAnimations(cas.animations);
       jas.setTexture(cas.texture);
-
-      const hitId = dnaManager.createEntity();
-      dnaManager.addComponent(hitId, new PositionComponent(position.x, position.y));
-      dnaManager.addComponent(hitId, new DrawableComponent({ jas: jas }));
-      dnaManager.addComponent(hitId, new HitComponent(Object.assign(hit, {
-        owner: eid,
-        direction: velocity.direction
-      })));
+      spawnHit(hit, position.x, position.y, jas, eid, velocity.direction);
     }
   }
 }

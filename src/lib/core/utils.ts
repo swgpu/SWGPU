@@ -400,6 +400,57 @@ class UT {
   /**
    * @param a - The first vector.
    * @param b - The second vector.
+   * @param out - The result vector with minimum values for each component pair.
+   */
+  static VEC2_MIN(a: vec2, b: vec2, out: vec2 = [0, 0]): vec2 {
+    out[0] = Math.min(a[0], b[0]);
+    out[1] = Math.min(a[1], b[1]);
+    return out;
+  }
+
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The result vector with maximum values for each component pair.
+   */
+  static VEC2_MAX(a: vec2, b: vec2, out: vec2 = [0, 0]): vec2 {
+    out[0] = Math.max(a[0], b[0]);
+    out[1] = Math.max(a[1], b[1]);
+    return out;
+  }
+
+  /**
+   * @param value - The vector to clamp.
+   * @param min - The min vector.
+   * @param max - The max vector.
+   */
+  static VEC2_CLAMP(value: vec2, min: vec2, max: vec2, out: vec2 = [0, 0]): vec2 {
+    out[0] = Math.max(min[0], Math.min(max[0], value[0]));
+    out[1] = Math.max(min[1], Math.min(max[1], value[1]));
+    return out;
+  }
+
+  /**
+   * @param a - The vector to floor.
+   */
+  static VEC2_FLOOR(a: vec2, out: vec2 = [0, 0]): vec2 {
+    out[0] = Math.floor(a[0]);
+    out[1] = Math.floor(a[1]);
+    return out;
+  }
+
+  /**
+   * @param a - The vector to ceil.
+   */
+  static VEC2_CEIL(a: vec2, out: vec2 = [0, 0]): vec2 {
+    out[0] = Math.ceil(a[0]);
+    out[1] = Math.ceil(a[1]);
+    return out;
+  }
+
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
    */
   static VEC2_ANGLE_BETWEEN(a: vec2, b: vec2): number {
     return Math.acos(UT.VEC2_DOT(a, b) / (UT.VEC2_LENGTH(a) * UT.VEC2_LENGTH(b)));
@@ -714,6 +765,62 @@ class UT {
     out[0] = a[0] + b[0] * scale;
     out[1] = a[1] + b[1] * scale;
     out[2] = a[2] + b[2] * scale;
+    return out;
+  }
+
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The result vector with minimum values for each component pair.
+   */
+  static VEC3_MIN(a: vec3, b: vec3, out: vec3 = [0, 0, 0]): vec3 {
+    out[0] = Math.min(a[0], b[0]);
+    out[1] = Math.min(a[1], b[1]);
+    out[2] = Math.min(a[2], b[2]);
+    return out;
+  }
+
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
+   * @param out - The result vector with maximum values for each component pair.
+   */
+  static VEC3_MAX(a: vec3, b: vec3, out: vec3 = [0, 0, 0]): vec3 {
+    out[0] = Math.max(a[0], b[0]);
+    out[1] = Math.max(a[1], b[1]);
+    out[2] = Math.max(a[2], b[2]);
+    return out;
+  }
+
+  /**
+   * @param value - The vector to clamp.
+   * @param min - The min vector.
+   * @param max - The max vector.
+   */
+  static VEC3_CLAMP(value: vec3, min: vec3, max: vec3, out: vec3 = [0, 0, 0]): vec3 {
+    out[0] = Math.max(min[0], Math.min(max[0], value[0]));
+    out[1] = Math.max(min[1], Math.min(max[1], value[1]));
+    out[2] = Math.max(min[2], Math.min(max[2], value[2]));
+    return out;
+  }
+
+  /**
+   * @param a - The vector to floor.
+   */
+  static VEC3_FLOOR(a: vec3, out: vec3 = [0, 0, 0]): vec3 {
+    out[0] = Math.floor(a[0]);
+    out[1] = Math.floor(a[1]);
+    out[2] = Math.floor(a[2]);
+    return out;
+  }
+
+  /**
+   * @param a - The vector to ceil.
+   */
+  static VEC3_CEIL(a: vec3, out: vec3 = [0, 0, 0]): vec3 {
+    out[0] = Math.ceil(a[0]);
+    out[1] = Math.ceil(a[1]);
+    out[2] = Math.ceil(a[2]);
     return out;
   }
 

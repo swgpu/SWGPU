@@ -12,13 +12,12 @@ import { FighterComponent } from './fighter';
 import { RunComponent } from './run';
 import { IdleComponent } from './idle';
 import { JumpComponent } from './jump';
+import { ColliderComponent } from './collider';
 // ---------------------------------------------------------------------------------------
 
 export class HitComponent extends DNAComponent {
   constructor(options = {}) {
     super('Hit');
-    this.w = options.w;
-    this.h = options.h;
     this.frameIndex = options.frameIndex;
     this.maxAge = options.maxAge;
     this.relativeX = options.relativeX;
@@ -49,6 +48,7 @@ export class HitSystem extends DNASystem {
     super.addRequiredComponentTypename('Hit');
     super.addRequiredComponentTypename('Position');
     super.addRequiredComponentTypename('Drawable');
+    super.addRequiredComponentTypename('Collider');
   }
 
   onEntityBind(eid) {
@@ -74,21 +74,17 @@ export class HitSystem extends DNASystem {
 
     const position = dnaManager.getComponent(eid, PositionComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
+    const collider = dnaManager.getComponent(eid, ColliderComponent);
 
     if (hit.isCollide) {
       const fighters = dnaManager.findEntities(FighterComponent);
       const enemies = fighters.filter(f => f != hit.owner);
 
       for (let enemyId of enemies) {
-        const enemyFighter = dnaManager.getComponent(enemyId, FighterComponent);
         const enemyPosition = dnaManager.getComponent(enemyId, PositionComponent);
-
-        const min1 = [position.x - (hit.w / 2), position.y - (hit.h / 2)];
-        const max1 = [position.x + (hit.w / 2), position.y + (hit.h / 2)];
-        const min2 = [enemyPosition.x - (enemyFighter.w / 2), enemyPosition.y - (enemyFighter.h / 2)];
-        const max2 = [enemyPosition.x + (enemyFighter.w / 2), enemyPosition.y + (enemyFighter.h / 2)];
+        const enemyCollider = dnaManager.getComponent(enemyId, ColliderComponent);
   
-        if (UT.COLLIDE_RECT_TO_RECT(min1, max1, min2, max2)) {
+        if (ColliderComponent.isCollide(position, collider, enemyPosition, enemyCollider)) {
           hit.marked = true;
           dnaManager.removeComponentIfExist(enemyId, DamageComponent);
           dnaManager.removeComponentIfExist(enemyId, RunComponent);
@@ -132,10 +128,12 @@ export class HitSystem extends DNASystem {
   }
 
   onEntityDraw(eid) {
-    const hit = dnaManager.getComponent(eid, HitComponent);
     const position = dnaManager.getComponent(eid, PositionComponent);
+    const collider = dnaManager.getComponent(eid, ColliderComponent);
+    const bounds = collider.getBounds(position.x, position.y);
+
     const ctx = gfx2Manager.getContext();
     ctx.fillStyle = 'red';
-    ctx.fillRect(position.x - (hit.w / 2), position.y - (hit.h / 2), hit.w, hit.h);
+    ctx.fillRect(bounds.left, bounds.top, collider.width, collider.height);
   }
 }

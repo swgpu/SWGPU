@@ -5,9 +5,9 @@ import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
 import { PositionComponent } from './position';
 import { VelocityComponent } from './velocity';
-import { FighterComponent } from './fighter';
 import { PlatformComponent } from './platform';
 import { DrawableComponent } from './drawable';
+import { ColliderComponent } from './collider';
 // ---------------------------------------------------------------------------------------
 
 const GRAVITY = 160;
@@ -27,6 +27,7 @@ export class MoveSystem extends DNASystem {
     super.addRequiredComponentTypename('Velocity');
     super.addRequiredComponentTypename('Fighter');
     super.addRequiredComponentTypename('Drawable');
+    super.addRequiredComponentTypename('Collider');
     this.bgWidth = bgWidth;
     this.bgHeight = bgHeight;
     this.floorElevation = floorElevation;
@@ -36,42 +37,37 @@ export class MoveSystem extends DNASystem {
     const move = dnaManager.getComponent(eid, MoveComponent);
     const position = dnaManager.getComponent(eid, PositionComponent);
     const velocity = dnaManager.getComponent(eid, VelocityComponent);
-    const fighter = dnaManager.getComponent(eid, FighterComponent);
     const drawable = dnaManager.getComponent(eid, DrawableComponent);
-
+    const collider = dnaManager.getComponent(eid, ColliderComponent);
+    const halfWidth = collider.width * 0.5;
+    const halfHeight = collider.height * 0.5;
+    
     // update gravity, update position, reset onFloor
     velocity.y = UT.LERP(velocity.y, GRAVITY, ts / 1000);
     position.x += velocity.x * (ts / 100);
     position.y += velocity.y * (ts / 100);
     move.onFloor = false;
 
-    const halfWidth = fighter.w * 0.5;
-    const halfHeight = fighter.h * 0.5;
-    const left = position.x - halfWidth;
-    const right = position.x + halfWidth;
-    const bottom = position.y + halfHeight;
+    const bounds = collider.getBounds(position.x, position.y);
 
     for (const platformId of dnaManager.findEntities(PlatformComponent)) {
-      const platform = dnaManager.getComponent(platformId, PlatformComponent);
       const platformPos = dnaManager.getComponent(platformId, PositionComponent);
-      const platformLeft = platformPos.x - platform.w / 2;
-      const platformRight = platformPos.x + platform.w / 2;
-      const platformTop = platformPos.y - platform.h / 2;
-      const platformBottom = platformPos.y + platform.h / 2;
+      const platformCollider = dnaManager.getComponent(platformId, ColliderComponent);
+      const platformBounds = platformCollider.getBounds(platformPos.x, platformPos.y);
 
-      const isAbove = position.y < platformTop;
-      const isWithinX = position.x >= platformLeft && position.x <= platformRight;
-      const isWithinY = platformTop < bottom && bottom < platformBottom;
+      const isAbove = position.y < platformBounds.top;
+      const isWithinX = position.x >= platformBounds.left && position.x <= platformBounds.right;
+      const isWithinY = platformBounds.top < bounds.bottom && bounds.bottom < platformBounds.bottom;
 
       if (velocity.y > 0 && isAbove && isWithinX && isWithinY) {
-        position.y = platformTop - halfHeight;
+        position.y = platformBounds.top - halfHeight;
         velocity.y = 0;
         move.onFloor = true;
         break;
       }
     }
 
-    if (velocity.y >= 0 && bottom >= this.floorElevation) {
+    if (velocity.y >= 0 && bounds.bottom >= this.floorElevation) {
       position.y = this.floorElevation - halfHeight;
       velocity.y = 0;
       move.onFloor = true;
@@ -81,10 +77,10 @@ export class MoveSystem extends DNASystem {
       drawable.jas.play('FALLOF', false, true);
     }
 
-    if (left < 0) {
+    if (bounds.left < 0) {
       position.x = halfWidth;
     }
-    else if (right > this.bgWidth) {
+    else if (bounds.right > this.bgWidth) {
       position.x = this.bgWidth - halfWidth;
     }
   }

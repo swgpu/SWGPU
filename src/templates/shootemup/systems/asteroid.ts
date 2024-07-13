@@ -35,7 +35,7 @@ export class AsteroidSystem extends DNASystem {
     }
 
     const shipEnt = dnaManager.findEntity(ShipComponent);
-    const ship = dnaManager.getComponent<ShipComponent>(shipEnt, ShipComponent);
+    const ship = dnaManager.getComponent(shipEnt, ShipComponent);
 
     const shipRect = ship.jss.getWorldBoundingRect();
     const asteroidRect = asteroid.jss.getWorldBoundingRect();

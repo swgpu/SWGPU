@@ -1,4 +1,5 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
+import { UT } from '../core/utils';
 import { Poolable } from '../core/object_pool';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
@@ -108,6 +109,7 @@ class Gfx2SpriteJSS extends Gfx2Drawable implements Poolable<Gfx2SpriteJSS> {
    */
   setTextureRect(left: number, top: number, width: number, height: number): void {
     this.textureRect = [left, top, width, height];
+    this.boundingRect = Gfx2BoundingRect.createFromCoord(this.textureRect[0], this.textureRect[1], this.textureRect[2], this.textureRect[3]);
   }
 
   /**
@@ -142,6 +144,15 @@ class Gfx2SpriteJSS extends Gfx2Drawable implements Poolable<Gfx2SpriteJSS> {
    */
   getTexture(): ImageBitmap | HTMLImageElement {
     return this.texture;
+  }
+
+  /**
+   * Returns the bounding rect in the world space coordinates.
+   */
+  getWorldBoundingRect(): Gfx2BoundingRect {
+    const x = this.position[0] - this.textureRect[2] * this.offsetFactor[0];
+    const y = this.position[1] - this.textureRect[3] * this.offsetFactor[1];
+    return this.boundingRect.transform(UT.MAT3_TRANSFORM([x, y], this.offset, this.rotation, this.scale));
   }
 
   /**

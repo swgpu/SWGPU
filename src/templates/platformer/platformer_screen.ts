@@ -1,9 +1,12 @@
-import { dnaManager } from '@lib/dna/dna_manager';
 import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
+import { dnaManager } from '@lib/dna/dna_manager';
+import { gfx2TextureManager } from '@lib/gfx2/gfx2_texture_manager';
 import { UT } from '@lib/core/utils';
 import { Screen } from '@lib/screen/screen';
 import { Gfx2TileMap } from '@lib/gfx2_tile/gfx2_tile_map';
 import { Gfx2TileMapLayer } from '@lib/gfx2_tile/gfx2_tile_map_layer';
+import { Gfx2SpriteJSS } from '@lib/gfx2_sprite/gfx2_sprite_jss';
+import { Gfx2SpriteScrolling } from '@lib/gfx2_sprite/gfx2_sprite_scrolling';
 // ---------------------------------------------------------------------------------------
 import { spawnEnemy } from './entities/enemy';
 import { spawnPlayer } from './entities/player';
@@ -24,6 +27,7 @@ class PlatformerScreen extends Screen {
   backgroundLayer: Gfx2TileMapLayer;
   middleLayer: Gfx2TileMapLayer;
   foregroundLayer: Gfx2TileMapLayer;
+  scrolling: Gfx2SpriteScrolling;
 
   constructor() {
     super();
@@ -31,6 +35,7 @@ class PlatformerScreen extends Screen {
     this.backgroundLayer = new Gfx2TileMapLayer();
     this.middleLayer = new Gfx2TileMapLayer();
     this.foregroundLayer = new Gfx2TileMapLayer();
+    this.scrolling = new Gfx2SpriteScrolling();
   }
 
   async onEnter() {
@@ -38,6 +43,10 @@ class PlatformerScreen extends Screen {
     this.backgroundLayer.loadFromTileMap(this.tileMap, 3);
     this.middleLayer.loadFromTileMap(this.tileMap, 4);
     this.foregroundLayer.loadFromTileMap(this.tileMap, 2);
+
+		const parallaxSprite = new Gfx2SpriteJSS()
+		parallaxSprite.setTexture(await gfx2TextureManager.loadTexture('templates/platformer/background.png'));
+    this.scrolling.setSprite(parallaxSprite);
 
     dnaManager.setup([
       new DrawableSystem(),
@@ -65,12 +74,23 @@ class PlatformerScreen extends Screen {
   }
 
   update(ts: number) {
+    const previousCameraPositionX = gfx2Manager.getCameraPositionX();
+    const previousCameraPositionY = gfx2Manager.getCameraPositionY();
+
     dnaManager.update(ts);
+
     const cameraX = UT.CLAMP(gfx2Manager.getCameraPositionX(), 70, 600);
     gfx2Manager.setCameraPosition(cameraX, gfx2Manager.getCameraPositionY());
+
+    const cameraDeltaX = gfx2Manager.getCameraPositionX() - previousCameraPositionX;
+    const cameraDeltaY = gfx2Manager.getCameraPositionY() - previousCameraPositionY;
+
+    this.scrolling.setMove(-cameraDeltaX, -cameraDeltaY);
+    this.scrolling.update();
   }
 
   draw() {
+    this.scrolling.draw();
     this.backgroundLayer.draw();
     this.middleLayer.draw();
     dnaManager.draw();

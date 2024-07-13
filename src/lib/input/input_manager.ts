@@ -93,7 +93,7 @@ class InputManager {
 
     this.registerAction('keyboard', 'Enter', 'OK');
     this.registerAction('keyboard', 'Escape', 'BACK');
-    this.registerAction('keyboard', ' ', 'SELECT');
+    this.registerAction('keyboard', 'Space', 'SELECT');
     this.registerAction('keyboard', 'ArrowLeft', 'LEFT');
     this.registerAction('keyboard', 'ArrowRight', 'RIGHT');
     this.registerAction('keyboard', 'ArrowUp', 'UP');
@@ -156,11 +156,6 @@ class InputManager {
    * @param {string} actionId - The unique action identifier.
    */
   registerAction(inputSource: InputSource, eventKey: string, actionId: string): void {
-    const found = this.actionRegister.has(inputSource + eventKey);
-    if (found) {
-      throw new Error('InputManager::registerAction(): you cannot register action with same event source & key.');
-    }
-
     this.actionRegister.set(inputSource + eventKey, {
       id: actionId,
       inputSource: inputSource,
@@ -348,7 +343,6 @@ class InputManager {
 
   #handleKeyUp(e: KeyboardEvent): void {
     const action = this.actionRegister.get('keyboard' + e.code);
-
     if (action) {
       eventManager.emit(this, 'E_ACTION_RELEASED', { actionId: action.id });
       this.actionMap.set(action.id, false);  

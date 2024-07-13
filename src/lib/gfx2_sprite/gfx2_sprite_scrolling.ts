@@ -1,98 +1,104 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
-import { UT } from '../core/utils';
 import { Gfx2SpriteJSS } from './gfx2_sprite_jss';
+import { Gfx2SpriteJAS } from './gfx2_sprite_jas';
 
-type ParallaxDirection = 'horizontal' | 'vertical';
+class Gfx2SpriteScrolling {
+  sprites: Array<Gfx2SpriteJSS | Gfx2SpriteJAS>;
+  move: vec2;
 
-class Gfx2ScrollingParallax {
-  sprites: Array<Gfx2SpriteJSS>;
-  direction: ParallaxDirection;
-  lastCameraPosition: vec2 | null;
-  distanceFactor: number;
-  otherPosition: number;
-
-  constructor(direction: ParallaxDirection, sprite: Gfx2SpriteJSS, distanceFactor: number = 1) {
+  constructor() {
     this.sprites = [];
-    this.direction = direction;
-    this.lastCameraPosition = null;
-    this.distanceFactor = distanceFactor;
-    this.otherPosition = 0;
-
-    sprite.setOffsetNormalized(0.5, 0.5);
-    const canvasSize = this.direction === 'horizontal' ? gfx2Manager.getWidth() : gfx2Manager.getHeight()
-    const spriteSize = this.direction === 'horizontal' ? sprite.getTextureRectWidth() : sprite.getTextureRectHeight()
-    const nbOfSprites = Math.ceil(canvasSize / spriteSize) + 1
-
-    for (let i = 0; i < nbOfSprites; i++) {
-      const clone = sprite.clone()
-      if (this.direction === 'horizontal') {
-        clone.position[0] = -canvasSize / 2 + i * spriteSize
-      } else {
-        clone.position[1] = -canvasSize / 2 + i * spriteSize
-      }
-      this.sprites.push(clone)
-    }
+    this.move = [0, 0];
   }
 
-  setOtherAxis(position: number) {
-    this.otherPosition = position
-  }
-
+  /**
+   * The update function.
+   */
   update() {
-    const cameraPosition = gfx2Manager.cameraPosition
-    if (this.lastCameraPosition) {
-      // apply offset
-      const offset = UT.VEC2_SUBSTRACT(cameraPosition, this.lastCameraPosition)
+    for (const sprite of this.sprites) {
+      const newX = sprite.position[0] + this.move[0];
+      const newY = sprite.position[1] + this.move[1];
+      sprite.setPosition(newX, newY);
+    }
 
-      for (const sprite of this.sprites) {
-        if (this.direction === 'horizontal') {
-          const newX = sprite.position[0] + offset[0] * this.distanceFactor
-          sprite.setPosition(newX, this.otherPosition)
-        } else {
-          const newY = sprite.position[1] + offset[1] * this.distanceFactor
-          sprite.setPosition(this.otherPosition, newY)
-        }
+    const screenHalfWidth = gfx2Manager.getWidth() * 0.5;
+    const screenHalfHeight = gfx2Manager.getHeight() * 0.5;
+    const maxRight = Math.max(...this.sprites.map(s => s.position[0]));
+    const maxBottom = Math.min(...this.sprites.map(s => s.position[1]));
+    const maxTop = Math.max(...this.sprites.map(s => s.position[1]));
+    const maxLeft = Math.min(...this.sprites.map(s => s.position[0]));
+
+    for (const sprite of this.sprites) {
+      const rect = sprite.getWorldBoundingRect();
+
+      if (rect.max[0] < -screenHalfWidth) {
+        sprite.position[0] = maxRight + rect.getWidth();
       }
-      // recycle sprites going off bounds
-      for (const sprite of this.sprites) {
-        if (this.direction === 'horizontal') {
-          const rightBound = sprite.position[0] + sprite.getTextureRectWidth() / 2
-          const leftBound = sprite.position[0] - sprite.getTextureRectWidth() / 2
-          const screenHalfSize = gfx2Manager.getWidth() / 2
-          const cameraPosition = gfx2Manager.cameraPosition[0]
-          if (rightBound < cameraPosition - screenHalfSize) {
-            const maxRight = Math.max(...this.sprites.map(s => s.position[0]))
-            sprite.position[0] = maxRight + sprite.getTextureRectWidth()
-          }
-          if (leftBound > cameraPosition + screenHalfSize) {
-            const maxLeft = Math.min(...this.sprites.map(s => s.position[0]))
-            sprite.position[0] = maxLeft - sprite.getTextureRectWidth()
-          }
-        } else {
-          const topBound = sprite.position[1] - sprite.getTextureRectHeight() / 2
-          const bottomBound = sprite.position[1] + sprite.getTextureRectHeight() / 2
-          const screenHalfSize = gfx2Manager.getHeight() / 2
-          const cameraPosition = gfx2Manager.cameraPosition[1]
-          if (topBound > cameraPosition + screenHalfSize) {
-            const maxBottom = Math.min(...this.sprites.map(s => s.position[1]))
-            sprite.position[1] = maxBottom - sprite.getTextureRectHeight()
-          }
-          if (bottomBound < cameraPosition - screenHalfSize) {
-            const maxTop = Math.max(...this.sprites.map(s => s.position[1]))
-            sprite.position[1] = maxTop + sprite.getTextureRectHeight()
-          }
-        }
+
+      if (rect.min[0] > screenHalfWidth) {        
+        sprite.position[0] = maxLeft - rect.getWidth();
+      }
+
+      if (rect.min[1] > screenHalfHeight) {
+        sprite.position[1] = maxBottom - rect.getHeight();
+      }
+
+      if (rect.max[1] < -screenHalfHeight) {
+        sprite.position[1] = maxTop + rect.getHeight();
       }
     }
-    this.lastCameraPosition = UT.VEC2_COPY(cameraPosition)
   }
 
+  /**
+   * The draw function.
+   */
   draw() {
+    const ctx = gfx2Manager.getContext();
+
+    ctx.save();
+    ctx.translate(gfx2Manager.getCameraPositionX(), gfx2Manager.getCameraPositionY());
+
     for (const sprite of this.sprites) {
       sprite.draw()
     }
+
+    ctx.restore();
+  }
+
+  /**
+   * Set the scrolling sprite.
+   * 
+   * @param {Gfx2SpriteJSS | Gfx2SpriteJAS} sprite - The scrolling sprite.
+   */
+  setSprite(sprite: Gfx2SpriteJSS | Gfx2SpriteJAS): void {
+    const spriteRect = sprite.getBoundingRect();
+    const nbSpritesH = Math.ceil(gfx2Manager.getWidth() / spriteRect.getWidth()) + 1;
+    const nbSpritesV = Math.ceil(gfx2Manager.getHeight() / spriteRect.getHeight()) + 1;
+
+    const screenLeft = -gfx2Manager.getWidth() * 0.5;
+    const screenTop = -gfx2Manager.getHeight() * 0.5;
+
+    this.sprites = [];
+    for (let i = 0; i < nbSpritesH; i++) {
+      for (let j = 0; j < nbSpritesV; j++) {
+        const clone = sprite.clone();
+        clone.setOffsetNormalized(0.5, 0.5);
+        clone.setPosition(screenLeft + i * spriteRect.getWidth(), screenTop + j * spriteRect.getHeight());
+        this.sprites.push(clone);
+      }
+    }
+  }
+
+  /**
+   * Set scrolling move vector.
+   * 
+   * @param {number} mx - The move x component.
+   * @param {number} my - The move y component.
+   */
+  setMove(mx: number, my: number): void {
+    this.move[0] = mx;
+    this.move[1] = my;
   }
 }
 
-export type { ParallaxDirection };
-export { Gfx2ScrollingParallax };
+export { Gfx2SpriteScrolling };

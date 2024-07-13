@@ -2,14 +2,15 @@ import { uiManager } from '@lib/ui/ui_manager';
 import { eventManager } from '@lib/core/event_manager';
 import { screenManager } from '@lib/screen/screen_manager';
 import { dnaManager } from '@lib/dna/dna_manager';
-import { gfx2TextureManager } from '@lib/gfx2/gfx2_texture_manager';
 import { UIText } from '@lib/ui_text/ui_text';
 import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
+import { generateWave } from './entities/asteroid';
+import { spawnShip } from './entities/ship';
 import { GameOverScreen } from './game_over_screen';
-import { ShipComponent, ShipSystem } from './ship';
-import { AsteroidComponent, AsteroidSystem } from './asteroid';
-import { BulletSystem } from './bullet';
+import { ShipSystem } from './systems/ship';
+import { AsteroidSystem } from './systems/asteroid';
+import { BulletSystem } from './systems/bullet';
 // ---------------------------------------------------------------------------------------
 
 const TOP_PADDING = 100;
@@ -38,10 +39,6 @@ class ShootemupScreen extends Screen {
   }
 
   async onEnter() {
-    await gfx2TextureManager.loadTexture('./templates/shootemup/asteroid.png');
-    await gfx2TextureManager.loadTexture('./templates/shootemup/bullet.png');
-    await gfx2TextureManager.loadTexture('./templates/shootemup/ship.png');
-
     dnaManager.setup([
       this.shipSystem,
       this.asteroidSystem,
@@ -51,10 +48,8 @@ class ShootemupScreen extends Screen {
     this.uiScore.setText('Score: ' + this.score);
     uiManager.addWidget(this.uiScore);
 
-    const shipEnt = dnaManager.createEntity();
-    dnaManager.addComponent(shipEnt, new ShipComponent());
-
-    this.generateWave();
+    await spawnShip();
+    await generateWave(NB_ROWS, NB_COLS, HOLES, LEFT_PADDING, TOP_PADDING);
 
     eventManager.subscribe(this.bulletSystem, 'E_ASTEROID_DESTROYED', this, this.handleAsteroidDestroyed);
     eventManager.subscribe(this.asteroidSystem, 'E_PLAYER_DESTROYED', this, this.handlePlayerDestroyed);
@@ -66,7 +61,7 @@ class ShootemupScreen extends Screen {
 
   update(ts: number) {
     if (this.waveAge > WAVE_GENERATION_INTERVAL) {
-      this.generateWave();
+      generateWave(NB_ROWS, NB_COLS, HOLES, LEFT_PADDING, TOP_PADDING);
       this.waveAge = 0;
     }
     else {
@@ -78,19 +73,6 @@ class ShootemupScreen extends Screen {
 
   draw() {
     dnaManager.draw();
-  }
-
-  generateWave() {
-    for (let i = 0; i < NB_ROWS; i++) {
-      for (let j = 0; j < NB_COLS; j++) {
-        if (HOLES[i] != j) {
-          const x = j * 60 - 300 + LEFT_PADDING;
-          const y = i * 60 - 300 + TOP_PADDING;
-          const asteroid = dnaManager.createEntity();
-          dnaManager.addComponent(asteroid, new AsteroidComponent(x, y - 300));
-        }
-      }
-    }
   }
 
   handleAsteroidDestroyed() {

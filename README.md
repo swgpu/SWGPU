@@ -221,7 +221,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## Roadmap
 ```
-- VEC2_MIN, VEC2_MAX, VEC2_CLAMP, VEC_FLOOR et VEC_CEIL dans UT UT.GET_BOUNDS
+- Ajouter texture scrolling sur normal map
 - Ajouter une fonction render sur gfx2 (analogue à gfx3)
 
 Export:

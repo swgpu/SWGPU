@@ -1,4 +1,5 @@
 import { UT } from '../core/utils';
+import { Gfx2Drawable } from './gfx2_drawable';
 
 /**
  * Singleton 2D graphics manager.
@@ -6,6 +7,7 @@ import { UT } from '../core/utils';
 class Gfx2Manager {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
+  drawables: Array<Gfx2Drawable>;
   cameraTransform: mat3;
   cameraScale: vec2;
   cameraRotation: number;
@@ -15,6 +17,7 @@ class Gfx2Manager {
   constructor() {
     this.canvas = <HTMLCanvasElement>document.getElementById('CANVAS_2D')!;
     this.ctx = this.canvas.getContext('2d')!;
+    this.drawables = [];
     this.cameraTransform = UT.MAT3_IDENTITY();
     this.cameraScale = [1, 1];
     this.cameraRotation = 0;
@@ -60,9 +63,32 @@ class Gfx2Manager {
   }
 
   /**
+   * The render method.
+   */
+  render(): void {
+    for (const drawable of this.drawables) {
+      if (!drawable.isVisible()) {
+        return;
+      }
+  
+      this.ctx.save();
+      this.ctx.globalAlpha = drawable.getOpacity();
+      this.ctx.translate(-drawable.getOffsetX(), -drawable.getOffsetY());
+      this.ctx.translate(drawable.getPositionX(), drawable.getPositionY());
+      this.ctx.rotate(drawable.getRotation());
+      this.ctx.scale(drawable.getScaleX(), drawable.getScaleY());
+      drawable.draw();
+      this.ctx.globalAlpha = 1.0;
+      this.ctx.restore();  
+    }
+
+    this.drawables = [];
+  }
+
+  /**
    * End the draw phase.
    */
-  endDrawing() {
+  endDrawing(): void {
     this.ctx.restore();
   }
 

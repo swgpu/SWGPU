@@ -5,11 +5,11 @@ import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 import { Gfx3PhysicsJNM } from '@lib/gfx3_physics/gfx3_physics_jnm';
 // ---------------------------------------------------------------------------------------
-import { EntityComponent } from './entity';
-import { GraphicsComponent, GraphicsSystem } from './graphics';
-import { PhysicsComponent, PhysicsSystem } from './physics';
-import { InputComponent, InputSystem } from './input';
-import { CameraComponent, CameraSystem } from './camera';
+import { spawnPlayer } from './entities/player';
+import { GraphicsSystem } from './systems/graphics';
+import { PhysicsSystem } from './systems/physics';
+import { InputSystem } from './systems/input';
+import { CameraSystem } from './systems/camera';
 // ---------------------------------------------------------------------------------------
 
 class ThirdPersonScreen extends Screen {
@@ -34,7 +34,7 @@ class ThirdPersonScreen extends Screen {
     this.mapJSM = jsm;
     this.mapJNM = jnm;
 
-    await this.#createPlayer(this.mapJNM);
+    await spawnPlayer(this.mapJNM);
   }
 
   update(ts: number) {
@@ -63,32 +63,6 @@ class ThirdPersonScreen extends Screen {
     const jnm = new Gfx3PhysicsJNM();
     await jnm.loadFromFile('./templates/third-person/map.jnm');
     return { jsm, jnm };
-  }
-
-  async #createPlayer(jnm: Gfx3PhysicsJNM): Promise<number> {
-    const player = dnaManager.createEntity();
-
-    const character = new EntityComponent();
-    character.x = 0.1;
-    character.z = 0.1;
-    dnaManager.addComponent(player, character);
-
-    const input = new InputComponent();
-    dnaManager.addComponent(player, input);
-
-    const physics = new PhysicsComponent(jnm);
-    dnaManager.addComponent(player, physics);
-
-    const graphics = new GraphicsComponent();
-    await graphics.jam.loadFromFile('./templates/third-person/barret.jam');
-    graphics.jam.play('IDLE', true);
-    graphics.jam.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture('./templates/third-person/barret.png') }));
-    dnaManager.addComponent(player, graphics);
-
-    const camera = new CameraComponent(jnm);
-    dnaManager.addComponent(player, camera);
-
-    return player;
   }
 }
 

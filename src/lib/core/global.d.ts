@@ -19,6 +19,9 @@ declare global {
     number, number, number, number,
     number, number, number, number
   ];
+
+  type bounds2 = {left: number, right: number, bottom: number, top: number };
+  type bounds3 = {left: number, right: number, bottom: number, top: number, back: number, front: number };
 }
 
 export {
@@ -30,5 +33,7 @@ export {
   vec6,
   vec_any,
   mat3,
-  mat4
+  mat4,
+  bounds2,
+  bounds3
 };

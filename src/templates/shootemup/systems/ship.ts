@@ -5,6 +5,7 @@ import { Gfx2SpriteJSS } from '@lib/gfx2_sprite/gfx2_sprite_jss';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
+import { spawnBullet } from '../entities/bullet';
 import { BulletComponent } from './bullet';
 // ---------------------------------------------------------------------------------------
 
@@ -64,11 +65,8 @@ export class ShipSystem extends DNASystem {
       return;
     }
   
-    const newBulletEnt = dnaManager.createEntity();
-    const newBullet = new BulletComponent();
-
-    newBullet.jss.setOffsetNormalized(0.5, 0);
-    newBullet.jss.setPosition(ship.jss.getPositionX() + ship.jss.getTextureRectWidth() / 2,  ship.jss.getPositionY() - 64);
-    dnaManager.addComponent(newBulletEnt, newBullet);
+    const x = ship.jss.getPositionX() + ship.jss.getTextureRectWidth() / 2;
+    const y = ship.jss.getPositionY() - 64;
+    spawnBullet(x, y);
   }
 }
