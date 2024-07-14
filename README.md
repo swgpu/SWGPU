@@ -228,7 +228,6 @@ Importation:
 - Add AseSprite import. [Black]
 - Add Spritemancer import (https://codemanu.itch.io/spritemancer). [Black]
 - Add export MAT on Blender addon. [Me]
-- Add export pack on Blender addon (export tous les objets présent dans les catégories valides (jam, jsm, jwm, etc...) [Me]
 
 Extra:
 - Add fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master.
