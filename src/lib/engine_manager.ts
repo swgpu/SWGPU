@@ -24,10 +24,22 @@ import { Gfx3MeshLight } from './gfx3_mesh/gfx3_mesh_light';
 import { AIPathGraph3D } from './ai/ai_path_graph';
 import { Motion } from './motion/motion';
 
-interface PackItem {
-  name: string,
-  ext: string,
-  object: any
+interface PackItem<T> {
+  name: string;
+  ext: string;
+  object: T;
+};
+
+interface Pack {
+  jam: Array<PackItem<Gfx3MeshJAM>>;
+  jsm: Array<PackItem<Gfx3MeshJSM>>;
+  jwm: Array<PackItem<Gfx3PhysicsJWM>>;
+  jnm: Array<PackItem<Gfx3PhysicsJNM>>;
+  jlm: Array<PackItem<Motion>>;
+  jsv: Array<PackItem<Gfx3ShadowVolume>>;
+  jlt: Array<PackItem<Gfx3MeshLight>>;
+  grf: Array<PackItem<AIPathGraph3D>>;
+  any: Array<PackItem<any>>;
 };
 
 /**
@@ -115,91 +127,113 @@ class EngineManager {
    * 
    * @param {string} path - The archive file path.
    */
-  async loadPack(path: string): Promise<Array<PackItem>> {
+  async loadPack(path: string): Promise<Pack> {
     const res = await fetch(path);
     const zip = await JSZip.loadAsync(await res.blob());
-    const pack = new Array<PackItem>();
+    const pack: Pack = {
+      jam: [],
+      jsm: [],
+      jwm: [],
+      jnm: [],
+      jlm: [],
+      jsv: [],
+      jlt: [],
+      grf: [],
+      any: []
+    };
 
-    zip.forEach(async (relativePath, zipEntry) => {
+    zip.forEach(async (relativePath: any, zipEntry: any) => {
       const ext = zipEntry.name.split('.').at(-1);
       const file = zip.file(zipEntry.name);
-      const item: PackItem = { name: zipEntry.name, ext: ext ?? '', object: null };
       
       if (file != null && ext == 'jam') {
-        item.object = new Gfx3MeshJAM();
-        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')));
+        const jam = new Gfx3MeshJAM();
+        await jam.loadFromFile(URL.createObjectURL(await file.async('blob')));
+        pack.jam.push({ name: zipEntry.name, ext: ext ?? '', object: jam });
       }
 
       if (file != null && ext == 'bam') {
-        item.object = new Gfx3MeshJAM();
-        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+        const jam = new Gfx3MeshJAM();
+        await jam.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')));
+        pack.jam.push({ name: zipEntry.name, ext: ext ?? '', object: jam });
       }
 
       if (file != null && ext == 'jsm') {
-        item.object = new Gfx3MeshJSM();
-        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+        const jsm = new Gfx3MeshJSM();
+        await jsm.loadFromFile(URL.createObjectURL(await file.async('blob')));
+        pack.jsm.push({ name: zipEntry.name, ext: ext ?? '', object: jsm });
       }
 
       if (file != null && ext == 'bsm') {
-        item.object = new Gfx3MeshJSM();
-        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+        const jsm = new Gfx3MeshJSM();
+        await jsm.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')));
+        pack.jsm.push({ name: zipEntry.name, ext: ext ?? '', object: jsm });
       }
 
       if (file != null && ext == 'jwm') {
-        item.object = new Gfx3PhysicsJWM();
-        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+        const jwm = new Gfx3PhysicsJWM();
+        await jwm.loadFromFile(URL.createObjectURL(await file.async('blob')));
+        pack.jwm.push({ name: zipEntry.name, ext: ext ?? '', object: jwm });
       }
 
       if (file != null && ext == 'bwm') {
-        item.object = new Gfx3PhysicsJWM();
-        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+        const jwm = new Gfx3PhysicsJWM();
+        await jwm.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')));
+        pack.jwm.push({ name: zipEntry.name, ext: ext ?? '', object: jwm });
       }
 
       if (file != null && ext == 'jnm') {
-        item.object = new Gfx3PhysicsJNM();
-        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+        const jnm = new Gfx3PhysicsJNM();
+        await jnm.loadFromFile(URL.createObjectURL(await file.async('blob')));
+        pack.jnm.push({ name: zipEntry.name, ext: ext ?? '', object: jnm });
       }
 
       if (file != null && ext == 'bnm') {
-        item.object = new Gfx3PhysicsJNM();
-        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+        const jnm = new Gfx3PhysicsJNM();
+        await jnm.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')));
+        pack.jnm.push({ name: zipEntry.name, ext: ext ?? '', object: jnm });
       }
 
       if (file != null && ext == 'jlm') {
-        item.object = new Motion();
-        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+        const jlm = new Motion();
+        await jlm.loadFromFile(URL.createObjectURL(await file.async('blob')));
+        pack.jlm.push({ name: zipEntry.name, ext: ext ?? '', object: jlm });
       }
 
       if (file != null && ext == 'blm') {
-        item.object = new Motion();
-        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+        const jlm = new Motion();
+        await jlm.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')));
+        pack.jlm.push({ name: zipEntry.name, ext: ext ?? '', object: jlm });
       }
 
       if (file != null && ext == 'jsv') {
-        item.object = new Gfx3ShadowVolume();
-        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+        const jsv = new Gfx3ShadowVolume();
+        await jsv.loadFromFile(URL.createObjectURL(await file.async('blob')));
+        pack.jsv.push({ name: zipEntry.name, ext: ext ?? '', object: jsv });
       }
 
       if (file != null && ext == 'bsv') {
-        item.object = new Gfx3ShadowVolume();
-        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+        const jsv = new Gfx3ShadowVolume();
+        await jsv.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')));
+        pack.jsv.push({ name: zipEntry.name, ext: ext ?? '', object: jsv });
       }
 
       if (file != null && ext == 'jlt') {
-        item.object = new Gfx3MeshLight();
-        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+        const jlt = new Gfx3MeshLight();
+        await jlt.loadFromFile(URL.createObjectURL(await file.async('blob')));
+        pack.jlt.push({ name: zipEntry.name, ext: ext ?? '', object: jlt });
       }
 
       if (file != null && ext == 'grf') {
-        item.object = new AIPathGraph3D();
-        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+        const grf = new AIPathGraph3D();
+        await grf.loadFromFile(URL.createObjectURL(await file.async('blob')));
+        pack.grf.push({ name: zipEntry.name, ext: ext ?? '', object: grf });
       }
 
       if (file != null && ext == 'any') {
-        item.object = JSON.parse(await file.async('string'));
+        const data = JSON.parse(await file.async('string'));
+        pack.any.push({ name: zipEntry.name, ext: ext ?? '', object: data });
       }
-
-      pack.push(item);
     });
 
     return pack;
