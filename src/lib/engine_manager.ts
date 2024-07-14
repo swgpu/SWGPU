@@ -1,3 +1,4 @@
+import JSZip from 'jszip';
 import { coreManager } from './core/core_manager';
 import { inputManager } from './input/input_manager';
 import { gfx2Manager } from './gfx2/gfx2_manager';
@@ -13,6 +14,21 @@ import { screenManager } from './screen/screen_manager';
 import { uiManager } from './ui/ui_manager';
 import { gfx3PostRenderer } from './gfx3_post/gfx3_post_renderer';
 import { gfx3ShadowVolumeRenderer } from './gfx3_shadow_volume/gfx3_shadow_volume_renderer';
+// ------------------------------------------------------------------
+import { Gfx3MeshJAM } from './gfx3_mesh/gfx3_mesh_jam';
+import { Gfx3MeshJSM } from './gfx3_mesh/gfx3_mesh_jsm';
+import { Gfx3PhysicsJWM } from './gfx3_physics/gfx3_physics_jwm';
+import { Gfx3PhysicsJNM } from './gfx3_physics/gfx3_physics_jnm';
+import { Gfx3ShadowVolume } from './gfx3_shadow_volume/gfx3_shadow_volume';
+import { Gfx3MeshLight } from './gfx3_mesh/gfx3_mesh_light';
+import { AIPathGraph3D } from './ai/ai_path_graph';
+import { Motion } from './motion/motion';
+
+interface PackItem {
+  name: string,
+  ext: string,
+  object: any
+};
 
 /**
  * Singleton managing the main loop engine.
@@ -32,6 +48,7 @@ class EngineManager {
 
   /**
    * Start the engine with optional parameters and run the main loop.
+   * 
    * @param {boolean} [enableScanlines=true] - Determines whether scanlines should be enabled or not.
    * @param {boolean} [showDebug=true] - Determines whether to display debug information.
    */
@@ -41,6 +58,9 @@ class EngineManager {
     this.run(0);
   }
 
+  /**
+   * The main loop.
+   */
   run(timeStamp: number): void {
     const ts = timeStamp - this.then;
     this.then = timeStamp;
@@ -89,7 +109,103 @@ class EngineManager {
 
     requestAnimationFrame(timeStamp => this.run(timeStamp));
   }
+
+  /**
+   * The pack loader.
+   * 
+   * @param {string} path - The archive file path.
+   */
+  async loadPack(path: string): Promise<Array<PackItem>> {
+    const res = await fetch(path);
+    const zip = await JSZip.loadAsync(await res.blob());
+    const pack = new Array<PackItem>();
+
+    zip.forEach(async (relativePath, zipEntry) => {
+      const ext = zipEntry.name.split('.').at(-1);
+      const file = zip.file(zipEntry.name);
+      const item: PackItem = { name: zipEntry.name, ext: ext ?? '', object: null };
+      
+      if (file != null && ext == 'jam') {
+        item.object = new Gfx3MeshJAM();
+        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')));
+      }
+
+      if (file != null && ext == 'bam') {
+        item.object = new Gfx3MeshJAM();
+        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'jsm') {
+        item.object = new Gfx3MeshJSM();
+        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'bsm') {
+        item.object = new Gfx3MeshJSM();
+        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'jwm') {
+        item.object = new Gfx3PhysicsJWM();
+        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'bwm') {
+        item.object = new Gfx3PhysicsJWM();
+        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'jnm') {
+        item.object = new Gfx3PhysicsJNM();
+        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'bnm') {
+        item.object = new Gfx3PhysicsJNM();
+        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'jlm') {
+        item.object = new Motion();
+        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'blm') {
+        item.object = new Motion();
+        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'jsv') {
+        item.object = new Gfx3ShadowVolume();
+        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'bsv') {
+        item.object = new Gfx3ShadowVolume();
+        await item.object.loadFromBinaryFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'jlt') {
+        item.object = new Gfx3MeshLight();
+        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'grf') {
+        item.object = new AIPathGraph3D();
+        await item.object.loadFromFile(URL.createObjectURL(await file.async('blob')))
+      }
+
+      if (file != null && ext == 'any') {
+        item.object = JSON.parse(await file.async('string'));
+      }
+
+      pack.push(item);
+    });
+
+    return pack;
+  }
 }
 
+export type { PackItem };
 export { EngineManager };
 export const engineManager = new EngineManager();

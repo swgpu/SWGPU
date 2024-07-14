@@ -237,7 +237,7 @@ class AIPathGraph2D extends AIPathGraph<vec2> {
   /**
    * @param nodes - The graph data.
    */
-  constructor(nodes: Map<string, AIPathNode<vec2>>) {
+  constructor(nodes: Map<string, AIPathNode<vec2>> = new Map<string, AIPathNode<vec2>>()) {
     super(nodes);
   }
 
@@ -258,7 +258,7 @@ class AIPathGraph3D extends AIPathGraph<vec3> {
   /**
    * @param nodes - The graph data.
    */
-  constructor(nodes: Map<string, AIPathNode<vec3>>) {
+  constructor(nodes: Map<string, AIPathNode<vec3>> = new Map<string, AIPathNode<vec3>>()) {
     super(nodes);
   }
 

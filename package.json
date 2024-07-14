@@ -14,7 +14,7 @@
   "email": "aliyah.raijin@gmail.com",
   "author": "Julien Rongiere",
   "license": "MIT",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "type": "module",
   "main": "src/lib/index.ts",
   "files": [
@@ -41,6 +41,7 @@
     "@webgpu/types": "^0.1.21",
     "curve-interpolator": "^3.3.1",
     "dotenv": "^16.4.5",
+    "jszip": "^3.10.1",
     "unplugin-preprocessor-directives": "^1.0.3",
     "vite-plugin-top-level-await": "^1.4.1",
     "vite-plugin-wasm": "^3.3.0"
