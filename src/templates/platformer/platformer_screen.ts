@@ -20,7 +20,6 @@ import { MovePlatformSystem } from './systems/move_platform';
 import { PlayerControllerSystem } from './systems/player_controller';
 import { PlayerShootSystem } from './systems/player_shoot';
 import { TakeDamageSytem } from './systems/take_damage';
-import { engineManager } from '@lib/engine_manager';
 // ---------------------------------------------------------------------------------------
 
 class PlatformerScreen extends Screen {
