@@ -70,8 +70,8 @@ fn main(
 ) -> VertexOutput {
   var c = cos(ANGLE);
   var s = sin(ANGLE);
-  var transformedPos = Pos + OFFSET;
-  transformedPos = transformedPos * SIZE * SCALE;
+  var transformedPos = Pos * SIZE + OFFSET;
+  transformedPos = transformedPos * SCALE;
   transformedPos = vec2(c * (transformedPos.x) + s * (transformedPos.y), c * (transformedPos.y) - s * (transformedPos.x));
 
   var screenPos = transformedPos + TRANSLATION;

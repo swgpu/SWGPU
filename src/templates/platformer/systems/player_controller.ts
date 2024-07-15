@@ -96,7 +96,7 @@ export class PlayerControllerSystem extends DNASystem {
 
     velocity.x += accelerationX * (ts / 100);
     velocity.x = UT.CLAMP(velocity.x, -player.maxSpeed, player.maxSpeed);
-    velocity.x *= 0.9;
+    velocity.x = UT.LERP(velocity.x, 0, (ts / 100));
     velocity.y += accelerationY * (ts / 100);
   }
 

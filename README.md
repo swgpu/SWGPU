@@ -232,7 +232,6 @@ Importation:
 Extra:
 - Add fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master.
 - Add pooling soundManager.
-- Test light on toon shader.
 ```
 
 ## License 

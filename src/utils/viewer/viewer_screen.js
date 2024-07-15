@@ -13,6 +13,7 @@ import { Gfx3MeshOBJ } from '@lib/gfx3_mesh/gfx3_mesh_obj';
 import { Gfx3Skybox } from '@lib/gfx3_skybox/gfx3_skybox';
 import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 import { Gfx3ShadowVolume } from '@lib/gfx3_shadow_volume/gfx3_shadow_volume';
+import { Gfx3FlareLens } from '@lib/gfx3_flare/gfx3_flare_lens';
 // ---------------------------------------------------------------------------------------
 
 class ViewerScreen extends Screen {
@@ -22,6 +23,7 @@ class ViewerScreen extends Screen {
     this.skybox = new Gfx3Skybox();
     this.mesh = new Gfx3MeshJSM();
     this.shadow = new Gfx3ShadowVolume();
+    this.lens = new Gfx3FlareLens();
     this.handleKeyDownCb = this.handleKeyDown.bind(this);
   }
 
@@ -32,6 +34,9 @@ class ViewerScreen extends Screen {
 
     this.shadow = new Gfx3ShadowVolume();
     await this.shadow.loadFromFile('./utils/viewer/shadow.jsv');
+
+    this.lens.setSunWorldPosition(10, 10, 0);
+    await this.lens.startup(0.4);
 
     gfx3PostRenderer.setParam(PostParam.COLOR_ENABLED, 1.0);
     gfx3PostRenderer.setParam(PostParam.PIXELATION_ENABLED, 1.0);
@@ -57,6 +62,7 @@ class ViewerScreen extends Screen {
     this.shadow.draw();
     this.mesh.draw();
     this.skybox.draw();
+    this.lens.draw();
     gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
     gfx3MeshRenderer.drawPointLight([0, 30, 0], [1, 0, 0], [0, 0, 0]);
     gfx3MeshRenderer.drawPointLight([30, 0, 0], [0, 1, 0], [0, 0, 0]);

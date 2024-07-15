@@ -42,6 +42,7 @@ export { Gfx3Camera } from './gfx3_camera/gfx3_camera';
 export { Gfx3CameraOrbit } from './gfx3_camera/gfx3_camera_orbit';
 export { Gfx3CameraWASD } from './gfx3_camera/gfx3_camera_wasd';
 export { Gfx3Flare } from './gfx3_flare/gfx3_flare';
+export { Gfx3FlareLens } from './gfx3_flare/gfx3_flare_lens';
 export { Gfx3MeshJAM } from './gfx3_mesh/gfx3_mesh_jam';
 export { Gfx3MeshJSM } from './gfx3_mesh/gfx3_mesh_jsm';
 export { Gfx3MeshLight, LightType } from './gfx3_mesh/gfx3_mesh_light';

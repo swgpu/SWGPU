@@ -127,6 +127,17 @@ class Gfx3Flare extends Gfx3Drawable {
   }
 
   /**
+   * Set the origin offset in normalized value.
+   * 
+   * @param {number} x - The x offset.
+   * @param {number} y - The y offset.
+   */
+  setOffset2DNormalized(x: number, y: number): void {
+    this.offset2D[0] = -x * this.size2D[0];
+    this.offset2D[1] = -y * this.size2D[1];
+  }
+
+  /**
    * Returns the origin offset in pixel.
    */
   getOffset2D(): vec2 {

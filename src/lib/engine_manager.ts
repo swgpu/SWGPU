@@ -14,7 +14,7 @@ import { screenManager } from './screen/screen_manager';
 import { uiManager } from './ui/ui_manager';
 import { gfx3PostRenderer } from './gfx3_post/gfx3_post_renderer';
 import { gfx3ShadowVolumeRenderer } from './gfx3_shadow_volume/gfx3_shadow_volume_renderer';
-// ------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------
 import { Gfx3MeshJAM } from './gfx3_mesh/gfx3_mesh_jam';
 import { Gfx3MeshJSM } from './gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3PhysicsJWM } from './gfx3_physics/gfx3_physics_jwm';
@@ -48,13 +48,13 @@ interface Pack {
 class EngineManager {
   then: number;
   elapsedTime: number;
-  frameRateVariable: boolean;
+  frameRateFixed: boolean;
   frameRateValue: number;
 
   constructor() {
     this.then = 0;
     this.elapsedTime = 0;
-    this.frameRateVariable = true;
+    this.frameRateFixed = false;
     this.frameRateValue = 60;
   }
 
@@ -78,11 +78,12 @@ class EngineManager {
     this.then = timeStamp;
 
     // update phase
-    if (this.frameRateVariable || this.elapsedTime > 1000 / this.frameRateValue) {
+    if (!this.frameRateFixed || this.elapsedTime > 1000 / this.frameRateValue) {
       inputManager.update(ts);
       gfx2Manager.update(ts);
       uiManager.update(ts);
       screenManager.update(ts);
+      this.elapsedTime = 0;
     }
 
     this.elapsedTime += ts;
@@ -237,6 +238,24 @@ class EngineManager {
     });
 
     return pack;
+  }
+
+  /**
+   * Set frame rate fixed flag.
+   * 
+   * @param {boolean} fixed - The boolean flag.
+   */
+  setFrameRateFixed(fixed: boolean): void {
+    this.frameRateFixed = fixed;
+  }
+
+  /**
+   * The the frame rate value.
+   * 
+   * @param {number} value - The fps value.
+   */
+  setFrameRateValue(value: number): void {
+    this.frameRateValue = value;
   }
 }
 
