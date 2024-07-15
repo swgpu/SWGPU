@@ -1,11 +1,16 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
 import { gfx2TextureManager } from '../gfx2/gfx2_texture_manager';
+import { UT } from '../core/utils';
 
 interface TileCollision {
-  left: number | null;
-  right: number | null;
-  top: number | null;
-  bottom: number | null;
+  left: boolean;
+  right: boolean;
+  top: boolean;
+  bottom: boolean;
+  horizontalRow: number;
+  horizontalCol: number;
+  verticalRow: number;
+  verticalCol: number;
   isGrounded: boolean;
   isAgainstWall: null | 'right' | 'left' | 'top' | 'bottom';
 };
@@ -226,26 +231,31 @@ class Gfx2TileMap {
   }
 
   /**
-   * Returns a rectangle collision description.
-   * Note: isGround & isAgainstWall is used for side point of view.
+   * Returns a rectangle collision infos.
    * 
+   * @param {number} mx - The x movement.
+   * @param {number} my - The y movement.
    * @param {number} layerIndex - The collision index layer.
    * @param {number} l - The left side of rectangle.
    * @param {number} r - The right side of rectangle.
    * @param {number} t - The top side of rectangle.
    * @param {number} b - The bottom side of rectangle.
    */
-  getCollisions(layerIndex: number, l: number, r: number, t: number, b: number): TileCollision {
-    const bottom = this.getLocationRow(b);
-    const top = this.getLocationRow(t);
-    const right = this.getLocationCol(r);
-    const left = this.getLocationCol(l);
+  box(mx: number, my: number, layerIndex: number, l: number, r: number, t: number, b: number): TileCollision {
+    const bottom = this.getLocationRow(b + my);
+    const top = this.getLocationRow(t + my);
+    const right = this.getLocationCol(r + mx);
+    const left = this.getLocationCol(l + mx);
 
     const collisions: TileCollision = {
-      left: null,
-      right: null,
-      top: null,
-      bottom: null,
+      left: false,
+      right: false,
+      top: false,
+      bottom: false,
+      horizontalRow: -1,
+      horizontalCol: -1,
+      verticalRow: -1,
+      verticalCol: -1,
       isGrounded: false,
       isAgainstWall: null
     };
@@ -255,48 +265,45 @@ class Gfx2TileMap {
     for (let row = top; row <= bottom; row++) {
       for (let col = left; col <= right; col++) {
         if (layer.getTile(col, row) !== undefined) {
-          const tileTop = (row + 1) * this.tileHeight;
-          const tileBottom = row * this.tileHeight;
-          const tileLeft = col * this.tileWidth;
-          const tileRight = (col + 1) * this.tileWidth;
-          const emptyTop = layer.getTile(col, row + 1) === undefined;
-          const emptyBottom = layer.getTile(col, row - 1) === undefined;
-          const emptyLeft = layer.getTile(col - 1, row) === undefined;
-          const emptyRight = layer.getTile(col + 1, row) === undefined;
+          const tileX = col * this.tileWidth;
+          const tileY = row * this.tileWidth;
+          const collideH = UT.COLLIDE_RECT_TO_RECT([l + mx, t], [r + mx, b], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
+          const collideV = UT.COLLIDE_RECT_TO_RECT([l, t + my], [r, b + my], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
 
-          // We only test one side of each tile
-          if (emptyBottom && tileTop > b) {
-            collisions.bottom = tileBottom;
+          if (collideV && row == bottom && my > 0) {
+            collisions.bottom = true;
             collisions.isGrounded = true;
+            collisions.verticalRow = row;
+            collisions.verticalCol = col;
           }
-          else if (emptyTop && tileBottom < t) {
-            collisions.top = tileTop;
+          else if (collideV && row == top && my < 0) {
+            collisions.top = true;
+            collisions.verticalRow = row;
+            collisions.verticalCol = col;
           }
-          else if (emptyLeft && tileLeft < r) {
-            collisions.right = tileLeft;
+
+          if (collideH && col == left && mx < 0) {
+            collisions.left = true;
+            collisions.horizontalRow = row;
+            collisions.horizontalCol = col;
           }
-          else if (emptyRight && tileRight > l) {
-            collisions.left = tileRight;
+          else if (collideH && col == right && mx > 0) {
+            collisions.right = true;
+            collisions.horizontalRow = row;
+            collisions.horizontalCol = col;
           }
         }
       }
 
-      // Edge detection against the wall for wall jumping
       const leftEdgeCol = this.getLocationCol(l - 0.1);
       const isWallLeft = layer.getTile(leftEdgeCol, row) !== undefined;
-      const tileRight = (leftEdgeCol + 1) * this.tileWidth;
-      const emptyRight = layer.getTile(leftEdgeCol + 1, row) === undefined;
-
-      if (isWallLeft && emptyRight && tileRight >= l) {
+      if (isWallLeft) {
         collisions.isAgainstWall = 'left';
       }
 
       const rightEdgeCol = this.getLocationCol(r + 0.1);
       const isWallRight = layer.getTile(rightEdgeCol, row) !== undefined;
-      const tileLeft = (leftEdgeCol + 1) * this.tileWidth;
-      const emptyLeft = layer.getTile(rightEdgeCol - 1, row) === undefined;
-
-      if (isWallRight && emptyLeft && tileLeft <= r) {
+      if (isWallRight) {
         collisions.isAgainstWall = 'right';
       }
     }

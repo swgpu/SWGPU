@@ -247,6 +247,13 @@ class Gfx2BoundingRect {
   intersectBoundingRect(aabr: Gfx2BoundingRect): boolean {
     return UT.COLLIDE_RECT_TO_RECT(this.min, this.max, aabr.min, aabr.max);
   }
+
+  /**
+   * Get lines of the bounding rectangle.
+   */
+  getLines(): { l: [vec2, vec2], t: [vec2, vec2], r: [vec2, vec2], b: [vec2, vec2] } {
+    return UT.GET_LINES_FROM_RECT(this.min[0], this.min[1], this.max[0], this.max[1]);
+  }
 }
 
 export { Gfx2BoundingRect };

@@ -18,8 +18,8 @@ export class Collider extends DNAComponent {
     return {
       left: position.x - this.min[0],
       right: position.x + this.max[0],
-      bottom: position.y + this.min[1],
-      top: position.y - this.max[1]
+      bottom: position.y + this.max[1],
+      top: position.y - this.min[1]
     }
   }
 

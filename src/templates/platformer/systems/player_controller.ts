@@ -2,7 +2,7 @@ import { dnaManager } from '@lib/dna/dna_manager';
 import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
 import { inputManager } from '@lib/input/input_manager';
 import { Gfx2SpriteJAS } from '@lib/gfx2_sprite/gfx2_sprite_jas';
-import { Gfx2TileMap, TileCollision } from '@lib/gfx2_tile/gfx2_tile_map';
+import { Gfx2TileMap } from '@lib/gfx2_tile/gfx2_tile_map';
 import { UT } from '@lib/core/utils';
 import { DNASystem } from '@lib/dna/dna_system';
 // ---------------------------------------------------------------------------------------
@@ -45,21 +45,17 @@ export class PlayerControllerSystem extends DNASystem {
     const player = dnaManager.getComponent(eid, Player);
     const jump = dnaManager.getComponent(eid, Jump);
 
-    const bounds = collider.getBounds(position);
-    const collisions = this.map.getCollisions(this.collisionLayerIndex, bounds.left, bounds.right, bounds.top, bounds.bottom);
-
-    this.updateInput(ts, collisions, drawable, jump, velocity, player);
+    this.updateInput(ts, position, collider, drawable, jump, velocity, player);
     this.updateGravity(ts, jump, velocity);
-    this.updatePosition(ts, position, velocity, jump);
-
-    const nextBounds = collider.getBounds(position);
-    const nextCollisions = this.map.getCollisions(this.collisionLayerIndex, nextBounds.left, nextBounds.right, nextBounds.top, nextBounds.bottom);
-
-    this.updateCollision(nextCollisions, position, collider, velocity, jump);
+    this.updatePosition(ts, position, collider, velocity, jump);
+    this.updatePlatforms(ts, position, velocity, collider, jump);
     this.updateCamera(ts, position, jump);
   }
 
-  updateInput(ts: number, collisions: TileCollision, drawable: Drawable<Gfx2SpriteJAS>, jump: Jump, velocity: Velocity, player: Player) {
+  updateInput(ts: number, position: Position, collider: Collider, drawable: Drawable<Gfx2SpriteJAS>, jump: Jump, velocity: Velocity, player: Player) {
+    const bounds = collider.getBounds(position);
+    const collisions = this.map.box(0, 0.1, this.collisionLayerIndex, bounds.left, bounds.right, bounds.top, bounds.bottom);
+
     let accelerationX = 0;
     let accelerationY = 0;
 
@@ -74,14 +70,12 @@ export class PlayerControllerSystem extends DNASystem {
     if (inputManager.isJustActiveAction('JUMP') && (collisions.isGrounded || jump.platform !== -1)) {
       accelerationY = player.jumpStrenght * -1;
       jump.jumping = true;
-      collisions.bottom = null;
     }
 
     if (inputManager.isJustActiveAction('JUMP') && collisions.isAgainstWall && jump.jumping && !collisions.isGrounded) {
       accelerationY = player.wallJumpStrenght * -1;
       accelerationX = (collisions.isAgainstWall === 'right' ? -player.maxSpeed : player.maxSpeed) * 10;
       jump.wallJumping = true;
-      collisions[collisions.isAgainstWall] = null;
     }
 
     if (jump.jumping || jump.wallJumping) {
@@ -111,62 +105,56 @@ export class PlayerControllerSystem extends DNASystem {
     velocity.y = UT.LERP(velocity.y, GRAVITY_VALUE * gravityFactor, ts / 1000);
   }
 
-  updatePosition(ts: number, position: Position, velocity: Velocity, jump: Jump) {
-    position.x += velocity.x * (ts / 100);
-    position.y += velocity.y * (ts / 100);
-
-    if (jump.platform !== -1) {
-      const platformVelocity = dnaManager.getComponent(jump.platform, Velocity);
-      position.x += platformVelocity.x * (ts / 100);
-      position.y += platformVelocity.y * (ts / 100);
-    }
-  }
-
-  updateCollision(collisions: TileCollision, position: Position, collider: Collider, velocity: Velocity, jump: Jump) {
-    if (velocity.y >= 0) {
-      const bounds = collider.getBounds(position);
-      const platformId = this.collideWithPlatform(position, bounds);
-
-      if (platformId !== -1) {
-        if (inputManager.isActiveAction('DOWN')) {
-          jump.dropDown = platformId;
-        }
-        if (platformId !== jump.dropDown) {
-          const platformCollider = dnaManager.getComponent(platformId, Collider);
-          const platformPosition = dnaManager.getComponent(platformId, Position);
-          const platformBounds = platformCollider.getBounds(platformPosition);
-          position.y = platformBounds.top - collider.min[1];
-          jump.platform = platformId;
-          collisions.isGrounded = true;
-          jump.jumping = false;
-        }
-      }
-    }
+  updatePosition(ts: number, position: Position, collider: Collider, velocity: Velocity, jump: Jump) {
+    const bounds = collider.getBounds(position);
+    const mx = velocity.x * (ts / 100);
+    const my = velocity.y * (ts / 100);
+    const collisions = this.map.box(mx, my, this.collisionLayerIndex, bounds.left, bounds.right, bounds.top, bounds.bottom);
 
     if (collisions.isGrounded) {
-      velocity.y = 0;
       jump.jumping = false;
       jump.dropDown = -1;
       jump.wallJumping = false;
-    } else {
+    }
+    else {
       jump.platform = -1;
     }
 
-    if (collisions.left) {
-      position.x = collisions.left + collider.min[0];
-      velocity.x = 0;
-    }
-    if (collisions.right) {
-      position.x = collisions.right - collider.min[0];
-      velocity.x = 0;
-    }
-    if (collisions.bottom) {
-      position.y = collisions.bottom - collider.min[1];
+    if (collisions.top || collisions.bottom) {
       velocity.y = 0;
     }
-    if (collisions.top) {
-      position.y = collisions.top + collider.max[1];
-      velocity.y = 0;
+
+    if (collisions.left || collisions.right) {
+      velocity.x = 0;
+    }
+
+    position.x += velocity.x * (ts / 100);
+    position.y += velocity.y * (ts / 100);
+  }
+
+  updatePlatforms(ts: number, position: Position, velocity: Velocity, collider: Collider, jump: Jump) {
+    if (velocity.y < 0) {
+      return;
+    }
+
+    const bounds = collider.getBounds(position);
+    const platformId = this.collideWithPlatform(position, bounds);
+
+    if (platformId !== -1) {
+      if (inputManager.isActiveAction('DOWN')) {
+        jump.dropDown = platformId;
+      }
+      if (platformId !== jump.dropDown) {
+        const platformVelocity = dnaManager.getComponent(platformId, Velocity);
+        const platformCollider = dnaManager.getComponent(platformId, Collider);
+        const platformPosition = dnaManager.getComponent(platformId, Position);
+        const platformBounds = platformCollider.getBounds(platformPosition);
+        position.y = platformBounds.top - collider.min[1];
+        velocity.x += platformVelocity.x * (ts / 100);
+        velocity.y = 0;
+        jump.platform = platformId;
+        jump.jumping = false;
+      }
     }
   }
 

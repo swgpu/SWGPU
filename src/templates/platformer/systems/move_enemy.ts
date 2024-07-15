@@ -26,7 +26,7 @@ export class MoveEnemySystem extends DNASystem {
     const bounds = collider.getBounds(position);
     const leftCol = this.map.getLocationCol(bounds.left);
     const rightCol = this.map.getLocationCol(bounds.right);
-    const bottomRow = this.map.getLocationRow(bounds.bottom + 1);
+    const bottomRow = this.map.getLocationRow(bounds.bottom) + 1;
     const currentRow = this.map.getLocationRow(position.y);
     const layer = this.map.getTileLayer(this.layerIndex);
 

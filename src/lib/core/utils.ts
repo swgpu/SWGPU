@@ -1717,6 +1717,21 @@ class UT {
   }
 
   /**
+   * @param {number} l - The left side of rectangle.
+   * @param {number} r - The right side of rectangle.
+   * @param {number} t - The top side of rectangle.
+   * @param {number} b - The bottom side of rectangle.
+   */
+  static GET_LINES_FROM_RECT(l : number, t: number, r: number, b: number): { l: [vec2, vec2], t: [vec2, vec2], r: [vec2, vec2], b: [vec2, vec2] } {
+    return {
+      t: [[l, t], [r, t]],
+      r: [[r, t], [r, b]],
+      b: [[r, b], [l, b]],
+      l: [[l, b], [l, t]] 
+    }
+  }
+
+  /**
    * @param c1 - center of circle 1.
    * @param r1 - radius of circle 1.
    * @param c2 - center of circle 2.
