@@ -4,24 +4,23 @@ interface Sound {
 };
 
 interface SoundGroup {
-  id: string;
   muted: boolean;
   volume: number;
 };
 
 const DEFAULT_GROUP_ID = 'default';
-const DEFAULT_GROUP = { id: DEFAULT_GROUP_ID, muted: false, volume: 1 };
+const DEFAULT_GROUP = { muted: false, volume: 1 };
 
 /**
  * Singleton sound manager.
  */
 class SoundManager {
   sounds: Map<string, Sound>;
-  soundGroups: Array<SoundGroup>;
+  soundGroups: Map<string, SoundGroup>;
 
   constructor() {
     this.sounds = new Map<string, Sound>();
-    this.soundGroups = [DEFAULT_GROUP];
+    this.soundGroups = new Map<string, SoundGroup>();
   }
 
   /**
@@ -40,6 +39,7 @@ class SoundManager {
 
       sound.audio.addEventListener('canplaythrough', () => {
         this.sounds.set(path, sound);
+        this.soundGroups.set(groupId, {...DEFAULT_GROUP});
         resolve(sound);
       });
     });
@@ -108,7 +108,7 @@ class SoundManager {
    * @param {string} groupId - The group identifier.
    */
   mute(muted: boolean, groupId: string = DEFAULT_GROUP_ID): void {
-    const group = this.soundGroups.find(g => g.id == groupId);
+    const group = this.soundGroups.get(groupId);
     if (!group) {
       throw new Error('SoundManager::mute(): Group not found !');
     }
@@ -129,7 +129,7 @@ class SoundManager {
    * @param {string} groupId - The group identifier.
    */
   setVolume(volume: number, groupId: string = DEFAULT_GROUP_ID): void {
-    const group = this.soundGroups.find(g => g.id == groupId);
+    const group = this.soundGroups.get(groupId);
     if (!group) {
       throw new Error('SoundManager::setVolume(): Group not found !');
     }
@@ -147,7 +147,7 @@ class SoundManager {
    * Check if the group is currently muted or not.
    */
   isMuted(groupId: string = DEFAULT_GROUP_ID): boolean {
-    const group = this.soundGroups.find(g => g.id == groupId);
+    const group = this.soundGroups.get(groupId);
     if (!group) {
       throw new Error('SoundManager::isMuted(): Group not found !');
     }
