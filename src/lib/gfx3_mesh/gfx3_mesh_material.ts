@@ -569,8 +569,8 @@ class Gfx3Material {
    * 
    * @param {boolean} toonBlending - Enable or disable the blending between texture and toon texture.
    */
-  setToonBlending(toonBlending: boolean): void {
-    this.params[17] = toonBlending ? 1.0 : 0.0;
+  setToonBlending(toonBlending: number): void {
+    this.params[17] = toonBlending;
     this.dataChanged = true;
   }
 
