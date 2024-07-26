@@ -170,10 +170,9 @@ class Gfx3Material {
    * 
    * @param {string} path - The file path.
    */
-  static async createFromFile(path: string): Promise<Gfx3Material> {
+  static async createFromFile(path: string, textureDir: string = ''): Promise<Gfx3Material> {
     const response = await fetch(path);
     const json = await response.json();
-    const dir = path.split('/').slice(0, -1).join('/') + '/';
 
     if (!json.hasOwnProperty('Ident') || json['Ident'] != 'MAT') {
       throw new Error('Gfx3Material::loadFromFile(): File not valid !');
@@ -207,19 +206,19 @@ class Gfx3Material {
       ambient: json['Ambient'],
       diffuse: json['Diffuse'],
       specular: json['Specular'],
-      texture: json['Texture'] ? await gfx3TextureManager.loadTexture(dir + json['Texture']) : undefined,
+      texture: json['Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['Texture']) : undefined,
       textureScrollAngle: json['TextureScrollAngle'],
       textureScrollRate: json['TextureScrollRate'],
-      displacementMap: json['DisplacementMap'] ? await gfx3TextureManager.loadTexture(dir + json['DisplacementMap']) : undefined,
+      displacementMap: json['DisplacementMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['DisplacementMap']) : undefined,
       displacementMapScrollAngle: json['DisplacementMapScrollAngle'],
       displacementMapScrollRate: json['DisplacementMapScrollRate'],
       displacementMapFactor: json['DisplacementMapFactor'],
-      diffuseMap: json['DiffuseMap'] ? await gfx3TextureManager.loadTexture(dir + json['DiffuseMap']) : undefined,
-      specularMap: json['SpecularMap'] ? await gfx3TextureManager.loadTexture(dir + json['SpecularMap']) : undefined,
-      emissiveMap: json['EmissiveMap'] ? await gfx3TextureManager.loadTexture(dir + json['EmissiveMap']) : undefined,
-      normalMap: json['NormalMap'] ? await gfx3TextureManager.loadTexture(dir + json['NormalMap']) : undefined,
-      envMap: json['EnvMap'] ? await gfx3TextureManager.loadTexture(dir + json['EnvMap']) : undefined,
-      toonMap: json['ToonMap'] ? await gfx3TextureManager.loadTexture(dir + json['ToonMap']): undefined,
+      diffuseMap: json['DiffuseMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['DiffuseMap']) : undefined,
+      specularMap: json['SpecularMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['SpecularMap']) : undefined,
+      emissiveMap: json['EmissiveMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['EmissiveMap']) : undefined,
+      normalMap: json['NormalMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['NormalMap']) : undefined,
+      envMap: json['EnvMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['EnvMap']) : undefined,
+      toonMap: json['ToonMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['ToonMap']): undefined,
       decalEnabled: json['DecalEnabled'],
       shadowEnabled: json['ShadowEnabled'],
       shininess: json['Shininess'],

@@ -225,19 +225,18 @@ class EngineManager {
     const zip = await JSZip.loadAsync(await res.blob());
     const pack = new Pack3D();
 
-    // load texture first
-    zip.forEach(async (relativePath: any, zipEntry: any) => {
-      const splitname = zipEntry.name.split('.');
-      const name = splitname.slice(0, -1);
-      const ext = splitname.slice(-1);
-      const file = zip.file(zipEntry.name);
+    // load textures first
+    for (const entry of zip.file(/\.(jpg|jpeg|png|bmp)/)) {
+      const infos = this.#getFilenameInfos(entry.name);
+      const file = zip.file(entry.name);
 
-      if (file != null && this.textureExts.indexOf(ext) != -1) {
-        const texFile = zip.file(name + '.tex');
+      if (file != null && this.textureExts.indexOf(infos.ext) != -1) {
+        const imageUrl = URL.createObjectURL(await file.async('blob'));
         const sampler: GPUSamplerDescriptor = {};
         let type = '';
         let is8Bit = false;
 
+        const texFile = zip.file(infos.name + '.tex');
         if (texFile != null) {
           const json = JSON.parse(await texFile.async('string'));
           sampler.addressModeU = json['AddressModeU'];
@@ -254,162 +253,180 @@ class EngineManager {
           is8Bit = json['Is8Bit'];
         }
 
-        const imageUrl = URL.createObjectURL(await file!.async('blob'));
-
         if (type == 'Mips') {
-          const texture = await gfx3TextureManager.loadTextureMips(imageUrl, sampler, is8Bit, zipEntry.name);
-          pack.tex.push({ name: name, ext: 'bitmap', object: texture, blobUrl: imageUrl });
+          const texture = await gfx3TextureManager.loadTextureMips(imageUrl, sampler, is8Bit, entry.name);
+          pack.tex.push({ name: infos.name, ext: 'bitmap', object: texture, blobUrl: imageUrl });
         }
         else if (type == 'Cubemap') {
-          const texture = await gfx3TextureManager.loadCubemapTexture(imageUrl, ext, zipEntry.name);
-          pack.tex.push({ name: name, ext: 'bitmap', object: texture, blobUrl: imageUrl });
+          const texture = await gfx3TextureManager.loadCubemapTexture(imageUrl, infos.ext, entry.name);
+          pack.tex.push({ name: infos.name, ext: 'bitmap', object: texture, blobUrl: imageUrl });
         }
         else {
-          const texture = await gfx3TextureManager.loadTexture(imageUrl, sampler, is8Bit, zipEntry.name);
-          pack.tex.push({ name: name, ext: 'bitmap', object: texture, blobUrl: imageUrl });
+          const texture = await gfx3TextureManager.loadTexture(imageUrl, sampler, is8Bit, entry.name);
+          pack.tex.push({ name: infos.name, ext: 'bitmap', object: texture, blobUrl: imageUrl });
         }
       }
-    });
+    }
 
     // load all others resources
-    zip.forEach(async (relativePath: any, zipEntry: any) => {
-      const splitname = zipEntry.name.split('.');
-      const name = splitname.slice(0, -1);
-      const ext = splitname.slice(-1);
-      const file = zip.file(zipEntry.name);
-      const url = URL.createObjectURL(await file!.async('blob'));
+    for (const entry of zip.file(/.*/)) {
+      const infos = this.#getFilenameInfos(entry.name);
+      const file = zip.file(entry.name);
 
-      if (file != null && ext == 'mp3') {
-        const snd = await soundManager.loadSound(url, zipEntry.name);
-        pack.snd.push({ name: name, ext: 'mp3', object: snd, blobUrl: url });
+      if (file != null && infos.ext == 'mp3') {
+        const url = URL.createObjectURL(await file.async('blob'));
+        const snd = await soundManager.loadSound(url, entry.name);
+        pack.snd.push({ name: infos.name, ext: 'mp3', object: snd, blobUrl: url });
       }
 
-      if (file != null && ext == 'jsc') {
+      if (file != null && infos.ext == 'jsc') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jsc = new ScriptMachine();
         await jsc.loadFromFile(url);
-        pack.jsc.push({ name: name, ext: 'jsc', object: jsc, blobUrl: url });
+        pack.jsc.push({ name: infos.name, ext: 'jsc', object: jsc, blobUrl: url });
       }
 
-      if (file != null && ext == 'mat') {
+      if (file != null && infos.ext == 'mat') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const mat = await Gfx3Material.createFromFile(url);
-        pack.mat.push({ name: name, ext: 'mat', object: mat, blobUrl: url });
+        pack.mat.push({ name: infos.name, ext: 'mat', object: mat, blobUrl: url });
       }
 
-      if (file != null && ext == 'jam') {
+      if (file != null && infos.ext == 'jam') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jam = new Gfx3MeshJAM();
         await jam.loadFromFile(url);
-        pack.jam.push({ name: name, ext: 'jam', object: jam, blobUrl: url });
+        pack.jam.push({ name: infos.name, ext: 'jam', object: jam, blobUrl: url });
       }
 
-      if (file != null && ext == 'bam') {
+      if (file != null && infos.ext == 'bam') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jam = new Gfx3MeshJAM();
         await jam.loadFromBinaryFile(url);
-        pack.jam.push({ name: name, ext: 'bam', object: jam, blobUrl: url });
+        pack.jam.push({ name: infos.name, ext: 'bam', object: jam, blobUrl: url });
       }
 
-      if (file != null && ext == 'jsm') {
+      if (file != null && infos.ext == 'jsm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jsm = new Gfx3MeshJSM();
         await jsm.loadFromFile(url);
-        pack.jsm.push({ name: name, ext: 'jsm', object: jsm, blobUrl: url });
+        pack.jsm.push({ name: infos.name, ext: 'jsm', object: jsm, blobUrl: url });
       }
 
-      if (file != null && ext == 'bsm') {
+      if (file != null && infos.ext == 'bsm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jsm = new Gfx3MeshJSM();
         await jsm.loadFromBinaryFile(url);
-        pack.jsm.push({ name: name, ext: 'bsm', object: jsm, blobUrl: url });
+        pack.jsm.push({ name: infos.name, ext: 'bsm', object: jsm, blobUrl: url });
       }
 
-      if (file != null && ext == 'obj') {
-        const mtlFile = zip.file(name + '.mtl');
-        const mtlUrl = URL.createObjectURL(await mtlFile!.async('blob'));
-        const obj = new Gfx3MeshOBJ();
-        await obj.loadFromFile(url, mtlUrl);
-        pack.obj.push({ name: name, ext: 'obj', object: obj, blobUrl: url });
+      if (file != null && infos.ext == 'obj') {
+        const url = URL.createObjectURL(await file.async('blob'));
+        const mtlFile = zip.file(infos.name + '.mtl');
+        if (mtlFile != null) {
+          const mtlUrl = URL.createObjectURL(await mtlFile.async('blob'));
+          const obj = new Gfx3MeshOBJ();
+          await obj.loadFromFile(url, mtlUrl);
+          pack.obj.push({ name: infos.name, ext: 'obj', object: obj, blobUrl: url });
+        }
       }
 
-      if (file != null && ext == 'jas') {
+      if (file != null && infos.ext == 'jas') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jas = new Gfx3SpriteJAS();
         await jas.loadFromFile(url);
-        pack.jas.push({ name: name, ext: 'jas', object: jas, blobUrl: url });
+        pack.jas.push({ name: infos.name, ext: 'jas', object: jas, blobUrl: url });
       }
 
-      if (file != null && ext == 'jss') {
+      if (file != null && infos.ext == 'jss') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jss = new Gfx3SpriteJSS();
         await jss.loadFromFile(url);
-        pack.jss.push({ name: name, ext: 'jss', object: jss, blobUrl: url });
+        pack.jss.push({ name: infos.name, ext: 'jss', object: jss, blobUrl: url });
       }
 
-      if (file != null && ext == 'jwm') {
+      if (file != null && infos.ext == 'jwm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jwm = new Gfx3PhysicsJWM();
         await jwm.loadFromFile(url);
-        pack.jwm.push({ name: name, ext: 'jwm', object: jwm, blobUrl: url });
+        pack.jwm.push({ name: infos.name, ext: 'jwm', object: jwm, blobUrl: url });
       }
 
-      if (file != null && ext == 'bwm') {
+      if (file != null && infos.ext == 'bwm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jwm = new Gfx3PhysicsJWM();
         await jwm.loadFromBinaryFile(url);
-        pack.jwm.push({ name: name, ext: 'bwm', object: jwm, blobUrl: url });
+        pack.jwm.push({ name: infos.name, ext: 'bwm', object: jwm, blobUrl: url });
       }
 
-      if (file != null && ext == 'jnm') {
+      if (file != null && infos.ext == 'jnm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jnm = new Gfx3PhysicsJNM();
         await jnm.loadFromFile(url);
-        pack.jnm.push({ name: name, ext: 'jnm', object: jnm, blobUrl: url });
+        pack.jnm.push({ name: infos.name, ext: 'jnm', object: jnm, blobUrl: url });
       }
 
-      if (file != null && ext == 'bnm') {
+      if (file != null && infos.ext == 'bnm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jnm = new Gfx3PhysicsJNM();
         await jnm.loadFromBinaryFile(url);
-        pack.jnm.push({ name: name, ext: 'bnm', object: jnm, blobUrl: url });
+        pack.jnm.push({ name: infos.name, ext: 'bnm', object: jnm, blobUrl: url });
       }
 
-      if (file != null && ext == 'jlm') {
+      if (file != null && infos.ext == 'jlm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jlm = new Motion();
         await jlm.loadFromFile(url);
-        pack.jlm.push({ name: name, ext: 'jlm', object: jlm, blobUrl: url });
+        pack.jlm.push({ name: infos.name, ext: 'jlm', object: jlm, blobUrl: url });
       }
 
-      if (file != null && ext == 'blm') {
+      if (file != null && infos.ext == 'blm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jlm = new Motion();
         await jlm.loadFromBinaryFile(url);
-        pack.jlm.push({ name: name, ext: 'blm', object: jlm, blobUrl: url });
+        pack.jlm.push({ name: infos.name, ext: 'blm', object: jlm, blobUrl: url });
       }
 
-      if (file != null && ext == 'jsv') {
+      if (file != null && infos.ext == 'jsv') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jsv = new Gfx3ShadowVolume();
         await jsv.loadFromFile(url);
-        pack.jsv.push({ name: name, ext: 'jsv', object: jsv, blobUrl: url });
+        pack.jsv.push({ name: infos.name, ext: 'jsv', object: jsv, blobUrl: url });
       }
 
-      if (file != null && ext == 'bsv') {
+      if (file != null && infos.ext == 'bsv') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jsv = new Gfx3ShadowVolume();
         await jsv.loadFromBinaryFile(url);
-        pack.jsv.push({ name: name, ext: 'bsv', object: jsv, blobUrl: url });
+        pack.jsv.push({ name: infos.name, ext: 'bsv', object: jsv, blobUrl: url });
       }
 
-      if (file != null && ext == 'jlt') {
+      if (file != null && infos.ext == 'jlt') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jlt = new Gfx3MeshLight();
         await jlt.loadFromFile(url);
-        pack.jlt.push({ name: name, ext: 'jlt', object: jlt, blobUrl: url });
+        pack.jlt.push({ name: infos.name, ext: 'jlt', object: jlt, blobUrl: url });
       }
 
-      if (file != null && ext == 'grf') {
+      if (file != null && infos.ext == 'grf') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const grf = new AIPathGraph3D();
         await grf.loadFromFile(url);
-        pack.grf.push({ name: name, ext: 'grf', object: grf, blobUrl: url });
+        pack.grf.push({ name: infos.name, ext: 'grf', object: grf, blobUrl: url });
       }
 
-      if (file != null && ext == 'grd') {
+      if (file != null && infos.ext == 'grd') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const grd = new AIPathGrid3D();
         await grd.loadFromFile(url);
-        pack.grd.push({ name: name, ext: 'grd', object: grd, blobUrl: url });
+        pack.grd.push({ name: infos.name, ext: 'grd', object: grd, blobUrl: url });
       }
 
-      if (file != null && ext == 'any') {
+      if (file != null && infos.ext == 'any') {
         const data = JSON.parse(await file.async('string'));
-        pack.any.push({ name: name, ext: 'any', object: data, blobUrl: url });
+        pack.any.push({ name: infos.name, ext: 'any', object: data, blobUrl: '' });
       }
-    });
+    }
 
     for (const item of [...pack.jsm, ...pack.jam]) {
       item.object.setMaterial(pack.mat.get(item.name));
@@ -429,85 +446,89 @@ class EngineManager {
     const pack = new Pack2D();
 
     // load texture first
-    zip.forEach(async (relativePath: any, zipEntry: any) => {
-      const splitname = zipEntry.name.split('.');
-      const name = splitname.slice(0, -1);
-      const ext = splitname.slice(-1);
-      const file = zip.file(zipEntry.name);
-      const url = URL.createObjectURL(await file!.async('blob'));
+    for (const entry of zip.file(/\.(jpg|jpeg|png|bmp)/)) {
+      const infos = this.#getFilenameInfos(entry.name);
+      const file = zip.file(entry.name);
 
-      if (file != null && this.textureExts.indexOf(ext) != -1) {
+      if (file != null && this.textureExts.indexOf(infos.ext) != -1) {
+        const url = URL.createObjectURL(await file.async('blob'));
         const tex = await gfx2TextureManager.loadTexture(url);
-        pack.tex.push({ name: name, ext: 'bitmap', object: tex, blobUrl: url });
+        pack.tex.push({ name: infos.name, ext: 'bitmap', object: tex, blobUrl: url });
       }
-    });
+    }
 
     // load all others resources
-    zip.forEach(async (relativePath: any, zipEntry: any) => {
-      const splitname = zipEntry.name.split('.');
-      const name = splitname.slice(0, -1);
-      const ext = splitname.slice(-1);
-      const file = zip.file(zipEntry.name);
-      const url = URL.createObjectURL(await file!.async('blob'));
-
-      if (file != null && ext == 'mp3') {
-        const snd = await soundManager.loadSound(url, zipEntry.name);
-        pack.snd.push({ name: name, ext: 'mp3', object: snd, blobUrl: url });
+    for (const entry of zip.file(/.*/)) {
+      const infos = this.#getFilenameInfos(entry.name);
+      const file = zip.file(entry.name);
+      
+      if (file != null && infos.ext == 'mp3') {
+        const url = URL.createObjectURL(await file.async('blob'));
+        const snd = await soundManager.loadSound(url, entry.name);
+        pack.snd.push({ name: infos.name, ext: 'mp3', object: snd, blobUrl: url });
       }
 
-      if (file != null && ext == 'jsc') {
+      if (file != null && infos.ext == 'jsc') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jsc = new ScriptMachine();
         await jsc.loadFromFile(url);
-        pack.jsc.push({ name: name, ext: 'jsc', object: jsc, blobUrl: url });
+        pack.jsc.push({ name: infos.name, ext: 'jsc', object: jsc, blobUrl: url });
       }
 
-      if (file != null && ext == 'jss') {
+      if (file != null && infos.ext == 'jss') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jss = new Gfx2SpriteJSS();
         await jss.loadFromFile(url);
-        pack.jss.push({ name: name, ext: 'jss', object: jss, blobUrl: url });
+        pack.jss.push({ name: infos.name, ext: 'jss', object: jss, blobUrl: url });
       }
 
-      if (file != null && ext == 'jas') {
+      if (file != null && infos.ext == 'jas') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jas = new Gfx2SpriteJAS();
         await jas.loadFromFile(url);
-        pack.jas.push({ name: name, ext: 'jas', object: jas, blobUrl: url });
+        pack.jas.push({ name: infos.name, ext: 'jas', object: jas, blobUrl: url });
       }
 
-      if (file != null && ext == 'jtm') {
+      if (file != null && infos.ext == 'jtm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jtm = new Gfx2TileMap();
         await jtm.loadFromFile(url);
-        pack.jtm.push({ name: name, ext: 'jtm', object: jtm, blobUrl: url });
+        pack.jtm.push({ name: infos.name, ext: 'jtm', object: jtm, blobUrl: url });
       }
 
-      if (file != null && ext == 'jlm') {
+      if (file != null && infos.ext == 'jlm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jlm = new Motion();
         await jlm.loadFromFile(url);
-        pack.jlm.push({ name: name, ext: 'jlm', object: jlm, blobUrl: url });
+        pack.jlm.push({ name: infos.name, ext: 'jlm', object: jlm, blobUrl: url });
       }
 
-      if (file != null && ext == 'blm') {
+      if (file != null && infos.ext == 'blm') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const jlm = new Motion();
         await jlm.loadFromBinaryFile(url);
-        pack.jlm.push({ name: name, ext: 'blm', object: jlm, blobUrl: url });
+        pack.jlm.push({ name: infos.name, ext: 'blm', object: jlm, blobUrl: url });
       }
 
-      if (file != null && ext == 'grf') {
+      if (file != null && infos.ext == 'grf') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const grf = new AIPathGraph2D();
         await grf.loadFromFile(url);
-        pack.grf.push({ name: name, ext: 'grf', object: grf, blobUrl: url });
+        pack.grf.push({ name: infos.name, ext: 'grf', object: grf, blobUrl: url });
       }
 
-      if (file != null && ext == 'grd') {
+      if (file != null && infos.ext == 'grd') {
+        const url = URL.createObjectURL(await file.async('blob'));
         const grd = new AIPathGrid2D();
         await grd.loadFromFile(url);
-        pack.grd.push({ name: name, ext: 'grd', object: grd, blobUrl: url });
+        pack.grd.push({ name: infos.name, ext: 'grd', object: grd, blobUrl: url });
       }
 
-      if (file != null && ext == 'any') {
+      if (file != null && infos.ext == 'any') {
         const data = JSON.parse(await file.async('string'));
-        pack.any.push({ name: name, ext: 'any', object: data, blobUrl: url });
+        pack.any.push({ name: infos.name, ext: 'any', object: data, blobUrl: '' });
       }
-    });
+    }
 
     return pack;
   }
@@ -528,6 +549,14 @@ class EngineManager {
    */
   setFrameRateValue(value: number): void {
     this.frameRateValue = value;
+  }
+
+  #getFilenameInfos(filename: string): { name: string, ext: string } {
+    const splitname = filename.split('.');
+    return {
+      name: splitname.slice(0, -1).join(),
+      ext: splitname.at(-1) ?? ''
+    };
   }
 }
 

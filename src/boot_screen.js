@@ -29,6 +29,7 @@ import { RapierScreen } from './utils/rapier/rapier_screen';
 import { ShadowScreen } from './utils/shadow/shadow_screen';
 import { UserInterfaceScreen } from './utils/user-interface/user_interface_screen';
 import { ViewerScreen } from './utils/viewer/viewer_screen';
+import { PackScreen } from './utils/pack/pack_screen';
 // ---------------------------------------------------------------------------------------
 
 class BootScreen extends Screen {
@@ -71,6 +72,7 @@ class BootScreen extends Screen {
     this.uiUtils.add('5', 'UI Menu');
     this.uiUtils.add('6', '3D Viewer');
     this.uiUtils.add('7', '3D Menu Ring');
+    this.uiUtils.add('8', '3D Pack');
     this.uiUtils.setVisible(false);
     uiManager.addWidget(this.uiUtils, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
@@ -173,6 +175,9 @@ class BootScreen extends Screen {
     }
     else if (data.id == 7) {
       screenManager.requestSetScreen(new MenuRingScreen());
+    }
+    else if (data.id == 8) {
+      screenManager.requestSetScreen(new PackScreen());
     }
   }
 }
