@@ -39,51 +39,66 @@ interface PackItem<T> {
   blobUrl: string;
 };
 
+class PackItemList<T> extends Array<PackItem<T>> {
+  constructor() {
+    super();
+  }
+
+  getItem(name: string): T {
+    const item = this.find(i => i.name == name);
+    if (!item) {
+      throw new Error('EngineManager::PackItemList::get(): item not found !');
+    }
+  
+    return item.object;
+  }
+}
+
 class Pack3D {
-  tex: Array<PackItem<Gfx3Texture>>;
-  mat: Array<PackItem<Gfx3Material>>;
-  jam: Array<PackItem<Gfx3MeshJAM>>;
-  jsm: Array<PackItem<Gfx3MeshJSM>>;
-  jwm: Array<PackItem<Gfx3PhysicsJWM>>;
-  jnm: Array<PackItem<Gfx3PhysicsJNM>>;
-  jlm: Array<PackItem<Motion>>;
-  jsv: Array<PackItem<Gfx3ShadowVolume>>;
-  jlt: Array<PackItem<Gfx3MeshLight>>;
-  grf: Array<PackItem<AIPathGraph3D>>;
-  any: Array<PackItem<any>>;
+  tex: PackItemList<Gfx3Texture>;
+  mat: PackItemList<Gfx3Material>;
+  jam: PackItemList<Gfx3MeshJAM>;
+  jsm: PackItemList<Gfx3MeshJSM>;
+  jwm: PackItemList<Gfx3PhysicsJWM>;
+  jnm: PackItemList<Gfx3PhysicsJNM>;
+  jlm: PackItemList<Motion>;
+  jsv: PackItemList<Gfx3ShadowVolume>;
+  jlt: PackItemList<Gfx3MeshLight>;
+  grf: PackItemList<AIPathGraph3D>;
+  any: PackItemList<any>;
 
   constructor() {
-    this.tex = [];
-    this.mat = [];
-    this.jam = [];
-    this.jsm = [];
-    this.jwm = [];
-    this.jnm = [];
-    this.jlm = [];
-    this.jsv = [];
-    this.jlt = [];
-    this.grf = [];
-    this.any = [];
+    this.tex = new PackItemList<Gfx3Texture>;
+    this.mat = new PackItemList<Gfx3Material>;
+    this.jam = new PackItemList<Gfx3MeshJAM>;
+    this.jsm = new PackItemList<Gfx3MeshJSM>;
+    this.jwm = new PackItemList<Gfx3PhysicsJWM>;
+    this.jnm = new PackItemList<Gfx3PhysicsJNM>;
+    this.jlm = new PackItemList<Motion>;
+    this.jsv = new PackItemList<Gfx3ShadowVolume>;
+    this.jlt = new PackItemList<Gfx3MeshLight>;
+    this.grf = new PackItemList<AIPathGraph3D>;
+    this.any = new PackItemList<any>;
   }
 }
 
 class Pack2D {
-  tex: Array<PackItem<ImageBitmap>>;
-  jss: Array<PackItem<Gfx2SpriteJSS>>;
-  jas: Array<PackItem<Gfx2SpriteJAS>>;
-  jtm: Array<PackItem<Gfx2TileMap>>;
-  jlm: Array<PackItem<Motion>>;
-  grf: Array<PackItem<AIPathGraph2D>>;
-  any: Array<PackItem<any>>;
+  tex: PackItemList<ImageBitmap>;
+  jss: PackItemList<Gfx2SpriteJSS>;
+  jas: PackItemList<Gfx2SpriteJAS>;
+  jtm: PackItemList<Gfx2TileMap>;
+  jlm: PackItemList<Motion>;
+  grf: PackItemList<AIPathGraph2D>;
+  any: PackItemList<any>;
 
   constructor() {
-    this.tex = [];
-    this.jss = [];
-    this.jas = [];
-    this.jtm = [];
-    this.jlm = [];
-    this.grf = [];
-    this.any = [];
+    this.tex = new PackItemList<ImageBitmap>;
+    this.jss = new PackItemList<Gfx2SpriteJSS>;
+    this.jas = new PackItemList<Gfx2SpriteJAS>;
+    this.jtm = new PackItemList<Gfx2TileMap>;
+    this.jlm = new PackItemList<Motion>;
+    this.grf = new PackItemList<AIPathGraph2D>;
+    this.any = new PackItemList<any>;
   }
 }
 

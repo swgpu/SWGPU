@@ -14,7 +14,7 @@
   "email": "aliyah.raijin@gmail.com",
   "author": "Julien Rongiere",
   "license": "MIT",
-  "version": "1.5.8",
+  "version": "1.5.9",
   "type": "module",
   "main": "src/lib/index.ts",
   "files": [
