@@ -29,8 +29,11 @@ class SoundManager {
    * 
    * @param {string} path - The file path.
    * @param {string} groupId - The group identifier.
+   * @param {string} storePath - The optionnal store file path.
    */
-  async loadSound(path: string, groupId: string = DEFAULT_GROUP_ID): Promise<Sound> {
+  async loadSound(path: string, groupId: string = DEFAULT_GROUP_ID, storePath: string = ''): Promise<Sound> {
+    storePath = storePath ? storePath : path;
+
     return new Promise(resolve => {
       const sound = {
         audio: new Audio(path),
@@ -38,7 +41,7 @@ class SoundManager {
       };
 
       sound.audio.addEventListener('canplaythrough', () => {
-        this.sounds.set(path, sound);
+        this.sounds.set(storePath, sound);
         this.soundGroups.set(groupId, {...DEFAULT_GROUP});
         resolve(sound);
       });
@@ -156,5 +159,6 @@ class SoundManager {
   }
 }
 
+export type { Sound };
 export { SoundManager };
 export const soundManager = new SoundManager();

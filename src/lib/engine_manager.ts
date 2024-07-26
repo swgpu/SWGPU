@@ -12,25 +12,33 @@ import { gfx3SpriteRenderer } from './gfx3_sprite/gfx3_sprite_renderer';
 import { gfx3SkyboxRenderer } from './gfx3_skybox/gfx3_skybox_renderer';
 import { gfx3FlareRenderer } from './gfx3_flare/gfx3_flare_renderer';
 import { gfx3ParticlesRenderer } from './gfx3_particules/gfx3_particles_renderer';
-import { screenManager } from './screen/screen_manager';
-import { uiManager } from './ui/ui_manager';
 import { gfx3PostRenderer } from './gfx3_post/gfx3_post_renderer';
 import { gfx3ShadowVolumeRenderer } from './gfx3_shadow_volume/gfx3_shadow_volume_renderer';
+import { soundManager } from './sound/sound_manager';
+import { screenManager } from './screen/screen_manager';
+import { uiManager } from './ui/ui_manager';
 // -----------------------------------------------------------------------------------------------
 import { Gfx3MeshJAM } from './gfx3_mesh/gfx3_mesh_jam';
 import { Gfx3MeshJSM } from './gfx3_mesh/gfx3_mesh_jsm';
+import { Gfx3MeshOBJ } from './gfx3_mesh/gfx3_mesh_obj';
 import { Gfx3PhysicsJWM } from './gfx3_physics/gfx3_physics_jwm';
 import { Gfx3PhysicsJNM } from './gfx3_physics/gfx3_physics_jnm';
 import { Gfx3ShadowVolume } from './gfx3_shadow_volume/gfx3_shadow_volume';
 import { Gfx3MeshLight } from './gfx3_mesh/gfx3_mesh_light';
 import { AIPathGraph3D } from './ai/ai_path_graph';
+import { AIPathGraph2D } from './ai/ai_path_graph';
+import { AIPathGrid3D } from './ai/ai_path_grid';
+import { AIPathGrid2D } from './ai/ai_path_grid';
 import { Motion } from './motion/motion';
 import { Gfx2SpriteJSS } from './gfx2_sprite/gfx2_sprite_jss';
 import { Gfx2SpriteJAS } from './gfx2_sprite/gfx2_sprite_jas';
 import { Gfx2TileMap } from './gfx2_tile/gfx2_tile_map';
-import { AIPathGraph2D } from './ai/ai_path_graph';
 import { Gfx3Texture } from './gfx3/gfx3_texture';
 import { Gfx3Material } from './gfx3_mesh/gfx3_mesh_material';
+import { Gfx3SpriteJAS } from './gfx3_sprite/gfx3_sprite_jas';
+import { Gfx3SpriteJSS } from './gfx3_sprite/gfx3_sprite_jss';
+import { ScriptMachine } from './script/script_machine';
+import { Sound } from './sound/sound_manager';
 
 interface PackItem<T> {
   name: string;
@@ -44,7 +52,7 @@ class PackItemList<T> extends Array<PackItem<T>> {
     super();
   }
 
-  getItem(name: string): T {
+  get(name: string): T {
     const item = this.find(i => i.name == name);
     if (!item) {
       throw new Error('EngineManager::PackItemList::get(): item not found !');
@@ -54,50 +62,72 @@ class PackItemList<T> extends Array<PackItem<T>> {
   }
 }
 
-class Pack3D {
+class Pack {
+  jsc: PackItemList<ScriptMachine>;
+  snd: PackItemList<Sound>;
+
+  constructor() {
+    this.jsc = new PackItemList<ScriptMachine>;
+    this.snd = new PackItemList<Sound>;
+  }
+}
+
+class Pack3D extends Pack {
   tex: PackItemList<Gfx3Texture>;
   mat: PackItemList<Gfx3Material>;
   jam: PackItemList<Gfx3MeshJAM>;
   jsm: PackItemList<Gfx3MeshJSM>;
+  obj: PackItemList<Gfx3MeshOBJ>;
+  jas: PackItemList<Gfx3SpriteJAS>;
+  jss: PackItemList<Gfx3SpriteJSS>;
   jwm: PackItemList<Gfx3PhysicsJWM>;
   jnm: PackItemList<Gfx3PhysicsJNM>;
   jlm: PackItemList<Motion>;
   jsv: PackItemList<Gfx3ShadowVolume>;
   jlt: PackItemList<Gfx3MeshLight>;
   grf: PackItemList<AIPathGraph3D>;
+  grd: PackItemList<AIPathGrid3D>;
   any: PackItemList<any>;
 
   constructor() {
+    super();
     this.tex = new PackItemList<Gfx3Texture>;
     this.mat = new PackItemList<Gfx3Material>;
     this.jam = new PackItemList<Gfx3MeshJAM>;
     this.jsm = new PackItemList<Gfx3MeshJSM>;
+    this.obj = new PackItemList<Gfx3MeshOBJ>;
+    this.jas = new PackItemList<Gfx3SpriteJAS>;
+    this.jss = new PackItemList<Gfx3SpriteJSS>;
     this.jwm = new PackItemList<Gfx3PhysicsJWM>;
     this.jnm = new PackItemList<Gfx3PhysicsJNM>;
     this.jlm = new PackItemList<Motion>;
     this.jsv = new PackItemList<Gfx3ShadowVolume>;
     this.jlt = new PackItemList<Gfx3MeshLight>;
     this.grf = new PackItemList<AIPathGraph3D>;
+    this.grd = new PackItemList<AIPathGrid3D>;
     this.any = new PackItemList<any>;
   }
 }
 
-class Pack2D {
+class Pack2D extends Pack {
   tex: PackItemList<ImageBitmap>;
   jss: PackItemList<Gfx2SpriteJSS>;
   jas: PackItemList<Gfx2SpriteJAS>;
   jtm: PackItemList<Gfx2TileMap>;
   jlm: PackItemList<Motion>;
   grf: PackItemList<AIPathGraph2D>;
+  grd: PackItemList<AIPathGrid2D>;
   any: PackItemList<any>;
 
   constructor() {
+    super();
     this.tex = new PackItemList<ImageBitmap>;
     this.jss = new PackItemList<Gfx2SpriteJSS>;
     this.jas = new PackItemList<Gfx2SpriteJAS>;
     this.jtm = new PackItemList<Gfx2TileMap>;
     this.jlm = new PackItemList<Motion>;
     this.grf = new PackItemList<AIPathGraph2D>;
+    this.grd = new PackItemList<AIPathGrid2D>;
     this.any = new PackItemList<any>;
   }
 }
@@ -193,15 +223,14 @@ class EngineManager {
     const zip = await JSZip.loadAsync(await res.blob());
     const pack = new Pack3D();
 
+    // load texture first
     zip.forEach(async (relativePath: any, zipEntry: any) => {
       const splitname = zipEntry.name.split('.');
       const name = splitname.slice(0, -1);
       const ext = splitname.slice(-1);
       const file = zip.file(zipEntry.name);
 
-      // load texture first
       // @todo: export tex from blender
-
       if (file != null && ext == 'tex') {
         const json = JSON.parse(await file.async('string'));
         const sampler: GPUSamplerDescriptor = {
@@ -235,26 +264,30 @@ class EngineManager {
       }
     });
 
+    // load all others resources
     zip.forEach(async (relativePath: any, zipEntry: any) => {
       const splitname = zipEntry.name.split('.');
       const name = splitname.slice(0, -1);
       const ext = splitname.slice(-1);
       const file = zip.file(zipEntry.name);
       const url = URL.createObjectURL(await file!.async('blob'));
+
+      if (file != null && ext == 'mp3') {
+        const snd = await soundManager.loadSound(url, zipEntry.name);
+        pack.snd.push({ name: name, ext: 'mp3', object: snd, blobUrl: url });
+      }
+
+      if (file != null && ext == 'jsc') {
+        const jsc = new ScriptMachine();
+        await jsc.loadFromFile(url);
+        pack.jsc.push({ name: name, ext: 'jsc', object: jsc, blobUrl: url });
+      }
 
       if (file != null && ext == 'mat') {
         const mat = await Gfx3Material.createFromFile(url);
-        pack.mat.push({ name: name, ext: ext, object: mat, blobUrl: url });
+        pack.mat.push({ name: name, ext: 'mat', object: mat, blobUrl: url });
       }
-    });
 
-    zip.forEach(async (relativePath: any, zipEntry: any) => {
-      const splitname = zipEntry.name.split('.');
-      const name = splitname.slice(0, -1);
-      const ext = splitname.slice(-1);
-      const file = zip.file(zipEntry.name);
-      const url = URL.createObjectURL(await file!.async('blob'));
-      
       if (file != null && ext == 'jam') {
         const jam = new Gfx3MeshJAM();
         await jam.loadFromFile(url);
@@ -264,7 +297,7 @@ class EngineManager {
       if (file != null && ext == 'bam') {
         const jam = new Gfx3MeshJAM();
         await jam.loadFromBinaryFile(url);
-        pack.jam.push({ name: name, ext: 'jam', object: jam, blobUrl: url });
+        pack.jam.push({ name: name, ext: 'bam', object: jam, blobUrl: url });
       }
 
       if (file != null && ext == 'jsm') {
@@ -277,6 +310,26 @@ class EngineManager {
         const jsm = new Gfx3MeshJSM();
         await jsm.loadFromBinaryFile(url);
         pack.jsm.push({ name: name, ext: 'bsm', object: jsm, blobUrl: url });
+      }
+
+      if (file != null && ext == 'obj') {
+        const mtlFile = zip.file(name + '.mtl');
+        const mtlUrl = URL.createObjectURL(await mtlFile!.async('blob'));
+        const obj = new Gfx3MeshOBJ();
+        await obj.loadFromFile(url, mtlUrl);
+        pack.obj.push({ name: name, ext: 'obj', object: obj, blobUrl: url });
+      }
+
+      if (file != null && ext == 'jas') {
+        const jas = new Gfx3SpriteJAS();
+        await jas.loadFromFile(url);
+        pack.jas.push({ name: name, ext: 'jas', object: jas, blobUrl: url });
+      }
+
+      if (file != null && ext == 'jss') {
+        const jss = new Gfx3SpriteJSS();
+        await jss.loadFromFile(url);
+        pack.jss.push({ name: name, ext: 'jss', object: jss, blobUrl: url });
       }
 
       if (file != null && ext == 'jwm') {
@@ -339,6 +392,12 @@ class EngineManager {
         pack.grf.push({ name: name, ext: 'grf', object: grf, blobUrl: url });
       }
 
+      if (file != null && ext == 'grd') {
+        const grd = new AIPathGrid3D();
+        await grd.loadFromFile(url);
+        pack.grd.push({ name: name, ext: 'grd', object: grd, blobUrl: url });
+      }
+
       if (file != null && ext == 'any') {
         const data = JSON.parse(await file.async('string'));
         pack.any.push({ name: name, ext: 'any', object: data, blobUrl: url });
@@ -358,6 +417,7 @@ class EngineManager {
     const zip = await JSZip.loadAsync(await res.blob());
     const pack = new Pack2D();
 
+    // load texture first
     zip.forEach(async (relativePath: any, zipEntry: any) => {
       const splitname = zipEntry.name.split('.');
       const name = splitname.slice(0, -1);
@@ -371,12 +431,24 @@ class EngineManager {
       }
     });
 
+    // load all others resources
     zip.forEach(async (relativePath: any, zipEntry: any) => {
       const splitname = zipEntry.name.split('.');
       const name = splitname.slice(0, -1);
       const ext = splitname.slice(-1);
       const file = zip.file(zipEntry.name);
       const url = URL.createObjectURL(await file!.async('blob'));
+
+      if (file != null && ext == 'mp3') {
+        const snd = await soundManager.loadSound(url, zipEntry.name);
+        pack.snd.push({ name: name, ext: 'mp3', object: snd, blobUrl: url });
+      }
+
+      if (file != null && ext == 'jsc') {
+        const jsc = new ScriptMachine();
+        await jsc.loadFromFile(url);
+        pack.jsc.push({ name: name, ext: 'jsc', object: jsc, blobUrl: url });
+      }
 
       if (file != null && ext == 'jss') {
         const jss = new Gfx2SpriteJSS();
@@ -388,6 +460,12 @@ class EngineManager {
         const jas = new Gfx2SpriteJAS();
         await jas.loadFromFile(url);
         pack.jas.push({ name: name, ext: 'jas', object: jas, blobUrl: url });
+      }
+
+      if (file != null && ext == 'jtm') {
+        const jtm = new Gfx2TileMap();
+        await jtm.loadFromFile(url);
+        pack.jtm.push({ name: name, ext: 'jtm', object: jtm, blobUrl: url });
       }
 
       if (file != null && ext == 'jlm') {
@@ -406,6 +484,12 @@ class EngineManager {
         const grf = new AIPathGraph2D();
         await grf.loadFromFile(url);
         pack.grf.push({ name: name, ext: 'grf', object: grf, blobUrl: url });
+      }
+
+      if (file != null && ext == 'grd') {
+        const grd = new AIPathGrid2D();
+        await grd.loadFromFile(url);
+        pack.grd.push({ name: name, ext: 'grd', object: grd, blobUrl: url });
       }
 
       if (file != null && ext == 'any') {
@@ -436,6 +520,6 @@ class EngineManager {
   }
 }
 
-export type { PackItem };
+export type { PackItem, PackItemList };
 export { EngineManager, Pack2D, Pack3D };
 export const em = new EngineManager();

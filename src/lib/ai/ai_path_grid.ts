@@ -46,7 +46,7 @@ abstract class AIPathGrid<T extends vec2 | vec3> {
   abstract isSame(a: T, b: T): boolean;
 
   /**
-   * Loads asynchronously path grid data from a json file.
+   * Asynchronously loads path grid data from a json file (grd).
    * 
    * @param {string} path - The file path.
    */
@@ -54,7 +54,7 @@ abstract class AIPathGrid<T extends vec2 | vec3> {
     const response = await fetch(path);
     const json = await response.json();
 
-    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'PATH_GRID') {
+    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'GRD') {
       throw new Error('AIPathGrid<T>::loadFromFile(): File not valid !');
     }
 
