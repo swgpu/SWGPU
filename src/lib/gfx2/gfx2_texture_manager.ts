@@ -12,16 +12,19 @@ class Gfx2TextureManager {
    * Loads asynchronously an image from a given path, caching it for future use and returns it as an `ImageBitmap`.
    * 
    * @param {string} path - The file path.
+   * @param {string} storePath - The optionnal store file path.
    */
-  async loadTexture(path: string): Promise<ImageBitmap> {
-    if (this.textures.has(path)) {
-      return this.textures.get(path)!;
+  async loadTexture(path: string, storePath: string = ''): Promise<ImageBitmap> {
+    storePath = storePath ? storePath : path;
+
+    if (this.textures.has(storePath)) {
+      return this.textures.get(storePath)!;
     }
 
     const res = await fetch(path);
     const img = await res.blob();
     const bitmap = await createImageBitmap(img);
-    this.textures.set(path, bitmap);
+    this.textures.set(storePath, bitmap);
     return bitmap;
   }
 

@@ -102,7 +102,7 @@ export { inputManager } from './input/input_manager';
 export { screenManager } from './screen/screen_manager';
 export { soundManager } from './sound/sound_manager';
 export { uiManager } from './ui/ui_manager';
-export { engineManager } from './engine_manager';
+export { em, Pack2D, Pack3D } from './engine_manager';
 // types -------------------------------------------------------------------------------------
 export type { StraightFlowState } from './core/straight_flow';
 export type { Gfx2RenderingMode } from './gfx2/gfx2_manager';

@@ -18,10 +18,13 @@ class Gfx3TextureManager {
    * @param {string} path - The file path.
    * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
    * @param {boolean} [is8bit] - Determine if texture is 8bits encoded.
+   * @param {string} storePath - The optionnal store file path.
    */
-  async loadTexture(path: string, samplerDescriptor: GPUSamplerDescriptor = {}, is8bit: boolean = false): Promise<Gfx3Texture> {
-    if (this.textures.has(path)) {
-      return this.textures.get(path)!;
+  async loadTexture(path: string, samplerDescriptor: GPUSamplerDescriptor = {}, is8bit: boolean = false, storePath: string = ''): Promise<Gfx3Texture> {
+    storePath = storePath ? storePath : path;
+
+    if (this.textures.has(storePath)) {
+      return this.textures.get(storePath)!;
     }
 
     const res = await fetch(path);
@@ -29,7 +32,7 @@ class Gfx3TextureManager {
     const bitmap = await createImageBitmap(img, { colorSpaceConversion: 'none' });
     const texture = gfx3Manager.createTextureFromBitmap(bitmap, is8bit, samplerDescriptor);
 
-    this.textures.set(path, texture);
+    this.textures.set(storePath, texture);
     return texture;
   }
 
@@ -39,17 +42,20 @@ class Gfx3TextureManager {
    * @param {string} path - The file path.
    * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
    * @param {boolean} [is8bit] - Determine if texture is 8bits encoded.
+   * @param {string} storePath - The optionnal store file path.
    */
-  async loadTextureMips(path: string, samplerDescriptor: GPUSamplerDescriptor = {}, is8bit: boolean = false): Promise<Gfx3Texture> {
-    if (this.textures.has(path)) {
-      return this.textures.get(path)!;
+  async loadTextureMips(path: string, samplerDescriptor: GPUSamplerDescriptor = {}, is8bit: boolean = false, storePath: string = ''): Promise<Gfx3Texture> {
+    storePath = storePath ? storePath : path;
+    
+    if (this.textures.has(storePath)) {
+      return this.textures.get(storePath)!;
     }
 
     const res = await fetch(path);
     const img = await res.blob();
     const bitmap = await createImageBitmap(img, { colorSpaceConversion: 'none' });
     const texture = gfx3MipmapManager.createTextureFromBitmap(bitmap, is8bit, samplerDescriptor);
-    this.textures.set(path, texture);
+    this.textures.set(storePath, texture);
     return texture;
   }
 
@@ -58,10 +64,13 @@ class Gfx3TextureManager {
    * Note: Six images are required, each names postfixed by: right, left, top, bottom, front and back.
    * 
    * @param {string} path - The file path excluding directions postfix.
+   * @param {string} storePath - The optionnal store file path.
    */
-  async loadCubemapTexture(path: string, extension: string): Promise<Gfx3Texture> {
-    if (this.textures.has(path)) {
-      return this.textures.get(path)!;
+  async loadCubemapTexture(path: string, extension: string, storePath: string = ''): Promise<Gfx3Texture> {
+    storePath = storePath ? storePath : path;
+
+    if (this.textures.has(storePath)) {
+      return this.textures.get(storePath)!;
     }
 
     const dirs = ['right', 'left', 'top', 'bottom', 'front', 'back'];
@@ -75,7 +84,7 @@ class Gfx3TextureManager {
     }
 
     const texture = gfx3Manager.createCubeMapFromBitmap(bitmaps);
-    this.textures.set(path, texture);
+    this.textures.set(storePath, texture);
     return texture;
   }
 
