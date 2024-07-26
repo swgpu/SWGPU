@@ -140,12 +140,14 @@ class EngineManager {
   elapsedTime: number;
   frameRateFixed: boolean;
   frameRateValue: number;
+  textureExts: Array<string>;
 
   constructor() {
     this.then = 0;
     this.elapsedTime = 0;
     this.frameRateFixed = false;
     this.frameRateValue = 60;
+    this.textureExts = ['jpg', 'jpeg', 'png', 'bmp'];
   }
 
   /**
@@ -230,35 +232,40 @@ class EngineManager {
       const ext = splitname.slice(-1);
       const file = zip.file(zipEntry.name);
 
-      // @todo: export tex from blender
-      if (file != null && ext == 'tex') {
-        const json = JSON.parse(await file.async('string'));
-        const sampler: GPUSamplerDescriptor = {
-          addressModeU: json['AddressModeU'],
-          addressModeV: json['AddressMoveV'],
-          addressModeW: json['AddressMoveW'],
-          magFilter: json['MagFilter'],
-          minFilter: json['MinFilter'],
-          mipmapFilter: json['MipMapFilter'],
-          lodMinClamp: json['LodMinClamp'],
-          lodMaxClamp: json['LodMaxClamp'],
-          compare: json['Compare'],
-          maxAnisotropy: json['MaxAnisotropy']
-        };
-  
-        const imageFile = zip.file(json['ImagePath']);
-        const imageUrl = URL.createObjectURL(await imageFile!.async('blob'));
+      if (file != null && this.textureExts.indexOf(ext) != -1) {
+        const texFile = zip.file(name + '.tex');
+        const sampler: GPUSamplerDescriptor = {};
+        let type = '';
+        let is8Bit = false;
 
-        if (json['Type'] == 'Mips') {
-          const texture = await gfx3TextureManager.loadTextureMips(imageUrl, sampler, json['Is8Bit'], zipEntry.name);
+        if (texFile != null) {
+          const json = JSON.parse(await texFile.async('string'));
+          sampler.addressModeU = json['AddressModeU'];
+          sampler.addressModeV = json['AddressMoveV'];
+          sampler.addressModeW = json['AddressMoveW'];
+          sampler.magFilter = json['MagFilter'];
+          sampler.minFilter = json['MinFilter'];
+          sampler.mipmapFilter = json['MipMapFilter'];
+          sampler.lodMinClamp = json['LodMinClamp'];
+          sampler.lodMaxClamp = json['LodMaxClamp'];
+          sampler.compare = json['Compare'];
+          sampler.maxAnisotropy = json['MaxAnisotropy'];
+          type = json['Type'];
+          is8Bit = json['Is8Bit'];
+        }
+
+        const imageUrl = URL.createObjectURL(await file!.async('blob'));
+
+        if (type == 'Mips') {
+          const texture = await gfx3TextureManager.loadTextureMips(imageUrl, sampler, is8Bit, zipEntry.name);
           pack.tex.push({ name: name, ext: 'bitmap', object: texture, blobUrl: imageUrl });
         }
-        else if (json['Type'] == 'CubeMap') {
-          const texture = await gfx3TextureManager.loadCubemapTexture(imageUrl, json['CubeMapExt'], zipEntry.name);
+        else if (type == 'Cubemap') {
+          const texture = await gfx3TextureManager.loadCubemapTexture(imageUrl, ext, zipEntry.name);
           pack.tex.push({ name: name, ext: 'bitmap', object: texture, blobUrl: imageUrl });
         }
         else {
-          const texture = await gfx3TextureManager.loadTexture(imageUrl, sampler, json['Is8Bit'], zipEntry.name);
+          const texture = await gfx3TextureManager.loadTexture(imageUrl, sampler, is8Bit, zipEntry.name);
           pack.tex.push({ name: name, ext: 'bitmap', object: texture, blobUrl: imageUrl });
         }
       }
@@ -425,7 +432,7 @@ class EngineManager {
       const file = zip.file(zipEntry.name);
       const url = URL.createObjectURL(await file!.async('blob'));
 
-      if (file != null && (ext == 'jpg' || ext == 'jpeg' || ext == 'png' || ext == 'bmp')) {
+      if (file != null && this.textureExts.indexOf(ext) != -1) {
         const tex = await gfx2TextureManager.loadTexture(url);
         pack.tex.push({ name: name, ext: 'bitmap', object: tex, blobUrl: url });
       }
