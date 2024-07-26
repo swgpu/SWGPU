@@ -1,9 +1,11 @@
 import wasm from 'vite-plugin-wasm';
+import FullReload from 'vite-plugin-full-reload';
 import path from 'path';
 
 export default {
   plugins: [
-		wasm()
+		wasm(),
+    FullReload(['public/**'])
   ],
   resolve: {
     alias: {

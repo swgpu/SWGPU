@@ -33,7 +33,8 @@
     "typedoc": "^0.25.1",
     "typedoc-plugin-markdown": "^3.16.0",
     "typescript": "^4.6.4",
-    "vite": "^4.5.0"
+    "vite": "^4.5.0",
+    "vite-plugin-full-reload": "^1.2.0"
   },
   "dependencies": {
     "@dimforge/rapier2d": "*",
