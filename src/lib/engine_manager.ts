@@ -411,6 +411,10 @@ class EngineManager {
       }
     });
 
+    for (const item of [...pack.jsm, ...pack.jam]) {
+      item.object.setMaterial(pack.mat.get(item.name));
+    }
+
     return pack;
   }
 
