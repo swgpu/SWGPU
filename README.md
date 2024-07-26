@@ -223,12 +223,6 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## Roadmap
 ```
-Importation:
-- Replace SpriteFusion import by Tilekit (https://rxi.itch.io/tilekit). [Black]
-- Add AseSprite import. [Black]
-- Add Spritemancer import (https://codemanu.itch.io/spritemancer). [Black]
-- Add export MAT on Blender addon. [Me]
-
 Extra:
 - Add fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master.
 - Add pooling soundManager.
