@@ -13,6 +13,8 @@ interface TileCollision {
   verticalCol: number;
   isGrounded: boolean;
   isAgainstWall: null | 'right' | 'left' | 'top' | 'bottom';
+  mx: number;
+  my: number;
 };
 
 /**
@@ -241,7 +243,7 @@ class Gfx2TileMap {
    * @param {number} t - The top side of rectangle.
    * @param {number} b - The bottom side of rectangle.
    */
-  box(mx: number, my: number, layerIndex: number, l: number, r: number, t: number, b: number): TileCollision {
+  box(mx: number, my: number, layerIndex: number, l: number, r: number, t: number, b: number, gap: number = 0.01): TileCollision {
     const bottom = this.getLocationRow(b + my);
     const top = this.getLocationRow(t + my);
     const right = this.getLocationCol(r + mx);
@@ -257,7 +259,9 @@ class Gfx2TileMap {
       verticalRow: -1,
       verticalCol: -1,
       isGrounded: false,
-      isAgainstWall: null
+      isAgainstWall: null,
+      mx: 0,
+      my: 0
     };
 
     const layer = this.getTileLayer(layerIndex);
@@ -275,22 +279,26 @@ class Gfx2TileMap {
             collisions.isGrounded = true;
             collisions.verticalRow = row;
             collisions.verticalCol = col;
+            collisions.my = tileY - b - gap;
           }
           else if (collideV && row == top && my < 0) {
             collisions.top = true;
             collisions.verticalRow = row;
             collisions.verticalCol = col;
+            collisions.my = (tileY + this.tileHeight) - t + gap;
           }
 
           if (collideH && col == left && mx < 0) {
             collisions.left = true;
             collisions.horizontalRow = row;
             collisions.horizontalCol = col;
+            collisions.mx = (tileX + this.tileWidth) - l + gap;
           }
           else if (collideH && col == right && mx > 0) {
             collisions.right = true;
             collisions.horizontalRow = row;
             collisions.horizontalCol = col;
+            collisions.mx = tileX - r - gap;
           }
         }
       }

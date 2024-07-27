@@ -15,9 +15,9 @@ export class Player extends DNAComponent {
     this.shooting = false;
     this.shootingDuration = 300;
     this.lastShot = null;
-    this.accel = 5;
-    this.maxSpeed = 20;
-    this.jumpStrenght = 200;
-    this.wallJumpStrenght = 200;
+    this.accel = 4;
+    this.maxSpeed = 8;
+    this.jumpStrenght = 20;
+    this.wallJumpStrenght = 20;
   }
 }

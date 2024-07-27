@@ -15,7 +15,7 @@ import { Drawable } from '../components/drawable';
 import { Velocity } from '../components/velocity';
 // ---------------------------------------------------------------------------------------
 
-const GRAVITY_VALUE = 10;
+// const GRAVITY_VALUE = 10;
 
 export class PlayerControllerSystem extends DNASystem {
   map: Gfx2TileMap;
@@ -67,13 +67,13 @@ export class PlayerControllerSystem extends DNASystem {
       accelerationX += player.accel;
     }
 
-    if (inputManager.isJustActiveAction('JUMP') && (collisions.isGrounded || jump.platform !== -1)) {
-      accelerationY = player.jumpStrenght * -1;
+    if (inputManager.isJustActiveAction('JUMP') && (jump.isGrounded || jump.platform !== -1)) {
+      velocity.y = player.jumpStrenght * -1;
       jump.jumping = true;
     }
 
-    if (inputManager.isJustActiveAction('JUMP') && collisions.isAgainstWall && jump.jumping && !collisions.isGrounded) {
-      accelerationY = player.wallJumpStrenght * -1;
+    if (inputManager.isJustActiveAction('JUMP') && collisions.isAgainstWall && jump.jumping && !jump.isGrounded) {
+      velocity.y = player.wallJumpStrenght * -1;
       accelerationX = (collisions.isAgainstWall === 'right' ? -player.maxSpeed : player.maxSpeed) * 10;
       jump.wallJumping = true;
     }
@@ -96,13 +96,16 @@ export class PlayerControllerSystem extends DNASystem {
 
     velocity.x += accelerationX * (ts / 100);
     velocity.x = UT.CLAMP(velocity.x, -player.maxSpeed, player.maxSpeed);
-    velocity.x = UT.LERP(velocity.x, 0, (ts / 100));
     velocity.y += accelerationY * (ts / 100);
+
+    if (accelerationX === 0) {
+      velocity.x = UT.LERP(velocity.x, 0, (ts / 100));
+    }
   }
 
   updateGravity(ts: number, jump: Jump, velocity: Velocity) {
     const gravityFactor = jump.jumping && inputManager.isActiveAction('JUMP') ? 1 : 3;
-    velocity.y = UT.LERP(velocity.y, GRAVITY_VALUE * gravityFactor, ts / 1000);
+    velocity.y += 3 * gravityFactor * (ts / 100);
   }
 
   updatePosition(ts: number, position: Position, collider: Collider, velocity: Velocity, jump: Jump) {
@@ -115,17 +118,31 @@ export class PlayerControllerSystem extends DNASystem {
       jump.jumping = false;
       jump.dropDown = -1;
       jump.wallJumping = false;
+      jump.isGrounded = true;
     }
     else {
       jump.platform = -1;
+      jump.isGrounded = false;
     }
 
-    if (collisions.top || collisions.bottom) {
+    if (collisions.top) {
       velocity.y = 0;
+      position.y += collisions.my;
     }
 
-    if (collisions.left || collisions.right) {
+    if (collisions.bottom) {
+      velocity.y = 0;
+      position.y += collisions.my;
+    }
+
+    if (collisions.left) {
       velocity.x = 0;
+      position.x += collisions.mx;
+    }
+
+    if (collisions.right) {
+      velocity.x = 0;
+      position.x += collisions.mx;
     }
 
     position.x += velocity.x * (ts / 100);

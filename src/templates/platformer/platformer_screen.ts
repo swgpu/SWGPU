@@ -61,7 +61,7 @@ class PlatformerScreen extends Screen {
     ]);
 
     await Promise.all([
-      spawnPlayer(50, 95),
+      spawnPlayer(50, 97),
       spawnEnemy(160, 68),
       spawnEnemy(180, 68),
       spawnEnemy(270, 100),

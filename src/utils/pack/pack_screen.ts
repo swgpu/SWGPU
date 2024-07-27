@@ -18,7 +18,7 @@ class PackScreen extends Screen {
 
   async onEnter() {
     this.camera.setPosition(0, 0, 10);
-    this.pack = await em.loadPack3D('./utils/pack/scene.blend.zip');
+    this.pack = await em.loadPack3D('./utils/pack/scene.blend.pak');
   }
 
   update(ts: number) {
