@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    <a href="https://warme-engine.com/">Documentation</a> - <a href="https://demo.warme-engine.com/">Demos</a> - <a href="https://warme-engine.com/?Screenshots">Screenshots</a> - <a href="https://discord.gg/9PcFvg5f7P">Join our discord !</a>
+    <a href="https://warme-engine.com/">Documentation</a> - <a href="https://jay19240.github.io/">Demos</a> - <a href="https://warme-engine.com/?Screenshots">Screenshots</a> - <a href="https://discord.gg/9PcFvg5f7P">Join our discord !</a>
 </p>
 
 > [!NOTE]
@@ -23,7 +23,7 @@ Some words about our philosophy:
 - **Performance:** We used WebGPU API for a blazing fast rendering.
 - **Lightweight:** The lib minzipped size is just 73 kB (1Mb with Rapier2D & Rapier3D).
 
-For a more concret overview on it, you can play [examples](http://demo.warme-engine.com/).
+For a more concret overview on it, you can play [examples](https://jay19240.github.io/).
 
 ## Table of content
 

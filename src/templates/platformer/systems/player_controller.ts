@@ -15,7 +15,7 @@ import { Drawable } from '../components/drawable';
 import { Velocity } from '../components/velocity';
 // ---------------------------------------------------------------------------------------
 
-// const GRAVITY_VALUE = 10;
+const GRAVITY_ACCEL = 3;
 
 export class PlayerControllerSystem extends DNASystem {
   map: Gfx2TileMap;
@@ -104,8 +104,13 @@ export class PlayerControllerSystem extends DNASystem {
   }
 
   updateGravity(ts: number, jump: Jump, velocity: Velocity) {
-    const gravityFactor = jump.jumping && inputManager.isActiveAction('JUMP') ? 1 : 3;
-    velocity.y += 3 * gravityFactor * (ts / 100);
+
+    if (jump.platform == -1) {
+      console.log('gravity');
+      const gravityFactor = jump.jumping && inputManager.isActiveAction('JUMP') ? 1 : 3;
+      velocity.y += GRAVITY_ACCEL * gravityFactor * (ts / 100);
+  
+    }
   }
 
   updatePosition(ts: number, position: Position, collider: Collider, velocity: Velocity, jump: Jump) {
@@ -125,28 +130,16 @@ export class PlayerControllerSystem extends DNASystem {
       jump.isGrounded = false;
     }
 
-    if (collisions.top) {
+    if (collisions.top || collisions.bottom) {
       velocity.y = 0;
-      position.y += collisions.my;
     }
 
-    if (collisions.bottom) {
-      velocity.y = 0;
-      position.y += collisions.my;
-    }
-
-    if (collisions.left) {
+    if (collisions.left || collisions.right) {
       velocity.x = 0;
-      position.x += collisions.mx;
     }
 
-    if (collisions.right) {
-      velocity.x = 0;
-      position.x += collisions.mx;
-    }
-
-    position.x += velocity.x * (ts / 100);
-    position.y += velocity.y * (ts / 100);
+    position.x += collisions.mx;
+    position.y += collisions.my;
   }
 
   updatePlatforms(ts: number, position: Position, velocity: Velocity, collider: Collider, jump: Jump) {
@@ -168,7 +161,7 @@ export class PlayerControllerSystem extends DNASystem {
         const platformBounds = platformCollider.getBounds(platformPosition);
         position.y = platformBounds.top - collider.min[1];
         velocity.x += platformVelocity.x * (ts / 100);
-        velocity.y = 0;
+        velocity.y += platformVelocity.y * (ts / 100);
         jump.platform = platformId;
         jump.jumping = false;
       }

@@ -44,7 +44,7 @@ export class TakeDamageSytem extends DNASystem {
     }
 
     if (health.currentHealth === 0) {
-      console.log('you are die !');
+      console.log('You are dead !');
     }
   }
 }

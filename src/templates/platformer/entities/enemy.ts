@@ -21,7 +21,7 @@ export const spawnEnemy = async (x: number, y: number) => {
     new Position(x, y),
     new Velocity(-0.2, 0),
     new Enemy(),
-    new Collider([3.5, 4], [3.5, 1])
+    new Collider([3.5, 3.5], [3.5, 3.5])
   ])
 }
 

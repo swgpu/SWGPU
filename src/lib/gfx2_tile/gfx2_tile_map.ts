@@ -260,8 +260,8 @@ class Gfx2TileMap {
       verticalCol: -1,
       isGrounded: false,
       isAgainstWall: null,
-      mx: 0,
-      my: 0
+      mx: mx,
+      my: my
     };
 
     const layer = this.getTileLayer(layerIndex);
