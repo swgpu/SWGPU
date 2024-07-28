@@ -104,12 +104,9 @@ export class PlayerControllerSystem extends DNASystem {
   }
 
   updateGravity(ts: number, jump: Jump, velocity: Velocity) {
-
     if (jump.platform == -1) {
-      console.log('gravity');
       const gravityFactor = jump.jumping && inputManager.isActiveAction('JUMP') ? 1 : 3;
       velocity.y += GRAVITY_ACCEL * gravityFactor * (ts / 100);
-  
     }
   }
 
@@ -126,7 +123,6 @@ export class PlayerControllerSystem extends DNASystem {
       jump.isGrounded = true;
     }
     else {
-      jump.platform = -1;
       jump.isGrounded = false;
     }
 
@@ -143,10 +139,12 @@ export class PlayerControllerSystem extends DNASystem {
   }
 
   updatePlatforms(ts: number, position: Position, velocity: Velocity, collider: Collider, jump: Jump) {
+    jump.platform = -1;
+
     if (velocity.y < 0) {
       return;
     }
-
+    
     const bounds = collider.getBounds(position);
     const platformId = this.collideWithPlatform(position, bounds);
 
@@ -161,7 +159,6 @@ export class PlayerControllerSystem extends DNASystem {
         const platformBounds = platformCollider.getBounds(platformPosition);
         position.y = platformBounds.top - collider.min[1];
         velocity.x += platformVelocity.x * (ts / 100);
-        velocity.y += platformVelocity.y * (ts / 100);
         jump.platform = platformId;
         jump.jumping = false;
       }

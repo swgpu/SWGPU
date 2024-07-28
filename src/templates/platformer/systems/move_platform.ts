@@ -26,6 +26,8 @@ export class MovePlatformSystem extends DNASystem {
 
     if (dist <= 0.2) {
       platform.direction = !platform.direction;
+      velocity.y = 0;
+      velocity.x = 0;
     }
     else {
       velocity.x = Math.sign(deltaX) * platform.speed;
