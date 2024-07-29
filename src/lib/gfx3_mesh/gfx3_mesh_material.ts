@@ -3,6 +3,7 @@ import { gfx3TextureManager } from '../gfx3/gfx3_texture_manager';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
+import { MAT_SLOT_NAMES } from './gfx3_mesh_shader';
 
 interface MATFrame {
   offsetX: number;
@@ -44,6 +45,9 @@ interface MATOptions {
   shininess?: number;
   emissiveFactor?: number;
   toonBlending?: number;
+  sParams?: Array<{name: string, value: number }>;
+  s0Texture?: Gfx3Texture;
+  s1Texture?: Gfx3Texture;
 };
 
 /**
@@ -76,7 +80,6 @@ class Gfx3Material {
   normalMap: Gfx3Texture;
   envMap: Gfx3Texture;
   toonMap: Gfx3Texture;
-
   s0Texture: Gfx3Texture;
   s1Texture: Gfx3Texture;
 
@@ -114,7 +117,7 @@ class Gfx3Material {
     this.colors[13] = options.specular ? options.specular[1] : 0.0;
     this.colors[14] = options.specular ? options.specular[2] : 0.0;
     this.colors[15] = 0.0;
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 34);
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 36);
     this.params[0] = options.id ?? 0;
     this.params[1] = options.opacity ?? 1.0;
     this.params[2] = options.normalIntensity ?? 1.0;
@@ -133,6 +136,18 @@ class Gfx3Material {
     this.params[15] = options.shininess ?? 0.0;
     this.params[16] = options.emissiveFactor ?? 1.0;
     this.params[17] = options.toonBlending ?? 1.0;
+    this.params[18] = options.s0Texture ? 1.0 : 0.0;
+    this.params[19] = options.s1Texture ? 1.0 : 0.0;
+
+    if (options.sParams) {
+      for (const sParam of options.sParams) {
+        const paramIndex = MAT_SLOT_NAMES.findIndex(n => n == sParam.name);
+        if (paramIndex != -1) {
+          this.params[20 + paramIndex] = sParam.value ?? 0.0;
+        }
+      }
+    }
+
     this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 6);
     this.toonLightDir = this.grp2.setFloat(3, 'MAT_TOON_LIGHT_DIR', 3);
     this.toonLightDir[0] = options.toonLightDir ? options.toonLightDir[0] : 0.0;
@@ -186,14 +201,24 @@ class Gfx3Material {
         frameDuration: parseInt(obj['FrameDuration'])
       };
 
-      for (const objFrame of obj['Frames']) {
+      const frames = obj['Frames'].split(';');
+      for (const frame of frames) {
+        const offsetXY = frame.split(',');
         animation.frames.push({
-          offsetX: objFrame['OffsetX'],
-          offsetY: objFrame['OffsetY']
+          offsetX: offsetXY[0],
+          offsetY: offsetXY[1]
         });
       }
 
       animations.push(animation);
+    }
+
+    const sParams = new Array<{name: string, value: number}>();
+    for (const obj of json['SParams']) {
+      sParams.push({
+        name: obj['Name'],
+        value: obj['Value']
+      });
     }
 
     return new Gfx3Material({
@@ -224,7 +249,10 @@ class Gfx3Material {
       shininess: json['Shininess'],
       emissiveFactor: json['EmissiveFactor'],
       toonBlending: json['ToonBlending'],
-      toonLightDir: json['ToonLightDir']
+      toonLightDir: json['ToonLightDir'],
+      sParams: sParams,
+      s0Texture: json['S0Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['S0Texture']) : undefined,
+      s1Texture: json['S1Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['S1Texture']) : undefined
     });
   }
 
@@ -577,18 +605,30 @@ class Gfx3Material {
   /**
    * Set a custom parameter value.
    * 
-   * @param {number} index - The param index.
-   * @param {number} value - The value.
+   * @param {string} name - The param name.
+   * @param {number} value - The param value.
    */
-  setCustomParam(index: number, value: number): void {
-    this.params[18 + index] = value;
+  setCustomParam(name: string, value: number): void {
+    const paramIndex = MAT_SLOT_NAMES.findIndex(n => n == name);
+    if (paramIndex == -1) {
+      throw new Error('Gfx3Material::setCustomParam(): Custom param name not found !');
+    }
+
+    this.params[20 + paramIndex] = value;
   }
 
   /**
    * Returns the specified custom param value.
+   * 
+   * @param {string} name - The param name.
    */
-  getCustomParam(index: number): number {
-    return this.params[18 + index];
+  getCustomParam(name: string): number {
+    const paramIndex = MAT_SLOT_NAMES.findIndex(n => n == name);
+    if (paramIndex == -1) {
+      throw new Error('Gfx3Material::getCustomParam(): Custom param name not found !');
+    }
+
+    return this.params[20 + paramIndex];
   }
 
   /**

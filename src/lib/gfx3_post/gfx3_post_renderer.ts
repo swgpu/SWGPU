@@ -5,7 +5,7 @@ import { gfx3ShadowVolumeRenderer } from '../gfx3_shadow_volume/gfx3_shadow_volu
 import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
-import { VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_VERTEX_ATTR_COUNT } from './gfx3_post_shader';
+import { VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_VERTEX_ATTR_COUNT, SLOT_NAMES } from './gfx3_post_shader';
 
 enum PostShadowVolumeBlendMode {
   MUL = 0,
@@ -171,18 +171,30 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
   /**
    * Set a custom parameter value.
    * 
-   * @param {number} index - The param index.
-   * @param {number} value - The value.
+   * @param {string} name - The param name.
+   * @param {number} value - The param value.
    */
-  setCustomParam(index: number, value: number): void {
-    this.params[19 + index] = value;
+  setCustomParam(name: string, value: number): void {
+    const paramIndex = SLOT_NAMES.findIndex(n => n == name);
+    if (paramIndex == -1) {
+      throw new Error('Gfx3PostRenderer::setCustomParam(): Custom param name not found !');
+    }
+
+    this.params[19 + paramIndex] = value;
   }
 
   /**
    * Returns the specified custom param value.
+   * 
+   * @param {string} name - The param name.
    */
-  getCustomParam(index: number): number {
-    return this.params[19 + index];
+  getCustomParam(name: string): number {
+    const paramIndex = SLOT_NAMES.findIndex(n => n == name);
+    if (paramIndex == -1) {
+      throw new Error('Gfx3PostRenderer::getCustomParam(): Custom param name not found !');
+    }
+
+    return this.params[19 + paramIndex];
   }
 
   /**

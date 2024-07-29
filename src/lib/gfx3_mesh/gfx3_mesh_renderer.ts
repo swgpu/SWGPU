@@ -5,7 +5,7 @@ import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { Gfx3StaticGroup, Gfx3DynamicGroup } from '../gfx3/gfx3_group';
 import { Gfx3Mesh } from './gfx3_mesh';
-import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER, MAX_POINT_LIGHTS, MAX_SPOT_LIGHTS, MAX_DECALS } from './gfx3_mesh_shader';
+import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER, MAX_POINT_LIGHTS, MAX_SPOT_LIGHTS, MAX_DECALS, SCENE_SLOT_NAMES } from './gfx3_mesh_shader';
 
 interface MeshCommand {
   mesh: Gfx3Mesh;
@@ -199,18 +199,30 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   /**
    * Set a custom parameter value.
    * 
-   * @param {number} index - The param index.
-   * @param {number} value - The value.
+   * @param {string} name - The param name.
+   * @param {number} value - The param value.
    */
-  setCustomParam(index: number, value: number): void {
-    this.sceneInfos[12 + index] = value;
+  setCustomParam(name: string, value: number): void {
+    const paramIndex = SCENE_SLOT_NAMES.findIndex(n => n == name);
+    if (paramIndex == -1) {
+      throw new Error('Gfx3MeshRenderer::setCustomParam(): Custom param name not found !');
+    }
+
+    this.sceneInfos[12 + paramIndex] = value;
   }
 
   /**
    * Returns the specified custom param value.
+   * 
+   * @param {string} name - The param name.
    */
-  getCustomParam(index: number): number {
-    return this.sceneInfos[12 + index];
+  getCustomParam(name: string): number {
+    const paramIndex = SCENE_SLOT_NAMES.findIndex(n => n == name);
+    if (paramIndex == -1) {
+      throw new Error('Gfx3MeshRenderer::getCustomParam(): Custom param name not found !');
+    }
+
+    return this.sceneInfos[12 + paramIndex];
   }
 
   /**

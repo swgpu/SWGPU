@@ -1,6 +1,25 @@
-export const SHADER_VERTEX_ATTR_COUNT = 4;
-
 const WINDOW = window as any;
+
+export const SHADER_VERTEX_ATTR_COUNT = 4;
+export const SLOT_NAMES = WINDOW.__POST_SLOT_NAMES__ as Array<string> ?? [
+  'S00',
+  'S01',
+  'S02',
+  'S03',
+  'S04',
+  'S05',
+  'S06',
+  'S07',
+  'S08',
+  'S09',
+  'S10',
+  'S11',
+  'S12',
+  'S13',
+  'S14',
+  'S15'
+];
+
 const FRAG_BEGIN = WINDOW.__POST_FRAG_BEGIN__ ? WINDOW.__POST_FRAG_BEGIN__ : '';
 const FRAG_END = WINDOW.__POST_FRAG_END__ ? WINDOW.__POST_FRAG_END__ : '';
 
@@ -78,22 +97,22 @@ struct Params {
   OUTLINE_CONSTANT: f32,
   SHADOW_VOLUME_ENABLED: f32,
   SHADOW_VOLUME_BLEND_MODE: f32,
-  S00: f32,
-  S01: f32,
-  S02: f32,
-  S03: f32,
-  S04: f32,
-  S05: f32,
-  S06: f32,
-  S07: f32,
-  S08: f32,
-  S09: f32,
-  S10: f32,
-  S11: f32,
-  S12: f32,
-  S13: f32,
-  S14: f32,
-  S15: f32
+  ${SLOT_NAMES[0]}: f32,
+  ${SLOT_NAMES[1]}: f32,
+  ${SLOT_NAMES[2]}: f32,
+  ${SLOT_NAMES[3]}: f32,
+  ${SLOT_NAMES[4]}: f32,
+  ${SLOT_NAMES[5]}: f32,
+  ${SLOT_NAMES[6]}: f32,
+  ${SLOT_NAMES[7]}: f32,
+  ${SLOT_NAMES[8]}: f32,
+  ${SLOT_NAMES[9]}: f32,
+  ${SLOT_NAMES[10]}: f32,
+  ${SLOT_NAMES[11]}: f32,
+  ${SLOT_NAMES[12]}: f32,
+  ${SLOT_NAMES[13]}: f32,
+  ${SLOT_NAMES[14]}: f32,
+  ${SLOT_NAMES[15]}: f32
 };
 
 @group(0) @binding(0) var<uniform> PARAMS: Params;

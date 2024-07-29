@@ -1,9 +1,47 @@
+const WINDOW = window as any;
+
 export const SHADER_VERTEX_ATTR_COUNT = 17;
 export const MAX_POINT_LIGHTS = 64;
 export const MAX_SPOT_LIGHTS = 16;
 export const MAX_DECALS = 64;
+export const MAT_SLOT_NAMES = WINDOW.__MESH_MATERIAL_SLOT_NAMES__ as Array<string> ?? [
+  'S00',
+  'S01',
+  'S02',
+  'S03',
+  'S04',
+  'S05',
+  'S06',
+  'S07',
+  'S08',
+  'S09',
+  'S10',
+  'S11',
+  'S12',
+  'S13',
+  'S14',
+  'S15'
+];
 
-const WINDOW = window as any;
+export const SCENE_SLOT_NAMES = WINDOW.__MESH_SCENE_SLOT_NAMES__ as Array<string> ?? [
+  'S00',
+  'S01',
+  'S02',
+  'S03',
+  'S04',
+  'S05',
+  'S06',
+  'S07',
+  'S08',
+  'S09',
+  'S10',
+  'S11',
+  'S12',
+  'S13',
+  'S14',
+  'S15'
+];
+
 const VERT_BEGIN = WINDOW.__MESH_VERT_BEGIN__ ? WINDOW.__MESH_VERT_BEGIN__ : '';
 const VERT_END = WINDOW.__MESH_VERT_END__ ? WINDOW.__MESH_VERT_END__ : '';
 const VERT_OUT_POSITION = WINDOW.__MESH_VERT_OUT_POSITION__;
@@ -109,22 +147,24 @@ struct MaterialParams {
   SHININESS: f32,
   EMISSIVE_FACTOR: f32,
   TOON_BLENDING: f32,
-  S00: f32,
-  S01: f32,
-  S02: f32,
-  S03: f32,
-  S04: f32,
-  S05: f32,
-  S06: f32,
-  S07: f32,
-  S08: f32,
-  S09: f32,
-  S10: f32,
-  S11: f32,
-  S12: f32,
-  S13: f32,
-  S14: f32,
-  S15: f32
+  HAS_S0_TEXTURE: f32,
+  HAS_S1_TEXTURE: f32,
+  ${MAT_SLOT_NAMES[0]}: f32,
+  ${MAT_SLOT_NAMES[1]}: f32,
+  ${MAT_SLOT_NAMES[2]}: f32,
+  ${MAT_SLOT_NAMES[3]}: f32,
+  ${MAT_SLOT_NAMES[4]}: f32,
+  ${MAT_SLOT_NAMES[5]}: f32,
+  ${MAT_SLOT_NAMES[6]}: f32,
+  ${MAT_SLOT_NAMES[7]}: f32,
+  ${MAT_SLOT_NAMES[8]}: f32,
+  ${MAT_SLOT_NAMES[9]}: f32,
+  ${MAT_SLOT_NAMES[10]}: f32,
+  ${MAT_SLOT_NAMES[11]}: f32,
+  ${MAT_SLOT_NAMES[12]}: f32,
+  ${MAT_SLOT_NAMES[13]}: f32,
+  ${MAT_SLOT_NAMES[14]}: f32,
+  ${MAT_SLOT_NAMES[15]}: f32
 };`;
 
 const INCLUDE_SCENE_INFOS = `
@@ -136,22 +176,22 @@ struct SceneInfos {
   DECAL_COUNT: f32,
   DELTA_TIME: f32,
   TIME: f32,
-  S00: f32,
-  S01: f32,
-  S02: f32,
-  S03: f32,
-  S04: f32,
-  S05: f32,
-  S06: f32,
-  S07: f32,
-  S08: f32,
-  S09: f32,
-  S10: f32,
-  S11: f32,
-  S12: f32,
-  S13: f32,
-  S14: f32,
-  S15: f32
+  ${SCENE_SLOT_NAMES[0]}: f32,
+  ${SCENE_SLOT_NAMES[1]}: f32,
+  ${SCENE_SLOT_NAMES[2]}: f32,
+  ${SCENE_SLOT_NAMES[3]}: f32,
+  ${SCENE_SLOT_NAMES[4]}: f32,
+  ${SCENE_SLOT_NAMES[5]}: f32,
+  ${SCENE_SLOT_NAMES[6]}: f32,
+  ${SCENE_SLOT_NAMES[7]}: f32,
+  ${SCENE_SLOT_NAMES[8]}: f32,
+  ${SCENE_SLOT_NAMES[9]}: f32,
+  ${SCENE_SLOT_NAMES[10]}: f32,
+  ${SCENE_SLOT_NAMES[11]}: f32,
+  ${SCENE_SLOT_NAMES[12]}: f32,
+  ${SCENE_SLOT_NAMES[13]}: f32,
+  ${SCENE_SLOT_NAMES[14]}: f32,
+  ${SCENE_SLOT_NAMES[15]}: f32
 };`;
 
 const INCLUDE_MESH_INFOS = `
