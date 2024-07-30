@@ -5,6 +5,13 @@ import { UT } from '../core/utils';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
 
+export enum FileType {
+  JSS,
+  JAS,
+  Asprite,
+  TileKit
+}
+
 interface JASFrame {
   x: number;
   y: number;
@@ -18,6 +25,118 @@ interface JASAnimation {
   frameDuration: number;
   boundingRects: Array<Gfx2BoundingRect>;
 }
+
+interface AsepriteFrame {
+  filename: string
+  frame: any;
+  rotated: boolean;
+  trimmed: boolean;
+  spriteSourceSize: object;
+  sourceSize: object;
+  duration: number;
+}
+
+interface AsepriteMeta {
+  app: string;
+  version: string;
+  image: string;
+  format: string;
+  size: object;
+  scale: string;
+  frameTags: Array<AsepriteTag>,
+}
+
+interface AsepriteTag {
+  name: string;
+  from: number;
+  to: number;
+  direction: string;
+  color: string;
+}
+
+interface Aseprite {
+  frames: Map<string, AsepriteFrame>;
+  meta: AsepriteMeta
+}
+
+/*
+{ "frames": [
+  {
+   "filename": "sprite 0.ase",
+   "frame": { "x": 0, "y": 0, "w": 256, "h": 256 },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": { "x": 0, "y": 0, "w": 256, "h": 256 },
+   "sourceSize": { "w": 256, "h": 256 },
+   "duration": 100
+  },
+  {
+   "filename": "sprite 1.ase",
+   "frame": { "x": 256, "y": 0, "w": 256, "h": 256 },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": { "x": 0, "y": 0, "w": 256, "h": 256 },
+   "sourceSize": { "w": 256, "h": 256 },
+   "duration": 200
+  },
+  {
+   "filename": "sprite 2.ase",
+   "frame": { "x": 512, "y": 0, "w": 256, "h": 256 },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": { "x": 0, "y": 0, "w": 256, "h": 256 },
+   "sourceSize": { "w": 256, "h": 256 },
+   "duration": 100
+  }
+],
+"meta": {
+ "app": "http://www.aseprite.org/",
+ "version": "1.2-dev",
+ "format": "RGBA8888",
+ "size": { "w": 768, "h": 256 },
+ "scale": "1"
+}
+}
+
+
+
+{ "frames": {
+   "helicoper 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 32, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 100
+   },
+   "helicoper 1.aseprite": {
+    "frame": { "x": 32, "y": 0, "w": 32, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.7-x64",
+  "image": "helicoper.png",
+  "format": "RGBA8888",
+  "size": { "w": 64, "h": 32 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
+
+
+*/
 
 /**
  * A 2D sprite with animations.
@@ -39,7 +158,7 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
     this.offsetFactor = [0, 0];
     this.currentAnimation = null;
     this.currentAnimationFrameIndex = 0;
-    this.looped = false;    
+    this.looped = false;
     this.frameProgress = 0;
   }
 
@@ -48,10 +167,19 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
    * 
    * @param {string} path - The file path.
    */
-  async loadFromFile(path: string): Promise<void> {
+  async loadFromFile(path: string, format = FileType.JAS): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
+    if (format === FileType.JAS) { this.parseJAS(json) }
+    else if (format === FileType.Asprite) { this.parseAseprite(json) }
 
+    this.boundingRect = this.animations[0].boundingRects[0];
+    this.currentAnimation = null;
+    this.currentAnimationFrameIndex = 0;
+    this.frameProgress = 0;
+  }
+
+  parseJAS(json: any): void {
     this.offset[0] = json['OffsetX'] ?? 0;
     this.offset[1] = json['OffsetY'] ?? 0;
 
@@ -83,16 +211,89 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
           frame['Y'],
           frame['Width'],
           frame['Height']
-        ));  
+        ));
       }
 
       this.animations.push(animation);
     }
 
-    this.boundingRect = this.animations[0].boundingRects[0];
-    this.currentAnimation = null;
-    this.currentAnimationFrameIndex = 0;
-    this.frameProgress = 0;
+
+  }
+
+  parseAseprite(json: any): void {
+    const aseprite = json as Aseprite;
+    console.log('Aseprite struct is ', aseprite);
+
+
+    // TODO find the fields in aseprite json
+    // general offset
+    // general flips etc...
+    this.offset = [0, 0];
+
+    this.flip[0] = false;
+    this.flip[1] = false;
+
+    this.offsetFactor[0] = 0;
+    this.offsetFactor[1] = 0;
+
+    this.animations = [];
+
+    // Todo handle tags
+    if (aseprite.meta.frameTags) {
+      console.warn('frame tags still not implemented')
+    }
+
+    const frames = Array.from(aseprite.frames.values());
+    // const duration = Array.from(frames.values()).map(frame => frame.duration).reduce((fDuration1,fDuration2) => fDuration1 + fDuration2);
+
+    const animation: JASAnimation = {
+      name: 'animation',
+      frames: [],
+      frameDuration: frames[0].duration,
+      boundingRects: []
+    };
+
+
+    const jasFrames:Array<JASFrame> = frames.map(aseFrame => {
+      const jasFrame:JASFrame = {
+        x: aseFrame.frame.x,
+        y: aseFrame.frame.y,
+        width: aseFrame.frame.w,
+        height: aseFrame.frame.h,
+      };
+      return jasFrame;
+    })
+
+    animation.frames.push(...jasFrames);
+
+
+    // // for (const obj of json['Animations']) {
+    // for (const frame of aseprite.frames) {
+    //   const animation: JASAnimation = {
+    //     name: frame.'Name'],
+    //     frames: [],
+    //     frameDuration: parseInt(obj['FrameDuration']),
+    //     boundingRects: []
+    //   };
+
+    //   for (const frame of obj['Frames']) {
+    //     animation.frames.push({
+    //       x: frame['X'],
+    //       y: frame['Y'],
+    //       width: frame['Width'],
+    //       height: frame['Height']
+    //     });
+
+    //     animation.boundingRects.push(Gfx2BoundingRect.createFromCoord(
+    //       frame['X'],
+    //       frame['Y'],
+    //       frame['Width'],
+    //       frame['Height']
+    //     ));
+    //   }
+
+    //   this.animations.push(animation);
+    // }
   }
 
   /**
@@ -277,7 +478,7 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
     jas.texture = this.texture;
     jas.currentAnimation = null;
     jas.currentAnimationFrameIndex = 0;
-    jas.looped = false;    
+    jas.looped = false;
     jas.frameProgress = 0;
     return jas;
   }

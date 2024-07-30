@@ -4,6 +4,12 @@ import { Poolable } from '../core/object_pool';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
 
+export enum FileType {
+  JSS,
+  Asprite,
+  TileKit
+}
+
 /**
  * A 2D static sprite (without animations).
  */
@@ -24,10 +30,21 @@ class Gfx2SpriteJSS extends Gfx2Drawable implements Poolable<Gfx2SpriteJSS> {
    * 
    * @param {string} path - The file path.
    */
-  async loadFromFile(path: string): Promise<void> {
+  async loadFromFile(path: string, format : FileType = FileType.JSS): Promise<void> {
+    console.info('load from file');
     const response = await fetch(path);
     const json = await response.json();
 
+    if (format == FileType.JSS) {
+     // this.parseJSSContent(json);
+    } else if(format == FileType.Asprite) {
+      this.parseAsepriteJSON(json);
+    }
+  }
+
+
+
+  parseJSSContent(json:string) :void {
     this.textureRect[0] = json['X'];
     this.textureRect[1] = json['Y'];
     this.textureRect[2] = json['Width'];
@@ -48,6 +65,10 @@ class Gfx2SpriteJSS extends Gfx2Drawable implements Poolable<Gfx2SpriteJSS> {
       json['Width'],
       json['Height']
     );
+  }
+
+  parseAsepriteJSON(asepriteJSON: String) : void {
+
   }
 
   /**
