@@ -15,25 +15,25 @@ export class MovePlatformSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const position = dnaManager.getComponent(eid, Position);
+    const pos = dnaManager.getComponent(eid, Position);
+    const vel = dnaManager.getComponent(eid, Velocity);
     const platform = dnaManager.getComponent(eid, Platform);
-    const velocity = dnaManager.getComponent(eid, Velocity);
 
     const dest = platform.direction ? platform.from : platform.to;
-    const deltaX = dest[0] - position.x;
-    const deltaY = dest[1] - position.y;
+    const deltaX = dest[0] - pos.x;
+    const deltaY = dest[1] - pos.y;
     const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
     if (dist <= 0.2) {
       platform.direction = !platform.direction;
-      velocity.y = 0;
-      velocity.x = 0;
+      vel.y = 0;
+      vel.x = 0;
     }
     else {
-      velocity.x = Math.sign(deltaX) * platform.speed;
-      velocity.y = Math.sign(deltaY) * platform.speed;
-      position.x += velocity.x * (ts / 100);
-      position.y += velocity.y * (ts / 100);
+      vel.x = Math.sign(deltaX) * platform.speed;
+      vel.y = Math.sign(deltaY) * platform.speed;
+      pos.x += vel.x * (ts / 100);
+      pos.y += vel.y * (ts / 100);
     }
   }
 }

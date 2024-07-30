@@ -15,7 +15,7 @@ export class DrawableSystem extends DNASystem {
 
   onEntityUpdate(ts: number, eid: number) {
     const drawable = dnaManager.getComponent(eid, Drawable);
-    const position = dnaManager.getComponent(eid, Position);
+    const pos = dnaManager.getComponent(eid, Position);
 
     if (dnaManager.hasComponent(eid, Velocity)) {
       const velocity = dnaManager.getComponent(eid, Velocity);
@@ -27,7 +27,7 @@ export class DrawableSystem extends DNASystem {
       }
     }
 
-    drawable.sprite.setPosition(position.x, position.y);
+    drawable.sprite.setPosition(pos.x, pos.y);
     drawable.sprite.update(ts);
   }
 

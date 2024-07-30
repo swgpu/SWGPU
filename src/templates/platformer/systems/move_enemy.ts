@@ -19,15 +19,15 @@ export class MoveEnemySystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const position = dnaManager.getComponent(eid, Position);
+    const pos = dnaManager.getComponent(eid, Position);
+    const vel = dnaManager.getComponent(eid, Velocity);
     const collider = dnaManager.getComponent(eid, Collider);
-    const velocity = dnaManager.getComponent(eid, Velocity);
 
-    const bounds = collider.getBounds(position);
+    const bounds = collider.getBounds([pos.x, pos.y]);
     const leftCol = this.map.getLocationCol(bounds.left);
     const rightCol = this.map.getLocationCol(bounds.right);
     const bottomRow = this.map.getLocationRow(bounds.bottom) + 1;
-    const currentRow = this.map.getLocationRow(position.y);
+    const currentRow = this.map.getLocationRow(pos.y);
     const layer = this.map.getTileLayer(this.layerIndex);
 
     const emptyLeft = layer.getTile(leftCol, bottomRow) === undefined;
@@ -37,9 +37,9 @@ export class MoveEnemySystem extends DNASystem {
     const wallRight = layer.getTile(rightCol, currentRow) !== undefined;
 
     if (emptyLeft || emptyRight || wallLeft || wallRight) {
-      velocity.x *= -1;
+      vel.x *= -1;
     }
 
-    position.x += velocity.x;
+    pos.x += vel.x;
   }
 }

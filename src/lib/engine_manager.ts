@@ -230,7 +230,7 @@ class EngineManager {
       const infos = this.#getFilenameInfos(entry.name);
       const file = zip.file(entry.name);
 
-      if (file != null && this.textureExts.indexOf(infos.ext) != -1) {
+      if (file != null) {
         const imageUrl = URL.createObjectURL(await file.async('blob'));
         const sampler: GPUSamplerDescriptor = {};
         let type = '';
@@ -450,7 +450,7 @@ class EngineManager {
       const infos = this.#getFilenameInfos(entry.name);
       const file = zip.file(entry.name);
 
-      if (file != null && this.textureExts.indexOf(infos.ext) != -1) {
+      if (file != null) {
         const url = URL.createObjectURL(await file.async('blob'));
         const tex = await gfx2TextureManager.loadTexture(url);
         pack.tex.push({ name: infos.name, ext: 'bitmap', object: tex, blobUrl: url });

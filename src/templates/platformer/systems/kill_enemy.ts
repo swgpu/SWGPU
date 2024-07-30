@@ -14,17 +14,17 @@ export class KillEnemySystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const position = dnaManager.getComponent(eid, Position);
+    const pos = dnaManager.getComponent(eid, Position);
     const collider = dnaManager.getComponent(eid, Collider);
     const bullets = dnaManager.getAllComponents(Bullet);
 
     for (const bulletId of bullets.keys()) {
-      const bulletPosition = dnaManager.getComponent(bulletId, Position);
+      const bulletPos = dnaManager.getComponent(bulletId, Position);
       const bulletCollider = dnaManager.getComponent(bulletId, Collider);
-      if (Collider.isCollide(bulletPosition, bulletCollider, position, collider)) {
+      if (Collider.isCollide([bulletPos.x, bulletPos.y], bulletCollider, [pos.x, pos.y], collider)) {
         dnaManager.removeEntity(eid);
         dnaManager.removeEntity(bulletId);
-        spawnExplosion(position.x, position.y);
+        spawnExplosion(pos.x, pos.y);
       }
     }
   }

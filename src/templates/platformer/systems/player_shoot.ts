@@ -16,7 +16,7 @@ export class PlayerShootSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const position = dnaManager.getComponent(eid, Position);
+    const pos = dnaManager.getComponent(eid, Position);
     const drawable = dnaManager.getComponent(eid, Drawable<Gfx2SpriteJAS>);
     const player = dnaManager.getComponent(eid, Player);
 
@@ -34,8 +34,8 @@ export class PlayerShootSystem extends DNASystem {
       }
 
       const isCrouching = currentAnimation?.name === 'crouch';
-      const bulletOriginY = isCrouching ? position.y + 2 : position.y;
-      spawnBullet(position.x, bulletOriginY, drawable.sprite.getFlipX());
+      const bulletOriginY = isCrouching ? pos.y + 2 : pos.y;
+      spawnBullet(pos.x, bulletOriginY, drawable.sprite.getFlipX());
       player.shooting = true;
       player.lastShot = Date.now();
     }

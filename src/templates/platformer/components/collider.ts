@@ -1,8 +1,6 @@
 import { DNAComponent } from '@lib/dna/dna_component';
 import { UT } from '@lib/core/utils';
 // ---------------------------------------------------------------------------------------
-import { Position } from './position';
-// ---------------------------------------------------------------------------------------
 
 export class Collider extends DNAComponent {
   min: vec2;
@@ -14,16 +12,16 @@ export class Collider extends DNAComponent {
     this.max = max;
   }
 
-  getBounds(position: Position) {
+  getBounds(position: vec2) {
     return {
-      left: position.x - this.min[0],
-      right: position.x + this.max[0],
-      bottom: position.y + this.max[1],
-      top: position.y - this.min[1]
+      left: position[0] - this.min[0],
+      right: position[0] + this.max[0],
+      bottom: position[1] + this.max[1],
+      top: position[1] - this.min[1]
     }
   }
 
-  static isCollide(position1: Position, collider1: Collider, position2: Position, collider2: Collider): boolean {
+  static isCollide(position1: vec2, collider1: Collider, position2: vec2, collider2: Collider): boolean {
     const bounds1 = collider1.getBounds(position1);
     const bounds2 = collider2.getBounds(position2);
     return UT.COLLIDE_RECT_TO_RECT(

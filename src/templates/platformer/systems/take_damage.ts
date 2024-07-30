@@ -21,13 +21,13 @@ export class TakeDamageSytem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const position = dnaManager.getComponent(eid, Position);
+    const pos = dnaManager.getComponent(eid, Position);
     const collider = dnaManager.getComponent(eid, Collider);
     const health = dnaManager.getComponent(eid, Health);
 
     const enemies = dnaManager.getAllComponents(Enemy);
-    const playerRow = this.map.getLocationRow(position.y);
-    const playerCol = this.map.getLocationRow(position.x);
+    const playerRow = this.map.getLocationRow(pos.y);
+    const playerCol = this.map.getLocationRow(pos.x);
     const layer = this.map.getTileLayer(this.layerIndex);
 
     // take damage when falling in lava
@@ -36,9 +36,9 @@ export class TakeDamageSytem extends DNASystem {
     }
 
     for (const enemyId of enemies.keys()) {
-      const enemyPosition = dnaManager.getComponent(enemyId, Position);
+      const enemyPos = dnaManager.getComponent(enemyId, Position);
       const enemyCollider = dnaManager.getComponent(enemyId, Collider);
-      if (Collider.isCollide(position, collider, enemyPosition, enemyCollider)) {
+      if (Collider.isCollide([pos.x, pos.y], collider, [enemyPos.x, enemyPos.y], enemyCollider)) {
         health.takeDamage();
       }
     }

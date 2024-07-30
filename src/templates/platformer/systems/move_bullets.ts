@@ -14,9 +14,9 @@ export class MoveBulletsSystem extends DNASystem {
   }
 
   onEntityUpdate(ts: number, eid: number) {
-    const position = dnaManager.getComponent(eid, Position);
-    const velocity = dnaManager.getComponent(eid, Velocity);
-    position.x += velocity.x * ts;
-    position.y += velocity.y * ts;
+    const pos = dnaManager.getComponent(eid, Position);
+    const vel = dnaManager.getComponent(eid, Velocity);
+    pos.x += vel.x * ts;
+    pos.y += vel.y * ts;
   }
 }
