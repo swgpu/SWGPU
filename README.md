@@ -224,8 +224,6 @@ If you have a suggestion that would make this better, please fork the repo and c
 ## Roadmap
 ```
 Extra:
-- Add texture sampler settings to blender addon
-- Add material animation to blender addon
 - Add fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master.
 - Add pooling soundManager.
 ```
