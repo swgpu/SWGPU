@@ -1,4 +1,4 @@
-import type { RigidBody, Collider, World } from '@dimforge/rapier3d';
+import { type RigidBody, type Collider, type World, Vector3 } from '@dimforge/rapier3d';
 // ---------------------------------------------------------------------------------------
 import { dnaManager } from '@lib/dna/dna_manager';
 import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
@@ -10,15 +10,24 @@ import { DNAComponent } from '@lib/dna/dna_component';
 import { EntityComponent } from './entity';
 // ---------------------------------------------------------------------------------------
 
-export enum PhysicsType {
+export enum PhysicsShapeType {
+  TRIMESH = 0,
+  BALL = 1,
+  CAPSULE = 2
+};
+
+export enum PhysicsBodyType {
   STATIC = 0,
-  ENTITY = 1
+  DYNAMIC = 1,
+  NONE = 2
 };
 
 export class PhysicsComponent extends DNAComponent {
-  type: PhysicsType;
+  shapeType: PhysicsShapeType;
+  bodyType: PhysicsBodyType;
   body: RigidBody | null;
-  collider: Collider | null;
+  collider: Collider;
+  isController: boolean;
   /* entity */
   radius: number;
   /* static */
@@ -27,9 +36,11 @@ export class PhysicsComponent extends DNAComponent {
   constructor() {
     super('Physics');
     this.jsm = new Gfx3MeshJSM();
-    this.type = PhysicsType.STATIC;
+    this.shapeType = PhysicsShapeType.TRIMESH;
+    this.bodyType = PhysicsBodyType.NONE;
     this.body = null;
-    this.collider = null;
+    this.collider = {} as Collider;
+    this.isController = false;
     this.radius = 1;
   }
 }
@@ -48,20 +59,25 @@ export class PhysicsSystem extends DNASystem {
     const physics = dnaManager.getComponent(eid, PhysicsComponent);
     const entity = dnaManager.getComponent(eid, EntityComponent);
 
-    if (physics.type == PhysicsType.STATIC) {
+    if (physics.bodyType == PhysicsBodyType.STATIC) {
       const bodyDesc = Rapier3D.RigidBodyDesc.fixed();
       bodyDesc.setTranslation(entity.x, entity.y, entity.z);
-      const body = this.world.createRigidBody(bodyDesc);
-      const geo = physics.jsm.getGeo();
-      const colliderDesc = Rapier3D.ColliderDesc.trimesh(new Float32Array(geo.coords), new Uint32Array(geo.indexes));
-      physics.collider = this.world.createCollider(colliderDesc, body);
+      physics.body = this.world.createRigidBody(bodyDesc);
     }
-    else if (physics.type == PhysicsType.ENTITY) {
+    else if (physics.bodyType == PhysicsBodyType.DYNAMIC) {
       const bodyDesc = Rapier3D.RigidBodyDesc.dynamic();
       bodyDesc.setTranslation(entity.x, entity.y, entity.z);
       physics.body = this.world.createRigidBody(bodyDesc);
+    }
+
+    if (physics.shapeType == PhysicsShapeType.BALL) {
       const colliderDesc = Rapier3D.ColliderDesc.ball(physics.radius);
-      physics.collider = this.world.createCollider(colliderDesc, physics.body);
+      physics.collider = this.world.createCollider(colliderDesc, physics.body ?? undefined);
+    }
+    else if (physics.shapeType == PhysicsShapeType.TRIMESH) {
+      const geo = physics.jsm.getGeo();
+      const colliderDesc = Rapier3D.ColliderDesc.trimesh(new Float32Array(geo.coords), new Uint32Array(geo.indexes));
+      physics.collider = this.world.createCollider(colliderDesc, physics.body ?? undefined);
     }
   }
 
@@ -71,14 +87,26 @@ export class PhysicsSystem extends DNASystem {
     const physics = dnaManager.getComponent(eid, PhysicsComponent);
     const entity = dnaManager.getComponent(eid, EntityComponent);
 
+    if (physics.isController) {
+      const controller = this.world.createCharacterController(0.01);
+      controller.computeColliderMovement(physics.collider, new Vector3(entity.velocity[0], 0, entity.velocity[2]));
+      let correctedMovement = controller.computedMovement();
+      entity.velocity[0] = correctedMovement.x;
+      entity.velocity[1] = correctedMovement.y;
+      entity.velocity[2] = correctedMovement.z;
+    }
+
     if (physics.body) {
       const vy = physics.body.linvel().y;
-      physics.body.setLinvel({ x: entity.velocity[0], y: vy, z: entity.velocity[2] }, true);  
-
+      physics.body.setLinvel({ x: entity.velocity[0], y: vy, z: entity.velocity[2] }, true);
+      
       const translation = physics.body.translation();
       entity.x = translation.x;
       entity.y = translation.y;
       entity.z = translation.z;
+    }
+    else {
+      physics.collider.setTranslation(new Vector3(entity.velocity[0], entity.velocity[1], entity.velocity[2]));
     }
   }
 

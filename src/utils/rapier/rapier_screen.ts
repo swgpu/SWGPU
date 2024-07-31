@@ -4,7 +4,7 @@ import { Screen } from '@lib/screen/screen';
 import { Gfx3CameraOrbit } from '@lib/gfx3_camera/gfx3_camera_orbit';
 import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 // ---------------------------------------------------------------------------------------
-import { PhysicsComponent, PhysicsSystem, PhysicsType } from './physics';
+import { PhysicsComponent, PhysicsSystem, PhysicsShapeType, PhysicsBodyType } from './physics';
 import { GraphicsComponent, GraphicsSystem } from './graphics';
 import { EntityComponent } from './entity';
 import { InputComponent, InputSystem } from './input';
@@ -56,7 +56,8 @@ class RapierScreen extends Screen {
     dnaManager.addComponent(wall, graphics);
 
     const physics = new PhysicsComponent();
-    physics.type = PhysicsType.STATIC;
+    physics.bodyType = PhysicsBodyType.STATIC;
+    physics.shapeType = PhysicsShapeType.TRIMESH;
     physics.jsm = graphics.jsm;
     dnaManager.addComponent(wall, physics);
 
@@ -76,7 +77,8 @@ class RapierScreen extends Screen {
     dnaManager.addComponent(floor, graphics);
 
     const physics = new PhysicsComponent();
-    physics.type = PhysicsType.STATIC;
+    physics.bodyType = PhysicsBodyType.STATIC;
+    physics.shapeType = PhysicsShapeType.TRIMESH;
     physics.jsm = graphics.jsm;
     dnaManager.addComponent(floor, physics);
 
@@ -95,7 +97,9 @@ class RapierScreen extends Screen {
     dnaManager.addComponent(ship, graphics);
 
     const physics = new PhysicsComponent();
-    physics.type = PhysicsType.ENTITY;
+    // physics.bodyType = PhysicsBodyType.DYNAMIC;
+    physics.shapeType = PhysicsShapeType.BALL;
+    physics.isController = true;
     physics.radius = 2.0;
     dnaManager.addComponent(ship, physics);
 
