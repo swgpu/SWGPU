@@ -3,7 +3,7 @@ import { type RigidBody, type Collider, type World, Vector3 } from '@dimforge/ra
 import { dnaManager } from '@lib/dna/dna_manager';
 import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
 import { Rapier3D } from '@lib/gfx3_physics/gfx3_physics_rapier';
-import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
+import { Gfx3Mesh } from '@lib/gfx3_mesh/gfx3_mesh';
 import { DNASystem } from '@lib/dna/dna_system';
 import { DNAComponent } from '@lib/dna/dna_component';
 // ---------------------------------------------------------------------------------------
@@ -19,29 +19,29 @@ export enum PhysicsShapeType {
 export enum PhysicsBodyType {
   STATIC = 0,
   DYNAMIC = 1,
-  NONE = 2
+  KINEMATIC = 2
 };
 
 export class PhysicsComponent extends DNAComponent {
   shapeType: PhysicsShapeType;
   bodyType: PhysicsBodyType;
-  body: RigidBody | null;
+  body: RigidBody;
   collider: Collider;
   isController: boolean;
-  /* entity */
-  radius: number;
-  /* static */
-  jsm: Gfx3MeshJSM;
+  grounded: boolean;
+  ballRadius: number;
+  mesh: Gfx3Mesh;
 
   constructor() {
     super('Physics');
-    this.jsm = new Gfx3MeshJSM();
     this.shapeType = PhysicsShapeType.TRIMESH;
-    this.bodyType = PhysicsBodyType.NONE;
-    this.body = null;
+    this.bodyType = PhysicsBodyType.STATIC;
+    this.body = {} as RigidBody;
     this.collider = {} as Collider;
     this.isController = false;
-    this.radius = 1;
+    this.grounded = false;
+    this.ballRadius = 1;
+    this.mesh = new Gfx3Mesh();
   }
 }
 
@@ -59,6 +59,9 @@ export class PhysicsSystem extends DNASystem {
     const physics = dnaManager.getComponent(eid, PhysicsComponent);
     const entity = dnaManager.getComponent(eid, EntityComponent);
 
+    //
+    // RigidBody
+    //
     if (physics.bodyType == PhysicsBodyType.STATIC) {
       const bodyDesc = Rapier3D.RigidBodyDesc.fixed();
       bodyDesc.setTranslation(entity.x, entity.y, entity.z);
@@ -69,44 +72,60 @@ export class PhysicsSystem extends DNASystem {
       bodyDesc.setTranslation(entity.x, entity.y, entity.z);
       physics.body = this.world.createRigidBody(bodyDesc);
     }
+    else {
+      const bodyDesc = Rapier3D.RigidBodyDesc.kinematicPositionBased();
+      bodyDesc.setTranslation(entity.x, entity.y, entity.z);
+      physics.body = this.world.createRigidBody(bodyDesc);
+    }
 
+    //
+    // Collider
+    //
     if (physics.shapeType == PhysicsShapeType.BALL) {
-      const colliderDesc = Rapier3D.ColliderDesc.ball(physics.radius);
+      const colliderDesc = Rapier3D.ColliderDesc.capsule(1, physics.ballRadius);
       physics.collider = this.world.createCollider(colliderDesc, physics.body ?? undefined);
     }
     else if (physics.shapeType == PhysicsShapeType.TRIMESH) {
-      const geo = physics.jsm.getGeo();
+      const geo = physics.mesh.getGeo();
       const colliderDesc = Rapier3D.ColliderDesc.trimesh(new Float32Array(geo.coords), new Uint32Array(geo.indexes));
       physics.collider = this.world.createCollider(colliderDesc, physics.body ?? undefined);
     }
   }
 
-  onEntityUpdate(ts: number, eid: number): void {
+  onBeforeUpdate(ts: number): void {
     this.world.step();
+  }
 
+  onEntityUpdate(ts: number, eid: number): void {
     const physics = dnaManager.getComponent(eid, PhysicsComponent);
     const entity = dnaManager.getComponent(eid, EntityComponent);
 
     if (physics.isController) {
-      const controller = this.world.createCharacterController(0.01);
-      controller.computeColliderMovement(physics.collider, new Vector3(entity.velocity[0], 0, entity.velocity[2]));
-      let correctedMovement = controller.computedMovement();
-      entity.velocity[0] = correctedMovement.x;
-      entity.velocity[1] = correctedMovement.y;
-      entity.velocity[2] = correctedMovement.z;
-    }
+      const position = physics.body.translation();
 
-    if (physics.body) {
-      const vy = physics.body.linvel().y;
-      physics.body.setLinvel({ x: entity.velocity[0], y: vy, z: entity.velocity[2] }, true);
-      
-      const translation = physics.body.translation();
-      entity.x = translation.x;
-      entity.y = translation.y;
-      entity.z = translation.z;
-    }
-    else {
-      physics.collider.setTranslation(new Vector3(entity.velocity[0], entity.velocity[1], entity.velocity[2]));
+      const controller = this.world.createCharacterController(0.1);
+      controller.setApplyImpulsesToDynamicBodies(true);
+      controller.enableSnapToGround(0.02);
+      controller.setCharacterMass(0.2);      
+
+      // Apply gravity
+      if (!physics.grounded) {
+        entity.velocity[1] -= (9.807 * (ts / 1000)) / 20;
+      }
+
+      controller.computeColliderMovement(physics.collider, { x: entity.velocity[0], y: entity.velocity[1], z: entity.velocity[2] });
+      physics.grounded = controller.computedGrounded();
+
+      const correctedMovement = controller.computedMovement();
+      physics.body.setNextKinematicTranslation({
+        x: position.x + correctedMovement.x,
+        y: position.y + correctedMovement.y,
+        z: position.z + correctedMovement.z
+      });
+
+      entity.x += correctedMovement.x;
+      entity.y += correctedMovement.y;
+      entity.z += correctedMovement.z;
     }
   }
 

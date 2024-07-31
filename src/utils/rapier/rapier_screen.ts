@@ -31,9 +31,10 @@ class RapierScreen extends Screen {
       new GraphicsSystem()
     ]);
 
-    this.floorEid = await this.#createFloor();
+    this.floorEid = await this.#createStaticMesh('./utils/rapier/floor.jsm', './utils/rapier/floor.png');
+    this.floorEid = await this.#createStaticMesh('./utils/rapier/slope.jsm', './utils/rapier/floor.png');
     this.shipEid = await this.#createShip();
-    this.wallEid = await this.#createWall();
+    this.wallEid = await this.#createStaticMesh('./utils/rapier/wall.jsm', './utils/rapier/wall.jpg');
   }
 
   update(ts: number) {
@@ -47,49 +48,33 @@ class RapierScreen extends Screen {
     dnaManager.draw();
   }
 
-  async #createWall(): Promise<number> {
-    const wall = dnaManager.createEntity();
+  async #createStaticMesh(jsmPath: string, jsmTexture: string): Promise<number> {
+    const mesh = dnaManager.createEntity();
+
+    const entity = new EntityComponent();
+    dnaManager.addComponent(mesh, entity);
 
     const graphics = new GraphicsComponent();
-    await graphics.jsm.loadFromFile('./utils/rapier/wall.jsm');
-    graphics.jsm.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture('./utils/rapier/wall.jpg') }));
-    dnaManager.addComponent(wall, graphics);
+    await graphics.jsm.loadFromFile(jsmPath);
+    graphics.jsm.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture(jsmTexture) }));
+    dnaManager.addComponent(mesh, graphics);
 
     const physics = new PhysicsComponent();
     physics.bodyType = PhysicsBodyType.STATIC;
     physics.shapeType = PhysicsShapeType.TRIMESH;
-    physics.jsm = graphics.jsm;
-    dnaManager.addComponent(wall, physics);
+    physics.mesh = graphics.jsm;
+    dnaManager.addComponent(mesh, physics);
 
-    const entity = new EntityComponent();
-    entity.z = 10;
-    dnaManager.addComponent(wall, entity);
-
-    return wall;
-  }
-
-  async #createFloor(): Promise<number> {
-    const floor = dnaManager.createEntity();
-
-    const graphics = new GraphicsComponent();
-    await graphics.jsm.loadFromFile('./utils/rapier/floor.jsm');
-    graphics.jsm.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture('./utils/rapier/floor.png') }));
-    dnaManager.addComponent(floor, graphics);
-
-    const physics = new PhysicsComponent();
-    physics.bodyType = PhysicsBodyType.STATIC;
-    physics.shapeType = PhysicsShapeType.TRIMESH;
-    physics.jsm = graphics.jsm;
-    dnaManager.addComponent(floor, physics);
-
-    const entity = new EntityComponent();
-    dnaManager.addComponent(floor, entity);
-
-    return floor;
+    return mesh;
   }
 
   async #createShip(): Promise<number> {
     const ship = dnaManager.createEntity();
+
+    const entity = new EntityComponent();
+    entity.y = 3;
+    entity.z = 10;
+    dnaManager.addComponent(ship, entity);
 
     const graphics = new GraphicsComponent();
     await graphics.jsm.loadFromFile('./utils/rapier/ship.jsm');
@@ -97,15 +82,11 @@ class RapierScreen extends Screen {
     dnaManager.addComponent(ship, graphics);
 
     const physics = new PhysicsComponent();
-    // physics.bodyType = PhysicsBodyType.DYNAMIC;
+    physics.bodyType = PhysicsBodyType.KINEMATIC;
     physics.shapeType = PhysicsShapeType.BALL;
     physics.isController = true;
-    physics.radius = 2.0;
+    physics.ballRadius = 2.0;
     dnaManager.addComponent(ship, physics);
-
-    const entity = new EntityComponent();
-    entity.y = 10;
-    dnaManager.addComponent(ship, entity);
 
     const input = new InputComponent();
     dnaManager.addComponent(ship, input);
