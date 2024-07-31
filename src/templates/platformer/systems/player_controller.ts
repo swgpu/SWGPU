@@ -15,8 +15,6 @@ import { Drawable } from '../components/drawable';
 import { Velocity } from '../components/velocity';
 // ---------------------------------------------------------------------------------------
 
-const GRAVITY_ACCEL = 3;
-
 export class PlayerControllerSystem extends DNASystem {
   map: Gfx2TileMap;
   collisionLayerIndex: number;
@@ -46,10 +44,10 @@ export class PlayerControllerSystem extends DNASystem {
     const jump = dnaManager.getComponent(eid, Jump);
 
     this.updateInput(ts, pos, collider, drawable, jump, vel, player);
-    this.updateGravity(ts, jump, vel);
-    this.updatePlatforms(ts, pos, vel, collider, jump);
-    this.updatePosition(ts, pos, collider, vel, jump);
+    this.updateGravity(ts, jump, vel, player);
     
+    this.updatePosition(ts, pos, collider, vel, jump);
+    this.updatePlatforms(ts, pos, vel, collider, jump);
     this.updateCamera(ts, pos, jump);
   }
 
@@ -104,43 +102,17 @@ export class PlayerControllerSystem extends DNASystem {
     }
   }
 
-  updateGravity(ts: number, jump: Jump, vel: Velocity) {
-    if (jump.platform == -1) {
-      const gravityFactor = jump.jumping && inputManager.isActiveAction('JUMP') ? 1 : 3;
-      vel.y += GRAVITY_ACCEL * gravityFactor * (ts / 100);
-    }
-  }
-
-  updatePlatforms(ts: number, pos: Position, vel: Velocity, collider: Collider, jump: Jump) {
-    // if (vel.y < 0) {
-    //   return;
-    // }
-
-    const bounds = collider.getBounds([pos.x, pos.y + vel.y]);
-    const platformId = this.collideWithPlatform(pos, bounds);
-
-    if (platformId !== -1) {
-      if (inputManager.isActiveAction('DOWN')) {
-        jump.dropDown = platformId;
-      }
-      if (platformId !== jump.dropDown) {
-        const platformPos = dnaManager.getComponent(platformId, Position);
-        const platformVel = dnaManager.getComponent(platformId, Velocity);
-        const platformCollider = dnaManager.getComponent(platformId, Collider);        
-        const platformBounds = platformCollider.getBounds([platformPos.x, platformPos.y]);
-        pos.y = platformBounds.top - collider.min[1];
-        vel.x += platformVel.x * (ts / 100);
-        vel.y = platformVel.y * (ts / 100);
-        jump.platform = platformId;
-        jump.jumping = false;
-      }
-    }
-    else {
-      jump.platform = -1;
-    }
+  updateGravity(ts: number, jump: Jump, vel: Velocity, player: Player) {
+    const gravityFactor = jump.jumping && inputManager.isActiveAction('JUMP') ? 1 : 3;
+    vel.y += player.gravity * gravityFactor * (ts / 100);
+    
   }
 
   updatePosition(ts: number, pos: Position, collider: Collider, vel: Velocity, jump: Jump) {
+    // clamp the velocity to a safety max value
+    vel.y = Math.min(vel.y, 60);
+    vel.x = Math.min(vel.x, 60);
+
     const bounds = collider.getBounds([pos.x, pos.y]);
     const mx = vel.x * (ts / 100);
     const my = vel.y * (ts / 100);
@@ -168,24 +140,51 @@ export class PlayerControllerSystem extends DNASystem {
     pos.y += collisions.my;
   }
 
-  updateCamera(ts: number, pos: Position, jump: Jump) {
-    if (!jump.wallJumping) {
-      const x = UT.LERP(gfx2Manager.getCameraPositionX(), pos.x, ts / 100);
-      gfx2Manager.setCameraPosition(x, 70);
+  updatePlatforms(ts: number, pos: Position, vel: Velocity, collider: Collider, jump: Jump) {
+    if (vel.y < 0 && jump.platform == -1) {
+      return;
+    }
+
+    const bounds = collider.getBounds([pos.x, pos.y]);
+    const platformId = this.collideWithPlatform(pos.y, bounds);
+
+    if (platformId !== -1) {
+      if (inputManager.isActiveAction('DOWN')) {
+        jump.dropDown = platformId;
+      }
+      if (platformId !== jump.dropDown) {
+        const platformPos = dnaManager.getComponent(platformId, Position);
+        const platformVel = dnaManager.getComponent(platformId, Velocity);
+        const platformCollider = dnaManager.getComponent(platformId, Collider);        
+        const platformBounds = platformCollider.getBounds([platformPos.x, platformPos.y]);
+        pos.y = platformBounds.top - collider.min[1];
+        pos.x += platformVel.x;
+        jump.platform = platformId;
+        jump.jumping = false;
+      }
+    }
+    else {
+      jump.platform = -1;
     }
   }
 
-  collideWithPlatform(pos: Position, bounds: ReturnType<Collider['getBounds']>): number {
+  updateCamera(ts: number, pos: Position, jump: Jump) {
+    if (!jump.wallJumping) {
+      const x = UT.LERP(gfx2Manager.getCameraPositionX(), pos.x, ts / 100);
+      gfx2Manager.setCameraPosition(x, 250);
+    }
+  }
+
+  collideWithPlatform(y: number, bounds: ReturnType<Collider['getBounds']>): number {
     const platforms = dnaManager.getAllComponents(Platform);
 
     for (const eid of platforms.keys()) {
       const platformPos = dnaManager.getComponent(eid, Position);
       const platformCollider = dnaManager.getComponent(eid, Collider);
       const platformBounds = platformCollider.getBounds([platformPos.x, platformPos.y]);
-      const isAbove = pos.y < platformBounds.top;
       const isWithinX = [bounds.left, bounds.right].some(b => platformBounds.left < b && b < platformBounds.right);
       const isWithinY = platformBounds.top < bounds.bottom && bounds.bottom < platformBounds.bottom;
-      if (isAbove && isWithinX && isWithinY) {
+      if (isWithinX && isWithinY) {
         return eid;
       }
     }

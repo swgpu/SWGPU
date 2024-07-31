@@ -9,15 +9,17 @@ export class Player extends DNAComponent {
   maxSpeed: number;
   jumpStrenght: number;
   wallJumpStrenght: number;
+  gravity: number;
 
   constructor() {
     super('Player');
     this.shooting = false;
     this.shootingDuration = 300;
     this.lastShot = null;
-    this.accel = 4;
-    this.maxSpeed = 8;
-    this.jumpStrenght = 20;
-    this.wallJumpStrenght = 20;
+    this.accel = 16;
+    this.maxSpeed = 32;
+    this.jumpStrenght = 80;
+    this.wallJumpStrenght = 80;
+    this.gravity = 12;
   }
 }

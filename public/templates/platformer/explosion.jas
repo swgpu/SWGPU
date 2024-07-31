@@ -6,21 +6,21 @@
 			"FrameDuration": 100,
 			"Frames": [
 				{
-					"Width": 12,
-					"Height": 12,
+					"Width": 48,
+					"Height": 48,
 					"X": 0,
 					"Y": 0
 				},
 				{
-					"Width": 12,
-					"Height": 12,
-					"X": 12,
+					"Width": 48,
+					"Height": 48,
+					"X": 48,
 					"Y": 0
 				},
 				{
-					"Width": 12,
-					"Height": 12,
-					"X": 24,
+					"Width": 48,
+					"Height": 48,
+					"X": 96,
 					"Y": 0
 				}
 			]

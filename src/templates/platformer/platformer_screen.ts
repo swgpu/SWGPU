@@ -61,16 +61,16 @@ class PlatformerScreen extends Screen {
     ]);
 
     await Promise.all([
-      spawnPlayer(50, 97),
-      spawnEnemy(160, 68),
-      spawnEnemy(180, 68),
-      spawnEnemy(270, 100),
-      spawnEnemy(300, 100),
-      spawnEnemy(330, 100),
-      spawnPlatform(250, 70, [0, -20], [0, 20])
+      spawnPlayer(170, 350),
+      spawnEnemy(640, 272),
+      spawnEnemy(720, 272),
+      spawnEnemy(1080, 400),
+      spawnEnemy(1200, 400),
+      spawnEnemy(1320, 400),
+      spawnPlatform(1000, 280, [0, -80], [0, 80])
     ]);
 
-    gfx2Manager.setCameraScale(5, 5);
+    gfx2Manager.setCameraPosition(170, 350);
   }
 
   update(ts: number) {
@@ -78,9 +78,6 @@ class PlatformerScreen extends Screen {
     const previousCameraPositionY = gfx2Manager.getCameraPositionY();
 
     dnaManager.update(ts);
-
-    const cameraX = UT.CLAMP(gfx2Manager.getCameraPositionX(), 70, 600);
-    gfx2Manager.setCameraPosition(cameraX, gfx2Manager.getCameraPositionY());
 
     const cameraDeltaX = gfx2Manager.getCameraPositionX() - previousCameraPositionX;
     const cameraDeltaY = gfx2Manager.getCameraPositionY() - previousCameraPositionY;

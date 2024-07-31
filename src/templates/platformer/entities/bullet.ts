@@ -23,6 +23,6 @@ export const spawnBullet = async (x: number, y: number, flipped: boolean) => {
 		new Drawable(sprite),
 		new Velocity(direction * 0.05, 0),
 		new Bullet(),
-		new Collider([4, 3], [-1, -1])
+		new Collider([16, 12], [-4, -4])
 	]);
 }

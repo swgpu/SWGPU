@@ -14,14 +14,14 @@ export const spawnEnemy = async (x: number, y: number) => {
   await sprite.loadFromFile('templates/platformer/enemy.jas');
   sprite.setTexture(await gfx2TextureManager.loadTexture('templates/platformer/enemy.png'));  
   sprite.play('walk', true);
-  sprite.setOffset(4, 4);
+  sprite.setOffset(16, 16);
 
   dnaManager.createEntityWith([
     new Drawable(sprite),
     new Position(x, y),
-    new Velocity(-0.2, 0),
+    new Velocity(-0.8, 0),
     new Enemy(),
-    new Collider([3.5, 3.5], [3.5, 3.5])
+    new Collider([14, 14], [14, 14])
   ])
 }
 
@@ -30,7 +30,7 @@ export const spawnExplosion = async (x: number, y: number) => {
   await sprite.loadFromFile('templates/platformer/explosion.jas');
   sprite.setTexture(await gfx2TextureManager.loadTexture('templates/platformer/explosion.png'));  
   sprite.play('explode', false);
-  sprite.setOffset(6, 6);
+  sprite.setOffset(24, 24);
 
   const eid = dnaManager.createEntityWith([
     new Position(x, y),

@@ -15,14 +15,14 @@ export const spawnPlayer = async (x: number, y: number) => {
   const sprite = new Gfx2SpriteJAS();
   await sprite.loadFromFile('templates/platformer/player.jas');
   sprite.setTexture(await gfx2TextureManager.loadTexture('templates/platformer/player.png'));
-  sprite.setOffset(4, 4);
+  sprite.setOffset(16, 16);
 
   dnaManager.createEntityWith([
     new Position(x, y),
     new Drawable(sprite),
     new Player(),
     new Velocity(),
-    new Collider([2, 4], [2, 4]),
+    new Collider([8, 16], [8, 16]),
     new Jump(),
     new Health(5)
   ]);
