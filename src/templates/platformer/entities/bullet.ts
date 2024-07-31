@@ -15,13 +15,13 @@ export const spawnBullet = async (x: number, y: number, flipped: boolean) => {
 	sprite.setTexture(await gfx2TextureManager.loadTexture('templates/platformer/player.png'));
 	sprite.play('shoot', false);
 	sprite.setFlipX(flipped);
-	sprite.setOffset(4, 4);
+	sprite.setOffset(16, 16);
 	const direction = flipped ? -1 : 1;
 	
   dnaManager.createEntityWith([
 		new Position(x + direction * 6, y),
 		new Drawable(sprite),
-		new Velocity(direction * 0.05, 0),
+		new Velocity(direction * 0.5, 0),
 		new Bullet(),
 		new Collider([16, 12], [-4, -4])
 	]);

@@ -105,7 +105,6 @@ export class PlayerControllerSystem extends DNASystem {
   updateGravity(ts: number, jump: Jump, vel: Velocity, player: Player) {
     const gravityFactor = jump.jumping && inputManager.isActiveAction('JUMP') ? 1 : 3;
     vel.y += player.gravity * gravityFactor * (ts / 100);
-    
   }
 
   updatePosition(ts: number, pos: Position, collider: Collider, vel: Velocity, jump: Jump) {
@@ -145,8 +144,7 @@ export class PlayerControllerSystem extends DNASystem {
       return;
     }
 
-    const bounds = collider.getBounds([pos.x, pos.y]);
-    const platformId = this.collideWithPlatform(pos.y, bounds);
+    const platformId = this.collideWithPlatform(pos, collider);
 
     if (platformId !== -1) {
       if (inputManager.isActiveAction('DOWN')) {
@@ -175,16 +173,19 @@ export class PlayerControllerSystem extends DNASystem {
     }
   }
 
-  collideWithPlatform(y: number, bounds: ReturnType<Collider['getBounds']>): number {
+  collideWithPlatform(pos: Position, collider: Collider): number {
     const platforms = dnaManager.getAllComponents(Platform);
+    const bounds = collider.getBounds([pos.x, pos.y]);
 
     for (const eid of platforms.keys()) {
       const platformPos = dnaManager.getComponent(eid, Position);
       const platformCollider = dnaManager.getComponent(eid, Collider);
       const platformBounds = platformCollider.getBounds([platformPos.x, platformPos.y]);
       const isWithinX = [bounds.left, bounds.right].some(b => platformBounds.left < b && b < platformBounds.right);
-      const isWithinY = platformBounds.top < bounds.bottom && bounds.bottom < platformBounds.bottom;
-      if (isWithinX && isWithinY) {
+      const isWithinY = platformBounds.top > bounds.top && bounds.bottom > platformBounds.top;
+      const isJustOnAbove = platformBounds.top - bounds.top > collider.min[1];
+
+      if (isJustOnAbove && isWithinX && isWithinY) {
         return eid;
       }
     }
