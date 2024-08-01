@@ -1,5 +1,6 @@
 import { eventManager } from '../core/event_manager';
 import { gfx2Manager } from '../gfx2/gfx2_manager';
+import { FormatJAS, fromAseprite } from '@lib/core/format_jas';
 import { Poolable } from '../core/object_pool';
 import { UT } from '../core/utils';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
@@ -39,7 +40,7 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
     this.offsetFactor = [0, 0];
     this.currentAnimation = null;
     this.currentAnimationFrameIndex = 0;
-    this.looped = false;    
+    this.looped = false;
     this.frameProgress = 0;
   }
 
@@ -51,22 +52,40 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
+    this.loadFromData(json);
+  }
 
-    this.offset[0] = json['OffsetX'] ?? 0;
-    this.offset[1] = json['OffsetY'] ?? 0;
+  /**
+   * Loads asynchronously sprite data from a aseprite file (ase).
+   * 
+   * @param {string} path - The file path.
+   */
+  async loadFromAsepriteFile(path: string): Promise<void> {
+    const data = await fromAseprite(path);
+    this.loadFromData(data);
+  }
 
-    this.flip[0] = json['FlipX'] ?? false;
-    this.flip[1] = json['FlipY'] ?? false;
+  /**
+   * Loads sprite data from a jas formatted data.
+   * 
+   * @param {FormatJAS} data - The jas formatted data.
+   */
+  loadFromData(data: FormatJAS): void {
+    this.offset[0] = data['OffsetX'] ?? 0;
+    this.offset[1] = data['OffsetY'] ?? 0;
 
-    this.offsetFactor[0] = json['OffsetFactorX'] ?? 0;
-    this.offsetFactor[1] = json['OffsetFactorY'] ?? 0;
+    this.flip[0] = data['FlipX'] ?? false;
+    this.flip[1] = data['FlipY'] ?? false;
+
+    this.offsetFactor[0] = data['OffsetFactorX'] ?? 0;
+    this.offsetFactor[1] = data['OffsetFactorY'] ?? 0;
 
     this.animations = [];
-    for (const obj of json['Animations']) {
+    for (const obj of data['Animations']) {
       const animation: JASAnimation = {
         name: obj['Name'],
         frames: [],
-        frameDuration: parseInt(obj['FrameDuration']),
+        frameDuration: Number(obj['FrameDuration']),
         boundingRects: []
       };
 
@@ -83,7 +102,7 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
           frame['Y'],
           frame['Width'],
           frame['Height']
-        ));  
+        ));
       }
 
       this.animations.push(animation);
@@ -277,7 +296,7 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
     jas.texture = this.texture;
     jas.currentAnimation = null;
     jas.currentAnimationFrameIndex = 0;
-    jas.looped = false;    
+    jas.looped = false;
     jas.frameProgress = 0;
     return jas;
   }

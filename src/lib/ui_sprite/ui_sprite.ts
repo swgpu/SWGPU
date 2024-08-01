@@ -1,4 +1,5 @@
 import { eventManager } from '../core/event_manager';
+import { FormatJAS, fromAseprite } from '@lib/core/format_jas';
 import { UIWidget } from '../ui/ui_widget';
 
 interface JASFrame {
@@ -64,10 +65,28 @@ class UISprite extends UIWidget {
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
+    this.loadFromData(json);
+  }
 
+  /**
+   * Loads asynchronously sprite data from a aseprite file (ase).
+   * 
+   * @param {string} path - The file path.
+   */
+  async loadFromAsepriteFile(path: string): Promise<void> {
+    const data = await fromAseprite(path);
+    this.loadFromData(data);
+  }
+
+  /**
+   * Loads sprite data from a jas formatted data.
+   * 
+   * @param {FormatJAS} data - The jas formatted data.
+   */
+  loadFromData(data: FormatJAS): void {
     this.animations = [];
-    for (const obj of json['Animations']) {
-      const animation: JASAnimation = { name: obj['Name'], frames: [], frameDuration: parseInt(obj['FrameDuration']) };
+    for (const obj of data['Animations']) {
+      const animation: JASAnimation = { name: obj['Name'], frames: [], frameDuration: Number(obj['FrameDuration']) };
       for (const objFrame of obj['Frames']) {
         animation.frames.push({
           x: objFrame['X'],
