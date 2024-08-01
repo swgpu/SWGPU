@@ -1,17 +1,23 @@
 import { eventManager } from '../core/event_manager';
 import { gfx2Manager } from '../gfx2/gfx2_manager';
+import { FormatJAS, fromAseprite } from '@lib/core/format_jas';
 import { Poolable } from '../core/object_pool';
 import { UT } from '../core/utils';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
 import { Gfx2BoundingRect } from '../gfx2/gfx2_bounding_rect';
-import { JASAnimation } from './jas';
-import { AsepriteTransform } from './aseprite';
 
-export enum FileType {
-  JSS,
-  JAS,
-  Aseprite,
-  TileKit
+interface JASFrame {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+interface JASAnimation {
+  name: string;
+  frames: Array<JASFrame>;
+  frameDuration: number;
+  boundingRects: Array<Gfx2BoundingRect>;
 }
 
 /**
@@ -43,34 +49,43 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
    * 
    * @param {string} path - The file path.
    */
-  async loadFromFile(path: string, format = FileType.JAS): Promise<void> {
+  async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
-    if (format === FileType.JAS) { this.parseJAS(json) }
-    else if (format === FileType.Aseprite) { this.parseAseprite(json) }
-
-    this.boundingRect = this.animations[0].boundingRects[0];
-    this.currentAnimation = null;
-    this.currentAnimationFrameIndex = 0;
-    this.frameProgress = 0;
+    this.loadFromData(json);
   }
 
-  parseJAS(json: any): void {
-    this.offset[0] = json['OffsetX'] ?? 0;
-    this.offset[1] = json['OffsetY'] ?? 0;
+  /**
+   * Loads asynchronously sprite data from a aseprite file (ase).
+   * 
+   * @param {string} path - The file path.
+   */
+  async loadFromAsepriteFile(path: string): Promise<void> {
+    const data = await fromAseprite(path);
+    this.loadFromData(data);
+  }
 
-    this.flip[0] = json['FlipX'] ?? false;
-    this.flip[1] = json['FlipY'] ?? false;
+  /**
+   * Loads sprite data from a jas formatted data.
+   * 
+   * @param {FormatJAS} data - The jas formatted data.
+   */
+  loadFromData(data: FormatJAS): void {
+    this.offset[0] = data['OffsetX'] ?? 0;
+    this.offset[1] = data['OffsetY'] ?? 0;
 
-    this.offsetFactor[0] = json['OffsetFactorX'] ?? 0;
-    this.offsetFactor[1] = json['OffsetFactorY'] ?? 0;
+    this.flip[0] = data['FlipX'] ?? false;
+    this.flip[1] = data['FlipY'] ?? false;
+
+    this.offsetFactor[0] = data['OffsetFactorX'] ?? 0;
+    this.offsetFactor[1] = data['OffsetFactorY'] ?? 0;
 
     this.animations = [];
-    for (const obj of json['Animations']) {
+    for (const obj of data['Animations']) {
       const animation: JASAnimation = {
         name: obj['Name'],
         frames: [],
-        frameDuration: parseInt(obj['FrameDuration']),
+        frameDuration: Number(obj['FrameDuration']),
         boundingRects: []
       };
 
@@ -93,11 +108,10 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
       this.animations.push(animation);
     }
 
-
-  }
-
-  parseAseprite(json: any): void {
-    AsepriteTransform.apply(this, json);
+    this.boundingRect = this.animations[0].boundingRects[0];
+    this.currentAnimation = null;
+    this.currentAnimationFrameIndex = 0;
+    this.frameProgress = 0;
   }
 
   /**

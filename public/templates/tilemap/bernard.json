@@ -1,5 +1,5 @@
 {
-  "JASFile": "templates/tilemap/bernard.jas",
+  "JASFile": "templates/tilemap/bernard.ase",
   "TextureFile": "templates/tilemap/bernard.png",
   "OffsetX": 8,
   "OffsetY": 8,

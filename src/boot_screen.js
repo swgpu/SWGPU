@@ -20,7 +20,6 @@ import { TilemapIsoScreen } from './templates/tilemap-iso/tilemap_iso_screen';
 import { TilemapPathfindingScreen } from './templates/tilemap-pathfinding/tilemap_pathfinding_screen';
 import { TripleTriadScreen } from './templates/triple-triad/triple_triad_screen';
 import { VisualNovelScreen } from './templates/visual-novel/visual_novel_screen';
-import { AnimationsScreen } from './templates/animations/animations_screen';
 // ---------------------------------------------------------------------------------------
 import { CurveScreen } from './utils/curve/curve_screen';
 import { MenuRingScreen } from './utils/menu-ring/menu_ring_screen';
@@ -62,7 +61,6 @@ class BootScreen extends Screen {
     this.uiTemplates.add('13', '2D Triple Triad');
     this.uiTemplates.add('14', '2D Visual Novel');
     this.uiTemplates.add('15', '2D Platformer');
-    this.uiTemplates.add('16', 'Animations');
     this.uiTemplates.setVisible(false);
     uiManager.addWidget(this.uiTemplates, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
@@ -150,8 +148,6 @@ class BootScreen extends Screen {
     }
     else if (data.id == 15) {
       screenManager.requestSetScreen(new PlatformerScreen());
-    } else if (data.id == 16) {
-      screenManager.requestSetScreen(new AnimationsScreen());
     }
   }
 

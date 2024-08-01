@@ -1,4 +1,5 @@
 import { eventManager } from '../core/event_manager';
+import { FormatJAS, fromAseprite } from '@lib/core/format_jas';
 import { UT } from '../core/utils';
 import { Poolable } from '../core/object_pool';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
@@ -46,26 +47,44 @@ class Gfx3SpriteJAS extends Gfx3Sprite implements Poolable<Gfx3SpriteJAS> {
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
+    this.loadFromData(json);
+  }
 
-    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'JAS') {
+  /**
+   * Loads asynchronously sprite data from a aseprite file (ase).
+   * 
+   * @param {string} path - The file path.
+   */
+  async loadFromAsepriteFile(path: string): Promise<void> {
+    const data = await fromAseprite(path);
+    this.loadFromData(data);
+  }
+
+  /**
+   * Loads sprite data from a jas formatted data.
+   * 
+   * @param {FormatJAS} data - The jas formatted data.
+   */
+  loadFromData(data: FormatJAS): void {
+    if (!data.hasOwnProperty('Ident') || data['Ident'] != 'JAS') {
       throw new Error('Gfx3SpriteJAS::loadFromFile(): File not valid !');
     }
 
-    this.offset[0] = json['OffsetX'] ?? 0;
-    this.offset[1] = json['OffsetY'] ?? 0;
+    this.offset[0] = data['OffsetX'] ?? 0;
+    this.offset[1] = data['OffsetY'] ?? 0;
 
-    this.flip[0] = json['FlipX'] ?? false;
-    this.flip[1] = json['FlipY'] ?? false;
+    this.flip[0] = data['FlipX'] ?? false;
+    this.flip[1] = data['FlipY'] ?? false;
 
-    this.offsetFactor[0] = json['OffsetFactorX'] ?? 0;
-    this.offsetFactor[1] = json['OffsetFactorY'] ?? 0;
+    this.offsetFactor[0] = data['OffsetFactorX'] ?? 0;
+    this.offsetFactor[1] = data['OffsetFactorY'] ?? 0;
 
     this.animations = [];
-    for (const obj of json['Animations']) {
+    for (const obj of data['Animations']) {
       const animation: JASAnimation = {
         name: obj['Name'],
         frames: [],
-        frameDuration: parseInt(obj['FrameDuration']),
+        frameDuration: Number(obj['FrameDuration']),
         boundingBoxes: []
       };
 
