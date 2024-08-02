@@ -77,6 +77,7 @@ class TilemapScreen extends Screen {
     this.middleLayer.draw();
     this.controller.draw();
     this.foregroundLayer.draw();
+    this.controller.draw();
   }
 
   moveController(mx, my, direction) {
