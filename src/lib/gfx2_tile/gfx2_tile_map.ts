@@ -1,6 +1,7 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
 import { gfx2TextureManager } from '../gfx2/gfx2_texture_manager';
 import { UT } from '../core/utils';
+import { TimeLike } from 'fs';
 
 interface TileCollision {
   left: boolean;
@@ -16,6 +17,39 @@ interface TileCollision {
   mx: number;
   my: number;
 };
+
+interface Tilekit {
+  map: TilekitMap;
+  objects: Array<TilekitObject>;
+}
+
+interface TilekitMap {
+  data: Array<number>;
+  w: number;
+  h: number;
+  tile_w: number;
+  tile_h: number;
+  tile_spacing: number;
+  image_filename: string;
+  animations: Array<TilekitAnimation>;
+  tags: Array<TilekitTag>;
+
+}
+
+interface TilekitAnimation {
+  idx: number;
+  rate: number;
+  frames: Array<number>;
+}
+
+interface TilekitTag {
+  label: string;
+  tiles: number[];
+}
+
+interface TilekitObject {
+  name: string; id: string; x: string; y: string; w: string; h: string;
+}
 
 /**
  * The tilemap.
@@ -94,6 +128,26 @@ class Gfx2TileMap {
 
     this.tileset = new Gfx2Tileset();
     await this.tileset.loadFromTexture(texturePath, this.tileWidth, this.tileHeight);
+  }
+
+  async loadFromTileKit(path: string, cwd:string): Promise<void> {
+    console.info('load tilekit file ');
+    const response = await fetch(`${cwd}/${path}`);
+    const json = await response.json();
+    const tilekit = json as Tilekit;
+    console.log('tilekit is ', tilekit);
+    this.rows = tilekit.map.h;
+    this.columns = tilekit.map.w;
+    this.tileHeight = tilekit.map.tile_h;
+    this.tileWidth = tilekit.map.tile_w;
+
+    this.tileLayers = [];
+    const tileLayer = new Gfx2TileLayer();
+    tileLayer.loadFromTilekit(tilekit);
+    this.tileLayers.push(tileLayer);
+
+    this.tileset = new Gfx2Tileset();
+    this.tileset.loadFromTileKit(tilekit, cwd);
   }
 
   /**
@@ -366,7 +420,7 @@ class Gfx2TileLayer {
         const object = new Gfx2TileObject();
         object.loadFromData(obj);
         this.objects.push(object);
-      }  
+      }
     }
   }
 
@@ -384,6 +438,20 @@ class Gfx2TileLayer {
       const index = parseInt(obj['x']) + parseInt(obj['y']) * this.columns;
       this.grid[index] = parseInt(obj['id']) + 1;
     }
+  }
+
+  loadFromTilekit(tilekit: Tilekit) {
+    this.name = "tiles";
+    this.rows = tilekit.map.h;
+    this.columns = tilekit.map.w;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.visible = true;
+    this.frameDuration = tilekit.map.animations[0].rate;
+    this.grid = [];
+    this.objects = [];
+    this.grid = tilekit.map.data;
+    // TODO Object anim also here ?
   }
 
   /**
@@ -516,6 +584,22 @@ class Gfx2Tileset {
     this.tileHeight = tileHeight;
   }
 
+  async loadFromTileKit(tilekit:Tilekit, cwd:string) :Promise<void> {
+    this.columns = tilekit.map.w;
+    this.tileWidth = tilekit.map.tile_w;
+    this.tileHeight = tilekit.map.tile_h;
+    this.texture = await gfx2TextureManager.loadTexture(`${cwd}/${tilekit.map.image_filename}`);
+
+    this.animations.clear();
+    for (const tkAnim of tilekit.map.animations) {
+      this.animations.set(tkAnim.idx, tkAnim.frames);
+    }
+    this.properties.clear();
+    for (const tkObj of tilekit.objects) {
+      this.properties.set(+tkObj.id, tkObj)
+    }
+  }
+
   /**
    * Returns the pixel x-coordinate of a tile.
    * 
@@ -639,6 +723,16 @@ class Gfx2TileObject {
     for (const key in data['Properties']) {
       this.properties.set(key, data['Properties'][key]);
     }
+  }
+
+  loadFromTilekit(tilekitObject:TilekitObject):void {
+    this.id = tilekitObject.id;
+    this.position = [+tilekitObject.x, +tilekitObject.y];
+    this.name = tilekitObject.name;
+    this.type = tilekitObject.name;
+    this.visible = true;
+    this.size = [+tilekitObject.w, +tilekitObject.h];
+    // TODO properties
   }
 
   /**

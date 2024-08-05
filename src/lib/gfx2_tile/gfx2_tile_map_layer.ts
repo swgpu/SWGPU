@@ -1,6 +1,6 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
-import { Gfx2TileMap } from './gfx2_tile_map';
+import { Gfx2TileMap, Tilekit } from './gfx2_tile_map';
 
 /**
  * A tilemap layer drawable.
@@ -23,7 +23,7 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
    * Load data from tilemap and layer index.
    * 
    * @param {Gfx2TileMap} tilemap - The tilemap.
-   * @param {number} layerIndex - The index of the tilelayer.
+   * @param {number} layerIndex - The index of the tileLayer.
    */
   loadFromTileMap(tilemap: Gfx2TileMap, layerIndex: number): void {
     this.tilemap = tilemap;
@@ -31,9 +31,9 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
     this.frameIndex = 0;
     this.frameProgress = 0;
 
-    const tilelayer = tilemap.getTileLayer(layerIndex);
-    this.offset[0] = tilelayer.getOffsetX();
-    this.offset[1] = tilelayer.getOffsetY();
+    const tileLayer = tilemap.getTileLayer(layerIndex);
+    this.offset[0] = tileLayer.getOffsetX();
+    this.offset[1] = tileLayer.getOffsetY();
   }
 
   /**
@@ -81,7 +81,7 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
         if (animation) {
           tileId = animation[this.frameIndex % animation.length];
         }
-  
+
         ctx.drawImage(
           tileset.getTexture(),
           tileset.getTilePositionX(tileId),

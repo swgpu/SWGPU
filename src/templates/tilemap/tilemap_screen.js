@@ -19,24 +19,24 @@ class TilemapScreen extends Screen {
     super();
     this.tileMap = new Gfx2TileMap();
     this.backgroundLayer = new Gfx2TileMapLayer();
-    this.middleLayer = new Gfx2TileMapLayer();
-    this.foregroundLayer = new Gfx2TileMapLayer();
     this.collisionMap = new Gfx2TileMap();
     this.collisionTileLayer = new Gfx2TileLayer();
     this.controller = new Controller();
   }
 
   async onEnter() {
-    await this.tileMap.loadFromFile('./templates/tilemap/map.json');
+    await this.tileMap.loadFromTileKit('map.tilekit', './templates/tilemap');
     this.backgroundLayer.loadFromTileMap(this.tileMap, LAYER.BACKGROUND);
-    this.middleLayer.loadFromTileMap(this.tileMap, LAYER.MIDDLE);
-    this.foregroundLayer.loadFromTileMap(this.tileMap, LAYER.FOREGROUND);
 
     await this.collisionMap.loadFromFile('./templates/tilemap/collision.json');
     this.collisionTileLayer = this.collisionMap.getTileLayer(0);
 
     await this.controller.loadFromFile('./templates/tilemap/bernard.json');
     this.controller.setPosition(this.collisionMap.getPositionX(12), this.collisionMap.getPositionY(16));
+
+    console.log('tilemap is: ', this.tileMap);
+    console.log('tileSet is : ', this.tileMap.tileset);
+    console.log('backgroundLayer is: ', this.backgroundLayer);
   }
 
   update(ts) {
@@ -67,16 +67,14 @@ class TilemapScreen extends Screen {
     );
 
     this.backgroundLayer.update(ts);
-    this.middleLayer.update(ts);
+    // this.middleLayer.update(ts);
     this.controller.update(ts);
-    this.foregroundLayer.update(ts);
+    // this.foregroundLayer.update(ts);
   }
 
   draw() {
     this.backgroundLayer.draw();
-    this.middleLayer.draw();
     this.controller.draw();
-    this.foregroundLayer.draw();
     this.controller.draw();
   }
 
