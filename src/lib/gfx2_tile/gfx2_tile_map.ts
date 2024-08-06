@@ -79,18 +79,6 @@ class Gfx2TileMap {
   async loadFromTileKit(path: string, cwd:string = '.'): Promise<void> {
     const jmt = await fromTilekit(path, cwd);
     this.loadFromData(jmt);
-    // this.rows = tilekit.map.h;
-    // this.columns = tilekit.map.w;
-    // this.tileHeight = tilekit.map.tile_h;
-    // this.tileWidth = tilekit.map.tile_w;
-
-    // this.tileLayers = [];
-    // const tileLayer = new Gfx2TileLayer();
-    // tileLayer.loadFromTilekit(tilekit);
-    // this.tileLayers.push(tileLayer);
-
-    // this.tileset = new Gfx2Tileset();
-    // this.tileset.loadFromTileKit(tilekit, cwd);
   }
 
   async loadFromData(json: FormatJTM) {
@@ -453,7 +441,7 @@ class Gfx2TileLayer {
   }
 
   /**
-   * Returns the y-coordiantes offset.
+   * Returns the y-coordinates offset.
    */
   getOffsetY(): number {
     return this.offsetY;
@@ -550,23 +538,7 @@ class Gfx2Tileset {
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
   }
-
-  // async loadFromTileKit(tilekit:Tilekit, cwd:string) :Promise<void> {
-  //   this.columns = tilekit.map.w;
-  //   this.tileWidth = tilekit.map.tile_w;
-  //   this.tileHeight = tilekit.map.tile_h;
-  //   this.texture = await gfx2TextureManager.loadTexture(`${cwd}/${tilekit.map.image_filename}`);
-
-  //   this.animations.clear();
-  //   for (const tkAnim of tilekit.map.animations) {
-  //     this.animations.set(tkAnim.idx, tkAnim.frames);
-  //   }
-  //   this.properties.clear();
-  //   for (const tkObj of tilekit.objects) {
-  //     this.properties.set(+tkObj.id, tkObj)
-  //   }
-  // }
-
+  
   /**
    * Returns the pixel x-coordinate of a tile.
    * 
@@ -692,15 +664,6 @@ class Gfx2TileObject {
     }
   }
 
-  loadFromTilekit(tilekitObject:TilekitObject):void {
-    this.id = tilekitObject.id;
-    this.position = [+tilekitObject.x, +tilekitObject.y];
-    this.name = tilekitObject.name;
-    this.type = tilekitObject.name;
-    this.visible = true;
-    this.size = [+tilekitObject.w, +tilekitObject.h];
-    // TODO properties
-  }
 
   /**
    * Returns the id.

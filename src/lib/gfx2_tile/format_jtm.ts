@@ -7,7 +7,7 @@ export interface FormatJTM {
   TileHeight: number;
   TileWidth: number;
   Layers: Array<FormatJTMLayer>;
-  Tileset: FormatJMTTileSet;
+  Tileset: FormatJTMTileSet;
 }
 
 interface FormatJTMLayer {
