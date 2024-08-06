@@ -1,5 +1,3 @@
-import { FormatJTM } from "../format_jtm";
-
 export interface Tilekit {
   map: TilekitMap;
   objects: Array<TilekitObject>;
