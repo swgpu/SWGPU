@@ -1,6 +1,6 @@
 import { gfx2Manager } from '../gfx2/gfx2_manager';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';
-import { Gfx2TileMap, Tilekit } from './gfx2_tile_map';
+import { Gfx2TileMap } from './gfx2_tile_map';
 
 /**
  * A tilemap layer drawable.

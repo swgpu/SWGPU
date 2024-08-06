@@ -8,12 +8,6 @@ import { Gfx2TileMapLayer } from '@lib/gfx2_tile/gfx2_tile_map_layer';
 import { Controller } from './controller';
 // ---------------------------------------------------------------------------------------
 
-const LAYER = {
-  BACKGROUND: 0,
-  MIDDLE: 1,
-  FOREGROUND: 2
-};
-
 class TilemapScreen extends Screen {
   constructor() {
     super();
@@ -26,7 +20,7 @@ class TilemapScreen extends Screen {
 
   async onEnter() {
     await this.tileMap.loadFromTileKit('map.tilekit', './templates/tilemap');
-    this.backgroundLayer.loadFromTileMap(this.tileMap, LAYER.BACKGROUND);
+    this.backgroundLayer.loadFromTileMap(this.tileMap, 0);
 
     await this.collisionMap.loadFromFile('./templates/tilemap/collision.json');
     this.collisionTileLayer = this.collisionMap.getTileLayer(0);
