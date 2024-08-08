@@ -395,20 +395,6 @@ class Gfx2TileLayer {
     }
   }
 
-  // loadFromTilekit(tilekit: Tilekit) {
-  //   this.name = "tiles";
-  //   this.rows = tilekit.map.h;
-  //   this.columns = tilekit.map.w;
-  //   this.offsetX = 0;
-  //   this.offsetY = 0;
-  //   this.visible = true;
-  //   this.frameDuration = tilekit.map.animations[0].rate;
-  //   this.grid = [];
-  //   this.objects = [];
-  //   this.grid = tilekit.map.data;
-  //   // TODO Object anim also here ?
-  // }
-
   /**
    * Returns the tile at a specific location.
    * 

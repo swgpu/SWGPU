@@ -19,7 +19,8 @@ class TilemapScreen extends Screen {
   }
 
   async onEnter() {
-    await this.tileMap.loadFromTileKit('map.tilekit', './templates/tilemap');
+    // await this.tileMap.loadFromTileKit('map.tilekit', './templates/tilemap');
+    await this.tileMap.loadFromTileKit('tk-basic.json', './templates/tilemap');
     this.backgroundLayer.loadFromTileMap(this.tileMap, 0);
 
     await this.collisionMap.loadFromFile('./templates/tilemap/collision.json');
@@ -61,9 +62,7 @@ class TilemapScreen extends Screen {
     );
 
     this.backgroundLayer.update(ts);
-    // this.middleLayer.update(ts);
     this.controller.update(ts);
-    // this.foregroundLayer.update(ts);
   }
 
   draw() {

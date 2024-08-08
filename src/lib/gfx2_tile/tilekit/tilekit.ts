@@ -28,5 +28,13 @@ export interface TilekitTag {
 }
 
 export interface TilekitObject {
-  name: string; id: string; x: string; y: string; w: string; h: string;
+  name: string;
+  id: string;
+  x: string;
+  y: string;
+  w: string;
+  h: string;
+  visible?: boolean;
+  type?: string;
+  properties: { [key: string]: string | number | boolean };
 }
