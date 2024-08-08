@@ -32,6 +32,11 @@ class TilemapScreen extends Screen {
     console.log('tilemap is: ', this.tileMap);
     console.log('tileSet is : ', this.tileMap.tileset);
     console.log('backgroundLayer is: ', this.backgroundLayer);
+
+    const tileset = this.tileMap.tileset;
+    console.log(tileset.getTilePositionX(8));
+    console.log(tileset.getTilePositionY(8));
+
   }
 
   update(ts) {

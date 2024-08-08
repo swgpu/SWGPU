@@ -33,8 +33,7 @@ interface FormatJTMObject {
 }
 
 interface FormatJTMTileSet {
-  Rows: number;
-  Columns: number;
+  Columns?: number;
   TileWidth: number;
   TileHeight: number;
   TextureFile: string;
@@ -98,8 +97,6 @@ export async function fromTilekit(path: string, cwd = '.'): Promise<FormatJTM> {
   })
 
   const jmtTileSet: FormatJTMTileSet = {
-    Columns: tilekit.map.w,
-    Rows: tilekit.map.h,
     TileWidth: tilekit.map.tile_w,
     TileHeight: tilekit.map.tile_h,
     TextureFile: `${cwd}/${tilekit.map.image_filename}`,

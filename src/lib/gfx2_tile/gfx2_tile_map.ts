@@ -495,10 +495,10 @@ class Gfx2Tileset {
    * @param {any} data - The data object.
    */
   async loadFromData(data: any): Promise<void> {
-    this.columns = parseInt(data['Columns']);
     this.tileWidth = parseInt(data['TileWidth']);
     this.tileHeight = parseInt(data['TileHeight']);
     this.texture = await gfx2TextureManager.loadTexture(data['TextureFile']);
+    this.columns = data['Columns'] ? parseInt(data['Columns']) : this.texture.width / this.tileWidth;
 
     this.animations.clear();
     for (const tileId in data['Animations']) {

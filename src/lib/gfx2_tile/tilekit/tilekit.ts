@@ -13,7 +13,6 @@ export interface TilekitMap {
   image_filename: string;
   animations: Array<TilekitAnimation>;
   tags: Array<TilekitTag>;
-
 }
 
 export interface TilekitAnimation {
