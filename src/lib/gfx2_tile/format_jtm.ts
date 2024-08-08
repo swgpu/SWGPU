@@ -52,18 +52,32 @@ interface FormatJTMProperties {
 export async function fromTilekit(path: string, cwd = '.'): Promise<FormatJTM> {
   const response = await fetch(`${cwd}/${path}`);
   const json = await response.json();
-  
+
   const tilekit = json as Tilekit;
-  
+
+  // @return a any object with all custom properties
+  const tkObjectCustomProperties = (tkObject: TilekitObject): FormatJTMProperties => {
+    const props: FormatJTMProperties = {};
+    Object.keys(tkObject)
+      // prevent duplication of mandatory props
+      // not sur if id should not be duplicated ...
+      .filter(key => false === ['id', 'name', 'x', 'y', 'visible', 'h', 'w'].includes(key))
+      .forEach(prop => {
+        props[prop] = tkObject[prop]
+      })
+
+    return props;
+  };
+
   const tkToJTMObject = ((tkObj: TilekitObject): FormatJTMObject => {
     return {
-      Id: tkObj.name,
+      Id: tkObj.id ?? tkObj.name,
       Position: [+tkObj.x, +tkObj.y],
       Name: tkObj.name,
       Type: tkObj.type ?? `type_${tkObj.name}`,
-      Visible: tkObj.visible ?? true,
+      Visible: ('false' === tkObj.visible) ? false : true,
       Size: [+tkObj.w, +tkObj.h],
-      Properties: tkObj.properties
+      Properties: tkObjectCustomProperties(tkObj)
     };
   });
 

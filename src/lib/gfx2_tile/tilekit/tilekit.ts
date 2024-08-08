@@ -33,7 +33,5 @@ export interface TilekitObject {
   y: string;
   w: string;
   h: string;
-  visible?: boolean;
-  type?: string;
-  properties: { [key: string]: string | number | boolean };
+  [other_props: string]: string;
 }
