@@ -52,10 +52,9 @@ interface FormatJTMProperties {
 export async function fromTilekit(path: string, cwd = '.'): Promise<FormatJTM> {
   const response = await fetch(`${cwd}/${path}`);
   const json = await response.json();
-
+  
   const tilekit = json as Tilekit;
-  console.log('loaded tilekit: ', tilekit);
-
+  
   const tkToJTMObject = ((tkObj: TilekitObject): FormatJTMObject => {
     return {
       Id: tkObj.name,
@@ -68,8 +67,6 @@ export async function fromTilekit(path: string, cwd = '.'): Promise<FormatJTM> {
     };
   });
 
-
-
   const jtmTileLayers: FormatJTMTileLayer[] = [
     {
       Name: `unique Tilekit layer from ${path}`,
@@ -79,30 +76,29 @@ export async function fromTilekit(path: string, cwd = '.'): Promise<FormatJTM> {
       OffsetY: 0,
       Visible: true,
       FrameDuration: tilekit.map.animations[0]?.rate ?? 0,
-      Grid: tilekit.map.data.map(tileIndex => tileIndex),
+      Grid: tilekit.map.data,
       Objects: tilekit.objects.map(tkToJTMObject)
     }
   ]
 
-  const jmtAnimations: FormatJTMAnimations = {};
+  const jtmAnimations: FormatJTMAnimations = {};
   tilekit.map.animations.forEach(tkAnim => {
-    jmtAnimations[tkAnim.idx.toString()] = tkAnim.frames;
+    jtmAnimations[tkAnim.idx.toString()] = tkAnim.frames;
   });
 
-  let tileSetLayerProperties: Array<FormatJTMProperties>;
+  let tilesetProperties: Array<FormatJTMProperties> = [];
   tilekit.map.tags.forEach(tag => {
     let property: any = {};
     property[tag.label] = tag.tiles
-    tileSetLayerProperties.push(property)
-  })
+    tilesetProperties.push(property)
+  });
 
   const jmtTileSet: FormatJTMTileSet = {
     TileWidth: tilekit.map.tile_w,
     TileHeight: tilekit.map.tile_h,
     TextureFile: `${cwd}/${tilekit.map.image_filename}`,
-    Animations: {},
-    // TODO
-    Properties: []
+    Animations: jtmAnimations,
+    Properties: tilesetProperties
   }
 
   const jmt: FormatJTM = {

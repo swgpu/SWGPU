@@ -3,7 +3,7 @@
         "tile_w": 16,
         "tile_h": 16,
         "tile_spacing": 0,
-        "image_filename": "basic8x8.png",
+        "image_filename": "basic16x16.png",
         "animations": [
             {
                 "idx": 9,
@@ -14,7 +14,35 @@
                 ]
             }
         ],
-        "tags": [],
+        "tags": [
+            {
+                "label": "collision",
+                "tiles": [
+                    2,
+                    3,
+                    4,
+                    8,
+                    12,
+                    6,
+                    7
+                ]
+            },
+            {
+                "label": "death",
+                "tiles": [
+                    9,
+                    10,
+                    13
+                ]
+            },
+            {
+                "label": "climb",
+                "tiles": [
+                    16,
+                    15
+                ]
+            }
+        ],
         "w": 60,
         "h": 29,
         "data": [
