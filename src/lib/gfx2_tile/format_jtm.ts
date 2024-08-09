@@ -1,5 +1,3 @@
-import { Tilekit, TilekitObject } from "./tilekit/tilekit";
-
 export interface FormatJTM {
   Ident: string;
   Rows: number;
@@ -8,9 +6,9 @@ export interface FormatJTM {
   TileWidth: number;
   Layers: Array<FormatJTMTileLayer>;
   Tileset: FormatJTMTileSet;
-}
+};
 
-interface FormatJTMTileLayer {
+export interface FormatJTMTileLayer {
   Name: string;
   Rows: number;
   Columns: number;
@@ -20,9 +18,9 @@ interface FormatJTMTileLayer {
   FrameDuration: number;
   Grid: Array<number>;
   Objects: Array<FormatJTMObject>
-}
+};
 
-interface FormatJTMObject {
+export interface FormatJTMObject {
   Id: string;
   Position: vec2;
   Name: string;
@@ -30,59 +28,104 @@ interface FormatJTMObject {
   Visible: boolean;
   Size: [number, number];
   Properties: FormatJTMProperties;
-}
+};
 
-interface FormatJTMTileSet {
+export interface FormatJTMTileSet {
   Columns?: number;
   TileWidth: number;
   TileHeight: number;
   TextureFile: string;
   Animations: FormatJTMAnimations;
-  Properties: Array<FormatJTMProperties>;
-}
+  Properties: FormatJTMProperties;
+};
 
-interface FormatJTMAnimations {
+export interface FormatJTMAnimations {
   [key: string]: Array<number>;
-}
+};
 
-interface FormatJTMProperties {
-  [key: string]: number | string | boolean;
-}
+export interface FormatJTMProperties {
+  [key: string]: any;
+};
 
-export async function fromTilekit(path: string, cwd = '.'): Promise<FormatJTM> {
-  const response = await fetch(`${cwd}/${path}`);
-  const json = await response.json();
+interface Tilekit {
+  map: TilekitMap;
+  objects: Array<TilekitObject>;
+};
 
-  const tilekit = json as Tilekit;
+interface TilekitMap {
+  data: Array<number>;
+  w: number;
+  h: number;
+  tile_w: number;
+  tile_h: number;
+  tile_spacing: number;
+  image_filename: string;
+  animations: Array<TilekitAnimation>;
+  tags: Array<TilekitTag>;
+};
 
-  // @return a any object with all custom properties
-  const tkObjectCustomProperties = (tkObject: TilekitObject): FormatJTMProperties => {
-    const props: FormatJTMProperties = {};
-    Object.keys(tkObject)
-      // prevent duplication of mandatory props
-      // not sur if id should not be duplicated ...
-      .filter(key => false === ['id', 'name', 'x', 'y', 'visible', 'h', 'w'].includes(key))
-      .forEach(prop => {
-        props[prop] = tkObject[prop]
-      })
+interface TilekitAnimation {
+  idx: number;
+  rate: number;
+  frames: Array<number>;
+};
 
-    return props;
-  };
+interface TilekitTag {
+  label: string;
+  tiles: number[];
+};
 
-  const tkToJTMObject = ((tkObj: TilekitObject): FormatJTMObject => {
-    return {
+interface TilekitObject {
+  name: string;
+  id: string;
+  x: string;
+  y: string;
+  w: string;
+  h: string;
+  [other_props: string]: string;
+};
+
+export async function fromTilekit(path: string, textureDir: string = ''): Promise<FormatJTM> {
+  const response = await fetch(path);
+  const tilekit = await response.json() as Tilekit;
+
+  const objects = new Array<FormatJTMObject>();
+  for (const tkObj of tilekit.objects) {
+    const properties: FormatJTMProperties = {};
+    for (const key in tkObj) {
+      if (!['id', 'name', 'x', 'y', 'visible', 'h', 'w'].includes(key)) {
+        properties[key] = tkObj[key];
+      }
+    }
+
+    objects.push({
       Id: tkObj.id ?? tkObj.name,
       Position: [+tkObj.x, +tkObj.y],
       Name: tkObj.name,
       Type: tkObj.type ?? `type_${tkObj.name}`,
       Visible: ('false' === tkObj.visible) ? false : true,
       Size: [+tkObj.w, +tkObj.h],
-      Properties: tkObjectCustomProperties(tkObj)
-    };
+      Properties: properties
+    });
+  }
+
+  const animations: FormatJTMAnimations = {};
+  tilekit.map.animations.forEach(tkAnim => {
+    animations[tkAnim.idx.toString()] = tkAnim.frames;
   });
 
-  const jtmTileLayers: FormatJTMTileLayer[] = [
-    {
+  const tilesetProperties: FormatJTMProperties = {};
+  tilekit.map.tags.forEach(tkTag => {
+    tilesetProperties[tkTag.label] = tkTag.tiles;
+  });
+
+  return {
+    Ident: 'JTM',
+    Rows: tilekit.map.h,
+    Columns: tilekit.map.w,
+    TileHeight: tilekit.map.tile_h,
+    TileWidth: tilekit.map.tile_w,
+    Layers: [{
       Name: `unique Tilekit layer from ${path}`,
       Rows: tilekit.map.h,
       Columns: tilekit.map.w,
@@ -91,40 +134,14 @@ export async function fromTilekit(path: string, cwd = '.'): Promise<FormatJTM> {
       Visible: true,
       FrameDuration: tilekit.map.animations[0]?.rate ?? 0,
       Grid: tilekit.map.data,
-      Objects: tilekit.objects.map(tkToJTMObject)
+      Objects: objects
+    }],
+    Tileset: {
+      TileWidth: tilekit.map.tile_w,
+      TileHeight: tilekit.map.tile_h,
+      TextureFile: textureDir + tilekit.map.image_filename,
+      Animations: animations,
+      Properties: tilesetProperties
     }
-  ]
-
-  const jtmAnimations: FormatJTMAnimations = {};
-  tilekit.map.animations.forEach(tkAnim => {
-    jtmAnimations[tkAnim.idx.toString()] = tkAnim.frames;
-  });
-
-  let tilesetProperties: Array<FormatJTMProperties> = [];
-  tilekit.map.tags.forEach(tag => {
-    let property: any = {};
-    property[tag.label] = tag.tiles
-    tilesetProperties.push(property)
-  });
-
-  const jmtTileSet: FormatJTMTileSet = {
-    TileWidth: tilekit.map.tile_w,
-    TileHeight: tilekit.map.tile_h,
-    TextureFile: `${cwd}/${tilekit.map.image_filename}`,
-    Animations: jtmAnimations,
-    Properties: tilesetProperties
-  }
-
-  const jmt: FormatJTM = {
-    Ident: 'JTM',
-    Rows: tilekit.map.h,
-    Columns: tilekit.map.w,
-    TileHeight: tilekit.map.tile_h,
-    TileWidth: tilekit.map.tile_w,
-    Layers: jtmTileLayers,
-    Tileset: jmtTileSet
-  }
-
-  console.log('tilekit became JMT: ', jmt);
-  return jmt;
+  };
 }

@@ -71,6 +71,10 @@ class Gfx2SpriteJAS extends Gfx2Drawable implements Poolable<Gfx2SpriteJAS> {
    * @param {FormatJAS} data - The jas formatted data.
    */
   loadFromData(data: FormatJAS): void {
+    if (!data.hasOwnProperty('Ident') || data['Ident'] != 'JAS') {
+      throw new Error('Gfx2SpriteJAS::loadFromData(): Data not valid !');
+    }
+
     this.offset[0] = data['OffsetX'] ?? 0;
     this.offset[1] = data['OffsetY'] ?? 0;
 

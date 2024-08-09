@@ -22,18 +22,16 @@ export interface FormatJASAnimationFrame {
   'Height': number;
 };
 
-interface Rect {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
+interface Aseprite {
+  meta: AsepriteMeta;
+  frames: Array<AsepriteFrame>;
 };
 
 interface AsepriteFrame {
-  frame: Rect;
+  frame: { x: number, y: number, w: number, h: number; };
   rotated: boolean;
   trimmed: boolean;
-  spriteSourceSize: Rect;
+  spriteSourceSize: { x: number, y: number, w: number, h: number; };
   sourceSize: { x: number, y: number };
   duration: number;
 };
@@ -58,22 +56,15 @@ interface AsepriteTag {
 
 export async function fromAseprite(path: string): Promise<FormatJAS> {
   const response = await fetch(path);
-  const json =  await response.json();
+  const aseprite =  await response.json() as Aseprite;
 
-  const res: FormatJAS = {
-    'Ident': 'JAS',
-    'Animations': new Array<FormatJASAnimation>()
-  };
-
-  const meta = json['meta'] as AsepriteMeta;
-  const frames = new Map<string, AsepriteFrame>();
-  for (const key in json['frames']) {
-    frames.set(key, json['frames'][key]);
+  const arrayFrames = new Array<AsepriteFrame>();
+  for (const key in aseprite.frames) {
+    arrayFrames.push(aseprite.frames[key]);
   }
 
-  const arrayFrames = Array.from(frames.values());
-
-  for (const tag of meta.frameTags) {
+  const animations = new Array<FormatJASAnimation>();
+  for (const tag of aseprite.meta.frameTags) {
     const frames = new Array<FormatJASAnimationFrame>();
     for (let i = tag.from; i <= tag.to; i++) {
       frames.push({
@@ -84,14 +75,15 @@ export async function fromAseprite(path: string): Promise<FormatJAS> {
       });
     }
 
-    res['Animations'].push({
+    animations.push({
       'Name': tag.name,
       'Frames': frames,
       'FrameDuration': arrayFrames[tag.from].duration
     });
   }
 
-  console.log(res);
-
-  return res;
+  return {
+    'Ident': 'JAS',
+    'Animations': animations
+  };
 }

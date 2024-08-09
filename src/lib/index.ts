@@ -29,7 +29,10 @@ export { Gfx2SpriteJAS } from './gfx2_sprite/gfx2_sprite_jas';
 export { Gfx2SpriteJSS } from './gfx2_sprite/gfx2_sprite_jss';
 export { Gfx2SpriteScrolling } from './gfx2_sprite/gfx2_sprite_scrolling';
 export { Gfx2TileMapLayer } from './gfx2_tile/gfx2_tile_map_layer';
-export { Gfx2TileMap, Gfx2TileLayer, Gfx2Tileset, Gfx2TileObject } from './gfx2_tile/gfx2_tile_map';
+export { Gfx2TileMap } from './gfx2_tile/gfx2_tile_map';
+export { Gfx2TileLayer } from './gfx2_tile/gfx2_tile_layer';
+export { Gfx2Tileset } from './gfx2_tile/gfx2_tile_set';
+export { Gfx2TileObject } from './gfx2_tile/gfx2_tile_object';
 // gfx3 --------------------------------------------------------------------------------------
 export { Gfx3BoundingBox } from './gfx3/gfx3_bounding_box';
 export { Gfx3Drawable } from './gfx3/gfx3_drawable';

@@ -67,7 +67,7 @@ class Gfx3SpriteJAS extends Gfx3Sprite implements Poolable<Gfx3SpriteJAS> {
    */
   loadFromData(data: FormatJAS): void {
     if (!data.hasOwnProperty('Ident') || data['Ident'] != 'JAS') {
-      throw new Error('Gfx3SpriteJAS::loadFromFile(): File not valid !');
+      throw new Error('Gfx3SpriteJAS::loadFromData(): Data not valid !');
     }
 
     this.offset[0] = data['OffsetX'] ?? 0;
