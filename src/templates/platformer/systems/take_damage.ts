@@ -31,7 +31,7 @@ export class TakeDamageSytem extends DNASystem {
     const layer = this.map.getTileLayer(this.layerIndex);
 
     // take damage when falling in lava
-    if (layer.getTile(playerCol, playerRow) !== undefined) {
+    if (layer.getTile(playerCol, playerRow) !== 0) {
       health.takeDamage();
     }
 

@@ -51,22 +51,6 @@ class Gfx2TileLayer {
   }
 
   /**
-   * Loads asynchronously tile layer from SpriteFusion data object.
-   * 
-   * @param {any} data - The data object.
-   */
-  loadFromSpriteFusion(data: any, rows: number, columns: number): void {
-    this.name = data['name'];
-    this.rows = rows;
-    this.columns = columns;
-
-    for (const obj of data['tiles']) {
-      const index = parseInt(obj['x']) + parseInt(obj['y']) * this.columns;
-      this.grid[index] = parseInt(obj['id']) + 1;
-    }
-  }
-
-  /**
    * Returns the tile at a specific location.
    * 
    * @param {number} col - The column index.

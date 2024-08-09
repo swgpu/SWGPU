@@ -30,11 +30,11 @@ export class MoveEnemySystem extends DNASystem {
     const currentRow = this.map.getLocationRow(pos.y);
     const layer = this.map.getTileLayer(this.layerIndex);
 
-    const emptyLeft = layer.getTile(leftCol, bottomRow) === undefined;
-    const emptyRight = layer.getTile(rightCol, bottomRow) === undefined;
+    const emptyLeft = layer.getTile(leftCol, bottomRow) === 0;
+    const emptyRight = layer.getTile(rightCol, bottomRow) === 0;
 
-    const wallLeft = layer.getTile(leftCol, currentRow) !== undefined;
-    const wallRight = layer.getTile(rightCol, currentRow) !== undefined;
+    const wallLeft = layer.getTile(leftCol, currentRow) !== 0;
+    const wallRight = layer.getTile(rightCol, currentRow) !== 0;
 
     if (emptyLeft || emptyRight || wallLeft || wallRight) {
       vel.x *= -1;

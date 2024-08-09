@@ -17,7 +17,7 @@ export interface FormatJTMTileLayer {
   Visible: boolean;
   FrameDuration: number;
   Grid: Array<number>;
-  Objects: Array<FormatJTMObject>
+  Objects: Array<FormatJTMObject>;
 };
 
 export interface FormatJTMObject {

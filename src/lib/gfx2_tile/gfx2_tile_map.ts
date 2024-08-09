@@ -46,7 +46,7 @@ class Gfx2TileMap {
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
-    this.loadFromData(json);
+    await this.loadFromData(json);
   }
 
   /**
@@ -56,29 +56,7 @@ class Gfx2TileMap {
    */
   async loadFromTileKit(path: string, textureDir: string = ''): Promise<void> {
     const data = await fromTilekit(path, textureDir);
-    this.loadFromData(data);
-  }
-
-  async loadFromSpriteFusion(path: string, texturePath: string): Promise<void> {
-    const response = await fetch(path);
-    const json = await response.json();
-
-    this.rows = parseInt(json['mapHeight']);
-    this.columns = parseInt(json['mapWidth']);
-    this.tileHeight = parseInt(json['tileSize']);
-    this.tileWidth = parseInt(json['tileSize']);
-
-    this.tileLayers = [];
-    for (const obj of json['layers']) {
-      const tileLayer = new Gfx2TileLayer();
-      tileLayer.loadFromSpriteFusion(obj, this.rows, this.columns);
-      tileLayer.rows = this.rows;
-      tileLayer.columns = this.columns;
-      this.tileLayers.push(tileLayer);
-    }
-
-    this.tileset = new Gfx2Tileset();
-    await this.tileset.loadFromTexture(texturePath, this.tileWidth, this.tileHeight);
+    await this.loadFromData(data);
   }
 
   /**
@@ -281,7 +259,7 @@ class Gfx2TileMap {
 
     for (let row = top; row <= bottom; row++) {
       for (let col = left; col <= right; col++) {
-        if (layer.getTile(col, row) !== undefined) {
+        if (layer.getTile(col, row) !== 0) {
           const tileX = col * this.tileWidth;
           const tileY = row * this.tileWidth;
           const collideH = UT.COLLIDE_RECT_TO_RECT([l + mx, t], [r + mx, b], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
@@ -317,13 +295,13 @@ class Gfx2TileMap {
       }
 
       const leftEdgeCol = this.getLocationCol(l - 0.1);
-      const isWallLeft = layer.getTile(leftEdgeCol, row) !== undefined;
+      const isWallLeft = layer.getTile(leftEdgeCol, row) !== 0;
       if (isWallLeft) {
         collisions.isAgainstWall = 'left';
       }
 
       const rightEdgeCol = this.getLocationCol(r + 0.1);
-      const isWallRight = layer.getTile(rightEdgeCol, row) !== undefined;
+      const isWallRight = layer.getTile(rightEdgeCol, row) !== 0;
       if (isWallRight) {
         collisions.isAgainstWall = 'right';
       }

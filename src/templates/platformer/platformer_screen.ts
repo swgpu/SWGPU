@@ -38,7 +38,7 @@ class PlatformerScreen extends Screen {
   }
 
   async onEnter() {
-    await this.tileMap.loadFromSpriteFusion('templates/platformer/map.jtm', 'templates/platformer/map.png');
+    await this.tileMap.loadFromFile('templates/platformer/map.jtm');
     this.backgroundLayer.loadFromTileMap(this.tileMap, 3);
     this.middleLayer.loadFromTileMap(this.tileMap, 4);
     this.foregroundLayer.loadFromTileMap(this.tileMap, 2);
