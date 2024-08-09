@@ -2,41 +2,42 @@ import { inputManager } from '@lib/input/input_manager';
 import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
 import { UT } from '@lib/core/utils';
 import { Screen } from '@lib/screen/screen';
-import { Gfx2TileLayer, Gfx2TileMap } from '@lib/gfx2_tile/gfx2_tile_map';
+import { Gfx2TileMap } from '@lib/gfx2_tile/gfx2_tile_map';
+import { Gfx2TileLayer } from '@lib/gfx2_tile/gfx2_tile_layer';
 import { Gfx2TileMapLayer } from '@lib/gfx2_tile/gfx2_tile_map_layer';
 // ---------------------------------------------------------------------------------------
 import { Controller } from './controller';
 // ---------------------------------------------------------------------------------------
-
-const LAYER = {
-  BACKGROUND: 0,
-  MIDDLE: 1,
-  FOREGROUND: 2
-};
 
 class TilemapScreen extends Screen {
   constructor() {
     super();
     this.tileMap = new Gfx2TileMap();
     this.backgroundLayer = new Gfx2TileMapLayer();
-    this.middleLayer = new Gfx2TileMapLayer();
-    this.foregroundLayer = new Gfx2TileMapLayer();
     this.collisionMap = new Gfx2TileMap();
     this.collisionTileLayer = new Gfx2TileLayer();
     this.controller = new Controller();
   }
 
   async onEnter() {
-    await this.tileMap.loadFromFile('./templates/tilemap/map.json');
-    this.backgroundLayer.loadFromTileMap(this.tileMap, LAYER.BACKGROUND);
-    this.middleLayer.loadFromTileMap(this.tileMap, LAYER.MIDDLE);
-    this.foregroundLayer.loadFromTileMap(this.tileMap, LAYER.FOREGROUND);
+    // await this.tileMap.loadFromTileKit('map.tilekit', './templates/tilemap');
+    await this.tileMap.loadFromTileKit('tk-basic.json', './templates/tilemap');
+    this.backgroundLayer.loadFromTileMap(this.tileMap, 0);
 
     await this.collisionMap.loadFromFile('./templates/tilemap/collision.json');
     this.collisionTileLayer = this.collisionMap.getTileLayer(0);
 
     await this.controller.loadFromFile('./templates/tilemap/bernard.json');
     this.controller.setPosition(this.collisionMap.getPositionX(12), this.collisionMap.getPositionY(16));
+
+    console.log('tilemap is: ', this.tileMap);
+    console.log('tileSet is : ', this.tileMap.tileset);
+    console.log('backgroundLayer is: ', this.backgroundLayer);
+
+    const tileset = this.tileMap.tileset;
+    console.log(tileset.getTilePositionX(8));
+    console.log(tileset.getTilePositionY(8));
+
   }
 
   update(ts) {
@@ -67,16 +68,13 @@ class TilemapScreen extends Screen {
     );
 
     this.backgroundLayer.update(ts);
-    this.middleLayer.update(ts);
     this.controller.update(ts);
-    this.foregroundLayer.update(ts);
   }
 
   draw() {
     this.backgroundLayer.draw();
-    this.middleLayer.draw();
     this.controller.draw();
-    this.foregroundLayer.draw();
+    this.controller.draw();
   }
 
   moveController(mx, my, direction) {

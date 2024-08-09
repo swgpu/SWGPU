@@ -1,6 +1,7 @@
-import { gfx2Manager } from '../gfx2/gfx2_manager';
-import { gfx2TextureManager } from '../gfx2/gfx2_texture_manager';
 import { UT } from '../core/utils';
+import { FormatJTM, fromTilekit } from './format_jtm';
+import { Gfx2TileLayer } from './gfx2_tile_layer';
+import { Gfx2Tileset } from './gfx2_tile_set';
 
 interface TileCollision {
   left: boolean;
@@ -45,35 +46,19 @@ class Gfx2TileMap {
   async loadFromFile(path: string): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
-
-    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'JTM') {
-      throw new Error('Gfx2TileMap::loadFromFile(): File not valid !');
-    }
-
-    this.rows = parseInt(json['Rows']);
-    this.columns = parseInt(json['Columns']);
-    this.tileHeight = parseInt(json['TileHeight']);
-    this.tileWidth = parseInt(json['TileWidth']);
-
-    this.tileLayers = [];
-    for (const obj of json['Layers']) {
-      const tileLayer = new Gfx2TileLayer();
-      tileLayer.loadFromData(obj);
-      this.tileLayers.push(tileLayer);
-    }
-
-    this.tileset = new Gfx2Tileset();
-    if (json['Tileset']) {
-      await this.tileset.loadFromData(json['Tileset']);
-    }
+    this.loadFromData(json);
   }
 
   /**
-   * Load asynchronously tilemap data from a SpriteFusion json file.
+   * Loads asynchronously tilemap data from a tilekit file (json).
    * 
    * @param {string} path - The file path.
-   * @param {string} texturePath - The texture file path.
    */
+  async loadFromTileKit(path: string, textureDir: string = ''): Promise<void> {
+    const data = await fromTilekit(path, textureDir);
+    this.loadFromData(data);
+  }
+
   async loadFromSpriteFusion(path: string, texturePath: string): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
@@ -94,6 +79,34 @@ class Gfx2TileMap {
 
     this.tileset = new Gfx2Tileset();
     await this.tileset.loadFromTexture(texturePath, this.tileWidth, this.tileHeight);
+  }
+
+  /**
+   * Loads tilemap data from a jtm formatted data.
+   * 
+   * @param {FormatJTM} data - The jtm formatted data.
+   */
+  async loadFromData(json: FormatJTM) {
+    if (!json.hasOwnProperty('Ident') || json['Ident'] != 'JTM') {
+      throw new Error('Gfx2TileMap::loadFromData(): Data not valid !');
+    }
+
+    this.rows = json['Rows'];
+    this.columns = json['Columns'];
+    this.tileHeight = json['TileHeight'];
+    this.tileWidth = json['TileWidth'];
+
+    this.tileLayers = [];
+    for (const obj of json['Layers']) {
+      const tileLayer = new Gfx2TileLayer();
+      tileLayer.loadFromData(obj);
+      this.tileLayers.push(tileLayer);
+    }
+
+    this.tileset = new Gfx2Tileset();
+    if (json['Tileset']) {
+      await this.tileset.loadFromData(json['Tileset']);
+    }
   }
 
   /**
@@ -320,379 +333,5 @@ class Gfx2TileMap {
   }
 }
 
-/**
- * The tile layer.
- */
-class Gfx2TileLayer {
-  name: string;
-  rows: number;
-  offsetX: number;
-  offsetY: number;
-  columns: number;
-  visible: boolean;
-  frameDuration: number;
-  grid: Array<number>;
-  objects: Array<Gfx2TileObject>;
-
-  constructor() {
-    this.name = '';
-    this.rows = 0;
-    this.columns = 0;
-    this.offsetX = 0;
-    this.offsetY = 0;
-    this.visible = true;
-    this.frameDuration = 0;
-    this.grid = [];
-    this.objects = [];
-  }
-
-  /**
-   * Loads asynchronously tile layer from data object.
-   * 
-   * @param {any} data - The data object.
-   */
-  loadFromData(data: any): void {
-    this.name = data['Name'];
-    this.rows = data['Rows'];
-    this.columns = data['Columns'];
-    this.offsetX = data['OffsetX'] ?? 0;
-    this.offsetY = data['OffsetY'] ?? 0;
-    this.visible = data['Visible'] ?? true;
-    this.frameDuration = data['FrameDuration'] ?? 0;
-    this.grid = data['Grid'];
-
-    if (data['Objects'] && data['Objects'].length > 0) {
-      for (const obj of data['Objects']) {
-        const object = new Gfx2TileObject();
-        object.loadFromData(obj);
-        this.objects.push(object);
-      }  
-    }
-  }
-
-  /**
-   * Loads asynchronously tile layer from SpriteFusion data object.
-   * 
-   * @param {any} data - The data object.
-   */
-  loadFromSpriteFusion(data: any, rows: number, columns: number): void {
-    this.name = data['name'];
-    this.rows = rows;
-    this.columns = columns;
-
-    for (const obj of data['tiles']) {
-      const index = parseInt(obj['x']) + parseInt(obj['y']) * this.columns;
-      this.grid[index] = parseInt(obj['id']) + 1;
-    }
-  }
-
-  /**
-   * Returns the tile at a specific location.
-   * 
-   * @param {number} col - The column index.
-   * @param {number} row - The row index.
-   */
-  getTile(col: number, row: number) {
-    return this.grid[col + (row * this.columns)];
-  }
-
-  /**
-   * Returns the name.
-   */
-  getName(): string {
-    return this.name;
-  }
-
-  /**
-   * Returns the number of rows.
-   */
-  getRows(): number {
-    return this.rows;
-  }
-
-  /**
-   * Returns the x-coordinates offset.
-   */
-  getOffsetX(): number {
-    return this.offsetX;
-  }
-
-  /**
-   * Returns the y-coordiantes offset.
-   */
-  getOffsetY(): number {
-    return this.offsetY;
-  }
-
-  /**
-   * Returns the number of columns.
-   */
-  getColumns(): number {
-    return this.columns;
-  }
-
-  /**
-   * Check if layer is visible or not.
-   */
-  isVisible(): boolean {
-    return this.visible;
-  }
-
-  /**
-   * Returns the frame duration for animated tiles.
-   */
-  getFrameDuration(): number {
-    return this.frameDuration;
-  }
-
-  /**
-   * Returns the map layer's grid.
-   */
-  getGrid(): Array<number> {
-    return this.grid;
-  }
-
-  /**
-   * Returns the map object list.
-   */
-  getObjects(): Array<Gfx2TileObject> {
-    return this.objects;
-  }
-}
-
-/**
- * The tileset.
- */
-class Gfx2Tileset {
-  columns: number;
-  tileWidth: number;
-  tileHeight: number;
-  texture: ImageBitmap | HTMLImageElement;
-  animations: Map<number, Array<number>>;
-  properties: Map<number, any>;
-
-  constructor() {
-    this.columns = 0;
-    this.tileWidth = 0;
-    this.tileHeight = 0;
-    this.texture = gfx2Manager.getDefaultTexture();
-    this.animations = new Map<number, Array<number>>;
-    this.properties = new Map<number, any>();
-  }
-
-  /**
-   * Load asynchronously tileset from data object.
-   * 
-   * @param {any} data - The data object.
-   */
-  async loadFromData(data: any): Promise<void> {
-    this.columns = parseInt(data['Columns']);
-    this.tileWidth = parseInt(data['TileWidth']);
-    this.tileHeight = parseInt(data['TileHeight']);
-    this.texture = await gfx2TextureManager.loadTexture(data['TextureFile']);
-
-    this.animations.clear();
-    for (const tileId in data['Animations']) {
-      this.animations.set(parseInt(tileId), data['Animations'][tileId] ?? []);
-    }
-
-    this.properties.clear();
-    for (const tileId in data['Properties']) {
-      this.properties.set(parseInt(tileId), data['Properties'][tileId]);
-    }
-  }
-
-  /**
-   * Load asynchronously tileset from texture only.
-   * 
-   * @param {string} texturePath - The texture path.
-   * @param {number} tileWidth - The tile width.
-   * @param {number} tileHeight - The tile height.
-   */
-  async loadFromTexture(texturePath: string, tileWidth: number, tileHeight: number): Promise<void> {
-    this.texture = await gfx2TextureManager.loadTexture(texturePath);
-    this.columns = this.texture.width / tileWidth;
-    this.tileWidth = tileWidth;
-    this.tileHeight = tileHeight;
-  }
-
-  /**
-   * Returns the pixel x-coordinate of a tile.
-   * 
-   * @param {number} tileId - The tile index (start at 1).
-   */
-  getTilePositionX(tileId: number): number {
-    return ((tileId - 1) % this.columns) * this.tileWidth;
-  }
-
-  /**
-   * Returns the pixel y-coordinate of a tile.
-   * 
-   * @param {number} tileId - The tile index (start at 1).
-   */
-  getTilePositionY(tileId: number): number {
-    return Math.floor((tileId - 1) / this.columns) * this.tileHeight;
-  }
-
-  /**
-   * Returns the height of a tile.
-   */
-  getTileHeight(): number {
-    return this.tileHeight;
-  }
-
-  /**
-   * Returns the width of a tile.
-   */
-  getTileWidth(): number {
-    return this.tileWidth;
-  }
-
-  /**
-   * Returns the number of columns.
-   */
-  getColumns(): number {
-    return this.columns;
-  }
-
-  /**
-   * Returns the texture's tileset.
-   */
-  getTexture(): ImageBitmap | HTMLImageElement {
-    return this.texture;
-  }
-
-  /**
-   * Returns a tile animation as a list of tile index or undefined if not exist.
-   * 
-   * @param {number} tileId - The tile index.
-   */
-  getAnimation(tileId: number): Array<number> | undefined {
-    return this.animations.get(tileId);
-  }
-
-  /**
-   * Returns a tile properties.
-   * 
-   * @param {number} tileId - The tile index.
-   */
-  getProperties(tileId: number): any {
-    const properties = this.properties.get(tileId);
-    if (!properties) {
-      throw new Error('Gfx2TileMap::getProperties(): Properties not found for this tile');
-    }
-
-    return properties;
-  }
-
-  /**
-   * Returns a tile property.
-   * 
-   * @param {number} tileId - The tile index.
-   * @param {string} key - The property key.
-   */
-  getProperty(tileId: number, key: string): any {
-    const properties = this.properties.get(tileId);
-    if (!properties) {
-      throw new Error('Gfx2TileMap::getProperty(): Properties not found for this tile');
-    }
-
-    return properties[key];
-  }
-}
-
-/**
- * A tile object.
- */
-class Gfx2TileObject {
-  id: string;
-  position: vec2;
-  name: string;
-  type: string;
-  visible: boolean;
-  size: vec2;
-  properties: Map<string, any>;
-
-  constructor() {
-    this.id = '';
-    this.position = [0, 0];
-    this.name = '';
-    this.type = '';
-    this.visible = true;
-    this.size = [0, 0];
-    this.properties = new Map<string, any>();
-  }
-
-  /**
-   * Load data from data object.
-   * 
-   * @param {any} data - The data object.
-   */
-  loadFromData(data: any): void {
-    this.id = data['Id'] ?? '';
-    this.position = data['Position'] ?? [0, 0];
-    this.name = data['Name'] ?? '';
-    this.type = data['Type'] ?? '';
-    this.visible = data['Visible'] ? true : false;
-    this.size = data['Size'] ?? [0, 0];
-
-    for (const key in data['Properties']) {
-      this.properties.set(key, data['Properties'][key]);
-    }
-  }
-
-  /**
-   * Returns the id.
-   */
-  getId(): string {
-    return this.id;
-  }
-
-  /**
-   * Returns the position (location or canvas position).
-   */
-  getPosition(): vec2 {
-    return this.position;
-  }
-
-  /**
-   * Returns the name.
-   */
-  getName(): string {
-    return this.name;
-  }
-
-  /**
-   * Returns the type.
-   */
-  getType(): string {
-    return this.type;
-  }
-
-  /**
-   * Returns the visible flag.
-   */
-  isVisible(): boolean {
-    return this.visible;
-  }
-
-  /**
-   * Returns the size.
-   */
-  getSize(): vec2 {
-    return this.size;
-  }
-
-  /**
-   * Returns the property list.
-   */
-  getProperties(): Map<string, any> {
-    return this.properties;
-  }
-}
-
 export type { TileCollision };
 export { Gfx2TileMap };
-export { Gfx2TileLayer };
-export { Gfx2Tileset };
-export { Gfx2TileObject };
