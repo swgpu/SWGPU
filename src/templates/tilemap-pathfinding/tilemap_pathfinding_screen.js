@@ -30,12 +30,12 @@ class TilemapPathfindingScreen extends Screen {
   }
 
   async onEnter() {
-    await this.tileMap.loadFromFile('./templates/tilemap/map.json');
+    await this.tileMap.loadFromFile('./templates/tilemap/map.jtm');
     this.backgroundLayer.loadFromTileMap(this.tileMap, LAYER.BACKGROUND);
     this.middleLayer.loadFromTileMap(this.tileMap, LAYER.MIDDLE);
     this.foregroundLayer.loadFromTileMap(this.tileMap, LAYER.FOREGROUND);
 
-    await this.collisionMap.loadFromFile('./templates/tilemap/collision.json');
+    await this.collisionMap.loadFromFile('./templates/tilemap/collision.jtm');
     await this.controller.loadFromFile('./templates/tilemap/bernard.json');
     this.controller.setPosition(this.tileMap.getPositionX(6), this.tileMap.getPositionY(16));
     this.movePlayer(10, 16);

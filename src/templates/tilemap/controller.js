@@ -19,7 +19,7 @@ class Controller extends Gfx2Drawable {
     let response = await fetch(path);
     let json = await response.json();
 
-    await this.jas.loadFromAsepriteFile(json['JASFile']);
+    await this.jas.loadFromFile(json['JASFile']);
     this.jas.setTexture(await gfx2TextureManager.loadTexture(json['TextureFile']));
     this.jas.setOffset(json['OffsetX'], json['OffsetY']);
     this.width = json['Width'];

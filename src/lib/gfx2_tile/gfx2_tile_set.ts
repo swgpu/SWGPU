@@ -35,12 +35,12 @@ class Gfx2Tileset {
 
     this.animations.clear();
     for (const tileId in data['Animations']) {
-      this.animations.set(parseInt(tileId), data['Animations'][tileId] ?? []);
+      this.animations.set(Number(tileId), data['Animations'][tileId] ?? []);
     }
 
     this.properties.clear();
     for (const tileId in data['Properties']) {
-      this.properties.set(parseInt(tileId), data['Properties'][tileId]);
+      this.properties.set(Number(tileId), data['Properties'][tileId]);
     }
   }
 

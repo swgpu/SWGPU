@@ -73,7 +73,7 @@ class Gfx2TileMapLayer extends Gfx2Drawable {
     for (let i = 0; i < tilelayer.getRows(); i++) {
       for (let j = 0; j < tilelayer.getColumns(); j++) {
         let tileId = tilelayer.getTile(j, i);
-        if (tileId < 0) {
+        if (tileId <= 0) {
           continue;
         }
 

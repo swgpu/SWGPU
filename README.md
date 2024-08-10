@@ -26,13 +26,18 @@ Some words about our philosophy:
 For a more concret overview on it, you can play [examples](https://jay19240.github.io/).
 
 ## Table of content
-
+* [Compatible tools](#compatible-tools)
 * [Features](#features)
 * [Contributions](#contributions)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
 * [Changelog](#changelog)
 * [Roadmap](#roadmap)
+
+## Compatible tools
+- Blender is used for all the 3D stuffs.
+- Aseprite is used for 2D and 3D sprites.
+- Tilekit is used for tilemap editing.
 
 ## Features
 - 🧱 **Core**
@@ -45,8 +50,8 @@ For a more concret overview on it, you can play [examples](https://jay19240.gith
     
 - 👾 **2D**
     - Static sprite (jss)
-    - Animated sprite (jas)
-    - Isometric tilemap (jtm)
+    - Animated sprite (jas, aseprite)
+    - Isometric tilemap (jtm, tilekit)
     - Orthographic tilemap (jtm)
     - Particles
     - Rendering filters
@@ -62,7 +67,7 @@ For a more concret overview on it, you can play [examples](https://jay19240.gith
     - Static mesh (jsm and obj)
     - Animated mesh (jam)
     - Static sprite (jss)
-    - Animated sprite (jas)
+    - Animated sprite (jas, aseprite)
     - Motion lines (jlm)
     - Billboarding
     - Cubemap skybox
@@ -189,8 +194,6 @@ If you have a suggestion that would make this better, please fork the repo and c
 - CanvasRenderingContext2D for 2D stuffs
 - [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
-- Compatible Blender for 3D with our addon
-- Compatible SpriteFusion for 2D
 
 ## Changelog
 ```
