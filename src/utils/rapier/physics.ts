@@ -1,4 +1,4 @@
-import { type RigidBody, type Collider, type World, Vector3 } from '@dimforge/rapier3d';
+import { type RigidBody, type Collider, type World, Ray } from '@dimforge/rapier3d';
 // ---------------------------------------------------------------------------------------
 import { dnaManager } from '@lib/dna/dna_manager';
 import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
@@ -25,6 +25,7 @@ export enum PhysicsBodyType {
 export class PhysicsComponent extends DNAComponent {
   shapeType: PhysicsShapeType;
   bodyType: PhysicsBodyType;
+  ray: Ray;
   body: RigidBody;
   collider: Collider;
   isController: boolean;
@@ -36,6 +37,7 @@ export class PhysicsComponent extends DNAComponent {
     super('Physics');
     this.shapeType = PhysicsShapeType.TRIMESH;
     this.bodyType = PhysicsBodyType.STATIC;
+    this.ray = new Rapier3D.Ray({ x: 0, y: 0, z: 0 }, { x: 0, y: -1, z: 0});
     this.body = {} as RigidBody;
     this.collider = {} as Collider;
     this.isController = false;
@@ -102,19 +104,34 @@ export class PhysicsSystem extends DNASystem {
 
     if (physics.isController) {
       const position = physics.body.translation();
+      entity.x = position.x;
+      entity.y = position.y;
+      entity.z = position.z;
 
       const controller = this.world.createCharacterController(0.1);
       controller.setApplyImpulsesToDynamicBodies(true);
-      controller.enableSnapToGround(0.02);
-      controller.setCharacterMass(0.2);      
-
-      // Apply gravity
-      if (!physics.grounded) {
-        entity.velocity[1] -= (9.807 * (ts / 1000)) / 20;
-      }
+      controller.enableSnapToGround(0.2);
+      controller.setCharacterMass(0.2);
 
       controller.computeColliderMovement(physics.collider, { x: entity.velocity[0], y: entity.velocity[1], z: entity.velocity[2] });
       physics.grounded = controller.computedGrounded();
+
+      physics.ray.origin.x = position.x;
+      physics.ray.origin.y = position.y;
+      physics.ray.origin.z = position.z;
+      const hit = this.world.castRay(physics.ray, 20, false, 2);
+      if (hit) {
+        const point = physics.ray.pointAt(hit.timeOfImpact);
+        const diff = position.y - point.y;
+
+        if (diff < 3.2) {
+          position.y = point.y + 3.2;
+          entity.velocity[1] = 0;
+        }
+        else if (diff > 3.3) {
+          entity.velocity[1] -= (9.807 * (ts / 1000)) / 20;
+        }
+      }
 
       const correctedMovement = controller.computedMovement();
       physics.body.setNextKinematicTranslation({
@@ -122,10 +139,6 @@ export class PhysicsSystem extends DNASystem {
         y: position.y + correctedMovement.y,
         z: position.z + correctedMovement.z
       });
-
-      entity.x += correctedMovement.x;
-      entity.y += correctedMovement.y;
-      entity.z += correctedMovement.z;
     }
   }
 
