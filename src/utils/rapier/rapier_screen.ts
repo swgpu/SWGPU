@@ -62,7 +62,7 @@ class RapierScreen extends Screen {
     const physics = new PhysicsComponent();
     physics.bodyType = PhysicsBodyType.STATIC;
     physics.shapeType = PhysicsShapeType.TRIMESH;
-    physics.mesh = graphics.jsm;
+    physics.trimeshJSM = graphics.jsm;
     dnaManager.addComponent(mesh, physics);
 
     return mesh;
@@ -83,9 +83,9 @@ class RapierScreen extends Screen {
 
     const physics = new PhysicsComponent();
     physics.bodyType = PhysicsBodyType.KINEMATIC;
-    physics.shapeType = PhysicsShapeType.BALL;
+    physics.shapeType = PhysicsShapeType.CAPSULE;
     physics.isController = true;
-    physics.ballRadius = 2.0;
+    physics.radius = 2.0;
     dnaManager.addComponent(ship, physics);
 
     const input = new InputComponent();

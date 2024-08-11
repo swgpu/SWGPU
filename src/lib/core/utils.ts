@@ -771,6 +771,14 @@ class UT {
   /**
    * @param a - The first vector.
    * @param b - The second vector.
+   */
+  static VEC3_ANGLE_BETWEEN(a: vec3, b: vec3): number {
+    return Math.acos(UT.VEC3_DOT(a, b) / (UT.VEC3_LENGTH(a) * UT.VEC3_LENGTH(b)));
+  }
+
+  /**
+   * @param a - The first vector.
+   * @param b - The second vector.
    * @param out - The result vector with minimum values for each component pair.
    */
   static VEC3_MIN(a: vec3, b: vec3, out: vec3 = [0, 0, 0]): vec3 {
