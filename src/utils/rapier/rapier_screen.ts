@@ -84,7 +84,6 @@ class RapierScreen extends Screen {
     const physics = new PhysicsComponent();
     physics.bodyType = PhysicsBodyType.KINEMATIC;
     physics.shapeType = PhysicsShapeType.CAPSULE;
-    physics.isController = true;
     physics.radius = 2.0;
     dnaManager.addComponent(ship, physics);
 
