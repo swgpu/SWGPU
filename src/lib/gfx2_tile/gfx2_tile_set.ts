@@ -11,6 +11,7 @@ class Gfx2Tileset {
   tileHeight: number;
   texture: ImageBitmap | HTMLImageElement;
   animations: Map<number, Array<number>>;
+  slopes: Map<number, Array<number>>;
   properties: Map<number, any>;
 
   constructor() {
@@ -19,6 +20,7 @@ class Gfx2Tileset {
     this.tileHeight = 0;
     this.texture = gfx2Manager.getDefaultTexture();
     this.animations = new Map<number, Array<number>>;
+    this.slopes = new Map<number, Array<number>>;
     this.properties = new Map<number, any>();
   }
 
@@ -36,6 +38,11 @@ class Gfx2Tileset {
     this.animations.clear();
     for (const tileId in data['Animations']) {
       this.animations.set(Number(tileId), data['Animations'][tileId] ?? []);
+    }
+
+    this.slopes.clear();
+    for (const tileId in data['Slopes']) {
+      this.slopes.set(Number(tileId), data['Slopes'][tileId] ?? []);
     }
 
     this.properties.clear();
@@ -111,6 +118,15 @@ class Gfx2Tileset {
    */
   getAnimation(tileId: number): Array<number> | undefined {
     return this.animations.get(tileId);
+  }
+
+  /**
+   * Returns a tile slope or undefined if not exist.
+   * 
+   * @param {number} tileId - The tile index.
+   */
+  getSlope(tileId: number): Array<number> | undefined {
+    return this.slopes.get(tileId);
   }
 
   /**

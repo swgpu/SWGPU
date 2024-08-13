@@ -36,10 +36,15 @@ export interface FormatJTMTileSet {
   TileHeight: number;
   TextureFile: string;
   Animations: FormatJTMAnimations;
+  Slopes: FormatJTMSlopes;
   Properties: FormatJTMProperties;
 };
 
 export interface FormatJTMAnimations {
+  [key: string]: Array<number>;
+};
+
+export interface FormatJTMSlopes {
   [key: string]: Array<number>;
 };
 
@@ -141,6 +146,7 @@ export async function fromTilekit(path: string, textureDir: string = ''): Promis
       TileHeight: tilekit.map.tile_h,
       TextureFile: textureDir + tilekit.map.image_filename,
       Animations: animations,
+      Slopes: {},
       Properties: tilesetProperties
     }
   };

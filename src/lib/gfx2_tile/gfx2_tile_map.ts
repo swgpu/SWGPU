@@ -267,10 +267,10 @@ class Gfx2TileMap {
 
           if (collideV && row == bottom && my > 0) {
             collisions.bottom = true;
-            collisions.isGrounded = true;
+            collisions.isGrounded = true; // test slop pos y
             collisions.verticalRow = row;
             collisions.verticalCol = col;
-            collisions.my = tileY - b - gap;
+            collisions.my = tileY - b - gap; // test & compute my with the slop
           }
           else if (collideV && row == top && my < 0) {
             collisions.top = true;

@@ -13,6 +13,9 @@
             "Columns": 96,
             "Visible": true,
             "FrameDuration": 0,
+            "Slopes": {
+                "3": [32, 0]
+            },
             "Grid": [
                 2,
                 2,
