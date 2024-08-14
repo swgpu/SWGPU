@@ -147,6 +147,7 @@ struct MaterialParams {
   SHININESS: f32,
   EMISSIVE_FACTOR: f32,
   TOON_BLENDING: f32,
+  FACING_ALPHA_BLEND: f32,
   HAS_S0_TEXTURE: f32,
   HAS_S1_TEXTURE: f32,
   ${MAT_SLOT_NAMES[0]}: f32,
@@ -244,14 +245,14 @@ fn main(
   ${VERT_END}
 
   var output: VertexOutput;
-  ${VERT_OUT_POSITION ??        `output.Position = MESH_INFOS.MVPC_MATRIX * position;`}
-  ${VERT_OUT_FRAG_POS ??        `output.FragPos = vec4(MESH_INFOS.M_MATRIX * position).xyz;`}
-  ${VERT_OUT_FRAG_UV ??         `output.FragUV = texUV;`}
-  ${VERT_OUT_FRAG_COLOR ??      `output.FragColor = color;`}
-  ${VERT_OUT_FRAG_NORMAL ??     `output.FragNormal = MESH_INFOS.NORM_MATRIX * normal;`}
-  ${VERT_OUT_FRAG_TANGENT ??    `output.FragTangent = MESH_INFOS.NORM_MATRIX * tangent;`}
-  ${VERT_OUT_FRAG_BINORMAL ??   `output.FragBinormal = MESH_INFOS.NORM_MATRIX * binormal;`}
-  ${VERT_OUT_FRAG_SHADOW_POS ?? `output.FragShadowPos = vec3(posFromLight.xy * vec2(0.5, -0.5) + vec2(0.5), posFromLight.z); // Convert XY to (0, 1) and Y is flipped because texture coords are Y-down.`}
+  output.Position = ${VERT_OUT_POSITION ?? 'MESH_INFOS.MVPC_MATRIX * position;'}
+  output.FragPos = ${VERT_OUT_FRAG_POS ?? 'vec4(MESH_INFOS.M_MATRIX * position).xyz;'}
+  output.FragUV = ${VERT_OUT_FRAG_UV ?? 'texUV;'}
+  output.FragColor = ${VERT_OUT_FRAG_COLOR ?? 'color;'}
+  output.FragNormal = ${VERT_OUT_FRAG_NORMAL ?? 'MESH_INFOS.NORM_MATRIX * normal;'}
+  output.FragTangent = ${VERT_OUT_FRAG_TANGENT ?? 'MESH_INFOS.NORM_MATRIX * tangent;'}
+  output.FragBinormal = ${VERT_OUT_FRAG_BINORMAL ?? 'MESH_INFOS.NORM_MATRIX * binormal;'}
+  output.FragShadowPos = ${VERT_OUT_FRAG_SHADOW_POS ?? 'vec3(posFromLight.xy * vec2(0.5, -0.5) + vec2(0.5), posFromLight.z); // Convert XY to (0, 1) and Y is flipped because texture coords are Y-down.'}
   return output;
 }`;
 
@@ -410,6 +411,10 @@ fn main(
   {
     texel = textureSample(MAT_TEXTURE, MAT_SAMPLER, textureUV) * vec4<f32>(fragColor, 1.0);
   }
+  else
+  {
+    texel = vec4(fragColor, 1.0);
+  }
 
   if (texel.a == 0)
   {
@@ -463,12 +468,21 @@ fn main(
     outputColor = vec4(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY);
   }
 
+  var viewDir = normalize(SCENE_INFOS.CAMERA_POS - fragPos);
+  var facing = max(dot(viewDir, fragNormal), 0.0);
+
+  if (MAT_PARAMS.FACING_ALPHA_BLEND < 1.0)
+  {
+    var IOR = 1.0 - log(1.0 - MAT_PARAMS.FACING_ALPHA_BLEND);
+    outputColor.a *= pow(facing, IOR);
+  }
+
   ${FRAG_END}
 
   var output: FragOutput;
-  ${FRAG_OUT_BASE ??   `output.Base = outputColor;`}
-  ${FRAG_OUT_NORMAL ?? `output.Normal = vec4(normalize(fragNormal), 1.0);`}
-  ${FRAG_OUT_ID ??     `output.Id = MESH_INFOS.ID;`}
+  output.Base = ${FRAG_OUT_BASE ?? 'outputColor;'}
+  output.Normal = ${FRAG_OUT_NORMAL ?? 'vec4(normalize(fragNormal), 1.0);'}
+  output.Id = ${FRAG_OUT_ID ?? 'MESH_INFOS.ID;'}
   return output;
 }
 

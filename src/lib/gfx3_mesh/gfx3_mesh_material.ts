@@ -45,6 +45,7 @@ interface MATOptions {
   shininess?: number;
   emissiveFactor?: number;
   toonBlending?: number;
+  facingAlphaBlend?: number;
   sParams?: Array<{name: string, value: number }>;
   s0Texture?: Gfx3Texture;
   s1Texture?: Gfx3Texture;
@@ -117,7 +118,7 @@ class Gfx3Material {
     this.colors[13] = options.specular ? options.specular[1] : 0.0;
     this.colors[14] = options.specular ? options.specular[2] : 0.0;
     this.colors[15] = 0.0;
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 36);
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 37);
     this.params[0] = options.id ?? 0;
     this.params[1] = options.opacity ?? 1.0;
     this.params[2] = options.normalIntensity ?? 1.0;
@@ -136,14 +137,15 @@ class Gfx3Material {
     this.params[15] = options.shininess ?? 0.0;
     this.params[16] = options.emissiveFactor ?? 1.0;
     this.params[17] = options.toonBlending ?? 1.0;
-    this.params[18] = options.s0Texture ? 1.0 : 0.0;
-    this.params[19] = options.s1Texture ? 1.0 : 0.0;
+    this.params[18] = options.facingAlphaBlend ?? 1.0;
+    this.params[19] = options.s0Texture ? 1.0 : 0.0;
+    this.params[20] = options.s1Texture ? 1.0 : 0.0;
 
     if (options.sParams) {
       for (const sParam of options.sParams) {
         const paramIndex = MAT_SLOT_NAMES.findIndex(n => n == sParam.name);
         if (paramIndex != -1) {
-          this.params[20 + paramIndex] = sParam.value ?? 0.0;
+          this.params[21 + paramIndex] = sParam.value ?? 0.0;
         }
       }
     }
@@ -250,6 +252,7 @@ class Gfx3Material {
       emissiveFactor: json['EmissiveFactor'],
       toonBlending: json['ToonBlending'],
       toonLightDir: json['ToonLightDir'],
+      facingAlphaBlend: json['FacingAlphaBlend'],
       sParams: sParams,
       s0Texture: json['S0Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['S0Texture']) : undefined,
       s1Texture: json['S1Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['S1Texture']) : undefined
@@ -614,7 +617,7 @@ class Gfx3Material {
       throw new Error('Gfx3Material::setCustomParam(): Custom param name not found !');
     }
 
-    this.params[20 + paramIndex] = value;
+    this.params[21 + paramIndex] = value;
   }
 
   /**
@@ -628,7 +631,7 @@ class Gfx3Material {
       throw new Error('Gfx3Material::getCustomParam(): Custom param name not found !');
     }
 
-    return this.params[20 + paramIndex];
+    return this.params[21 + paramIndex];
   }
 
   /**
@@ -646,6 +649,9 @@ class Gfx3Material {
       this.s1Texture = textures[1];
       this.texturesChanged = true;
     }
+
+    this.params[19] = textures[0] ? 1 : 0;
+    this.params[20] = textures[1] ? 1 : 0;
   }
 
   /**
@@ -753,6 +759,20 @@ class Gfx3Material {
    */
   getToonMap(): Gfx3Texture {
     return this.toonMap;
+  }
+
+  /**
+   * Returns the custom texture 0.
+   */
+  getCustomTexture0(): Gfx3Texture {
+    return this.s0Texture;
+  }
+
+  /**
+   * Returns the custom texture 1.
+   */
+  getCustomTexture1(): Gfx3Texture {
+    return this.s1Texture;
   }
 }
 

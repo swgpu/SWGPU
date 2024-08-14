@@ -44,7 +44,19 @@ export const PIPELINE_DESC: any = {
   fragment: {
     entryPoint: 'main',
     targets: [{
-      format: navigator.gpu.getPreferredCanvasFormat()
+      format: navigator.gpu.getPreferredCanvasFormat(),
+      blend: {
+        color: {
+          srcFactor: 'one',
+          dstFactor: 'one-minus-src',
+          operation: 'add'
+        },
+        alpha: {
+          srcFactor: 'one',
+          dstFactor: 'one-minus-src',
+          operation: 'add'
+        }
+      }
     }]
   },
   primitive: {

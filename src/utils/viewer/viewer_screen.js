@@ -23,6 +23,7 @@ class ViewerScreen extends Screen {
     this.skybox = new Gfx3Skybox();
     this.mesh = new Gfx3MeshJSM();
     this.shadow = new Gfx3ShadowVolume();
+    this.bloom = new Gfx3MeshJSM();
     this.lens = new Gfx3FlareLens();
     this.handleKeyDownCb = this.handleKeyDown.bind(this);
   }
@@ -34,6 +35,10 @@ class ViewerScreen extends Screen {
 
     this.shadow = new Gfx3ShadowVolume();
     await this.shadow.loadFromFile('./utils/viewer/shadow.jsv');
+
+    this.bloom = new Gfx3MeshJSM();
+    await this.bloom.loadFromFile('./utils/viewer/bloom.jsm');
+    this.bloom.setMaterial(await Gfx3Material.createFromFile('./utils/viewer/bloom.mat'));
 
     this.lens.setSunWorldPosition(10, 10, 0);
     await this.lens.startup(0.4);
@@ -55,12 +60,14 @@ class ViewerScreen extends Screen {
     const now = Date.now() / 10000;
     this.mesh.setRotation(Math.sin(now), Math.cos(now), 0);
     this.mesh.update(ts);
+    this.bloom.update(ts);
     this.camera.update(ts);
   }
 
   draw() {
     this.shadow.draw();
     this.mesh.draw();
+    this.bloom.draw();
     this.skybox.draw();
     this.lens.draw();
     gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
