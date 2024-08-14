@@ -35,9 +35,9 @@ For a more concret overview on it, you can play [examples](https://jay19240.gith
 * [Roadmap](#roadmap)
 
 ## Compatible tools
-- Blender is used for all the 3D stuffs.
-- Aseprite is used for 2D and 3D sprites.
-- Tilekit is used for tilemap editing.
+- Blender -> for all the 3D stuffs.
+- Aseprite -> for sprites generation.
+- Tilekit -> for tilemap editing.
 
 ## Features
 - 🧱 **Core**
