@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/banner-brand-mini.png" alt="logo"/>
+    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/swgpu.png" alt="logo"/>
 </p>
 
 <p align="center">
