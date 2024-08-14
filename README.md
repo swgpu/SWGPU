@@ -197,7 +197,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## Changelog
 ```
-- [Ver. 1.5.3]  Pack archivage added.
+- [Ver. 1.6.0] Aseprite support added.
+- [Ver. 1.6.0] Tilekit support added.
+- [Ver. 1.5.0]  Pack archivage added.
 - [Ver. 1.5.0]  New mesh shader hook added.
 - [Ver. 1.5.0]  Engine manager added.
 - [Ver. 1.5.0]  ECS Components check optimized with the use of Set.
