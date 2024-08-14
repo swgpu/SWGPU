@@ -10,17 +10,18 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
-**WarmeY2K** is a fully free **2D/3D** game engine dedicated to **indie games** !      
-It provide an easy way to build web based "old-school" games like the **PS1/PS2/XBOX** era in a modern **Typescript & HTML5, CSS3** environement. The core engine is freely available as a [npm package](https://www.npmjs.com/package/warme-y2k) or starter-kit. You can also have full access to the [documentation](http://warme-engine.com/).
+**SWGPU** is a simple **2D/3D game library** written in **TypeScript** and powered by the latest web APIs, offering an easy way to create classic games. From the start, we chose to embrace the future with pure **WebGPU** support as the logo suggests.      
+Check out our technology stack below:
+| API       | Domain     |
+|:---------:|:----------:|
+| WebGPU    | 3D         |
+| Canvas2D  | 2D         |
+| CSS3      | UI         |
+| Web Audio | Sound      |
+| Rapier3D  | 3D Physics |
+| Rapier2D  | 2D Physics |
 
-Some words about our philosophy:
-- **Robustness:** We used only simple and efficient methods coming from the industrie for nearly two decades.     
-- **Flexibility:** Create your own renderers. Handle render and update loops in a state-less way.    
-- **Modularity:** We used modular architecture to keep things simple and separate.     
-- **Performance:** We used WebGPU API for a blazing fast rendering.
-- **Lightweight:** The lib minzipped size is just 73 kB (1Mb with Rapier2D & Rapier3D).
-
-For a more concret overview on it, you can play [examples](https://jay19240.github.io/).
+For a more concret overview on it, you can play examples [here](https://jay19240.github.io/).
 
 ## Table of content
 * [Getting started](#getting-started)
