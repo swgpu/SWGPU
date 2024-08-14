@@ -22,8 +22,6 @@ From the start, we chose to embrace the future with pure **WebGPU** 3D rendering
 | Rapier3D  | 3D Physics | The fastest 3D physics engine for the web.                                                                                 |
 | Rapier2D  | 2D Physics | The fastest 2D physics engine for the web.                                                                                 |
 
-For a more concret overview on it, you can play examples [here](https://jay19240.github.io/).
-
 ## Table of content
 * [Getting started](#getting-started)
 * [Compatible tools](#compatible-tools)
