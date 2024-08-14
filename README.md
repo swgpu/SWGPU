@@ -43,8 +43,8 @@ Edit the ''src/game_screen'' and start writing your game.
 Go to http://localhost:5173.
 
 ## Compatible tools
-| Aseprite                                                                                              | Tilekit | Blender |
-|:-----------------------------------------------------------------------------------------------------:|:-------:|:--------|
+| Aseprite                                                                                              | Tilekit | Blender  |
+|:-----------------------------------------------------------------------------------------------------:|:-------:|:--------:|
 | ![](https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/tools-0.png "Aseprite") | ![](https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/tools-1.png "Tilekit") | ![](https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/tools-2.png "Blender") |
 
 ## Features
