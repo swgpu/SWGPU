@@ -1,5 +1,5 @@
 import { eventManager } from '../core/event_manager';
-import { FormatJAS, fromAseprite } from '@lib/core/format_jas';
+import { FormatJAS, fromAseprite } from '../core/format_jas';
 import { UIWidget } from '../ui/ui_widget';
 
 interface JASFrame {

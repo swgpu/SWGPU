@@ -1,6 +1,6 @@
 import { eventManager } from '../core/event_manager';
 import { gfx2Manager } from '../gfx2/gfx2_manager';
-import { FormatJAS, fromAseprite } from '@lib/core/format_jas';
+import { FormatJAS, fromAseprite } from '../core/format_jas';
 import { Poolable } from '../core/object_pool';
 import { UT } from '../core/utils';
 import { Gfx2Drawable } from '../gfx2/gfx2_drawable';

@@ -260,4 +260,4 @@ List of examples:
 ```
 
 ## License 
-WARME Y2K is released under the [MIT](https://opensource.org/licenses/MIT) license. 
+SWGPU is released under the [MIT](https://opensource.org/licenses/MIT) license. 

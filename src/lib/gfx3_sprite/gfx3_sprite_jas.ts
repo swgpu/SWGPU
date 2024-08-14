@@ -1,5 +1,5 @@
 import { eventManager } from '../core/event_manager';
-import { FormatJAS, fromAseprite } from '@lib/core/format_jas';
+import { FormatJAS, fromAseprite } from '../core/format_jas';
 import { UT } from '../core/utils';
 import { Poolable } from '../core/object_pool';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
