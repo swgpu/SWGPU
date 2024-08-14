@@ -18,8 +18,8 @@ Check what stack we've choices for this librairy:
 | Canvas2D  | 2D         | A 2D graphics API designed to provide shapes, text, and images drawing.                                                    |
 | CSS3      | UI         | The best way to build powerful and hightly maintenable user-interface.                                                     |
 | Web Audio | Sound      | An Audio API for playing sounds.                                                                                           |
-| Rapier3D  | 3D Physics | The fastest 3D physics engine on web.                                                                                      |
-| Rapier2D  | 2D Physics | The fastest 2D physics engine on web.                                                                                      |
+| Rapier3D  | 3D Physics | The fastest 3D physics engine for the web.                                                                                 |
+| Rapier2D  | 2D Physics | The fastest 2D physics engine for the web.                                                                                 |
 
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/).
 
