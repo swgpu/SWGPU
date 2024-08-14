@@ -50,14 +50,15 @@ For a more concret overview on it, you can play [examples](https://jay19240.gith
 - 👾 **2D**
     - Static sprite (jss)
     - Animated sprite (jas, aseprite)
-    - Isometric tilemap (jtm, tilekit)
-    - Orthographic tilemap (jtm)
+    - Isometric animated tilemap (jtm, tilekit)
+    - Orthographic animated tilemap (jtm)
     - Particles
     - Rendering filters
     - Motion lines (jlm)
 
 - 📐 **2D Physics**
     - BoundingRect
+    - Tilemap collider
     - Rapier2D
 
 - 🧊 **3D**
@@ -83,7 +84,7 @@ For a more concret overview on it, you can play [examples](https://jay19240.gith
     - Auto mipmap
     - Post rendering (gbuffers: depth/normal/ids)
     - Rendering filters
-    - Shader customizable
+    - Customizable shaders
  
 - 📐 **3D Physics**
     - BoundingBox
@@ -108,6 +109,7 @@ For a more concret overview on it, you can play [examples](https://jay19240.gith
     - Specular shininess
     - Emissive intensity
     - Normal intensity
+    - Facing blending
 
 - 🌞 **3D Light**
     - Directional light
