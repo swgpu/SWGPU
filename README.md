@@ -224,12 +224,5 @@ If you have a suggestion that would make this better, please fork the repo and c
 - [Ver. 1.0.3]  Camera orbit has been added.
 ```
 
-## Roadmap
-```
-Extra:
-- Add fake light volume: https://github.com/marmitoTH/godot-fake-volumetric-light/tree/master.
-- Add pooling soundManager.
-```
-
 ## License 
 WARME Y2K is released under the [MIT](https://opensource.org/licenses/MIT) license. 
