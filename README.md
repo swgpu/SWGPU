@@ -6,9 +6,6 @@
     <a href="https://warme-engine.com/">Documentation</a> - <a href="https://jay19240.github.io/">Demos</a> - <a href="https://warme-engine.com/?Screenshots">Screenshots</a> - <a href="https://discord.gg/9PcFvg5f7P">Join our discord !</a>
 </p>
 
-> [!NOTE]
-> This project is finally stable, only minor changes in the futur.
-
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
