@@ -1,6 +1,6 @@
 {
-  "name": "warme-y2k",
-  "description": "HTML5 Game Engine 2D & 3D written in TypeScript",
+  "name": "swgpu",
+  "description": "A complete, fast and fun web game engine",
   "homepage": "https://warme-engine.com",
   "keywords": [
     "game-engine-2d",
