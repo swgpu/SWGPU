@@ -34,8 +34,8 @@ From the start, we chose to embrace the future with pure **WebGPU** 3D rendering
 ## Getting started
 Clone and install the starter-kit from this repository:      
 ```
-# git clone https://github.com/jay19240/WarmeY2K-StarterKit.git
-# cd WarmeY2K-StarterKit
+# git clone https://github.com/jay19240/SWGPU-StarterKit.git
+# cd SWGPU-StarterKit
 # npm install
 # npm run dev
 ```
