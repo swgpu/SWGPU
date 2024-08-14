@@ -11,15 +11,15 @@
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
 **SWGPU** is a simple **2D/3D game library** written in **TypeScript** and powered by the latest web APIs, offering an easy way to create classic games. From the start, we chose to embrace the future with pure **WebGPU** support as the name suggests.      
-Check out our technology stack below:
-| API       | Domain     |
-|:---------:|:----------:|
-| WebGPU    | 3D         |
-| Canvas2D  | 2D         |
-| CSS3      | UI         |
-| Web Audio | Sound      |
-| Rapier3D  | 3D Physics |
-| Rapier2D  | 2D Physics |
+Check what stack we've choices for this librairy:
+| API       | Domain     | Description                                                                                                                |
+|:---------:|:----------:|:---------------------------------------------------------------------------------------------------------------------------|
+| WebGPU    | 3D         | A modern 3D graphics API designed to provide high-performance rendering and compute capabilities directly in web browsers. |
+| Canvas2D  | 2D         | A 2D graphics API designed to provide shapes, text, and images drawing.                                                    |
+| CSS3      | UI         | The best way to build powerful and hightly maintenable user-interface.                                                     |
+| Web Audio | Sound      | An Audio API for playing sounds.                                                                                           |
+| Rapier3D  | 3D Physics | The fastest 3D physics engine on web.                                                                                      |
+| Rapier2D  | 2D Physics | The fastest 2D physics engine on web.                                                                                      |
 
 For a more concret overview on it, you can play examples [here](https://jay19240.github.io/).
 
