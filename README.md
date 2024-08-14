@@ -26,6 +26,7 @@ Some words about our philosophy:
 For a more concret overview on it, you can play [examples](https://jay19240.github.io/).
 
 ## Table of content
+* [Getting started](#getting-started)
 * [Compatible tools](#compatible-tools)
 * [Features](#features)
 * [Examples](#examples)
@@ -33,10 +34,21 @@ For a more concret overview on it, you can play [examples](https://jay19240.gith
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
 * [Changelog](#changelog)
 
+## Getting started
+Clone and install the starter-kit from this repository:      
+```
+# git clone https://github.com/jay19240/WarmeY2K-StarterKit.git
+# cd WarmeY2K-StarterKit
+# npm install
+# npm run dev
+```
+Edit the ''src/game_screen'' and start writing your game.
+Go to http://localhost:5173.
+
 ## Compatible tools
-- Blender -> for all the 3D stuffs.
-- Aseprite -> for sprites generation.
-- Tilekit -> for tilemap editing.
+| Aseprite                                                                                              | Tilekit | Blender |
+|:-----------------------------------------------------------------------------------------------------:|:-------:|:--------|
+| ![](https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/tools-0.png "Aseprite") | ![](https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/tools-1.png "Tilekit") | ![](https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/tools-2.png "Blender") |
 
 ## Features
 - 🧱 **Core**
@@ -58,7 +70,7 @@ For a more concret overview on it, you can play [examples](https://jay19240.gith
 
 - 📐 **2D Physics**
     - BoundingRect
-    - Tilemap collider
+    - Tilemap box collider
     - Rapier2D
 
 - 🧊 **3D**
