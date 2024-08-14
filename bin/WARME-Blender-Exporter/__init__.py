@@ -509,6 +509,7 @@ class WARME_PT_material(bpy.types.Panel):
       layout.prop(selected_object.mat_properties, "shininess")
       layout.prop(selected_object.mat_properties, "emissive_factor")
       layout.prop(selected_object.mat_properties, "toon_blending")
+      layout.prop(selected_object.mat_properties, "facing_alpha_blend")
       layout.separator()
       layout.separator(type="LINE")
       layout.separator()

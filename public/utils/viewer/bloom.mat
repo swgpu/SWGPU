@@ -68,7 +68,7 @@
         }
     ],
     "Id": 0,
-    "Opacity": 1.0,
+    "Opacity": 0.800000011920929,
     "NormalIntensity": 1.0,
     "Lightning": false,
     "Ambient": [
@@ -91,9 +91,9 @@
         0.0,
         0.0
     ],
-    "Texture": "",
+    "Texture": "./utils/viewer/noise.jpg",
     "TextureScrollAngle": 0.0,
-    "TextureScrollRate": 0.0,
+    "TextureScrollRate": 0.10000000149011612,
     "DisplacementMap": "",
     "DisplacementMapScrollAngle": 0.0,
     "DisplacementMapScrollRate": 0.0,
@@ -114,6 +114,7 @@
     "Shininess": 0.0,
     "EmissiveFactor": 1.0,
     "ToonBlending": 1.0,
+    "FacingAlphaBlend": 0.8999999761581421,
     "S0Texture": "",
     "S1Texture": ""
 }
