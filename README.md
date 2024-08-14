@@ -28,11 +28,10 @@ For a more concret overview on it, you can play [examples](https://jay19240.gith
 ## Table of content
 * [Compatible tools](#compatible-tools)
 * [Features](#features)
-* [Contributions](#contributions)
+* [Examples](#examples)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
 * [Changelog](#changelog)
-* [Roadmap](#roadmap)
 
 ## Compatible tools
 - Blender -> for all the 3D stuffs.
@@ -170,16 +169,39 @@ For a more concret overview on it, you can play [examples](https://jay19240.gith
 - 🌆 **DNA**
     - ECS architecture implementation
 
-## Contributions
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
+## Examples
+This framework come with 16 common game templates and 9 utils templates.     
+Each one is thinking to represent a common game style like platformer, fighting, fps or rpg.     
+Template are written in typescript/javascript and build to be clean and extensible.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again!    
+List of templates (that you can test here):
+- 3D Pre-rendered
+- 3D Isometric
+- 2D Visual Novel
+- 2D Tilemap
+- 2D Tilemap (with pathfinding)
+- 2D Checker (extendable)
+- 2D Trading Carding Game
+- 3D FPS
+- 3D Turn-based RPG
+- 2D Fight
+- 2D Triple Triad
+- 2D Tilemap Isometric
+- 2D Background Isometric
+- 2D Shoot'em up
+- 3D Third Person Camera
+- 2D Platformer
 
-1. Fork the Project
-2. Create your Feature Branch (git checkout -b new_feature)
-3. Commit your Changes (git commit -m 'Add new feature')
-4. Push to the Branch (git push origin new_feature)
-5. Open a Pull Request
+List of examples:
+- 3D Curve
+- 3D Particles
+- 3D Performance Test
+- 3D Rapier
+- 3D Shadow Map
+- UI Menu
+- 3D Viewer
+- 3D Menu Ring
+- 3D Pack
 
 ## Contributors
 1. Crisxzu - Contribute to the Wiki, typedoc converter and Triple Triad demo.
