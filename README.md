@@ -190,7 +190,7 @@ Please, before export check if:
 2. You've set the output path in the right panel -> output -> output path.
 
 Click on the mesh and select Export JSM.   
-Your jsm file is now in your output path.
+Congratulation, your static mesh is now exported !
 
 ## Examples
 This framework come with 16 common game templates and 9 utils templates.     
