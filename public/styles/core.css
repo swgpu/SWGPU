@@ -3,9 +3,7 @@
 body {
   overflow: hidden;
   margin: 0;
-  background-color: #7f7f7f;
   height: 100vh;
-  background-image: url("../textures/bg.jpeg");
   background-size: cover;
 }
 
@@ -55,7 +53,8 @@ body {
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
   margin-bottom:10px;
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid black;
+  color: black;
 }
 
 #BRAND_METRICS {

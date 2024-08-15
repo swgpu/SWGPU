@@ -1,3 +1,0 @@
-* Script
-Powerful script machine implementation.~
-- [[ScriptMachine]]~

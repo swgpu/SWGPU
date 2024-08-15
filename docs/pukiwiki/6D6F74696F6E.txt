@@ -1,3 +1,0 @@
-* Motion
-The way to handle motion path for both 2D and 3D~
-- [[Motion]]~
