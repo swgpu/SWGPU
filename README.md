@@ -26,6 +26,7 @@ From the start, we chose to embrace the future with pure **WebGPU** 3D rendering
 * [Getting started](#getting-started)
 * [Compatible tools](#compatible-tools)
 * [Features](#features)
+* [Blender Plugin](#blender-plugin)
 * [Examples](#examples)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
@@ -179,6 +180,17 @@ Go to http://localhost:5173.
 
 - 🌆 **DNA**
     - ECS architecture implementation
+
+## Blender plugin
+Download the exporter [here](https://github.com/jay19240/SWGPU-Blender-Plugin).   
+Install it on Blender by going to Edit -> Preferences -> Add-ons -> Install... -> Select the zip.   
+Push "n", and click on WarmeY2K Exporter to see the exportation panel.   
+Please, before export check if:   
+1. Your Blender scene is saved.
+2. You've set the output path in the right panel -> output -> output path.
+
+Click on the mesh and select Export JSM.   
+Your jsm file is now in your output path.
 
 ## Examples
 This framework come with 16 common game templates and 9 utils templates.     
