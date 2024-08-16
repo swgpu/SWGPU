@@ -46,6 +46,7 @@ interface MATOptions {
   emissiveFactor?: number;
   toonBlending?: number;
   facingAlphaBlend?: number;
+  distanceAlphaBlend?: number;
   sParams?: Array<{name: string, value: number }>;
   s0Texture?: Gfx3Texture;
   s1Texture?: Gfx3Texture;
@@ -118,7 +119,7 @@ class Gfx3Material {
     this.colors[13] = options.specular ? options.specular[1] : 0.0;
     this.colors[14] = options.specular ? options.specular[2] : 0.0;
     this.colors[15] = 0.0;
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 37);
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 38);
     this.params[0] = options.id ?? 0;
     this.params[1] = options.opacity ?? 1.0;
     this.params[2] = options.normalIntensity ?? 1.0;
@@ -138,14 +139,15 @@ class Gfx3Material {
     this.params[16] = options.emissiveFactor ?? 1.0;
     this.params[17] = options.toonBlending ?? 1.0;
     this.params[18] = options.facingAlphaBlend ?? 1.0;
-    this.params[19] = options.s0Texture ? 1.0 : 0.0;
-    this.params[20] = options.s1Texture ? 1.0 : 0.0;
+    this.params[19] = options.distanceAlphaBlend ?? 0.0;
+    this.params[20] = options.s0Texture ? 1.0 : 0.0;
+    this.params[21] = options.s1Texture ? 1.0 : 0.0;
 
     if (options.sParams) {
       for (const sParam of options.sParams) {
         const paramIndex = MAT_SLOT_NAMES.findIndex(n => n == sParam.name);
         if (paramIndex != -1) {
-          this.params[21 + paramIndex] = sParam.value ?? 0.0;
+          this.params[22 + paramIndex] = sParam.value ?? 0.0;
         }
       }
     }
@@ -253,6 +255,7 @@ class Gfx3Material {
       toonBlending: json['ToonBlending'],
       toonLightDir: json['ToonLightDir'],
       facingAlphaBlend: json['FacingAlphaBlend'],
+      distanceAlphaBlend: json['DistanceAlphaBlend'],
       sParams: sParams,
       s0Texture: json['S0Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['S0Texture']) : undefined,
       s1Texture: json['S1Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['S1Texture']) : undefined
@@ -617,7 +620,7 @@ class Gfx3Material {
       throw new Error('Gfx3Material::setCustomParam(): Custom param name not found !');
     }
 
-    this.params[21 + paramIndex] = value;
+    this.params[22 + paramIndex] = value;
   }
 
   /**
@@ -631,7 +634,7 @@ class Gfx3Material {
       throw new Error('Gfx3Material::getCustomParam(): Custom param name not found !');
     }
 
-    return this.params[21 + paramIndex];
+    return this.params[22 + paramIndex];
   }
 
   /**

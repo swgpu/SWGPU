@@ -149,6 +149,7 @@ struct MaterialParams {
   EMISSIVE_FACTOR: f32,
   TOON_BLENDING: f32,
   FACING_ALPHA_BLEND: f32,
+  DISTANCE_ALPHA_BLEND: f32,
   HAS_S0_TEXTURE: f32,
   HAS_S1_TEXTURE: f32,
   ${MAT_SLOT_NAMES[0]}: f32,
@@ -469,6 +470,7 @@ fn main(
     outputColor = vec4(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY);
   }
 
+  var viewDelta = SCENE_INFOS.CAMERA_POS - fragPos;
   var viewDir = normalize(SCENE_INFOS.CAMERA_POS - fragPos);
   var facing = max(dot(viewDir, fragNormal), 0.0);
 
@@ -477,6 +479,12 @@ fn main(
     var IOR = 1.0 - log(1.0 - MAT_PARAMS.FACING_ALPHA_BLEND);
     outputColor.a *= pow(facing, IOR);
     ${FRAG_FACING}
+  }
+
+  if (MAT_PARAMS.DISTANCE_ALPHA_BLEND != 0.0)
+  {
+    var len = clamp(length(viewDelta) - MAT_PARAMS.DISTANCE_ALPHA_BLEND, 0.0, 1.0);
+    outputColor.a *= len;
   }
 
   ${FRAG_END}
