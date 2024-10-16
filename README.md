@@ -1,3 +1,4 @@
+# SWGPU
 <p align="center">
     <a href="https://swgpu.github.io/docs">Documentation</a> - <a href="https://swgpu.github.io/">Demos</a> - <a href="https://warme-engine.com/?Screenshots">Screenshots</a> - <a href="https://discord.gg/9PcFvg5f7P">Join our discord !</a>
 </p>
