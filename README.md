@@ -1,8 +1,4 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/swgpu.png" width="450px" alt="logo"/>
-</p>
-
-<p align="center">
     <a href="https://swgpu.github.io/docs">Documentation</a> - <a href="https://swgpu.github.io/">Demos</a> - <a href="https://warme-engine.com/?Screenshots">Screenshots</a> - <a href="https://discord.gg/9PcFvg5f7P">Join our discord !</a>
 </p>
 
@@ -19,8 +15,8 @@ From the start, we chose to embrace the future with pure **WebGPU** 3D rendering
 | Canvas2D  | 2D         | A 2D graphics API designed to provide shapes, text, and images drawing.                                                    |
 | CSS3      | UI         | The best way to build powerful and hightly maintenable user-interface.                                                     |
 | Web Audio | Sound      | An Audio API for playing sounds.                                                                                           |
-| Rapier3D  | 3D Physics | The fastest 3D physics engine for the web.                                                                                 |
-| Rapier2D  | 2D Physics | The fastest 2D physics engine for the web.                                                                                 |
+| Rapier3D  | 3D Physics | Fast 3D physics engine.                                                                                                    |
+| Rapier2D  | 2D Physics | Fast 2D physics engine.                                                                                                    |
 
 ## Table of content
 * [Getting started](#getting-started)
@@ -44,9 +40,9 @@ Edit the ''src/game_screen'' and start writing your game.
 Go to http://localhost:5173.
 
 ## Compatible tools
-| Aseprite                                                                                              | Tilekit | Blender  |
-|:-----------------------------------------------------------------------------------------------------:|:-------:|:--------:|
-| ![](https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/tools-0.png "Aseprite") | ![](https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/tools-1.png "Tilekit") | ![](https://raw.githubusercontent.com/jay19240/jay19240.github.io/main/others/tools-2.png "Blender") |
+- Asesprite
+- Tilekit
+- Blender
 
 ## Features
 - 🧱 **Core**
@@ -72,7 +68,6 @@ Go to http://localhost:5173.
     - Rapier2D
 
 - 🧊 **3D**
-    - Binary format (bsm, bam, bwm, bnm, blm)
     - Debug shapes
     - Static mesh (jsm and obj)
     - Animated mesh (jam)
@@ -232,7 +227,6 @@ List of examples:
 3. luciedefraiteur - Contribute to the fog.
 4. thetinyspark - Contribute to the binary space partition.
 5. Impre-visible - Contribute to 2D tutorial.
-6. Alina Morinokanata - Create the logo.
 
 ## Some parts taken for this work
 - DOM for UI elements
