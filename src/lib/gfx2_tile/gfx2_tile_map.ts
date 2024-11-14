@@ -259,38 +259,48 @@ class Gfx2TileMap {
 
     for (let row = top; row <= bottom; row++) {
       for (let col = left; col <= right; col++) {
-        if (layer.getTile(col, row) !== 0) {
-          const tileX = col * this.tileWidth;
-          const tileY = row * this.tileWidth;
-          const collideH = UT.COLLIDE_RECT_TO_RECT([l + mx, t], [r + mx, b], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
-          const collideV = UT.COLLIDE_RECT_TO_RECT([l, t + my], [r, b + my], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
+        if (layer.getTile(col, row) == 0) {
+          continue;
+        }
 
-          if (collideV && row == bottom && my > 0) {
-            collisions.bottom = true;
-            collisions.isGrounded = true; // test slop pos y
-            collisions.verticalRow = row;
-            collisions.verticalCol = col;
-            collisions.my = tileY - b - gap; // test & compute my with the slop
-          }
-          else if (collideV && row == top && my < 0) {
-            collisions.top = true;
-            collisions.verticalRow = row;
-            collisions.verticalCol = col;
-            collisions.my = (tileY + this.tileHeight) - t + gap;
-          }
+        const tileX = col * this.tileWidth;
+        const tileY = row * this.tileHeight;
+        let collideH = false; 
+        let collideV = false; 
 
-          if (collideH && col == left && mx < 0) {
-            collisions.left = true;
-            collisions.horizontalRow = row;
-            collisions.horizontalCol = col;
-            collisions.mx = (tileX + this.tileWidth) - l + gap;
-          }
-          else if (collideH && col == right && mx > 0) {
-            collisions.right = true;
-            collisions.horizontalRow = row;
-            collisions.horizontalCol = col;
-            collisions.mx = tileX - r - gap;
-          }
+        if (col == left || col == right) {
+          collideH = UT.COLLIDE_RECT_TO_RECT([l + mx, t], [r + mx, b], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
+        }
+
+        if (row == top || row == bottom) {
+          collideV = UT.COLLIDE_RECT_TO_RECT([l, t + my], [r, b + my], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
+        }
+
+        if (collideV && my > 0) {
+          collisions.bottom = true;
+          collisions.isGrounded = true; // test slop pos y
+          collisions.verticalRow = row;
+          collisions.verticalCol = col;
+          collisions.my = tileY - b - gap; // test & compute my with the slop
+        }
+        else if (collideV && my < 0) {
+          collisions.top = true;
+          collisions.verticalRow = row;
+          collisions.verticalCol = col;
+          collisions.my = (tileY + this.tileHeight) - t + gap;
+        }
+
+        if (collideH && mx < 0) {
+          collisions.left = true;
+          collisions.horizontalRow = row;
+          collisions.horizontalCol = col;
+          collisions.mx = (tileX + this.tileWidth) - l + gap;
+        }
+        else if (collideH && mx > 0) {
+          collisions.right = true;
+          collisions.horizontalRow = row;
+          collisions.horizontalCol = col;
+          collisions.mx = tileX - r - gap;
         }
       }
 

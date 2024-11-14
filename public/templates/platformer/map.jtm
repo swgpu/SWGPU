@@ -13,9 +13,6 @@
             "Columns": 96,
             "Visible": true,
             "FrameDuration": 0,
-            "Slopes": {
-                "3": [32, 0]
-            },
             "Grid": [
                 2,
                 2,
@@ -9027,6 +9024,9 @@
         "TileHeight": 32,
         "TextureFile": "./templates/platformer/map.png",
         "Animations": {},
+        "Slopes": {
+            "3": [32, 0]
+        },
         "Properties": {}
     }
 }
