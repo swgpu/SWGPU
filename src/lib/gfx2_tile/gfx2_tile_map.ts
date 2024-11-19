@@ -259,29 +259,39 @@ class Gfx2TileMap {
 
     for (let row = top; row <= bottom; row++) {
       for (let col = left; col <= right; col++) {
-        if (layer.getTile(col, row) == 0) {
-          continue;
-        }
+        const tileId = layer.getTile(col, row);
+        if (tileId == 0) continue;
+        if (col != left && col != right && row != top && row != bottom) continue;
 
         const tileX = col * this.tileWidth;
         const tileY = row * this.tileHeight;
-        let collideH = false; 
-        let collideV = false; 
+        const slope = this.tileset.getSlope(tileId);
+        const collideH = UT.COLLIDE_RECT_TO_RECT([l + mx, t], [r + mx, b], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
+        const collideV = UT.COLLIDE_RECT_TO_RECT([l, t + my], [r, b + my], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
 
-        if (col == left || col == right) {
-          collideH = UT.COLLIDE_RECT_TO_RECT([l + mx, t], [r + mx, b], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
-        }
+        if ((collideH || collideV) && slope) {
+          const y1 = tileY + slope[0];
+          const y2 = tileY + slope[1];
+          const s = y1 < y2 ? l : r;
+          const t = (s - tileX) / this.tileWidth;
 
-        if (row == top || row == bottom) {
-          collideV = UT.COLLIDE_RECT_TO_RECT([l, t + my], [r, b + my], [tileX, tileY], [tileX + this.tileWidth, tileY + this.tileHeight]);
+          if (t > -0.1 && t < 1.1) {
+            const slopePosY = y1 + ((y2 - y1) * t);
+            collisions.bottom = (b + my) >= slopePosY;
+            collisions.isGrounded = collisions.bottom;
+            collisions.verticalRow = row;
+            collisions.verticalCol = col;
+            collisions.my = collisions.bottom ? slopePosY - b - gap : collisions.my;
+            return collisions;  
+          }
         }
 
         if (collideV && my > 0) {
           collisions.bottom = true;
-          collisions.isGrounded = true; // test slop pos y
+          collisions.isGrounded = true;
           collisions.verticalRow = row;
           collisions.verticalCol = col;
-          collisions.my = tileY - b - gap; // test & compute my with the slop
+          collisions.my = tileY - b - gap;
         }
         else if (collideV && my < 0) {
           collisions.top = true;
