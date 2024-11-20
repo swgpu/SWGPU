@@ -52,6 +52,9 @@ export interface FormatJTMProperties {
   [key: string]: any;
 };
 
+// -------------------------------------------------------------------------------------
+// TILEKIT
+// -------------------------------------------------------------------------------------
 interface Tilekit {
   map: TilekitMap;
   objects: Array<TilekitObject>;
@@ -90,7 +93,84 @@ interface TilekitObject {
   [other_props: string]: string;
 };
 
-export async function fromTilekit(path: string, textureDir: string = ''): Promise<FormatJTM> {
+// -------------------------------------------------------------------------------------
+// SPRITE FUSION
+// -------------------------------------------------------------------------------------
+interface SpriteFusion {
+  tileSize: number;
+  mapWidth: number;
+  mapHeight: number;
+  layers: Array<SpriteFusionLayer>;
+};
+
+interface SpriteFusionLayer {
+  name: string;
+  tiles: Array<SpriteFusionTile>;
+  collider: boolean;
+};
+
+interface SpriteFusionTile {
+  id: string;
+  x: number;
+  y: number;
+};
+
+export async function fromSpriteFusion(path: string, texturePath: string = '', optsPath: string = ''): Promise<FormatJTM> {
+  const response = await fetch(path);
+  const sf = await response.json() as SpriteFusion;
+
+  const layers = [];
+  for (const sfLayer of sf.layers) {
+    const layer: FormatJTMTileLayer = {
+      Name: sfLayer.name,
+      Rows: sf.mapHeight,
+      Columns: sf.mapWidth,
+      OffsetX: 0,
+      OffsetY: 0,
+      Visible: true,
+      FrameDuration: 0,
+      Grid: [],
+      Objects: []
+    };
+
+    for (const sfTile of sfLayer.tiles) {
+      const index = (sfTile.x + sfTile.y) * sf.mapWidth;
+      layer.Grid[index] = parseInt(sfTile.id) + 1;
+    }
+
+    layers.push(layer);
+  }
+
+  let animations = {};
+  let slopes = {};
+  let properties = {};
+  if (optsPath) {
+    const response = await fetch(optsPath);
+    const data = await response.json();
+    animations = data['Animations'] ?? {};
+    slopes = data['Slopes'] ?? {};
+    properties = data['Properties'] ?? {};
+  }
+
+  return {
+    Ident: 'JTM',
+    Rows: sf.mapHeight,
+    Columns: sf.mapWidth,
+    TileHeight: sf.tileSize,
+    TileWidth: sf.tileSize,
+    Layers: layers,
+    Tileset: {
+      TileWidth: sf.tileSize,
+      TileHeight: sf.tileSize,
+      TextureFile: texturePath,
+      Animations: animations,
+      Slopes: slopes,
+      Properties: properties
+    }
+  };
+}
+
+export async function fromTilekit(path: string, textureDir: string = '', optsPath: string = ''): Promise<FormatJTM> {
   const response = await fetch(path);
   const tilekit = await response.json() as Tilekit;
 
@@ -124,6 +204,13 @@ export async function fromTilekit(path: string, textureDir: string = ''): Promis
     tilesetProperties[tkTag.label] = tkTag.tiles;
   });
 
+  let slopes = {};
+  if (optsPath) {
+    const response = await fetch(optsPath);
+    const data = await response.json();
+    slopes = data['Slopes'] ?? {};
+  }
+
   return {
     Ident: 'JTM',
     Rows: tilekit.map.h,
@@ -146,7 +233,7 @@ export async function fromTilekit(path: string, textureDir: string = ''): Promis
       TileHeight: tilekit.map.tile_h,
       TextureFile: textureDir + tilekit.map.image_filename,
       Animations: animations,
-      Slopes: {},
+      Slopes: slopes,
       Properties: tilesetProperties
     }
   };

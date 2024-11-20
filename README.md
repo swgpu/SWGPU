@@ -53,28 +53,28 @@ Go to http://localhost:5173.
     - Curves
     - Quaternions
     - Object pooling
-    
+
 - 👾 **2D**
-    - Static sprite (jss)
-    - Animated sprite (jas, aseprite)
-    - Isometric animated tilemap (jtm, tilekit)
-    - Orthographic animated tilemap (jtm)
+    - Static sprite
+    - Animated sprite
+    - Isometric animated tilemap
+    - Orthographic animated tilemap
     - Particles
     - Rendering filters
-    - Motion lines (jlm)
+    - Motion lines
 
 - 📐 **2D Physics**
     - BoundingRect
-    - Tilemap box collider
+    - Tilemap box collider with slopes support
     - Rapier2D
 
 - 🧊 **3D**
     - Debug shapes
-    - Static mesh (jsm and obj)
-    - Animated mesh (jam)
-    - Static sprite (jss)
-    - Animated sprite (jas, aseprite)
-    - Motion lines (jlm)
+    - Static mesh
+    - Animated mesh
+    - Static sprite
+    - Animated sprite
+    - Motion lines
     - Billboarding
     - Cubemap skybox
     - Particules
@@ -95,8 +95,8 @@ Go to http://localhost:5173.
 - 📐 **3D Physics**
     - BoundingBox
     - BoundingCylinder
-    - Walkmesh (jwm)
-    - Hitmesh (jnm)
+    - Walkmesh
+    - Hitmesh
     - Ray-testing
     - Rapier3D
 
@@ -134,7 +134,7 @@ Go to http://localhost:5173.
 
 - 🧠 **AI**
     - A* for 2D/3D with graph and grid
-    - Djikstra graph (grf)
+    - Djikstra graph
     - Min-max with alpha-beta pruning
 
 - 📺 **Screen**
