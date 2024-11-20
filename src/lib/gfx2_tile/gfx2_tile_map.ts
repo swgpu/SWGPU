@@ -1,5 +1,5 @@
 import { UT } from '../core/utils';
-import { FormatJTM, fromTilekit } from './format_jtm';
+import { FormatJTM, fromSpriteFusion, fromTilekit } from './format_jtm';
 import { Gfx2TileLayer } from './gfx2_tile_layer';
 import { Gfx2Tileset } from './gfx2_tile_set';
 
@@ -53,9 +53,21 @@ class Gfx2TileMap {
    * Loads asynchronously tilemap data from a tilekit file (json).
    * 
    * @param {string} path - The file path.
+   * @param {string} textureDir - The texture folder path.
    */
   async loadFromTileKit(path: string, textureDir: string = ''): Promise<void> {
     const data = await fromTilekit(path, textureDir);
+    await this.loadFromData(data);
+  }
+
+  /**
+   * Loads asynchronously tilemap data from a spritefusion file (json).
+   * 
+   * @param {string} path - The file path.
+   * @param {string} texturePath - The texture file path.
+   */
+  async loadFromSpriteFusion(path: string, texturePath: string = ''): Promise<void> {
+    const data = await fromSpriteFusion(path, texturePath);
     await this.loadFromData(data);
   }
 
