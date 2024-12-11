@@ -33,6 +33,17 @@ class UT {
   }
 
   /**
+   * @param filename - The file name.
+   */
+  static GET_FILENAME_INFOS(filename: string): { name: string, ext: string } {
+    const splitname = filename.split('.');
+    return {
+      name: splitname.slice(0, -1).join(),
+      ext: splitname.at(-1) ?? ''
+    };
+  }
+
+  /**
    * @param ms - Time to wait (in milliseconds).
    */
   static WAIT(ms: number): Promise<any> {
