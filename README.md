@@ -1,6 +1,8 @@
 # SWGPU
 <p align="center">
     <img src="https://github.com/swgpu/swgpu.github.io/blob/main/Animation.gif?raw=true" width="250" height="250"/>
+</p>
+<p align="center">
     <a href="https://github.com/swgpu/SWGPU/wiki">Documentation</a> - <a href="https://swgpu.github.io/">Demos</a> - <a href="https://warme-engine.com/?Screenshots">Screenshots</a>
 </p>
 
