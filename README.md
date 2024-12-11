@@ -1,13 +1,12 @@
 # SWGPU
 <p align="center">
+    <img src="https://github.com/swgpu/swgpu.github.io/blob/main/Animation.gif?raw=true" width="250" height="250"/>
     <a href="https://github.com/swgpu/SWGPU/wiki">Documentation</a> - <a href="https://swgpu.github.io/">Demos</a> - <a href="https://warme-engine.com/?Screenshots">Screenshots</a>
 </p>
 
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
-
-<img src="https://github.com/swgpu/swgpu.github.io/blob/main/Animation.gif?raw=true" width="250" height="250"/>
 
 **SWGPU** is a simple **2D/3D game library** written in **TypeScript** and powered by the latest web APIs.
 It offers an easy and complete way to create classic games in a non-opinionated but recommanded coding style.
