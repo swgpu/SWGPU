@@ -1,4 +1,4 @@
-import { em, Pack3D } from '@lib/engine_manager';
+import { em, Pack3D } from '@lib/engine/engine_manager';
 import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
 import { UT } from '@lib/core/utils';

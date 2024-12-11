@@ -105,7 +105,7 @@ export { inputManager } from './input/input_manager';
 export { screenManager } from './screen/screen_manager';
 export { soundManager } from './sound/sound_manager';
 export { uiManager } from './ui/ui_manager';
-export { em, Pack2D, Pack3D } from './engine_manager';
+export { em, Pack2D, Pack3D } from './engine/engine_manager';
 // types -------------------------------------------------------------------------------------
 export type { StraightFlowState } from './core/straight_flow';
 export type { Gfx2RenderingMode } from './gfx2/gfx2_manager';
@@ -114,4 +114,4 @@ export type { Gfx3Texture } from './gfx3/gfx3_texture';
 export type { Gfx3Viewport, ProjectionMode } from './gfx3/gfx3_view';
 export type { vec1, vec2, vec3, vec4, vec5, vec6, vec_any, mat3, mat4, bounds2, bounds3 } from './core/global';
 export type { Sound } from './sound/sound_manager';
-export type { PackItem, PackItemList } from './engine_manager';
+export type { PackItem, PackItemList } from './engine/engine_manager';
