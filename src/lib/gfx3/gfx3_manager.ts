@@ -300,6 +300,16 @@ class Gfx3Manager {
   }
 
   /**
+   * Flush the main vertex buffer.
+   */
+  flushVertexBuffers(): void {
+    this.vertexSubBuffers = [];
+    this.vertexSubBuffersSize = 0;
+    this.vertexBuffer.destroy();
+    this.vertexBuffer = this.device.createBuffer({ size: 0, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST });
+  }
+
+  /**
    * Write data on vertex sub-buffer.
    * 
    * @param {VertexSubBuffer} sub - The vertex sub-buffer.
