@@ -1,5 +1,4 @@
 import { uiManager } from '@lib/ui/ui_manager';
-import { soundManager } from '@lib/sound/sound_manager';
 import { eventManager } from '@lib/core/event_manager';
 import { screenManager } from '@lib/screen/screen_manager';
 import { UIWidget } from '@lib/ui/ui_widget';
@@ -18,9 +17,6 @@ class FightScreen extends Screen {
   }
 
   async onEnter() {
-    await soundManager.loadSound('./templates/fight/musics/intro.mp3');
-    // await soundManager.playSound('./templates/fight/musics/intro.mp3');
-
     this.uiBackground = document.createElement('img');
     this.uiBackground.className = 'MapScreen-background';
     this.uiBackground.src = './templates/fight/ui/bg-map-screen.jpg';
