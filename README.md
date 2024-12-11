@@ -21,10 +21,10 @@ From the start, we chose to embrace the future with pure **WebGPU** 3D rendering
 
 ## Table of content
 * [Getting started](#getting-started)
-* [Compatible tools](#compatible-tools)
 * [Features](#features)
-* [Blender Plugin](#blender-plugin)
 * [Examples](#examples)
+* [Compatible tools](#compatible-tools)
+* [Blender Plugin](#blender-plugin)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
 * [Changelog](#changelog)
@@ -39,11 +39,6 @@ Clone and install the starter-kit from this repository:
 ```
 Edit the ''src/game_screen'' and start writing your game.
 Go to http://localhost:5173.
-
-## Compatible tools
-- Asesprite
-- Tilekit
-- Blender
 
 ## Features
 - 🧱 **Core**
@@ -177,17 +172,6 @@ Go to http://localhost:5173.
 - 🌆 **DNA**
     - ECS architecture implementation
 
-## Blender plugin
-Download the exporter [here](https://github.com/jay19240/SWGPU-Blender-Plugin).   
-Install it on Blender by going to Edit -> Preferences -> Add-ons -> Install... -> Select the zip.   
-Push "n", and click on WarmeY2K Exporter to see the exportation panel.   
-Please, before export check if:   
-1. Your Blender scene is saved.
-2. You've set the output path in the right panel -> output -> output path.
-
-Click on the mesh and select Export JSM.   
-Congratulation, your static mesh is now exported !
-
 ## Examples
 This framework come with 16 common game templates and 9 utils templates.     
 Each one is thinking to represent a common game style like platformer, fighting, fps or rpg.     
@@ -221,6 +205,23 @@ List of examples:
 - 3D Viewer
 - 3D Menu Ring
 - 3D Pack
+
+## Compatible tools
+- Asesprite
+- Tilekit
+- SpriteFusion
+- Blender
+
+## Blender plugin
+Download the exporter [here](https://github.com/jay19240/SWGPU-Blender-Plugin).   
+Install it on Blender by going to Edit -> Preferences -> Add-ons -> Install... -> Select the zip.   
+Push "n", and click on WarmeY2K Exporter to see the exportation panel.   
+Please, before export check if:   
+1. Your Blender scene is saved.
+2. You've set the output path in the right panel -> output -> output path.
+
+Click on the mesh and select Export JSM.   
+Congratulation, your static mesh is now exported !
 
 ## Contributors
 1. Crisxzu - Contribute to the Wiki, typedoc converter and Triple Triad demo.
