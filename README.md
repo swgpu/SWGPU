@@ -7,7 +7,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
-<video src="https://github.com/swgpu/swgpu.github.io/raw/refs/heads/main/intro.mp4"></video>
+![Alt Text](https://github.com/swgpu/swgpu.github.io/blob/main/Animation.gif?raw=true)
 
 **SWGPU** is a simple **2D/3D game library** written in **TypeScript** and powered by the latest web APIs.
 It offers an easy and complete way to create classic games in a non-opinionated but recommanded coding style.
