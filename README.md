@@ -241,6 +241,8 @@ Congratulation, your static mesh is now exported !
 
 ## Changelog
 ```
+- [Ver. 1.6.0] Tile slope support added.
+- [Ver. 1.6.0] Spritefusion support re-added.
 - [Ver. 1.6.0] Aseprite support added.
 - [Ver. 1.6.0] Tilekit support added.
 - [Ver. 1.5.0]  Pack archivage added.
