@@ -239,6 +239,9 @@ Congratulation, your static mesh is now exported !
 - [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
+## Todos
+- Add Erosion texture map.
+
 ## Changelog
 ```
 - [Ver. 1.6.0] Tile slope support added.
