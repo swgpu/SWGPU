@@ -244,6 +244,7 @@ Congratulation, your static mesh is now exported !
 - Split mesh shader in parts + add hook in each part (before and after)
 - Add second classic texture with scroll in material
 - Let displacement map but add erosion texture map.
+- Add the possibility to scale all these kind of textures
 
 ## Changelog
 ```
