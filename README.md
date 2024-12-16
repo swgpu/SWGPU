@@ -241,6 +241,8 @@ Congratulation, your static mesh is now exported !
 
 ## Todos
 - Add Erosion texture map.
+- Review noise texture and secondary texture mask
+- Soft appearing of the lens flare (sun) renderer
 
 ## Changelog
 ```
