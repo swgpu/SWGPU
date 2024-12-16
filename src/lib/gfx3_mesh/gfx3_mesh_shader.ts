@@ -54,9 +54,6 @@ const VERT_OUT_FRAG_BINORMAL = WINDOW.__MESH_VERT_OUT_FRAG_BINORMAL__;
 const VERT_OUT_FRAG_SHADOW_POS = WINDOW.__MESH_VERT_OUT_FRAG_SHADOW_POS__;
 
 const FRAG_BEGIN = WINDOW.__MESH_FRAG_BEGIN__ ? WINDOW.__MESH_FRAG_BEGIN__ : '';
-const FRAG_PRE_TEXTURE = WINDOW.__MESH_FRAG_PRE_TEXTURE__ ? WINDOW.__MESH_FRAG_PRE_TEXTURE__ : '';
-const FRAG_POST_TEXTURE = WINDOW.__MESH_FRAG_POST_TEXTURE__ ? WINDOW.__MESH_FRAG_POST_TEXTURE__ : '';
-const FRAG_FACING = WINDOW.__MESH_FRAG_FACING__ ? WINDOW.__MESH_FRAG_FACING__ : '';
 const FRAG_END = WINDOW.__MESH_FRAG_END__ ? WINDOW.__MESH_FRAG_END__ : '';
 const FRAG_OUT_BASE = WINDOW.__MESH_FRAG_OUT_BASE__;
 const FRAG_OUT_NORMAL = WINDOW.__MESH_FRAG_OUT_NORMAL__;
@@ -128,7 +125,7 @@ export const PIPELINE_DESC: any = {
   }
 };
 
-const INCLUDE_MAT_PARAMS = `
+const STRUCT_MAT_PARAMS = `
 struct MaterialParams {
   ID: f32,
   OPACITY: f32,
@@ -170,7 +167,7 @@ struct MaterialParams {
   ${MAT_SLOT_NAMES[15]}: f32
 };`;
 
-const INCLUDE_SCENE_INFOS = `
+const STRUCT_SCENE_INFOS = `
 struct SceneInfos {
   CAMERA_POS: vec3<f32>,
   AMBIENT_COLOR: vec3<f32>,
@@ -197,7 +194,7 @@ struct SceneInfos {
   ${SCENE_SLOT_NAMES[15]}: f32
 };`;
 
-const INCLUDE_MESH_INFOS = `
+const STRUCT_MESH_INFOS = `
 struct MeshInfos {
   MVPC_MATRIX: mat4x4<f32>,
   M_MATRIX: mat4x4<f32>,
@@ -205,7 +202,7 @@ struct MeshInfos {
   ID: vec4<f32>
 };`;
 
-export const VERTEX_SHADER = /* wgsl */`
+const STRUCT_VERTEX_OUTPUT = `
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
   @location(0) FragPos: vec3<f32>,
@@ -215,11 +212,13 @@ struct VertexOutput {
   @location(4) FragTangent: vec3<f32>,
   @location(5) FragBinormal: vec3<f32>,
   @location(6) FragShadowPos: vec3<f32>
-}
+}`;
 
-${INCLUDE_MESH_INFOS}
-${INCLUDE_MAT_PARAMS}
-${INCLUDE_SCENE_INFOS}
+export const VERTEX_SHADER = /* wgsl */`
+${STRUCT_VERTEX_OUTPUT}
+${STRUCT_MESH_INFOS}
+${STRUCT_MAT_PARAMS}
+${STRUCT_SCENE_INFOS}
 
 @group(0) @binding(0) var<uniform> SCENE_INFOS: SceneInfos;
 @group(0) @binding(1) var<uniform> LVP_MATRIX: mat4x4<f32>;
@@ -258,30 +257,29 @@ fn main(
   return output;
 }`;
 
-export const FRAGMENT_SHADER = /* wgsl */`
+const STRUCT_FRAG_OUT = `
 struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
   @location(2) Id: vec4f
-}
+}`;
 
+const STRUCT_MATERIAL_COLORS = `
 struct MaterialColors {
   EMISSIVE: vec3<f32>,
   AMBIENT: vec3<f32>,
   DIFFUSE: vec3<f32>,
   SPECULAR: vec3<f32>
-}
+}`;
 
-${INCLUDE_MESH_INFOS}
-${INCLUDE_MAT_PARAMS}
-${INCLUDE_SCENE_INFOS}
-
+const STRUCT_MATERIAL_UVS = `
 struct MaterialUvs {
   TEXTURE_SCROLL: vec2<f32>,
   TEXTURE_OFFSET: vec2<f32>,
   DISPLACEMENT_MAP_SCROLL: vec2<f32>
-}
+}`;
 
+const STRUCT_POINT_LIGHT = `
 struct PointLight {
   POSITION: vec3<f32>,
   DIFFUSE: vec3<f32>,
@@ -289,8 +287,9 @@ struct PointLight {
   ATTEN: vec3<f32>,
   INTENSITY: f32,
   MESH_ID: f32
-}
+}`;
 
+const STRUCT_SPOT_LIGHT = `
 struct SpotLight {
   POSITION: vec3<f32>,
   DIRECTION: vec3<f32>,
@@ -300,8 +299,9 @@ struct SpotLight {
   INTENSITY: f32,
   MESH_ID: f32,
   CUTOFF: f32
-}
+}`;
 
+const STRUCT_DIR_LIGHT = `
 struct DirLight {
   DIR: vec3<f32>,
   ENABLED: f32,
@@ -309,16 +309,18 @@ struct DirLight {
   SPECULAR: vec3<f32>,
   INTENSITY: f32,
   MESH_ID: f32
-}
+}`;
 
+const STRUCT_FOG = `
 struct Fog {
   ENABLED: f32,
   NEAR: f32,
   FAR: f32,
   COLOR: vec3<f32>,
   FROM: vec3<f32>
-}
+}`;
 
+const STRUCT_DECAL = `
 struct Decal {
   VP_MATRIX: mat4x4<f32>,
   TEXTURE_LEFT: f32,
@@ -328,7 +330,20 @@ struct Decal {
   ASPECT_RATIO: vec2<f32>,
   OPACITY: f32,
   GROUP: f32
-}
+}`;
+
+export const FRAGMENT_SHADER = /* wgsl */`
+${STRUCT_FRAG_OUT}
+${STRUCT_MESH_INFOS}
+${STRUCT_MAT_PARAMS}
+${STRUCT_SCENE_INFOS}
+${STRUCT_MATERIAL_COLORS}
+${STRUCT_MATERIAL_UVS}
+${STRUCT_POINT_LIGHT}
+${STRUCT_SPOT_LIGHT}
+${STRUCT_DIR_LIGHT}
+${STRUCT_FOG}
+${STRUCT_DECAL}
 
 @group(0) @binding(0) var<uniform> SCENE_INFOS: SceneInfos;
 @group(0) @binding(2) var<uniform> DIR_LIGHT: DirLight;
@@ -351,24 +366,28 @@ struct Decal {
 @group(2) @binding(3) var<uniform> MAT_TOON_LIGHT_DIR: vec3<f32>;
 @group(3) @binding(0) var MAT_TEXTURE: texture_2d<f32>;
 @group(3) @binding(1) var MAT_SAMPLER: sampler;
-@group(3) @binding(2) var MAT_DISPLACEMENT_TEXTURE: texture_2d<f32>;
-@group(3) @binding(3) var MAT_DISPLACEMENT_SAMPLER: sampler;
-@group(3) @binding(4) var MAT_DIFFUSE_TEXTURE: texture_2d<f32>;
-@group(3) @binding(5) var MAT_DIFFUSE_SAMPLER: sampler;
-@group(3) @binding(6) var MAT_SPECULAR_TEXTURE: texture_2d<f32>;
-@group(3) @binding(7) var MAT_SPECULAR_SAMPLER: sampler;
-@group(3) @binding(8) var MAT_EMISSIVE_TEXTURE: texture_2d<f32>;
-@group(3) @binding(9) var MAT_EMISSIVE_SAMPLER: sampler;
-@group(3) @binding(10) var MAT_NORM_TEXTURE: texture_2d<f32>;
-@group(3) @binding(11) var MAT_NORM_SAMPLER: sampler;
-@group(3) @binding(12) var MAT_ENV_MAP_TEXTURE: texture_cube<f32>;
-@group(3) @binding(13) var MAT_ENV_MAP_SAMPLER: sampler;
-@group(3) @binding(14) var MAT_TOON_TEXTURE: texture_2d<f32>;
-@group(3) @binding(15) var MAT_TOON_SAMPLER: sampler;
-@group(3) @binding(16) var MAT_S0_TEXTURE: texture_2d<f32>;
-@group(3) @binding(17) var MAT_S0_SAMPLER: sampler;
-@group(3) @binding(18) var MAT_S1_TEXTURE: texture_2d<f32>;
-@group(3) @binding(19) var MAT_S1_SAMPLER: sampler;
+
+@group(3) @binding(2) var MAT_SECONDARY_TEXTURE: texture_2d<f32>;
+@group(3) @binding(3) var MAT_SECONDARY_SAMPLER: sampler;
+
+@group(3) @binding(4) var MAT_DISPLACEMENT_TEXTURE: texture_2d<f32>;
+@group(3) @binding(5) var MAT_DISPLACEMENT_SAMPLER: sampler;
+@group(3) @binding(6) var MAT_DIFFUSE_TEXTURE: texture_2d<f32>;
+@group(3) @binding(7) var MAT_DIFFUSE_SAMPLER: sampler;
+@group(3) @binding(8) var MAT_SPECULAR_TEXTURE: texture_2d<f32>;
+@group(3) @binding(9) var MAT_SPECULAR_SAMPLER: sampler;
+@group(3) @binding(10) var MAT_EMISSIVE_TEXTURE: texture_2d<f32>;
+@group(3) @binding(11) var MAT_EMISSIVE_SAMPLER: sampler;
+@group(3) @binding(12) var MAT_NORM_TEXTURE: texture_2d<f32>;
+@group(3) @binding(13) var MAT_NORM_SAMPLER: sampler;
+@group(3) @binding(14) var MAT_ENV_MAP_TEXTURE: texture_cube<f32>;
+@group(3) @binding(15) var MAT_ENV_MAP_SAMPLER: sampler;
+@group(3) @binding(16) var MAT_TOON_TEXTURE: texture_2d<f32>;
+@group(3) @binding(17) var MAT_TOON_SAMPLER: sampler;
+@group(3) @binding(18) var MAT_S0_TEXTURE: texture_2d<f32>;
+@group(3) @binding(19) var MAT_S0_SAMPLER: sampler;
+@group(3) @binding(20) var MAT_S1_TEXTURE: texture_2d<f32>;
+@group(3) @binding(21) var MAT_S1_SAMPLER: sampler;
 
 @fragment
 fn main(
@@ -394,12 +413,12 @@ fn main(
 
   ${FRAG_BEGIN}
 
-  ${FRAG_PRE_TEXTURE}
+  var sss = textureSample(MAT_SECONDARY_TEXTURE, MAT_SECONDARY_SAMPLER, fragUV);
+
   var matS0 = textureSample(MAT_S0_TEXTURE, MAT_S0_SAMPLER, fragUV);
   var matS1 = textureSample(MAT_S1_TEXTURE, MAT_S1_SAMPLER, fragUV);
   var s0 = textureSample(S0_TEXTURE, S0_SAMPLER, fragUV);
   var s1 = textureSample(S1_TEXTURE, S1_SAMPLER, fragUV);
-  ${FRAG_POST_TEXTURE}
 
   var textureUV = MAT_UVS.TEXTURE_SCROLL + MAT_UVS.TEXTURE_OFFSET + fragUV;
   var shadow = 1.0;
@@ -478,7 +497,6 @@ fn main(
   {
     var IOR = 1.0 - log(1.0 - MAT_PARAMS.FACING_ALPHA_BLEND);
     outputColor.a *= pow(facing, IOR);
-    ${FRAG_FACING}
   }
 
   if (MAT_PARAMS.DISTANCE_ALPHA_BLEND != 0.0)

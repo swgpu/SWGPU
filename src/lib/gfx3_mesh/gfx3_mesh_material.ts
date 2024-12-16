@@ -27,6 +27,7 @@ interface MATOptions {
   specular?: vec3;
   emissive?: vec3;
   texture?: Gfx3Texture;
+  secondaryTexture?: Gfx3Texture;
   textureScrollAngle?: number;
   textureScrollRate?: number;
   displacementMap?: Gfx3Texture;
@@ -75,6 +76,9 @@ class Gfx3Material {
   toonLightDir: Float32Array;
   grp3: Gfx3StaticGroup;
   texture: Gfx3Texture;
+
+  secondaryTexture: Gfx3Texture;
+
   displacementMap: Gfx3Texture;
   diffuseMap: Gfx3Texture;
   specularMap: Gfx3Texture;
@@ -161,24 +165,28 @@ class Gfx3Material {
     this.grp3 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 3);
     this.texture = this.grp3.setTexture(0, 'MAT_TEXTURE', options.texture ?? gfx3Manager.createTextureFromBitmap());
     this.texture = this.grp3.setSampler(1, 'MAT_SAMPLER', this.texture);
-    this.displacementMap = this.grp3.setTexture(2, 'MAT_DISPLACEMENT_TEXTURE', options.displacementMap ?? gfx3Manager.createTextureFromBitmap());
-    this.displacementMap = this.grp3.setSampler(3, 'MAT_DISPLACEMENT_SAMPLER', this.displacementMap);
-    this.diffuseMap = this.grp3.setTexture(4, 'MAT_DIFFUSE_TEXTURE', options.diffuseMap ?? gfx3Manager.createTextureFromBitmap());
-    this.diffuseMap = this.grp3.setSampler(5, 'MAT_DIFFUSE_SAMPLER', this.diffuseMap);
-    this.specularMap = this.grp3.setTexture(6, 'MAT_SPECULAR_TEXTURE', options.specularMap ?? gfx3Manager.createTextureFromBitmap());
-    this.specularMap = this.grp3.setSampler(7, 'MAT_SPECULAR_SAMPLER', this.specularMap);
-    this.emissiveMap = this.grp3.setTexture(8, 'MAT_EMISSIVE_TEXTURE', options.emissiveMap ?? gfx3Manager.createTextureFromBitmap());
-    this.emissiveMap = this.grp3.setSampler(9, 'MAT_EMISSIVE_SAMPLER', this.emissiveMap);
-    this.normalMap = this.grp3.setTexture(10, 'MAT_NORM_TEXTURE', options.normalMap ?? gfx3Manager.createTextureFromBitmap());
-    this.normalMap = this.grp3.setSampler(11, 'MAT_NORM_SAMPLER', this.normalMap);
-    this.envMap = this.grp3.setTexture(12, 'MAT_ENV_MAP_TEXTURE', options.envMap ?? gfx3Manager.createCubeMapFromBitmap(), { dimension: 'cube' });
-    this.envMap = this.grp3.setSampler(13, 'MAT_ENV_MAP_SAMPLER', this.envMap);
-    this.toonMap = this.grp3.setTexture(14, 'MAT_TOON_TEXTURE', options.toonMap ?? gfx3Manager.createTextureFromBitmap());
-    this.toonMap = this.grp3.setSampler(15, 'MAT_TOON_SAMPLER', this.toonMap);
-    this.s0Texture = this.grp3.setTexture(16, 'MAT_S0_TEXTURE', gfx3Manager.createTextureFromBitmap());
-    this.s0Texture = this.grp3.setSampler(17, 'MAT_S0_SAMPLER', this.s0Texture);
-    this.s1Texture = this.grp3.setTexture(18, 'MAT_S1_TEXTURE', gfx3Manager.createTextureFromBitmap());
-    this.s1Texture = this.grp3.setSampler(19, 'MAT_S1_SAMPLER', this.s1Texture);
+    
+    this.secondaryTexture = this.grp3.setTexture(2, 'MAT_SECONDARY_TEXTURE', options.secondaryTexture ?? gfx3Manager.createTextureFromBitmap());
+    this.secondaryTexture = this.grp3.setSampler(3, 'MAT_SECONDARY_SAMPLER', this.secondaryTexture);
+
+    this.displacementMap = this.grp3.setTexture(4, 'MAT_DISPLACEMENT_TEXTURE', options.displacementMap ?? gfx3Manager.createTextureFromBitmap());
+    this.displacementMap = this.grp3.setSampler(5, 'MAT_DISPLACEMENT_SAMPLER', this.displacementMap);
+    this.diffuseMap = this.grp3.setTexture(6, 'MAT_DIFFUSE_TEXTURE', options.diffuseMap ?? gfx3Manager.createTextureFromBitmap());
+    this.diffuseMap = this.grp3.setSampler(7, 'MAT_DIFFUSE_SAMPLER', this.diffuseMap);
+    this.specularMap = this.grp3.setTexture(8, 'MAT_SPECULAR_TEXTURE', options.specularMap ?? gfx3Manager.createTextureFromBitmap());
+    this.specularMap = this.grp3.setSampler(9, 'MAT_SPECULAR_SAMPLER', this.specularMap);
+    this.emissiveMap = this.grp3.setTexture(10, 'MAT_EMISSIVE_TEXTURE', options.emissiveMap ?? gfx3Manager.createTextureFromBitmap());
+    this.emissiveMap = this.grp3.setSampler(11, 'MAT_EMISSIVE_SAMPLER', this.emissiveMap);
+    this.normalMap = this.grp3.setTexture(12, 'MAT_NORM_TEXTURE', options.normalMap ?? gfx3Manager.createTextureFromBitmap());
+    this.normalMap = this.grp3.setSampler(13, 'MAT_NORM_SAMPLER', this.normalMap);
+    this.envMap = this.grp3.setTexture(14, 'MAT_ENV_MAP_TEXTURE', options.envMap ?? gfx3Manager.createCubeMapFromBitmap(), { dimension: 'cube' });
+    this.envMap = this.grp3.setSampler(15, 'MAT_ENV_MAP_SAMPLER', this.envMap);
+    this.toonMap = this.grp3.setTexture(16, 'MAT_TOON_TEXTURE', options.toonMap ?? gfx3Manager.createTextureFromBitmap());
+    this.toonMap = this.grp3.setSampler(17, 'MAT_TOON_SAMPLER', this.toonMap);
+    this.s0Texture = this.grp3.setTexture(18, 'MAT_S0_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.s0Texture = this.grp3.setSampler(19, 'MAT_S0_SAMPLER', this.s0Texture);
+    this.s1Texture = this.grp3.setTexture(20, 'MAT_S1_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.s1Texture = this.grp3.setSampler(21, 'MAT_S1_SAMPLER', this.s1Texture);
 
     this.grp2.allocate();
     this.grp3.allocate();
@@ -692,15 +700,16 @@ class Gfx3Material {
   getGroup03(): Gfx3StaticGroup {
     if (this.texturesChanged) {
       this.grp3.setTexture(0, 'MAT_TEXTURE', this.texture);
-      this.grp3.setTexture(2, 'MAT_DISPLACEMENT_TEXTURE', this.displacementMap);
-      this.grp3.setTexture(4, 'MAT_DIFFUSE_TEXTURE', this.diffuseMap);
-      this.grp3.setTexture(6, 'MAT_SPECULAR_TEXTURE', this.specularMap);
-      this.grp3.setTexture(8, 'MAT_EMISSIVE_TEXTURE', this.emissiveMap);
-      this.grp3.setTexture(10, 'MAT_NORM_TEXTURE', this.normalMap);
-      this.grp3.setTexture(12, 'MAT_ENV_MAP_TEXTURE', this.envMap, { dimension: 'cube' });
-      this.grp3.setTexture(14, 'MAT_TOON_TEXTURE', this.toonMap);
-      this.grp3.setTexture(16, 'MAT_S0_TEXTURE', this.s0Texture);
-      this.grp3.setTexture(18, 'MAT_S1_TEXTURE', this.s1Texture);
+      this.grp3.setTexture(2, 'MAT_SECONDARY_TEXTURE', this.secondaryTexture);
+      this.grp3.setTexture(4, 'MAT_DISPLACEMENT_TEXTURE', this.displacementMap);
+      this.grp3.setTexture(6, 'MAT_DIFFUSE_TEXTURE', this.diffuseMap);
+      this.grp3.setTexture(8, 'MAT_SPECULAR_TEXTURE', this.specularMap);
+      this.grp3.setTexture(10, 'MAT_EMISSIVE_TEXTURE', this.emissiveMap);
+      this.grp3.setTexture(12, 'MAT_NORM_TEXTURE', this.normalMap);
+      this.grp3.setTexture(14, 'MAT_ENV_MAP_TEXTURE', this.envMap, { dimension: 'cube' });
+      this.grp3.setTexture(16, 'MAT_TOON_TEXTURE', this.toonMap);
+      this.grp3.setTexture(18, 'MAT_S0_TEXTURE', this.s0Texture);
+      this.grp3.setTexture(20, 'MAT_S1_TEXTURE', this.s1Texture);
       this.grp3.allocate();
       this.texturesChanged = false;
     }
