@@ -241,6 +241,7 @@ Congratulation, your static mesh is now exported !
 
 ## Todos
 - Setup Electron in template
+- Add json property for secondary texture blend mode
 
 ## Changelog
 ```
