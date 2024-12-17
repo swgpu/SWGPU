@@ -128,10 +128,10 @@ export const PIPELINE_DESC: any = {
 const STRUCT_MAT_PARAMS = `
 struct MaterialParams {
   ID: f32,
-  OPACITY: f32,
   NORMAL_INTENSITY: f32,
   HAS_LIGHTNING: f32,
   HAS_TEXTURE: f32,
+  HAS_SECONDARY_TEXTURE: f32,
   HAS_DISPLACEMENT_MAP: f32,
   DISPLACEMENT_MAP_FACTOR: f32,
   HAS_DIFFUSE_MAP: f32,
@@ -140,6 +140,10 @@ struct MaterialParams {
   HAS_NORMAL_MAP: f32,
   HAS_ENV_MAP: f32,
   HAS_TOON_MAP: f32,
+  HAS_DISSOLVE_TEXTURE: f32,
+  DISSOLVE_GLOW_RANGE: f32,
+  DISSOLVE_GLOW_FALLOFF: f32,
+  DISSOLVE_AMOUNT: f32,
   HAS_DECAL: f32,
   HAS_SHADOW: f32,
   SHININESS: f32,
@@ -269,14 +273,22 @@ struct MaterialColors {
   EMISSIVE: vec3<f32>,
   AMBIENT: vec3<f32>,
   DIFFUSE: vec3<f32>,
-  SPECULAR: vec3<f32>
+  SPECULAR: vec3<f32>,
+  BLEND: vec4<f32>,
+  DISSOLVE_GLOW: vec3<f32>
 }`;
 
 const STRUCT_MATERIAL_UVS = `
 struct MaterialUvs {
   TEXTURE_SCROLL: vec2<f32>,
   TEXTURE_OFFSET: vec2<f32>,
-  DISPLACEMENT_MAP_SCROLL: vec2<f32>
+  TEXTURE_SCALE: vec2<f32>,
+  SECONDARY_TEXTURE_SCROLL: vec2<f32>,
+  SECONDARY_TEXTURE_SCALE: vec2<f32>,
+  DISPLACEMENT_MAP_SCROLL: vec2<f32>,
+  DISPLACEMENT_MAP_SCALE: vec2<f32>,
+  DISSOLVE_TEXTURE_SCROLL: vec2<f32>,
+  DISSOLVE_TEXTURE_SCALE: vec2<f32>
 }`;
 
 const STRUCT_POINT_LIGHT = `
@@ -366,10 +378,8 @@ ${STRUCT_DECAL}
 @group(2) @binding(3) var<uniform> MAT_TOON_LIGHT_DIR: vec3<f32>;
 @group(3) @binding(0) var MAT_TEXTURE: texture_2d<f32>;
 @group(3) @binding(1) var MAT_SAMPLER: sampler;
-
 @group(3) @binding(2) var MAT_SECONDARY_TEXTURE: texture_2d<f32>;
 @group(3) @binding(3) var MAT_SECONDARY_SAMPLER: sampler;
-
 @group(3) @binding(4) var MAT_DISPLACEMENT_TEXTURE: texture_2d<f32>;
 @group(3) @binding(5) var MAT_DISPLACEMENT_SAMPLER: sampler;
 @group(3) @binding(6) var MAT_DIFFUSE_TEXTURE: texture_2d<f32>;
@@ -384,10 +394,12 @@ ${STRUCT_DECAL}
 @group(3) @binding(15) var MAT_ENV_MAP_SAMPLER: sampler;
 @group(3) @binding(16) var MAT_TOON_TEXTURE: texture_2d<f32>;
 @group(3) @binding(17) var MAT_TOON_SAMPLER: sampler;
-@group(3) @binding(18) var MAT_S0_TEXTURE: texture_2d<f32>;
-@group(3) @binding(19) var MAT_S0_SAMPLER: sampler;
-@group(3) @binding(20) var MAT_S1_TEXTURE: texture_2d<f32>;
-@group(3) @binding(21) var MAT_S1_SAMPLER: sampler;
+@group(3) @binding(18) var MAT_DISSOLVE_TEXTURE: texture_2d<f32>;
+@group(3) @binding(19) var MAT_DISSOLVE_SAMPLER: sampler;
+@group(3) @binding(20) var MAT_S0_TEXTURE: texture_2d<f32>;
+@group(3) @binding(21) var MAT_S0_SAMPLER: sampler;
+@group(3) @binding(22) var MAT_S1_TEXTURE: texture_2d<f32>;
+@group(3) @binding(23) var MAT_S1_SAMPLER: sampler;
 
 @fragment
 fn main(
@@ -410,32 +422,65 @@ fn main(
   var outputColor = vec4(0.0, 0.0, 0.0, 1.0);
   var texel = vec4(1.0, 1.0, 1.0, 1.0);
   var normalUV = FragUV;
-
-  ${FRAG_BEGIN}
-
-  var sss = textureSample(MAT_SECONDARY_TEXTURE, MAT_SECONDARY_SAMPLER, fragUV);
-
+  var shadow = 1.0;
   var matS0 = textureSample(MAT_S0_TEXTURE, MAT_S0_SAMPLER, fragUV);
   var matS1 = textureSample(MAT_S1_TEXTURE, MAT_S1_SAMPLER, fragUV);
   var s0 = textureSample(S0_TEXTURE, S0_SAMPLER, fragUV);
   var s1 = textureSample(S1_TEXTURE, S1_SAMPLER, fragUV);
 
-  var textureUV = MAT_UVS.TEXTURE_SCROLL + MAT_UVS.TEXTURE_OFFSET + fragUV;
-  var shadow = 1.0;
+  ${FRAG_BEGIN}
+
+  var textureUV = CalcTextureUV(
+    MAT_UVS.TEXTURE_SCROLL,
+    MAT_UVS.TEXTURE_SCALE,
+    fragUV,
+    MAT_UVS.TEXTURE_OFFSET
+  );
+
+  var secondaryTextureUV = CalcTextureUV(
+    MAT_UVS.SECONDARY_TEXTURE_SCROLL,
+    MAT_UVS.SECONDARY_TEXTURE_SCALE,
+    fragUV,
+    vec2(0.0, 0.0)
+  );
+
+  var displacementTextureUV = CalcTextureUV(
+    MAT_UVS.DISPLACEMENT_MAP_SCROLL,
+    MAT_UVS.DISPLACEMENT_MAP_SCALE,
+    fragUV,
+    vec2(0.0, 0.0)
+  );
+
+  var dissolveTextureUV = CalcTextureUV(
+    MAT_UVS.DISSOLVE_TEXTURE_SCROLL,
+    MAT_UVS.DISSOLVE_TEXTURE_SCALE,
+    fragUV,
+    vec2(0.0, 0.0)
+  );
 
   if (MAT_PARAMS.HAS_DISPLACEMENT_MAP == 1.0)
   {
-    textureUV += CalcDisplacementMap(fragUV);
+    textureUV += CalcDisplacementMap(displacementTextureUV);
   }
 
   if (MAT_PARAMS.HAS_TEXTURE == 1.0)
   {
-    texel = textureSample(MAT_TEXTURE, MAT_SAMPLER, textureUV) * vec4<f32>(fragColor, 1.0);
+    texel *= textureSample(MAT_TEXTURE, MAT_SAMPLER, textureUV);
   }
-  else
+
+  if (MAT_PARAMS.HAS_SECONDARY_TEXTURE == 1.0)
   {
-    texel = vec4(fragColor, 1.0);
+    texel *= textureSample(MAT_SECONDARY_TEXTURE, MAT_SECONDARY_SAMPLER, secondaryTextureUV);
   }
+
+  if (MAT_PARAMS.HAS_SECONDARY_TEXTURE == 2.0)
+  {
+    var texel2 = textureSample(MAT_SECONDARY_TEXTURE, MAT_SECONDARY_SAMPLER, secondaryTextureUV);
+    texel = mix(texel, texel2, texel2.a);
+  }
+
+  texel *= vec4(fragColor, 1.0);
+  texel *= MAT_COLORS.BLEND;
 
   if (texel.a == 0)
   {
@@ -480,30 +525,18 @@ fn main(
     outputColor += CalcEnvMap(fragNormal, fragPos);
   }
 
+  if (MAT_PARAMS.HAS_DISSOLVE_TEXTURE == 1.0)
+  {
+    var isGlowing = CalcDissolve(dissolveTextureUV);
+    outputColor = mix(outputColor, vec4(MAT_COLORS.DISSOLVE_GLOW, outputColor.a), isGlowing);
+  }
+
   if (FOG.ENABLED == 1.0)
   {
-    outputColor = CalcFog(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY, fragPos);
-  }
-  else
-  {
-    outputColor = vec4(outputColor.rgb, texel.a * MAT_PARAMS.OPACITY);
+    outputColor = CalcFog(outputColor.rgb, texel.a, fragPos);
   }
 
-  var viewDelta = SCENE_INFOS.CAMERA_POS - fragPos;
-  var viewDir = normalize(SCENE_INFOS.CAMERA_POS - fragPos);
-  var facing = max(dot(viewDir, fragNormal), 0.0);
-
-  if (MAT_PARAMS.FACING_ALPHA_BLEND < 1.0)
-  {
-    var IOR = 1.0 - log(1.0 - MAT_PARAMS.FACING_ALPHA_BLEND);
-    outputColor.a *= pow(facing, IOR);
-  }
-
-  if (MAT_PARAMS.DISTANCE_ALPHA_BLEND != 0.0)
-  {
-    var len = clamp(length(viewDelta) - MAT_PARAMS.DISTANCE_ALPHA_BLEND, 0.0, 1.0);
-    outputColor.a *= len;
-  }
+  outputColor.a = CalcVolumetric(outputColor.a, fragNormal, fragPos);
 
   ${FRAG_END}
 
@@ -512,6 +545,16 @@ fn main(
   output.Normal = ${FRAG_OUT_NORMAL ?? 'vec4(normalize(fragNormal), 1.0);'}
   output.Id = ${FRAG_OUT_ID ?? 'MESH_INFOS.ID;'}
   return output;
+}
+
+// *****************************************************************************************************************
+// CALC FOG
+// *****************************************************************************************************************
+fn CalcTextureUV(scroll: vec2<f32>, scale: vec2<f32>, fragUV: vec2<f32>, offset: vec2<f32>) -> vec2<f32>
+{
+  var scrollX = cos(scroll[0]) * scroll[1] * SCENE_INFOS.TIME;
+  var scrollY = sin(scroll[0]) * scroll[1] * SCENE_INFOS.TIME;
+  return vec2(scrollX + offset.x + (fragUV.x * scale.x), scrollY + offset.y + (fragUV.y * scale.y));
 }
 
 // *****************************************************************************************************************
@@ -598,9 +641,8 @@ fn CalcEnvMap(normal: vec3<f32>, fragPos: vec3<f32>) -> vec4<f32>
 // *****************************************************************************************************************
 // CALC DISPLACEMENT MAP
 // *****************************************************************************************************************
-fn CalcDisplacementMap(fragUV: vec2<f32>) -> vec2<f32>
+fn CalcDisplacementMap(textureUV: vec2<f32>) -> vec2<f32>
 {
-  var textureUV = MAT_UVS.DISPLACEMENT_MAP_SCROLL + fragUV;
   var offset = vec2(0.0, 0.0);
   var greyScale = textureSample(MAT_DISPLACEMENT_TEXTURE, MAT_DISPLACEMENT_SAMPLER, textureUV).r;
   offset.x = clamp(MAT_PARAMS.DISPLACEMENT_MAP_FACTOR * ((greyScale * 2) - 1), 0.0, 1.0);
@@ -768,4 +810,46 @@ fn CalcShadow(fragShadowPos: vec3<f32>) -> f32
   }
 
   return visibility / 9.0;
+}
+
+// *****************************************************************************************************************
+// CALC VOLUMETRIC
+// *****************************************************************************************************************
+fn CalcVolumetric(inputAlpha: f32, normal: vec3<f32>, fragPos: vec3<f32>) -> f32
+{
+  var viewDelta = SCENE_INFOS.CAMERA_POS - fragPos;
+  var viewDir = normalize(SCENE_INFOS.CAMERA_POS - fragPos);
+  var facing = max(dot(viewDir, normal), 0.0);
+  var outputAlpha = inputAlpha;
+
+  if (MAT_PARAMS.FACING_ALPHA_BLEND < 1.0)
+  {
+    var IOR = 1.0 - log(1.0 - MAT_PARAMS.FACING_ALPHA_BLEND);
+    outputAlpha *= pow(facing, IOR);
+  }
+
+  if (MAT_PARAMS.DISTANCE_ALPHA_BLEND != 0.0)
+  {
+    var len = clamp(length(viewDelta) - MAT_PARAMS.DISTANCE_ALPHA_BLEND, 0.0, 1.0);
+    outputAlpha *= len;
+  }
+  
+  return outputAlpha;
+}
+
+// *****************************************************************************************************************
+// CALC DISSOLVE
+// *****************************************************************************************************************
+fn CalcDissolve(textureUV: vec2<f32>) -> f32
+{
+  var dissolve = textureSample(MAT_DISSOLVE_TEXTURE, MAT_DISSOLVE_SAMPLER, textureUV).r * 0.999;
+  var isVisible = dissolve - MAT_PARAMS.DISSOLVE_AMOUNT;
+  if (isVisible < 0)
+  {
+    discard;
+  }
+
+  var edge = MAT_PARAMS.DISSOLVE_GLOW_RANGE + MAT_PARAMS.DISSOLVE_GLOW_FALLOFF;
+  var away = MAT_PARAMS.DISSOLVE_GLOW_RANGE;
+  return smoothstep(edge, away, isVisible);
 }`;

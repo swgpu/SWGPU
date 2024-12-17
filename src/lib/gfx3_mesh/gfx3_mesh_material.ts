@@ -5,35 +5,40 @@ import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { MAT_SLOT_NAMES } from './gfx3_mesh_shader';
 
-interface MATFrame {
-  offsetX: number;
-  offsetY: number;
-};
-
 interface MATAnimation {
   name: string;
-  frames: Array<MATFrame>;
+  frameWidth: number;
+  frameHeight: number;
+  numCol: number;
+  numRow: number;
+  numFrames: number;
   frameDuration: number;
 };
 
 interface MATOptions {
   animations?: Array<MATAnimation>;
   id?: number;
-  opacity?: number;
   normalIntensity?: number;
   lightning?: boolean;
   ambient?: vec3;
   diffuse?: vec3;
   specular?: vec3;
   emissive?: vec3;
+  blend?: vec4;
+  dissolveGlow?: vec3;
   texture?: Gfx3Texture;
-  secondaryTexture?: Gfx3Texture;
   textureScrollAngle?: number;
   textureScrollRate?: number;
+  textureScale?: vec2,
+  secondaryTexture?: Gfx3Texture;
+  secondaryTextureScrollAngle?: number;
+  secondaryTextureScrollRate?: number;
+  secondaryTextureScale?: vec2;
   displacementMap?: Gfx3Texture;
   displacementMapScrollAngle?: number;
   displacementMapScrollRate?: number;
   displacementMapFactor?: number;
+  displacementMapScale?: vec2;
   toonLightDir?: vec3;
   diffuseMap?: Gfx3Texture;
   specularMap?: Gfx3Texture;
@@ -41,6 +46,13 @@ interface MATOptions {
   normalMap?: Gfx3Texture;
   envMap?: Gfx3Texture;
   toonMap?: Gfx3Texture;
+  dissolveTexture?: Gfx3Texture;
+  dissolveGlowRange?: number;
+  dissolveGlowFalloff?: number;
+  dissolveAmount?: number;
+  dissolveTextureScrollAngle?: number;
+  dissolveTextureScrollRate?: number;
+  dissolveTextureScale?: vec2;
   decalEnabled?: boolean;
   shadowEnabled?: boolean;
   shininess?: number;
@@ -65,10 +77,6 @@ class Gfx3Material {
   frameProgress: number;
   dataChanged: boolean;
   texturesChanged: boolean;
-  textureScrollAngle: number;
-  textureScrollRate: number;
-  displacementMapScrollAngle: number;
-  displacementMapScrollRate: number;
   grp2: Gfx3StaticGroup;
   colors: Float32Array;
   params: Float32Array;
@@ -76,9 +84,7 @@ class Gfx3Material {
   toonLightDir: Float32Array;
   grp3: Gfx3StaticGroup;
   texture: Gfx3Texture;
-
   secondaryTexture: Gfx3Texture;
-
   displacementMap: Gfx3Texture;
   diffuseMap: Gfx3Texture;
   specularMap: Gfx3Texture;
@@ -86,6 +92,7 @@ class Gfx3Material {
   normalMap: Gfx3Texture;
   envMap: Gfx3Texture;
   toonMap: Gfx3Texture;
+  dissolveTexture: Gfx3Texture;
   s0Texture: Gfx3Texture;
   s1Texture: Gfx3Texture;
 
@@ -100,13 +107,9 @@ class Gfx3Material {
     this.frameProgress = 0;
     this.dataChanged = true;
     this.texturesChanged = false;
-    this.textureScrollAngle = options.textureScrollAngle ?? 0;
-    this.textureScrollRate = options.textureScrollRate ?? 0;
-    this.displacementMapScrollAngle = options.displacementMapScrollAngle ?? 0;
-    this.displacementMapScrollRate = options.displacementMapScrollRate ?? 0;
 
     this.grp2 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 2);
-    this.colors = this.grp2.setFloat(0, 'MAT_COLORS', 16);
+    this.colors = this.grp2.setFloat(0, 'MAT_COLORS', 24);
     this.colors[0] = options.emissive ? options.emissive[0] : 0.0;
     this.colors[1] = options.emissive ? options.emissive[1] : 0.0;
     this.colors[2] = options.emissive ? options.emissive[2] : 0.0;
@@ -123,12 +126,21 @@ class Gfx3Material {
     this.colors[13] = options.specular ? options.specular[1] : 0.0;
     this.colors[14] = options.specular ? options.specular[2] : 0.0;
     this.colors[15] = 0.0;
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 38);
+    this.colors[16] = options.blend ? options.blend[0] : 1.0;
+    this.colors[17] = options.blend ? options.blend[1] : 1.0;
+    this.colors[18] = options.blend ? options.blend[2] : 1.0;
+    this.colors[19] = options.blend ? options.blend[3] : 1.0;
+    this.colors[20] = options.dissolveGlow ? options.dissolveGlow[0] : 1.0;
+    this.colors[21] = options.dissolveGlow ? options.dissolveGlow[1] : 1.0;
+    this.colors[22] = options.dissolveGlow ? options.dissolveGlow[2] : 1.0;
+    this.colors[23] = 0.0;
+
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 42);
     this.params[0] = options.id ?? 0;
-    this.params[1] = options.opacity ?? 1.0;
-    this.params[2] = options.normalIntensity ?? 1.0;
-    this.params[3] = options.lightning ? 1.0 : 0.0;
-    this.params[4] = options.texture ? 1.0 : 0.0;
+    this.params[1] = options.normalIntensity ?? 1.0;
+    this.params[2] = options.lightning ? 1.0 : 0.0;
+    this.params[3] = options.texture ? 1.0 : 0.0;
+    this.params[4] = options.secondaryTexture ? 1.0 : 0.0;
     this.params[5] = options.displacementMap ? 1.0 : 0.0;
     this.params[6] = options.displacementMapFactor ?? 0.0;
     this.params[7] = options.diffuseMap ? 1.0 : 0.0;
@@ -137,26 +149,49 @@ class Gfx3Material {
     this.params[10] = options.normalMap ? 1.0 : 0.0;
     this.params[11] = options.envMap ? 1.0 : 0.0;
     this.params[12] = options.toonMap ? 1.0 : 0.0;
-    this.params[13] = options.decalEnabled ? 1.0 : 0.0;
-    this.params[14] = options.shadowEnabled ? 1.0 : 0.0;
-    this.params[15] = options.shininess ?? 0.0;
-    this.params[16] = options.emissiveFactor ?? 1.0;
-    this.params[17] = options.toonBlending ?? 1.0;
-    this.params[18] = options.facingAlphaBlend ?? 1.0;
-    this.params[19] = options.distanceAlphaBlend ?? 0.0;
-    this.params[20] = options.s0Texture ? 1.0 : 0.0;
-    this.params[21] = options.s1Texture ? 1.0 : 0.0;
+    this.params[13] = options.dissolveTexture ? 1.0 : 0.0;
+    this.params[14] = options.dissolveGlowRange ?? 0.0;
+    this.params[15] = options.dissolveGlowFalloff ?? 0.0;
+    this.params[16] = options.dissolveAmount ?? 0.5;
+    this.params[17] = options.decalEnabled ? 1.0 : 0.0;
+    this.params[18] = options.shadowEnabled ? 1.0 : 0.0;
+    this.params[19] = options.shininess ?? 0.0;
+    this.params[20] = options.emissiveFactor ?? 1.0;
+    this.params[21] = options.toonBlending ?? 1.0;
+    this.params[22] = options.facingAlphaBlend ?? 1.0;
+    this.params[23] = options.distanceAlphaBlend ?? 0.0;
+    this.params[24] = options.s0Texture ? 1.0 : 0.0;
+    this.params[25] = options.s1Texture ? 1.0 : 0.0;
 
     if (options.sParams) {
       for (const sParam of options.sParams) {
         const paramIndex = MAT_SLOT_NAMES.findIndex(n => n == sParam.name);
         if (paramIndex != -1) {
-          this.params[22 + paramIndex] = sParam.value ?? 0.0;
+          this.params[26 + paramIndex] = sParam.value ?? 0.0;
         }
       }
     }
 
-    this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 6);
+    this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 18);
+    this.uvs[0] = options.textureScrollAngle ? options.textureScrollAngle : 0.0;
+    this.uvs[1] = options.textureScrollRate ? options.textureScrollRate : 0.0;
+    this.uvs[2] = 0.0;
+    this.uvs[3] = 0.0;
+    this.uvs[4] = options.textureScale ? options.textureScale[0] : 1.0;
+    this.uvs[5] = options.textureScale ? options.textureScale[1] : 1.0;
+    this.uvs[6] = options.secondaryTextureScrollAngle ? options.secondaryTextureScrollAngle : 0.0;
+    this.uvs[7] = options.secondaryTextureScrollRate ? options.secondaryTextureScrollRate : 0.0;
+    this.uvs[8] = options.secondaryTextureScale ? options.secondaryTextureScale[0] : 1.0;
+    this.uvs[9] = options.secondaryTextureScale ? options.secondaryTextureScale[1] : 1.0;
+    this.uvs[10] = options.displacementMapScrollAngle ? options.displacementMapScrollAngle : 0.0;
+    this.uvs[11] = options.displacementMapScrollRate ? options.displacementMapScrollRate : 0.0;
+    this.uvs[12] = options.displacementMapScale ? options.displacementMapScale[0] : 1.0;
+    this.uvs[13] = options.displacementMapScale ? options.displacementMapScale[1] : 1.0;
+    this.uvs[14] = options.dissolveTextureScrollAngle ? options.dissolveTextureScrollAngle : 0.0;
+    this.uvs[15] = options.dissolveTextureScrollRate ? options.dissolveTextureScrollRate : 0.0;
+    this.uvs[16] = options.dissolveTextureScale ? options.dissolveTextureScale[0] : 1.0;
+    this.uvs[17] = options.dissolveTextureScale ? options.dissolveTextureScale[1] : 1.0;
+
     this.toonLightDir = this.grp2.setFloat(3, 'MAT_TOON_LIGHT_DIR', 3);
     this.toonLightDir[0] = options.toonLightDir ? options.toonLightDir[0] : 0.0;
     this.toonLightDir[1] = options.toonLightDir ? options.toonLightDir[1] : 0.0;
@@ -165,10 +200,8 @@ class Gfx3Material {
     this.grp3 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 3);
     this.texture = this.grp3.setTexture(0, 'MAT_TEXTURE', options.texture ?? gfx3Manager.createTextureFromBitmap());
     this.texture = this.grp3.setSampler(1, 'MAT_SAMPLER', this.texture);
-    
     this.secondaryTexture = this.grp3.setTexture(2, 'MAT_SECONDARY_TEXTURE', options.secondaryTexture ?? gfx3Manager.createTextureFromBitmap());
     this.secondaryTexture = this.grp3.setSampler(3, 'MAT_SECONDARY_SAMPLER', this.secondaryTexture);
-
     this.displacementMap = this.grp3.setTexture(4, 'MAT_DISPLACEMENT_TEXTURE', options.displacementMap ?? gfx3Manager.createTextureFromBitmap());
     this.displacementMap = this.grp3.setSampler(5, 'MAT_DISPLACEMENT_SAMPLER', this.displacementMap);
     this.diffuseMap = this.grp3.setTexture(6, 'MAT_DIFFUSE_TEXTURE', options.diffuseMap ?? gfx3Manager.createTextureFromBitmap());
@@ -183,10 +216,12 @@ class Gfx3Material {
     this.envMap = this.grp3.setSampler(15, 'MAT_ENV_MAP_SAMPLER', this.envMap);
     this.toonMap = this.grp3.setTexture(16, 'MAT_TOON_TEXTURE', options.toonMap ?? gfx3Manager.createTextureFromBitmap());
     this.toonMap = this.grp3.setSampler(17, 'MAT_TOON_SAMPLER', this.toonMap);
-    this.s0Texture = this.grp3.setTexture(18, 'MAT_S0_TEXTURE', gfx3Manager.createTextureFromBitmap());
-    this.s0Texture = this.grp3.setSampler(19, 'MAT_S0_SAMPLER', this.s0Texture);
-    this.s1Texture = this.grp3.setTexture(20, 'MAT_S1_TEXTURE', gfx3Manager.createTextureFromBitmap());
-    this.s1Texture = this.grp3.setSampler(21, 'MAT_S1_SAMPLER', this.s1Texture);
+    this.dissolveTexture = this.grp3.setTexture(18, 'MAT_DISSOLVE_TEXTURE', options.dissolveTexture ?? gfx3Manager.createTextureFromBitmap());
+    this.dissolveTexture = this.grp3.setSampler(19, 'MAT_DISSOLVE_SAMPLER', this.dissolveTexture);
+    this.s0Texture = this.grp3.setTexture(20, 'MAT_S0_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.s0Texture = this.grp3.setSampler(21, 'MAT_S0_SAMPLER', this.s0Texture);
+    this.s1Texture = this.grp3.setTexture(22, 'MAT_S1_TEXTURE', gfx3Manager.createTextureFromBitmap());
+    this.s1Texture = this.grp3.setSampler(23, 'MAT_S1_SAMPLER', this.s1Texture);
 
     this.grp2.allocate();
     this.grp3.allocate();
@@ -207,22 +242,15 @@ class Gfx3Material {
 
     const animations = new Array<MATAnimation>();
     for (const obj of json['Animations']) {
-      const animation: MATAnimation = {
+      animations.push({
         name: obj['Name'],
-        frames: [],
+        frameWidth: parseInt(obj['FrameWidth']),
+        frameHeight: parseInt(obj['FrameHeight']),
+        numCol: parseInt(obj['NumCol']),
+        numRow: parseInt(obj['NumRow']),
+        numFrames: parseInt(obj['NumFrames']),
         frameDuration: parseInt(obj['FrameDuration'])
-      };
-
-      const frames = obj['Frames'].split(';');
-      for (const frame of frames) {
-        const offsetXY = frame.split(',');
-        animation.frames.push({
-          offsetX: offsetXY[0],
-          offsetY: offsetXY[1]
-        });
-      }
-
-      animations.push(animation);
+      });
     }
 
     const sParams = new Array<{name: string, value: number}>();
@@ -236,19 +264,26 @@ class Gfx3Material {
     return new Gfx3Material({
       animations: animations,
       id: json['Id'],
-      opacity: json['Opacity'],
       normalIntensity: json['NormalIntensity'],
       lightning: json['Lightning'],
       emissive: json['Emissive'],
       ambient: json['Ambient'],
       diffuse: json['Diffuse'],
       specular: json['Specular'],
+      blend: json['Blend'],
+      dissolveGlow: json['DissolveGlow'],
       texture: json['Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['Texture']) : undefined,
       textureScrollAngle: json['TextureScrollAngle'],
       textureScrollRate: json['TextureScrollRate'],
+      textureScale: json['TextureScale'],
+      secondaryTexture: json['SecondaryTexture'] ? await gfx3TextureManager.loadTexture(textureDir + json['SecondaryTexture']) : undefined,
+      secondaryTextureScrollAngle: json['SecondaryTextureScrollAngle'],
+      secondaryTextureScrollRate: json['SecondaryTextureScrollRate'],
+      secondaryTextureScale: json['SecondaryTextureScale'],
       displacementMap: json['DisplacementMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['DisplacementMap']) : undefined,
       displacementMapScrollAngle: json['DisplacementMapScrollAngle'],
       displacementMapScrollRate: json['DisplacementMapScrollRate'],
+      displacementMapScale: json['DisplacementMapScale'],
       displacementMapFactor: json['DisplacementMapFactor'],
       diffuseMap: json['DiffuseMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['DiffuseMap']) : undefined,
       specularMap: json['SpecularMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['SpecularMap']) : undefined,
@@ -256,6 +291,15 @@ class Gfx3Material {
       normalMap: json['NormalMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['NormalMap']) : undefined,
       envMap: json['EnvMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['EnvMap']) : undefined,
       toonMap: json['ToonMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['ToonMap']): undefined,
+      dissolveTexture: json['DissolveTexture'] ? await gfx3TextureManager.loadTexture(textureDir + json['DissolveTexture']): undefined,
+      dissolveGlowRange: json['DissolveGlowRange'],
+      dissolveGlowFalloff: json['DissolveGlowFalloff'],
+      dissolveAmount: json['DissolveAmount'],
+      dissolveTextureScrollAngle: json['DissolveTextureScrollAngle'],
+      dissolveTextureScrollRate: json['DissolveTextureScrollRate'],
+      dissolveTextureScale: json['DissolveTextureScale'],
+      s0Texture: json['S0Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['S0Texture']) : undefined,
+      s1Texture: json['S1Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['S1Texture']) : undefined,
       decalEnabled: json['DecalEnabled'],
       shadowEnabled: json['ShadowEnabled'],
       shininess: json['Shininess'],
@@ -264,9 +308,7 @@ class Gfx3Material {
       toonLightDir: json['ToonLightDir'],
       facingAlphaBlend: json['FacingAlphaBlend'],
       distanceAlphaBlend: json['DistanceAlphaBlend'],
-      sParams: sParams,
-      s0Texture: json['S0Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['S0Texture']) : undefined,
-      s1Texture: json['S1Texture'] ? await gfx3TextureManager.loadTexture(textureDir + json['S1Texture']) : undefined
+      sParams: sParams
     });
   }
 
@@ -283,31 +325,21 @@ class Gfx3Material {
    * The update function.
    */
   update(ts: number): void {
-    if (this.textureScrollRate != 0) {
-      this.uvs[0] += Math.cos(this.textureScrollAngle) * this.textureScrollRate * (ts / 1000);
-      this.uvs[1] += Math.sin(this.textureScrollAngle) * this.textureScrollRate * (ts / 1000);
-      this.dataChanged = true;
-    }
-
-    if (this.displacementMapScrollRate != 0) {
-      this.uvs[4] += Math.cos(this.displacementMapScrollAngle) * this.displacementMapScrollRate * (ts / 1000);
-      this.uvs[5] += Math.sin(this.displacementMapScrollAngle) * this.displacementMapScrollRate * (ts / 1000);
-      this.dataChanged = true;
-    }
-
     if (!this.currentAnimation) {
       return;
     }
 
-    const currentFrame = this.currentAnimation.frames[this.currentAnimationFrameIndex];
-    this.uvs[2] = currentFrame.offsetX / this.texture.gpuTexture.width;
-    this.uvs[3] = currentFrame.offsetY / this.texture.gpuTexture.height;
+    const offsetX = this.currentAnimation.frameWidth * (this.currentAnimationFrameIndex % this.currentAnimation.numCol);
+    const offsetY = this.currentAnimation.frameHeight * Math.floor(this.currentAnimationFrameIndex / this.currentAnimation.numCol);
+
+    this.uvs[2] = offsetX / this.texture.gpuTexture.width;
+    this.uvs[3] = offsetY / this.texture.gpuTexture.height;
     this.dataChanged = true;
 
     if (this.frameProgress >= this.currentAnimation.frameDuration) {
-      if (this.currentAnimationFrameIndex == this.currentAnimation.frames.length - 1) {
+      if (this.currentAnimationFrameIndex == this.currentAnimation.numFrames - 1) {
         eventManager.emit(this, 'E_FINISHED');
-        this.currentAnimationFrameIndex = this.looped ? 0 : this.currentAnimation.frames.length - 1;
+        this.currentAnimationFrameIndex = this.looped ? 0 : this.currentAnimation.numFrames - 1;
         this.frameProgress = 0;
       }
       else {
@@ -354,22 +386,12 @@ class Gfx3Material {
   }
 
   /**
-   * Sets the opacity value.
-   * 
-   * @param {number} opacity - The opacity (from 0 to 1).
-   */
-  setOpacity(opacity: number): void {
-    this.params[1] = opacity;
-    this.dataChanged = true;
-  }
-
-  /**
    * Set the normal bumping intensity.
    * 
    * @param {number} normalIntensity - The normal intensity.
    */
   setNormalIntensity(normalIntensity: number): void {
-    this.params[2] = normalIntensity;
+    this.params[1] = normalIntensity;
     this.dataChanged = true;
   }
 
@@ -379,7 +401,7 @@ class Gfx3Material {
    * @param {boolean} lightning - Indicates if light is applied or not to the material.
    */
   setLightning(lightning: boolean): void {
-    this.params[3] = lightning ? 1.0 : 0.0;
+    this.params[2] = lightning ? 1.0 : 0.0;
     this.dataChanged = true;
   }
 
@@ -457,6 +479,37 @@ class Gfx3Material {
   }
 
   /**
+   * Set the blend color.
+   * This color is multiply by the texel color.
+   * 
+   * @param {number} r - The red component.
+   * @param {number} g - The green component.
+   * @param {number} b - The blue component.
+   * @param {number} a - The alpha component.
+   */
+  setBlend(r: number, g: number, b: number, a: number): void {
+    this.colors[16] = r;
+    this.colors[17] = g;
+    this.colors[18] = b;
+    this.colors[19] = a;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the dissolve glow color.
+   * 
+   * @param {number} r - The red component.
+   * @param {number} g - The green component.
+   * @param {number} b - The blue component.
+   */
+  setDissolveGlow(r: number, g: number, b: number): void {
+    this.colors[20] = r;
+    this.colors[21] = g;
+    this.colors[22] = b;
+    this.dataChanged = true;
+  }
+
+  /**
    * Set the texture.
    * 
    * @param {Gfx3Texture} texture - The texture.
@@ -465,10 +518,75 @@ class Gfx3Material {
    */
   setTexture(texture: Gfx3Texture, angle: number = 0, rate: number = 0): void {
     this.texture = texture;
-    this.textureScrollAngle = angle;
-    this.textureScrollRate = rate;
-    this.params[4] = 1;
+    this.uvs[0] = angle;
+    this.uvs[1] = rate;
+    this.params[3] = 1;
     this.texturesChanged = true;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the texture scrolling.
+   * 
+   * @param {number} [angle=0] - The angle at which the texture will be scrolled (in radians).
+   * @param {number} [rate=0] - The scrolling rate of the texture.
+   */
+  setTextureScroll(angle: number = 0, rate: number = 0): void {
+    this.uvs[0] = angle;
+    this.uvs[1] = rate;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the texture scale.
+   * 
+   * @param {number} x - The horizontal scale.
+   * @param {number} y - The vertical scale.
+   */
+  setTextureScale(x: number, y: number): void {
+    this.uvs[4] = x;
+    this.uvs[5] = y;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the secondary texture.
+   * 
+   * @param {Gfx3Texture} texture - The texture.
+   * @param {number} [angle=0] - The angle at which the texture will be scrolled (in radians).
+   * @param {number} [rate=0] - The scrolling rate of the texture.
+   * @param {string} blendMode - The blend mode.
+   */
+  setSecondaryTexture(texture: Gfx3Texture, angle: number = 0, rate: number = 0, blendMode: 'mul' | 'mix' = 'mul'): void {
+    this.secondaryTexture = texture;
+    this.uvs[6] = angle;
+    this.uvs[7] = rate;
+    this.params[4] = blendMode == 'mul' ? 1 : 2;
+    this.texturesChanged = true;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the secondary texture scrolling.
+   * 
+   * @param {number} [angle=0] - The angle at which the texture will be scrolled (in radians).
+   * @param {number} [rate=0] - The scrolling rate of the texture.
+   */
+  setSecondaryTextureScroll(angle: number = 0, rate: number = 0): void {
+    this.uvs[6] = angle;
+    this.uvs[7] = rate;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the secondary texture scale.
+   * 
+   * @param {number} x - The horizontal scale.
+   * @param {number} y - The vertical scale.
+   */
+  setSecondaryTextureScale(x: number, y: number): void {
+    this.uvs[8] = x;
+    this.uvs[9] = y;
     this.dataChanged = true;
   }
 
@@ -486,11 +604,35 @@ class Gfx3Material {
    */
   setDisplacementMap(displacementMap: Gfx3Texture, angle: number = 0, rate: number = 0, factor: number = 0): void {
     this.displacementMap = displacementMap;
-    this.displacementMapScrollAngle = angle;
-    this.displacementMapScrollRate = rate;
+    this.uvs[10] = angle;
+    this.uvs[11] = rate;
     this.params[5] = 1;
     this.params[6] = factor;
     this.texturesChanged = true;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the displacement map scrolling.
+   * 
+   * @param {number} [angle=0] - The angle at which the texture will be scrolled (in radians).
+   * @param {number} [rate=0] - The scrolling rate of the texture.
+   */
+  setDisplacementMapScroll(angle: number = 0, rate: number = 0): void {
+    this.uvs[10] = angle;
+    this.uvs[11] = rate;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the displacement map texture scale.
+   * 
+   * @param {number} x - The horizontal scale.
+   * @param {number} y - The vertical scale.
+   */
+  setDisplacementMapScale(x: number, y: number): void {
+    this.uvs[12] = x;
+    this.uvs[13] = y;
     this.dataChanged = true;
   }
 
@@ -567,12 +709,81 @@ class Gfx3Material {
   }
 
   /**
+   * Set the dissolve texture.
+   * 
+   * @param {Gfx3Texture} dissolveTexture - The dissolve texture.
+   */
+  setDissolveTexture(dissolveTexture: Gfx3Texture, glowRange: number, glowFalloff: number, amount: number): void {
+    this.dissolveTexture = dissolveTexture;
+    this.params[13] = 1;
+    this.params[14] = glowRange;
+    this.params[15] = glowFalloff;
+    this.params[16] = amount;
+    this.texturesChanged = true;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the dissolve texture scrolling.
+   * 
+   * @param {number} [angle=0] - The angle at which the texture will be scrolled (in radians).
+   * @param {number} [rate=0] - The scrolling rate of the texture.
+   */
+  setDissolveTextureScroll(angle: number = 0, rate: number = 0): void {
+    this.uvs[14] = angle;
+    this.uvs[15] = rate;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the dissolve texture scale.
+   * 
+   * @param {number} x - The horizontal scale.
+   * @param {number} y - The vertical scale.
+   */
+  setDissolveTextureScale(x: number, y: number): void {
+    this.uvs[16] = x;
+    this.uvs[17] = y;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the dissolve glow range.
+   * 
+   * @param {number} glowRange - The dissolve glow range.
+   */
+  setDissolveGlowRange(glowRange: number): void {
+    this.params[14] = glowRange;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the dissolve glow falloff.
+   * 
+   * @param {number} falloff - The dissolve glow falloff.
+   */
+  setDissolveGlowFallOff(falloff: number): void {
+    this.params[15] = falloff;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the dissolve amount.
+   * 
+   * @param {number} amount - The dissolve amount.
+   */
+  setDissolveAmount(amount: number): void {
+    this.params[16] = amount;
+    this.dataChanged = true;
+  }
+
+  /**
    * Enable decals on the material surface.
    * 
    * @param {boolean} enabled - Indicating whether decals should be enabled or disabled.
    */
   enableDecal(enabled: boolean): void {
-    this.params[13] = enabled ? 1.0 : 0.0;
+    this.params[17] = enabled ? 1.0 : 0.0;
     this.dataChanged = true;
   }
 
@@ -582,7 +793,7 @@ class Gfx3Material {
    * @param {boolean} enabled - Indicating whether the shadow should be enabled or disabled.
    */
   enableShadow(enabled: boolean): void {
-    this.params[14] = enabled ? 1.0 : 0.0;
+    this.params[18] = enabled ? 1.0 : 0.0;
     this.dataChanged = true;
   }
 
@@ -592,7 +803,7 @@ class Gfx3Material {
    * @param {number} shininess - The shininess/specularity value (0-1)
    */
   setShininess(shininess: number): void {
-    this.params[15] = shininess;
+    this.params[19] = shininess;
     this.dataChanged = true;
   }
 
@@ -602,7 +813,7 @@ class Gfx3Material {
    * @param {number} emissiveFactor - The factor of emission color (0-1)
    */
   setEmissiveFactor(emissiveFactor: number): void {
-    this.params[16] = emissiveFactor;
+    this.params[20] = emissiveFactor;
     this.dataChanged = true;
   }
 
@@ -612,7 +823,27 @@ class Gfx3Material {
    * @param {boolean} toonBlending - Enable or disable the blending between texture and toon texture.
    */
   setToonBlending(toonBlending: number): void {
-    this.params[17] = toonBlending;
+    this.params[21] = toonBlending;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the facing alpha blend.
+   * 
+   * @param {boolean} facingAlphaBlend - Facing alpha blend factor.
+   */
+  setFacingAlphaBlend(facingAlphaBlend: number): void {
+    this.params[22] = facingAlphaBlend;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the distance alpha blend.
+   * 
+   * @param {boolean} distanceAlphaBlend - Distance alpha blend factor.
+   */
+  setDistanceAlphaBlend(distanceAlphaBlend: number): void {
+    this.params[23] = distanceAlphaBlend;
     this.dataChanged = true;
   }
 
@@ -628,7 +859,7 @@ class Gfx3Material {
       throw new Error('Gfx3Material::setCustomParam(): Custom param name not found !');
     }
 
-    this.params[22 + paramIndex] = value;
+    this.params[26 + paramIndex] = value;
   }
 
   /**
@@ -642,7 +873,7 @@ class Gfx3Material {
       throw new Error('Gfx3Material::getCustomParam(): Custom param name not found !');
     }
 
-    return this.params[22 + paramIndex];
+    return this.params[26 + paramIndex];
   }
 
   /**
@@ -661,8 +892,8 @@ class Gfx3Material {
       this.texturesChanged = true;
     }
 
-    this.params[19] = textures[0] ? 1 : 0;
-    this.params[20] = textures[1] ? 1 : 0;
+    this.params[24] = textures[0] ? 1 : 0;
+    this.params[25] = textures[1] ? 1 : 0;
   }
 
   /**
@@ -708,8 +939,9 @@ class Gfx3Material {
       this.grp3.setTexture(12, 'MAT_NORM_TEXTURE', this.normalMap);
       this.grp3.setTexture(14, 'MAT_ENV_MAP_TEXTURE', this.envMap, { dimension: 'cube' });
       this.grp3.setTexture(16, 'MAT_TOON_TEXTURE', this.toonMap);
-      this.grp3.setTexture(18, 'MAT_S0_TEXTURE', this.s0Texture);
-      this.grp3.setTexture(20, 'MAT_S1_TEXTURE', this.s1Texture);
+      this.grp3.setTexture(18, 'MAT_DISSOLVE_TEXTURE', this.dissolveTexture);
+      this.grp3.setTexture(20, 'MAT_S0_TEXTURE', this.s0Texture);
+      this.grp3.setTexture(22, 'MAT_S1_TEXTURE', this.s1Texture);
       this.grp3.allocate();
       this.texturesChanged = false;
     }
@@ -722,6 +954,13 @@ class Gfx3Material {
    */
   getTexture(): Gfx3Texture {
     return this.texture;
+  }
+
+  /**
+   * Returns the secondary texture.
+   */
+  getSecondaryTexture(): Gfx3Texture {
+    return this.secondaryTexture;
   }
 
   /**
@@ -771,6 +1010,13 @@ class Gfx3Material {
    */
   getToonMap(): Gfx3Texture {
     return this.toonMap;
+  }
+
+  /**
+   * Returns the dissolve texture.
+   */
+  getDissolveTexture(): Gfx3Texture {
+    return this.dissolveTexture;
   }
 
   /**

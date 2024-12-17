@@ -84,7 +84,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     }
 
     this.grp0.beginWrite();
-    this.grp0.write(0, BUILD_SCENE_INFOS(currentView.getCameraPosition(), ts, this.sceneInfos));
+    this.grp0.write(0, BUILD_SCENE_INFOS(currentView.getCameraPosition(), ts / 1000, this.sceneInfos));
     this.grp0.write(1, gfx3MeshShadowRenderer.getLVPMatrix());
     this.grp0.write(2, this.dirLight);
     this.grp0.write(3, this.pointLights);

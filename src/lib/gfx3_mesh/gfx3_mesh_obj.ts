@@ -285,7 +285,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
 
       if (line.startsWith('d')) {
         const a = extract(line, 1);
-        curMat.setOpacity(parseFloat(a));
+        curMat.setBlend(1.0, 1.0, 1.0, parseFloat(a));
       }
 
       if (line.startsWith('Ke ')) {

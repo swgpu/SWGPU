@@ -240,11 +240,7 @@ Congratulation, your static mesh is now exported !
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
 ## Todos
-- Soft appearing of the lens flare (sun) renderer
-- Split mesh shader in parts + add hook in each part (before and after)
-- Add second classic texture with scroll in material
-- Let displacement map but add erosion texture map.
-- Add the possibility to scale all these kind of textures
+- Setup Electron in template
 
 ## Changelog
 ```

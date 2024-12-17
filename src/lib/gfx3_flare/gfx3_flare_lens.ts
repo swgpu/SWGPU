@@ -65,10 +65,6 @@ class Gfx3FlareLens {
     const viewportSize = currentView.getViewportSize();
 
     const sunPos = currentView.getScreenPosition(this.sunWorldPos[0], this.sunWorldPos[1], this.sunWorldPos[2]);
-    if (sunPos[0] < 0 || sunPos[0] > viewportSize[0] || sunPos[1] < 0 || sunPos[1] > viewportSize[1]) {
-      return;
-    }
-
     const centerX = viewportSize[0] / 2;
     const centerY = viewportSize[1] / 2;
 

@@ -68,7 +68,6 @@
         }
     ],
     "Id": 0,
-    "Opacity": 0.800000011920929,
     "NormalIntensity": 1.0,
     "Lightning": false,
     "Ambient": [
@@ -91,9 +90,15 @@
         0.0,
         0.0
     ],
+    "Blend": [
+        1.0,
+        1.0,
+        1.0,
+        0.7
+    ],
     "Texture": "./utils/viewer/noise.jpg",
     "TextureScrollAngle": 0.0,
-    "TextureScrollRate": 0.10000000149011612,
+    "TextureScrollRate": 100,
     "DisplacementMap": "",
     "DisplacementMapScrollAngle": 0.0,
     "DisplacementMapScrollRate": 0.0,

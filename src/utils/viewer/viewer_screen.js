@@ -40,7 +40,7 @@ class ViewerScreen extends Screen {
     await this.bloom.loadFromFile('./utils/viewer/bloom.jsm');
     this.bloom.setMaterial(await Gfx3Material.createFromFile('./utils/viewer/bloom.mat'));
 
-    this.lens.setSunWorldPosition(10, 10, 0);
+    this.lens.setSunWorldPosition(10, 100, 0);
     await this.lens.startup(0.4);
 
     gfx3PostRenderer.setParam(PostParam.COLOR_ENABLED, 1.0);
@@ -172,18 +172,11 @@ async function CREATE_CUBE_SPRITE() {
     lightning: false,
     animations: [{
       name: 'Default',
-      frames: [{
-        offsetX: 0,
-        offsetY: 0
-      },
-      {
-        offsetX: 850,
-        offsetY: 0
-      },
-      {
-        offsetX: 1700,
-        offsetY: 0
-      }],
+      frameWidth: 850,
+      frameHeight: 850,
+      numCol: 3,
+      numRow: 1,
+      numFrames: 3,
       frameDuration: 100
     }]
   }));
