@@ -1,6 +1,8 @@
 name: swgpu-doc-update
 
 on: # specify the build to trigger the automated ci/cd
+  permissions:
+    contents: write
   push:
     branches:
       - "main"
