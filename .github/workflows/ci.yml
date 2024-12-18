@@ -36,7 +36,7 @@ jobs:
       run: |
         set -e
         cd $GITHUB_WORKSPACE/${{github.repository}}.wiki
-        cp -r $GITHUB_WORKSPACE/${{github.repository}}/docs/markdowns/* .
+        cp -r $GITHUB_WORKSPACE/docs/markdowns/* .
         git config --local user.email "aliyah.raijin@gmail.com"
         git config --local user.name "jay19240"
         git add .
