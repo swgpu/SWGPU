@@ -26,3 +26,9 @@ jobs:
       run: npm run doc
     - name: Generate markdown documentation files
       run: npm run markdown
+
+    - name: Copy to wiki
+      uses: OrlovM/Wiki-Action@v1
+      with:
+        path: 'docs/markdowns'
+        token: ${{ secrets.GITHUB_TOKEN }}
