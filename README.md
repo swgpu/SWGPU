@@ -245,6 +245,9 @@ Congratulation, your static mesh is now exported !
 
 ## Changelog
 ```
+- [Ver. 1.6.5] Scroll added on main textures.
+- [Ver. 1.6.5] Secondary texture added.
+- [Ver. 1.6.5] Dissolve texture added.
 - [Ver. 1.6.0] Tile slope support added.
 - [Ver. 1.6.0] Spritefusion support re-added.
 - [Ver. 1.6.0] Aseprite support added.
