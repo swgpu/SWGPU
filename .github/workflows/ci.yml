@@ -26,17 +26,18 @@ jobs:
     - name: Generate markdown documentation files
       run: npm run markdown
 
-    - name: Copycat
-      uses: andstor/copycat-action@v3
+    - name: Checkout Wiki
+      uses: actions/checkout@v4
       with:
-        personal_token: ${{ secrets.PERSONAL_TOKEN }}
-        src_path: /docs/markdowns
-        dst_path: /.
-        dst_owner: jay19240
-        dst_repo_name: ${{github.repository}}
-        dst_branch: master
-        src_branch: main
-        src_wiki: false
-        dst_wiki: true
-        username: jay19240
-        email: aliyah.raijin@gmail.com
+        repository: ${{github.repository}}.wiki
+        path: ${{github.repository}}.wiki
+
+    - name: Push to wiki
+      run: |
+        set -e
+        cd $GITHUB_WORKSPACE/${{github.repository}}.wiki
+        cp -r $GITHUB_WORKSPACE/${{github.repository}}/docs/markdowns/* .
+        git config --local user.email "aliyah.raijin@gmail.com"
+        git config --local user.name "jay19240"
+        git add .
+        git diff-index --quiet HEAD || git commit -m "action: wiki sync" && git push
