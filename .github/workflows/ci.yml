@@ -27,10 +27,15 @@ jobs:
     - name: Generate markdown documentation files
       run: npm run markdown
 
-    - name: Copy to wiki
-      uses: OrlovM/Wiki-Action@v1
-      paths:
-        - 'docs/markdowns/**'
+    - name: Checkout wiki code
+      uses: actions/checkout@v2
       with:
-        path: ''
-        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{github.repository}}.wiki
+
+    - name: Push to wiki
+      run: |
+        cd docs/markdowns
+        git config --local user.email "aliyah.raijin@gmail.com"
+        git config --local user.name "jay19240"
+        git add .
+        git diff-index --quiet HEAD || git commit -m "Add changes" && git push
