@@ -239,6 +239,9 @@ Congratulation, your static mesh is now exported !
 - [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
+## Todo (no-delay)
+- Add frames on JNM
+
 ## Changelog
 ```
 - [Ver. 1.6.5] Scroll added on main textures.
