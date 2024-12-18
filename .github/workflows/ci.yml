@@ -29,6 +29,8 @@ jobs:
 
     - name: Copy to wiki
       uses: OrlovM/Wiki-Action@v1
+      paths:
+        - 'docs/markdowns/**'
       with:
-        path: 'docs/markdowns'
+        path: ''
         token: ${{ secrets.GITHUB_TOKEN }}
