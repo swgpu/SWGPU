@@ -33,7 +33,7 @@ jobs:
         src_path: /docs/markdowns
         dst_path: /.
         dst_owner: jay19240
-        dst_repo_name: ${{github.repository}}.wiki
+        dst_repo_name: ${{github.repository}}
         dst_branch: master
         src_branch: main
         src_wiki: false
