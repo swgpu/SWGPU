@@ -216,7 +216,7 @@ List of examples:
 - Blender
 
 ## Blender plugin
-Download the exporter [here](https://github.com/jay19240/SWGPU-Blender-Plugin).   
+Download the exporter [here](https://github.com/swgpu/SWGPU/blob/main/bin/SWGPU-Blender-Exporter.zip).   
 Install it on Blender by going to Edit -> Preferences -> Add-ons -> Install... -> Select the zip.   
 Push "n", and click on WarmeY2K Exporter to see the exportation panel.   
 Please, before export check if:   
@@ -238,10 +238,6 @@ Congratulation, your static mesh is now exported !
 - CanvasRenderingContext2D for 2D stuffs
 - [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
-
-## Todos
-- Setup Electron in template
-- Add json property for secondary texture blend mode
 
 ## Changelog
 ```

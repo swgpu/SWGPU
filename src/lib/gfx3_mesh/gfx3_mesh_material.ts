@@ -34,6 +34,7 @@ interface MATOptions {
   secondaryTextureScrollAngle?: number;
   secondaryTextureScrollRate?: number;
   secondaryTextureScale?: vec2;
+  secondaryTextureBlendMode?: 'mul' | 'mix';
   displacementMap?: Gfx3Texture;
   displacementMapScrollAngle?: number;
   displacementMapScrollRate?: number;
@@ -140,7 +141,7 @@ class Gfx3Material {
     this.params[1] = options.normalIntensity ?? 1.0;
     this.params[2] = options.lightning ? 1.0 : 0.0;
     this.params[3] = options.texture ? 1.0 : 0.0;
-    this.params[4] = options.secondaryTexture ? 1.0 : 0.0;
+    this.params[4] = options.secondaryTexture ? (options.secondaryTextureBlendMode == 'mul' ? 1.0 : 2.0) : 0.0;
     this.params[5] = options.displacementMap ? 1.0 : 0.0;
     this.params[6] = options.displacementMapFactor ?? 0.0;
     this.params[7] = options.diffuseMap ? 1.0 : 0.0;
@@ -280,6 +281,7 @@ class Gfx3Material {
       secondaryTextureScrollAngle: json['SecondaryTextureScrollAngle'],
       secondaryTextureScrollRate: json['SecondaryTextureScrollRate'],
       secondaryTextureScale: json['SecondaryTextureScale'],
+      secondaryTextureBlendMode: json['SecondaryTextureBlendMode'],
       displacementMap: json['DisplacementMap'] ? await gfx3TextureManager.loadTexture(textureDir + json['DisplacementMap']) : undefined,
       displacementMapScrollAngle: json['DisplacementMapScrollAngle'],
       displacementMapScrollRate: json['DisplacementMapScrollRate'],
