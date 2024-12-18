@@ -100,20 +100,6 @@ class Gfx3PhysicsJNM {
     }
   }
 
-  // @warn: not-tested
-  setTransform(matrix: mat4): void {
-    this.boundingBox = this.boundingBox.transform(matrix);
-
-    for (let f of this.frags) {
-      f.v1 = UT.MAT4_MULTIPLY_BY_VEC4(matrix, [f.v1[0], f.v1[1], f.v1[2], 1]) as vec3;
-      f.v2 = UT.MAT4_MULTIPLY_BY_VEC4(matrix, [f.v2[0], f.v2[1], f.v2[2], 1]) as vec3;
-      f.v3 = UT.MAT4_MULTIPLY_BY_VEC4(matrix, [f.v3[0], f.v3[1], f.v3[2], 1]) as vec3;
-      f.n = UT.VEC3_NORMALIZE(UT.TRI3_NORMAL(f.v1, f.v2, f.v3));
-      f.t = UT.VEC3_NORMALIZE(UT.VEC3_CROSS([0, 1, 0], f.n));
-      f.fromVertices([...f.v1, ...f.v2, ...f.v3], 3);
-    }
-  }
-
   /**
    * Load asynchronously navmesh data from a binary file (bnm).
    * 
