@@ -41,6 +41,22 @@ class Gfx3TreePartitionMethod implements ITreePartitionMethod<Gfx3BoundingBox> {
   }
 
   /**
+   * Translate the position.
+   * 
+   * @param {number} x - The amount of translation in the x-axis direction.
+   * @param {number} y - The amount of translation in the y-axis direction.
+   * @param {number} z - The amount of translation in the z-axis direction.
+   */
+  translate(x: number, y: number, z: number) {
+    this.box.min[0] += x;
+    this.box.min[1] += y;
+    this.box.min[2] += z;
+    this.box.max[0] += x;
+    this.box.max[1] += y;
+    this.box.max[2] += z;
+  }
+
+  /**
    * Search and return all objects that intersect with the target.
    * 
    * @param {Gfx3BoundingBox} target - The target object.

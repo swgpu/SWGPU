@@ -39,6 +39,19 @@ class Gfx2TreePartitionMethod implements ITreePartitionMethod<Gfx2BoundingRect> 
     ctx.fillRect(this.rect.min[0], this.rect.min[1], size[0], size[1]);
   }
 
+  /**
+   * Translate the position.
+   * 
+   * @param {number} x - The amount of translation in the x-axis direction.
+   * @param {number} y - The amount of translation in the y-axis direction.
+   */
+  translate(x: number, y: number) {
+    this.rect.min[0] += x;
+    this.rect.min[1] += y;
+    this.rect.max[0] += x;
+    this.rect.max[1] += y;
+  }
+
  /**
   * Search and return all objects that intersect with the target.
   * 

@@ -8,6 +8,7 @@ export type SplitResult<T> = {
 export interface ITreePartitionMethod<T> {
   split(objects: Array<T>): SplitResult<T>;
   search(node: TreePartitionNode<T>, ...params: any[]): Array<T>;
+  translate(x: number, y: number, z: number): void;
   draw(): void;
 }
 
@@ -33,6 +34,17 @@ class TreePartition<T> {
 
   draw(): void {
     this.root.draw();
+  }
+
+  /**
+   * Translate the position.
+   * 
+   * @param {number} x - The amount of translation in the x-axis direction.
+   * @param {number} y - The amount of translation in the y-axis direction.
+   * @param {number} z - The amount of translation in the z-axis direction.
+   */
+  translate(x: number, y: number, z: number = 0): void {
+    this.root.translate(x, y, z);
   }
 
   /**
@@ -112,6 +124,25 @@ class TreePartitionNode<T> {
       this.right.draw();
     }
   }  
+
+  /**
+   * Translate the position.
+   * 
+   * @param {number} x - The amount of translation in the x-axis direction.
+   * @param {number} y - The amount of translation in the y-axis direction.
+   * @param {number} z - The amount of translation in the z-axis direction.
+   */
+  translate(x: number, y: number, z: number = 0): void {
+    this.method.translate(x, y, z);
+
+    if (this.left) {
+      this.left.translate(x, y, z);
+    }
+
+    if (this.right) {
+      this.right.translate(x, y, z);
+    }
+  }
 
   /**
    * Search and return all objects that intersect with the target.

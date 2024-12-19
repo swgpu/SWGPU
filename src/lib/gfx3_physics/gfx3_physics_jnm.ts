@@ -1,7 +1,7 @@
 import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
 import { UT } from '../core/utils';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
-import { Gfx3TreePartition } from '../gfx3/gfx3_tree_partition';
+import { Gfx3TreePartition, Gfx3TreePartitionMethod } from '../gfx3/gfx3_tree_partition';
 
 class Frag extends Gfx3BoundingBox {
   index: number;
@@ -74,7 +74,7 @@ class Gfx3PhysicsJNM {
    * @param {number} bspMaxChildren - The maximum of children per bsp node.
    * @param {number} bspMaxDepth - The maximum depth for bsp tree.
    */
-  async loadFromFile(path: string, bspMaxChildren: number = 20, bspMaxDepth: number = 10, transform?: mat4): Promise<void> {
+  async loadFromFile(path: string, bspMaxChildren: number = 20, bspMaxDepth: number = 10): Promise<void> {
     const response = await fetch(path);
     const json = await response.json();
 
@@ -85,24 +85,12 @@ class Gfx3PhysicsJNM {
     this.boundingBox = new Gfx3BoundingBox(json['Min'], json['Max']);
     this.btree = new Gfx3TreePartition(bspMaxChildren, bspMaxDepth, this.boundingBox);
 
-    if (transform) {
-      this.boundingBox = this.boundingBox.transform(transform);
-    }
-
     this.frags = [];
     for (let i = 0; i < json['NumFrags']; i++) {
       const obj = json['Frags'][i];
-
-      let v1 = obj[0];
-      let v2 = obj[1];
-      let v3 = obj[2];
-
-      if (transform) {
-        v1 = UT.MAT4_MULTIPLY_BY_VEC4(transform, v1);
-        v2 = UT.MAT4_MULTIPLY_BY_VEC4(transform, v2);
-        v3 = UT.MAT4_MULTIPLY_BY_VEC4(transform, v3);
-      }
-
+      const v1 = obj[0];
+      const v2 = obj[1];
+      const v3 = obj[2];
       const frag = new Frag(i, v1, v2, v3);
       this.btree.addChild(frag);
       this.frags.push(frag);
@@ -122,7 +110,7 @@ class Gfx3PhysicsJNM {
    * @param {number} bspMaxChildren - The maximum of children per bsp node.
    * @param {number} bspMaxDepth - The maximum depth for bsp tree.
    */
-  async loadFromBinaryFile(path: string, bspMaxChildren: number = 20, bspMaxDepth: number = 10, transform?: mat4): Promise<void> {
+  async loadFromBinaryFile(path: string, bspMaxChildren: number = 20, bspMaxDepth: number = 10): Promise<void> {
     const response = await fetch(path);
     const buffer = await response.arrayBuffer();
     const data = new Float32Array(buffer);
@@ -143,22 +131,11 @@ class Gfx3PhysicsJNM {
     this.boundingBox = new Gfx3BoundingBox([minX, minY, minZ], [maxX, maxY, maxZ]);
     this.btree = new Gfx3TreePartition(bspMaxChildren, bspMaxDepth, this.boundingBox);
 
-    if (transform) {
-      this.boundingBox = this.boundingBox.transform(transform);
-    }
-
     this.frags = [];
     for (let i = 0; i < numFrags; i++) {
-      let v1: vec3 = [data[offset + (i * 9) + 0], data[offset + (i * 9) + 1], data[offset + (i * 9) + 2]];
-      let v2: vec3 = [data[offset + (i * 9) + 3], data[offset + (i * 9) + 4], data[offset + (i * 9) + 5]];
-      let v3: vec3 = [data[offset + (i * 9) + 6], data[offset + (i * 9) + 7], data[offset + (i * 9) + 8]];
-
-      if (transform) {
-        v1 = UT.MAT4_MULTIPLY_BY_VEC4(transform, [v1[0], v1[1], v1[2], 1]) as vec3;
-        v2 = UT.MAT4_MULTIPLY_BY_VEC4(transform, [v2[0], v2[1], v2[2], 1]) as vec3;
-        v3 = UT.MAT4_MULTIPLY_BY_VEC4(transform, [v3[0], v3[1], v3[2], 1]) as vec3;
-      }
-
+      const v1: vec3 = [data[offset + (i * 9) + 0], data[offset + (i * 9) + 1], data[offset + (i * 9) + 2]];
+      const v2: vec3 = [data[offset + (i * 9) + 3], data[offset + (i * 9) + 4], data[offset + (i * 9) + 5]];
+      const v3: vec3 = [data[offset + (i * 9) + 6], data[offset + (i * 9) + 7], data[offset + (i * 9) + 8]];
       const frag = new Frag(i, v1, v2, v3);
       this.btree.addChild(frag);
       this.frags.push(frag);
@@ -200,6 +177,47 @@ class Gfx3PhysicsJNM {
 
     if (this.debugMeshEnabled) {
       gfx3DebugRenderer.drawVertices(this.debugVertices, this.debugVertexCount);
+    }
+  }
+
+  /**
+   * Translate the position.
+   * 
+   * @param {number} x - The amount of translation in the x-axis direction.
+   * @param {number} y - The amount of translation in the y-axis direction.
+   * @param {number} z - The amount of translation in the z-axis direction.
+   */
+  translate(x: number, y: number, z: number): void {
+    this.boundingBox.min[0] += x;
+    this.boundingBox.min[1] += y;
+    this.boundingBox.min[2] += z;
+
+    this.boundingBox.max[0] += x;
+    this.boundingBox.max[1] += y;
+    this.boundingBox.max[2] += z;
+
+    this.btree.translate(x, y, z);
+
+    for (const frag of this.frags) {
+      frag.v1[0] += x;
+      frag.v1[1] += y;
+      frag.v1[2] += z;
+
+      frag.v2[0] += x;
+      frag.v2[1] += y;
+      frag.v2[2] += z;
+
+      frag.v3[0] += x;
+      frag.v3[1] += y;
+      frag.v3[2] += z;
+
+      frag.min[0] += x;
+      frag.min[1] += y;
+      frag.min[2] += z;
+
+      frag.max[0] += x;
+      frag.max[1] += y;
+      frag.max[2] += z;
     }
   }
 
