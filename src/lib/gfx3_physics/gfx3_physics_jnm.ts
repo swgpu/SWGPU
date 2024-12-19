@@ -1,7 +1,7 @@
 import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
 import { UT } from '../core/utils';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
-import { Gfx3TreePartition, Gfx3TreePartitionMethod } from '../gfx3/gfx3_tree_partition';
+import { Gfx3TreePartition } from '../gfx3/gfx3_tree_partition';
 
 class Frag extends Gfx3BoundingBox {
   index: number;
