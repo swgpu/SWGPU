@@ -98,20 +98,21 @@ Go to http://localhost:5173.
 
 - 💥 **3D Material**
     - Phong reflection model
+    - Dissolve texture map
     - Displacement texture map
-    - Displacement texture scrolling
     - Diffuse map
     - Specular map
     - Emissive map
     - Normal map
     - Env map
     - Toon map
-    - Texture scrolling
+    - Main textures scroll/scale handle
     - Animated UV
     - Specular shininess
     - Emissive intensity
     - Normal intensity
     - Facing blending
+    - Secondary texture (mix/mul)
 
 - 🌞 **3D Light**
     - Directional light
