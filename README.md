@@ -19,8 +19,6 @@ From the start, we chose to embrace the future with pure **WebGPU** 3D rendering
 | Canvas2D  | 2D         | A 2D graphics API designed to provide shapes, text, and images drawing.                                                    |
 | CSS3      | UI         | The best way to build powerful and hightly maintenable user-interface.                                                     |
 | Web Audio | Sound      | An Audio API for playing sounds.                                                                                           |
-| Rapier3D  | 3D Physics | Fast 3D physics engine.                                                                                                    |
-| Rapier2D  | 2D Physics | Fast 2D physics engine.                                                                                                    |
 
 ## Table of content
 * [Getting started](#getting-started)
