@@ -13,6 +13,13 @@ import { gfx3PostRenderer } from '../gfx3_post/gfx3_post_renderer';
 import { gfx3ShadowVolumeRenderer } from '../gfx3_shadow_volume/gfx3_shadow_volume_renderer';
 import { screenManager } from '../screen/screen_manager';
 import { uiManager } from '../ui/ui_manager';
+import { soundManager } from '@lib/sound/sound_manager';
+
+enum RenderingMode {
+  DIM_2D = 'DIM_2D',
+  DIM_3D = 'DIM_3D',
+  DIM_XD = 'DIM_XD'
+};
 
 /**
  * Singleton managing the main loop engine.
@@ -22,12 +29,18 @@ class EngineManager {
   elapsedTime: number;
   frameRateFixed: boolean;
   frameRateValue: number;
+  paused: boolean;
+  mode: RenderingMode;
 
   constructor() {
     this.then = 0;
     this.elapsedTime = 0;
     this.frameRateFixed = false;
     this.frameRateValue = 60;
+    this.paused = false;
+    this.mode = RenderingMode.DIM_XD;
+
+    document.addEventListener('visibilitychange', () => this.#handleVisibilityChange());
   }
 
   /**
@@ -45,14 +58,28 @@ class EngineManager {
   /**
    * The main loop.
    */
-  run(timeStamp: number): void {
+  run(timeStamp: number, state: 'pause' | 'resume' |'normal' = 'normal'): void {
+    if (state == 'pause') {
+      return;
+    }
+
+    if (state == 'resume') {
+      this.then = timeStamp;
+    }
+
+    //
+    // begin update phase
+    //
     const ts = timeStamp - this.then;
     this.then = timeStamp;
 
-    // update phase
     if (!this.frameRateFixed || this.elapsedTime > 1000 / this.frameRateValue) {
       inputManager.update(ts);
-      gfx2Manager.update(ts);
+
+      if (this.mode == RenderingMode.DIM_2D || this.mode == RenderingMode.DIM_XD) {
+        gfx2Manager.update(ts);
+      }
+
       uiManager.update(ts);
       screenManager.update(ts);
       this.elapsedTime = 0;
@@ -60,37 +87,57 @@ class EngineManager {
 
     this.elapsedTime += ts;
 
-    // draw phase
-    gfx3Manager.beginDrawing();
+    //
+    // begin draw phase
+    //
+    if (this.mode == RenderingMode.DIM_3D || this.mode == RenderingMode.DIM_XD) {
+      gfx3Manager.beginDrawing();
+    }
+
     screenManager.draw();
-    gfx3Manager.endDrawing();
 
-    // 2D render phase
-    gfx2Manager.beginRender();
-    gfx2Manager.render();
-    gfx2Manager.endRender();
+    if (this.mode == RenderingMode.DIM_3D || this.mode == RenderingMode.DIM_XD) {
+      gfx3Manager.endDrawing();
+    }
 
-    // 3D render phase
-    gfx3Manager.beginRender();
-    gfx3MeshShadowRenderer.render();
-    gfx3ShadowVolumeRenderer.render();
-    gfx3Manager.setDestinationTexture(gfx3PostRenderer.getSourceTexture());
-    gfx3Manager.beginPassRender(0);
-    gfx3SkyboxRenderer.render();
-    gfx3DebugRenderer.render();
-    gfx3MeshRenderer.render(ts);
-    gfx3SpriteRenderer.render();
-    gfx3ParticlesRenderer.render();
-    gfx3FlareRenderer.render();
-    gfx3Manager.endPassRender();
-    gfx3PostRenderer.render(ts, gfx3Manager.getCurrentRenderingTexture());
-    gfx3Manager.endRender();
+    //
+    // begin 2d render phase
+    //
+    if (this.mode == RenderingMode.DIM_2D || this.mode == RenderingMode.DIM_XD) {
+      gfx2Manager.beginRender();
+      gfx2Manager.render();
+      gfx2Manager.endRender();
+    }
+
+    //
+    // begin 3d render phase
+    //
+    if (this.mode == RenderingMode.DIM_3D || this.mode == RenderingMode.DIM_XD) {
+      gfx3Manager.beginRender();
+      gfx3MeshShadowRenderer.render();
+      gfx3ShadowVolumeRenderer.render();
+      gfx3Manager.setDestinationTexture(gfx3PostRenderer.getSourceTexture());
+      gfx3Manager.beginPassRender(0);
+      gfx3SkyboxRenderer.render();
+      gfx3DebugRenderer.render();
+      gfx3MeshRenderer.render(ts);
+      gfx3SpriteRenderer.render();
+      gfx3ParticlesRenderer.render();
+      gfx3FlareRenderer.render();
+      gfx3Manager.endPassRender();
+      gfx3PostRenderer.render(ts, gfx3Manager.getCurrentRenderingTexture());
+      gfx3Manager.endRender();
+    }
 
     const fps = document.getElementById('fps');
-    if (fps) fps.textContent = (1000 / ts).toFixed(2);
+    if (fps) {
+      fps.textContent = (1000 / ts).toFixed(2);
+    }
 
     const rt = document.getElementById('rt');
-    if (rt) rt.textContent = (1000 / gfx3Manager.getLastRenderTime()).toFixed(2);
+    if (rt) {
+      rt.textContent = (1000 / gfx3Manager.getLastRenderTime()).toFixed(2);
+    }
 
     requestAnimationFrame(timeStamp => this.run(timeStamp));
   }
@@ -105,14 +152,49 @@ class EngineManager {
   }
 
   /**
-   * The the frame rate value.
+   * Set the frame rate value.
    * 
    * @param {number} value - The fps value.
    */
   setFrameRateValue(value: number): void {
     this.frameRateValue = value;
   }
+
+  /**
+   * Set the rendering mode among 2D, 3D or 2D-3D.
+   * 
+   * @param {RenderingMode} renderingMode - The rendering mode value.
+   */
+  setRenderingMode(renderingMode: RenderingMode): void {
+    this.mode = renderingMode;
+  }
+
+  /**
+   * Make the update loop paused.
+   */
+  pause(): void {
+    this.run(0, 'pause');
+    soundManager.pause();
+  }
+
+  /**
+   * Make the update loop running.
+   */
+  resume(): void {
+    this.run(0, 'resume');
+    soundManager.resume();
+  }
+
+  #handleVisibilityChange() {
+    if (document.hidden) {
+      this.pause();
+    }
+    else {
+      this.resume();
+    }
+  }
 }
 
 export { EngineManager };
+export type { RenderingMode };
 export const em = new EngineManager();

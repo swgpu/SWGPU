@@ -1,7 +1,7 @@
 {
   "name": "swgpu",
   "description": "A complete, fast and fun web game engine",
-  "homepage": "https://warme-engine.com",
+  "homepage": "https://swgpu.github.io",
   "keywords": [
     "game-engine-2d",
     "game-engine-3d",
@@ -9,12 +9,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/jay19240/WARME-Y2K.git"
+    "url": "https://github.com/swgpu/SWGPU.git"
   },
   "email": "aliyah.raijin@gmail.com",
   "author": "Julien Rongiere",
   "license": "MIT",
-  "version": "1.6.7",
+  "version": "1.6.8",
   "type": "module",
   "main": "src/lib/index.ts",
   "files": [

@@ -83,7 +83,6 @@ class BootScreen extends Screen {
   }
 
   onExit() {
-
     uiManager.removeWidget(this.uiMenu);
     uiManager.removeWidget(this.uiTemplates);
     uiManager.removeWidget(this.uiUtils);

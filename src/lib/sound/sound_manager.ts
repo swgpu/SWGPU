@@ -188,6 +188,20 @@ class SoundManager {
 
     return group.muted;
   }
+
+  /**
+   * Pause all sounds.
+   */
+  pause(): void {
+    this.audioContext.suspend();
+  }
+
+  /**
+   * Resume all sounds.
+   */
+  resume(): void {
+    this.audioContext.resume();
+  }
 }
 
 export type { Sound };
