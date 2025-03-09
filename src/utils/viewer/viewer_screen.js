@@ -181,7 +181,7 @@ async function CREATE_CUBE_SPRITE() {
     }]
   }));
 
-  mesh.mat.playFlipbook('Texture', true);
+  mesh.mat.playAnimation('Texture', true);
   return mesh;
 }
 

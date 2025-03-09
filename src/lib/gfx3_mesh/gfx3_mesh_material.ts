@@ -75,7 +75,6 @@ interface MATOptions {
 
 interface Animation {
   flipbook: MATFlipbook;
-  playing: boolean;
   currentFrameIndex: number;
   looped: boolean;
   frameProgress: number;
@@ -87,7 +86,8 @@ interface Animation {
  * It emit 'E_FINISHED' (on texture animation end)
  */
 class Gfx3Material {
-  animations: Array<Animation>;
+  flipbooks: Array<MATFlipbook>;
+  animations: Map<TextureTarget, Animation>;
   dataChanged: boolean;
   texturesChanged: boolean;
   grp2: Gfx3StaticGroup;
@@ -113,7 +113,8 @@ class Gfx3Material {
    * @param {MATOptions} options - The options to configure the material.
    */
   constructor(options: MATOptions) {
-    this.animations = [];
+    this.flipbooks = options.flipbooks ?? [];
+    this.animations = new Map<TextureTarget, Animation>();
     this.dataChanged = true;
     this.texturesChanged = false;
 
@@ -171,25 +172,6 @@ class Gfx3Material {
     this.params[23] = options.distanceAlphaBlend ?? 0.0;
     this.params[24] = options.s0Texture ? 1.0 : 0.0;
     this.params[25] = options.s1Texture ? 1.0 : 0.0;
-
-    if (options.flipbooks) {
-      for (const flipbook of options.flipbooks) {
-        this.animations.push({
-          flipbook: flipbook,
-          playing: false,
-          currentFrameIndex: 0,
-          looped: false,
-          frameProgress: 0,
-          uvsIndexes: function() {
-            if (flipbook.textureTarget == TextureTarget.TEXTURE) return [2, 3];
-            else if (flipbook.textureTarget == TextureTarget.SECONDARY_TEXTURE) return [8, 9];
-            else if (flipbook.textureTarget == TextureTarget.DISPLACEMENT_TEXTURE) return [14, 15];
-            else if (flipbook.textureTarget == TextureTarget.DISSOLVE_TEXTURE) return [20, 21];
-            else return [2, 3];
-          } ()
-        });
-      }
-    }
 
     if (options.sParams) {
       for (const sParam of options.sParams) {
@@ -360,11 +342,7 @@ class Gfx3Material {
    * The update function.
    */
   update(ts: number): void {
-    for (const animation of this.animations) {
-      if (!animation.playing) {
-        continue;
-      }
-  
+    for (const animation of this.animations.values()) {
       const offsetX = animation.flipbook.frameWidth * (animation.currentFrameIndex % animation.flipbook.numCol);
       const offsetY = animation.flipbook.frameHeight * Math.floor(animation.currentFrameIndex / animation.flipbook.numCol);
   
@@ -374,10 +352,15 @@ class Gfx3Material {
   
       if (animation.frameProgress >= animation.flipbook.frameDuration) {
         if (animation.currentFrameIndex == animation.flipbook.numFrames - 1) {
+          if (animation.looped) {
+            animation.currentFrameIndex = 0;
+            animation.frameProgress = 0;
+          }
+          else {
+            this.animations.delete(animation.flipbook.textureTarget);
+          }
+
           eventManager.emit(this, 'E_FINISHED');
-          animation.currentFrameIndex = animation.looped ? 0 : animation.flipbook.numFrames - 1;
-          animation.frameProgress = 0;
-          animation.playing = animation.looped ? true : false;
         }
         else {
           animation.currentFrameIndex = animation.currentFrameIndex + 1;
@@ -397,20 +380,29 @@ class Gfx3Material {
    * @param {boolean} [looped=false] - Determines whether the animation should loop or not.
    * @param {boolean} [preventSameAnimation=false] - Determines whether the same animation should be prevented from playing again.
    */
-  playFlipbook(textureTarget: TextureTarget, looped: boolean = false, preventSameAnimation: boolean = false): void {
-    const animation = this.animations.find(anim => anim.flipbook.textureTarget == textureTarget);
-    if (!animation) {
-      throw new Error('Gfx3Material::playFlipbook: animation not found.');
+  playAnimation(textureTarget: TextureTarget, looped: boolean = false, preventSameAnimation: boolean = false): void {
+    const flipbook = this.flipbooks.find(f => f.textureTarget == textureTarget);
+    if (!flipbook) {
+      throw new Error('Gfx3Material::playAnimation: flipbook not exist for this texture target.');
     }
 
-    if (preventSameAnimation && animation.playing) {
+    if (preventSameAnimation && this.animations.has(textureTarget)) {
       return;
     }
 
-    animation.currentFrameIndex = 0;
-    animation.looped = looped;
-    animation.frameProgress = 0;
-    animation.playing = true;
+    this.animations.set(textureTarget, {
+      flipbook: flipbook,
+      currentFrameIndex: 0,
+      looped: looped,
+      frameProgress: 0,
+      uvsIndexes: function() {
+        if (flipbook.textureTarget == TextureTarget.TEXTURE) return [2, 3];
+        else if (flipbook.textureTarget == TextureTarget.SECONDARY_TEXTURE) return [8, 9];
+        else if (flipbook.textureTarget == TextureTarget.DISPLACEMENT_TEXTURE) return [14, 15];
+        else if (flipbook.textureTarget == TextureTarget.DISSOLVE_TEXTURE) return [20, 21];
+        else return [2, 3];
+      } ()
+    })
   }
 
   /**
@@ -418,19 +410,15 @@ class Gfx3Material {
    * 
    * @param {TextureTarget} textureTarget - The name of the animated texture.
    */
-  stopFlipbook(textureTarget: TextureTarget): void {
-    const animation = this.animations.find(anim => anim.flipbook.textureTarget == textureTarget);
+  stopAnimation(textureTarget: TextureTarget): void {
+    const animation = this.animations.get(textureTarget);
     if (!animation) {
-      throw new Error('Gfx3Material::stopFlipbook: animation not found.');
+      throw new Error('Gfx3Material::stopAnimation: animation not found on this texture target.');
     }
-
-    animation.playing = false;
-    animation.currentFrameIndex = 0;
-    animation.looped = false;
-    animation.frameProgress = 0;
 
     this.uvs[animation.uvsIndexes[0]] = 0.0;
     this.uvs[animation.uvsIndexes[1]] = 0.0;
+    this.animations.delete(textureTarget);
     this.dataChanged = true;
   }
 
