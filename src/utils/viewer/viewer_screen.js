@@ -170,8 +170,8 @@ async function CREATE_CUBE_SPRITE() {
   mesh.setMaterial(new Gfx3Material({
     texture: await gfx3TextureManager.loadTexture('./utils/viewer/cube_sprite.png'),
     lightning: false,
-    animations: [{
-      name: 'Default',
+    flipbooks: [{
+      textureTarget: 'Texture',
       frameWidth: 850,
       frameHeight: 850,
       numCol: 3,
@@ -181,7 +181,7 @@ async function CREATE_CUBE_SPRITE() {
     }]
   }));
 
-  mesh.mat.playAnimation('Default', true);
+  mesh.mat.playFlipbook('Texture', true);
   return mesh;
 }
 

@@ -5,8 +5,15 @@ import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
 import { MAT_SLOT_NAMES } from './gfx3_mesh_shader';
 
-interface MATAnimation {
-  name: string;
+enum TextureTarget {
+  TEXTURE = 'Texture',
+  SECONDARY_TEXTURE = 'SecondaryTexture',
+  DISPLACEMENT_TEXTURE = 'DisplacementTexture',
+  DISSOLVE_TEXTURE = 'DissolveTexture'
+};
+
+interface MATFlipbook {
+  textureTarget: TextureTarget;
   frameWidth: number;
   frameHeight: number;
   numCol: number;
@@ -16,7 +23,7 @@ interface MATAnimation {
 };
 
 interface MATOptions {
-  animations?: Array<MATAnimation>;
+  flipbooks?: Array<MATFlipbook>;
   id?: number;
   normalIntensity?: number;
   lightning?: boolean;
@@ -66,16 +73,21 @@ interface MATOptions {
   s1Texture?: Gfx3Texture;
 };
 
+interface Animation {
+  flipbook: MATFlipbook;
+  playing: boolean;
+  currentFrameIndex: number;
+  looped: boolean;
+  frameProgress: number;
+  uvsIndexes: [number, number];
+};
+
 /**
- * The material of a surface.
+ * The surface material.
  * It emit 'E_FINISHED' (on texture animation end)
  */
 class Gfx3Material {
-  animations: Array<MATAnimation>;
-  currentAnimation: MATAnimation | null;
-  currentAnimationFrameIndex: number;
-  looped: boolean;
-  frameProgress: number;
+  animations: Array<Animation>;
   dataChanged: boolean;
   texturesChanged: boolean;
   grp2: Gfx3StaticGroup;
@@ -101,11 +113,7 @@ class Gfx3Material {
    * @param {MATOptions} options - The options to configure the material.
    */
   constructor(options: MATOptions) {
-    this.animations = options.animations ?? [];
-    this.currentAnimation = null;
-    this.currentAnimationFrameIndex = 0;
-    this.looped = false;
-    this.frameProgress = 0;
+    this.animations = [];
     this.dataChanged = true;
     this.texturesChanged = false;
 
@@ -164,6 +172,25 @@ class Gfx3Material {
     this.params[24] = options.s0Texture ? 1.0 : 0.0;
     this.params[25] = options.s1Texture ? 1.0 : 0.0;
 
+    if (options.flipbooks) {
+      for (const flipbook of options.flipbooks) {
+        this.animations.push({
+          flipbook: flipbook,
+          playing: false,
+          currentFrameIndex: 0,
+          looped: false,
+          frameProgress: 0,
+          uvsIndexes: function() {
+            if (flipbook.textureTarget == TextureTarget.TEXTURE) return [2, 3];
+            else if (flipbook.textureTarget == TextureTarget.SECONDARY_TEXTURE) return [8, 9];
+            else if (flipbook.textureTarget == TextureTarget.DISPLACEMENT_TEXTURE) return [14, 15];
+            else if (flipbook.textureTarget == TextureTarget.DISSOLVE_TEXTURE) return [20, 21];
+            else return [2, 3];
+          } ()
+        });
+      }
+    }
+
     if (options.sParams) {
       for (const sParam of options.sParams) {
         const paramIndex = MAT_SLOT_NAMES.findIndex(n => n == sParam.name);
@@ -173,7 +200,7 @@ class Gfx3Material {
       }
     }
 
-    this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 18);
+    this.uvs = this.grp2.setFloat(2, 'MAT_UVS', 24);
     this.uvs[0] = options.textureScrollAngle ? options.textureScrollAngle : 0.0;
     this.uvs[1] = options.textureScrollRate ? options.textureScrollRate : 0.0;
     this.uvs[2] = 0.0;
@@ -182,16 +209,22 @@ class Gfx3Material {
     this.uvs[5] = options.textureScale ? options.textureScale[1] : 1.0;
     this.uvs[6] = options.secondaryTextureScrollAngle ? options.secondaryTextureScrollAngle : 0.0;
     this.uvs[7] = options.secondaryTextureScrollRate ? options.secondaryTextureScrollRate : 0.0;
-    this.uvs[8] = options.secondaryTextureScale ? options.secondaryTextureScale[0] : 1.0;
-    this.uvs[9] = options.secondaryTextureScale ? options.secondaryTextureScale[1] : 1.0;
-    this.uvs[10] = options.displacementMapScrollAngle ? options.displacementMapScrollAngle : 0.0;
-    this.uvs[11] = options.displacementMapScrollRate ? options.displacementMapScrollRate : 0.0;
-    this.uvs[12] = options.displacementMapScale ? options.displacementMapScale[0] : 1.0;
-    this.uvs[13] = options.displacementMapScale ? options.displacementMapScale[1] : 1.0;
-    this.uvs[14] = options.dissolveTextureScrollAngle ? options.dissolveTextureScrollAngle : 0.0;
-    this.uvs[15] = options.dissolveTextureScrollRate ? options.dissolveTextureScrollRate : 0.0;
-    this.uvs[16] = options.dissolveTextureScale ? options.dissolveTextureScale[0] : 1.0;
-    this.uvs[17] = options.dissolveTextureScale ? options.dissolveTextureScale[1] : 1.0;
+    this.uvs[8] = 0.0;
+    this.uvs[9] = 0.0;
+    this.uvs[10] = options.secondaryTextureScale ? options.secondaryTextureScale[0] : 1.0;
+    this.uvs[11] = options.secondaryTextureScale ? options.secondaryTextureScale[1] : 1.0;
+    this.uvs[12] = options.displacementMapScrollAngle ? options.displacementMapScrollAngle : 0.0;
+    this.uvs[13] = options.displacementMapScrollRate ? options.displacementMapScrollRate : 0.0;
+    this.uvs[14] = 0.0;
+    this.uvs[15] = 0.0;
+    this.uvs[16] = options.displacementMapScale ? options.displacementMapScale[0] : 1.0;
+    this.uvs[17] = options.displacementMapScale ? options.displacementMapScale[1] : 1.0;
+    this.uvs[18] = options.dissolveTextureScrollAngle ? options.dissolveTextureScrollAngle : 0.0;
+    this.uvs[19] = options.dissolveTextureScrollRate ? options.dissolveTextureScrollRate : 0.0;
+    this.uvs[20] = 0.0;
+    this.uvs[21] = 0.0;
+    this.uvs[22] = options.dissolveTextureScale ? options.dissolveTextureScale[0] : 1.0;
+    this.uvs[23] = options.dissolveTextureScale ? options.dissolveTextureScale[1] : 1.0;
 
     this.toonLightDir = this.grp2.setFloat(3, 'MAT_TOON_LIGHT_DIR', 3);
     this.toonLightDir[0] = options.toonLightDir ? options.toonLightDir[0] : 0.0;
@@ -241,10 +274,10 @@ class Gfx3Material {
       throw new Error('Gfx3Material::loadFromFile(): File not valid !');
     }
 
-    const animations = new Array<MATAnimation>();
-    for (const obj of json['Animations']) {
-      animations.push({
-        name: obj['Name'],
+    const flipbooks = new Array<MATFlipbook>();
+    for (const obj of json['Flipbooks']) {
+      flipbooks.push({
+        textureTarget: obj['TextureTarget'],
         frameWidth: parseInt(obj['FrameWidth']),
         frameHeight: parseInt(obj['FrameHeight']),
         numCol: parseInt(obj['NumCol']),
@@ -263,7 +296,7 @@ class Gfx3Material {
     }
 
     return new Gfx3Material({
-      animations: animations,
+      flipbooks: flipbooks,
       id: json['Id'],
       normalIntensity: json['NormalIntensity'],
       lightning: json['Lightning'],
@@ -327,63 +360,77 @@ class Gfx3Material {
    * The update function.
    */
   update(ts: number): void {
-    if (!this.currentAnimation) {
-      return;
-    }
-
-    const offsetX = this.currentAnimation.frameWidth * (this.currentAnimationFrameIndex % this.currentAnimation.numCol);
-    const offsetY = this.currentAnimation.frameHeight * Math.floor(this.currentAnimationFrameIndex / this.currentAnimation.numCol);
-
-    this.uvs[2] = offsetX / this.texture.gpuTexture.width;
-    this.uvs[3] = offsetY / this.texture.gpuTexture.height;
-    this.dataChanged = true;
-
-    if (this.frameProgress >= this.currentAnimation.frameDuration) {
-      if (this.currentAnimationFrameIndex == this.currentAnimation.numFrames - 1) {
-        eventManager.emit(this, 'E_FINISHED');
-        this.currentAnimationFrameIndex = this.looped ? 0 : this.currentAnimation.numFrames - 1;
-        this.frameProgress = 0;
+    for (const animation of this.animations) {
+      if (!animation.playing) {
+        continue;
+      }
+  
+      const offsetX = animation.flipbook.frameWidth * (animation.currentFrameIndex % animation.flipbook.numCol);
+      const offsetY = animation.flipbook.frameHeight * Math.floor(animation.currentFrameIndex / animation.flipbook.numCol);
+  
+      this.uvs[animation.uvsIndexes[0]] = offsetX / this.texture.gpuTexture.width;
+      this.uvs[animation.uvsIndexes[1]] = offsetY / this.texture.gpuTexture.height;
+      this.dataChanged = true;
+  
+      if (animation.frameProgress >= animation.flipbook.frameDuration) {
+        if (animation.currentFrameIndex == animation.flipbook.numFrames - 1) {
+          eventManager.emit(this, 'E_FINISHED');
+          animation.currentFrameIndex = animation.looped ? 0 : animation.flipbook.numFrames - 1;
+          animation.frameProgress = 0;
+          animation.playing = animation.looped ? true : false;
+        }
+        else {
+          animation.currentFrameIndex = animation.currentFrameIndex + 1;
+          animation.frameProgress = 0;
+        }
       }
       else {
-        this.currentAnimationFrameIndex = this.currentAnimationFrameIndex + 1;
-        this.frameProgress = 0;
+        animation.frameProgress += ts;
       }
-    }
-    else {
-      this.frameProgress += ts;
     }
   }
 
   /**
    * Play a specific animation.
    * 
-   * @param {string} animationName - The name of the animation to be played.
+   * @param {TextureTarget} textureTarget - The name of the animated texture.
    * @param {boolean} [looped=false] - Determines whether the animation should loop or not.
    * @param {boolean} [preventSameAnimation=false] - Determines whether the same animation should be prevented from playing again.
    */
-  playAnimation(animationName: string, looped: boolean = false, preventSameAnimation: boolean = false): void {
-    if (preventSameAnimation && this.currentAnimation && animationName == this.currentAnimation.name) {
+  playFlipbook(textureTarget: TextureTarget, looped: boolean = false, preventSameAnimation: boolean = false): void {
+    const animation = this.animations.find(anim => anim.flipbook.textureTarget == textureTarget);
+    if (!animation) {
+      throw new Error('Gfx3Material::playFlipbook: animation not found.');
+    }
+
+    if (preventSameAnimation && animation.playing) {
       return;
     }
 
-    const animation = this.animations.find(animation => animation.name == animationName);
-    if (!animation) {
-      throw new Error('Gfx3Material::play: animation not found.');
-    }
-
-    this.currentAnimation = animation;
-    this.currentAnimationFrameIndex = 0;
-    this.looped = looped;
-    this.frameProgress = 0;
+    animation.currentFrameIndex = 0;
+    animation.looped = looped;
+    animation.frameProgress = 0;
+    animation.playing = true;
   }
 
   /**
-   * Stop animation and set current animation to null.
+   * Stop the specified texture animation.
+   * 
+   * @param {TextureTarget} textureTarget - The name of the animated texture.
    */
-  resetAnimation(): void {
-    this.currentAnimation = null;
-    this.uvs[2] = 0.0;
-    this.uvs[3] = 0.0;
+  stopFlipbook(textureTarget: TextureTarget): void {
+    const animation = this.animations.find(anim => anim.flipbook.textureTarget == textureTarget);
+    if (!animation) {
+      throw new Error('Gfx3Material::stopFlipbook: animation not found.');
+    }
+
+    animation.playing = false;
+    animation.currentFrameIndex = 0;
+    animation.looped = false;
+    animation.frameProgress = 0;
+
+    this.uvs[animation.uvsIndexes[0]] = 0.0;
+    this.uvs[animation.uvsIndexes[1]] = 0.0;
     this.dataChanged = true;
   }
 
@@ -587,8 +634,8 @@ class Gfx3Material {
    * @param {number} y - The vertical scale.
    */
   setSecondaryTextureScale(x: number, y: number): void {
-    this.uvs[8] = x;
-    this.uvs[9] = y;
+    this.uvs[10] = x;
+    this.uvs[11] = y;
     this.dataChanged = true;
   }
 
@@ -606,8 +653,8 @@ class Gfx3Material {
    */
   setDisplacementMap(displacementMap: Gfx3Texture, angle: number = 0, rate: number = 0, factor: number = 0): void {
     this.displacementMap = displacementMap;
-    this.uvs[10] = angle;
-    this.uvs[11] = rate;
+    this.uvs[12] = angle;
+    this.uvs[13] = rate;
     this.params[5] = 1;
     this.params[6] = factor;
     this.texturesChanged = true;
@@ -621,8 +668,8 @@ class Gfx3Material {
    * @param {number} [rate=0] - The scrolling rate of the texture.
    */
   setDisplacementMapScroll(angle: number = 0, rate: number = 0): void {
-    this.uvs[10] = angle;
-    this.uvs[11] = rate;
+    this.uvs[12] = angle;
+    this.uvs[13] = rate;
     this.dataChanged = true;
   }
 
@@ -633,8 +680,8 @@ class Gfx3Material {
    * @param {number} y - The vertical scale.
    */
   setDisplacementMapScale(x: number, y: number): void {
-    this.uvs[12] = x;
-    this.uvs[13] = y;
+    this.uvs[16] = x;
+    this.uvs[17] = y;
     this.dataChanged = true;
   }
 
@@ -732,8 +779,8 @@ class Gfx3Material {
    * @param {number} [rate=0] - The scrolling rate of the texture.
    */
   setDissolveTextureScroll(angle: number = 0, rate: number = 0): void {
-    this.uvs[14] = angle;
-    this.uvs[15] = rate;
+    this.uvs[18] = angle;
+    this.uvs[19] = rate;
     this.dataChanged = true;
   }
 
@@ -744,8 +791,8 @@ class Gfx3Material {
    * @param {number} y - The vertical scale.
    */
   setDissolveTextureScale(x: number, y: number): void {
-    this.uvs[16] = x;
-    this.uvs[17] = y;
+    this.uvs[22] = x;
+    this.uvs[23] = y;
     this.dataChanged = true;
   }
 
@@ -1037,3 +1084,4 @@ class Gfx3Material {
 }
 
 export { Gfx3Material };
+export type { TextureTarget };
