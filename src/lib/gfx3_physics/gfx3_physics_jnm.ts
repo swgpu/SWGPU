@@ -448,6 +448,13 @@ class Gfx3PhysicsJNM {
     return this.fragColors[fragIndex];
   }
 
+  /**
+   * Return bounding box.
+   */
+  getBoundingBox(): Gfx3BoundingBox {
+    return this.boundingBox;
+  }
+
   #moveXZ(frags: Array<Frag>, point: vec3, move: vec2, i: number = 0 ): { move: vec2 } {
     let minFrag: Frag | null = null;
     let minPenLength = Infinity;

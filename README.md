@@ -209,10 +209,10 @@ List of examples:
 - 3D Pack
 
 ## Compatible tools
-- Asesprite
-- Tilekit
-- SpriteFusion
-- Blender
+- Asesprite [Asesprite](https://www.aseprite.org/)
+- Tilekit [Tilekit](https://rxi.itch.io/tilekit)
+- SpriteFusion [Spritefusion](https://www.spritefusion.com/)
+- Blender [Blender](https://www.blender.org/)
 
 ## Blender plugin
 Download the exporter [here](https://github.com/swgpu/SWGPU/blob/main/bin/SWGPU-Blender-Exporter.zip).   
