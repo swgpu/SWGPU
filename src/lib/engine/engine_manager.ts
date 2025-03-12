@@ -14,6 +14,7 @@ import { gfx3ShadowVolumeRenderer } from '../gfx3_shadow_volume/gfx3_shadow_volu
 import { screenManager } from '../screen/screen_manager';
 import { uiManager } from '../ui/ui_manager';
 import { soundManager } from '@lib/sound/sound_manager';
+import { time } from 'console';
 
 enum RenderingMode {
   DIM_2D = 'DIM_2D',
@@ -30,15 +31,19 @@ class EngineManager {
   frameRateFixed: boolean;
   frameRateValue: number;
   paused: boolean;
+  lastAnimationFrameId: number;
   mode: RenderingMode;
+  pauseStartTime: number;
 
   constructor() {
     this.then = 0;
     this.elapsedTime = 0;
     this.frameRateFixed = false;
     this.frameRateValue = 60;
-    this.paused = false;
     this.mode = RenderingMode.DIM_XD;
+    this.paused = false;
+    this.lastAnimationFrameId = 0;
+    this.pauseStartTime = 0;
 
     document.addEventListener('visibilitychange', () => this.#handleVisibilityChange());
   }
@@ -58,13 +63,16 @@ class EngineManager {
   /**
    * The main loop.
    */
-  run(timeStamp: number, state: 'pause' | 'resume' |'normal' = 'normal'): void {
-    if (state == 'pause') {
+  run(timeStamp: number, state: 'pause' | 'resume' | 'normal' = 'normal'): void {
+    if (state === 'pause') {
+      this.pauseStartTime = timeStamp;
+      cancelAnimationFrame(this.lastAnimationFrameId);
       return;
     }
 
-    if (state == 'resume') {
-      this.then = timeStamp;
+    if (state === 'resume') {
+      const pauseDuration = timeStamp - this.pauseStartTime;
+      this.then = this.then + pauseDuration;
     }
 
     //
@@ -139,7 +147,7 @@ class EngineManager {
       rt.textContent = (1000 / gfx3Manager.getLastRenderTime()).toFixed(2);
     }
 
-    requestAnimationFrame(timeStamp => this.run(timeStamp));
+    this.lastAnimationFrameId = requestAnimationFrame(timeStamp => this.run(timeStamp));
   }
 
   /**
@@ -173,7 +181,12 @@ class EngineManager {
    * Make the update loop paused.
    */
   pause(): void {
-    this.run(0, 'pause');
+    if (this.paused) {
+      return;
+    }
+
+    this.paused = true;
+    this.run(performance.now(), 'pause');
     soundManager.pause();
   }
 
@@ -181,7 +194,12 @@ class EngineManager {
    * Make the update loop running.
    */
   resume(): void {
-    this.run(0, 'resume');
+    if (!this.paused) {
+      return;
+    }
+
+    this.paused = false;
+    this.run(performance.now(), 'resume');
     soundManager.resume();
   }
 
