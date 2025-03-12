@@ -214,8 +214,8 @@ List of examples:
 - [Spritefusion](https://www.spritefusion.com/)
 - [Blender](https://www.blender.org/)
 
-## Blender plugin
-Download the exporter [here](https://github.com/swgpu/SWGPU/blob/main/bin/SWGPU-Blender-Exporter.zip).   
+## The Blender Plugin
+Find the the exporter in bin folder of this repository.   
 Install it on Blender by going to Edit -> Preferences -> Add-ons -> Install... -> Select the zip.   
 Push "n", and click on WarmeY2K Exporter to see the exportation panel.   
 Please, before export check if:   
