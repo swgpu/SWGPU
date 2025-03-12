@@ -14,7 +14,6 @@ import { gfx3ShadowVolumeRenderer } from '../gfx3_shadow_volume/gfx3_shadow_volu
 import { screenManager } from '../screen/screen_manager';
 import { uiManager } from '../ui/ui_manager';
 import { soundManager } from '@lib/sound/sound_manager';
-import { time } from 'console';
 
 enum RenderingMode {
   DIM_2D = 'DIM_2D',
