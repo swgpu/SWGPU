@@ -209,10 +209,10 @@ List of examples:
 - 3D Pack
 
 ## Compatible tools
-- Asesprite [Asesprite](https://www.aseprite.org/)
-- Tilekit [Tilekit](https://rxi.itch.io/tilekit)
-- SpriteFusion [Spritefusion](https://www.spritefusion.com/)
-- Blender [Blender](https://www.blender.org/)
+- [Asesprite](https://www.aseprite.org/)
+- [Tilekit](https://rxi.itch.io/tilekit)
+- [Spritefusion](https://www.spritefusion.com/)
+- [Blender](https://www.blender.org/)
 
 ## Blender plugin
 Download the exporter [here](https://github.com/swgpu/SWGPU/blob/main/bin/SWGPU-Blender-Exporter.zip).   
@@ -239,7 +239,7 @@ Congratulation, your static mesh is now exported !
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
 ## Bugs track
-- Physics bug when change tab and come back (even with paused the game before tab changing)
+- ~~Physics bug when change tab and come back (even with paused the game before tab changing)~~
 
 ## Changelog
 ```
