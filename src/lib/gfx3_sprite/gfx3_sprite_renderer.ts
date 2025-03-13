@@ -26,9 +26,17 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
   /**
    * The render function.
    */
-  render(): void {
+  render(destinationTexture: GPUTexture | null = null): void {
     const currentView = gfx3Manager.getCurrentView();
-    const passEncoder = gfx3Manager.getPassEncoder();
+    const commandEncoder = gfx3Manager.getCommandEncoder();
+    const passEncoder = destinationTexture ? commandEncoder.beginRenderPass({
+      colorAttachments: [{
+        view: destinationTexture.createView(),
+        loadOp: 'clear',
+        storeOp: 'store'
+      }]
+    }) : gfx3Manager.getPassEncoder();
+
     passEncoder.setPipeline(this.pipeline);
 
     if (this.grp0.getSize() < this.sprites.length) {
@@ -66,6 +74,10 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
 
     this.grp0.endWrite();
     this.sprites = [];
+
+    if (destinationTexture) {
+      passEncoder.end();
+    }
   }
 
   /**

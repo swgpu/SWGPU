@@ -33,6 +33,10 @@ class EngineManager {
   lastAnimationFrameId: number;
   mode: RenderingMode;
   pauseStartTime: number;
+  onBegin3DRender: Function;
+  onEnd3DRender: Function;
+  onBegin2DRender: Function;
+  onEnd2DRender: Function;
 
   constructor() {
     this.then = 0;
@@ -43,6 +47,10 @@ class EngineManager {
     this.paused = false;
     this.lastAnimationFrameId = 0;
     this.pauseStartTime = 0;
+    this.onBegin3DRender = () => {};
+    this.onEnd3DRender = () => {};
+    this.onBegin2DRender = () => {};
+    this.onEnd2DRender = () => {};
 
     document.addEventListener('visibilitychange', () => this.#handleVisibilityChange());
   }
@@ -112,15 +120,18 @@ class EngineManager {
     //
     if (this.mode == RenderingMode.DIM_2D || this.mode == RenderingMode.DIM_XD) {
       gfx2Manager.beginRender();
+      this.onBegin2DRender();
       gfx2Manager.render();
+      this.onEnd2DRender();
       gfx2Manager.endRender();
-    }
+     }
 
     //
     // begin 3d render phase
     //
     if (this.mode == RenderingMode.DIM_3D || this.mode == RenderingMode.DIM_XD) {
       gfx3Manager.beginRender();
+      this.onBegin3DRender();
       gfx3MeshShadowRenderer.render();
       gfx3ShadowVolumeRenderer.render();
       gfx3Manager.setDestinationTexture(gfx3PostRenderer.getSourceTexture());
@@ -132,6 +143,7 @@ class EngineManager {
       gfx3ParticlesRenderer.render();
       gfx3FlareRenderer.render();
       gfx3Manager.endPassRender();
+      this.onEnd3DRender();
       gfx3PostRenderer.render(ts, gfx3Manager.getCurrentRenderingTexture());
       gfx3Manager.endRender();
     }
@@ -200,6 +212,42 @@ class EngineManager {
     this.paused = false;
     this.run(performance.now(), 'resume');
     soundManager.resume();
+  }
+
+  /**
+   * Set the function to call when the 3D render phase begins.
+   * 
+   * @param {Function} onBegin3DRender - The function to call.
+   */
+  setOnBegin3DRender(onBegin3DRender: Function): void {
+    this.onBegin3DRender = onBegin3DRender;
+  }
+
+  /**
+   * Set the function to call when the 3D render phase ends.
+   * 
+   * @param {Function} onEnd3DRender - The function to call.
+   */
+  setOnEnd3DRender(onEnd3DRender: Function): void {
+    this.onEnd3DRender = onEnd3DRender;
+  }
+
+  /**
+   * Set the function to call when the 2D render phase begins.
+   * 
+   * @param {Function} onBegin2DRender - The function to call.
+   */
+  setOnBegin2DRender(onBegin2DRender: Function): void {
+    this.onBegin2DRender = onBegin2DRender;
+  }
+
+  /**
+   * Set the function to call when the 2D render phase ends.
+   * 
+   * @param {Function} onEnd2DRender - The function to call.
+   */
+  setOnEnd2DRender(onEnd2DRender: Function): void {
+    this.onEnd2DRender = onEnd2DRender;
   }
 
   #handleVisibilityChange() {

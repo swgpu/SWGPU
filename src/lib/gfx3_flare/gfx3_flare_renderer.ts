@@ -46,9 +46,17 @@ class Gfx3FlareRenderer extends Gfx3RendererAbstract {
   /**
    * The render function.
    */
-  render(): void {
+  render(destinationTexture: GPUTexture | null = null): void {
     const currentView = gfx3Manager.getCurrentView();
-    const passEncoder = gfx3Manager.getPassEncoder();
+    const commandEncoder = gfx3Manager.getCommandEncoder();
+    const passEncoder = destinationTexture ? commandEncoder.beginRenderPass({
+      colorAttachments: [{
+        view: destinationTexture.createView(),
+        loadOp: 'clear',
+        storeOp: 'store'
+      }]
+    }) : gfx3Manager.getPassEncoder();
+
     passEncoder.setPipeline(this.pipeline);
 
     this.grp0.beginWrite();
@@ -82,6 +90,10 @@ class Gfx3FlareRenderer extends Gfx3RendererAbstract {
 
     this.grp1.endWrite();
     this.flares = [];
+
+    if (destinationTexture) {
+      passEncoder.end();
+    }
   }
 
   /**

@@ -67,9 +67,16 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   /**
    * The render function.
    */
-  render(ts: number): void {
+  render(ts: number, destinationTexture: GPUTexture | null = null): void {
     const currentView = gfx3Manager.getCurrentView();
-    const passEncoder = gfx3Manager.getPassEncoder();
+    const commandEncoder = gfx3Manager.getCommandEncoder();
+    const passEncoder = destinationTexture ? commandEncoder.beginRenderPass({
+      colorAttachments: [{
+        view: destinationTexture.createView(),
+        loadOp: 'clear',
+        storeOp: 'store'
+      }]
+    }) : gfx3Manager.getPassEncoder();
 
     const bpcMatrix = currentView.getBillboardProjectionClipMatrix();
     const vpcMatrix = currentView.getViewProjectionClipMatrix();
@@ -125,6 +132,10 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.sceneInfos[9] = 0;
     this.decals.fill(0);
     this.meshCommands = [];
+
+    if (destinationTexture) {
+      passEncoder.end();
+    }
   }
 
   /**

@@ -34,9 +34,17 @@ class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
   /**
    * The render function.
    */
-  render(): void {
+  render(destinationTexture: GPUTexture | null = null): void {
     const currentView = gfx3Manager.getCurrentView();
-    const passEncoder = gfx3Manager.getPassEncoder();
+    const commandEncoder = gfx3Manager.getCommandEncoder();
+    const passEncoder = destinationTexture ? commandEncoder.beginRenderPass({
+      colorAttachments: [{
+        view: destinationTexture.createView(),
+        loadOp: 'clear',
+        storeOp: 'store'
+      }]
+    }) : gfx3Manager.getPassEncoder();
+
     const vpcMatrix = currentView.getViewProjectionClipMatrix();
     passEncoder.setPipeline(this.pipeline);
 
@@ -66,6 +74,10 @@ class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
 
     this.grp1.endWrite();
     this.particlesList = [];
+
+    if (destinationTexture) {
+      passEncoder.end();
+    }
   }
 
   /**

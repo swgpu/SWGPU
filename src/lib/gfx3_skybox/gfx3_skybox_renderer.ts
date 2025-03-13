@@ -26,13 +26,21 @@ class Gfx3SkyboxRenderer extends Gfx3RendererAbstract {
   /**
    * The render function.
    */
-  render(): void {
+  render(destinationTexture: GPUTexture | null = null): void {
     if (!this.skybox) {
       return;
     }
 
     const currentView = gfx3Manager.getCurrentView();
-    const passEncoder = gfx3Manager.getPassEncoder();
+    const commandEncoder = gfx3Manager.getCommandEncoder();
+    const passEncoder = destinationTexture ? commandEncoder.beginRenderPass({
+      colorAttachments: [{
+        view: destinationTexture.createView(),
+        loadOp: 'clear',
+        storeOp: 'store'
+      }]
+    }) : gfx3Manager.getPassEncoder();
+
     passEncoder.setPipeline(this.pipeline);
 
     const viewMatrix = new Float32Array(currentView.getCameraViewMatrix());
@@ -50,6 +58,10 @@ class Gfx3SkyboxRenderer extends Gfx3RendererAbstract {
 
     passEncoder.setVertexBuffer(0, gfx3Manager.getVertexBuffer(), this.skybox.getVertexSubBufferOffset(), this.skybox.getVertexSubBufferSize());
     passEncoder.draw(this.skybox.getVertexCount());
+
+    if (destinationTexture) {
+      passEncoder.end();
+    }
   }
 
   /**
