@@ -62,7 +62,7 @@ Go to http://localhost:5173.
 - 📐 **2D Physics**
     - BoundingRect
     - Tilemap box collider with slopes support
-    - Rapier2D
+    - Box2D built-in
 
 - 🧊 **3D**
     - Debug shapes
@@ -94,7 +94,7 @@ Go to http://localhost:5173.
     - Walkmesh
     - Hitmesh
     - Ray-testing
-    - Rapier3D
+    - Jolt built-in
 
 - 💥 **3D Material**
     - Phong reflection model
@@ -196,12 +196,13 @@ List of templates that you can test [here](https://jay19240.github.io/):
 - 2D Shoot'em up
 - 3D Third Person Camera
 - 2D Platformer
+- 3D Physics
+- 2D Physics
 
 List of examples:
 - 3D Curve
 - 3D Particles
 - 3D Performance Test
-- 3D Rapier
 - 3D Shadow Map
 - UI Menu
 - 3D Viewer
@@ -235,7 +236,8 @@ Congratulation, your static mesh is now exported !
 ## Some parts taken for this work
 - DOM for UI elements
 - CanvasRenderingContext2D for 2D stuffs
-- [Rapier](https://rapier.rs/) for both 2D and 3D physics engine
+- [Box2D](https://box2d.org/) for 2D physics engine
+- [Jolt Physics](https://jrouwe.github.io/JoltPhysics/) for 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
 ## Bugs track
