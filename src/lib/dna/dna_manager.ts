@@ -31,6 +31,12 @@ class DNAManager {
         system.actionOnce(data.actionId);
       }
     });
+
+    eventManager.subscribe(inputManager, 'E_ACTION_RELEASED', this, (data: any) => {
+      for (let system of this.systems) {
+        system.actionReleased(data.actionId);
+      }
+    });
   }
 
   /**

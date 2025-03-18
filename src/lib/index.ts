@@ -27,7 +27,7 @@ export { Gfx2TreePartition, Gfx2TreePartitionMethod } from './gfx2/gfx2_tree_par
 export { Gfx2IsoTileMapLayer } from './gfx2_iso/gfx2_iso_tile_map_layer';
 export { Gfx2IsoTile } from './gfx2_iso/gfx2_iso_tile';
 export { Gfx2Particles, PositionStyle, VelocityStyle } from './gfx2_particles/gfx2_particles';
-export { Rapier2D } from './gfx2_physics/gfx2_physics_rapier';
+export { Gfx2Box2D } from './gfx2_physics/gfx2_physics_box2d';
 export { Gfx2SpriteJAS } from './gfx2_sprite/gfx2_sprite_jas';
 export { Gfx2SpriteJSS } from './gfx2_sprite/gfx2_sprite_jss';
 export { Gfx2SpriteScrolling } from './gfx2_sprite/gfx2_sprite_scrolling';
@@ -59,7 +59,7 @@ export { Fountain, Fireball, Smoke, Clouds, Snow, Rain, Starfield, Fireflies, St
 export { Gfx3Particles } from './gfx3_particules/gfx3_particles';
 export { Gfx3PhysicsJNM } from './gfx3_physics/gfx3_physics_jnm';
 export { Gfx3PhysicsJWM } from './gfx3_physics/gfx3_physics_jwm';
-export { Rapier3D } from './gfx3_physics/gfx3_physics_rapier';
+export { Gfx3Jolt } from './gfx3_physics/gfx3_physics_jolt';
 export { Gfx3ShadowVolume } from './gfx3_shadow_volume/gfx3_shadow_volume';
 export { Gfx3Skybox } from './gfx3_skybox/gfx3_skybox';
 export { Gfx3SpriteJAS } from './gfx3_sprite/gfx3_sprite_jas';

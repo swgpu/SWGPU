@@ -4,7 +4,6 @@ import path from 'path';
 
 export default {
   plugins: [
-		wasm(),
     FullReload(['public/**'])
   ],
   resolve: {

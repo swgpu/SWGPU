@@ -874,6 +874,14 @@ class UT {
   }
 
   /**
+   * @param a - The vector to transform.
+   * @param q - The quaternion filter.
+   */
+  static VEC3_APPLY_QUATERNION(a: vec3, q: Quaternion): vec3 {
+    return q.rotateVector(a);
+  }
+
+  /**
    * @param x - The first component.
    * @param y - The second component.
    * @param z - The third component.

@@ -38,6 +38,16 @@ class Screen {
   draw(): void {}
 
   /**
+   * Virtual function called during the render phase.
+   */
+  render2D(): void {}
+
+  /**
+   * Virtual function called during the render phase.
+   */
+  render3D(): void {}
+
+  /**
    * Virtual asynchronous method that is called when screen is pushed to the stack.
    * 
    * @param {any} args - Used to pass any additional arguments or data to the "onEnter" method.

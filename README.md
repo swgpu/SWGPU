@@ -243,14 +243,20 @@ Congratulation, your static mesh is now exported !
 
 ## Changelog
 ```
-- [Ver. 1.6.5] Changes material animation to support multi-textures.
-- [Ver. 1.6.5] Scroll added on main textures.
-- [Ver. 1.6.5] Secondary texture added.
-- [Ver. 1.6.5] Dissolve texture added.
-- [Ver. 1.6.0] Tile slope support added.
-- [Ver. 1.6.0] Spritefusion support re-added.
-- [Ver. 1.6.0] Aseprite support added.
-- [Ver. 1.6.0] Tilekit support added.
+- [Ver. 1.6.13] The 3D physics demo become more complete (full character implementation).
+- [Ver. 1.6.12] A 2D physics demo is added.
+- [Ver. 1.6.12] Change Rapier3D physics engine for Jolt Physics.
+- [Ver. 1.6.12] Change Rapier2D physics engine for Box2D.
+- [Ver. 1.6.12] Change the shootemup demo for a real shootemup base.
+- [Ver. 1.6.12] Renderer hook in screen added.
+- [Ver. 1.6.5]  Changes material animation to support multi-textures.
+- [Ver. 1.6.5]  Scroll added on main textures.
+- [Ver. 1.6.5]  Secondary texture added.
+- [Ver. 1.6.5]  Dissolve texture added.
+- [Ver. 1.6.0]  Tile slope support added.
+- [Ver. 1.6.0]  Spritefusion support re-added.
+- [Ver. 1.6.0]  Aseprite support added.
+- [Ver. 1.6.0]  Tilekit support added.
 - [Ver. 1.5.0]  Pack archivage added.
 - [Ver. 1.5.0]  New mesh shader hook added.
 - [Ver. 1.5.0]  Engine manager added.
@@ -307,4 +313,6 @@ SWGPU is released under the [MIT](https://opensource.org/licenses/MIT) license.
     <img src="https://github.com/swgpu/swgpu.github.io/blob/main/screenshots/21.png?raw=true" width="250" height="250"/>
     <img src="https://github.com/swgpu/swgpu.github.io/blob/main/screenshots/22.png?raw=true" width="250" height="250"/>
     <img src="https://github.com/swgpu/swgpu.github.io/blob/main/screenshots/23.png?raw=true" width="250" height="250"/>
+    <img src="https://github.com/swgpu/swgpu.github.io/blob/main/screenshots/24.png?raw=true" width="250" height="250"/>
+    <img src="https://github.com/swgpu/swgpu.github.io/blob/main/screenshots/25.png?raw=true" width="250" height="250"/>
 </div>

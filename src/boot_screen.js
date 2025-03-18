@@ -20,12 +20,13 @@ import { TilemapIsoScreen } from './templates/tilemap-iso/tilemap_iso_screen';
 import { TilemapPathfindingScreen } from './templates/tilemap-pathfinding/tilemap_pathfinding_screen';
 import { TripleTriadScreen } from './templates/triple-triad/triple_triad_screen';
 import { VisualNovelScreen } from './templates/visual-novel/visual_novel_screen';
+import { PhysicsJoltScreen } from './templates/physics-jolt/physics_jolt_screen';
+import { PhysicsBox2DScreen } from './templates/physics-box2d/physics_box2d_screen';
 // ---------------------------------------------------------------------------------------
 import { CurveScreen } from './utils/curve/curve_screen';
 import { MenuRingScreen } from './utils/menu-ring/menu_ring_screen';
 import { ParticlesScreen } from './utils/particles/particles_screen';
 import { PerfScreen } from './utils/perf/perf_screen';
-import { RapierScreen } from './utils/rapier/rapier_screen';
 import { ShadowScreen } from './utils/shadow/shadow_screen';
 import { UserInterfaceScreen } from './utils/user-interface/user_interface_screen';
 import { ViewerScreen } from './utils/viewer/viewer_screen';
@@ -61,18 +62,19 @@ class BootScreen extends Screen {
     this.uiTemplates.add('13', '2D Triple Triad');
     this.uiTemplates.add('14', '2D Visual Novel');
     this.uiTemplates.add('15', '2D Platformer');
+    this.uiTemplates.add('16', '3D Physics With Jolt');
+    this.uiTemplates.add('17', '2D Physics With Box2D');
     this.uiTemplates.setVisible(false);
     uiManager.addWidget(this.uiTemplates, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
     this.uiUtils.add('0', '3D Curve');
     this.uiUtils.add('1', '3D Particles');
     this.uiUtils.add('2', '3D Perf');
-    this.uiUtils.add('3', '3D Rapier');
-    this.uiUtils.add('4', '3D Shadow Map');
-    this.uiUtils.add('5', 'UI Menu');
-    this.uiUtils.add('6', '3D Viewer');
-    this.uiUtils.add('7', '3D Menu Ring');
-    this.uiUtils.add('8', '3D Pack');
+    this.uiUtils.add('3', '3D Shadow Map');
+    this.uiUtils.add('4', 'UI Menu');
+    this.uiUtils.add('5', '3D Viewer');
+    this.uiUtils.add('6', '3D Menu Ring');
+    this.uiUtils.add('7', '3D Pack');
     this.uiUtils.setVisible(false);
     uiManager.addWidget(this.uiUtils, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
@@ -148,6 +150,12 @@ class BootScreen extends Screen {
     else if (data.id == 15) {
       screenManager.requestSetScreen(new PlatformerScreen());
     }
+    else if (data.id == 16) {
+      screenManager.requestSetScreen(new PhysicsJoltScreen());
+    }
+    else if (data.id == 17) {
+      screenManager.requestSetScreen(new PhysicsBox2DScreen());
+    }
   }
 
   handleUtilSelected(data) {
@@ -161,21 +169,18 @@ class BootScreen extends Screen {
       screenManager.requestSetScreen(new PerfScreen());
     }
     else if (data.id == 3) {
-      screenManager.requestSetScreen(new RapierScreen());
-    }
-    else if (data.id == 4) {
       screenManager.requestSetScreen(new ShadowScreen());
     }
-    else if (data.id == 5) {
+    else if (data.id == 4) {
       screenManager.requestSetScreen(new UserInterfaceScreen());
     }
-    else if (data.id == 6) {
+    else if (data.id == 5) {
       screenManager.requestSetScreen(new ViewerScreen());
     }
-    else if (data.id == 7) {
+    else if (data.id == 6) {
       screenManager.requestSetScreen(new MenuRingScreen());
     }
-    else if (data.id == 8) {
+    else if (data.id == 7) {
       screenManager.requestSetScreen(new PackScreen());
     }
   }

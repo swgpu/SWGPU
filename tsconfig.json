@@ -3,6 +3,7 @@
     "typeRoots": [
       "./node_modules/@webgpu/types",
       "./node_modules/@types",
+      "./node_modules/box2d-wasm",
       "./src/lib/core"
     ],
     "baseUrl": ".",
@@ -16,9 +17,10 @@
       "ESNext",
       "DOM"
     ],
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "strict": true,
     "sourceMap": true,
+    "allowJs": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,

@@ -52,6 +52,19 @@ class DNASystem {
   }
 
   /**
+   * The render function.
+   */
+  render(): void {
+    this.onBeforeDraw();
+
+    for (const eid of this.eids) {
+      this.onEntityDraw(eid);
+    }
+
+    this.onAfterDraw();
+  }
+
+  /**
    * Call "onAction" for each entity (for internal use).
    * 
    * @param {string} actionId - The identifier of the action (see input_manager).
@@ -70,6 +83,17 @@ class DNASystem {
   actionOnce(actionId: string): void {
     for (const eid of this.eids) {
       this.onActionOnce(actionId, eid);
+    }
+  }
+
+  /**
+   * Call "onActionReleased" for each entity (for internal use).
+   * 
+   * @param {string} actionId - The identifier of the action (see input_manager).
+   */
+  actionReleased(actionId: string): void {
+    for (const eid of this.eids) {
+      this.onActionReleased(actionId, eid);
     }
   }
 
@@ -187,6 +211,14 @@ class DNASystem {
    * @param {number} eid - The entity's id.
    */
   onActionOnce(actionId: string, eid: number): void {}
+
+  /**
+   * Virtual method that is called when a specific action is released.
+   * 
+   * @param {string} actionId - The identifier of the action (see input_manager).
+   * @param {number} eid - The entity's id.
+   */
+  onActionReleased(actionId: string, eid: number): void {}
 
   /**
    * Virtual method that is called before the entities update phase.

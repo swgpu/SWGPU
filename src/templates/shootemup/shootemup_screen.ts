@@ -1,87 +1,45 @@
 import { uiManager } from '@lib/ui/ui_manager';
-import { eventManager } from '@lib/core/event_manager';
+import { inputManager } from '@lib/input/input_manager';
 import { screenManager } from '@lib/screen/screen_manager';
-import { dnaManager } from '@lib/dna/dna_manager';
-import { UIText } from '@lib/ui_text/ui_text';
 import { Screen } from '@lib/screen/screen';
+import { gfx2TextureManager } from '@lib/gfx2/gfx2_texture_manager';
+import { Gfx2SpriteJSS } from '@lib/gfx2_sprite/gfx2_sprite_jss';
 // ---------------------------------------------------------------------------------------
-import { generateWave } from './entities/asteroid';
-import { spawnShip } from './entities/ship';
-import { GameOverScreen } from './game_over_screen';
-import { ShipSystem } from './systems/ship';
-import { AsteroidSystem } from './systems/asteroid';
-import { BulletSystem } from './systems/bullet';
+import { GameScreen } from './game_screen';
 // ---------------------------------------------------------------------------------------
-
-const TOP_PADDING = 100;
-const LEFT_PADDING = 75;
-const NB_ROWS = 5;
-const NB_COLS = 8;
-const HOLES = [1, 2, 3, 4, 3];
-const WAVE_GENERATION_INTERVAL = 10000;
 
 class ShootemupScreen extends Screen {
-  shipSystem: ShipSystem;
-  asteroidSystem: AsteroidSystem;
-  bulletSystem: BulletSystem;
-  uiScore: UIText;
-  score: number;
-  waveAge: number;
+  startText: HTMLDivElement;
+  bg: Gfx2SpriteJSS;
 
   constructor() {
     super();
-    this.shipSystem = new ShipSystem();
-    this.asteroidSystem = new AsteroidSystem();
-    this.bulletSystem = new BulletSystem();
-    this.uiScore = new UIText();
-    this.score = 0;
-    this.waveAge = 0;
+    this.startText = document.createElement('div');
+    this.bg = new Gfx2SpriteJSS();
   }
 
   async onEnter() {
-    dnaManager.setup([
-      this.shipSystem,
-      this.asteroidSystem,
-      this.bulletSystem
-    ]);
+    await gfx2TextureManager.loadTexture('./templates/shootemup/title.png');
+    this.bg.setPosition(-300, -300);
+    this.bg.setTexture(gfx2TextureManager.getTexture('./templates/shootemup/title.png'));
 
-    this.uiScore.setText('Score: ' + this.score);
-    uiManager.addWidget(this.uiScore);
-
-    await spawnShip();
-    await generateWave(NB_ROWS, NB_COLS, HOLES, LEFT_PADDING, TOP_PADDING);
-
-    eventManager.subscribe(this.bulletSystem, 'E_ASTEROID_DESTROYED', this, this.handleAsteroidDestroyed);
-    eventManager.subscribe(this.asteroidSystem, 'E_PLAYER_DESTROYED', this, this.handlePlayerDestroyed);
+    this.startText.textContent = 'Press Enter to start.';
+    uiManager.addNode(this.startText, 'display:flex; justify-content:center; align-items:center; margin-top:20px; margin-left:20px; margin-right:20px; font-size:14px;');
   }
 
   onExit() {
-    uiManager.removeWidget(this.uiScore);
+    gfx2TextureManager.releaseTextures();
+    uiManager.removeNode(this.startText);
   }
 
-  update(ts: number) {
-    if (this.waveAge > WAVE_GENERATION_INTERVAL) {
-      generateWave(NB_ROWS, NB_COLS, HOLES, LEFT_PADDING, TOP_PADDING);
-      this.waveAge = 0;
+  update(dt: number) {
+    if (inputManager.isActiveAction('OK')) {
+      screenManager.requestSetScreen(new GameScreen());
     }
-    else {
-      this.waveAge += ts;
-    }
-
-    dnaManager.update(ts);
   }
 
   draw() {
-    dnaManager.draw();
-  }
-
-  handleAsteroidDestroyed() {
-    this.score += 10;
-    this.uiScore.setText('Score: ' + this.score);
-  }
-
-  handlePlayerDestroyed() {
-    screenManager.requestSetScreen(new GameOverScreen(), { score: this.score });
+    this.bg.draw();
   }
 }
 

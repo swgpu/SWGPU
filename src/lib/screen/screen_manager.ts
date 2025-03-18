@@ -43,6 +43,28 @@ class ScreenManager {
   }
 
   /**
+   * The render function during the 2D phase.
+   */
+  render2D(): void {
+    for (let i = this.screens.length - 1; i >= 0; i--) {
+      if (!this.screens[i].isBlocking()) {
+        this.screens[i].render2D();
+      }
+    }
+  }
+
+  /**
+   * The render function during the 3D phase.
+   */
+  render3D(): void {
+    for (let i = this.screens.length - 1; i >= 0; i--) {
+      if (!this.screens[i].isBlocking()) {
+        this.screens[i].render3D();
+      }
+    }
+  }
+
+  /**
    * Pushes a new screen to the stack, throwing an error if the screen is already present.
    * Note: The screen is pushed just after the onEnter method done the job.
    * 
