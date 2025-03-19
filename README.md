@@ -317,4 +317,5 @@ SWGPU is released under the [MIT](https://opensource.org/licenses/MIT) license.
     <img src="https://github.com/swgpu/swgpu.github.io/blob/main/screenshots/23.png?raw=true" width="250" height="250"/>
     <img src="https://github.com/swgpu/swgpu.github.io/blob/main/screenshots/24.png?raw=true" width="250" height="250"/>
     <img src="https://github.com/swgpu/swgpu.github.io/blob/main/screenshots/25.png?raw=true" width="250" height="250"/>
+    <img src="https://github.com/swgpu/swgpu.github.io/blob/main/screenshots/26.png?raw=true" width="250" height="250"/>
 </div>
