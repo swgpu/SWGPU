@@ -175,8 +175,8 @@ Go to http://localhost:5173.
     - ECS architecture implementation
 
 ## Examples
-This framework come with 16 common game templates and 9 utils templates.     
-Each one is thinking to represent a common game style like platformer, fighting, fps or rpg.     
+**SWGPU** come with 26 common examples.     
+Each one is thinking to represent a common game style (platformer, fighting, fps, rpg, etc...) or just a demo of features.     
 Template are written in typescript/javascript and build to be clean and extensible.
 
 List of templates that you can test [here](https://jay19240.github.io/):
