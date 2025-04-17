@@ -136,14 +136,11 @@ struct Params {
 @group(0) @binding(6) var IDS_TEXTURE: texture_2d<f32>;
 @group(0) @binding(7) var IDS_SAMPLER: sampler;
 @group(0) @binding(8) var DEPTH_TEXTURE: texture_depth_2d;
-@group(0) @binding(9) var DEPTH_SAMPLER: sampler;
 
 @group(1) @binding(0) var SHADOW_VOL_TEXTURE: texture_2d<f32>;
 @group(1) @binding(1) var SHADOW_VOL_SAMPLER: sampler;
 @group(1) @binding(2) var SHADOW_VOL_DEPTH_CCW_TEXTURE: texture_depth_2d;
-@group(1) @binding(3) var SHADOW_VOL_DEPTH_CCW_SAMPLER: sampler;
-@group(1) @binding(4) var SHADOW_VOL_DEPTH_CW_TEXTURE: texture_depth_2d;
-@group(1) @binding(5) var SHADOW_VOL_DEPTH_CW_SAMPLER: sampler;
+@group(1) @binding(3) var SHADOW_VOL_DEPTH_CW_TEXTURE: texture_depth_2d;
 
 @group(2) @binding(0) var S0_TEXTURE: texture_2d<f32>;
 @group(2) @binding(1) var S0_SAMPLER: sampler;
@@ -178,10 +175,10 @@ fn main(
   flags = u32(id.a);
 
   var normal = textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, fragUV);
-  var depth = textureSample(DEPTH_TEXTURE, DEPTH_SAMPLER, fragUV);
+  var depth = LinearlyFilterDepthTexture(DEPTH_TEXTURE, fragUV);
   var shadowVol = textureSample(SHADOW_VOL_TEXTURE, SHADOW_VOL_SAMPLER, fragUV);
-  var shadowVolDepthCW = textureSample(SHADOW_VOL_DEPTH_CW_TEXTURE, SHADOW_VOL_DEPTH_CW_SAMPLER, fragUV);
-  var shadowVolDepthCCW = textureSample(SHADOW_VOL_DEPTH_CCW_TEXTURE, SHADOW_VOL_DEPTH_CCW_SAMPLER, fragUV);
+  var shadowVolDepthCW = LinearlyFilterDepthTexture(SHADOW_VOL_DEPTH_CW_TEXTURE, fragUV);
+  var shadowVolDepthCCW = LinearlyFilterDepthTexture(SHADOW_VOL_DEPTH_CCW_TEXTURE, fragUV);
   var s0 = textureSample(S0_TEXTURE, S0_SAMPLER, fragUV);
   var s1 = textureSample(S1_TEXTURE, S1_SAMPLER, fragUV);
 
@@ -210,14 +207,14 @@ fn main(
       t = PARAMS.OUTLINE_THICKNESS;
     }
 
-    idDiff += distance(id, getIdValue(fragUV, vec2<f32>( t,  0)));
-    idDiff += distance(id, getIdValue(fragUV, vec2<f32>( 0,  t)));
-    idDiff += distance(id, getIdValue(fragUV, vec2<f32>( 0,  t)));
-    idDiff += distance(id, getIdValue(fragUV, vec2<f32>( 0, -t)));
-    idDiff += distance(id, getIdValue(fragUV, vec2<f32>( t,  t)));
-    idDiff += distance(id, getIdValue(fragUV, vec2<f32>( t, -t)));
-    idDiff += distance(id, getIdValue(fragUV, vec2<f32>(-t,  t)));
-    idDiff += distance(id, getIdValue(fragUV, vec2<f32>(-t, -t)));
+    idDiff += distance(id, GetIdValue(fragUV, vec2<f32>( t,  0)));
+    idDiff += distance(id, GetIdValue(fragUV, vec2<f32>( 0,  t)));
+    idDiff += distance(id, GetIdValue(fragUV, vec2<f32>( 0,  t)));
+    idDiff += distance(id, GetIdValue(fragUV, vec2<f32>( 0, -t)));
+    idDiff += distance(id, GetIdValue(fragUV, vec2<f32>( t,  t)));
+    idDiff += distance(id, GetIdValue(fragUV, vec2<f32>( t, -t)));
+    idDiff += distance(id, GetIdValue(fragUV, vec2<f32>(-t,  t)));
+    idDiff += distance(id, GetIdValue(fragUV, vec2<f32>(-t, -t)));
 
     if (idDiff != 0.0)
     {
@@ -250,7 +247,7 @@ fn main(
 // *****************************************************************************************************************
 // GET TEXEL VALUE
 // *****************************************************************************************************************
-fn getTexelValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
+fn GetTexelValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 {
   var ps = vec2<f32>(1.0 / INFOS.RES_WIDTH, 1.0 / INFOS.RES_HEIGHT);
   return textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, textureUV + ps * offset);
@@ -259,7 +256,7 @@ fn getTexelValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 // *****************************************************************************************************************
 // GET NORMAL VALUE
 // *****************************************************************************************************************
-fn getNormalValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
+fn GetNormalValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 {
   var ps = vec2<f32>(1.0 / INFOS.RES_WIDTH, 1.0 / INFOS.RES_HEIGHT);
   return textureSampleBaseClampToEdge(NORMALS_TEXTURE, NORMALS_SAMPLER, textureUV + ps * offset);
@@ -268,7 +265,7 @@ fn getNormalValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 // *****************************************************************************************************************
 // GET ID VALUE
 // *****************************************************************************************************************
-fn getIdValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
+fn GetIdValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 {
   var ps = vec2<f32>(1.0 / INFOS.RES_WIDTH, 1.0 / INFOS.RES_HEIGHT);
   return textureSampleBaseClampToEdge(IDS_TEXTURE, IDS_SAMPLER, textureUV + ps * offset);
@@ -277,10 +274,10 @@ fn getIdValue(textureUV: vec2<f32>, offset: vec2<f32>) -> vec4<f32>
 // *****************************************************************************************************************
 // GET DEPTH VALUE
 // *****************************************************************************************************************
-fn getDepthValue(textureUV: vec2<f32>, offset: vec2<f32>) -> f32
+fn GetDepthValue(textureUV: vec2<f32>, offset: vec2<f32>) -> f32
 {
   var ps = vec2<f32>(1.0 / INFOS.RES_WIDTH, 1.0 / INFOS.RES_HEIGHT);
-  return textureSample(DEPTH_TEXTURE, DEPTH_SAMPLER, textureUV + ps * offset);
+  return LinearlyFilterDepthTexture(DEPTH_TEXTURE, textureUV + ps * offset);
 }
 
 // *****************************************************************************************************************
@@ -360,4 +357,30 @@ fn GetDitherValue(x: u32, y: u32, brightness: f32, pattern: mat4x4<f32>) -> f32
 fn GetPixelBrightness(color: vec3<f32>) -> f32
 {
   return color.r + color.g + color.b / 3.0;
+}
+
+// *****************************************************************************************************************
+// LINEARLY FILTER DEPTH TEXTURE
+// *****************************************************************************************************************
+fn LinearlyFilterDepthTexture(t: texture_depth_2d, normalizedTextureCoord: vec2f) -> f32
+{
+  let tSize = textureDimensions(t);
+  let texelCoord = normalizedTextureCoord * vec2f(tSize) - 0.5;
+
+  // clamp-to-edge
+  let lo = max(vec2i(0, 0), vec2i(floor(texelCoord)));
+  let hi = min(vec2i(tSize - 1u), vec2i(ceil(texelCoord)));
+
+  // load the 4 texels
+  let p00 = textureLoad(t, lo, 0);
+  let p10 = textureLoad(t, vec2i(hi.x, lo.y), 0);
+  let p11 = textureLoad(t, hi, 0);
+  let p01 = textureLoad(t, vec2i(lo.x, hi.y), 0);
+
+  // blend horizontally
+  let top = mix(p00, p10, fract(texelCoord.x));
+  let bot = mix(p01, p11, fract(texelCoord.x));
+
+  // blend vertically
+  return mix(top, bot, fract(texelCoord.y));
 }`;

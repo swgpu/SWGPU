@@ -91,16 +91,13 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     this.idsTexture = this.grp0.setTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
     this.idsTexture = this.grp0.setSampler(7, 'IDS_SAMPLER', this.idsTexture);
     this.depthTexture = this.grp0.setTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
-    this.depthTexture = this.grp0.setSampler(9, 'DEPTH_SAMPLER', this.depthTexture);
     this.grp0.allocate();
 
     this.grp1 = gfx3Manager.createStaticGroup('POST_PIPELINE', 1);
     this.shadowVolFactorTexture = this.grp1.setTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());
     this.shadowVolFactorTexture = this.grp1.setSampler(1, 'SHADOW_VOL_SAMPLER', this.shadowVolFactorTexture);
     this.shadowVolDepthCCWTexture = this.grp1.setTexture(2, 'SHADOW_VOL_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
-    this.shadowVolDepthCCWTexture = this.grp1.setSampler(3, 'SHADOW_VOL_DEPTH_CCW_SAMPLER', this.shadowVolDepthCCWTexture);
-    this.shadowVolDepthCWTexture = this.grp1.setTexture(4, 'SHADOW_VOL_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
-    this.shadowVolDepthCWTexture = this.grp1.setSampler(5, 'SHADOW_VOL_DEPTH_CW_SAMPLER', this.shadowVolDepthCWTexture);
+    this.shadowVolDepthCWTexture = this.grp1.setTexture(3, 'SHADOW_VOL_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
     this.grp1.allocate();
 
     this.grp2 = gfx3Manager.createStaticGroup('POST_PIPELINE', 2);
@@ -248,7 +245,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
 
     this.shadowVolFactorTexture = this.grp1.setTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());
     this.shadowVolDepthCCWTexture = this.grp1.setTexture(2, 'SHADOW_VOL_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
-    this.shadowVolDepthCWTexture = this.grp1.setTexture(4, 'SHADOW_VOL_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
+    this.shadowVolDepthCWTexture = this.grp1.setTexture(3, 'SHADOW_VOL_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
     this.grp1.allocate();
   }
 }

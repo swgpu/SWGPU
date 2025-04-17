@@ -16,8 +16,7 @@ interface MeshCommand {
  */
 class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
   depthTextureSize: number;
-  depthTexture: GPUTexture
-  depthTextureSampler: GPUSampler;
+  depthTexture: Gfx3Texture;
   meshCommands: Array<MeshCommand>;
   grp0: Gfx3DynamicGroup;
   lvpMatrix: Float32Array;
@@ -26,13 +25,7 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
   constructor() {
     super('MESH_SHADOW_MAP_PIPELINE', VERTEX_SHADER, '', PIPELINE_DESC);
     this.depthTextureSize = 2048.0;
-    this.depthTexture = gfx3Manager.getDevice().createTexture({
-      size: [this.depthTextureSize, this.depthTextureSize, 1],
-      usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.TEXTURE_BINDING,
-      format: 'depth32float'
-    });
-
-    this.depthTextureSampler = gfx3Manager.getDevice().createSampler({ compare: 'less'});
+    this.depthTexture = gfx3Manager.createEmptyTexture(this.depthTextureSize, this.depthTextureSize, 'depth32float', { magFilter: 'nearest', minFilter: 'nearest', compare: 'less' });
     this.meshCommands = [];
 
     this.grp0 = gfx3Manager.createDynamicGroup('MESH_SHADOW_MAP_PIPELINE', 0);
@@ -48,7 +41,7 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
     const passEncoder = commandEncoder.beginRenderPass({
       colorAttachments: [],
       depthStencilAttachment: {
-        view: this.depthTexture.createView(),
+        view: this.depthTexture.gpuTexture.createView(),
         depthClearValue: 1.0,
         depthLoadOp: 'clear',
         depthStoreOp: 'store',
@@ -110,13 +103,7 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
    * @param {number} depthTextureSize - The size.
    */
   setDepthTextureSize(depthTextureSize: number): void {
-    this.depthTexture = gfx3Manager.getDevice().createTexture({
-      size: [depthTextureSize, depthTextureSize, 1],
-      usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.TEXTURE_BINDING,
-      format: 'depth32float'
-    });
-
-    this.depthTextureSampler = gfx3Manager.getDevice().createSampler({ compare: 'less'});
+    this.depthTexture = gfx3Manager.createEmptyTexture(depthTextureSize, depthTextureSize, 'depth32float', { magFilter: 'nearest', minFilter: 'nearest', compare: 'less' });
     this.depthTextureSize = depthTextureSize;
   }
 
@@ -124,7 +111,7 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
    * Returns the depth texture.
    */
   getDepthTexture(): Gfx3Texture {
-    return { gpuTexture: this.depthTexture, gpuSampler: this.depthTextureSampler };
+    return this.depthTexture;
   }
 
   /**

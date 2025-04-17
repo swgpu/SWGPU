@@ -343,8 +343,8 @@ class Gfx3Manager {
   /**
    * Creates a default rendering texture.
    */
-  createRenderingTexture(format: GPUTextureFormat = navigator.gpu.getPreferredCanvasFormat()): Gfx3Texture {
-    return this.createEmptyTexture(this.getWidth(), this.getHeight(), format, { magFilter: 'nearest', minFilter: 'nearest' });
+  createRenderingTexture(format: GPUTextureFormat = navigator.gpu.getPreferredCanvasFormat(), samplerDescriptor: GPUSamplerDescriptor = { magFilter: 'nearest', minFilter: 'nearest' }): Gfx3Texture {
+    return this.createEmptyTexture(this.getWidth(), this.getHeight(), format, samplerDescriptor);
   }
 
   /**
@@ -352,7 +352,7 @@ class Gfx3Manager {
    * 
    * @param {number} width - The texture width.
    * @param {number} height - The texture height.
-   * @param {boolean} [is8bit=false] - Indicates whether the texture should be treated as an 8-bit texture or not.
+   * @param {GPUTextureFormat} format - Indicates the texture colors format.
    * @param {GPUSamplerDescriptor} [samplerDescriptor] - The sampler texture configuration, see https://www.w3.org/TR/webgpu/#GPUSamplerDescriptor.
    */
   createEmptyTexture(width: number, height: number, format: GPUTextureFormat, samplerDescriptor: GPUSamplerDescriptor = {}): Gfx3Texture {
@@ -362,13 +362,14 @@ class Gfx3Manager {
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
     });
 
-    const gpuSampler = this.device.createSampler(Object.assign(samplerDescriptor, {
-      magFilter: samplerDescriptor.magFilter ?? 'linear',
-      minFilter: samplerDescriptor.minFilter ?? 'linear',
-      addressModeU: samplerDescriptor.addressModeU ?? 'repeat',
-      addressModeV: samplerDescriptor.addressModeV ?? 'repeat'
-    }));
+    const defaultSamplerDescriptor: GPUSamplerDescriptor = {
+      magFilter: 'linear',
+      minFilter: 'linear',
+      addressModeU: 'repeat',
+      addressModeV: 'repeat'
+    };
 
+    const gpuSampler = this.device.createSampler({ ...defaultSamplerDescriptor, ...samplerDescriptor });
     return { gpuTexture: gpuTexture, gpuSampler: gpuSampler };
   }
 
