@@ -1,4 +1,4 @@
-import { Gfx3Texture } from './gfx3_texture';
+import { Gfx3Texture, Gfx3RenderingTexture } from './gfx3_texture';
 
 export const MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT = 256;
 
@@ -86,6 +86,11 @@ class Gfx3StaticGroup {
     return texture;
   }
 
+  setRenderingTexture(binding: number, name: string, texture: Gfx3RenderingTexture): Gfx3RenderingTexture {
+    this.textures.set(binding, { binding: binding, name: name, resource: texture.gpuTextureView });
+    return texture;
+  }
+
   /**
    * Set a sampler resource for uniform entry.
    * 
@@ -96,6 +101,11 @@ class Gfx3StaticGroup {
    * level range of the view.
    */
   setSampler(binding: number, name: string, texture: Gfx3Texture): Gfx3Texture {
+    this.textures.set(binding, { binding: binding, name: name, resource: texture.gpuSampler });
+    return texture;
+  }
+
+  setRenderingSampler(binding: number, name: string, texture: Gfx3RenderingTexture): Gfx3RenderingTexture {
     this.textures.set(binding, { binding: binding, name: name, resource: texture.gpuSampler });
     return texture;
   }

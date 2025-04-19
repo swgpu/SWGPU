@@ -49,8 +49,11 @@ class Gfx3DebugRenderer extends Gfx3RendererAbstract {
 
     this.vertexBuffer.destroy();
     this.vertexBuffer = this.device.createBuffer({ size: this.vertexCount * SHADER_VERTEX_ATTR_COUNT * 4, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC });    
-    
-    this.grp0.allocate(this.commands.length);
+
+    if (this.grp0.getSize() < this.commands.length) {
+      this.grp0.allocate(this.commands.length);
+    }
+
     this.grp0.beginWrite();
 
     for (let i = 0, offset = 0; i < this.commands.length; i++) {

@@ -2,6 +2,7 @@ import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { UT } from '../core/utils';
 import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3StaticGroup, Gfx3DynamicGroup } from '../gfx3/gfx3_group';
+import { Gfx3RenderingTexture } from '../gfx3/gfx3_texture';
 import { Gfx3Particles } from './gfx3_particles';
 import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_particles_shader';
 
@@ -34,12 +35,12 @@ class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
   /**
    * The render function.
    */
-  render(destinationTexture: GPUTexture | null = null): void {
+  render(destinationTexture: Gfx3RenderingTexture | null = null): void {
     const currentView = gfx3Manager.getCurrentView();
     const commandEncoder = gfx3Manager.getCommandEncoder();
     const passEncoder = destinationTexture ? commandEncoder.beginRenderPass({
       colorAttachments: [{
-        view: destinationTexture.createView(),
+        view: destinationTexture.gpuTextureView,
         loadOp: 'clear',
         storeOp: 'store'
       }]

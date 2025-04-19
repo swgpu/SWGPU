@@ -7,7 +7,8 @@
 </p>
 
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+![License](https://img.shields.io/badge/License-MIT-red)
+![Version](https://img.shields.io/badge/Version-1.7.0-blue)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
 **SWGPU** is a simple **2D/3D game library** written in **TypeScript** and powered by the latest web APIs.
@@ -245,6 +246,8 @@ Congratulation, your static mesh is now exported !
 
 ## Changelog
 ```
+- [Ver. 1.7.0]  Fix somes performances issues (now webgpu constants are stables).
+- [Ver. 1.7.0]  Changes the way to sample texture depth.
 - [Ver. 1.6.13] The 3D physics demo become more complete (full character implementation).
 - [Ver. 1.6.12] A 2D physics demo is added.
 - [Ver. 1.6.12] Change Rapier3D physics engine for Jolt Physics.

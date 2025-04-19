@@ -2,7 +2,7 @@ import { coreManager } from '../core/core_manager';
 import { eventManager } from '../core/event_manager';
 import { UT } from '../core/utils';
 import { Gfx3View } from './gfx3_view';
-import { Gfx3Texture } from './gfx3_texture';
+import { Gfx3Texture, Gfx3RenderingTexture } from './gfx3_texture';
 import { Gfx3StaticGroup, Gfx3DynamicGroup } from './gfx3_group';
 
 const WINDOW = window as any;
@@ -22,10 +22,12 @@ class Gfx3Manager {
   device: GPUDevice;
   canvas: HTMLCanvasElement;
   ctx: GPUCanvasContext;
-  destinationTexture: GPUTexture | null;
-  normalsTexture: Gfx3Texture;
-  idsTexture: Gfx3Texture;
-  depthTexture: Gfx3Texture;  
+  renderingTextureView: GPUTextureView | null;
+  renderingTextureSampler: GPUSampler | null;
+  destinationTexture: Gfx3RenderingTexture | null;
+  normalsTexture: Gfx3RenderingTexture;
+  idsTexture: Gfx3RenderingTexture;
+  depthTexture: Gfx3RenderingTexture;
   commandEncoder: GPUCommandEncoder;
   passEncoder: GPURenderPassEncoder;
   pipelines: Map<string, GPURenderPipeline>;
@@ -42,10 +44,13 @@ class Gfx3Manager {
     this.device = {} as GPUDevice;
     this.canvas = {} as HTMLCanvasElement;
     this.ctx = {} as GPUCanvasContext;
+
+    this.renderingTextureView = null;
+    this.renderingTextureSampler = null;
     this.destinationTexture = null;
-    this.normalsTexture = {} as Gfx3Texture;
-    this.idsTexture = {} as Gfx3Texture;
-    this.depthTexture = {} as Gfx3Texture;
+    this.normalsTexture = {} as Gfx3RenderingTexture;
+    this.idsTexture = {} as Gfx3RenderingTexture;
+    this.depthTexture = {} as Gfx3RenderingTexture;
     this.commandEncoder = {} as GPUCommandEncoder;
     this.passEncoder = {} as GPURenderPassEncoder;
     this.pipelines = new Map<string, GPURenderPipeline>();
@@ -97,7 +102,9 @@ class Gfx3Manager {
     const devicePixelRatio = window.devicePixelRatio || 1;
     this.canvas.width = this.canvas.clientWidth * devicePixelRatio;
     this.canvas.height = this.canvas.clientHeight * devicePixelRatio;
+    this.renderingTextureSampler = this.device.createSampler();
     this.currentView = this.createView();
+
     this.normalsTexture = this.createRenderingTexture('rgba16float');
     this.idsTexture = this.createRenderingTexture('rgba16float');
     this.depthTexture = this.createRenderingTexture('depth24plus');
@@ -158,7 +165,9 @@ class Gfx3Manager {
     const viewportWidth = this.canvas.width * viewport.widthFactor;
     const viewportHeight = this.canvas.height * viewport.heightFactor;
     const viewBgColor = view.getBgColor();
-    const textureView = this.destinationTexture ? this.destinationTexture.createView() : this.ctx.getCurrentTexture().createView();
+
+    this.renderingTextureView = this.ctx.getCurrentTexture().createView();
+    const textureView = this.destinationTexture ? this.destinationTexture.gpuTextureView : this.renderingTextureView!;
 
     this.passEncoder = this.commandEncoder.beginRenderPass({
       colorAttachments: [{
@@ -167,18 +176,18 @@ class Gfx3Manager {
         loadOp: 'clear',
         storeOp: 'store'
       },{
-        view: this.normalsTexture.gpuTexture.createView(),
+        view: this.normalsTexture.gpuTextureView,
         clearValue: {r: 0.0, g: 0.0, b: 1.0, a: 1.0},
         loadOp: 'clear',
         storeOp: 'store'
       },{
-        view: this.idsTexture.gpuTexture.createView(),
+        view: this.idsTexture.gpuTextureView,
         clearValue: {r: 0.0, g: 0.0, b: 0.0, a: 1.0},
         loadOp: 'clear',
         storeOp: 'store'
       }],
       depthStencilAttachment: {
-        view: this.depthTexture.gpuTexture.createView(),
+        view: this.depthTexture.gpuTextureView,
         depthClearValue: 1.0,
         depthLoadOp: 'clear',
         depthStoreOp: 'store'
@@ -343,8 +352,9 @@ class Gfx3Manager {
   /**
    * Creates a default rendering texture.
    */
-  createRenderingTexture(format: GPUTextureFormat = navigator.gpu.getPreferredCanvasFormat(), samplerDescriptor: GPUSamplerDescriptor = { magFilter: 'nearest', minFilter: 'nearest' }): Gfx3Texture {
-    return this.createEmptyTexture(this.getWidth(), this.getHeight(), format, samplerDescriptor);
+  createRenderingTexture(format: GPUTextureFormat = navigator.gpu.getPreferredCanvasFormat(), samplerDescriptor: GPUSamplerDescriptor = { magFilter: 'nearest', minFilter: 'nearest' }, width: number = this.getWidth(), height: number = this.getHeight()): Gfx3RenderingTexture {
+    const texture = this.createEmptyTexture(width, height, format, samplerDescriptor);
+    return { gpuTexture: texture.gpuTexture, gpuSampler: texture.gpuSampler, gpuTextureView: texture.gpuTexture.createView() };
   }
 
   /**
@@ -517,39 +527,39 @@ class Gfx3Manager {
    * Note: If destination texture is set, we render to the destination texture and let post-processing effect renderers used it.
    * otherwise we are rendering to the screen directly.
    * 
-   * @param {GPUTexture | null} destinationTexture - The destination texture.
+   * @param {Gfx3RenderingTexture | null} destinationTexture - The destination texture.
    */
-  setDestinationTexture(destinationTexture: GPUTexture | null): void {
+  setDestinationTexture(destinationTexture: Gfx3RenderingTexture | null): void {
     this.destinationTexture = destinationTexture;
-  }
-
-  /**
-   * Returns the rendering texture contains normals.
-   */
-  getNormalsTexture(): Gfx3Texture {
-    return this.normalsTexture;
-  }
-
-  /**
-   * Returns the rendering texture contains ids.
-   */
-  getIdsTexture(): Gfx3Texture {
-    return this.idsTexture;
-  }
-
-  /**
-   * Returns the depth texture.
-   */
-  getDepthTexture(): Gfx3Texture {
-    return this.depthTexture;
   }
 
   /**
    * Returns the current rendering texture.
    * Note: Is the texture used for final rendering.
    */
-  getCurrentRenderingTexture(): GPUTexture {
-    return this.ctx.getCurrentTexture();
+  getCurrentRenderingTexture(): Gfx3RenderingTexture {
+    return { gpuTexture: this.ctx.getCurrentTexture(), gpuSampler: this.renderingTextureSampler!, gpuTextureView: this.renderingTextureView! };
+  }
+
+  /**
+   * Returns the rendering texture contains normals.
+   */
+  getNormalsTexture(): Gfx3RenderingTexture {
+    return this.normalsTexture;
+  }
+
+  /**
+   * Returns the rendering texture contains ids.
+   */
+  getIdsTexture(): Gfx3RenderingTexture {
+    return this.idsTexture;
+  }
+
+  /**
+   * Returns the depth texture.
+   */
+  getDepthTexture(): Gfx3RenderingTexture {
+    return this.depthTexture;
   }
 
   /**

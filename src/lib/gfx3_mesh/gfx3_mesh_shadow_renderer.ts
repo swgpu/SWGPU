@@ -2,7 +2,7 @@ import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { UT } from '../core/utils';
 import { Gfx3DynamicGroup } from '../gfx3/gfx3_group';
 import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
-import { Gfx3Texture } from '../gfx3/gfx3_texture';
+import { Gfx3Texture, Gfx3RenderingTexture } from '../gfx3/gfx3_texture';
 import { Gfx3Mesh } from './gfx3_mesh';
 import { PIPELINE_DESC, VERTEX_SHADER } from './gfx3_mesh_shadow_shader';
 
@@ -16,7 +16,7 @@ interface MeshCommand {
  */
 class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
   depthTextureSize: number;
-  depthTexture: Gfx3Texture;
+  depthTexture: Gfx3RenderingTexture;
   meshCommands: Array<MeshCommand>;
   grp0: Gfx3DynamicGroup;
   lvpMatrix: Float32Array;
@@ -25,7 +25,7 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
   constructor() {
     super('MESH_SHADOW_MAP_PIPELINE', VERTEX_SHADER, '', PIPELINE_DESC);
     this.depthTextureSize = 2048.0;
-    this.depthTexture = gfx3Manager.createEmptyTexture(this.depthTextureSize, this.depthTextureSize, 'depth32float', { magFilter: 'nearest', minFilter: 'nearest', compare: 'less' });
+    this.depthTexture = gfx3Manager.createRenderingTexture('depth32float', { magFilter: 'nearest', minFilter: 'nearest', compare: 'less' }, this.depthTextureSize, this.depthTextureSize);
     this.meshCommands = [];
 
     this.grp0 = gfx3Manager.createDynamicGroup('MESH_SHADOW_MAP_PIPELINE', 0);
@@ -41,7 +41,7 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
     const passEncoder = commandEncoder.beginRenderPass({
       colorAttachments: [],
       depthStencilAttachment: {
-        view: this.depthTexture.gpuTexture.createView(),
+        view: this.depthTexture.gpuTextureView,
         depthClearValue: 1.0,
         depthLoadOp: 'clear',
         depthStoreOp: 'store',
@@ -103,7 +103,7 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
    * @param {number} depthTextureSize - The size.
    */
   setDepthTextureSize(depthTextureSize: number): void {
-    this.depthTexture = gfx3Manager.createEmptyTexture(depthTextureSize, depthTextureSize, 'depth32float', { magFilter: 'nearest', minFilter: 'nearest', compare: 'less' });
+    this.depthTexture = gfx3Manager.createRenderingTexture('depth32float', { magFilter: 'nearest', minFilter: 'nearest', compare: 'less' }, this.depthTextureSize, this.depthTextureSize);
     this.depthTextureSize = depthTextureSize;
   }
 

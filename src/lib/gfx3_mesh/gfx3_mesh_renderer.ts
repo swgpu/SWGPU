@@ -2,7 +2,7 @@ import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { gfx3MeshShadowRenderer } from './gfx3_mesh_shadow_renderer';
 import { UT } from '../core/utils';
 import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
-import { Gfx3Texture } from '../gfx3/gfx3_texture';
+import { Gfx3Texture, Gfx3RenderingTexture } from '../gfx3/gfx3_texture';
 import { Gfx3StaticGroup, Gfx3DynamicGroup } from '../gfx3/gfx3_group';
 import { Gfx3Mesh } from './gfx3_mesh';
 import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER, MAX_POINT_LIGHTS, MAX_SPOT_LIGHTS, MAX_DECALS, SCENE_SLOT_NAMES } from './gfx3_mesh_shader';
@@ -67,12 +67,12 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   /**
    * The render function.
    */
-  render(ts: number, destinationTexture: GPUTexture | null = null): void {
+  render(ts: number, destinationTexture: Gfx3RenderingTexture | null = null): void {
     const currentView = gfx3Manager.getCurrentView();
     const commandEncoder = gfx3Manager.getCommandEncoder();
     const passEncoder = destinationTexture ? commandEncoder.beginRenderPass({
       colorAttachments: [{
-        view: destinationTexture.createView(),
+        view: destinationTexture.gpuTextureView,
         loadOp: 'clear',
         storeOp: 'store'
       }]

@@ -4,7 +4,7 @@ import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { gfx3ShadowVolumeRenderer } from '../gfx3_shadow_volume/gfx3_shadow_volume_renderer';
 import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
-import { Gfx3Texture } from '../gfx3/gfx3_texture';
+import { Gfx3Texture, Gfx3RenderingTexture } from '../gfx3/gfx3_texture';
 import { VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_VERTEX_ATTR_COUNT, SLOT_NAMES } from './gfx3_post_shader';
 
 enum PostShadowVolumeBlendMode {
@@ -43,14 +43,14 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
   grp0: Gfx3StaticGroup;
   params: Float32Array;
   infos: Float32Array;
-  sourceTexture: Gfx3Texture;
-  normalsTexture: Gfx3Texture;
-  idsTexture: Gfx3Texture;
-  depthTexture: Gfx3Texture;
+  sourceTexture: Gfx3RenderingTexture;
+  normalsTexture: Gfx3RenderingTexture;
+  idsTexture: Gfx3RenderingTexture;
+  depthTexture: Gfx3RenderingTexture;
   grp1: Gfx3StaticGroup;
-  shadowVolFactorTexture: Gfx3Texture;
-  shadowVolDepthCWTexture: Gfx3Texture;
-  shadowVolDepthCCWTexture: Gfx3Texture;
+  shadowVolFactorTexture: Gfx3RenderingTexture;
+  shadowVolDepthCWTexture: Gfx3RenderingTexture;
+  shadowVolDepthCCWTexture: Gfx3RenderingTexture;
   grp2: Gfx3StaticGroup;
   s0Texture: Gfx3Texture;
   s1Texture: Gfx3Texture;
@@ -84,20 +84,20 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     this.infos = this.grp0.setFloat(1, 'INFOS', 4);
     this.infos[0] = gfx3Manager.getWidth();
     this.infos[1] = gfx3Manager.getHeight();
-    this.sourceTexture = this.grp0.setTexture(2, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
-    this.sourceTexture = this.grp0.setSampler(3, 'SOURCE_SAMPLER', this.sourceTexture);
-    this.normalsTexture = this.grp0.setTexture(4, 'NORMALS_TEXTURE', gfx3Manager.getNormalsTexture());
-    this.normalsTexture = this.grp0.setSampler(5, 'NORMALS_SAMPLER', this.normalsTexture);
-    this.idsTexture = this.grp0.setTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
-    this.idsTexture = this.grp0.setSampler(7, 'IDS_SAMPLER', this.idsTexture);
-    this.depthTexture = this.grp0.setTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
+    this.sourceTexture = this.grp0.setRenderingTexture(2, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
+    this.sourceTexture = this.grp0.setRenderingSampler(3, 'SOURCE_SAMPLER', this.sourceTexture);
+    this.normalsTexture = this.grp0.setRenderingTexture(4, 'NORMALS_TEXTURE', gfx3Manager.getNormalsTexture());
+    this.normalsTexture = this.grp0.setRenderingSampler(5, 'NORMALS_SAMPLER', this.normalsTexture);
+    this.idsTexture = this.grp0.setRenderingTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
+    this.idsTexture = this.grp0.setRenderingSampler(7, 'IDS_SAMPLER', this.idsTexture);
+    this.depthTexture = this.grp0.setRenderingTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
     this.grp0.allocate();
 
     this.grp1 = gfx3Manager.createStaticGroup('POST_PIPELINE', 1);
-    this.shadowVolFactorTexture = this.grp1.setTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());
-    this.shadowVolFactorTexture = this.grp1.setSampler(1, 'SHADOW_VOL_SAMPLER', this.shadowVolFactorTexture);
-    this.shadowVolDepthCCWTexture = this.grp1.setTexture(2, 'SHADOW_VOL_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
-    this.shadowVolDepthCWTexture = this.grp1.setTexture(3, 'SHADOW_VOL_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
+    this.shadowVolFactorTexture = this.grp1.setRenderingTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());
+    this.shadowVolFactorTexture = this.grp1.setRenderingSampler(1, 'SHADOW_VOL_SAMPLER', this.shadowVolFactorTexture);
+    this.shadowVolDepthCCWTexture = this.grp1.setRenderingTexture(2, 'SHADOW_VOL_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
+    this.shadowVolDepthCWTexture = this.grp1.setRenderingTexture(3, 'SHADOW_VOL_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
     this.grp1.allocate();
 
     this.grp2 = gfx3Manager.createStaticGroup('POST_PIPELINE', 2);
@@ -122,11 +122,11 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
   /**
    * The render function.
    */
-  render(ts: number, destinationTexture: GPUTexture): void {    
+  render(ts: number, destinationTexture: Gfx3RenderingTexture): void {    
     const commandEncoder = gfx3Manager.getCommandEncoder();
     const passEncoder = commandEncoder.beginRenderPass({
       colorAttachments: [{
-        view: destinationTexture.createView(),
+        view: destinationTexture.gpuTextureView,
         loadOp: 'clear',
         storeOp: 'store'
       }]
@@ -216,8 +216,8 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
    * Note: This instance is responsible to create the source texture used to rendering the previous pass.
    * This way, it is easy to chain multiple effects.
    */
-  getSourceTexture(): GPUTexture {
-    return this.sourceTexture.gpuTexture;
+  getSourceTexture(): Gfx3RenderingTexture {
+    return this.sourceTexture;
   }
 
   /**
@@ -225,10 +225,10 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
    * 
    * @param {Gfx3Texture} sourceTexture - The source texture.
    */
-  setSourceTexture(sourceTexture: Gfx3Texture): void {
+  setSourceTexture(sourceTexture: Gfx3RenderingTexture): void {
     this.sourceTexture.gpuTexture.destroy();
-    this.sourceTexture = this.grp0.setTexture(2, 'SOURCE_TEXTURE', sourceTexture);
-    this.sourceTexture = this.grp0.setSampler(3, 'SOURCE_SAMPLER', this.sourceTexture);
+    this.sourceTexture = this.grp0.setRenderingTexture(2, 'SOURCE_TEXTURE', sourceTexture);
+    this.sourceTexture = this.grp0.setRenderingSampler(3, 'SOURCE_SAMPLER', this.sourceTexture);
     this.grp0.allocate();
   }
 
@@ -237,15 +237,15 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     this.infos[1] = gfx3Manager.getHeight();
 
     this.sourceTexture.gpuTexture.destroy();
-    this.sourceTexture = this.grp0.setTexture(2, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
-    this.normalsTexture = this.grp0.setTexture(4, 'NORMALS_TEXTURE', gfx3Manager.getNormalsTexture());
-    this.idsTexture = this.grp0.setTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
-    this.depthTexture = this.grp0.setTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
+    this.sourceTexture = this.grp0.setRenderingTexture(2, 'SOURCE_TEXTURE', gfx3Manager.createRenderingTexture());
+    this.normalsTexture = this.grp0.setRenderingTexture(4, 'NORMALS_TEXTURE', gfx3Manager.getNormalsTexture());
+    this.idsTexture = this.grp0.setRenderingTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
+    this.depthTexture = this.grp0.setRenderingTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
     this.grp0.allocate();
 
-    this.shadowVolFactorTexture = this.grp1.setTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());
-    this.shadowVolDepthCCWTexture = this.grp1.setTexture(2, 'SHADOW_VOL_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
-    this.shadowVolDepthCWTexture = this.grp1.setTexture(3, 'SHADOW_VOL_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
+    this.shadowVolFactorTexture = this.grp1.setRenderingTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());
+    this.shadowVolDepthCCWTexture = this.grp1.setRenderingTexture(2, 'SHADOW_VOL_DEPTH_CCW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCCWTexture());
+    this.shadowVolDepthCWTexture = this.grp1.setRenderingTexture(3, 'SHADOW_VOL_DEPTH_CW_TEXTURE', gfx3ShadowVolumeRenderer.getDepthCWTexture());
     this.grp1.allocate();
   }
 }

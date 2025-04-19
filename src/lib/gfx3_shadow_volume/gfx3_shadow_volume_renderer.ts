@@ -3,15 +3,15 @@ import { eventManager } from '../core/event_manager';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { UT } from '../core/utils';
 import { Gfx3DynamicGroup } from '../gfx3/gfx3_group';
-import { Gfx3Texture } from '../gfx3/gfx3_texture';
+import { Gfx3RenderingTexture } from '../gfx3/gfx3_texture';
 import { VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_CW_DESC, PIPELINE_CCW_DESC } from './gfx3_shadow_volume_shader';
 import { Gfx3ShadowVolume } from './gfx3_shadow_volume';
 
 interface Pipeline {
   gpu: GPURenderPipeline;
   grp0: Gfx3DynamicGroup;
-  shadowTexture: Gfx3Texture;
-  depthTexture: Gfx3Texture;
+  shadowTexture: Gfx3RenderingTexture;
+  depthTexture: Gfx3RenderingTexture;
 };
 
 /*
@@ -69,21 +69,21 @@ class Gfx3ShadowVolumeRenderer {
   /**
    * Returns the shadow texture.
    */
-  getShadowTexture(): Gfx3Texture {
+  getShadowTexture(): Gfx3RenderingTexture {
     return this.pipelineCCW.shadowTexture;
   }
 
   /**
    * Returns the depth texture for cw faces.
    */
-  getDepthCWTexture(): Gfx3Texture {
+  getDepthCWTexture(): Gfx3RenderingTexture {
     return this.pipelineCW.depthTexture;
   }
 
   /**
    * Returns the depth texture for ccw faces.
    */
-  getDepthCCWTexture(): Gfx3Texture {
+  getDepthCCWTexture(): Gfx3RenderingTexture {
     return this.pipelineCCW.depthTexture;
   }
 
@@ -92,13 +92,13 @@ class Gfx3ShadowVolumeRenderer {
     const commandEncoder = gfx3Manager.getCommandEncoder();
     const passEncoder = commandEncoder.beginRenderPass({
       colorAttachments: [{
-        view: pipeline.shadowTexture.gpuTexture.createView(),
+        view: pipeline.shadowTexture.gpuTextureView,
         clearValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 },
         loadOp: 'clear',
         storeOp: 'store'
       }],
       depthStencilAttachment: {
-        view: pipeline.depthTexture.gpuTexture.createView(),
+        view: pipeline.depthTexture.gpuTextureView,
         depthClearValue: 1.0,
         depthLoadOp: 'clear',
         depthStoreOp: 'store',
