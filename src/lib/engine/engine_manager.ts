@@ -1,16 +1,7 @@
 import { coreManager } from '../core/core_manager';
 import { inputManager } from '../input/input_manager';
-import { gfx2Manager } from '../gfx2/gfx2_manager';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
-import { gfx3MeshRenderer } from '../gfx3_mesh/gfx3_mesh_renderer';
-import { gfx3MeshShadowRenderer } from '../gfx3_mesh/gfx3_mesh_shadow_renderer';
-import { gfx3SpriteRenderer } from '../gfx3_sprite/gfx3_sprite_renderer';
-import { gfx3SkyboxRenderer } from '../gfx3_skybox/gfx3_skybox_renderer';
-import { gfx3FlareRenderer } from '../gfx3_flare/gfx3_flare_renderer';
-import { gfx3ParticlesRenderer } from '../gfx3_particules/gfx3_particles_renderer';
-import { gfx3PostRenderer } from '../gfx3_post/gfx3_post_renderer';
-import { gfx3ShadowVolumeRenderer } from '../gfx3_shadow_volume/gfx3_shadow_volume_renderer';
 import { screenManager } from '../screen/screen_manager';
 import { uiManager } from '../ui/ui_manager';
 import { soundManager } from '../sound/sound_manager';
@@ -81,13 +72,13 @@ class EngineManager {
     this.then = timeStamp;
 
     if (!this.frameRateFixed || this.elapsedTime > 1000 / this.frameRateValue) {
-      inputManager.update(ts);
+      // inputManager.update(ts);
 
-      if (this.mode == RenderingMode.DIM_2D || this.mode == RenderingMode.DIM_XD) {
-        gfx2Manager.update(ts);
-      }
+      // if (this.mode == RenderingMode.DIM_2D || this.mode == RenderingMode.DIM_XD) {
+      //   gfx2Manager.update(ts);
+      // }
 
-      uiManager.update(ts);
+      // uiManager.update(ts);
       screenManager.update(ts);
       this.elapsedTime = 0;
     }
@@ -110,31 +101,31 @@ class EngineManager {
     //
     // begin 2d render phase
     //
-    if (this.mode == RenderingMode.DIM_2D || this.mode == RenderingMode.DIM_XD) {
-      gfx2Manager.beginRender();
-      screenManager.render2D();
-      gfx2Manager.render();
-      gfx2Manager.endRender();
-    }
+    // if (this.mode == RenderingMode.DIM_2D || this.mode == RenderingMode.DIM_XD) {
+    //   gfx2Manager.beginRender();
+    //   screenManager.render2D();
+    //   gfx2Manager.render();
+    //   gfx2Manager.endRender();
+    // }
 
     //
     // begin 3d render phase
     //
     if (this.mode == RenderingMode.DIM_3D || this.mode == RenderingMode.DIM_XD) {
       gfx3Manager.beginRender();
-      screenManager.render3D();
-      gfx3MeshShadowRenderer.render();
-      gfx3ShadowVolumeRenderer.render();
-      gfx3Manager.setDestinationTexture(gfx3PostRenderer.getSourceTexture());
+      // screenManager.render3D();
+      // gfx3MeshShadowRenderer.render();
+      // gfx3ShadowVolumeRenderer.render();
+      // gfx3Manager.setDestinationTexture(gfx3PostRenderer.getSourceTexture());
       gfx3Manager.beginPassRender(0);
-      gfx3SkyboxRenderer.render();
+      // gfx3SkyboxRenderer.render();
       gfx3DebugRenderer.render();
-      gfx3MeshRenderer.render(ts);
-      gfx3SpriteRenderer.render();
-      gfx3ParticlesRenderer.render();
-      gfx3FlareRenderer.render();
+      // gfx3MeshRenderer.render(ts);
+      // gfx3SpriteRenderer.render();
+      // gfx3ParticlesRenderer.render();
+      // gfx3FlareRenderer.render();
       gfx3Manager.endPassRender();
-      gfx3PostRenderer.render(ts, gfx3Manager.getCurrentRenderingTexture());
+      // gfx3PostRenderer.render(ts, gfx3Manager.getCurrentRenderingTexture());
       gfx3Manager.endRender();
     }
 
