@@ -180,7 +180,7 @@ Go to http://localhost:5173.
 Each one is thinking to represent a common game style (platformer, fighting, fps, rpg, etc...) or just a demo of features.     
 Template are written in typescript/javascript and build to be clean and extensible.
 
-List of templates that you can test [here](https://jay19240.github.io/):
+List of templates that you can test [here](https://swgpu.github.io/):
 - 3D Pre-rendered
 - 3D Isometric
 - 2D Visual Novel
