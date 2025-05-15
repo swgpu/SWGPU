@@ -1,0 +1,105 @@
+/* SET YOUR GAME CSS HERE */
+
+@font-face {
+  font-family: "Press Start 2P";
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/PressStart2PRegular.otf) format("truetype");
+}
+
+#UI_ROOT * {
+  font-family: "Press Start 2P";
+}
+
+.u-filter-greyscale {
+  filter: grayscale(100%);
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI AVATAR
+/*---------------------------------------------------------------------------------------------*/
+.UIAvatar {
+  display: block;
+  position: absolute;
+  z-index: 11;
+  opacity: 0;
+}
+
+.UIAvatar.u-middle {
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 0);
+}
+
+.UIAvatar.u-left {
+  left: 0;
+  bottom: 0;
+  transform: translate(0%, 0%);
+}
+
+.UIAvatar.u-center {
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.UIAvatar.u-right {
+  right: 0;
+  bottom: 0;
+  transform: translate(0%, 0%);
+}
+
+@keyframes ui-avatar-fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes ui-avatar-fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/* UI BACKGROUND
+/*---------------------------------------------------------------------------------------------*/
+.UIBackground {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-size: cover;
+  z-index: 10;
+  opacity: 0;
+}
+
+@keyframes ui-background-fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes ui-background-fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

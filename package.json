@@ -14,16 +14,18 @@
   "email": "aliyah.raijin@gmail.com",
   "author": "Julien Rongiere",
   "license": "MIT",
-  "version": "1.7.0",
+  "version": "1.8.4",
   "type": "module",
-  "main": "src/lib/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
   "files": [
-    "src/lib/*"
+    "dist/*"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
     "preview": "vite preview",
+    "build": "vite build",
+    "build-types": "tsc --declaration --emitDeclarationOnly --project tsconfig.types.json",
     "doc": "typedoc --entryPointStrategy Expand src/lib/ --json docs/doc.json --out docs/html --exclude \"quaternion.ts\"",
     "markdown": "python3 bin/converter-typedoc-to-markdown.py --json docs/doc.json --output docs/markdowns"
   },
@@ -34,7 +36,8 @@
     "typedoc-plugin-markdown": "^3.16.0",
     "typescript": "^4.6.4",
     "vite": "^6.2.1",
-    "vite-plugin-full-reload": "^1.2.0"
+    "vite-plugin-full-reload": "^1.2.0",
+    "vite-plugin-wasm": "^3.4.1"
   },
   "dependencies": {
     "@webgpu/types": "^0.1.21",
@@ -44,8 +47,11 @@
     "esbuild": "^0.25.0",
     "jolt-physics": "^0.32.0",
     "jszip": "^3.10.1",
+    "rollup-plugin-dts": "^6.2.1",
     "unplugin-preprocessor-directives": "^1.0.3",
+    "vite-plugin-dts": "^4.5.4",
+    "vite-plugin-static-copy": "^3.0.0",
     "vite-plugin-top-level-await": "^1.4.1",
-    "vite-plugin-wasm": "^3.3.0"
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }

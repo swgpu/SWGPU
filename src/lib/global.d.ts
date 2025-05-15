@@ -1,3 +1,5 @@
+/// <reference types="@webgpu/types" />
+
 declare global {
   type vec1 = Float32Array | Uint32Array | [number];
   type vec2 = Float32Array | Uint32Array | [number, number];
@@ -24,16 +26,4 @@ declare global {
   type bounds3 = {left: number, right: number, bottom: number, top: number, back: number, front: number };
 }
 
-export {
-  vec1,
-  vec2,
-  vec3,
-  vec4,
-  vec5,
-  vec6,
-  vec_any,
-  mat3,
-  mat4,
-  bounds2,
-  bounds3
-};
+export {};

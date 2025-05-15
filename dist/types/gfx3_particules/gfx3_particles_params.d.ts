@@ -1,0 +1,12 @@
+import { ParticlesOptions } from './gfx3_particles';
+export declare const Fountain: Partial<ParticlesOptions>;
+export declare const Fireball: Partial<ParticlesOptions>;
+export declare const Smoke: Partial<ParticlesOptions>;
+export declare const Clouds: Partial<ParticlesOptions>;
+export declare const Snow: Partial<ParticlesOptions>;
+export declare const Rain: Partial<ParticlesOptions>;
+export declare const Starfield: Partial<ParticlesOptions>;
+export declare const Fireflies: Partial<ParticlesOptions>;
+export declare const Startunnel: Partial<ParticlesOptions>;
+export declare const Firework: Partial<ParticlesOptions>;
+export declare const Candle: Partial<ParticlesOptions>;

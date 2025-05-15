@@ -1,6 +1,8 @@
 import { UT } from './utils';
 
 const EPSILON = 1e-16;
+let ZERO: Quaternion;
+let ONE: Quaternion;
 
 /**
  * A quaternion.
@@ -25,9 +27,6 @@ class Quaternion {
     this.y = y;
     this.z = z;
   }
-
-  static ZERO = new Quaternion(0, 0, 0, 0);
-  static ONE = new Quaternion(1, 0, 0, 0);
 
   /**
    * Creates a new normalized Quaternion object
@@ -92,7 +91,7 @@ class Quaternion {
 
     // Parallel when dot > 0.999999
     if (dot >= 1 - EPSILON) {
-      return Quaternion.ONE;
+      return new Quaternion(1, 0, 0, 0);
     }
 
     // Anti-Parallel (close to PI) when dot < -0.999999
@@ -143,16 +142,16 @@ class Quaternion {
   /**
    * Creates a quaternion by a rotation given by Euler angles (multiplication order from right to left)
    *
-   * @param {number} φ First angle
-   * @param {number} θ Second angle
-   * @param {number} ψ Third angle
+   * @param {number} f First angle
+   * @param {number} s Second angle
+   * @param {number} t Third angle
    * @param {string=} order Axis order (Tait Bryan)
    * @returns {Quaternion}
    */
-  static createFromEuler(φ: number, θ: number, ψ: number, order: string): Quaternion {
-    let _x = φ * 0.5;
-    let _y = θ * 0.5;
-    let _z = ψ * 0.5;
+  static createFromEuler(f: number, s: number, t: number, order: string): Quaternion {
+    let _x = f * 0.5;
+    let _y = s * 0.5;
+    let _z = t * 0.5;
 
     let cX = Math.cos(_x);
     let cY = Math.cos(_y);
@@ -163,7 +162,7 @@ class Quaternion {
     let sZ = Math.sin(_z);
 
     if (order === undefined || order === 'ZXY') {
-      // axisAngle([0, 0, 1], φ) * axisAngle([1, 0, 0], θ) * axisAngle([0, 1, 0], ψ)
+      // axisAngle([0, 0, 1], f) * axisAngle([1, 0, 0], s) * axisAngle([0, 1, 0], t)
       return new Quaternion(
         cX * cY * cZ - sX * sY * sZ,
         sY * cX * cZ - sX * sZ * cY,
@@ -173,7 +172,7 @@ class Quaternion {
     }
 
     if (order === 'XYZ' || order === 'RPY') { // roll around X, pitch around Y, yaw around Z
-      // axisAngle([1, 0, 0], φ) * axisAngle([0, 1, 0], θ) * axisAngle([0, 0, 1], ψ)
+      // axisAngle([1, 0, 0], f) * axisAngle([0, 1, 0], s) * axisAngle([0, 0, 1], t)
       return new Quaternion(
         cX * cY * cZ - sX * sY * sZ,
         sX * cY * cZ + sY * sZ * cX,
@@ -183,7 +182,7 @@ class Quaternion {
     }
 
     if (order === 'YXZ') { // deviceorientation
-      // axisAngle([0, 1, 0], φ) * axisAngle([1, 0, 0], θ) * axisAngle([0, 0, 1], ψ)
+      // axisAngle([0, 1, 0], f) * axisAngle([1, 0, 0], s) * axisAngle([0, 0, 1], t)
       return new Quaternion(
         sX * sY * sZ + cX * cY * cZ,
         sX * sZ * cY + sY * cX * cZ,
@@ -193,7 +192,7 @@ class Quaternion {
     }
 
     if (order === 'ZYX' || order === 'YPR') {
-      // axisAngle([0, 0, 1], φ) * axisAngle([0, 1, 0], θ) * axisAngle([1, 0, 0], ψ)
+      // axisAngle([0, 0, 1], f) * axisAngle([0, 1, 0], s) * axisAngle([1, 0, 0], t)
       return new Quaternion(
         sX * sY * sZ + cX * cY * cZ,
         sZ * cX * cY - sX * sY * cZ,
@@ -203,7 +202,7 @@ class Quaternion {
     }
 
     if (order === 'YZX') {
-      // axisAngle([0, 1, 0], φ) * axisAngle([0, 0, 1], θ) * axisAngle([1, 0, 0], ψ)
+      // axisAngle([0, 1, 0], f) * axisAngle([0, 0, 1], s) * axisAngle([1, 0, 0], t)
       return new Quaternion(
         cX * cY * cZ - sX * sY * sZ,
         sX * sY * cZ + sZ * cX * cY,
@@ -213,7 +212,7 @@ class Quaternion {
     }
 
     if (order === 'XZY') {
-      // axisAngle([1, 0, 0], φ) * axisAngle([0, 0, 1], θ) * axisAngle([0, 1, 0], ψ)
+      // axisAngle([1, 0, 0], f) * axisAngle([0, 0, 1], s) * axisAngle([0, 1, 0], t)
       return new Quaternion(
         sX * sY * sZ + cX * cY * cZ,
         sX * cY * cZ - sY * sZ * cX,
@@ -223,7 +222,7 @@ class Quaternion {
     }
 
     if (order === 'ZYZ') {
-      // axisAngle([0, 0, 1], φ) * axisAngle([0, 1, 0], θ) * axisAngle([0, 0, 1], ψ)
+      // axisAngle([0, 0, 1], f) * axisAngle([0, 1, 0], s) * axisAngle([0, 0, 1], t)
       return new Quaternion(
         cX * cY * cZ - sX * sZ * cY,
         sY * sZ * cX - sX * sY * cZ,
@@ -233,7 +232,7 @@ class Quaternion {
     }
 
     if (order === 'ZXZ') {
-      // axisAngle([0, 0, 1], φ) * axisAngle([1, 0, 0], θ) * axisAngle([0, 0, 1], ψ)
+      // axisAngle([0, 0, 1], f) * axisAngle([1, 0, 0], s) * axisAngle([0, 0, 1], t)
       return new Quaternion(
         cX * cY * cZ - sX * sZ * cY,
         sX * sY * sZ + sY * cX * cZ,
@@ -243,7 +242,7 @@ class Quaternion {
     }
 
     if (order === 'YXY') {
-      // axisAngle([0, 1, 0], φ) * axisAngle([1, 0, 0], θ) * axisAngle([0, 1, 0], ψ)
+      // axisAngle([0, 1, 0], f) * axisAngle([1, 0, 0], s) * axisAngle([0, 1, 0], t)
       return new Quaternion(
         cX * cY * cZ - sX * sZ * cY,
         sX * sY * sZ + sY * cX * cZ,
@@ -253,7 +252,7 @@ class Quaternion {
     }
 
     if (order === 'YZY') {
-      // axisAngle([0, 1, 0], φ) * axisAngle([0, 0, 1], θ) * axisAngle([0, 1, 0], ψ)
+      // axisAngle([0, 1, 0], f) * axisAngle([0, 0, 1], s) * axisAngle([0, 1, 0], t)
       return new Quaternion(
         cX * cY * cZ - sX * sZ * cY,
         sX * sY * cZ - sY * sZ * cX,
@@ -263,7 +262,7 @@ class Quaternion {
     }
 
     if (order === 'XYX') {
-      // axisAngle([1, 0, 0], φ) * axisAngle([0, 1, 0], θ) * axisAngle([1, 0, 0], ψ)
+      // axisAngle([1, 0, 0], f) * axisAngle([0, 1, 0], s) * axisAngle([1, 0, 0], t)
       return new Quaternion(
         cX * cY * cZ - sX * sZ * cY,
         sX * cY * cZ + sZ * cX * cY,
@@ -273,7 +272,7 @@ class Quaternion {
     }
 
     if (order === 'XZX') {
-      // axisAngle([1, 0, 0], φ) * axisAngle([0, 0, 1], θ) * axisAngle([1, 0, 0], ψ)
+      // axisAngle([1, 0, 0], f) * axisAngle([0, 0, 1], s) * axisAngle([1, 0, 0], t)
       return new Quaternion(
         cX * cY * cZ - sX * sZ * cY,
         sX * cY * cZ + sZ * cX * cY,
@@ -467,7 +466,7 @@ class Quaternion {
   normalize(): Quaternion {
     let norm = Math.sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
     if (norm < EPSILON) {
-      return Quaternion.ZERO;
+      return ZERO;
     }
 
     norm = 1 / norm;
@@ -530,7 +529,7 @@ class Quaternion {
   inverse(): Quaternion {
     let normSq = this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
     if (normSq === 0) {
-      return Quaternion.ZERO;
+      return ZERO;
     }
 
     normSq = 1 / normSq;
@@ -549,7 +548,7 @@ class Quaternion {
   div(w: number, x: number, y: number, z: number): Quaternion {
     var normSq = w * w + x * x + y * y + z * z;
     if (normSq === 0) {
-      return Quaternion.ZERO;
+      return ZERO;
     }
 
     normSq = 1 / normSq;
@@ -833,7 +832,10 @@ class Quaternion {
   }
 }
 
-export { Quaternion };
+ZERO = new Quaternion(0, 0, 0, 0);
+ONE = new Quaternion(1, 0, 0, 0);
+
+export { Quaternion, ZERO, ONE };
 
 function LOG_HYPOT(a: number, b: number) {
   var _a = Math.abs(a);
