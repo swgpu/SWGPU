@@ -3,7 +3,7 @@ import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
 import { UT } from '@lib/core/utils';
 import { Screen } from '@lib/screen/screen';
 import { Gfx3CameraWASD } from '@lib/gfx3_camera/gfx3_camera_wasd';
-import { EnginePack3D } from '@lib/engine/engine_pack3d';
+import { EnginePack3D } from '@lib/engine/engine_pack_3d';
 // ---------------------------------------------------------------------------------------
 
 class PackScreen extends Screen {

@@ -2,23 +2,44 @@
 <html lang="fr">
 
 <head>
-  <link rel="stylesheet" type="text/css" href="styles/core.css" />
-  <link rel="stylesheet" type="text/css" href="styles/game.css" />
-  <link rel="stylesheet" type="text/css" href="templates/checker/styles.css" />
-  <link rel="stylesheet" type="text/css" href="templates/tcg/styles.css" />
-  <link rel="stylesheet" type="text/css" href="templates/rpg/styles.css" />
-  <link rel="stylesheet" type="text/css" href="templates/triple-triad/styles.css" />
-  <link rel="stylesheet" type="text/css" href="templates/fight/styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="styles/core.css">
+  <link rel="stylesheet" type="text/css" href="templates/visual-novel/styles.css">
+  <link rel="stylesheet" type="text/css" href="templates/checker/styles.css">
+  <link rel="stylesheet" type="text/css" href="templates/tcg/styles.css">
+  <link rel="stylesheet" type="text/css" href="templates/rpg/styles.css">
+  <link rel="stylesheet" type="text/css" href="templates/triple-triad/styles.css">
+  <link rel="stylesheet" type="text/css" href="templates/fight/styles.css">
   <script type="module" src="src/main.js"></script>
   <title>SWGPU Playground</title>
   <link rel="icon" href="textures/favicon.ico">
-  <link rel="icon" type="image/jpeg" href="textures/favicon.png" />
+  <link rel="icon" type="image/jpeg" href="textures/favicon.png">
   <style>
+    @font-face {
+      font-family: "Press Start 2P";
+      font-style: normal;
+      font-weight: 400;
+      src: url(../fonts/PressStart2PRegular.otf) format("truetype");
+    }
+
     h1 {
       margin-bottom:10px;
     }
     center {
       margin-bottom:10px;
+    }
+
+    #APP {
+      margin: 0 auto;
+    }
+
+    #UI_ROOT * {
+      font-family: "Press Start 2P";
+    }
+
+    .u-filter-greyscale {
+      filter: grayscale(100%);
     }
   </style>
 </head>
@@ -27,7 +48,7 @@
   <div id="BRAND">
     <div id="BRAND_TITLE">SWGPU</div>
     <div id="BRAND_METRICS">
-      <span>Version: <b>1.7.0</b></span>
+      <span>Version: <b>1.8.5</b></span>
       <br/>
       <span>FPS: <b id="fps"></b>
       <br/>
@@ -36,7 +57,7 @@
       <span>Licence: <b>MIT</b></span>
     </div>  
   </div>
-  <div id="APP" style="margin: 0 auto">
+  <div id="APP">
     <div id="APP_FAIL"></div>
     <canvas id="CANVAS_3D" width="1px" height="1px"></canvas>
     <canvas id="CANVAS_2D" width="1px" height="1px"></canvas>
