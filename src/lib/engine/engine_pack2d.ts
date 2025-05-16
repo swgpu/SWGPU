@@ -1,7 +1,7 @@
 import JSZip from 'jszip';
+// -----------------------------------------------------------------------------------------------
 import { gfx2TextureManager } from '../gfx2/gfx2_texture_manager';
 import { soundManager } from '../sound/sound_manager';
-// -----------------------------------------------------------------------------------------------
 import { UT } from '../core/utils';
 import { Gfx2SpriteJSS } from '../gfx2_sprite/gfx2_sprite_jss';
 import { Gfx2SpriteJAS } from '../gfx2_sprite/gfx2_sprite_jas';
@@ -11,31 +11,34 @@ import { Motion } from '../motion/motion';
 import { ScriptMachine } from '../script/script_machine';
 import { AIPathGraph2D } from '../ai/ai_path_graph';
 import { AIPathGrid2D } from '../ai/ai_path_grid';
-import { PackItemList } from './engine_pack';
+import { EnginePackItemList } from './engine_pack_item_list';
 
+/**
+ * A package manager for 2D assets.
+ */
 class EnginePack2D {
-  jsc: PackItemList<ScriptMachine>;
-  snd: PackItemList<Sound>;
-  tex: PackItemList<ImageBitmap>;
-  jss: PackItemList<Gfx2SpriteJSS>;
-  jas: PackItemList<Gfx2SpriteJAS>;
-  jtm: PackItemList<Gfx2TileMap>;
-  jlm: PackItemList<Motion>;
-  grf: PackItemList<AIPathGraph2D>;
-  grd: PackItemList<AIPathGrid2D>;
-  any: PackItemList<any>;
+  jsc: EnginePackItemList<ScriptMachine>;
+  snd: EnginePackItemList<Sound>;
+  tex: EnginePackItemList<ImageBitmap>;
+  jss: EnginePackItemList<Gfx2SpriteJSS>;
+  jas: EnginePackItemList<Gfx2SpriteJAS>;
+  jtm: EnginePackItemList<Gfx2TileMap>;
+  jlm: EnginePackItemList<Motion>;
+  grf: EnginePackItemList<AIPathGraph2D>;
+  grd: EnginePackItemList<AIPathGrid2D>;
+  any: EnginePackItemList<any>;
 
   constructor() {
-    this.jsc = new PackItemList<ScriptMachine>;
-    this.snd = new PackItemList<Sound>;
-    this.tex = new PackItemList<ImageBitmap>;
-    this.jss = new PackItemList<Gfx2SpriteJSS>;
-    this.jas = new PackItemList<Gfx2SpriteJAS>;
-    this.jtm = new PackItemList<Gfx2TileMap>;
-    this.jlm = new PackItemList<Motion>;
-    this.grf = new PackItemList<AIPathGraph2D>;
-    this.grd = new PackItemList<AIPathGrid2D>;
-    this.any = new PackItemList<any>;
+    this.jsc = new EnginePackItemList<ScriptMachine>;
+    this.snd = new EnginePackItemList<Sound>;
+    this.tex = new EnginePackItemList<ImageBitmap>;
+    this.jss = new EnginePackItemList<Gfx2SpriteJSS>;
+    this.jas = new EnginePackItemList<Gfx2SpriteJAS>;
+    this.jtm = new EnginePackItemList<Gfx2TileMap>;
+    this.jlm = new EnginePackItemList<Motion>;
+    this.grf = new EnginePackItemList<AIPathGraph2D>;
+    this.grd = new EnginePackItemList<AIPathGrid2D>;
+    this.any = new EnginePackItemList<any>;
   }
 
   /**
@@ -48,7 +51,7 @@ class EnginePack2D {
     const zip = await JSZip.loadAsync(await res.blob());
     const pack = new EnginePack2D();
 
-    // load texture first
+    // load textures first
     for (const entry of zip.file(/\.(jpg|jpeg|png|bmp)/)) {
       const infos = UT.GET_FILENAME_INFOS(entry.name);
       const file = zip.file(entry.name);
@@ -64,7 +67,7 @@ class EnginePack2D {
     for (const entry of zip.file(/.*/)) {
       const infos = UT.GET_FILENAME_INFOS(entry.name);
       const file = zip.file(entry.name);
-      
+
       if (file != null && infos.ext == 'mp3') {
         const url = URL.createObjectURL(await file.async('blob'));
         const snd = await soundManager.loadSound(url, entry.name);

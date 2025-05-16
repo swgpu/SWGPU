@@ -1,7 +1,7 @@
 import JSZip from 'jszip';
+// -----------------------------------------------------------------------------------------------
 import { gfx3TextureManager } from '../gfx3/gfx3_texture_manager';
 import { soundManager } from '../sound/sound_manager';
-// -----------------------------------------------------------------------------------------------
 import { UT } from '../core/utils';
 import { Gfx3MeshJAM } from '../gfx3_mesh/gfx3_mesh_jam';
 import { Gfx3MeshJSM } from '../gfx3_mesh/gfx3_mesh_jsm';
@@ -19,45 +19,48 @@ import { Gfx3SpriteJSS } from '../gfx3_sprite/gfx3_sprite_jss';
 import { Sound } from '../sound/sound_manager';
 import { Motion } from '../motion/motion';
 import { ScriptMachine } from '../script/script_machine';
-import { PackItemList } from './engine_pack';
+import { EnginePackItemList } from './engine_pack_item_list';
 
+/**
+ * A package manager for 3D assets.
+ */
 class EnginePack3D {
-  jsc: PackItemList<ScriptMachine>;
-  snd: PackItemList<Sound>;
-  tex: PackItemList<Gfx3Texture>;
-  mat: PackItemList<Gfx3Material>;
-  jam: PackItemList<Gfx3MeshJAM>;
-  jsm: PackItemList<Gfx3MeshJSM>;
-  obj: PackItemList<Gfx3MeshOBJ>;
-  jas: PackItemList<Gfx3SpriteJAS>;
-  jss: PackItemList<Gfx3SpriteJSS>;
-  jwm: PackItemList<Gfx3PhysicsJWM>;
-  jnm: PackItemList<Gfx3PhysicsJNM>;
-  jlm: PackItemList<Motion>;
-  jsv: PackItemList<Gfx3ShadowVolume>;
-  jlt: PackItemList<Gfx3MeshLight>;
-  grf: PackItemList<AIPathGraph3D>;
-  grd: PackItemList<AIPathGrid3D>;
-  any: PackItemList<any>;
+  jsc: EnginePackItemList<ScriptMachine>;
+  snd: EnginePackItemList<Sound>;
+  tex: EnginePackItemList<Gfx3Texture>;
+  mat: EnginePackItemList<Gfx3Material>;
+  jam: EnginePackItemList<Gfx3MeshJAM>;
+  jsm: EnginePackItemList<Gfx3MeshJSM>;
+  obj: EnginePackItemList<Gfx3MeshOBJ>;
+  jas: EnginePackItemList<Gfx3SpriteJAS>;
+  jss: EnginePackItemList<Gfx3SpriteJSS>;
+  jwm: EnginePackItemList<Gfx3PhysicsJWM>;
+  jnm: EnginePackItemList<Gfx3PhysicsJNM>;
+  jlm: EnginePackItemList<Motion>;
+  jsv: EnginePackItemList<Gfx3ShadowVolume>;
+  jlt: EnginePackItemList<Gfx3MeshLight>;
+  grf: EnginePackItemList<AIPathGraph3D>;
+  grd: EnginePackItemList<AIPathGrid3D>;
+  any: EnginePackItemList<any>;
 
   constructor() {
-    this.jsc = new PackItemList<ScriptMachine>;
-    this.snd = new PackItemList<Sound>;
-    this.tex = new PackItemList<Gfx3Texture>;
-    this.mat = new PackItemList<Gfx3Material>;
-    this.jam = new PackItemList<Gfx3MeshJAM>;
-    this.jsm = new PackItemList<Gfx3MeshJSM>;
-    this.obj = new PackItemList<Gfx3MeshOBJ>;
-    this.jas = new PackItemList<Gfx3SpriteJAS>;
-    this.jss = new PackItemList<Gfx3SpriteJSS>;
-    this.jwm = new PackItemList<Gfx3PhysicsJWM>;
-    this.jnm = new PackItemList<Gfx3PhysicsJNM>;
-    this.jlm = new PackItemList<Motion>;
-    this.jsv = new PackItemList<Gfx3ShadowVolume>;
-    this.jlt = new PackItemList<Gfx3MeshLight>;
-    this.grf = new PackItemList<AIPathGraph3D>;
-    this.grd = new PackItemList<AIPathGrid3D>;
-    this.any = new PackItemList<any>;
+    this.jsc = new EnginePackItemList<ScriptMachine>;
+    this.snd = new EnginePackItemList<Sound>;
+    this.tex = new EnginePackItemList<Gfx3Texture>;
+    this.mat = new EnginePackItemList<Gfx3Material>;
+    this.jam = new EnginePackItemList<Gfx3MeshJAM>;
+    this.jsm = new EnginePackItemList<Gfx3MeshJSM>;
+    this.obj = new EnginePackItemList<Gfx3MeshOBJ>;
+    this.jas = new EnginePackItemList<Gfx3SpriteJAS>;
+    this.jss = new EnginePackItemList<Gfx3SpriteJSS>;
+    this.jwm = new EnginePackItemList<Gfx3PhysicsJWM>;
+    this.jnm = new EnginePackItemList<Gfx3PhysicsJNM>;
+    this.jlm = new EnginePackItemList<Motion>;
+    this.jsv = new EnginePackItemList<Gfx3ShadowVolume>;
+    this.jlt = new EnginePackItemList<Gfx3MeshLight>;
+    this.grf = new EnginePackItemList<AIPathGraph3D>;
+    this.grd = new EnginePackItemList<AIPathGrid3D>;
+    this.any = new EnginePackItemList<any>;
   }
 
   /**

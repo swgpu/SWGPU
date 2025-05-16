@@ -119,4 +119,4 @@ export type { Gfx3Viewport, ProjectionMode } from './gfx3/gfx3_view';
 export type { vec1, vec2, vec3, vec4, vec5, vec6, vec_any, mat3, mat4, bounds2, bounds3 } from './types';
 export type { Sound } from './sound/sound_manager';
 export type { RenderingMode } from './engine/engine_manager';
-export type { PackItem, PackItemList } from './engine/engine_pack';
+export type { PackItem, PackItemList } from './engine/engine_pack_item_list';
