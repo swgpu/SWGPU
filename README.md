@@ -29,7 +29,11 @@ From the start, we chose to embrace the future with pure **WebGPU** 3D rendering
 * [Blender Plugin](#blender-plugin)
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
+* [Bug track](#bug-track)
+* [Roadmap](#roadmap)
 * [Changelog](#changelog)
+* [Licence](#licence)
+* [Screenshots](#screenshots)
 
 ## Getting started
 Clone and install the starter-kit from this repository:      
@@ -241,7 +245,7 @@ Congratulation, your static mesh is now exported !
 - [Jolt Physics](https://jrouwe.github.io/JoltPhysics/) for 3D physics engine
 - No glTF support, we don't want to support the rendering techniques used by this format (BSDF, Skinning, etc...)
 
-## Bugs track
+## Bug track
 - ~~Physics bug when change tab and come back (even with paused the game before tab changing)~~
 
 ## Roadmap
