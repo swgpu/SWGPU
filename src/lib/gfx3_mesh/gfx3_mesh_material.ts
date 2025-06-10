@@ -345,11 +345,11 @@ class Gfx3Material {
     for (const animation of this.animations.values()) {
       const offsetX = animation.flipbook.frameWidth * (animation.currentFrameIndex % animation.flipbook.numCol);
       const offsetY = animation.flipbook.frameHeight * Math.floor(animation.currentFrameIndex / animation.flipbook.numCol);
-  
+
       this.uvs[animation.uvsIndexes[0]] = offsetX / this.texture.gpuTexture.width;
       this.uvs[animation.uvsIndexes[1]] = offsetY / this.texture.gpuTexture.height;
       this.dataChanged = true;
-  
+
       if (animation.frameProgress >= animation.flipbook.frameDuration) {
         if (animation.currentFrameIndex == animation.flipbook.numFrames - 1) {
           if (animation.looped) {

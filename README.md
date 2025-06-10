@@ -244,6 +244,10 @@ Congratulation, your static mesh is now exported !
 ## Bugs track
 - ~~Physics bug when change tab and come back (even with paused the game before tab changing)~~
 
+## Roadmap
+- Compute animated mesh attributes interpolation in a dedicated compute shader (optimization).
+- Work on particules system to pass some computations on shader side, add somes features and build a demo as a particules generator (optimization, demo).
+
 ## Changelog
 ```
 - [Ver. 1.7.0]  Fix somes performances issues (now webgpu constants are stables).
