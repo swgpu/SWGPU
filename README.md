@@ -255,7 +255,7 @@ Congratulation, your static mesh is now exported !
 
 ## Roadmap templates
 - Pre-rendered demo with z-buffer method.
-- A Crazy-taxi like.
+- Particules generator
 
 ## Changelog
 ```
