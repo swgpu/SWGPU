@@ -30,7 +30,8 @@ From the start, we chose to embrace the future with pure **WebGPU** 3D rendering
 * [Contributors](#contributors)
 * [Some parts taken for this work](#some-parts-taken-for-this-work)
 * [Bug track](#bug-track)
-* [Roadmap](#roadmap)
+* [Roadmap Engine](#roadmap-engine)
+* [Roadmap Templates](#roadmap-templates)
 * [Changelog](#changelog)
 * [Licence](#licence)
 * [Screenshots](#screenshots)
@@ -248,9 +249,13 @@ Congratulation, your static mesh is now exported !
 ## Bug track
 - ~~Physics bug when change tab and come back (even with paused the game before tab changing)~~
 
-## Roadmap
+## Roadmap engine
 - Compute animated mesh attributes interpolation in a dedicated compute shader (optimization).
 - Work on particules system to pass some computations on shader side, add somes features and build a demo as a particules generator (optimization, demo).
+
+## Roadmap templates
+- Pre-rendered demo with z-buffer method.
+- A Crazy-taxi like.
 
 ## Changelog
 ```
