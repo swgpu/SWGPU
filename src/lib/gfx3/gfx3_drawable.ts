@@ -57,9 +57,16 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
    */
   beginVertices(vertexCount: number): void {
     gfx3Manager.destroyVertexBuffer(this.vertexSubBuffer);
-    this.vertexSubBuffer = gfx3Manager.createVertexBuffer(vertexCount * this.vertexStride * 4);
+    this.vertexSubBuffer = gfx3Manager.createVertexBuffer(vertexCount * this.vertexStride);
     this.vertices = [];
     this.vertexCount = vertexCount;
+  }
+
+  /**
+   * Delete all values from vertex buffer but keep the allocation alive.
+   */
+  flushVertices(): void {
+    this.vertices = [];
   }
 
   /**

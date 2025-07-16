@@ -70,6 +70,12 @@ class TilemapPathfindingScreen extends Screen {
     this.selectionRect.draw();
   }
 
+  render() {
+    gfx2Manager.beginRender();
+    gfx2Manager.render();
+    gfx2Manager.endRender();
+  }
+
   movePlayer(endX, endY) {
     const startX = this.collisionMap.getLocationCol(this.controller.getPositionX());
     const startY = this.collisionMap.getLocationRow(this.controller.getPositionY());

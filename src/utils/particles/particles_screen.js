@@ -1,5 +1,7 @@
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
 import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
 import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
+import { gfx3ParticlesRenderer } from '@lib/gfx3_particules/gfx3_particles_renderer';
 import { Screen } from '@lib/screen/screen';
 import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
@@ -38,6 +40,7 @@ class ParticlesScreen extends Screen {
   }
 
   draw() {
+    gfx3Manager.beginDrawing();
     this.skySphere.draw();
     this.floor.draw();
     this.particles0.draw();
@@ -46,6 +49,16 @@ class ParticlesScreen extends Screen {
     gfx3MeshRenderer.drawDirLight([0, -1, 0.2], [0.8, 0.8, 0.8], [0.8, 0.8, 0.8]);
     gfx3MeshRenderer.drawPointLight([Math.cos(this.colFac * 0.2) * 45.0, 18, Math.cos(this.colFac * 0.2) * 45.0], [0.8, 0.8, 0.4], [0.8, 0.8, 0.4]);
     gfx3MeshRenderer.drawPointLight([Math.sin(this.colFac * 0.2) * 45.0, 18, Math.sin(this.colFac * 0.2) * 45.0], [0.8, 0.8, 0.4], [0.8, 0.8, 0.4]);
+    gfx3Manager.endDrawing();
+  }
+
+  render(ts) {
+    gfx3Manager.beginRender();
+    gfx3Manager.beginPassRender(0);
+    gfx3MeshRenderer.render(ts);
+    gfx3ParticlesRenderer.render();
+    gfx3Manager.endPassRender();
+    gfx3Manager.endRender();
   }
 }
 

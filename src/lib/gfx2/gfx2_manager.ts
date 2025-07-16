@@ -13,6 +13,7 @@ class Gfx2Manager {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   drawables: Array<Gfx2Drawable>;
+  drawCommands: Array<(ctx: CanvasRenderingContext2D) => void>;
   mode: Gfx2RenderingMode;
   cameraTransform: mat3;
   cameraScale: vec2;
@@ -24,12 +25,13 @@ class Gfx2Manager {
     this.canvas = <HTMLCanvasElement>document.getElementById('CANVAS_2D')!;
     this.ctx = this.canvas.getContext('2d')!;
     this.drawables = [];
+    this.drawCommands = [];
     this.mode = Gfx2RenderingMode.ORTHOGRAPHIC;
     this.cameraTransform = UT.MAT3_IDENTITY();
     this.cameraScale = [1, 1];
     this.cameraRotation = 0;
     this.cameraPosition = [0, 0];
-    this.bgColor = [0, 0, 0, 0];
+    this.bgColor = [0, 0, 0, 1];
 
     if (!this.ctx) {
       UT.FAIL('This browser does not support canvas');
@@ -79,6 +81,10 @@ class Gfx2Manager {
     for (const drawable of this.drawables) {
       drawable.render();
     }
+
+    for (const drawCmd of this.drawCommands) {
+      drawCmd(this.ctx);
+    }
   }
 
   /**
@@ -87,6 +93,7 @@ class Gfx2Manager {
   endRender(): void {
     this.ctx.restore();
     this.drawables = [];
+    this.drawCommands = [];
   }
 
   /**
@@ -96,6 +103,15 @@ class Gfx2Manager {
    */
   draw(drawable: Gfx2Drawable): void {
     this.drawables.push(drawable);
+  }
+
+  /**
+   * Add draw function command call to the draw list.
+   * 
+   * @param {(ctx: CanvasRenderingContext2D) => void} drawCmd - The draw command.
+   */
+  drawCommand(drawCmd: (ctx: CanvasRenderingContext2D) => void): void {
+    this.drawCommands.push(drawCmd);
   }
 
   /**

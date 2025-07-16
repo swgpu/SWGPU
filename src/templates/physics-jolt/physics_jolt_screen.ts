@@ -1,4 +1,6 @@
 import { dnaManager } from '@lib/dna/dna_manager';
+import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
 import { Screen } from '@lib/screen/screen';
 import { Gfx3CameraOrbit } from '@lib/gfx3_camera/gfx3_camera_orbit';
 import { Gfx3Jolt } from '@lib/gfx3_physics/gfx3_physics_jolt';
@@ -62,7 +64,17 @@ class PhysicsJoltScreen extends Screen {
   }
 
   draw() {
+    gfx3Manager.beginDrawing();
     dnaManager.draw();
+    gfx3Manager.endDrawing();
+  }
+
+  render() {
+    gfx3Manager.beginRender();
+    gfx3Manager.beginPassRender(0);
+    gfx3DebugRenderer.render();
+    gfx3Manager.endPassRender();
+    gfx3Manager.endRender();
   }
 
   async #createEntity(): Promise<number> {

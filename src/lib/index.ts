@@ -118,5 +118,4 @@ export type { TextureTarget } from './gfx3_mesh/gfx3_mesh_material';
 export type { Gfx3Viewport, ProjectionMode } from './gfx3/gfx3_view';
 export type { vec1, vec2, vec3, vec4, vec5, vec6, vec_any, mat3, mat4, bounds2, bounds3 } from './types';
 export type { Sound } from './sound/sound_manager';
-export type { RenderingMode } from './engine/engine_manager';
 export type { EnginePackItem, EnginePackItemList } from './engine/engine_pack_item_list';

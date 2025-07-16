@@ -1,4 +1,5 @@
 import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
 import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
 import { gfx3MeshShadowRenderer } from '@lib/gfx3_mesh/gfx3_mesh_shadow_renderer';
 import { Screen } from '@lib/screen/screen';
@@ -37,11 +38,22 @@ class ShadowScreen extends Screen {
   }
 
   draw() {
+    gfx3Manager.beginDrawing();
     gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
     gfx3MeshRenderer.drawDirLight([100, -100, 0], [1, 1, 1], [0, 0, 0]);
     this.skySphere.draw();
     this.floor.draw();
     this.cube.draw();
+    gfx3Manager.endDrawing();
+  }
+
+  render(ts) {
+    gfx3Manager.beginRender();
+    gfx3MeshShadowRenderer.render();
+    gfx3Manager.beginPassRender(0);
+    gfx3MeshRenderer.render(ts);
+    gfx3Manager.endPassRender();
+    gfx3Manager.endRender();
   }
 }
 

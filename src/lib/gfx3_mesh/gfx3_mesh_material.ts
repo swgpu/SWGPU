@@ -213,7 +213,7 @@ class Gfx3Material {
     this.toonLightDir[1] = options.toonLightDir ? options.toonLightDir[1] : 0.0;
     this.toonLightDir[2] = options.toonLightDir ? options.toonLightDir[2] : 0.0;
 
-    this.grp3 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 3);
+    this.grp3 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 3, GPUBufferUsage.STORAGE);
     this.texture = this.grp3.setTexture(0, 'MAT_TEXTURE', options.texture ?? gfx3Manager.createTextureFromBitmap());
     this.texture = this.grp3.setSampler(1, 'MAT_SAMPLER', this.texture);
     this.secondaryTexture = this.grp3.setTexture(2, 'MAT_SECONDARY_TEXTURE', options.secondaryTexture ?? gfx3Manager.createTextureFromBitmap());

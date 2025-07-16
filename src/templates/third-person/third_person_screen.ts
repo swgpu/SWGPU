@@ -1,5 +1,7 @@
 import { dnaManager } from '@lib/dna/dna_manager';
 import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
+import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
 import { Screen } from '@lib/screen/screen';
 import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
@@ -44,9 +46,19 @@ class ThirdPersonScreen extends Screen {
   }
 
   draw() {
+    gfx3Manager.beginDrawing();
     this.mapJSM.draw();
     this.mapJNM.enableDebugMesh(true);
     dnaManager.draw();
+    gfx3Manager.endDrawing();
+  }
+
+  render(ts: number) {
+    gfx3Manager.beginRender();
+    gfx3Manager.beginPassRender(0);
+    gfx3MeshRenderer.render(ts);
+    gfx3Manager.endPassRender();
+    gfx3Manager.endRender();
   }
 
   async #createMap(): Promise<{jsm: Gfx3MeshJSM, jnm: Gfx3PhysicsJNM }> {

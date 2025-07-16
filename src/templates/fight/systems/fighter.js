@@ -29,10 +29,11 @@ export class FighterSystem extends DNASystem {
     const collider = dnaManager.getComponent(eid, ColliderComponent);
     const bounds = collider.getBounds(position.x, position.y);
 
-    const ctx = gfx2Manager.getContext();
-    ctx.globalAlpha = 0.2;
-    ctx.fillStyle = '#000';
-    ctx.fillRect(bounds.left, bounds.top, collider.width, collider.height);
-    ctx.globalAlpha = 1.0;
+    gfx2Manager.drawCommand((ctx) => {
+      ctx.globalAlpha = 0.2;
+      ctx.fillStyle = '#000';
+      ctx.fillRect(bounds.left, bounds.top, collider.width, collider.height);
+      ctx.globalAlpha = 1.0;
+    });
   }
 }

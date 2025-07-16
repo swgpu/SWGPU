@@ -102,6 +102,8 @@ class PerfScreen extends Screen {
   }
 
   draw() {
+    gfx3Manager.beginDrawing();
+
     gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
     gfx3MeshRenderer.drawDirLight([0, -1, 0.2], [0.8, 0.6, 0.4], [0.8, 0.6, 0.4]);
     this.skySphere.draw();
@@ -114,6 +116,16 @@ class PerfScreen extends Screen {
         gfx3MeshRenderer.drawMesh(this.obj, t.m);
       }
     }
+
+    gfx3Manager.endDrawing();
+  }
+
+  render(ts) {
+    gfx3Manager.beginRender();
+    gfx3Manager.beginPassRender(0);
+    gfx3MeshRenderer.render(ts);
+    gfx3Manager.endPassRender();
+    gfx3Manager.endRender();
   }
 
   handleKeyUp(e) {

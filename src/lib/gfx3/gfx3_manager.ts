@@ -286,7 +286,7 @@ class Gfx3Manager {
     };
 
     this.vertexSubBuffers.push(sub);
-    this.vertexSubBuffersSize += size;
+    this.vertexSubBuffersSize += size * 4;
     return sub;
   }
 
@@ -325,7 +325,7 @@ class Gfx3Manager {
    * @param vertices - The vertex data.
    */
   writeVertexBuffer(sub: VertexSubBuffer, vertices: Array<number>): void {
-    sub.vertices = new Float32Array(vertices);
+    sub.vertices.set(vertices);
     sub.changed = true;
   }
 
@@ -334,9 +334,10 @@ class Gfx3Manager {
    * 
    * @param {string} pipelineId - The unique identifier of a pipeline.
    * @param {number} groupIndex - The uniform group index in the shader.
+   * @param {GPUBufferUsageFlags} usage - The buffer usage type (uniform, storage etc...).
    */
-  createStaticGroup(pipelineId: string, groupIndex: number): Gfx3StaticGroup {
-    return new Gfx3StaticGroup(this.device, this.getPipeline(pipelineId), groupIndex);
+  createStaticGroup(pipelineId: string, groupIndex: number, usage: GPUBufferUsageFlags = GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST): Gfx3StaticGroup {
+    return new Gfx3StaticGroup(this.device, this.getPipeline(pipelineId), groupIndex, usage);
   }
 
   /**
@@ -344,9 +345,10 @@ class Gfx3Manager {
    * 
    * @param {string} pipelineId - The unique identifier of a pipeline.
    * @param {number} groupIndex - The uniform group index in the shader.
+   * @param {GPUBufferUsageFlags} usage - The buffer usage type (uniform, storage etc...).
    */
-  createDynamicGroup(pipelineId: string, groupIndex: number): Gfx3DynamicGroup {
-    return new Gfx3DynamicGroup(this.device, this.getPipeline(pipelineId), groupIndex);
+  createDynamicGroup(pipelineId: string, groupIndex: number, usage: GPUBufferUsageFlags = GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST): Gfx3DynamicGroup {
+    return new Gfx3DynamicGroup(this.device, this.getPipeline(pipelineId), groupIndex, usage);
   }
 
   /**

@@ -10,6 +10,7 @@ class Gfx3StaticGroup {
   device: GPUDevice;
   pipeline: GPURenderPipeline;
   groupIndex: number;
+  usage: GPUBufferUsageFlags;
   uniformsByteLength: number;
   uniforms: Map<number, { binding: number, name: string, size: number, alignment: number }>;
   textures: Map<number, { binding: number, name: string, resource: GPUTextureView | GPUSampler }>;
@@ -21,15 +22,17 @@ class Gfx3StaticGroup {
    * @param {GPUDevice} device - The GPU device.
    * @param {GPURenderPipeline} pipeline - The graphics pipeline.
    * @param {number} groupIndex - The shader group index.
+   * @param {GPUBufferUsageFlags} usage - The buffer usage type (uniform, storage etc...).
    */
-  constructor(device: GPUDevice, pipeline: GPURenderPipeline, groupIndex: number) {
+  constructor(device: GPUDevice, pipeline: GPURenderPipeline, groupIndex: number, usage: GPUBufferUsageFlags) {
     this.device = device;
     this.pipeline = pipeline;
     this.groupIndex = groupIndex;
+    this.usage = usage;
     this.uniformsByteLength = 0;
     this.uniforms = new Map();
     this.textures = new Map();
-    this.buffer = device.createBuffer({ size: 16 * 4, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+    this.buffer = device.createBuffer({ size: 16 * 4, usage: this.usage });
     this.currentOffset = 0;
     this.bindGroup = null;
   }
@@ -50,8 +53,8 @@ class Gfx3StaticGroup {
    * @param {number} length - The number of float.
    */
   setFloat(binding: number, name: string, length: number): Float32Array {
-    let byteLength = length * 4;
-    let alignment = Math.ceil(byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
+    const byteLength = length * 4;
+    const alignment = Math.ceil(byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
     this.uniforms.set(binding, { binding: binding, name: name, size: byteLength, alignment: alignment });
     this.uniformsByteLength += alignment;
     return new Float32Array(length);
@@ -65,8 +68,8 @@ class Gfx3StaticGroup {
    * @param {number} length - The number of integer.
    */
   setInteger(binding: number, name: string, length: number): Uint32Array {
-    let byteLength = length * 4;
-    let alignment = Math.ceil(byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
+    const byteLength = length * 4;
+    const alignment = Math.ceil(byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
     this.uniforms.set(binding, { binding: binding, name: name, size: byteLength, alignment: alignment });
     this.uniformsByteLength += alignment;
     return new Uint32Array(length);
@@ -116,7 +119,7 @@ class Gfx3StaticGroup {
   allocate(): void {
     if (this.buffer.size != this.uniformsByteLength) {
       this.buffer.destroy();
-      this.buffer = this.device.createBuffer({ size: this.uniformsByteLength, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+      this.buffer = this.device.createBuffer({ size: this.uniformsByteLength, usage: this.usage });
     }
 
     let entries: Array<GPUBindGroupEntry> = [];
@@ -176,6 +179,7 @@ class Gfx3DynamicGroup {
   device: GPUDevice;
   pipeline: GPURenderPipeline;
   groupIndex: number;
+  usage: GPUBufferUsageFlags;
   uniformsByteLength: number;
   uniforms: Map<number, { binding: number, name: string, size: number, alignment: number }>;
   buffer: GPUBuffer;
@@ -187,14 +191,16 @@ class Gfx3DynamicGroup {
    * @param {GPUDevice} device - The GPU device.
    * @param {GPURenderPipeline} pipeline - The graphics pipeline.
    * @param {number} groupIndex - The shader group index.
+   * @param {GPUBufferUsageFlags} usage - The buffer usage type (uniform, storage etc...).
    */
-  constructor(device: GPUDevice, pipeline: GPURenderPipeline, groupIndex: number) {
+  constructor(device: GPUDevice, pipeline: GPURenderPipeline, groupIndex: number, usage: GPUBufferUsageFlags) {
     this.device = device;
     this.pipeline = pipeline;
     this.groupIndex = groupIndex;
+    this.usage = usage;
     this.uniformsByteLength = 0;
     this.uniforms = new Map();
-    this.buffer = device.createBuffer({ size: 16 * 4, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+    this.buffer = device.createBuffer({ size: 16 * 4, usage: this.usage });
     this.currentOffset = 0;    
     this.bindGroups = [];
     this.size = 0;
@@ -217,8 +223,8 @@ class Gfx3DynamicGroup {
    * @param {number} length - The number of float.
    */
   setFloat(binding: number, name: string, length: number): Float32Array {
-    let byteLength = length * 4;
-    let alignment = Math.ceil(byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
+    const byteLength = length * 4;
+    const alignment = Math.ceil(byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
     this.uniforms.set(binding, { binding: binding, name: name, size: byteLength, alignment: alignment });
     this.uniformsByteLength += alignment;
     return new Float32Array(length);
@@ -232,8 +238,8 @@ class Gfx3DynamicGroup {
    * @param {number} length - The number of integer.
    */
   setInteger(binding: number, name: string, length: number): Uint32Array {
-    let byteLength = length * 4;
-    let alignment = Math.ceil(byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
+    const byteLength = length * 4;
+    const alignment = Math.ceil(byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
     this.uniforms.set(binding, { binding: binding, name: name, size: byteLength, alignment: alignment });
     this.uniformsByteLength += alignment;
     return new Uint32Array(length);
@@ -249,7 +255,7 @@ class Gfx3DynamicGroup {
 
     if (this.buffer.size != size * this.uniformsByteLength) {
       this.buffer.destroy();
-      this.buffer = this.device.createBuffer({ size: size * this.uniformsByteLength, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+      this.buffer = this.device.createBuffer({ size: size * this.uniformsByteLength, usage: this.usage });
     }
 
     for (let i = 0, offset = 0, entries: Array<GPUBindGroupEntry> = []; i < size; i++) {

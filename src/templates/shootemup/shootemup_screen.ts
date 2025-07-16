@@ -1,6 +1,7 @@
 import { uiManager } from '@lib/ui/ui_manager';
 import { inputManager } from '@lib/input/input_manager';
 import { screenManager } from '@lib/screen/screen_manager';
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
 import { Screen } from '@lib/screen/screen';
 import { gfx2TextureManager } from '@lib/gfx2/gfx2_texture_manager';
 import { Gfx2SpriteJSS } from '@lib/gfx2_sprite/gfx2_sprite_jss';
@@ -40,6 +41,12 @@ class ShootemupScreen extends Screen {
 
   draw() {
     this.bg.draw();
+  }
+
+  render() {
+    gfx2Manager.beginRender();
+    gfx2Manager.render();
+    gfx2Manager.endRender();
   }
 }
 

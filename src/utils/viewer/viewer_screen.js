@@ -3,6 +3,9 @@ import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
 import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
 import { gfx3PostRenderer, PostParam } from '@lib/gfx3_post/gfx3_post_renderer';
+import { gfx3ShadowVolumeRenderer } from '@lib/gfx3_shadow_volume/gfx3_shadow_volume_renderer';
+import { gfx3SkyboxRenderer } from '@lib/gfx3_skybox/gfx3_skybox_renderer';
+import { gfx3FlareRenderer } from '@lib/gfx3_flare/gfx3_flare_renderer';
 import { uiManager } from '@lib/ui/ui_manager';
 import { coreManager } from '@lib/core/core_manager';
 import { UT } from '@lib/core/utils';
@@ -65,6 +68,7 @@ class ViewerScreen extends Screen {
   }
 
   draw() {
+    gfx3Manager.beginDrawing();
     this.shadow.draw();
     this.mesh.draw();
     this.bloom.draw();
@@ -75,6 +79,21 @@ class ViewerScreen extends Screen {
     gfx3MeshRenderer.drawPointLight([30, 0, 0], [0, 1, 0], [0, 0, 0]);
     gfx3MeshRenderer.drawPointLight([-30, 0, 0], [0, 0, 1], [0, 0, 0]);
     gfx3DebugRenderer.drawGrid(UT.MAT4_ROTATE_X(Math.PI * 0.5), 20, 1);
+    gfx3Manager.endDrawing();
+  }
+
+  render(ts) {
+    gfx3Manager.beginRender();
+    gfx3ShadowVolumeRenderer.render();
+    gfx3Manager.setDestinationTexture(gfx3PostRenderer.getSourceTexture());
+    gfx3Manager.beginPassRender(0);
+    gfx3SkyboxRenderer.render();
+    gfx3DebugRenderer.render();
+    gfx3MeshRenderer.render(ts);
+    gfx3FlareRenderer.render();
+    gfx3Manager.endPassRender();
+    gfx3PostRenderer.render(ts, gfx3Manager.getCurrentRenderingTexture());
+    gfx3Manager.endRender();
   }
 
   async handleKeyDown(e) {
@@ -226,31 +245,31 @@ function CREATE_UI_INFOBOX() {
 
   {
     const li = document.createElement('li');
-    li.textContent = '[2] => Load Cube Normal Map';  
+    li.textContent = '[2] => Load Cube Normal Map';
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[3] => Load Cube';  
+    li.textContent = '[3] => Load Cube';
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[4] => Load Cube Texture Sprite';  
+    li.textContent = '[4] => Load Cube Texture Sprite';
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[5] => Load Duck';  
+    li.textContent = '[5] => Load Duck';
     ul.appendChild(li);
   }
 
   {
     const li = document.createElement('li');
-    li.textContent = '[6] => Load Toon Torus';  
+    li.textContent = '[6] => Load Toon Torus';
     ul.appendChild(li);
   }
 

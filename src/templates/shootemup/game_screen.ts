@@ -1,5 +1,6 @@
 import { uiManager } from '@lib/ui/ui_manager';
 import { inputManager } from '@lib/input/input_manager';
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
 import { dnaManager } from '@lib/dna/dna_manager';
 import { screenManager } from '@lib/screen/screen_manager';
 import { soundManager } from '@lib/sound/sound_manager';
@@ -281,7 +282,7 @@ class GameScreen extends Screen {
     dnaManager.addComponent(shipEnt, new ShipComponent());
 
     this.generateWave();
-    
+
     eventManager.subscribe(this.bulletSystem, 'E_ENEMY_DESTROYED', this, this.handleEnemyDestroyed);
     eventManager.subscribe(this.bulletSystem, 'E_PLAYER_DESTROYED', this, this.handlePlayerDestroyed);
     eventManager.subscribe(this.enemySystem, 'E_PLAYER_DESTROYED', this, this.handlePlayerDestroyed);
@@ -331,6 +332,12 @@ class GameScreen extends Screen {
     dnaManager.draw();
   }
 
+  render() {
+    gfx2Manager.beginRender();
+    gfx2Manager.render();
+    gfx2Manager.endRender();
+  }
+
   generateWave() {
     const waveNum = ++this.waveCount;
     const randomOffsetX = (Math.random() - 0.5) * 30;
@@ -365,7 +372,7 @@ class GameScreen extends Screen {
             dnaManager.addComponent(enemy, new EnemyComponent(x + 600, y, 3, waveNum));
             break;
           default:
-            break;  
+            break;
         }
       }
     }
@@ -385,7 +392,7 @@ class GameScreen extends Screen {
 
   levelUp() {
     this.nextLevelXP = this.calculateNextLevelXP(++this.level);
-    
+
     const shipEnt = dnaManager.findEntity(ShipComponent);
     const ship = dnaManager.getComponent<ShipComponent>(shipEnt, ShipComponent);
     ship.cooldown = Math.max(550 - this.level * 50, 50);

@@ -1,4 +1,5 @@
 import { dnaManager } from '@lib/dna/dna_manager';
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
 import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
 import { spawnMap } from './entities/map';
@@ -60,6 +61,12 @@ class GameScreen extends Screen {
 
   draw() {
     dnaManager.draw();
+  }
+
+  render() {
+    gfx2Manager.beginRender();
+    gfx2Manager.render();
+    gfx2Manager.endRender();
   }
 }
 

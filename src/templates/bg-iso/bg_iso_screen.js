@@ -79,6 +79,12 @@ class BgIsoScreen extends Screen {
         this.layer1.draw();
     }
 
+    render() {
+        gfx2Manager.beginRender();
+        gfx2Manager.render();
+        gfx2Manager.endRender();
+    }
+
     locateCursor(row, col) {
         const collide = this.gridCollisions[row * this.tilemap.getColumns() + col];
         const layerIndex = this.gridLayers[row][col];

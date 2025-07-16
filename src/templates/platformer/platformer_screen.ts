@@ -92,6 +92,12 @@ class PlatformerScreen extends Screen {
     dnaManager.draw();
     this.foregroundLayer.draw();
   }
+
+  render() {
+    gfx2Manager.beginRender();
+    gfx2Manager.render();
+    gfx2Manager.endRender();
+  }
 }
 
 export { PlatformerScreen };

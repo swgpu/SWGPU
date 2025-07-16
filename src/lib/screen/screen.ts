@@ -39,13 +39,10 @@ class Screen {
 
   /**
    * Virtual function called during the render phase.
+   * 
+   * @param {number} ts - The timestep.
    */
-  render2D(): void {}
-
-  /**
-   * Virtual function called during the render phase.
-   */
-  render3D(): void {}
+  render(ts: number): void {}
 
   /**
    * Virtual asynchronous method that is called when screen is pushed to the stack.

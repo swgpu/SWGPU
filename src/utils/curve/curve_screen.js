@@ -1,3 +1,4 @@
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
 import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
 import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
 import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
@@ -58,11 +59,22 @@ class CurveScreen extends Screen {
   }
 
   draw() {
+    gfx3Manager.beginDrawing();
     gfx3DebugRenderer.drawVertices(this.curveVertices, this.curveVertexCount);
     gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
     gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [0, 0, 0]);
     this.obj.draw();
     this.skySphere.draw();
+    gfx3Manager.endDrawing();
+  }
+
+  render(ts) {
+    gfx3Manager.beginRender();
+    gfx3Manager.beginPassRender(0);
+    gfx3DebugRenderer.render();
+    gfx3MeshRenderer.render(ts);
+    gfx3Manager.endPassRender();
+    gfx3Manager.endRender();
   }
 }
 

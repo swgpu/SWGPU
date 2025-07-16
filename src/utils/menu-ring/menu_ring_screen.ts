@@ -1,6 +1,7 @@
 import { eventManager } from '@lib/core/event_manager';
 import { inputManager } from '@lib/input/input_manager';
 import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
+import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
 import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
 import { Screen } from '@lib/screen/screen';
 import { Gfx3Camera } from '@lib/gfx3_camera/gfx3_camera';
@@ -43,8 +44,8 @@ class MenuRingScreen extends Screen {
     });
 
     const view  = gfx3Manager.getCurrentView();
-    view.setBgColor(1, 1, 0, 0);
-    const canvas = document.querySelector('#CANVAS_3D') as HTMLDivElement;
+    view.setBgColor(0, 0, 0, 0.5);
+    const canvas = document.querySelector('#APP') as HTMLDivElement;
     canvas.style.backgroundImage = 'url(./utils/menu-ring/bg.png)';
 
     this.models.push(await LOAD_MODEL('./utils/menu-ring/scar.bsm', './utils/menu-ring/scar.jpeg'));
@@ -61,9 +62,21 @@ class MenuRingScreen extends Screen {
   }
 
   draw(): void {
+    gfx3Manager.beginDrawing();
+
     for (const model of this.models) {
       model.draw();
     }
+
+    gfx3Manager.endDrawing();
+  }
+
+  render(ts: number) {
+    gfx3Manager.beginRender();
+    gfx3Manager.beginPassRender(0);
+    gfx3MeshRenderer.render(ts);
+    gfx3Manager.endPassRender();
+    gfx3Manager.endRender();
   }
 
   #updateModels(ts: number): void {

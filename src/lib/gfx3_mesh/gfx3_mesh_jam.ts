@@ -194,70 +194,71 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
       nextFrameIndex = this.currentFrameIndex + 1;
     }
 
-    this.beginVertices(this.numVertices);
+    this.flushVertices();
     const currentFrame = this.frames[this.currentFrameIndex];
     const nextFrame = this.frames[nextFrameIndex];
 
     for (let i = 0; i < this.numVertices; i++) {
-      const vax = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 0];
-      const vay = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 1];
-      const vaz = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 2];
+      const offset = i * SHADER_VERTEX_ATTR_COUNT;
+      const vax = currentFrame.vertices[offset + 0];
+      const vay = currentFrame.vertices[offset + 1];
+      const vaz = currentFrame.vertices[offset + 2];
 
-      const tu = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 3];
-      const tv = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 4];
+      const tu = currentFrame.vertices[offset + 3];
+      const tv = currentFrame.vertices[offset + 4];
 
-      const car = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 5];
-      const cag = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 6];
-      const cab = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 7];
+      const car = currentFrame.vertices[offset + 5];
+      const cag = currentFrame.vertices[offset + 6];
+      const cab = currentFrame.vertices[offset + 7];
 
-      const nax = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 8];
-      const nay = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 9];
-      const naz = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 10];
+      const nax = currentFrame.vertices[offset + 8];
+      const nay = currentFrame.vertices[offset + 9];
+      const naz = currentFrame.vertices[offset + 10];
 
-      const tax = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 11];
-      const tay = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 12];
-      const taz = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 13];
+      const tax = currentFrame.vertices[offset + 11];
+      const tay = currentFrame.vertices[offset + 12];
+      const taz = currentFrame.vertices[offset + 13];
 
-      const bax = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 14];
-      const bay = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 15];
-      const baz = currentFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 16];
+      const bax = currentFrame.vertices[offset + 14];
+      const bay = currentFrame.vertices[offset + 15];
+      const baz = currentFrame.vertices[offset + 16];
 
       if (this.interpolationEnabled) {
-        const vbx = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 0];
-        const vby = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 1];
-        const vbz = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 2];
+        const vbx = nextFrame.vertices[offset + 0];
+        const vby = nextFrame.vertices[offset + 1];
+        const vbz = nextFrame.vertices[offset + 2];
         const vix = vax + ((vbx - vax) * interpolateFactor);
         const viy = vay + ((vby - vay) * interpolateFactor);
         const viz = vaz + ((vbz - vaz) * interpolateFactor);
 
-        const cbr = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 5];
-        const cbg = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 6];
-        const cbb = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 7];
+        const cbr = nextFrame.vertices[offset + 5];
+        const cbg = nextFrame.vertices[offset + 6];
+        const cbb = nextFrame.vertices[offset + 7];
         const cir = car + ((cbr - car) * interpolateFactor);
         const cig = cag + ((cbg - cag) * interpolateFactor);
         const cib = cab + ((cbb - cab) * interpolateFactor);
   
-        const nbx = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 8];
-        const nby = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 9];
-        const nbz = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 10];
+        const nbx = nextFrame.vertices[offset + 8];
+        const nby = nextFrame.vertices[offset + 9];
+        const nbz = nextFrame.vertices[offset + 10];
         const nix = nax + ((nbx - nax) * interpolateFactor);
         const niy = nay + ((nby - nay) * interpolateFactor);
         const niz = naz + ((nbz - naz) * interpolateFactor);
 
-        const tbx = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 11];
-        const tby = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 12];
-        const tbz = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 13];
+        const tbx = nextFrame.vertices[offset + 11];
+        const tby = nextFrame.vertices[offset + 12];
+        const tbz = nextFrame.vertices[offset + 13];
         const tix = tax + ((tbx - tax) * interpolateFactor);
         const tiy = tay + ((tby - tay) * interpolateFactor);
         const tiz = taz + ((tbz - taz) * interpolateFactor);
 
-        const bbx = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 14];
-        const bby = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 15];
-        const bbz = nextFrame.vertices[i * SHADER_VERTEX_ATTR_COUNT + 16];
+        const bbx = nextFrame.vertices[offset + 14];
+        const bby = nextFrame.vertices[offset + 15];
+        const bbz = nextFrame.vertices[offset + 16];
         const bix = tax + ((bbx - bax) * interpolateFactor);
         const biy = tay + ((bby - bay) * interpolateFactor);
         const biz = taz + ((bbz - baz) * interpolateFactor);
-  
+
         this.defineVertex(vix, viy, viz, tu, tv, cir, cig, cib, nix, niy, niz, tix, tiy, tiz, bix, biy, biz);
       }
       else {

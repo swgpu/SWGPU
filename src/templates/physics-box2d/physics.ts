@@ -51,7 +51,9 @@ export class PhysicsSystem extends DNASystem {
   }
 
   onAfterDraw(): void {
-    this.world.DebugDraw();
+    gfx2Manager.drawCommand((ctx) => {
+      this.world.DebugDraw();
+    });
   }
 
   createBox(position: vec2, width: number, height: number, dynamic: boolean) {

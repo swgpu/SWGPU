@@ -80,6 +80,12 @@ class TilemapScreen extends Screen {
     this.foregroundLayer.draw();
   }
 
+  render() {
+    gfx2Manager.beginRender();
+    gfx2Manager.render();
+    gfx2Manager.endRender();
+  }
+
   moveController(mx, my, direction) {
     this.controller.translate(mx, my);
     this.controller.setDirection(direction);

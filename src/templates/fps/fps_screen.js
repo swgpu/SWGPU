@@ -1,4 +1,5 @@
 import { inputManager } from '@lib/input/input_manager';
+import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
 import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
 import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
 import { Screen } from '@lib/screen/screen';
@@ -32,10 +33,20 @@ class FPSScreen extends Screen {
   }
 
   draw() {
+    gfx3Manager.beginDrawing();
     gfx3MeshRenderer.setAmbientColor([0.5, 0.5, 0.5]);
     gfx3MeshRenderer.drawDirLight([0, -1, 0], [1, 1, 1], [0, 0, 0]);
     this.map.mesh.draw();
     this.player.draw();
+    gfx3Manager.endDrawing();
+  }
+
+  render(ts) {
+    gfx3Manager.beginRender();
+    gfx3Manager.beginPassRender(0);
+    gfx3MeshRenderer.render(ts);
+    gfx3Manager.endPassRender();
+    gfx3Manager.endRender();
   }
 
   async createMap() {

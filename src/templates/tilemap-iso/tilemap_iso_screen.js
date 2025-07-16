@@ -78,6 +78,12 @@ class TilemapIsoScreen extends Screen {
     this.collisionLayer.draw();
   }
 
+  render() {
+    gfx2Manager.beginRender();
+    gfx2Manager.render();
+    gfx2Manager.endRender();
+  }
+
   move(ts, controller, dir, direction) {
     const move = UT.VEC2_2D_TO_ISO(dir);
     const mx = move[0] * controller.getSpeed() * (ts / 100);

@@ -1,4 +1,0 @@
-export declare const SHADER_VERTEX_ATTR_COUNT = 6;
-export declare const PIPELINE_DESC: any;
-export declare const VERTEX_SHADER = "\nstruct VertexOutput {\n  @builtin(position) Position: vec4<f32>,\n  @location(0) Color: vec3<f32>\n};\n\n@binding(0) @group(0) var<uniform> MVPC_MATRIX: mat4x4<f32>;\n\n@vertex\nfn main(\n  @location(0) Position: vec4<f32>,\n  @location(1) Color: vec3<f32>\n) -> VertexOutput {\n  var output: VertexOutput;\n  output.Position = MVPC_MATRIX * Position;\n  output.Color = Color;\n  return output;\n}";
-export declare const FRAGMENT_SHADER = "\nstruct FragOutput {\n  @location(0) Base: vec4f,\n  @location(1) Normal: vec4f,\n  @location(2) Id: vec4f\n}\n\n@fragment\nfn main(\n  @location(0) Color: vec3<f32>\n) -> FragOutput {\n  var output: FragOutput;\n  output.Base = vec4(Color, 1);\n  output.Normal = vec4(0.0, 0.0, 0.0, 0.0);\n  output.Id = vec4(0.0, 0.0, 0.0, 0.0);\n  return output;\n}";

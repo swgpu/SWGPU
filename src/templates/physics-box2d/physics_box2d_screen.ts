@@ -1,4 +1,5 @@
 import { dnaManager } from '@lib/dna/dna_manager';
+import { gfx2Manager } from '@lib/gfx2/gfx2_manager';
 import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
 import { PhysicsComponent, PhysicsSystem } from './physics';
@@ -30,8 +31,14 @@ class PhysicsBox2DScreen extends Screen {
     dnaManager.update(ts);
   }
 
-  render2D() {
+  draw() {
     dnaManager.draw();
+  }
+
+  render() {
+    gfx2Manager.beginRender();
+    gfx2Manager.render();
+    gfx2Manager.endRender();
   }
 
   async #createEntityBox(): Promise<number> {
@@ -39,7 +46,7 @@ class PhysicsBox2DScreen extends Screen {
 
     const entity = new EntityComponent();
     entity.x = 0;
-    entity.y = -200;  
+    entity.y = -200;
     dnaManager.addComponent(eid, entity);
 
     const physics = new PhysicsComponent();
