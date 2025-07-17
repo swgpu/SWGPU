@@ -250,10 +250,9 @@ Congratulation, your static mesh is now exported !
 - ~~Physics bug when change tab and come back (even with paused the game before tab changing)~~
 
 ## Roadmap engine
-- Compute animated mesh attributes interpolation in a dedicated compute shader (optimization).
-- Work on particules system to pass some computations on shader side, add somes features and build a demo as a particules generator (optimization, demo).
 
 ## Roadmap templates
+- Crazy Taxy Like
 - Pre-rendered demo with z-buffer method.
 - Particules generator
 
