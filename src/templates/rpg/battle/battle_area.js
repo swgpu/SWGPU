@@ -46,8 +46,8 @@ class BattleArea {
     }
 
     this.focusIcon = new Gfx3MeshJSM();
+    this.focusIcon.mat.setTexture(await gfx3TextureManager.loadTexture('templates/rpg/jsms/focus.png'));
     await this.focusIcon.loadFromFile('templates/rpg/jsms/focus.jsm');
-    this.focusIcon.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture('templates/rpg/jsms/focus.png') }));
 
     if (battle) {
       const cameraPos = battle.getCameraPosition();
@@ -57,8 +57,8 @@ class BattleArea {
       this.camera.setLookAt(cameraLookAt[0], cameraLookAt[1], cameraLookAt[2]);
 
       this.map = new Gfx3MeshJSM();
+      this.map.mat.setTexture(await gfx3TextureManager.loadTexture(battle.getJSMTextureFile()));
       await this.map.loadFromFile(battle.getJSMFile());
-      this.map.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture(battle.getJSMTextureFile()) }));
 
       let heroes = battle.getHeroes();
       for (let i = 0; i < heroes.length; i++) {

@@ -27,7 +27,7 @@ export async function spawnPlayer(jnm: Gfx3PhysicsJNM): Promise<number> {
   const graphics = new GraphicsComponent();
   await graphics.jam.loadFromFile('./templates/third-person/barret.jam');
   graphics.jam.play('IDLE', true);
-  graphics.jam.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture('./templates/third-person/barret.png') }));
+  graphics.jam.mat.setTexture(await gfx3TextureManager.loadTexture('./templates/third-person/barret.png'));
   dnaManager.addComponent(player, graphics);
 
   const camera = new CameraComponent(jnm);

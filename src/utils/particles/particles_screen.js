@@ -70,25 +70,19 @@ export { ParticlesScreen };
 
 async function CREATE_SKYSPHERE() {
   const skySphere = new Gfx3MeshJSM();
+  skySphere.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/particles/sky_sphere.jpg'));
   await skySphere.loadFromFile('./utils/particles/sky_sphere.jsm');
-  skySphere.setMaterial(new Gfx3Material({
-    texture: await gfx3TextureManager.loadTexture('./utils/particles/sky_sphere.jpg')
-  }));
-
   return skySphere;
 }
 
 async function CREATE_FLOOR(x, y, z) {
   const floor = new Gfx3MeshJSM();
   floor.setPosition(x, y, z);
+  floor.mat.setLightning(true);
+  floor.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/particles/floor.jpg'));
+  floor.mat.setNormalMap(await gfx3TextureManager.loadTexture('./utils/particles/floor_normal_map.jpg'));
+  floor.mat.setSpecularMap(await gfx3TextureManager.loadTexture('./utils/particles/floor_specularity_map.jpg'));
   await floor.loadFromFile('./utils/particles/floor.jsm');
-  floor.setMaterial(new Gfx3Material({
-    lightning: true,
-    texture: await gfx3TextureManager.loadTexture('./utils/particles/floor.jpg'),
-    normalMap: await gfx3TextureManager.loadTexture('./utils/particles/floor_normal_map.jpg'),
-    specularityMap: await gfx3TextureManager.loadTexture('./utils/particles/floor_specularity_map.jpg')
-  }));
-
   return floor;
 }
 

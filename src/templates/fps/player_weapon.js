@@ -34,16 +34,12 @@ export class PlayerWeapon {
 
   async load() {
     this.mesh = new Gfx3MeshJSM();
+    this.mesh.mat.setTexture(await gfx3TextureManager.loadTexture('./templates/fps/weapon.png'));
     await this.mesh.loadFromFile('./templates/fps/weapon.jsm');
-    this.mesh.setMaterial(new Gfx3Material({
-      texture: await gfx3TextureManager.loadTexture('./templates/fps/weapon.png')
-    }));
 
     this.bulletMesh = new Gfx3MeshJSM();
+    this.bulletMesh.mat.setTexture(await gfx3TextureManager.loadTexture('./templates/fps/bullet.png'));
     await this.bulletMesh.loadFromFile('./templates/fps/bullet.jsm');
-    this.bulletMesh.setMaterial(new Gfx3Material({
-      texture: await gfx3TextureManager.loadTexture('./templates/fps/bullet.png')
-    }));
   }
 
   delete() {

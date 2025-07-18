@@ -171,6 +171,17 @@ struct MaterialParams {
   ${MAT_SLOT_NAMES[15]}: f32
 };`;
 
+const STRUCT_MAT_JAM_INFOS = `
+struct MaterialJamInfos {
+  FRAME_INDEX_A: f32,
+  FRAME_INDEX_B: f32,
+  IS_ANIMATED: f32,
+  INTERPOLATED: f32,
+  LAST_FRAME_TIME: f32,
+  FRAME_DURATION: f32,
+  NUM_VERTICES: f32
+};`;
+
 const STRUCT_SCENE_INFOS = `
 struct SceneInfos {
   CAMERA_POS: vec3<f32>,
@@ -206,6 +217,16 @@ struct MeshInfos {
   ID: vec4<f32>
 };`;
 
+const STRUCT_JAM_FRAME_VERTEX = `
+struct JamFrameVertex {
+  POSITION: vec3<f32>,
+  UV: vec2<f32>,
+  COLOR: vec3<f32>,
+  NORMAL: vec3<f32>,
+  TANGENT: vec3<f32>,
+  BITANGENT: vec3<f32>
+};`;
+
 const STRUCT_VERTEX_OUTPUT = `
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
@@ -223,14 +244,19 @@ ${STRUCT_VERTEX_OUTPUT}
 ${STRUCT_MESH_INFOS}
 ${STRUCT_MAT_PARAMS}
 ${STRUCT_SCENE_INFOS}
+${STRUCT_JAM_FRAME_VERTEX}
+${STRUCT_MAT_JAM_INFOS}
 
 @group(0) @binding(0) var<uniform> SCENE_INFOS: SceneInfos;
 @group(0) @binding(1) var<uniform> LVP_MATRIX: mat4x4<f32>;
 @group(1) @binding(0) var<uniform> MESH_INFOS: MeshInfos;
 @group(2) @binding(1) var<uniform> MAT_PARAMS: MaterialParams;
+@group(2) @binding(4) var<uniform> MAT_JAM_INFOS: MaterialJamInfos;
+@group(3) @binding(24) var<storage, read> MAT_JAM_FRAMES: array<f32>;
 
 @vertex
 fn main(
+  @builtin(vertex_index) vertexIndex: u32,
   @location(0) Position: vec4<f32>,
   @location(1) TexUV: vec2<f32>,
   @location(2) Color: vec3<f32>,
@@ -244,6 +270,72 @@ fn main(
   var normal = Normal;
   var tangent = Tangent;
   var binormal = Binormal;
+
+  if (MAT_JAM_INFOS.IS_ANIMATED == 1.0)
+  {
+    var idxA = u32(MAT_JAM_INFOS.FRAME_INDEX_A) * u32(MAT_JAM_INFOS.NUM_VERTICES) * 17;
+    var idxB = u32(MAT_JAM_INFOS.FRAME_INDEX_B) * u32(MAT_JAM_INFOS.NUM_VERTICES) * 17;
+    var offsetA = (idxA + vertexIndex * 17);
+    var offsetB = (idxB + vertexIndex * 17);
+
+    var vax = MAT_JAM_FRAMES[offsetA + 0];
+    var vay = MAT_JAM_FRAMES[offsetA + 1];
+    var vaz = MAT_JAM_FRAMES[offsetA + 2];
+    var vbx = MAT_JAM_FRAMES[offsetB + 0];
+    var vby = MAT_JAM_FRAMES[offsetB + 1];
+    var vbz = MAT_JAM_FRAMES[offsetB + 2];
+
+    var car = MAT_JAM_FRAMES[offsetA + 5];
+    var cag = MAT_JAM_FRAMES[offsetA + 6];
+    var cab = MAT_JAM_FRAMES[offsetA + 7];
+    var cbr = MAT_JAM_FRAMES[offsetB + 5];
+    var cbg = MAT_JAM_FRAMES[offsetB + 6];
+    var cbb = MAT_JAM_FRAMES[offsetB + 7];
+
+    var nax = MAT_JAM_FRAMES[offsetA + 8];
+    var nay = MAT_JAM_FRAMES[offsetA + 9];
+    var naz = MAT_JAM_FRAMES[offsetA + 10];
+    var nbx = MAT_JAM_FRAMES[offsetB + 8];
+    var nby = MAT_JAM_FRAMES[offsetB + 9];
+    var nbz = MAT_JAM_FRAMES[offsetB + 10];
+
+    var tax = MAT_JAM_FRAMES[offsetA + 11];
+    var tay = MAT_JAM_FRAMES[offsetA + 12];
+    var taz = MAT_JAM_FRAMES[offsetA + 13];
+    var tbx = MAT_JAM_FRAMES[offsetB + 11];
+    var tby = MAT_JAM_FRAMES[offsetB + 12];
+    var tbz = MAT_JAM_FRAMES[offsetB + 13];
+
+    var bax = MAT_JAM_FRAMES[offsetA + 14];
+    var bay = MAT_JAM_FRAMES[offsetA + 15];
+    var baz = MAT_JAM_FRAMES[offsetA + 16];
+    var bbx = MAT_JAM_FRAMES[offsetB + 14];
+    var bby = MAT_JAM_FRAMES[offsetB + 15];
+    var bbz = MAT_JAM_FRAMES[offsetB + 16];
+
+    var interpolationFactor = min((SCENE_INFOS.TIME - MAT_JAM_INFOS.LAST_FRAME_TIME) / MAT_JAM_INFOS.FRAME_DURATION, 1.0);
+    interpolationFactor *= MAT_JAM_INFOS.INTERPOLATED;
+
+    position.x = mix(vax, vbx, interpolationFactor);
+    position.y = mix(vay, vby, interpolationFactor);
+    position.z = mix(vaz, vbz, interpolationFactor);
+
+    color.r = mix(car, cbr, interpolationFactor);
+    color.g = mix(cag, cbg, interpolationFactor);
+    color.b = mix(cab, cbb, interpolationFactor);
+
+    normal.x = mix(nax, nbx, interpolationFactor);
+    normal.y = mix(nay, nby, interpolationFactor);
+    normal.z = mix(naz, nbz, interpolationFactor);
+
+    tangent.x = mix(tax, tbx, interpolationFactor);
+    tangent.y = mix(tay, tby, interpolationFactor);
+    tangent.z = mix(taz, tbz, interpolationFactor);
+
+    binormal.x = mix(bax, bbx, interpolationFactor);
+    binormal.y = mix(bay, bby, interpolationFactor);
+    binormal.z = mix(baz, bbz, interpolationFactor);
+  }
 
   ${VERT_BEGIN}
   var posFromLight = LVP_MATRIX * MESH_INFOS.M_MATRIX * position;
@@ -555,8 +647,8 @@ fn main(
 // *****************************************************************************************************************
 fn CalcTextureUV(scroll: vec2<f32>, scale: vec2<f32>, fragUV: vec2<f32>, offset: vec2<f32>) -> vec2<f32>
 {
-  var scrollX = cos(scroll[0]) * scroll[1] * SCENE_INFOS.TIME;
-  var scrollY = sin(scroll[0]) * scroll[1] * SCENE_INFOS.TIME;
+  var scrollX = cos(scroll[0]) * scroll[1] * (SCENE_INFOS.DELTA_TIME / 1000);
+  var scrollY = sin(scroll[0]) * scroll[1] * (SCENE_INFOS.DELTA_TIME / 1000);
   return vec2(scrollX + offset.x + (fragUV.x * scale.x), scrollY + offset.y + (fragUV.y * scale.y));
 }
 

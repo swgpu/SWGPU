@@ -87,7 +87,7 @@ class PhysicsJoltScreen extends Screen {
 
     // const graphics = new GraphicsComponent();
     // await graphics.jsm.loadFromFile('./sample.jsm');
-    // graphics.jsm.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture('./sample.png') }));
+    // graphics.jsm.mat.setTexture(await gfx3TextureManager.loadTexture('./sample.png') }));
     // dnaManager.addComponent(eid, graphics);
 
     const physics = new PhysicsCharacterComponent();

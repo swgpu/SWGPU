@@ -7,14 +7,14 @@ import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
 import { screenManager } from '../screen/screen_manager';
 import { uiManager } from '../ui/ui_manager';
 import { soundManager } from '../sound/sound_manager';
+import { time } from 'console';
 
 /**
  * Singleton managing the main loop engine.
  */
 class EngineManager {
   then: number;
-  elapsedTime: number;
-  frameRateFixed: boolean;
+  timeStamp: number;
   frameRate: number;
   paused: boolean;
   lastAnimationFrameId: number;
@@ -23,8 +23,7 @@ class EngineManager {
 
   constructor() {
     this.then = 0;
-    this.elapsedTime = 0;
-    this.frameRateFixed = true;
+    this.timeStamp = 0;
     this.frameRate = 60;
     this.paused = false;
     this.lastAnimationFrameId = 0;
@@ -53,6 +52,7 @@ class EngineManager {
    */
   run(timeStamp: number, state: 'pause' | 'resume' | 'normal' = 'normal'): void {
     this.stats.begin();
+    this.timeStamp = timeStamp;
 
     if (state === 'pause') {
       this.pauseStartTime = timeStamp;
@@ -87,28 +87,12 @@ class EngineManager {
   }
 
   /**
-   * Set frame rate fixed flag.
-   * 
-   * @param {boolean} fixed - The boolean flag.
-   */
-  setFrameRateFixed(fixed: boolean): void {
-    this.frameRateFixed = fixed;
-  }
-
-  /**
    * Set the frame rate value.
    * 
    * @param {number} value - The fps value.
    */
   setFrameRate(value: number): void {
     this.frameRate = value;
-  }
-
-  /**
-   * Check if the frame rate is fixed or not.
-   */
-  isFrameRateFixed(): boolean {
-    return this.frameRateFixed;
   }
 
   /**
@@ -119,10 +103,10 @@ class EngineManager {
   }
 
   /**
-   * Set the delta time.
+   * Set the actual timestamp since the app is running.
    */
-  getElapsedTime(): number {
-    return this.elapsedTime;
+  getTimeStamp(): number {
+    return this.timeStamp;
   }
 
   /**

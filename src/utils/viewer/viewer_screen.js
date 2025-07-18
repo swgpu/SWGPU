@@ -41,7 +41,7 @@ class ViewerScreen extends Screen {
 
     this.bloom = new Gfx3MeshJSM();
     await this.bloom.loadFromFile('./utils/viewer/bloom.jsm');
-    this.bloom.setMaterial(await Gfx3Material.createFromFile('./utils/viewer/bloom.mat'));
+    await this.bloom.loadMaterialFromFile('./utils/viewer/bloom.mat');
 
     this.lens.setSunWorldPosition(10, 100, 0);
     await this.lens.startup(0.4);
@@ -162,43 +162,35 @@ async function CREATE_OBJ() {
 async function CREATE_CUBE_BRICK() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./utils/viewer/cube_brick.jsm');
-  mesh.setMaterial(new Gfx3Material({
-    texture: await gfx3TextureManager.loadTexture('./utils/viewer/cube_brick.png'),
-    normalMap: await gfx3TextureManager.loadTexture('./utils/viewer/cube_brick_normal.png'),
-    normalIntensity: 5.0,
-    lightning: true
-  }));
-
+  mesh.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/viewer/cube_brick.png'));
+  mesh.mat.setNormalMap(await gfx3TextureManager.loadTexture('./utils/viewer/cube_brick_normal.png'));
+  mesh.mat.setNormalIntensity(5.0);
+  mesh.mat.setLightning(true);
   return mesh;
 }
 
 async function CREATE_CUBE() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./utils/viewer/cube.jsm');
-  mesh.setMaterial(new Gfx3Material({
-    texture: await gfx3TextureManager.loadTexture('./utils/viewer/cube.png'),
-    lightning: true
-  }));
-
+  mesh.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/viewer/cube.png'));
+  mesh.mat.setLightning(true);
   return mesh;
 }
 
 async function CREATE_CUBE_SPRITE() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./utils/viewer/cube_sprite.jsm');
-  mesh.setMaterial(new Gfx3Material({
-    texture: await gfx3TextureManager.loadTexture('./utils/viewer/cube_sprite.png'),
-    lightning: false,
-    flipbooks: [{
-      textureTarget: 'Texture',
-      frameWidth: 850,
-      frameHeight: 850,
-      numCol: 3,
-      numRow: 1,
-      numFrames: 3,
-      frameDuration: 100
-    }]
-  }));
+  mesh.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/viewer/cube_sprite.png'));
+  mesh.mat.setLightning(false);
+  mesh.mat.setFlipbooks([{
+    textureTarget: 'Texture',
+    frameWidth: 850,
+    frameHeight: 850,
+    numCol: 3,
+    numRow: 1,
+    numFrames: 3,
+    frameDuration: 100
+  }]);
 
   mesh.mat.playAnimation('Texture', true);
   return mesh;
@@ -207,22 +199,16 @@ async function CREATE_CUBE_SPRITE() {
 async function CREATE_DUCK() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./utils/viewer/duck.jsm');
-  mesh.setMaterial(new Gfx3Material({
-    texture: await gfx3TextureManager.loadTexture('./utils/viewer/duck.png'),
-    lightning: true
-  }));
-
+  mesh.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/viewer/duck.png'));
+  mesh.mat.setLightning(true);
   return mesh;
 }
 
 async function CREATE_TORUS() {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromFile('./utils/viewer/torus.jsm');
-  mesh.setMaterial(new Gfx3Material({
-    toonMap: await gfx3TextureManager.loadTexture('./textures/toon_default.png', { minFilter: 'nearest', magFilter: 'nearest' }),
-    toonLightDir: [1.0, -1.0, -1.0]
-  }));
-
+  mesh.mat.setToonMap(await gfx3TextureManager.loadTexture('./textures/toon_default.png', { minFilter: 'nearest', magFilter: 'nearest' }));
+  mesh.mat.setToonLightDirection([1.0, -1.0, -1.0]);
   return mesh;
 }
 

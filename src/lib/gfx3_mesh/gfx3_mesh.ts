@@ -176,14 +176,9 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
   /**
    * Free all resources.
    * Warning: You need to call this method to free allocation for this object.
-   *
-   * @param {boolean} keepMat - Determines if the material is deleted or not.
    */
-  delete(keepMat: boolean = false): void {
-    if (!keepMat) {
-      this.material.delete();
-    }
-
+  delete(): void {
+    this.material.delete();
     super.delete();
   }
 
@@ -236,27 +231,6 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
   }
 
   /**
-   * Set a material.
-   * 
-   * @param {Gfx3Material} material - The material.
-   * @param {boolean} [keepMat=true] - Determines whether to keep the current material or delete it before assigning the new material.
-   */
-  setMaterial(material: Gfx3Material, keepMat: boolean = true): void {
-    if (!keepMat) {
-      this.material.delete();
-    }
-
-    this.material = material;
-  }
-
-  /**
-   * Returns the material.
-   */
-  getMaterial(): Gfx3Material {
-    return this.material;
-  }
-
-  /**
    * Returns all geometry informations.
    */
   getGeo(): MeshBuild {
@@ -274,6 +248,17 @@ class Gfx3Mesh extends Gfx3Drawable implements Poolable<Gfx3Mesh> {
     mesh.shadowCasting = this.shadowCasting;
     mesh.material = this.material;
     return mesh;
+  }
+
+  /**
+   * Load asynchronously material from a json file (mat).
+   * 
+   * @param {string} path - The file path.
+   * @param {string} textureDir - The textures directory.
+   */
+  async loadMaterialFromFile(path: string, textureDir: string = ''): Promise<void> {
+    this.material.delete();
+    this.material = await Gfx3Material.createFromFile(path, textureDir);
   }
 
   /**

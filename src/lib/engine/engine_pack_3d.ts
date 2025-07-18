@@ -277,7 +277,8 @@ class EnginePack3D {
     }
 
     for (const item of [...pack.jsm, ...pack.jam]) {
-      item.object.setMaterial(pack.mat.get(item.name));
+      item.object.material.delete();
+      item.object.material = pack.mat.get(item.name);
     }
 
     return pack;

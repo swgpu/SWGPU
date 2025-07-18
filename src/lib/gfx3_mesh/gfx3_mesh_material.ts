@@ -95,6 +95,7 @@ class Gfx3Material {
   params: Float32Array;
   uvs: Float32Array;
   toonLightDir: Float32Array;
+  jamInfos: Float32Array;
   grp3: Gfx3StaticGroup;
   texture: Gfx3Texture;
   secondaryTexture: Gfx3Texture;
@@ -108,6 +109,8 @@ class Gfx3Material {
   dissolveTexture: Gfx3Texture;
   s0Texture: Gfx3Texture;
   s1Texture: Gfx3Texture;
+  jamFrames: Float32Array;
+  jamFramesChanged: boolean;
 
   /**
    * @param {MATOptions} options - The options to configure the material.
@@ -117,6 +120,7 @@ class Gfx3Material {
     this.animations = new Map<TextureTarget, Animation>();
     this.dataChanged = true;
     this.texturesChanged = false;
+    this.jamFramesChanged = false;
 
     this.grp2 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 2);
     this.colors = this.grp2.setFloat(0, 'MAT_COLORS', 24);
@@ -213,7 +217,16 @@ class Gfx3Material {
     this.toonLightDir[1] = options.toonLightDir ? options.toonLightDir[1] : 0.0;
     this.toonLightDir[2] = options.toonLightDir ? options.toonLightDir[2] : 0.0;
 
-    this.grp3 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 3, GPUBufferUsage.STORAGE);
+    this.jamInfos = this.grp2.setFloat(4, 'MAT_JAM_INFOS', 7);
+    this.jamInfos[0] = 0.0;
+    this.jamInfos[1] = 0.0;
+    this.jamInfos[2] = 0.0;
+    this.jamInfos[3] = 1.0;
+    this.jamInfos[4] = 0.0;
+    this.jamInfos[5] = 0.0;
+    this.jamInfos[6] = 0.0;
+
+    this.grp3 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 3, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST);
     this.texture = this.grp3.setTexture(0, 'MAT_TEXTURE', options.texture ?? gfx3Manager.createTextureFromBitmap());
     this.texture = this.grp3.setSampler(1, 'MAT_SAMPLER', this.texture);
     this.secondaryTexture = this.grp3.setTexture(2, 'MAT_SECONDARY_TEXTURE', options.secondaryTexture ?? gfx3Manager.createTextureFromBitmap());
@@ -238,6 +251,7 @@ class Gfx3Material {
     this.s0Texture = this.grp3.setSampler(21, 'MAT_S0_SAMPLER', this.s0Texture);
     this.s1Texture = this.grp3.setTexture(22, 'MAT_S1_TEXTURE', gfx3Manager.createTextureFromBitmap());
     this.s1Texture = this.grp3.setSampler(23, 'MAT_S1_SAMPLER', this.s1Texture);
+    this.jamFrames = this.grp3.setStorageFloat(24, 'MAT_JAM_FRAMES', 1);
 
     this.grp2.allocate();
     this.grp3.allocate();
@@ -247,6 +261,7 @@ class Gfx3Material {
    * Load asynchronously data and create material from a json file (mat).
    * 
    * @param {string} path - The file path.
+   * @param {string} textureDir - The textures directory.
    */
   static async createFromFile(path: string, textureDir: string = ''): Promise<Gfx3Material> {
     const response = await fetch(path);
@@ -419,6 +434,46 @@ class Gfx3Material {
     this.uvs[animation.uvsIndexes[0]] = 0.0;
     this.uvs[animation.uvsIndexes[1]] = 0.0;
     this.animations.delete(textureTarget);
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set all vertex animations frames data as a flatten array and put in a uniform buffer.
+   * Note: The user can interprete this like a break of the principle of responsability
+   * and it is, but ! It is the cost to pay for compute the interpolation of frames in the GPU.
+   * Optimization win against good practice for me here.
+   * 
+   * @param {Array<number>} frames - The flatten frames data.
+   */
+  setJamFrames(frames: Array<number>): void {
+    this.jamFrames = this.grp3.setStorageFloat(24, 'MAT_JAM_FRAMES', frames.length);
+    this.jamFrames.set(frames);
+    this.grp3.allocate();
+    this.jamFramesChanged = true;
+  }
+
+  /**
+   * Set vertex animation frames informatives data.
+   * Note: The user can interprete this like a break of the principle of responsability
+   * and it is, but ! It is the cost to pay for compute the interpolation of frames in the GPU.
+   * So yeah, optimization win against good practice here.
+   * 
+   * @param {number} frameIndexA - The current frame index.
+   * @param {number} frameIndexB - The next frame index.
+   * @param {boolean} isAnimated - The animated flag.
+   * @param {boolean} interpolated - A flag to enable/disable interpolation between frames.
+   * @param {number} frameTimeStamp - Timestamp of the last frame change.
+   * @param {number} frameDuration - The frame duration.
+   * @param {number} numVertices - The number of vertices in a frame.
+   */
+  setJamInfos(frameIndexA: number, frameIndexB: number, isAnimated: boolean, interpolated: boolean, frameTimeStamp: number, frameDuration: number, numVertices: number): void {
+    this.jamInfos[0] = frameIndexA;
+    this.jamInfos[1] = frameIndexB;
+    this.jamInfos[2] = isAnimated ? 1.0 : 0.0;
+    this.jamInfos[3] = interpolated ? 1.0 : 0.0;
+    this.jamInfos[4] = frameTimeStamp;
+    this.jamInfos[5] = frameDuration;
+    this.jamInfos[6] = numVertices;
     this.dataChanged = true;
   }
 
@@ -885,6 +940,15 @@ class Gfx3Material {
   }
 
   /**
+   * Set flipbook list.
+   * 
+   * @param {Array<MATFlipbook>} flipbooks - The flipbook list.
+   */
+  setFlipbooks(flipbooks: Array<MATFlipbook>): void {
+    this.flipbooks = flipbooks;
+  }
+
+  /**
    * Set a custom parameter value.
    * 
    * @param {string} name - The param name.
@@ -955,6 +1019,7 @@ class Gfx3Material {
       this.grp2.write(1, this.params);
       this.grp2.write(2, this.uvs);
       this.grp2.write(3, this.toonLightDir);
+      this.grp2.write(4, this.jamInfos);
       this.grp2.endWrite();
       this.dataChanged = false;
     }
@@ -981,6 +1046,13 @@ class Gfx3Material {
       this.grp3.setTexture(22, 'MAT_S1_TEXTURE', this.s1Texture);
       this.grp3.allocate();
       this.texturesChanged = false;
+    }
+
+    if (this.jamFramesChanged) {
+      this.grp3.beginWrite();
+      this.grp3.writeStorage(0, this.jamFrames);
+      this.grp3.endWrite();
+      this.jamFramesChanged = false;
     }
 
     return this.grp3;

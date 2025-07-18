@@ -60,6 +60,13 @@ class Gfx3StaticGroup {
     return new Float32Array(length);
   }
 
+  setStorageFloat(binding: number, name: string, length: number): Float32Array {
+    const byteLength = length * 4;
+    this.uniforms.set(binding, { binding, name, size: byteLength, alignment: byteLength });
+    this.uniformsByteLength += byteLength;
+    return new Float32Array(length);
+  }
+
   /**
    * Set a integer-typed uniform entry and returns a writable buffer.
    * 
@@ -72,6 +79,13 @@ class Gfx3StaticGroup {
     const alignment = Math.ceil(byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
     this.uniforms.set(binding, { binding: binding, name: name, size: byteLength, alignment: alignment });
     this.uniformsByteLength += alignment;
+    return new Uint32Array(length);
+  }
+
+  setStorageInteger(binding: number, name: string, length: number): Uint32Array {
+    const byteLength = length * 4;
+    this.uniforms.set(binding, { binding, name, size: byteLength, alignment: byteLength });
+    this.uniformsByteLength += byteLength;
     return new Uint32Array(length);
   }
 
@@ -156,6 +170,11 @@ class Gfx3StaticGroup {
     this.currentOffset += Math.ceil(data.byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
   }
 
+  writeStorage(binding: number, data: Float32Array | Uint32Array): void {
+    this.device.queue.writeBuffer(this.buffer, this.currentOffset, data);
+    this.currentOffset += data.byteLength;
+  }
+
   /**
    * Close the write process.
    */
@@ -230,6 +249,13 @@ class Gfx3DynamicGroup {
     return new Float32Array(length);
   }
 
+  setStorageFloat(binding: number, name: string, length: number): Float32Array {
+    const byteLength = length * 4;
+    this.uniforms.set(binding, { binding, name, size: byteLength, alignment: byteLength });
+    this.uniformsByteLength += byteLength;
+    return new Float32Array(length);
+  }
+
   /**
    * Set a integer-typed uniform entry and returns a writable buffer.
    * 
@@ -242,6 +268,13 @@ class Gfx3DynamicGroup {
     const alignment = Math.ceil(byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
     this.uniforms.set(binding, { binding: binding, name: name, size: byteLength, alignment: alignment });
     this.uniformsByteLength += alignment;
+    return new Uint32Array(length);
+  }
+
+  setStorageInteger(binding: number, name: string, length: number): Uint32Array {
+    const byteLength = length * 4;
+    this.uniforms.set(binding, { binding, name, size: byteLength, alignment: byteLength });
+    this.uniformsByteLength += byteLength;
     return new Uint32Array(length);
   }
 
@@ -287,6 +320,11 @@ class Gfx3DynamicGroup {
   write(binding: number, data: Float32Array | Uint32Array): void {
     this.device.queue.writeBuffer(this.buffer, this.currentOffset, data);
     this.currentOffset += Math.ceil(data.byteLength / 256) * MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT;
+  }
+
+  writeStorage(binding: number, data: Float32Array | Uint32Array): void {
+    this.device.queue.writeBuffer(this.buffer, this.currentOffset, data);
+    this.currentOffset += data.byteLength;
   }
 
   /**

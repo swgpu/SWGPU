@@ -11,7 +11,6 @@ const ALPHA_MODE = WINDOW.__ALPHA_MODE__ ? WINDOW.__ALPHA_MODE__ : 'opaque';
 export interface VertexSubBuffer {
   vertices: Float32Array;
   offset: number;
-  changed: boolean;
 };
 
 /**
@@ -34,6 +33,7 @@ class Gfx3Manager {
   vertexBuffer: GPUBuffer;
   vertexSubBuffers: Array<VertexSubBuffer>;
   vertexSubBuffersSize: number;
+  vertexSubBuffersChanged: Array<VertexSubBuffer>;
   views: Array<Gfx3View>;
   currentView: Gfx3View;
   lastRenderStart: number;
@@ -57,6 +57,7 @@ class Gfx3Manager {
     this.vertexBuffer = {} as GPUBuffer;
     this.vertexSubBuffers = [];
     this.vertexSubBuffersSize = 0;
+    this.vertexSubBuffersChanged = [];
     this.views = [];
     this.currentView = new Gfx3View();
     this.lastRenderStart = 0;
@@ -130,18 +131,17 @@ class Gfx3Manager {
 
       for (const sub of this.vertexSubBuffers) {
         this.device.queue.writeBuffer(this.vertexBuffer, sub.offset, sub.vertices);
-        sub.changed = false;
       }
 
+      this.vertexSubBuffersChanged = [];
       return;
     }
 
-    for (const sub of this.vertexSubBuffers) {
-      if (sub.changed) {
-        this.device.queue.writeBuffer(this.vertexBuffer, sub.offset, sub.vertices);
-        sub.changed = false;
-      }
+    for (const subBufChanged of this.vertexSubBuffersChanged) {
+      this.device.queue.writeBuffer(this.vertexBuffer, subBufChanged.offset, subBufChanged.vertices);
     }
+
+    this.vertexSubBuffersChanged = [];
   }
 
   /**
@@ -281,8 +281,7 @@ class Gfx3Manager {
   createVertexBuffer(size: number): VertexSubBuffer {
     const sub: VertexSubBuffer = {
       vertices: new Float32Array(size),
-      offset: this.vertexSubBuffersSize,
-      changed: false
+      offset: this.vertexSubBuffersSize
     };
 
     this.vertexSubBuffers.push(sub);
@@ -326,7 +325,7 @@ class Gfx3Manager {
    */
   writeVertexBuffer(sub: VertexSubBuffer, vertices: Array<number>): void {
     sub.vertices.set(vertices);
-    sub.changed = true;
+    this.vertexSubBuffersChanged.push(sub);
   }
 
   /**

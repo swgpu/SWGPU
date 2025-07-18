@@ -29,10 +29,8 @@ class CurveScreen extends Screen {
     await this.obj.loadFromFile('./utils/curve/level.obj', './utils/curve/level.mtl');
 
     this.skySphere = new Gfx3MeshJSM();
+    this.skySphere.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/curve/sky_sphere.jpg'));
     await this.skySphere.loadFromFile('./utils/curve/sky_sphere.jsm');
-    this.skySphere.setMaterial(new Gfx3Material({
-      texture: await gfx3TextureManager.loadTexture('./utils/curve/sky_sphere.jpg')
-    }));
 
     this.curve = await Curve.createFromFile('./utils/curve/curve.json');
 

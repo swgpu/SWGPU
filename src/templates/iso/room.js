@@ -48,8 +48,8 @@ class Room {
     let json = await response.json();
 
     this.map = new Gfx3MeshJSM();
+    this.map.mat.setTexture(await gfx3TextureManager.loadTexture(json['MapTextureFile'], { magFilter: 'nearest' }));
     await this.map.loadFromFile(json['MapFile']);
-    this.map.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture(json['MapTextureFile'], { magFilter: 'nearest' }) }));
 
     this.walkmesh = new Gfx3PhysicsJWM();
     await this.walkmesh.loadFromFile(json['WalkmeshFile']);

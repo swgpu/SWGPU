@@ -64,12 +64,10 @@ class ThirdPersonScreen extends Screen {
   async #createMap(): Promise<{jsm: Gfx3MeshJSM, jnm: Gfx3PhysicsJNM }> {
     const jsm = new Gfx3MeshJSM();
     await jsm.loadFromFile('./templates/third-person/map.jsm');
-    jsm.setMaterial(new Gfx3Material({
-      texture: await gfx3TextureManager.loadTextureMips('./templates/third-person/map.png', {
-        magFilter: 'nearest',
-        minFilter: 'nearest',
-        mipmapFilter: 'linear'
-      })
+    jsm.mat.setTexture(await gfx3TextureManager.loadTextureMips('./templates/third-person/map.png', {
+      magFilter: 'nearest',
+      minFilter: 'nearest',
+      mipmapFilter: 'linear'
     }));
 
     const jnm = new Gfx3PhysicsJNM();

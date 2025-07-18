@@ -1,4 +1,5 @@
 import { gfx3Manager } from '../gfx3/gfx3_manager';
+import { em } from '../engine/engine_manager';
 import { gfx3MeshShadowRenderer } from './gfx3_mesh_shadow_renderer';
 import { UT } from '../core/utils';
 import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
@@ -91,7 +92,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     }
 
     this.grp0.beginWrite();
-    this.grp0.write(0, BUILD_SCENE_INFOS(currentView.getCameraPosition(), ts / 1000, this.sceneInfos));
+    this.grp0.write(0, BUILD_SCENE_INFOS(currentView.getCameraPosition(), ts, em.getTimeStamp(), this.sceneInfos));
     this.grp0.write(1, gfx3MeshShadowRenderer.getLVPMatrix());
     this.grp0.write(2, this.dirLight);
     this.grp0.write(3, this.pointLights);
@@ -112,9 +113,8 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
       this.grp1.write(0, BUILD_MESH_INFOS(command.mesh.billboard ? bpcMatrix : vpcMatrix, command.matrix, command.mesh.getId(), this.meshInfos) as Float32Array);
       passEncoder.setBindGroup(1, this.grp1.getBindGroup(i));
 
-      const material = command.mesh.getMaterial();
-      const grp2 = material.getGroup02();
-      const grp3 = material.getGroup03();
+      const grp2 = command.mesh.mat.getGroup02();
+      const grp3 = command.mesh.mat.getGroup03();
       passEncoder.setBindGroup(2, grp2.getBindGroup());
       passEncoder.setBindGroup(3, grp3.getBindGroup());
 
@@ -453,13 +453,13 @@ export const gfx3MeshRenderer = new Gfx3MeshRenderer();
 // HELPFUL
 // -------------------------------------------------------------------------------------------
 
-function BUILD_SCENE_INFOS(camPos: vec3, ts: number, out: Float32Array): Float32Array {
+function BUILD_SCENE_INFOS(camPos: vec3, ts: number, timeStamp: number, out: Float32Array): Float32Array {
   out[0] = camPos[0];
   out[1] = camPos[1];
   out[2] = camPos[2];
   out[3] = 0;
-  out[10] = ts / 1000;
-  out[11] += out[10];
+  out[10] = ts;
+  out[11] = timeStamp;
   return out;
 }
 

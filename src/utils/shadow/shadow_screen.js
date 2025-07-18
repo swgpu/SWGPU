@@ -66,23 +66,17 @@ export { ShadowScreen };
 async function CREATE_FLOOR(x, y, z) {
   const floor = new Gfx3MeshJSM();
   floor.setPosition(x, y, z);
+  floor.mat.setLightning(true);
+  floor.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/shadow/floor.jpg'));
+  floor.mat.enableShadow(true);
   await floor.loadFromFile('./utils/shadow/floor.jsm');
-  floor.setMaterial(new Gfx3Material({
-    lightning: true,
-    texture: await gfx3TextureManager.loadTexture('./utils/shadow/floor.jpg'),
-    shadowEnabled: true
-  }));
-
   return floor;
 }
 
 async function CREATE_SKYSPHERE() {
   const skySphere = new Gfx3MeshJSM();
+  skySphere.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/shadow/sky_sphere.jpg'));
   await skySphere.loadFromFile('./utils/shadow/sky_sphere.jsm');
-  skySphere.setMaterial(new Gfx3Material({
-    texture: await gfx3TextureManager.loadTexture('./utils/shadow/sky_sphere.jpg')
-  }));
-
   return skySphere;
 }
 
@@ -91,11 +85,8 @@ async function CREATE_CUBE(x, y, z) {
   mesh.setPosition(x, y, z);
   mesh.setScale(10, 10, 10);
   mesh.setShadowCasting(true);
+  mesh.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/viewer/duck.png'));
+  mesh.mat.setLightning(true);
   await mesh.loadFromFile('./utils/viewer/duck.jsm');
-  mesh.setMaterial(new Gfx3Material({
-    texture: await gfx3TextureManager.loadTexture('./utils/viewer/duck.png'),
-    lightning: true
-  }));
-
   return mesh;
 }

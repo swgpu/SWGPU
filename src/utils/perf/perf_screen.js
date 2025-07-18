@@ -45,17 +45,13 @@ class PerfScreen extends Screen {
     this.camera.setPosition(0, 10, 0);
 
     this.skySphere = new Gfx3MeshJSM();
+    this.skySphere.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/perf/sky_sphere.jpg'));
     await this.skySphere.loadFromFile('./utils/perf/sky_sphere.jsm');
-    this.skySphere.setMaterial(new Gfx3Material({
-      texture: await gfx3TextureManager.loadTexture('./utils/perf/sky_sphere.jpg')
-    }));
 
     this.obj = new Gfx3MeshJSM();
+    this.obj.mat.setTexture(await gfx3TextureManager.loadTexture('./utils/perf/cube.png'));
+    this.obj.mat.setLightning(true);
     await this.obj.loadFromFile('./utils/perf/cube.jsm');
-    this.obj.setMaterial(new Gfx3Material({
-      texture: await gfx3TextureManager.loadTexture('./utils/perf/cube.png'),
-      lightning: true
-    }));
 
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
@@ -155,6 +151,6 @@ function DUPE(mesh, matrices) {
   }
 
   outMesh.endVertices();
-  outMesh.setMaterial(mesh.getMaterial());
+  outMesh.material = mesh.material;
   return outMesh;
 }

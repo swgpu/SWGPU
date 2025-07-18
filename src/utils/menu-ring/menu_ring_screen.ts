@@ -129,6 +129,6 @@ export { MenuRingScreen };
 async function LOAD_MODEL(path: string, texturePath: string): Promise<Gfx3MeshJSM> {
   const mesh = new Gfx3MeshJSM();
   await mesh.loadFromBinaryFile(path);
-  mesh.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture(texturePath) }));
+  mesh.mat.setTexture(await gfx3TextureManager.loadTexture(texturePath));
   return mesh;
 }

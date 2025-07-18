@@ -258,6 +258,7 @@ Congratulation, your static mesh is now exported !
 
 ## Changelog
 ```
+- [Ver. 1.8.7] Some optimizations like moving animation frame to shader, remove allocation etc...
 - [Ver. 1.7.0]  Fix somes performances issues (now webgpu constants are stables).
 - [Ver. 1.7.0]  Changes the way to sample texture depth.
 - [Ver. 1.6.13] The 3D physics demo become more complete (full character implementation).

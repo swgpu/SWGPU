@@ -1,13 +1,9 @@
 import { eventManager } from '../core/event_manager';
+import { em } from '../engine/engine_manager';
 import { UT } from '../core/utils';
 import { Poolable } from '../core/object_pool';
 import { Gfx3BoundingBox } from '../gfx3/gfx3_bounding_box';
 import { Gfx3Mesh, MeshBuild } from './gfx3_mesh';
-import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_mesh_shader';
-
-interface JAMFrame {
-  vertices: Array<number>;
-};
 
 interface JAMAnimation {
   name: String;
@@ -21,10 +17,9 @@ interface JAMAnimation {
  * It emit 'E_FINISHED'
  */
 class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
-  numVertices: number;
-  frames: Array<JAMFrame>;
+  frames: Array<number>;
   animations: Array<JAMAnimation>;
-  interpolationEnabled: boolean;
+  interpolated: boolean;
   looped: boolean;
   currentAnimation: JAMAnimation | null;
   currentFrameIndex: number;
@@ -34,10 +29,9 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
 
   constructor() {
     super();
-    this.numVertices = 0;
     this.frames = [];
     this.animations = [];
-    this.interpolationEnabled = true;
+    this.interpolated = true;
     this.looped = true;
     this.currentAnimation = null;
     this.currentFrameIndex = 0;
@@ -60,6 +54,7 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
     }
 
     this.frames = [];
+    this.geos = [];
     this.boundingBoxes = [];
     for (const obj of json['Frames']) {
       const vertices = obj['Vertices'] ?? json['Vertices'];
@@ -68,7 +63,7 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
       const normals = obj['Normals'] ?? json['Normals'];
       const geo = Gfx3Mesh.buildVertices(json['NumVertices'], vertices, textureCoords, colors, normals);
       this.geos.push(geo);
-      this.frames.push({ vertices: geo.vertices });
+      this.frames.push(...geo.vertices);
       this.boundingBoxes.push(Gfx3BoundingBox.createFromVertices(vertices, 3));
     }
 
@@ -83,14 +78,14 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
     }
 
     this.beginVertices(json['NumVertices']);
-    this.setVertices(this.frames[0].vertices);
+    this.setVertices(this.geos[0].vertices);
     this.endVertices();
 
-    this.geo = this.geos[0];
+    this.material.setJamFrames(this.frames);
+
     this.boundingBox = this.boundingBoxes[0];
-    this.numVertices = json['NumVertices'];
     this.currentAnimation = null;
-    this.interpolationEnabled = true;
+    this.interpolated = true;
     this.looped = true;
     this.currentFrameIndex = 0;
     this.frameProgress = 0;
@@ -120,6 +115,7 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
     }
 
     this.frames = [];
+    this.geos = [];
     this.boundingBoxes = [];
     for (let i = 0; i < numFrames; i++) {
       const vertices = [];
@@ -135,7 +131,8 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
       }
 
       const geo = Gfx3Mesh.buildVertices(numVertices, vertices, textureCoords, undefined, normals);
-      this.frames.push({ vertices: geo.vertices });
+      this.geos.push(geo);
+      this.frames.push(...geo.vertices);
 
       this.boundingBoxes.push(
         Gfx3BoundingBox.createFromVertices(vertices, 3)
@@ -161,13 +158,14 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
     }
 
     this.beginVertices(numVertices);
-    this.setVertices(this.frames[0].vertices);
+    this.setVertices(this.geos[0].vertices);
     this.endVertices();
 
+    this.material.setJamFrames(this.frames);
+
     this.boundingBox = this.boundingBoxes[0];
-    this.numVertices = numVertices;
     this.currentAnimation = null;
-    this.interpolationEnabled = true;
+    this.interpolated = true;
     this.looped = true;
     this.currentFrameIndex = 0;
     this.frameProgress = 0;
@@ -194,79 +192,17 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
       nextFrameIndex = this.currentFrameIndex + 1;
     }
 
-    this.flushVertices();
-    const currentFrame = this.frames[this.currentFrameIndex];
-    const nextFrame = this.frames[nextFrameIndex];
-
-    for (let i = 0; i < this.numVertices; i++) {
-      const offset = i * SHADER_VERTEX_ATTR_COUNT;
-      const vax = currentFrame.vertices[offset + 0];
-      const vay = currentFrame.vertices[offset + 1];
-      const vaz = currentFrame.vertices[offset + 2];
-
-      const tu = currentFrame.vertices[offset + 3];
-      const tv = currentFrame.vertices[offset + 4];
-
-      const car = currentFrame.vertices[offset + 5];
-      const cag = currentFrame.vertices[offset + 6];
-      const cab = currentFrame.vertices[offset + 7];
-
-      const nax = currentFrame.vertices[offset + 8];
-      const nay = currentFrame.vertices[offset + 9];
-      const naz = currentFrame.vertices[offset + 10];
-
-      const tax = currentFrame.vertices[offset + 11];
-      const tay = currentFrame.vertices[offset + 12];
-      const taz = currentFrame.vertices[offset + 13];
-
-      const bax = currentFrame.vertices[offset + 14];
-      const bay = currentFrame.vertices[offset + 15];
-      const baz = currentFrame.vertices[offset + 16];
-
-      if (this.interpolationEnabled) {
-        const vbx = nextFrame.vertices[offset + 0];
-        const vby = nextFrame.vertices[offset + 1];
-        const vbz = nextFrame.vertices[offset + 2];
-        const vix = vax + ((vbx - vax) * interpolateFactor);
-        const viy = vay + ((vby - vay) * interpolateFactor);
-        const viz = vaz + ((vbz - vaz) * interpolateFactor);
-
-        const cbr = nextFrame.vertices[offset + 5];
-        const cbg = nextFrame.vertices[offset + 6];
-        const cbb = nextFrame.vertices[offset + 7];
-        const cir = car + ((cbr - car) * interpolateFactor);
-        const cig = cag + ((cbg - cag) * interpolateFactor);
-        const cib = cab + ((cbb - cab) * interpolateFactor);
-  
-        const nbx = nextFrame.vertices[offset + 8];
-        const nby = nextFrame.vertices[offset + 9];
-        const nbz = nextFrame.vertices[offset + 10];
-        const nix = nax + ((nbx - nax) * interpolateFactor);
-        const niy = nay + ((nby - nay) * interpolateFactor);
-        const niz = naz + ((nbz - naz) * interpolateFactor);
-
-        const tbx = nextFrame.vertices[offset + 11];
-        const tby = nextFrame.vertices[offset + 12];
-        const tbz = nextFrame.vertices[offset + 13];
-        const tix = tax + ((tbx - tax) * interpolateFactor);
-        const tiy = tay + ((tby - tay) * interpolateFactor);
-        const tiz = taz + ((tbz - taz) * interpolateFactor);
-
-        const bbx = nextFrame.vertices[offset + 14];
-        const bby = nextFrame.vertices[offset + 15];
-        const bbz = nextFrame.vertices[offset + 16];
-        const bix = tax + ((bbx - bax) * interpolateFactor);
-        const biy = tay + ((bby - bay) * interpolateFactor);
-        const biz = taz + ((bbz - baz) * interpolateFactor);
-
-        this.defineVertex(vix, viy, viz, tu, tv, cir, cig, cib, nix, niy, niz, tix, tiy, tiz, bix, biy, biz);
-      }
-      else {
-        this.defineVertex(vax, vay, vaz, tu, tv, car, cag, cab, nax, nay, naz, tax, tay, taz, bax, bay, baz);
-      }
+    if (interpolateFactor === 0) {
+      this.material.setJamInfos(
+        this.currentFrameIndex,
+        nextFrameIndex,
+        true,
+        this.interpolated,
+        em.getTimeStamp(),
+        this.currentAnimation.frameDuration,
+        this.vertexCount
+      );
     }
-
-    this.endVertices();
 
     if (interpolateFactor >= 1) {
       this.currentFrameIndex = nextFrameIndex;
@@ -285,9 +221,9 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
    * @param {string} animationName - The name of the animation to be played.
    * @param {boolean} [looped=false] - Determines whether the animation should loop or not.
    * @param {boolean} [preventSameAnimation=false] - Determines whether the same animation should be prevented from playing again.
-   * @param {boolean} [interpolationEnabled=true] - Determines whether the animation interpolation is enabled or not.
+   * @param {boolean} [interpolated=true] - Determines whether the animation interpolation is enabled or not.
    */
-  play(animationName: string, looped: boolean = false, preventSameAnimation: boolean = false, interpolationEnabled: boolean = true): void {
+  play(animationName: string, looped: boolean = false, preventSameAnimation: boolean = false, interpolated: boolean = true): void {
     if (preventSameAnimation && this.currentAnimation && this.currentAnimation.name == animationName) {
       return;
     }
@@ -298,7 +234,7 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
     }
 
     this.currentAnimation = animation;
-    this.interpolationEnabled = interpolationEnabled;
+    this.interpolated = interpolated;
     this.looped = looped;
     this.currentFrameIndex = animation.startFrame;
     this.frameProgress = 0;
@@ -307,8 +243,8 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
   /**
    * Check if interpolation is enabled.
    */
-  getInterpolationEnabled(): boolean {
-    return this.interpolationEnabled;
+  isInterpolated(): boolean {
+    return this.interpolated;
   }
 
   /**
@@ -374,10 +310,9 @@ class Gfx3MeshJAM extends Gfx3Mesh implements Poolable<Gfx3MeshJAM> {
    */
   clone(jam: Gfx3MeshJAM = new Gfx3MeshJAM(), transformMatrix: mat4 = UT.MAT4_IDENTITY()): Gfx3MeshJAM {
     super.clone(jam, transformMatrix);
-    jam.numVertices = this.numVertices;
     jam.frames = this.frames;
     jam.animations = this.animations;
-    jam.interpolationEnabled = this.interpolationEnabled;
+    jam.interpolated = this.interpolated;
     jam.looped = false;
     jam.currentAnimation = null;
     jam.currentFrameIndex = 0;

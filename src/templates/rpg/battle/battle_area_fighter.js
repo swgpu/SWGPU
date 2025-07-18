@@ -69,8 +69,8 @@ class BattleAreaFighter extends Gfx3Transformable {
       this.effectSprite.setTexture(await gfx3TextureManager.loadTexture('templates/rpg/sprites/effects.png'));
 
       this.mesh = new Gfx3MeshJAM();
+      this.mesh.mat.setTexture(await gfx3TextureManager.loadTexture(character.getJAMTextureFile()));
       await this.mesh.loadFromFile(character.getJAMFile());
-      this.mesh.setMaterial(new Gfx3Material({ texture: await gfx3TextureManager.loadTexture(character.getJAMTextureFile()) }));
       this.mesh.play('IDLE', true, true);
 
       this.character = character;

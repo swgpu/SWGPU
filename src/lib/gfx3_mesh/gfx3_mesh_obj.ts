@@ -94,11 +94,7 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
    */
   delete() {
     for (const mesh of this.meshes.values()) {
-      mesh.delete(true);
-    }
-
-    for (const material of this.materials.values()) {
-      material.delete();
+      mesh.delete();
     }
 
     super.delete();
@@ -464,7 +460,8 @@ class Gfx3MeshOBJ extends Gfx3Mesh implements Poolable<Gfx3MeshOBJ> {
         const mesh = new Gfx3Mesh();
         const material = this.materials.get(object.materialName);
         if (material) {
-          mesh.setMaterial(material);
+          mesh.material.delete();
+          mesh.material = material;
         }
 
         const texcoords = object.texcoords.length > 0 ? this.texcoords : undefined; // texcoords are optionnals
