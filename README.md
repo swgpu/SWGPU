@@ -13,7 +13,7 @@
 
 **SWGPU** is a simple **2D/3D game library** written in **TypeScript** and powered by the latest web APIs.
 It offers an easy and complete way to create classic games in a non-opinionated but recommended coding style.
-From the start, we chose to embrace the future with pure **WebGPU** 3D rendering pipeline as the name suggests. Below the stack we've choice for this work:
+From the start, we chose to embrace the future with pure **WebGPU** as the name suggests. Below the stack we've choice for this work:
 | API       | Domain     | Description                                                                                                                |
 |:---------:|:----------:|:---------------------------------------------------------------------------------------------------------------------------|
 | WebGPU    | 3D         | A modern 3D graphics API designed to provide high-performance rendering and compute capabilities directly in web browsers. |
