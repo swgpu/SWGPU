@@ -4,7 +4,6 @@ import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
 import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
 import { Screen } from '@lib/screen/screen';
 import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
-import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 import { Gfx3PhysicsJNM } from '@lib/gfx3_physics/gfx3_physics_jnm';
 // ---------------------------------------------------------------------------------------
 import { spawnPlayer } from './entities/player';

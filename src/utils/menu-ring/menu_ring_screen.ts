@@ -5,7 +5,6 @@ import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
 import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
 import { Screen } from '@lib/screen/screen';
 import { Gfx3Camera } from '@lib/gfx3_camera/gfx3_camera';
-import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
 // ---------------------------------------------------------------------------------------
 

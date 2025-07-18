@@ -7,7 +7,6 @@ import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
 import { screenManager } from '../screen/screen_manager';
 import { uiManager } from '../ui/ui_manager';
 import { soundManager } from '../sound/sound_manager';
-import { time } from 'console';
 
 /**
  * Singleton managing the main loop engine.

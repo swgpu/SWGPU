@@ -1,6 +1,5 @@
 import { dnaManager } from '@lib/dna/dna_manager';
 import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
-import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 import { Gfx3PhysicsJNM } from '@lib/gfx3_physics/gfx3_physics_jnm';
 // ---------------------------------------------------------------------------------------
 import { EntityComponent } from '../systems/entity';
