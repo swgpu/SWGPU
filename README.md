@@ -73,7 +73,7 @@ Go to http://localhost:5173.
 - 🧊 **3D**
     - Debug shapes
     - Static mesh
-    - Animated mesh
+    - Animated mesh: frame based, shader side
     - Static sprite
     - Animated sprite
     - Motion lines
@@ -90,7 +90,7 @@ Go to http://localhost:5173.
     - Camera orbit
     - Camera WASD
     - Auto mipmap
-    - Post rendering (gbuffers: depth/normal/ids)
+    - Post rendering: many textures on input like depth/normal/ids
     - Rendering filters
     - Customizable shaders
  
@@ -112,18 +112,18 @@ Go to http://localhost:5173.
     - Normal map
     - Env map
     - Toon map
-    - Main textures scroll/scale handle
+    - Textures scroll: multi-target
     - Animated UV
     - Specular shininess
     - Emissive intensity
     - Normal intensity
     - Facing blending
-    - Secondary texture (mix/mul)
+    - Secondary texture: with mix/mul blend mode
 
 - 🌞 **3D Light**
     - Directional light
-    - Point lights (max : 64)
-    - Spot lights (max: 16)
+    - Point lights: 64 lights
+    - Spot lights: 16 lights
 
 - 🖼️ **3D Post-processing**
     - Outline
