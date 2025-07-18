@@ -8,7 +8,7 @@
 
 ![Langage](https://img.shields.io/badge/Langage-Typescript-f39f37)
 ![License](https://img.shields.io/badge/License-MIT-red)
-![Version](https://img.shields.io/badge/Version-1.8.8-red)
+![Version](https://img.shields.io/badge/Version-1.8.10-red)
 ![Compatibility](https://img.shields.io/badge/Compatibility-All%20Platforms-lightgrey)
 
 **SWGPU** is a simple **2D/3D game library** written in **TypeScript** and powered by the latest web APIs.
