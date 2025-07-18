@@ -47,6 +47,12 @@ Clone and install the starter-kit from this repository:
 Edit the ''src/game_screen'' and start writing your game.
 Go to http://localhost:5173.
 
+Or, just install it on your own project with the following command:
+```
+# npm install swgpu
+```
+Don't forget to fill your index.html with the minimal structure required by the engine.
+
 ## Features
 - 🧱 **Core**
     - Maths
