@@ -109,7 +109,6 @@ class ViewerScreen extends Screen {
     }
     else if (e.key == '3') {
       this.mesh = await CREATE_CUBE();
-      this.mesh.setSingleId(3, 15);
     }
     else if (e.key == '4') {
       this.mesh = await CREATE_CUBE_SPRITE();
