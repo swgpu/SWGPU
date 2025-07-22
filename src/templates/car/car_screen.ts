@@ -1,3 +1,9 @@
+// @resources:
+// - https://www.youtube.com/watch?v=fe-8J7_WAq0&ab_channel=thalesr
+// - https://github.com/thalesrDev/godot-raycast-car-tutorial/tree/main
+// - https://jrouwe.github.io/JoltPhysics.js/ray_cast.html
+// - https://jrouwe.github.io/JoltPhysics.js/js/example.js
+
 import { dnaManager } from '@lib/dna/dna_manager';
 import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
 import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
