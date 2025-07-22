@@ -42,22 +42,8 @@ export const SCENE_SLOT_NAMES = WINDOW.__MESH_SCENE_SLOT_NAMES__ as Array<string
   'S15'
 ];
 
-const VERT_BEGIN = WINDOW.__MESH_VERT_BEGIN__ ? WINDOW.__MESH_VERT_BEGIN__ : '';
-const VERT_END = WINDOW.__MESH_VERT_END__ ? WINDOW.__MESH_VERT_END__ : '';
-const VERT_OUT_POSITION = WINDOW.__MESH_VERT_OUT_POSITION__;
-const VERT_OUT_FRAG_POS = WINDOW.__MESH_VERT_OUT_FRAG_POS__;
-const VERT_OUT_FRAG_UV = WINDOW.__MESH_VERT_OUT_FRAG_UV__;
-const VERT_OUT_FRAG_COLOR = WINDOW.__MESH_VERT_OUT_FRAG_COLOR__;
-const VERT_OUT_FRAG_NORMAL = WINDOW.__MESH_VERT_OUT_FRAG_NORMAL__;
-const VERT_OUT_FRAG_TANGENT = WINDOW.__MESH_VERT_OUT_FRAG_TANGENT__;
-const VERT_OUT_FRAG_BINORMAL = WINDOW.__MESH_VERT_OUT_FRAG_BINORMAL__;
-const VERT_OUT_FRAG_SHADOW_POS = WINDOW.__MESH_VERT_OUT_FRAG_SHADOW_POS__;
-
-const FRAG_BEGIN = WINDOW.__MESH_FRAG_BEGIN__ ? WINDOW.__MESH_FRAG_BEGIN__ : '';
-const FRAG_END = WINDOW.__MESH_FRAG_END__ ? WINDOW.__MESH_FRAG_END__ : '';
-const FRAG_OUT_BASE = WINDOW.__MESH_FRAG_OUT_BASE__;
-const FRAG_OUT_NORMAL = WINDOW.__MESH_FRAG_OUT_NORMAL__;
-const FRAG_OUT_ID = WINDOW.__MESH_FRAG_OUT_ID__;
+const VERT_INSERT = WINDOW.__MESH_VERT_INSERT__ ? WINDOW.__MESH_VERT_INSERT__ : '';
+const FRAG_INSERT = WINDOW.__MESH_FRAG_INSERT__ ? WINDOW.__MESH_FRAG_INSERT__ : '';
 
 export const PIPELINE_DESC: any = {
   label: 'Mesh pipeline',
@@ -111,7 +97,8 @@ export const PIPELINE_DESC: any = {
       }
     },
     { format: 'rgba16float' }, // normals
-    { format: 'rgba16float' }] // ids
+    { format: 'rgba16float' }, // ids
+    { format: 'rgba16float' }] // ch1
   },
   primitive: {
     topology: 'triangle-list',
@@ -153,6 +140,7 @@ struct MaterialParams {
   DISTANCE_ALPHA_BLEND: f32,
   HAS_S0_TEXTURE: f32,
   HAS_S1_TEXTURE: f32,
+  BLEND_COLOR_MODE: f32,
   ${MAT_SLOT_NAMES[0]}: f32,
   ${MAT_SLOT_NAMES[1]}: f32,
   ${MAT_SLOT_NAMES[2]}: f32,
@@ -337,19 +325,18 @@ fn main(
     binormal.z = mix(baz, bbz, interpolationFactor);
   }
 
-  ${VERT_BEGIN}
   var posFromLight = LVP_MATRIX * MESH_INFOS.M_MATRIX * position;
-  ${VERT_END}
+  ${VERT_INSERT}
 
   var output: VertexOutput;
-  output.Position = ${VERT_OUT_POSITION ?? 'MESH_INFOS.MVPC_MATRIX * position;'}
-  output.FragPos = ${VERT_OUT_FRAG_POS ?? 'vec4(MESH_INFOS.M_MATRIX * position).xyz;'}
-  output.FragUV = ${VERT_OUT_FRAG_UV ?? 'texUV;'}
-  output.FragColor = ${VERT_OUT_FRAG_COLOR ?? 'color;'}
-  output.FragNormal = ${VERT_OUT_FRAG_NORMAL ?? 'MESH_INFOS.NORM_MATRIX * normal;'}
-  output.FragTangent = ${VERT_OUT_FRAG_TANGENT ?? 'MESH_INFOS.NORM_MATRIX * tangent;'}
-  output.FragBinormal = ${VERT_OUT_FRAG_BINORMAL ?? 'MESH_INFOS.NORM_MATRIX * binormal;'}
-  output.FragShadowPos = ${VERT_OUT_FRAG_SHADOW_POS ?? 'vec3(posFromLight.xy * vec2(0.5, -0.5) + vec2(0.5), posFromLight.z); // Convert XY to (0, 1) and Y is flipped because texture coords are Y-down.'}
+  output.Position = MESH_INFOS.MVPC_MATRIX * position;
+  output.FragPos = vec4(MESH_INFOS.M_MATRIX * position).xyz;
+  output.FragUV = texUV;
+  output.FragColor = color;
+  output.FragNormal = MESH_INFOS.NORM_MATRIX * normal;
+  output.FragTangent = MESH_INFOS.NORM_MATRIX * tangent;
+  output.FragBinormal = MESH_INFOS.NORM_MATRIX * binormal;
+  output.FragShadowPos = vec3(posFromLight.xy * vec2(0.5, -0.5) + vec2(0.5), posFromLight.z); // Convert XY to (0, 1) and Y is flipped because texture coords are Y-down.
   return output;
 }`;
 
@@ -357,7 +344,8 @@ const STRUCT_FRAG_OUT = `
 struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
-  @location(2) Id: vec4f
+  @location(2) Id: vec4f,
+  @location(3) Ch1: vec4f
 }`;
 
 const STRUCT_MATERIAL_COLORS = `
@@ -523,8 +511,6 @@ fn main(
   var s0 = textureSample(S0_TEXTURE, S0_SAMPLER, fragUV);
   var s1 = textureSample(S1_TEXTURE, S1_SAMPLER, fragUV);
 
-  ${FRAG_BEGIN}
-
   var textureUV = CalcTextureUV(
     MAT_UVS.TEXTURE_SCROLL,
     MAT_UVS.TEXTURE_SCALE,
@@ -575,7 +561,15 @@ fn main(
   }
 
   texel *= vec4(fragColor, 1.0);
-  texel *= MAT_COLORS.BLEND;
+
+  if (MAT_PARAMS.BLEND_COLOR_MODE == 1.0)
+  {
+    texel *= MAT_COLORS.BLEND;
+  }
+  else
+  {
+    texel += MAT_COLORS.BLEND;
+  }
 
   if (texel.a == 0)
   {
@@ -633,12 +627,26 @@ fn main(
 
   outputColor.a = CalcVolumetric(outputColor.a, fragNormal, fragPos);
 
-  ${FRAG_END}
+  ${FRAG_INSERT}
 
   var output: FragOutput;
-  output.Base = ${FRAG_OUT_BASE ?? 'outputColor;'}
-  output.Normal = ${FRAG_OUT_NORMAL ?? 'vec4(normalize(fragNormal), 1.0);'}
-  output.Id = ${FRAG_OUT_ID ?? 'MESH_INFOS.ID;'}
+  var flags = u32(MESH_INFOS.ID.a);
+
+  if ((flags & 32) == 32)
+  {
+    output.Base = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Id = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Ch1 = outputColor;
+  }
+  else
+  {
+    output.Base = outputColor;
+    output.Normal = vec4(normalize(fragNormal), 1.0);
+    output.Id = MESH_INFOS.ID;
+    output.Ch1 = vec4(0.0, 0.0, 0.0, 0.0);
+  }
+
   return output;
 }
 

@@ -14,6 +14,8 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
   grp0: Gfx3DynamicGroup;
   mvpcMatrix: Float32Array;
   id: Float32Array;
+  blendColor: Float32Array;
+  blendColorMode: Float32Array;
 
   constructor() {
     super('SPRITE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
@@ -21,6 +23,8 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
     this.grp0 = gfx3Manager.createDynamicGroup('SPRITE_PIPELINE', 0);
     this.mvpcMatrix = this.grp0.setFloat(0, 'MVPC_MATRIX', 16);    
     this.id = this.grp0.setFloat(1, 'ID', 4);
+    this.blendColor = this.grp0.setFloat(2, 'COLOR', 4);
+    this.blendColorMode = this.grp0.setFloat(3, 'COLOR_MODE', 1);
     this.grp0.allocate();
   }
 
@@ -64,6 +68,9 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
 
       this.grp0.write(0, this.mvpcMatrix);
       this.grp0.write(1, UT.VEC4_COPY(sprite.getId(), this.id) as Float32Array);
+      this.grp0.write(2, UT.VEC4_COPY(sprite.getBlendColor(), this.blendColor) as Float32Array);
+      this.grp0.write(3, UT.VEC1_COPY(sprite.getBlendColorMode(), this.blendColorMode) as Float32Array);
+
       passEncoder.setBindGroup(0, this.grp0.getBindGroup(i));
 
       const grp1 = sprite.getGroup01();

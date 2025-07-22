@@ -27,6 +27,7 @@ class Gfx3Manager {
   normalsTexture: Gfx3RenderingTexture;
   idsTexture: Gfx3RenderingTexture;
   depthTexture: Gfx3RenderingTexture;
+  channel1Texture: Gfx3RenderingTexture;
   commandEncoder: GPUCommandEncoder;
   passEncoder: GPURenderPassEncoder;
   pipelines: Map<string, GPURenderPipeline>;
@@ -51,6 +52,8 @@ class Gfx3Manager {
     this.normalsTexture = {} as Gfx3RenderingTexture;
     this.idsTexture = {} as Gfx3RenderingTexture;
     this.depthTexture = {} as Gfx3RenderingTexture;
+    this.channel1Texture = {} as Gfx3RenderingTexture;
+
     this.commandEncoder = {} as GPUCommandEncoder;
     this.passEncoder = {} as GPURenderPassEncoder;
     this.pipelines = new Map<string, GPURenderPipeline>();
@@ -109,6 +112,7 @@ class Gfx3Manager {
     this.normalsTexture = this.createRenderingTexture('rgba16float');
     this.idsTexture = this.createRenderingTexture('rgba16float');
     this.depthTexture = this.createRenderingTexture('depth24plus');
+    this.channel1Texture = this.createRenderingTexture('rgba16float');
     this.vertexBuffer = this.device.createBuffer({ size: 0, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST });
 
     eventManager.subscribe(coreManager, 'E_RESIZE', this, this.#handleWindowResize);
@@ -182,6 +186,11 @@ class Gfx3Manager {
         storeOp: 'store'
       },{
         view: this.idsTexture.gpuTextureView,
+        clearValue: {r: 0.0, g: 0.0, b: 0.0, a: 1.0},
+        loadOp: 'clear',
+        storeOp: 'store'
+      },{
+        view: this.channel1Texture.gpuTextureView,
         clearValue: {r: 0.0, g: 0.0, b: 0.0, a: 1.0},
         loadOp: 'clear',
         storeOp: 'store'
@@ -561,6 +570,13 @@ class Gfx3Manager {
    */
   getDepthTexture(): Gfx3RenderingTexture {
     return this.depthTexture;
+  }
+
+  /**
+   * Returns the channel 1 texture.
+   */
+  getChannel1Texture(): Gfx3RenderingTexture {
+    return this.channel1Texture;
   }
 
   /**

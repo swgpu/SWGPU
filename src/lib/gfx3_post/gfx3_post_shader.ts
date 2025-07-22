@@ -20,8 +20,8 @@ export const SLOT_NAMES = WINDOW.__POST_SLOT_NAMES__ as Array<string> ?? [
   'S15'
 ];
 
-const FRAG_BEGIN = WINDOW.__POST_FRAG_BEGIN__ ? WINDOW.__POST_FRAG_BEGIN__ : '';
-const FRAG_END = WINDOW.__POST_FRAG_END__ ? WINDOW.__POST_FRAG_END__ : '';
+const FRAG_INSERT_BEGIN = WINDOW.__POST_FRAG_INSERT_BEGIN__ ? WINDOW.__POST_FRAG_INSERT_BEGIN__ : '';
+const FRAG_INSERT_END = WINDOW.__POST_FRAG_INSERT_END__ ? WINDOW.__POST_FRAG_INSERT_END__ : '';
 
 export const PIPELINE_DESC: any = {
   label: 'POST pipeline',
@@ -136,6 +136,8 @@ struct Params {
 @group(0) @binding(6) var IDS_TEXTURE: texture_2d<f32>;
 @group(0) @binding(7) var IDS_SAMPLER: sampler;
 @group(0) @binding(8) var DEPTH_TEXTURE: texture_depth_2d;
+@group(0) @binding(9) var CHANNEL1_TEXTURE: texture_2d<f32>;
+@group(0) @binding(10) var CHANNEL1_SAMPLER: sampler;
 
 @group(1) @binding(0) var SHADOW_VOL_TEXTURE: texture_2d<f32>;
 @group(1) @binding(1) var SHADOW_VOL_SAMPLER: sampler;
@@ -154,7 +156,7 @@ fn main(
   var outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, FragUV);
   var fragUV = FragUV;
 
-  ${FRAG_BEGIN}
+  ${FRAG_INSERT_BEGIN}
 
   if (PARAMS.ENABLED == 0.0)
   {
@@ -176,6 +178,7 @@ fn main(
 
   var normal = textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, fragUV);
   var depth = LinearlyFilterDepthTexture(DEPTH_TEXTURE, fragUV);
+  var channel1 = textureSample(CHANNEL1_TEXTURE, CHANNEL1_SAMPLER, fragUV);
   var shadowVol = textureSample(SHADOW_VOL_TEXTURE, SHADOW_VOL_SAMPLER, fragUV);
   var shadowVolDepthCW = LinearlyFilterDepthTexture(SHADOW_VOL_DEPTH_CW_TEXTURE, fragUV);
   var shadowVolDepthCCW = LinearlyFilterDepthTexture(SHADOW_VOL_DEPTH_CCW_TEXTURE, fragUV);
@@ -239,7 +242,7 @@ fn main(
     }
   }
 
-  ${FRAG_END}
+  ${FRAG_INSERT_END}
 
   return outputColor;
 }

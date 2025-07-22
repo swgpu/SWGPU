@@ -1,4 +1,8 @@
+const WINDOW = window as any;
 export const SHADER_VERTEX_ATTR_COUNT = 15;
+
+const VERT_INSERT = WINDOW.__PARTICULES_VERT_INSERT__ ? WINDOW.__PARTICULES_VERT_INSERT__ : '';
+const FRAG_INSERT = WINDOW.__PARTICULES_FRAG_INSERT__ ? WINDOW.__PARTICULES_FRAG_INSERT__ : '';
 
 export const PIPELINE_DESC: any = {
   label: 'Particles pipeline',
@@ -60,7 +64,8 @@ export const PIPELINE_DESC: any = {
       }
     },
     { format: 'rgba16float' }, // normals
-    { format: 'rgba16float' }] // ids
+    { format: 'rgba16float' }, // ids
+    { format: 'rgba16float' }] // ch1
   },
   primitive: {
     topology: 'triangle-list',
@@ -96,20 +101,13 @@ fn main(
   @location(6) Angle: f32,
   @location(7) Visible: f32
 ) -> VertexOutput {
-  var output: VertexOutput;
-
-  if(Visible == 1)
-  {
-    output.Color = vec4(Color, Opacity);
-  }
-  else
-  {
-    output.Color = vec4(0.0, 0.0, 0.0, 0.0);
-  }
-
   var right = vec3<f32>(V_MATRIX[0][0], V_MATRIX[1][0], V_MATRIX[2][0]);
   var up = vec3<f32>(V_MATRIX[0][1], V_MATRIX[1][1], V_MATRIX[2][1]);
 
+  ${VERT_INSERT}
+
+  var output: VertexOutput;
+  output.Color = vec4(Color, Opacity * Visible);
   output.Position = MVPC_MATRIX * vec4<f32>(Center + (right * Pos.x * Size) + (up * Pos.y * Size), 1.0);
   output.FragUV = TexUV;
   output.Angle = Angle;
@@ -120,7 +118,8 @@ export const FRAGMENT_SHADER = /* wgsl */`
 struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
-  @location(2) Id: vec4f
+  @location(2) Id: vec4f,
+  @location(3) Ch1: vec4f
 }
 
 @group(1) @binding(1) var<uniform> ID: vec4<f32>;
@@ -136,15 +135,30 @@ fn main(
 ) -> FragOutput {
   var c = cos(Angle);
   var s = sin(Angle);
-
   var rotatedUV = vec2(
     c * (FragUV.x - 0.5) + s * (FragUV.y - 0.5) + 0.5,
     c * (FragUV.y - 0.5) - s * (FragUV.x - 0.5) + 0.5
   );
 
+  ${FRAG_INSERT}
+
   var output: FragOutput;
-  output.Base = textureSample(TEXTURE, SAMPLER, rotatedUV) * Color;
-  output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
-  output.Id = ID;
+  var flags = u32(ID.a);
+
+  if ((flags & 32) == 32)
+  {
+    output.Base = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Id = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Ch1 = textureSample(TEXTURE, SAMPLER, rotatedUV) * Color;
+  }
+  else
+  {
+    output.Base = textureSample(TEXTURE, SAMPLER, rotatedUV) * Color;
+    output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Id = ID;
+    output.Ch1 = vec4(0.0, 0.0, 0.0, 0.0);
+  }
+
   return output;
 }`;

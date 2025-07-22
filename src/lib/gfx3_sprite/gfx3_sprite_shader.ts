@@ -1,4 +1,8 @@
+const WINDOW = window as any;
 export const SHADER_VERTEX_ATTR_COUNT = 5;
+
+const VERT_INSERT = WINDOW.__SPRITE_VERT_INSERT__ ? WINDOW.__SPRITE_VERT_INSERT__ : '';
+const FRAG_INSERT = WINDOW.__SPRITE_FRAG_INSERT__ ? WINDOW.__SPRITE_FRAG_INSERT__ : '';
 
 export const PIPELINE_DESC: any = {
   label: 'Sprite pipeline',
@@ -36,7 +40,8 @@ export const PIPELINE_DESC: any = {
       }
     },
     { format: 'rgba16float' }, // normals
-    { format: 'rgba16float' }] // ids
+    { format: 'rgba16float' }, // ids
+    { format: 'rgba16float' }] // ch1
   },
   primitive: {
     topology: 'triangle-list',
@@ -63,6 +68,7 @@ fn main(
   @location(0) Position : vec4<f32>,
   @location(1) TexUV : vec2<f32>
 ) -> VertexOutput {
+  ${VERT_INSERT}
   var output: VertexOutput;
   output.Position = MVPC_MATRIX * Position;
   output.FragUV = TexUV;
@@ -73,10 +79,13 @@ export const FRAGMENT_SHADER = /* wgsl */`
 struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
-  @location(2) Id: vec4f
+  @location(2) Id: vec4f,
+  @location(3) Ch1: vec4f
 }
 
 @group(0) @binding(1) var<uniform> ID: vec4<f32>;
+@group(0) @binding(2) var<uniform> BLEND_COLOR: vec4<f32>;
+@group(0) @binding(3) var<uniform> BLEND_COLOR_MODE: f32;
 @group(1) @binding(0) var TEXTURE: texture_2d<f32>;
 @group(1) @binding(1) var SAMPLER: sampler;
 
@@ -90,9 +99,34 @@ fn main(
     discard;
   }
 
+  if (BLEND_COLOR_MODE == 1.0)
+  {
+    textureColor *= BLEND_COLOR;
+  }
+  else
+  {
+    textureColor += BLEND_COLOR;    
+  }
+
+  ${FRAG_INSERT}
+
   var output: FragOutput;
-  output.Base = textureColor;
-  output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
-  output.Id = ID;
+  var flags = u32(ID.a);
+
+  if ((flags & 32) == 32)
+  {
+    output.Base = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Id = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Ch1 = textureColor;
+  }
+  else
+  {
+    output.Base = textureColor;
+    output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Id = ID;
+    output.Ch1 = vec4(0.0, 0.0, 0.0, 0.0);
+  }
+
   return output;
 }`;

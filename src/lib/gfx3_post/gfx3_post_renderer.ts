@@ -1,4 +1,5 @@
 import { coreManager } from '../core/core_manager';
+import { em } from '../engine/engine_manager';
 import { eventManager } from '../core/event_manager';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { gfx3ShadowVolumeRenderer } from '../gfx3_shadow_volume/gfx3_shadow_volume_renderer';
@@ -47,6 +48,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
   normalsTexture: Gfx3RenderingTexture;
   idsTexture: Gfx3RenderingTexture;
   depthTexture: Gfx3RenderingTexture;
+  channel1Texture: Gfx3RenderingTexture;
   grp1: Gfx3StaticGroup;
   shadowVolFactorTexture: Gfx3RenderingTexture;
   shadowVolDepthCWTexture: Gfx3RenderingTexture;
@@ -91,6 +93,8 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     this.idsTexture = this.grp0.setRenderingTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
     this.idsTexture = this.grp0.setRenderingSampler(7, 'IDS_SAMPLER', this.idsTexture);
     this.depthTexture = this.grp0.setRenderingTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
+    this.channel1Texture = this.grp0.setRenderingTexture(9, 'CHANNEL1_TEXTURE', gfx3Manager.getChannel1Texture());
+    this.channel1Texture = this.grp0.setRenderingSampler(10, 'CHANNEL1_SAMPLER', this.channel1Texture);
     this.grp0.allocate();
 
     this.grp1 = gfx3Manager.createStaticGroup('POST_PIPELINE', 1);
@@ -132,8 +136,8 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
       }]
     });
 
-    this.infos[2] = ts / 1000;
-    this.infos[3] += this.infos[2];
+    this.infos[2] = ts;
+    this.infos[3] = em.getTimeStamp();
 
     passEncoder.setPipeline(this.pipeline);
     this.grp0.beginWrite();
@@ -241,6 +245,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     this.normalsTexture = this.grp0.setRenderingTexture(4, 'NORMALS_TEXTURE', gfx3Manager.getNormalsTexture());
     this.idsTexture = this.grp0.setRenderingTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
     this.depthTexture = this.grp0.setRenderingTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
+    this.channel1Texture = this.grp0.setRenderingTexture(9, 'CHANNEL1_TEXTURE', gfx3Manager.getChannel1Texture());
     this.grp0.allocate();
 
     this.shadowVolFactorTexture = this.grp1.setRenderingTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());
