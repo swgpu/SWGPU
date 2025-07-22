@@ -22,6 +22,7 @@ import { TripleTriadScreen } from './templates/triple-triad/triple_triad_screen'
 import { VisualNovelScreen } from './templates/visual-novel/visual_novel_screen';
 import { PhysicsJoltScreen } from './templates/physics-jolt/physics_jolt_screen';
 import { PhysicsBox2DScreen } from './templates/physics-box2d/physics_box2d_screen';
+import { CarScreen } from './templates/car/car_screen';
 // ---------------------------------------------------------------------------------------
 import { CurveScreen } from './utils/curve/curve_screen';
 import { MenuRingScreen } from './utils/menu-ring/menu_ring_screen';
@@ -51,7 +52,7 @@ class BootScreen extends Screen {
     this.uiTemplates.add('2', '2D Fight');
     this.uiTemplates.add('3', '3D FPS');
     this.uiTemplates.add('4', '3D Isometric');
-    this.uiTemplates.add('5', '3D Pre-rendered');
+    this.uiTemplates.add('5', '3D Pre-rendered (no z-buffer)');
     this.uiTemplates.add('6', '3D RPG');
     this.uiTemplates.add('7', '2D Shootem\'up');
     this.uiTemplates.add('8', '2D TCG');
@@ -62,8 +63,9 @@ class BootScreen extends Screen {
     this.uiTemplates.add('13', '2D Triple Triad');
     this.uiTemplates.add('14', '2D Visual Novel');
     this.uiTemplates.add('15', '2D Platformer');
-    this.uiTemplates.add('16', '3D Physics With Jolt');
-    this.uiTemplates.add('17', '2D Physics With Box2D');
+    this.uiTemplates.add('16', '3D Virtual Controller');
+    this.uiTemplates.add('17', '2D Falling Square');
+    this.uiTemplates.add('18', '3D Car');
     this.uiTemplates.setVisible(false);
     uiManager.addWidget(this.uiTemplates, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
@@ -155,6 +157,9 @@ class BootScreen extends Screen {
     }
     else if (data.id == 17) {
       screenManager.requestSetScreen(new PhysicsBox2DScreen());
+    }
+    else if (data.id == 18) {
+      screenManager.requestSetScreen(new CarScreen());
     }
   }
 
