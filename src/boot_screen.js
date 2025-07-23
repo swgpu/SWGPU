@@ -32,6 +32,8 @@ import { UserInterfaceScreen } from './utils/user-interface/user_interface_scree
 import { ViewerScreen } from './utils/viewer/viewer_screen';
 import { PackScreen } from './utils/pack/pack_screen';
 // ---------------------------------------------------------------------------------------
+import { MarioSokobanScreen } from './ai/mario-sokoban/mario_sokoban_screen';
+import { CanChaseScreen } from './ai/can-chase/can_chase_screen';
 
 class BootScreen extends Screen {
   constructor() {
@@ -39,11 +41,13 @@ class BootScreen extends Screen {
     this.uiMenu = new UIMenuText({ className: 'UIMenuText UIBootMenu' });
     this.uiTemplates = new UIMenuText({ className: 'UIMenuText UIBootMenu' });
     this.uiUtils = new UIMenuText({ className: 'UIMenuText UIBootMenu' });
+    this.uiIAs = new UIMenuText({ className: 'UIMenuText UIBootMenu' });
   }
 
   async onEnter() {
     this.uiMenu.add('0', 'Templates');
     this.uiMenu.add('1', 'Utils');
+    this.uiMenu.add('2', 'IAs');
     uiManager.addWidget(this.uiMenu, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
     this.uiTemplates.add('0', '2D Background Isometric');
@@ -78,9 +82,15 @@ class BootScreen extends Screen {
     this.uiUtils.setVisible(false);
     uiManager.addWidget(this.uiUtils, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
+    this.uiIAs.add('0', '2D Mario Sokoban');
+    this.uiIAs.add('1', '3D Can Chase');
+    this.uiIAs.setVisible(false);
+    uiManager.addWidget(this.uiIAs, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
+
     eventManager.subscribe(this.uiMenu, 'E_ITEM_SELECTED', this, this.handleMenuItemSelected);
     eventManager.subscribe(this.uiTemplates, 'E_ITEM_SELECTED', this, this.handleTemplateSelected);
     eventManager.subscribe(this.uiUtils, 'E_ITEM_SELECTED', this, this.handleUtilSelected);
+    eventManager.subscribe(this.uiIAs, 'E_ITEM_SELECTED', this, this.handleIASelected);
     uiManager.focus(this.uiMenu);
   }
 
@@ -88,9 +98,12 @@ class BootScreen extends Screen {
     uiManager.removeWidget(this.uiMenu);
     uiManager.removeWidget(this.uiTemplates);
     uiManager.removeWidget(this.uiUtils);
+    uiManager.removeWidget(this.uiIAs);
   }
 
   handleMenuItemSelected(data) {
+    this.uiMenu.setVisible(false);
+
     if (data.id == 0) {
       this.uiTemplates.setVisible(true);
       uiManager.focus(this.uiTemplates);
@@ -99,89 +112,109 @@ class BootScreen extends Screen {
       this.uiUtils.setVisible(true);
       uiManager.focus(this.uiUtils);
     }
+    else if (data.id == 2) {
+      this.uiIAs.setVisible(true);
+      uiManager.focus(this.uiIAs);
+    }
   }
 
   handleTemplateSelected(data) {
-    if (data.id == 0) {
-      screenManager.requestSetScreen(new BgIsoScreen());
-    }
-    else if (data.id == 1) {
-      screenManager.requestSetScreen(new BoardScreen());
-    }
-    else if (data.id == 2) {
-      screenManager.requestSetScreen(new FightScreen());
-    }
-    else if (data.id == 3) {
-      screenManager.requestSetScreen(new FPSScreen());
-    }
-    else if (data.id == 4) {
-      screenManager.requestSetScreen(new IsoScreen());
-    }
-    else if (data.id == 5) {
-      screenManager.requestSetScreen(new PrerenderedScreen());
-    }
-    else if (data.id == 6) {
-      screenManager.requestSetScreen(new RPGScreen());
-    }
-    else if (data.id == 7) {
-      screenManager.requestSetScreen(new ShootemupScreen());
-    }
-    else if (data.id == 8) {
-      screenManager.requestSetScreen(new TCGScreen(), { duelId: '0000' });
-    }
-    else if (data.id == 9) {
-      screenManager.requestSetScreen(new ThirdPersonScreen());
-    }
-    else if (data.id == 10) {
-      screenManager.requestSetScreen(new TilemapScreen());
-    }
-    else if (data.id == 11) {
-      screenManager.requestSetScreen(new TilemapIsoScreen());
-    }
-    else if (data.id == 12) {
-      screenManager.requestSetScreen(new TilemapPathfindingScreen());
-    }
-    else if (data.id == 13) {
-      screenManager.requestSetScreen(new TripleTriadScreen());
-    }
-    else if (data.id == 14) {
-      screenManager.requestSetScreen(new VisualNovelScreen());
-    }
-    else if (data.id == 15) {
-      screenManager.requestSetScreen(new PlatformerScreen());
-    }
-    else if (data.id == 16) {
-      screenManager.requestSetScreen(new PhysicsJoltScreen());
-    }
-    else if (data.id == 17) {
-      screenManager.requestSetScreen(new PhysicsBox2DScreen());
+    switch (data.id) {
+      case '0':
+        screenManager.requestSetScreen(new BgIsoScreen());
+        break;
+      case '1':
+        screenManager.requestSetScreen(new BoardScreen());
+        break;
+      case '2':
+        screenManager.requestSetScreen(new FightScreen());
+        break;
+      case '3':
+        screenManager.requestSetScreen(new FPSScreen());
+        break;
+      case '4':
+        screenManager.requestSetScreen(new IsoScreen());
+        break;
+      case '5':
+        screenManager.requestSetScreen(new PrerenderedScreen());
+        break;
+      case '6':
+        screenManager.requestSetScreen(new RPGScreen());
+        break;
+      case '7':
+        screenManager.requestSetScreen(new ShootemupScreen());
+        break;
+      case '8':
+        screenManager.requestSetScreen(new TCGScreen(), { duelId: '0000' });
+        break;
+      case '9':
+        screenManager.requestSetScreen(new ThirdPersonScreen());
+        break;
+      case '10':
+        screenManager.requestSetScreen(new TilemapScreen());
+        break;
+      case '11':
+        screenManager.requestSetScreen(new TilemapIsoScreen());
+        break;
+      case '12':
+        screenManager.requestSetScreen(new TilemapPathfindingScreen());
+        break;
+      case '13':
+        screenManager.requestSetScreen(new TripleTriadScreen());
+        break;
+      case '14':
+        screenManager.requestSetScreen(new VisualNovelScreen());
+        break;
+      case '15':
+        screenManager.requestSetScreen(new PlatformerScreen());
+        break;
+      case '16':
+        screenManager.requestSetScreen(new PhysicsJoltScreen());
+        break;
+      case '17':
+        screenManager.requestSetScreen(new PhysicsBox2DScreen());
+        break;
+      case '18':
+        screenManager.requestSetScreen(new MarioSokobanScreen());
+        break;
+      default:
+        console.log('Unknown template ID:', data.id);
     }
   }
 
   handleUtilSelected(data) {
-    if (data.id == 0) {
+    if (data.id == '0') {
       screenManager.requestSetScreen(new CurveScreen());
     }
-    else if (data.id == 1) {
+    else if (data.id == '1') {
       screenManager.requestSetScreen(new ParticlesScreen());
     }
-    else if (data.id == 2) {
+    else if (data.id == '2') {
       screenManager.requestSetScreen(new PerfScreen());
     }
-    else if (data.id == 3) {
+    else if (data.id == '3') {
       screenManager.requestSetScreen(new ShadowScreen());
     }
-    else if (data.id == 4) {
+    else if (data.id == '4') {
       screenManager.requestSetScreen(new UserInterfaceScreen());
     }
-    else if (data.id == 5) {
+    else if (data.id == '5') {
       screenManager.requestSetScreen(new ViewerScreen());
     }
-    else if (data.id == 6) {
+    else if (data.id == '6') {
       screenManager.requestSetScreen(new MenuRingScreen());
     }
-    else if (data.id == 7) {
+    else if (data.id == '7') {
       screenManager.requestSetScreen(new PackScreen());
+    }
+  }
+
+  handleIASelected(data) {
+    if (data.id == '0') {
+      screenManager.requestSetScreen(new MarioSokobanScreen());
+    }
+    else if (data.id == '1') {
+      screenManager.requestSetScreen(new CanChaseScreen());
     }
   }
 }
