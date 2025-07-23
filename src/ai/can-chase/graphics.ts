@@ -1,4 +1,3 @@
-import { dnaManager } from '@lib/dna/dna_manager';
 import { DNASystem } from '@lib/dna/dna_system';
 // ---------------------------------------------------------------------------------------
 
