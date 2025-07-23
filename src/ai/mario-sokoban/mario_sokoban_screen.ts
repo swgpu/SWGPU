@@ -30,16 +30,24 @@ class MarioSokobanScreen extends Screen {
   }
 
   async loadLevel() {
-    // Simple level: 0=empty, 1=wall, 2=target, 3=box, 4=player
-    // Maintenant il y a exactement 2 boîtes et 2 cibles
+    // Niveau complexe avec des murs intérieurs: 0=empty, 1=wall, 2=target, 3=box, 4=player
+    // Niveau avec des passages étroits, des obstacles et des défis de positionnement
     this.level = [
-      [1,1,1,1,1,1,1,1],
-      [1,0,0,0,0,0,0,1],
-      [1,0,2,3,0,0,0,1],
-      [1,0,0,4,0,0,0,1],
-      [1,0,0,0,3,2,0,1],
-      [1,0,0,0,0,0,0,1],
-      [1,1,1,1,1,1,1,1]
+      [1,1,1,1,1,1,1,1,1,1,1,1],
+      [1,0,0,0,1,0,0,0,0,0,0,1],
+      [1,0,1,0,1,0,1,1,1,0,2,1],
+      [1,0,1,0,0,0,0,0,1,0,0,1],
+      [1,0,1,1,1,0,3,0,1,1,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,1],
+      [1,1,0,1,0,1,1,1,0,1,0,1],
+      [1,2,0,1,0,0,4,0,0,1,0,1],
+      [1,0,0,1,0,3,0,0,0,1,0,1],
+      [1,0,1,1,1,0,0,0,1,1,0,1],
+      [1,0,0,0,0,0,1,0,0,0,2,1],
+      [1,0,1,0,3,0,1,0,1,0,0,1],
+      [1,0,1,0,0,0,1,0,1,1,1,1],
+      [1,0,0,0,1,0,0,0,0,0,0,1],
+      [1,1,1,1,1,1,1,1,1,1,1,1]
     ];
 
     this.parseLevel();
