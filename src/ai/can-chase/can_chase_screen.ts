@@ -5,7 +5,7 @@ import { Screen } from '@lib/screen/screen';
 import { Gfx3CameraOrbit } from '@lib/gfx3_camera/gfx3_camera_orbit';
 import { Gfx3Jolt } from '@lib/gfx3_physics/gfx3_physics_jolt';
 // ---------------------------------------------------------------------------------------
-import { PhysicsSystem, CanComponent, PlayerComponent, LAYER_MOVING, LAYER_NON_MOVING } from './physics';
+import { PhysicsSystem, CanComponent, PlayerComponent, LAYER_NON_MOVING } from './physics';
 import { GraphicsSystem } from './graphics';
 import { EntityComponent } from './entity';
 import { InputSystem, InputComponent } from './input';
