@@ -2,7 +2,6 @@ import { dnaManager } from '@lib/dna/dna_manager';
 import { DNAComponent } from '@lib/dna/dna_component';
 import { DNASystem } from '@lib/dna/dna_system';
 import { Gfx3Jolt } from '@lib/gfx3_physics/gfx3_physics_jolt';
-import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
 import { drawShape } from '@lib/gfx3_physics/gfx3_physics_jolt_debug';
 // ---------------------------------------------------------------------------------------
 import { EntityComponent } from './entity';
@@ -60,8 +59,6 @@ export class PhysicsSystem extends DNASystem {
 
     this.system.SetGravity(new Gfx3Jolt.Vec3(0, gravity, 0));
   }
-
-
 
   onEntityUpdate(ts: number, eid: number): void {
     const entity = dnaManager.getComponent(eid, EntityComponent);
