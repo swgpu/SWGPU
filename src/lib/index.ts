@@ -119,3 +119,6 @@ export type { Gfx3Viewport, ProjectionMode } from './gfx3/gfx3_view';
 export type { vec1, vec2, vec3, vec4, vec5, vec6, vec_any, mat3, mat4, bounds2, bounds3 } from './types';
 export type { Sound } from './sound/sound_manager';
 export type { EnginePackItem, EnginePackItemList } from './engine/engine_pack_item_list';
+// functions ---------------------------------------------------------------------------------
+export { makeDebugDraw } from './gfx2_physics/gfx2_physics_box2d_debug';
+export { drawShape } from './gfx3_physics/gfx3_physics_jolt_debug';

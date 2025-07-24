@@ -1,7 +1,7 @@
 import Jolt from 'jolt-physics';
 // ---------------------------------------------------------------------------------------
-import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
-import { Gfx3Jolt } from '@lib/gfx3_physics/gfx3_physics_jolt';
+import { gfx3DebugRenderer } from '../gfx3/gfx3_debug_renderer';
+import { Gfx3Jolt } from './gfx3_physics_jolt';
 
 export const drawShape = (shape: Jolt.Shape, matrix: Jolt.RMat44) => {
   let vertexCount = 0;
