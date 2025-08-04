@@ -176,7 +176,7 @@ class BootScreen extends Screen {
         screenManager.requestSetScreen(new PhysicsBox2DScreen());
         break;
       case '18':
-        screenManager.requestSetScreen(new SokobanScreen());
+        screenManager.requestSetScreen(new PrerenderedScreen(true));
         break;
       default:
         console.log('Unknown template ID:', data.id);

@@ -6,13 +6,19 @@ import { Screen } from '@lib/screen/screen';
 import { Room } from './room';
 
 class PrerenderedScreen extends Screen {
-  constructor() {
+  constructor(zBuffer = false) {
     super();
-    this.room = new Room();
+    this.zBuffer = zBuffer;
+    this.room = new Room(zBuffer);
   }
 
   async onEnter() {
-    await this.room.loadFromFile('./templates/prerendered/scene.room', 'Spawn0000');
+    if (this.zBuffer) {
+      await this.room.loadFromFile('./templates/prerendered/zbuffer/scene.room', 'Spawn0000');
+    }
+    else {
+      await this.room.loadFromFile('./templates/prerendered/scene.room', 'Spawn0000');
+    }
   }
 
   update(ts) {

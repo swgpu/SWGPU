@@ -20,10 +20,12 @@ import { TrackingCamera } from './tracking_camera';
 const CHAR_SPEED = 3;
 
 class Room {
-  constructor() {
+  constructor(zBuffer = false) {
+    this.zBuffer = zBuffer;
     this.name = '';
     this.description = '';
     this.map = new Gfx3MeshJSM();
+    this.mapZBuffer = new Gfx3MeshJSM();
     this.walkmesh = new Gfx3PhysicsJWM();
     this.controller = new Model();
     this.controllerWalker = {};
@@ -62,6 +64,16 @@ class Room {
       magFilter: 'nearest'
     }));
 
+    if (this.zBuffer) {
+      this.mapZBuffer = new Gfx3MeshJSM();
+      this.mapZBuffer.mat.setZBuffer(true);
+      await this.mapZBuffer.loadFromFile(json['MapFile']);
+      this.mapZBuffer.mat.setTexture(await gfx3TextureManager.loadTexture(json['MapZBufferFile'], {
+        minFilter: 'nearest',
+        magFilter: 'nearest'
+      }));
+    }
+
     this.walkmesh = new Gfx3PhysicsJWM();
     await this.walkmesh.loadFromFile(json['WalkmeshFile']);
     await this.controller.loadFromData(json['Controller']);
@@ -99,7 +111,7 @@ class Room {
       this.triggers.push(trigger);
     }
 
-    let spawn = this.spawns.find(spawn => spawn.getName() == spawnName);
+    const spawn = this.spawns.find(spawn => spawn.getName() == spawnName);
     this.controller.setPosition(spawn.getPositionX(), spawn.getPositionY(), spawn.getPositionZ());
     this.controller.setRotation(0, UT.VEC2_ANGLE(spawn.getDirection()), 0);
     this.controllerWalker = this.walkmesh.addWalker('CONTROLLER', this.controller.getPositionX(), this.controller.getPositionZ(), this.controller.getRadius());
@@ -153,6 +165,7 @@ class Room {
     }
 
     this.map.update(ts);
+    this.mapZBuffer.update(ts);
     this.walkmesh.update(ts);
     this.controller.update(ts);
     this.camera.update(ts);
@@ -172,7 +185,8 @@ class Room {
   }
 
   draw() {
-    this.map.draw();
+    // this.map.draw();
+    this.mapZBuffer.draw();
     this.walkmesh.draw();
     this.controller.draw();
 

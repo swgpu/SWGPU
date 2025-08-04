@@ -134,6 +134,7 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
    * ■ dither: a = 4
    * ■ outline: a = 8
    * ■ shadow volume: a = 16
+   * ■ second channel: a = 32
    * 
    * @param {number} r - The pur identifier you can use for custom stuff.
    * @param {number} g - The decals group.
