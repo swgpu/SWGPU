@@ -23,7 +23,8 @@ export const PIPELINE_DESC: any = {
     targets: [
       { format: navigator.gpu.getPreferredCanvasFormat()},
       { format: 'rgba16float' }, // normals
-      { format: 'rgba16float' } // ids
+      { format: 'rgba16float' }, // ids
+      { format: 'rgba16float' } // ch1
     ]
   },
   primitive: {
@@ -38,7 +39,7 @@ export const PIPELINE_DESC: any = {
   }
 };
 
-export const VERTEX_SHADER = /* wgsl */`
+export const VERTEX_SHADER = (data: any) => /* wgsl */`
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
   @location(0) Color: vec3<f32>
@@ -57,11 +58,12 @@ fn main(
   return output;
 }`;
 
-export const FRAGMENT_SHADER = /* wgsl */`
+export const FRAGMENT_SHADER = (data: any) => /* wgsl */`
 struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
-  @location(2) Id: vec4f
+  @location(2) Id: vec4f,
+  @location(3) Ch1: vec4f
 }
 
 @fragment
@@ -72,5 +74,6 @@ fn main(
   output.Base = vec4(Color, 1);
   output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
   output.Id = vec4(0.0, 0.0, 0.0, 0.0);
+  output.Ch1 = vec4(0.0, 0.0, 0.0, 0.0);
   return output;
 }`;

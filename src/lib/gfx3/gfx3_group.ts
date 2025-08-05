@@ -188,6 +188,16 @@ class Gfx3StaticGroup {
   getBindGroup(): GPUBindGroup {
     return this.bindGroup!;
   }
+
+  /**
+   * Set a new pipeline.
+   * Of course, you need to call allocate() after setPipeline().
+   * 
+   * @param {GPURenderPipeline} pipeline - The new pipeline.
+   */
+  setPipeline(pipeline: GPURenderPipeline): void {
+    this.pipeline = pipeline;
+  }
 }
 
 /**
@@ -348,6 +358,16 @@ class Gfx3DynamicGroup {
    */
   getSize(): number {
     return this.size;
+  }
+
+  /**
+   * Set a new pipeline.
+   * Of course, you need to call allocate() after setPipeline().
+   * 
+   * @param {GPURenderPipeline} pipeline - The new pipeline.
+   */
+  setPipeline(pipeline: GPURenderPipeline): void {
+    this.pipeline = pipeline;
   }
 }
 

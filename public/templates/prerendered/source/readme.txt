@@ -18,3 +18,5 @@ matrix[1][0] = matrix[1][0] * -1;
 matrix[2][0] = matrix[2][0] * -1;
 matrix[3][0] = matrix[3][0] * -1;
 print(matrix);
+
+18 aout à 15h

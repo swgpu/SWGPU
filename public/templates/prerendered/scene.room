@@ -1,7 +1,7 @@
 {
   "Ident": "ROOM",
   "Id": "Room0000",
-  "Name": "Sample 00",
+  "Name": "Sample Without ZBuffer",
   "Description": "A cold and metallic piece that feel like inside an machine",
   "ScriptFile": "templates/prerendered/scene.jsc",
   "MusicFile": "templates/prerendered/music.mp3",

@@ -28,7 +28,7 @@ export const PIPELINE_DESC: any = {
   }
 };
 
-export const VERTEX_SHADER = `
+export const VERTEX_SHADER = (data: any) => `
 @group(0) @binding(0) var<uniform> LVP_MATRIX: mat4x4<f32>;
 @group(0) @binding(1) var<uniform> M_MATRIX: mat4x4<f32>;
 

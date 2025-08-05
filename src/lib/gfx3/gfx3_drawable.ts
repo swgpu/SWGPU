@@ -134,13 +134,14 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
    * ■ dither: a = 4
    * ■ outline: a = 8
    * ■ shadow volume: a = 16
+   * ■ channel 1: a = 32 (channel 1 is a rendering texture used by post process unit for many different things, it is invisible by default)
    * 
    * @param {number} r - The pur identifier you can use for custom stuff.
    * @param {number} g - The decals group.
    * @param {number} b - The lights group.
    * @param {number} a - The flags value for specials effects.
    */
-  setId(r: number, g: number, b: number, a: number): void {
+  setId(r: number, g: number = 0, b: number = 0, a: number = 0): void {
     this.id = [r, g, b, a];
   }
 
@@ -202,6 +203,7 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
     drawable.rotation = [this.rotation[0], this.rotation[1], this.rotation[2]];
     drawable.scale = [this.scale[0], this.scale[1], this.scale[2]];
     drawable.quaternion = new Quaternion(this.quaternion.w, this.quaternion.x, this.quaternion.y, this.quaternion.z);
+    drawable.id = this.id;
     drawable.boundingBox = new Gfx3BoundingBox(this.boundingBox.min, this.boundingBox.max);
 
     drawable.beginVertices(this.vertexCount);

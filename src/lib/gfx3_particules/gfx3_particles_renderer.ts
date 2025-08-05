@@ -4,7 +4,7 @@ import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3StaticGroup, Gfx3DynamicGroup } from '../gfx3/gfx3_group';
 import { Gfx3RenderingTexture } from '../gfx3/gfx3_texture';
 import { Gfx3Particles } from './gfx3_particles';
-import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_particles_shader';
+import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER, SHADER_INSERTS } from './gfx3_particles_shader';
 
 /**
  * Singleton particules renderer.
@@ -18,7 +18,7 @@ class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
   id: Float32Array;
 
   constructor() {
-    super('PARTICLES_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
+    super('PARTICLES_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_INSERTS);
     this.particlesList = [];
 
     this.grp0 = gfx3Manager.createStaticGroup('PARTICLES_PIPELINE', 0);
@@ -79,6 +79,20 @@ class Gfx3ParticlesRenderer extends Gfx3RendererAbstract {
     if (destinationTexture) {
       passEncoder.end();
     }
+  }
+
+  /**
+   * Set insertion of code in the shader.
+   * This method will reload the pipeline.
+   * 
+   * @param {Partial<typeof SHADER_INSERTS>} data - The custom data used by the shader template.
+   */
+  setShaderInserts(data: Partial<typeof SHADER_INSERTS> = {}): void {
+    super.reload(VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, Object.assign(SHADER_INSERTS, data));
+    this.grp0.setPipeline(this.pipeline);
+    this.grp1.setPipeline(this.pipeline);
+    this.grp0.allocate();
+    this.grp1.allocate();
   }
 
   /**
