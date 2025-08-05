@@ -18,7 +18,7 @@ class Gfx3MeshLight extends Gfx3Transformable {
   linear: number;
   exp: number;
   radius: number;
-  meshId: number;
+  group: number;
   /* spot */
   cutoff: number;
   direction: vec3;
@@ -33,7 +33,7 @@ class Gfx3MeshLight extends Gfx3Transformable {
     this.linear = 0;
     this.exp = 0;
     this.radius = 10;
-    this.meshId = 0;
+    this.group = 0;
     this.cutoff = 12.5;
     this.direction = [0, -1, 0];
   }
@@ -60,7 +60,7 @@ class Gfx3MeshLight extends Gfx3Transformable {
     this.linear = json['Linear'];
     this.exp = json['Exp'];
     this.radius = json['Radius'];
-    this.meshId = json['MeshID'];
+    this.group = json['Group'];
     this.cutoff = json['Cutoff'];
     this.direction = json['Direction'];
   }
@@ -75,7 +75,7 @@ class Gfx3MeshLight extends Gfx3Transformable {
         this.diffuse,
         this.specular,
         this.intensity,
-        this.meshId,
+        this.group,
         this.constant,
         this.linear,
         this.exp
@@ -89,7 +89,7 @@ class Gfx3MeshLight extends Gfx3Transformable {
         this.diffuse,
         this.specular,
         this.intensity,
-        this.meshId,
+        this.group,
         this.constant,
         this.linear,
         this.exp
@@ -180,13 +180,13 @@ class Gfx3MeshLight extends Gfx3Transformable {
   }
 
   /**
-   * Set mesh id targeted.
-   * Note: 0 affect all mesh
+   * Set group light identifier.
+   * Note: 0 is the default group and will affect all mesh
    * 
-   * @param {number} meshId - The mesh id.
+   * @param {number} group - The group id.
    */
-  setMeshId(meshId: number): void {
-    this.meshId = meshId;
+  setGroup(group: number): void {
+    this.group = group;
   }
 
   /**
@@ -268,11 +268,10 @@ class Gfx3MeshLight extends Gfx3Transformable {
   }
 
   /**
-   * Returns the mesh id affected by the light.
-   * Note: 0 affect all mesh
+   * Returns the group id.
    */
-  getMeshId(): number {
-    return this.meshId;
+  getGroup(): number {
+    return this.group;
   }
 
   /**

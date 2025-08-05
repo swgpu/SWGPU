@@ -163,9 +163,9 @@ fn main(
   }
 
   var id = textureSample(IDS_TEXTURE, IDS_SAMPLER, fragUV);
-  var flags = u32(id.a);
+  var flags = u32(id.b);
 
-  if (PARAMS.PIXELATION_ENABLED == 1.0 && (flags & 1) == 1)
+  if (PARAMS.PIXELATION_ENABLED == 1.0 && (flags & 2) == 2)
   {    
     fragUV.x = floor(fragUV.x * PARAMS.PIXELATION_WIDTH) / PARAMS.PIXELATION_WIDTH;
     fragUV.y = floor(fragUV.y * PARAMS.PIXELATION_HEIGHT) / PARAMS.PIXELATION_HEIGHT;
@@ -173,7 +173,7 @@ fn main(
 
   outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, fragUV);
   id = textureSample(IDS_TEXTURE, IDS_SAMPLER, fragUV);
-  flags = u32(id.a);
+  flags = u32(id.b);
 
   var normal = textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, fragUV);
   var depth = LinearlyFilterDepthTexture(DEPTH_TEXTURE, fragUV);
@@ -186,12 +186,12 @@ fn main(
 
   ${data.FRAG_BEGIN}
 
-  if (PARAMS.COLOR_ENABLED == 1.0 && (flags & 2) == 2)
+  if (PARAMS.COLOR_ENABLED == 1.0 && (flags & 4) == 4)
   {
     outputColor = floor(outputColor * PARAMS.COLOR_PRECISION) / PARAMS.COLOR_PRECISION;
   }
 
-  if (PARAMS.DITHER_ENABLED == 1.0 && (flags & 4) == 4)
+  if (PARAMS.DITHER_ENABLED == 1.0 && (flags & 8) == 8)
   {
     var brightness = GetPixelBrightness(outputColor.rgb);
     var ditherPattern = GetDitherPattern(PARAMS.DITHER_PATTERN_INDEX);
@@ -201,7 +201,7 @@ fn main(
     outputColor = outputColor * ditherPixel;
   }
 
-  if (PARAMS.OUTLINE_ENABLED == 1.0 && (flags & 8) == 8)
+  if (PARAMS.OUTLINE_ENABLED == 1.0 && (flags & 16) == 16)
   {
     var t = PARAMS.OUTLINE_THICKNESS * (depth - 1.0);
     var idDiff = 0.0;
@@ -228,7 +228,7 @@ fn main(
     }
   }
 
-  if (PARAMS.SHADOW_VOLUME_ENABLED == 1.0 && (flags & 16) == 16)
+  if (PARAMS.SHADOW_VOLUME_ENABLED == 1.0 && (flags & 32) == 32)
   {
     if (shadowVolDepthCW != 1.0 && shadowVolDepthCCW != 1.0 && depth >= shadowVolDepthCCW && depth <= shadowVolDepthCW)
     {

@@ -38,7 +38,7 @@ export { Gfx2Tileset } from './gfx2_tile/gfx2_tile_set';
 export { Gfx2TileObject } from './gfx2_tile/gfx2_tile_object';
 // gfx3 --------------------------------------------------------------------------------------
 export { Gfx3BoundingBox } from './gfx3/gfx3_bounding_box';
-export { Gfx3Drawable } from './gfx3/gfx3_drawable';
+export { Gfx3Drawable, MeshEffect } from './gfx3/gfx3_drawable';
 export { Gfx3StaticGroup, Gfx3DynamicGroup } from './gfx3/gfx3_group';
 export { Gfx3RendererAbstract } from './gfx3/gfx3_renderer_abstract';
 export { Gfx3Transformable, Axis } from './gfx3/gfx3_transformable';
@@ -114,7 +114,7 @@ export type { StraightFlowState } from './core/straight_flow';
 export type { Gfx2RenderingMode } from './gfx2/gfx2_manager';
 export type { ParticlesOptions } from './gfx2_particles/gfx2_particles';
 export type { Gfx3Texture } from './gfx3/gfx3_texture';
-export type { TextureTarget } from './gfx3_mesh/gfx3_mesh_material';
+export type { TextureTarget, MATFlipbook } from './gfx3_mesh/gfx3_mesh_material';
 export type { Gfx3Viewport, ProjectionMode } from './gfx3/gfx3_view';
 export type { vec1, vec2, vec3, vec4, vec5, vec6, vec_any, mat3, mat4, bounds2, bounds3 } from './types';
 export type { Sound } from './sound/sound_manager';

@@ -27,6 +27,7 @@ interface MATOptions {
   id?: number;
   normalIntensity?: number;
   lightning?: boolean;
+  lightGroup?: number;
   ambient?: vec3;
   diffuse?: vec3;
   specular?: vec3;
@@ -37,6 +38,7 @@ interface MATOptions {
   textureScrollAngle?: number;
   textureScrollRate?: number;
   textureScale?: vec2,
+  textureBlendMode?: 'mul' | 'add';
   secondaryTexture?: Gfx3Texture;
   secondaryTextureScrollAngle?: number;
   secondaryTextureScrollRate?: number;
@@ -71,7 +73,8 @@ interface MATOptions {
   sParams?: Array<{name: string, value: number }>;
   s0Texture?: Gfx3Texture;
   s1Texture?: Gfx3Texture;
-  colorBlendMode?: 'mul' | 'add';
+  decalGroup?: number;
+  effects?: number;
 };
 
 interface Animation {
@@ -150,7 +153,7 @@ class Gfx3Material {
     this.colors[22] = options.dissolveGlow ? options.dissolveGlow[2] : 1.0;
     this.colors[23] = 0.0;
 
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 43);
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 46);
     this.params[0] = options.id ?? 0;
     this.params[1] = options.normalIntensity ?? 1.0;
     this.params[2] = options.lightning ? 1.0 : 0.0;
@@ -177,13 +180,16 @@ class Gfx3Material {
     this.params[23] = options.distanceAlphaBlend ?? 0.0;
     this.params[24] = options.s0Texture ? 1.0 : 0.0;
     this.params[25] = options.s1Texture ? 1.0 : 0.0;
-    this.params[26] = options.colorBlendMode ? (options.colorBlendMode == 'mul' ? 1.0 : 2.0) : 1.0;
+    this.params[26] = options.textureBlendMode ? (options.textureBlendMode == 'mul' ? 1.0 : 2.0) : 1.0;
+    this.params[27] = options.lightGroup ?? 0;
+    this.params[28] = options.decalGroup ?? 0;
+    this.params[29] = options.effects ?? 0;
 
     if (options.sParams) {
       for (const sParam of options.sParams) {
         const paramIndex = Object.values(MAT_PARAMS_VARS).findIndex(n => n == sParam.name);
         if (paramIndex != -1) {
-          this.params[27 + paramIndex] = sParam.value ?? 0.0;
+          this.params[30 + paramIndex] = sParam.value ?? 0.0;
         }
       }
     }
@@ -299,6 +305,7 @@ class Gfx3Material {
       id: json['Id'],
       normalIntensity: json['NormalIntensity'],
       lightning: json['Lightning'],
+      lightGroup: json['LightGroup'],
       emissive: json['Emissive'],
       ambient: json['Ambient'],
       diffuse: json['Diffuse'],
@@ -309,6 +316,7 @@ class Gfx3Material {
       textureScrollAngle: json['TextureScrollAngle'],
       textureScrollRate: json['TextureScrollRate'],
       textureScale: json['TextureScale'],
+      textureBlendMode: json['TextureBlendMode'],
       secondaryTexture: json['SecondaryTexture'] ? await gfx3TextureManager.loadTexture(textureDir + json['SecondaryTexture']) : undefined,
       secondaryTextureScrollAngle: json['SecondaryTextureScrollAngle'],
       secondaryTextureScrollRate: json['SecondaryTextureScrollRate'],
@@ -342,6 +350,8 @@ class Gfx3Material {
       toonLightDir: json['ToonLightDir'],
       facingAlphaBlend: json['FacingAlphaBlend'],
       distanceAlphaBlend: json['DistanceAlphaBlend'],
+      decalGroup: json['DecalGroup'],
+      effects: json['Effects'],
       sParams: sParams
     });
   }
@@ -588,6 +598,26 @@ class Gfx3Material {
     this.colors[18] = b;
     this.colors[19] = a;
     this.params[26] = blendColorMode == 'mul' ? 1.0 : 2.0;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the light group identifier.
+   * 
+   * @param {number} group - The light group identifier.
+   */
+  setLightGroup(group: number): void {
+    this.params[27] = group;
+    this.dataChanged = true;
+  }
+
+  /**
+   * Set the decal group identifier.
+   * 
+   * @param {number} group - The decal group identifier.
+   */
+  setDecalGroup(group: number): void {
+    this.params[28] = group;
     this.dataChanged = true;
   }
 
@@ -964,7 +994,7 @@ class Gfx3Material {
       throw new Error('Gfx3Material::setCustomParam(): Custom param name not found !');
     }
 
-    this.params[27 + paramIndex] = value;
+    this.params[30 + paramIndex] = value;
   }
 
   /**
@@ -978,7 +1008,7 @@ class Gfx3Material {
       throw new Error('Gfx3Material::getCustomParam(): Custom param name not found !');
     }
 
-    return this.params[27 + paramIndex];
+    return this.params[30 + paramIndex];
   }
 
   /**
@@ -1148,4 +1178,4 @@ class Gfx3Material {
 }
 
 export { Gfx3Material };
-export type { TextureTarget };
+export type { TextureTarget, MATFlipbook };

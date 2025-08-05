@@ -1,6 +1,7 @@
 import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
 import { gfx3TextureManager } from '@lib/gfx3/gfx3_texture_manager';
 import { UT } from '@lib/core/utils';
+import { MeshEffect } from '@lib/gfx3/gfx3_drawable';
 import { Gfx3MeshJSM } from '@lib/gfx3_mesh/gfx3_mesh_jsm';
 import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 // ---------------------------------------------------------------------------------------
@@ -34,6 +35,7 @@ export class PlayerWeapon {
 
   async load() {
     this.mesh = new Gfx3MeshJSM();
+    this.mesh.setId(1.0, 0.0, MeshEffect.CHANNEL1);
     this.mesh.mat.setTexture(await gfx3TextureManager.loadTexture('./templates/fps/weapon.png'));
     await this.mesh.loadFromFile('./templates/fps/weapon.jsm');
 

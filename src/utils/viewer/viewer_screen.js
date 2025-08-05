@@ -17,6 +17,7 @@ import { Gfx3Skybox } from '@lib/gfx3_skybox/gfx3_skybox';
 import { Gfx3Material } from '@lib/gfx3_mesh/gfx3_mesh_material';
 import { Gfx3ShadowVolume } from '@lib/gfx3_shadow_volume/gfx3_shadow_volume';
 import { Gfx3FlareLens } from '@lib/gfx3_flare/gfx3_flare_lens';
+import { MeshEffect } from '@lib/gfx3/gfx3_drawable';
 // ---------------------------------------------------------------------------------------
 
 class ViewerScreen extends Screen {
@@ -126,16 +127,16 @@ class ViewerScreen extends Screen {
       coreManager.toggleClass('scanlines');
     }
     else if (e.key == 'p' || e.key == 'P') {
-      this.mesh.setSingleId(3, 7);
+      this.mesh.setEffects(MeshEffect.PIXELATION | MeshEffect.DITHER | MeshEffect.COLOR_LIMITATION);
     }
     else if (e.key == 'l' || e.key == 'L') {
-      this.mesh.setSingleId(3, 8);
+      this.mesh.setEffects(MeshEffect.OUTLINE);
     }
     else if (e.key == 's' || e.key == 'S') {
-      this.mesh.setSingleId(3, 16);
+      this.mesh.setEffects(MeshEffect.SHADOW_VOLUME);
     }
     else if (e.key == 'n' || e.key == 'N') {
-      this.mesh.setSingleId(3, 0);
+      this.mesh.setEffects(MeshEffect.NONE);
     }
   }
 }

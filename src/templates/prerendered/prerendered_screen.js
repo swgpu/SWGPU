@@ -1,3 +1,4 @@
+import { coreManager } from '@lib/core/core_manager';
 import { gfx3Manager } from '@lib/gfx3/gfx3_manager';
 import { gfx3DebugRenderer } from '@lib/gfx3/gfx3_debug_renderer';
 import { gfx3MeshRenderer } from '@lib/gfx3_mesh/gfx3_mesh_renderer';
@@ -5,15 +6,14 @@ import { gfx3PostRenderer, PostParam } from '@lib/gfx3_post/gfx3_post_renderer';
 import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
 import { Room } from './room';
-import { coreManager } from '@lib/index';
 // ---------------------------------------------------------------------------------------
 
 const POST_SHADER_FRAG_END = `
-if(id.r == 1.0f)
+if(id.r == 1.0)
 {
   return vec4(depth, depth, depth, 1.0);
 }
-  
+
 outputColor = ch1;
 `;
 
@@ -26,7 +26,7 @@ class PrerenderedScreen extends Screen {
 
   async onEnter() {
     if (this.zBuffer) {
-      coreManager.enableScanlines(false); // disable scanlines to ease debugging
+      coreManager.enableScanlines(false);
       gfx3PostRenderer.setShaderInserts({ FRAG_END: POST_SHADER_FRAG_END });
       await this.room.loadFromFile('./templates/prerendered/zbuffer/scene.room', 'Spawn0000');
     }
