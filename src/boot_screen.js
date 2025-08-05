@@ -70,6 +70,7 @@ class BootScreen extends Screen {
     this.uiTemplates.add('16', '3D Physics With Jolt');
     this.uiTemplates.add('17', '2D Physics With Box2D');
     this.uiTemplates.add('18', '3D Pre-rendered (zbuffer)');
+    this.uiTemplates.add('19', '3D Car');
     this.uiTemplates.setVisible(false);
     uiManager.addWidget(this.uiTemplates, 'position:absolute; top:50%; left:50%; width:60%; transform:translate(-50%,-50%);');
 
@@ -178,6 +179,9 @@ class BootScreen extends Screen {
         break;
       case '18':
         screenManager.requestSetScreen(new PrerenderedScreen(true));
+        break;
+      case '19':
+        screenManager.requestSetScreen(new CarScreen());
         break;
       default:
         console.log('Unknown template ID:', data.id);
