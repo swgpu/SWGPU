@@ -5,6 +5,16 @@ import { Gfx3Transformable } from './gfx3_transformable';
 import { Gfx3BoundingBox } from './gfx3_bounding_box';
 import { Quaternion } from '../core/quaternion';
 
+enum MeshEffect {
+  NONE = 0,
+  PIXELATION = 2,
+  COLOR_LIMITATION = 4,
+  DITHER = 8,
+  OUTLINE = 16,
+  SHADOW_VOLUME = 32,
+  CHANNEL1 = 64
+};
+
 /**
  * A 3D drawable object.
  */
@@ -21,7 +31,7 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
    */
   constructor(vertexStride: number) {
     super();
-    this.id = [0, 0, 0, 0];
+    this.id = [0, 0, 0, 1];
     this.vertexSubBuffer = gfx3Manager.createVertexBuffer(0);
     this.vertices = [];
     this.vertexCount = 0;
@@ -126,33 +136,34 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
 
   /**
    * Set an identifier based on three components.
-   * Note: WARME use some specials ID's in its internal pipeline, check the table below:
-   * ■ decals group: g = n
-   * ■ lights group: b = n
-   * ■ pixelation: a = 1
-   * ■ color limitation: a = 2
-   * ■ dither: a = 4
-   * ■ outline: a = 8
-   * ■ shadow volume: a = 16
-   * ■ channel 1: a = 32 (channel 1 is a rendering texture used by post process unit for many different things, it is invisible by default)
+   * Note: SWGPU use some specials ID's in its internal pipeline, check the table below:
+   * ■ R: The red channel.
+   * ■ G: The green channel.
+   * ■ A: The alpha channel [0, 1]
+   * ■ B: The blue channel for effects
+   *  ■ pixelation: 2
+   *  ■ color limitation: 4
+   *  ■ dither: 8
+   *  ■ outline: 16
+   *  ■ shadow volume: 32
+   *  ■ channel1: 64
    * 
-   * @param {number} r - The pur identifier you can use for custom stuff.
-   * @param {number} g - The decals group.
-   * @param {number} b - The lights group.
-   * @param {number} a - The flags value for specials effects.
+   * @param {number} r - The red channel.
+   * @param {number} g - The green channel.
+   * @param {MeshEffect|number} b - The blue channel for effects.
+   * @param {number} a - The alpha channel.
    */
-  setId(r: number, g: number = 0, b: number = 0, a: number = 0): void {
+  setId(r: number, g: number = 0, b: MeshEffect = 0, a: number = 1): void {
     this.id = [r, g, b, a];
   }
 
   /**
-   * Set a single identifier component.
+   * Set the effects.
    * 
-   * @param {number} index - The component index.
-   * @param {number} value - The identifier value.
+   * @param {MeshEffecta|number} effects - The effects.
    */
-  setSingleId(index: number, value: number): void {
-    this.id[index] = value;
+  setEffects(effects: number): void {
+    this.id[2] = effects;
   }
 
   /**
@@ -218,4 +229,4 @@ class Gfx3Drawable extends Gfx3Transformable implements Poolable<Gfx3Drawable> {
   }
 }
 
-export { Gfx3Drawable };
+export { Gfx3Drawable, MeshEffect };

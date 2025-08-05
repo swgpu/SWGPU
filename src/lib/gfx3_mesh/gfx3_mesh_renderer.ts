@@ -42,7 +42,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.meshCommands = [];
 
     this.grp0 = gfx3Manager.createStaticGroup('MESH_PIPELINE', 0);
-    this.sceneInfos = this.grp0.setFloat(0, 'SCENE_INFOS', 28); // 14
+    this.sceneInfos = this.grp0.setFloat(0, 'SCENE_INFOS', 27);
     this.lvpMatrix = this.grp0.setFloat(1, 'LVP_MATRIX', 16);
     this.dirLight = this.grp0.setFloat(2, 'DIR_LIGHT', 16);
     this.pointLights = this.grp0.setFloat(3, 'POINT_LIGHTS', 20 * MAX_POINT_LIGHTS);
@@ -125,11 +125,11 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.grp1.endWrite();
 
     this.dirLight.fill(0);
-    this.sceneInfos[7] = 0;
+    this.sceneInfos[6] = 0;
     this.pointLights.fill(0);
-    this.sceneInfos[8] = 0;
+    this.sceneInfos[7] = 0;
     this.spotLights.fill(0);
-    this.sceneInfos[9] = 0;
+    this.sceneInfos[8] = 0;
     this.decals.fill(0);
     this.meshCommands = [];
 
@@ -247,9 +247,9 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {vec3} ambientColor - The ambient color.
    */
   setAmbientColor(ambientColor: vec3): void {
-    this.sceneInfos[4] = ambientColor[0];
-    this.sceneInfos[5] = ambientColor[1];
-    this.sceneInfos[6] = ambientColor[2];
+    this.sceneInfos[3] = ambientColor[0];
+    this.sceneInfos[4] = ambientColor[1];
+    this.sceneInfos[5] = ambientColor[2];
   }
 
   /**
@@ -264,7 +264,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
       throw new Error('Gfx3MeshRenderer::setCustomParam(): Custom param name not found !');
     }
 
-    this.sceneInfos[12 + paramIndex] = value;
+    this.sceneInfos[11 + paramIndex] = value;
   }
 
   /**
@@ -278,7 +278,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
       throw new Error('Gfx3MeshRenderer::getCustomParam(): Custom param name not found !');
     }
 
-    return this.sceneInfos[12 + paramIndex];
+    return this.sceneInfos[11 + paramIndex];
   }
 
   /**
@@ -339,7 +339,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {number} [exp=0] - The exponent of the attenuation equation for the point light.
    */
   drawPointLight(position: vec3, diffuse: vec3, specular: vec3, intensity: number = 1, meshId: number = 0, constant: number = 1, linear: number = 0, exp: number = 0): void {
-    const count = this.sceneInfos[7];
+    const count = this.sceneInfos[6];
     if (count >= MAX_POINT_LIGHTS) {
       throw new Error('Gfx3MeshRenderer::drawPointLight(): Max point lights number exceeded !');
     }
@@ -364,7 +364,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.pointLights[count * 20 + 17] = 0;
     this.pointLights[count * 20 + 18] = 0;
     this.pointLights[count * 20 + 19] = 0;
-    this.sceneInfos[7]++;
+    this.sceneInfos[6]++;
   }
 
   /**
@@ -382,7 +382,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {number} [exp=0] - The exponent of the attenuation equation for the point light.
    */
   drawSpotLight(position: vec3, direction: vec3, cutoff: number, diffuse: vec3, specular: vec3, intensity: number = 1, meshId: number = 0, constant: number = 1, linear: number = 0, exp: number = 0): void {
-    const count = this.sceneInfos[8];
+    const count = this.sceneInfos[7];
     if (count >= MAX_SPOT_LIGHTS) {
       throw new Error('Gfx3MeshRenderer::drawSpotLight(): Max spot lights number exceeded !');
     }
@@ -411,7 +411,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.spotLights[count * 24 + 21] = Math.cos(cutoff);
     this.spotLights[count * 24 + 22] = 0;
     this.spotLights[count * 24 + 23] = 0;
-    this.sceneInfos[8]++;
+    this.sceneInfos[7]++;
   }
 
   /**
@@ -430,7 +430,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {number} opacity - The opacity or transparency of the decal.
    */
   drawDecal(group: number, sx: number, sy: number, sw: number, sh: number, position: vec3, orientationX: vec3, orientationY: vec3, orientationZ: vec3, size: vec3, opacity: number): void {
-    const count = this.sceneInfos[9];
+    const count = this.sceneInfos[8];
     if (count >= MAX_DECALS) {
       throw new Error('Gfx3MeshRenderer::drawDecal(): Max decals number exceeded !');
     }
@@ -487,7 +487,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
     this.decals[count * 24 + 21] = aspectRatio[1];
     this.decals[count * 24 + 22] = opacity;
     this.decals[count * 24 + 23] = group;
-    this.sceneInfos[9]++;
+    this.sceneInfos[8]++;
   }
 }
 
@@ -502,9 +502,8 @@ function BUILD_SCENE_INFOS(camPos: vec3, ts: number, timeStamp: number, out: Flo
   out[0] = camPos[0];
   out[1] = camPos[1];
   out[2] = camPos[2];
-  out[3] = 0;
-  out[10] = ts;
-  out[11] = timeStamp;
+  out[9] = ts;
+  out[10] = timeStamp;
   return out;
 }
 
