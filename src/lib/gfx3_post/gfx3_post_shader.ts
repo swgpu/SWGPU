@@ -1,28 +1,29 @@
-const WINDOW = window as any;
+export const PARAMS_VARS = {
+  S00: 'S00',
+  S01: 'S01',
+  S02: 'S02',
+  S03: 'S03',
+  S04: 'S04',
+  S05: 'S05',
+  S06: 'S06',
+  S07: 'S07',
+  S08: 'S08',
+  S09: 'S09',
+  S10: 'S10',
+  S11: 'S11',
+  S12: 'S12',
+  S13: 'S13',
+  S14: 'S14',
+  S15: 'S15',
+};
 
+export const SHADER_INSERTS = {
+  FRAG_BEGIN: '',
+  FRAG_END: ''
+};
+
+export const SHADER_CUSTOM_PARAMS_COUNT = 16;
 export const SHADER_VERTEX_ATTR_COUNT = 4;
-export const SLOT_NAMES = WINDOW.__POST_SLOT_NAMES__ as Array<string> ?? [
-  'S00',
-  'S01',
-  'S02',
-  'S03',
-  'S04',
-  'S05',
-  'S06',
-  'S07',
-  'S08',
-  'S09',
-  'S10',
-  'S11',
-  'S12',
-  'S13',
-  'S14',
-  'S15'
-];
-
-const FRAG_BEGIN = WINDOW.__POST_FRAG_BEGIN__ ? WINDOW.__POST_FRAG_BEGIN__ : '';
-const FRAG_END = WINDOW.__POST_FRAG_END__ ? WINDOW.__POST_FRAG_END__ : '';
-
 export const PIPELINE_DESC: any = {
   label: 'POST pipeline',
   layout: 'auto',
@@ -64,7 +65,7 @@ export const PIPELINE_DESC: any = {
   }
 };
 
-export const VERTEX_SHADER = /* wgsl */`
+export const VERTEX_SHADER = (data: any): string => /* wgsl */`
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
   @location(0) FragUV: vec2<f32>
@@ -81,7 +82,7 @@ fn main(
   return output;
 }`;
 
-export const FRAGMENT_SHADER = /* wgsl */`
+export const FRAGMENT_SHADER = (data: any): string => /* wgsl */`
 struct Infos {
   RES_WIDTH: f32,
   RES_HEIGHT: f32,
@@ -109,22 +110,22 @@ struct Params {
   OUTLINE_CONSTANT: f32,
   SHADOW_VOLUME_ENABLED: f32,
   SHADOW_VOLUME_BLEND_MODE: f32,
-  ${SLOT_NAMES[0]}: f32,
-  ${SLOT_NAMES[1]}: f32,
-  ${SLOT_NAMES[2]}: f32,
-  ${SLOT_NAMES[3]}: f32,
-  ${SLOT_NAMES[4]}: f32,
-  ${SLOT_NAMES[5]}: f32,
-  ${SLOT_NAMES[6]}: f32,
-  ${SLOT_NAMES[7]}: f32,
-  ${SLOT_NAMES[8]}: f32,
-  ${SLOT_NAMES[9]}: f32,
-  ${SLOT_NAMES[10]}: f32,
-  ${SLOT_NAMES[11]}: f32,
-  ${SLOT_NAMES[12]}: f32,
-  ${SLOT_NAMES[13]}: f32,
-  ${SLOT_NAMES[14]}: f32,
-  ${SLOT_NAMES[15]}: f32
+  ${data.S00}: f32,
+  ${data.S01}: f32,
+  ${data.S02}: f32,
+  ${data.S03}: f32,
+  ${data.S04}: f32,
+  ${data.S05}: f32,
+  ${data.S06}: f32,
+  ${data.S07}: f32,
+  ${data.S08}: f32,
+  ${data.S09}: f32,
+  ${data.S10}: f32,
+  ${data.S11}: f32,
+  ${data.S12}: f32,
+  ${data.S13}: f32,
+  ${data.S14}: f32,
+  ${data.S15}: f32
 };
 
 @group(0) @binding(0) var<uniform> PARAMS: Params;
@@ -136,6 +137,8 @@ struct Params {
 @group(0) @binding(6) var IDS_TEXTURE: texture_2d<f32>;
 @group(0) @binding(7) var IDS_SAMPLER: sampler;
 @group(0) @binding(8) var DEPTH_TEXTURE: texture_depth_2d;
+@group(0) @binding(9) var CHANNEL1_TEXTURE: texture_2d<f32>;
+@group(0) @binding(10) var CHANNEL1_SAMPLER: sampler;
 
 @group(1) @binding(0) var SHADOW_VOL_TEXTURE: texture_2d<f32>;
 @group(1) @binding(1) var SHADOW_VOL_SAMPLER: sampler;
@@ -153,8 +156,6 @@ fn main(
 ) -> @location(0) vec4<f32> {
   var outputColor = textureSample(SOURCE_TEXTURE, SOURCE_SAMPLER, FragUV);
   var fragUV = FragUV;
-
-  ${FRAG_BEGIN}
 
   if (PARAMS.ENABLED == 0.0)
   {
@@ -176,11 +177,14 @@ fn main(
 
   var normal = textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, fragUV);
   var depth = LinearlyFilterDepthTexture(DEPTH_TEXTURE, fragUV);
+  var ch1 = textureSample(CHANNEL1_TEXTURE, CHANNEL1_SAMPLER, fragUV);
   var shadowVol = textureSample(SHADOW_VOL_TEXTURE, SHADOW_VOL_SAMPLER, fragUV);
   var shadowVolDepthCW = LinearlyFilterDepthTexture(SHADOW_VOL_DEPTH_CW_TEXTURE, fragUV);
   var shadowVolDepthCCW = LinearlyFilterDepthTexture(SHADOW_VOL_DEPTH_CCW_TEXTURE, fragUV);
   var s0 = textureSample(S0_TEXTURE, S0_SAMPLER, fragUV);
   var s1 = textureSample(S1_TEXTURE, S1_SAMPLER, fragUV);
+
+  ${data.FRAG_BEGIN}
 
   if (PARAMS.COLOR_ENABLED == 1.0 && (flags & 2) == 2)
   {
@@ -239,8 +243,7 @@ fn main(
     }
   }
 
-  ${FRAG_END}
-
+  ${data.FRAG_END}
   return outputColor;
 }
 

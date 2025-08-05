@@ -4,7 +4,7 @@ import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3DynamicGroup } from '../gfx3/gfx3_group';
 import { Gfx3RenderingTexture } from '../gfx3/gfx3_texture';
 import { Gfx3Sprite } from './gfx3_sprite';
-import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER } from './gfx3_sprite_shader';
+import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER, SHADER_INSERTS } from './gfx3_sprite_shader';
 
 /**
  * Singleton sprite renderer.
@@ -14,13 +14,17 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
   grp0: Gfx3DynamicGroup;
   mvpcMatrix: Float32Array;
   id: Float32Array;
+  blendColor: Float32Array;
+  blendColorMode: Float32Array;
 
   constructor() {
-    super('SPRITE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
+    super('SPRITE_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_INSERTS);
     this.sprites = [];
     this.grp0 = gfx3Manager.createDynamicGroup('SPRITE_PIPELINE', 0);
     this.mvpcMatrix = this.grp0.setFloat(0, 'MVPC_MATRIX', 16);    
     this.id = this.grp0.setFloat(1, 'ID', 4);
+    this.blendColor = this.grp0.setFloat(2, 'COLOR', 4);
+    this.blendColorMode = this.grp0.setFloat(3, 'COLOR_MODE', 1);
     this.grp0.allocate();
   }
 
@@ -64,6 +68,9 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
 
       this.grp0.write(0, this.mvpcMatrix);
       this.grp0.write(1, UT.VEC4_COPY(sprite.getId(), this.id) as Float32Array);
+      this.grp0.write(2, UT.VEC4_COPY(sprite.getBlendColor(), this.blendColor) as Float32Array);
+      this.grp0.write(3, UT.VEC1_COPY(sprite.getBlendColorMode(), this.blendColorMode) as Float32Array);
+
       passEncoder.setBindGroup(0, this.grp0.getBindGroup(i));
 
       const grp1 = sprite.getGroup01();
@@ -79,6 +86,19 @@ class Gfx3SpriteRenderer extends Gfx3RendererAbstract {
     if (destinationTexture) {
       passEncoder.end();
     }
+  }
+
+  /**
+   * Set insertion in shaders code.
+   * This method will reload the pipeline.
+   * 
+   * @param {Partial<typeof SHADER_INSERTS>} data - The custom data used by the shader template.
+   */
+  setShaderInserts(data: Partial<typeof SHADER_INSERTS> = {}): void {
+    Object.assign(SHADER_INSERTS, data);
+    super.reload(VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_INSERTS);
+    this.grp0.setPipeline(this.pipeline);
+    this.grp0.allocate();
   }
 
   /**

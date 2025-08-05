@@ -6,7 +6,7 @@ import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3Texture, Gfx3RenderingTexture } from '../gfx3/gfx3_texture';
 import { Gfx3StaticGroup, Gfx3DynamicGroup } from '../gfx3/gfx3_group';
 import { Gfx3Mesh } from './gfx3_mesh';
-import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER, MAX_POINT_LIGHTS, MAX_SPOT_LIGHTS, MAX_DECALS, SCENE_SLOT_NAMES } from './gfx3_mesh_shader';
+import { PIPELINE_DESC, VERTEX_SHADER, FRAGMENT_SHADER, MAX_POINT_LIGHTS, MAX_SPOT_LIGHTS, MAX_DECALS, MAT_PARAMS_VARS, SCENE_PARAMS_VARS, SHADER_INSERTS } from './gfx3_mesh_shader';
 
 interface MeshCommand {
   mesh: Gfx3Mesh;
@@ -36,7 +36,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   meshInfos: Float32Array;
 
   constructor() {
-    super('MESH_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
+    super('MESH_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, { ...MAT_PARAMS_VARS, ...SCENE_PARAMS_VARS, ...SHADER_INSERTS });
     this.shadowEnabled = false;
     this.textureChanged = false;
     this.meshCommands = [];
@@ -139,6 +139,51 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
   }
 
   /**
+   * Set insertion in shaders code.
+   * This method will reload the pipeline.
+   * 
+   * @param {Partial<typeof SHADER_INSERTS>} data - The custom data used by the shader template.
+   */
+  setShaderInserts(data: Partial<typeof SHADER_INSERTS> = {}): void {
+    Object.assign(SHADER_INSERTS, data);
+    super.reload(VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, {...MAT_PARAMS_VARS, ...SCENE_PARAMS_VARS, ...SHADER_INSERTS });
+    this.grp0.setPipeline(this.pipeline);
+    this.grp1.setPipeline(this.pipeline);
+    this.grp0.allocate();
+    this.grp1.allocate();
+  }
+
+  /**
+   * Set custom scene params vars in shaders code.
+   * This method will reload the pipeline.
+   * 
+   * @param {Partial<typeof SCENE_PARAMS_VARS>} data - The custom data used by the shader template.
+   */
+  setSceneParamsVars(data: Partial<typeof SCENE_PARAMS_VARS> = {}): void {
+    Object.assign(SCENE_PARAMS_VARS, data);
+    super.reload(VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, {...MAT_PARAMS_VARS, ...SCENE_PARAMS_VARS, ...SHADER_INSERTS });
+    this.grp0.setPipeline(this.pipeline);
+    this.grp1.setPipeline(this.pipeline);
+    this.grp0.allocate();
+    this.grp1.allocate();
+  }
+
+  /**
+   * Set custom material params vars in shaders code.
+   * This method will reload the pipeline.
+   * 
+   * @param {Partial<typeof MAT_PARAMS_VARS>} data - The custom data used by the shader template.
+   */
+  setMaterialParamsVars(data: Partial<typeof MAT_PARAMS_VARS> = {}): void {
+    Object.assign(MAT_PARAMS_VARS, data);
+    super.reload(VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, {...MAT_PARAMS_VARS, ...SCENE_PARAMS_VARS, ...SHADER_INSERTS });
+    this.grp0.setPipeline(this.pipeline);
+    this.grp1.setPipeline(this.pipeline);
+    this.grp0.allocate();
+    this.grp1.allocate();
+  }
+
+  /**
    * Enable the shadowing projection.
    * 
    * @param {boolean} enabled - Indicating whether the shadow should be enabled or disabled.
@@ -214,7 +259,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {number} value - The param value.
    */
   setCustomParam(name: string, value: number): void {
-    const paramIndex = SCENE_SLOT_NAMES.findIndex(n => n == name);
+    const paramIndex = Object.values(SCENE_PARAMS_VARS).findIndex(n => n == name);
     if (paramIndex == -1) {
       throw new Error('Gfx3MeshRenderer::setCustomParam(): Custom param name not found !');
     }
@@ -228,7 +273,7 @@ class Gfx3MeshRenderer extends Gfx3RendererAbstract {
    * @param {string} name - The param name.
    */
   getCustomParam(name: string): number {
-    const paramIndex = SCENE_SLOT_NAMES.findIndex(n => n == name);
+    const paramIndex = Object.values(SCENE_PARAMS_VARS).findIndex(n => n == name);
     if (paramIndex == -1) {
       throw new Error('Gfx3MeshRenderer::getCustomParam(): Custom param name not found !');
     }

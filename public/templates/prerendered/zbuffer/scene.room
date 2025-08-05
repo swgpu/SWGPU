@@ -7,7 +7,8 @@
   "MusicFile": "templates/prerendered/music.mp3",
   "MapFile": "templates/prerendered/zbuffer/scene.jsm",
   "MapTextureFile": "templates/prerendered/zbuffer/scene.png",
-  "MapZBufferFile": "templates/prerendered/zbuffer/scene-zbuffer.png",
+  "MapZBufferFile": "templates/prerendered/zbuffer/scene-zbuffer.jsm",
+  "MapZBufferTextureFile": "templates/prerendered/zbuffer/scene-zbuffer.png",
   "WalkmeshFile": "templates/prerendered/zbuffer/scene.jwm",
   "Camera": {
     "Matrix": [-7.762123107910156, 0.0, 6.306341648101807, 0.0, 1.0994617938995361, 9.847860336303711, 1.3532658815383911, 0.0, -6.209760665893555, 1.7436010837554932, -7.643247604370117, 0.0, -28.044504165649414, 2.4879045486450195, -26.32898712158203, 1.0],

@@ -3,7 +3,7 @@ import { gfx3TextureManager } from '../gfx3/gfx3_texture_manager';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { Gfx3Texture } from '../gfx3/gfx3_texture';
-import { MAT_SLOT_NAMES } from './gfx3_mesh_shader';
+import { MAT_PARAMS_VARS } from './gfx3_mesh_shader';
 
 enum TextureTarget {
   TEXTURE = 'Texture',
@@ -71,6 +71,7 @@ interface MATOptions {
   sParams?: Array<{name: string, value: number }>;
   s0Texture?: Gfx3Texture;
   s1Texture?: Gfx3Texture;
+  colorBlendMode?: 'mul' | 'add';
 };
 
 interface Animation {
@@ -149,7 +150,7 @@ class Gfx3Material {
     this.colors[22] = options.dissolveGlow ? options.dissolveGlow[2] : 1.0;
     this.colors[23] = 0.0;
 
-    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 42);
+    this.params = this.grp2.setFloat(1, 'MAT_PARAMS', 43);
     this.params[0] = options.id ?? 0;
     this.params[1] = options.normalIntensity ?? 1.0;
     this.params[2] = options.lightning ? 1.0 : 0.0;
@@ -176,12 +177,13 @@ class Gfx3Material {
     this.params[23] = options.distanceAlphaBlend ?? 0.0;
     this.params[24] = options.s0Texture ? 1.0 : 0.0;
     this.params[25] = options.s1Texture ? 1.0 : 0.0;
+    this.params[26] = options.colorBlendMode ? (options.colorBlendMode == 'mul' ? 1.0 : 2.0) : 1.0;
 
     if (options.sParams) {
       for (const sParam of options.sParams) {
-        const paramIndex = MAT_SLOT_NAMES.findIndex(n => n == sParam.name);
+        const paramIndex = Object.values(MAT_PARAMS_VARS).findIndex(n => n == sParam.name);
         if (paramIndex != -1) {
-          this.params[26 + paramIndex] = sParam.value ?? 0.0;
+          this.params[27 + paramIndex] = sParam.value ?? 0.0;
         }
       }
     }
@@ -578,12 +580,14 @@ class Gfx3Material {
    * @param {number} g - The green component.
    * @param {number} b - The blue component.
    * @param {number} a - The alpha component.
+   * @param {string} blendColorMode - The color operation apply on texture.
    */
-  setBlend(r: number, g: number, b: number, a: number): void {
+  setBlendColor(r: number, g: number, b: number, a: number, blendColorMode: 'mul' | 'add' = 'mul'): void {
     this.colors[16] = r;
     this.colors[17] = g;
     this.colors[18] = b;
     this.colors[19] = a;
+    this.params[26] = blendColorMode == 'mul' ? 1.0 : 2.0;
     this.dataChanged = true;
   }
 
@@ -955,12 +959,12 @@ class Gfx3Material {
    * @param {number} value - The param value.
    */
   setCustomParam(name: string, value: number): void {
-    const paramIndex = MAT_SLOT_NAMES.findIndex(n => n == name);
+    const paramIndex = Object.values(MAT_PARAMS_VARS).findIndex(n => n == name);
     if (paramIndex == -1) {
       throw new Error('Gfx3Material::setCustomParam(): Custom param name not found !');
     }
 
-    this.params[26 + paramIndex] = value;
+    this.params[27 + paramIndex] = value;
   }
 
   /**
@@ -969,12 +973,12 @@ class Gfx3Material {
    * @param {string} name - The param name.
    */
   getCustomParam(name: string): number {
-    const paramIndex = MAT_SLOT_NAMES.findIndex(n => n == name);
+    const paramIndex = Object.values(MAT_PARAMS_VARS).findIndex(n => n == name);
     if (paramIndex == -1) {
       throw new Error('Gfx3Material::getCustomParam(): Custom param name not found !');
     }
 
-    return this.params[26 + paramIndex];
+    return this.params[27 + paramIndex];
   }
 
   /**

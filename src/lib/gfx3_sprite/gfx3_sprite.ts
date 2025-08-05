@@ -12,6 +12,8 @@ import { SHADER_VERTEX_ATTR_COUNT } from './gfx3_sprite_shader';
  */
 class Gfx3Sprite extends Gfx3Drawable implements Poolable<Gfx3Sprite> {
   textureChanged: boolean;
+  blendColor: vec4;
+  blendColorMode: number;
   offset: vec2;
   offsetFactor: vec2;
   flip: [boolean, boolean];
@@ -23,6 +25,8 @@ class Gfx3Sprite extends Gfx3Drawable implements Poolable<Gfx3Sprite> {
   constructor() {
     super(SHADER_VERTEX_ATTR_COUNT);
     this.textureChanged = false;
+    this.blendColor = [1, 1, 1, 1];
+    this.blendColorMode = 1.0;
     this.offset = [0, 0];
     this.offsetFactor = [0, 0];
     this.flip = [false, false];
@@ -63,6 +67,34 @@ class Gfx3Sprite extends Gfx3Drawable implements Poolable<Gfx3Sprite> {
     UT.MAT4_MULTIPLY(matrix, UT.MAT4_SCALE(1 / this.pixelsPerUnit, 1 / this.pixelsPerUnit, 1 / this.pixelsPerUnit), matrix);
     UT.MAT4_MULTIPLY(matrix, UT.MAT4_TRANSLATE(-this.offset[0], -this.offset[1], 0), matrix);
     return matrix;
+  }
+
+  /**
+   * Returns the blend color.
+   */
+  getBlendColor(): vec4 {
+    return this.blendColor;
+  }
+
+  /**
+   * Returns the blend color mode.
+   */
+  getBlendColorMode(): number {
+    return this.blendColorMode;
+  }
+
+  /**
+   * Set the color filter.
+   * 
+   * @param {number} r - The red channel.
+   * @param {number} g - The green channel.
+   * @param {number} b - The blue channel.
+   * @param {number} a - The alpha channel.
+   * @param {string} blendColorMode - The color operation apply on texture.
+   */
+  setBlendColor(r: number, g: number, b: number, a: number, blendColorMode: 'add' | 'mul'): void {
+    this.blendColor = [r, g, b, a];
+    this.blendColorMode = blendColorMode == 'mul' ? 1.0 : 2.0;
   }
 
   /**

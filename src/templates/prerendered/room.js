@@ -64,16 +64,6 @@ class Room {
       magFilter: 'nearest'
     }));
 
-    if (this.zBuffer) {
-      this.mapZBuffer = new Gfx3MeshJSM();
-      this.mapZBuffer.mat.setZBuffer(true);
-      await this.mapZBuffer.loadFromFile(json['MapFile']);
-      this.mapZBuffer.mat.setTexture(await gfx3TextureManager.loadTexture(json['MapZBufferFile'], {
-        minFilter: 'nearest',
-        magFilter: 'nearest'
-      }));
-    }
-
     this.walkmesh = new Gfx3PhysicsJWM();
     await this.walkmesh.loadFromFile(json['WalkmeshFile']);
     await this.controller.loadFromData(json['Controller']);
@@ -109,6 +99,19 @@ class Room {
       let trigger = new Trigger();
       await trigger.loadFromData(obj);
       this.triggers.push(trigger);
+    }
+
+    if (this.zBuffer) {
+      this.mapZBuffer = new Gfx3MeshJSM();
+      this.mapZBuffer.setId(0, 0, 0, 32);
+      await this.mapZBuffer.loadFromFile(json['MapZBufferFile']);
+      this.mapZBuffer.mat.setTexture(await gfx3TextureManager.loadTexture(json['MapZBufferTextureFile'], {
+        minFilter: 'nearest',
+        magFilter: 'nearest'
+      }));
+
+      this.controller.jam.setId(1.0);
+      this.models.forEach(model => model.jam.setId(1.0));
     }
 
     const spawn = this.spawns.find(spawn => spawn.getName() == spawnName);
@@ -165,7 +168,6 @@ class Room {
     }
 
     this.map.update(ts);
-    this.mapZBuffer.update(ts);
     this.walkmesh.update(ts);
     this.controller.update(ts);
     this.camera.update(ts);
@@ -173,6 +175,10 @@ class Room {
 
     for (let model of this.models) {
       model.update(ts);
+    }
+
+    if (this.zBuffer) {
+      this.mapZBuffer.update(ts);
     }
 
     for (const [motionIndex, modelIndex] of this.motionModelMapping.entries()) {
@@ -185,10 +191,13 @@ class Room {
   }
 
   draw() {
-    // this.map.draw();
-    this.mapZBuffer.draw();
+    this.map.draw();
     this.walkmesh.draw();
     this.controller.draw();
+
+    if (this.zBuffer) {
+      this.mapZBuffer.draw();
+    }
 
     for (let spawn of this.spawns) {
       spawn.draw();

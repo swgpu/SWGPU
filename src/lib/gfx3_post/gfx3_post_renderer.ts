@@ -1,11 +1,12 @@
 import { coreManager } from '../core/core_manager';
+import { em } from '../engine/engine_manager';
 import { eventManager } from '../core/event_manager';
 import { gfx3Manager } from '../gfx3/gfx3_manager';
 import { gfx3ShadowVolumeRenderer } from '../gfx3_shadow_volume/gfx3_shadow_volume_renderer';
 import { Gfx3RendererAbstract } from '../gfx3/gfx3_renderer_abstract';
 import { Gfx3StaticGroup } from '../gfx3/gfx3_group';
 import { Gfx3Texture, Gfx3RenderingTexture } from '../gfx3/gfx3_texture';
-import { VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_VERTEX_ATTR_COUNT, SLOT_NAMES } from './gfx3_post_shader';
+import { VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, SHADER_VERTEX_ATTR_COUNT, PARAMS_VARS, SHADER_INSERTS } from './gfx3_post_shader';
 
 enum PostShadowVolumeBlendMode {
   MUL = 0,
@@ -47,6 +48,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
   normalsTexture: Gfx3RenderingTexture;
   idsTexture: Gfx3RenderingTexture;
   depthTexture: Gfx3RenderingTexture;
+  channel1Texture: Gfx3RenderingTexture;
   grp1: Gfx3StaticGroup;
   shadowVolFactorTexture: Gfx3RenderingTexture;
   shadowVolDepthCWTexture: Gfx3RenderingTexture;
@@ -56,7 +58,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
   s1Texture: Gfx3Texture;
 
   constructor() {
-    super('POST_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC);
+    super('POST_PIPELINE', VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, {...PARAMS_VARS, ...SHADER_INSERTS });
     this.device = gfx3Manager.getDevice();
     this.vertexBuffer = this.device.createBuffer({ size: 6 * SHADER_VERTEX_ATTR_COUNT * 4, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC });
 
@@ -91,6 +93,8 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     this.idsTexture = this.grp0.setRenderingTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
     this.idsTexture = this.grp0.setRenderingSampler(7, 'IDS_SAMPLER', this.idsTexture);
     this.depthTexture = this.grp0.setRenderingTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
+    this.channel1Texture = this.grp0.setRenderingTexture(9, 'CHANNEL1_TEXTURE', gfx3Manager.getChannel1Texture());
+    this.channel1Texture = this.grp0.setRenderingSampler(10, 'CHANNEL1_SAMPLER', this.channel1Texture);
     this.grp0.allocate();
 
     this.grp1 = gfx3Manager.createStaticGroup('POST_PIPELINE', 1);
@@ -132,8 +136,8 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
       }]
     });
 
-    this.infos[2] = ts / 1000;
-    this.infos[3] += this.infos[2];
+    this.infos[2] = ts;
+    this.infos[3] = em.getTimeStamp();
 
     passEncoder.setPipeline(this.pipeline);
     this.grp0.beginWrite();
@@ -146,6 +150,40 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     passEncoder.setVertexBuffer(0, this.vertexBuffer);
     passEncoder.draw(6);
     passEncoder.end();
+  }
+
+  /**
+   * Set insertion in shaders code.
+   * This method will reload the pipeline.
+   * 
+   * @param {Partial<typeof SHADER_INSERTS>} data - The custom data used by the shader template.
+   */
+  setShaderInserts(data: Partial<typeof SHADER_INSERTS> = {}): void {
+    Object.assign(SHADER_INSERTS, data);
+    super.reload(VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, {...PARAMS_VARS, ...SHADER_INSERTS });
+    this.grp0.setPipeline(this.pipeline);
+    this.grp1.setPipeline(this.pipeline);
+    this.grp2.setPipeline(this.pipeline);
+    this.grp0.allocate();
+    this.grp1.allocate();
+    this.grp2.allocate();
+  }
+
+  /**
+   * Set custom params vars in shaders code.
+   * This method will reload the pipeline.
+   * 
+   * @param {Partial<typeof PARAMS_VARS>} data - The custom data used by the shader template.
+   */
+  setParamsVars(data: Partial<typeof PARAMS_VARS> = {}): void {
+    Object.assign(PARAMS_VARS, data);
+    super.reload(VERTEX_SHADER, FRAGMENT_SHADER, PIPELINE_DESC, {...PARAMS_VARS, ...SHADER_INSERTS });
+    this.grp0.setPipeline(this.pipeline);
+    this.grp1.setPipeline(this.pipeline);
+    this.grp2.setPipeline(this.pipeline);
+    this.grp0.allocate();
+    this.grp1.allocate();
+    this.grp2.allocate();
   }
 
   /**
@@ -172,7 +210,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
    * @param {number} value - The param value.
    */
   setCustomParam(name: string, value: number): void {
-    const paramIndex = SLOT_NAMES.findIndex(n => n == name);
+    const paramIndex = Object.values(PARAMS_VARS).findIndex(n => n == name);
     if (paramIndex == -1) {
       throw new Error('Gfx3PostRenderer::setCustomParam(): Custom param name not found !');
     }
@@ -186,7 +224,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
    * @param {string} name - The param name.
    */
   getCustomParam(name: string): number {
-    const paramIndex = SLOT_NAMES.findIndex(n => n == name);
+    const paramIndex = Object.values(PARAMS_VARS).findIndex(n => n == name);
     if (paramIndex == -1) {
       throw new Error('Gfx3PostRenderer::getCustomParam(): Custom param name not found !');
     }
@@ -241,6 +279,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     this.normalsTexture = this.grp0.setRenderingTexture(4, 'NORMALS_TEXTURE', gfx3Manager.getNormalsTexture());
     this.idsTexture = this.grp0.setRenderingTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
     this.depthTexture = this.grp0.setRenderingTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
+    this.channel1Texture = this.grp0.setRenderingTexture(9, 'CHANNEL1_TEXTURE', gfx3Manager.getChannel1Texture());
     this.grp0.allocate();
 
     this.shadowVolFactorTexture = this.grp1.setRenderingTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());

@@ -114,6 +114,15 @@ class Gfx3FlareLens {
   setMaxDistanceBrightness(maxDistanceBrightness: number): void {
     this.maxDistanceBrightness = maxDistanceBrightness;
   }
+
+  /**
+   * Replace default flares config by a custom one.
+   * 
+   * @param {Array<Gfx3Flare>} flares - The flare list.
+   */
+  setFlares(flares: Array<Gfx3Flare>): void {
+    this.flares = flares;
+  }
 }
 
 export { Gfx3FlareLens };

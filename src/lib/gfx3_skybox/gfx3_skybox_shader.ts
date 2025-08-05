@@ -36,7 +36,8 @@ export const PIPELINE_DESC: any = {
       }
     },
     { format: 'rgba16float' }, // normals
-    { format: 'rgba16float' }] // ids
+    { format: 'rgba16float' }, // ids
+    { format: 'rgba16float' }] // ch1
   },
   primitive: {
     topology: 'triangle-list',
@@ -50,7 +51,7 @@ export const PIPELINE_DESC: any = {
   }
 };
 
-export const VERTEX_SHADER = /* wgsl */`
+export const VERTEX_SHADER = (data: any) => /* wgsl */`
 struct VertexOutput {
   @builtin(position) Position: vec4<f32>,
   @location(0) ClipPos: vec4<f32>
@@ -67,11 +68,12 @@ fn main(
   return output;
 }`;
 
-export const FRAGMENT_SHADER = /* wgsl */`
+export const FRAGMENT_SHADER = (data: any) => /* wgsl */`
 struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
-  @location(2) Id: vec4f
+  @location(2) Id: vec4f,
+  @location(3) Ch1: vec4f
 };
 
 @group(0) @binding(0) var<uniform> VPC_INVERSE_MATRIX: mat4x4<f32>;
@@ -90,5 +92,6 @@ fn main(
   output.Base = textureSample(CUBEMAP_TEXTURE, CUBEMAP_SAMPLER, normalize(t.xyz / t.w));
   output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
   output.Id = ID;
+  output.Ch1 = vec4(0.0, 0.0, 0.0, 0.0);
   return output;
 }`;

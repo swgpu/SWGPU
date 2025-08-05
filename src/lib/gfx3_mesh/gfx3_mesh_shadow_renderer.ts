@@ -23,7 +23,7 @@ class Gfx3MeshShadowRenderer extends Gfx3RendererAbstract {
   mMatrix: Float32Array;
 
   constructor() {
-    super('MESH_SHADOW_MAP_PIPELINE', VERTEX_SHADER, '', PIPELINE_DESC);
+    super('MESH_SHADOW_MAP_PIPELINE', VERTEX_SHADER, () => '', PIPELINE_DESC);
     this.depthTextureSize = 2048.0;
     this.depthTexture = gfx3Manager.createRenderingTexture('depth32float', { magFilter: 'nearest', minFilter: 'nearest', compare: 'less' }, this.depthTextureSize, this.depthTextureSize);
     this.meshCommands = [];
