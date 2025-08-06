@@ -9,11 +9,12 @@ import { Room } from './room';
 // ---------------------------------------------------------------------------------------
 
 const POST_SHADER_FRAG_END = `
-if(id.r == 1.0)
+if(id.r == 1.0 && depth < ch1.r)
 {
-  return vec4(depth, depth, depth, 1.0);
+  discard;
 }
 
+//ch1 /= 10;
 outputColor = ch1;
 `;
 

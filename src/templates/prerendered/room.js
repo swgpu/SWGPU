@@ -179,6 +179,8 @@ class Room {
       this.mapZBuffer.update(ts);
     }
 
+    // console.log(this.controllerWalker.getPoints());
+
     for (const [motionIndex, modelIndex] of this.motionModelMapping.entries()) {
       let motion = this.motions[motionIndex];
       let model = this.models[modelIndex];
