@@ -28,6 +28,7 @@ class Gfx3Manager {
   idsTexture: Gfx3RenderingTexture;
   depthTexture: Gfx3RenderingTexture;
   channel1Texture: Gfx3RenderingTexture;
+  channel2Texture: Gfx3RenderingTexture;
   commandEncoder: GPUCommandEncoder;
   passEncoder: GPURenderPassEncoder;
   pipelines: Map<string, GPURenderPipeline>;
@@ -53,6 +54,7 @@ class Gfx3Manager {
     this.idsTexture = {} as Gfx3RenderingTexture;
     this.depthTexture = {} as Gfx3RenderingTexture;
     this.channel1Texture = {} as Gfx3RenderingTexture;
+    this.channel2Texture = {} as Gfx3RenderingTexture;
 
     this.commandEncoder = {} as GPUCommandEncoder;
     this.passEncoder = {} as GPURenderPassEncoder;
@@ -82,7 +84,12 @@ class Gfx3Manager {
       throw new Error('Gfx3Manager::Gfx3Manager: WebGPU cannot be initialized - Adapter not found');
     }
 
-    this.device = await this.adapter.requestDevice();
+    this.device = await this.adapter.requestDevice({
+      requiredLimits: {
+        maxColorAttachmentBytesPerSample: 64
+      }
+    });
+
     this.device.lost.then(() => {
       throw new Error('Gfx3Manager::Gfx3Manager: WebGPU cannot be initialized - Device has been lost');
     });
@@ -113,6 +120,7 @@ class Gfx3Manager {
     this.idsTexture = this.createRenderingTexture('rgba16float');
     this.depthTexture = this.createRenderingTexture('depth24plus');
     this.channel1Texture = this.createRenderingTexture('rgba16float');
+    this.channel2Texture = this.createRenderingTexture('rgba16float');
     this.vertexBuffer = this.device.createBuffer({ size: 0, usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST });
 
     eventManager.subscribe(coreManager, 'E_RESIZE', this, this.#handleWindowResize);
@@ -122,7 +130,7 @@ class Gfx3Manager {
    * Prepare the draw process.
    * Warning: You need to call this method before your draw calls.
    */
-  beginDrawing(): void {}
+  beginDrawing(): void { }
 
   /**
    * Close the draw process.
@@ -179,19 +187,24 @@ class Gfx3Manager {
         clearValue: { r: viewBgColor[0], g: viewBgColor[1], b: viewBgColor[2], a: viewBgColor[3] },
         loadOp: 'clear',
         storeOp: 'store'
-      },{
+      }, {
         view: this.normalsTexture.gpuTextureView,
-        clearValue: {r: 0.0, g: 0.0, b: 1.0, a: 1.0},
+        clearValue: { r: 0.0, g: 0.0, b: 1.0, a: 1.0 },
         loadOp: 'clear',
         storeOp: 'store'
-      },{
+      }, {
         view: this.idsTexture.gpuTextureView,
-        clearValue: {r: 0.0, g: 0.0, b: 0.0, a: 1.0},
+        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
         loadOp: 'clear',
         storeOp: 'store'
-      },{
+      }, {
         view: this.channel1Texture.gpuTextureView,
-        clearValue: {r: 0.0, g: 0.0, b: 0.0, a: 1.0},
+        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+        loadOp: 'clear',
+        storeOp: 'store'
+      }, {
+        view: this.channel2Texture.gpuTextureView,
+        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
         loadOp: 'clear',
         storeOp: 'store'
       }],
@@ -580,6 +593,13 @@ class Gfx3Manager {
   }
 
   /**
+   * Returns the channel 2 texture.
+   */
+  getChannel2Texture(): Gfx3RenderingTexture {
+    return this.channel2Texture;
+  }
+
+  /**
    * Returns the GPUCommandEncoder.
    */
   getCommandEncoder(): GPUCommandEncoder {
@@ -682,9 +702,15 @@ class Gfx3Manager {
 
     this.idsTexture.gpuTexture.destroy();
     this.idsTexture = this.createRenderingTexture('rgba16float');
-    
+
     this.depthTexture.gpuTexture.destroy();
     this.depthTexture = this.createRenderingTexture('depth24plus');
+
+    this.channel1Texture.gpuTexture.destroy();
+    this.channel1Texture = this.createRenderingTexture('rgba16float');
+
+    this.channel2Texture.gpuTexture.destroy();
+    this.channel2Texture = this.createRenderingTexture('rgba16float');
 
     for (const view of this.views) {
       view.setScreenSize(this.canvas.width, this.canvas.height);

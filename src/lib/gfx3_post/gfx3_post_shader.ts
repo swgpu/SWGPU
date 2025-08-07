@@ -139,6 +139,8 @@ struct Params {
 @group(0) @binding(8) var DEPTH_TEXTURE: texture_depth_2d;
 @group(0) @binding(9) var CHANNEL1_TEXTURE: texture_2d<f32>;
 @group(0) @binding(10) var CHANNEL1_SAMPLER: sampler;
+@group(0) @binding(11) var CHANNEL2_TEXTURE: texture_2d<f32>;
+@group(0) @binding(12) var CHANNEL2_SAMPLER: sampler;
 
 @group(1) @binding(0) var SHADOW_VOL_TEXTURE: texture_2d<f32>;
 @group(1) @binding(1) var SHADOW_VOL_SAMPLER: sampler;
@@ -178,6 +180,7 @@ fn main(
   var normal = textureSample(NORMALS_TEXTURE, NORMALS_SAMPLER, fragUV);
   var depth = LinearlyFilterDepthTexture(DEPTH_TEXTURE, fragUV);
   var ch1 = textureSample(CHANNEL1_TEXTURE, CHANNEL1_SAMPLER, fragUV);
+  var ch2 = textureSample(CHANNEL2_TEXTURE, CHANNEL2_SAMPLER, fragUV);
   var shadowVol = textureSample(SHADOW_VOL_TEXTURE, SHADOW_VOL_SAMPLER, fragUV);
   var shadowVolDepthCW = LinearlyFilterDepthTexture(SHADOW_VOL_DEPTH_CW_TEXTURE, fragUV);
   var shadowVolDepthCCW = LinearlyFilterDepthTexture(SHADOW_VOL_DEPTH_CCW_TEXTURE, fragUV);

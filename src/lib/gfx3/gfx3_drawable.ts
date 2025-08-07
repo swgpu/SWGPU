@@ -12,7 +12,8 @@ enum MeshEffect {
   DITHER = 8,
   OUTLINE = 16,
   SHADOW_VOLUME = 32,
-  CHANNEL1 = 64
+  CHANNEL1 = 64,
+  CHANNEL2 = 128
 };
 
 /**

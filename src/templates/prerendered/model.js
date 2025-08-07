@@ -17,7 +17,7 @@ class Model extends Gfx3Transformable {
 
   async loadFromData(data) {
     await this.jam.loadFromFile(data['JAMFile']);
-    this.jam.setId(1.0);
+    this.jam.setId(1.0, 0.0, 0.0, 1.0);
     this.jam.mat.setTexture(await gfx3TextureManager.loadTexture(data['TextureFile']));
     this.jam.play('IDLE', true);
     this.position[0] = data['PositionX'];

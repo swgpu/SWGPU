@@ -44,8 +44,9 @@ export const PIPELINE_DESC: any = {
     },
     { format: 'rgba16float' }, // normals
     { format: 'rgba16float' }, // ids
-    { format: 'rgba16float' }] // ch1
-  },
+    { format: 'rgba16float' }, // ch1
+    { format: 'rgba16float' }, // ch2
+  ]},
   primitive: {
     topology: 'triangle-list',
     cullMode: 'back',
@@ -84,7 +85,8 @@ struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
   @location(2) Id: vec4f,
-  @location(3) Ch1: vec4f
+  @location(3) Ch1: vec4f,
+  @location(4) Ch2: vec4f
 }
 
 @group(0) @binding(1) var<uniform> ID: vec4<f32>;
@@ -95,7 +97,8 @@ struct FragOutput {
 
 @fragment
 fn main(
-  @location(0) FragUV: vec2<f32>
+  @location(0) FragUV: vec2<f32>,
+
 ) -> FragOutput {
   var textureColor = textureSample(TEXTURE, SAMPLER, FragUV);
   if (textureColor.a == 0)
@@ -115,20 +118,26 @@ fn main(
 
   ${data.FRAG_BEGIN}
   var output: FragOutput;
+  output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
+  output.Id = ID;
 
-  if ((flags & 32) == 32)
+  if ((flags & 64) == 64)
   {
     output.Base = vec4(0.0, 0.0, 0.0, 0.0);
-    output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
-    output.Id = vec4(0.0, 0.0, 0.0, 0.0);
     output.Ch1 = textureColor;
+    output.Ch2 = vec4(0.0, 0.0, 0.0, 0.0);
+  }
+  else if ((flags & 128) == 128)
+  {
+    output.Base = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Ch1 = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Ch2 = textureColor;
   }
   else
   {
     output.Base = textureColor;
-    output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
-    output.Id = ID;
     output.Ch1 = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Ch2 = vec4(0.0, 0.0, 0.0, 0.0);
   }
 
   ${data.FRAG_END}

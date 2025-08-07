@@ -37,8 +37,9 @@ export const PIPELINE_DESC: any = {
     },
     { format: 'rgba16float' }, // normals
     { format: 'rgba16float' }, // ids
-    { format: 'rgba16float' }] // ch1
-  },
+    { format: 'rgba16float' }, // ch1
+    { format: 'rgba16float' }, // ch2
+  ]},
   primitive: {
     topology: 'triangle-list',
     cullMode: 'none',
@@ -91,7 +92,8 @@ struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
   @location(2) Id: vec4f,
-  @location(3) Ch1: vec4f
+  @location(3) Ch1: vec4f,
+  @location(4) Ch2: vec4f
 }
 
 @group(1) @binding(0) var<uniform> ID: vec4<f32>;
@@ -109,5 +111,6 @@ fn main(
   output.Normal = vec4(0.0, 0.0, 0.0, 0.0);
   output.Id = ID;
   output.Ch1 = vec4(0.0, 0.0, 0.0, 0.0);
+  output.Ch2 = vec4(0.0, 0.0, 0.0, 0.0);
   return output;
 }`;

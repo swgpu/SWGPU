@@ -49,6 +49,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
   idsTexture: Gfx3RenderingTexture;
   depthTexture: Gfx3RenderingTexture;
   channel1Texture: Gfx3RenderingTexture;
+  channel2Texture: Gfx3RenderingTexture;
   grp1: Gfx3StaticGroup;
   shadowVolFactorTexture: Gfx3RenderingTexture;
   shadowVolDepthCWTexture: Gfx3RenderingTexture;
@@ -95,6 +96,8 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     this.depthTexture = this.grp0.setRenderingTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
     this.channel1Texture = this.grp0.setRenderingTexture(9, 'CHANNEL1_TEXTURE', gfx3Manager.getChannel1Texture());
     this.channel1Texture = this.grp0.setRenderingSampler(10, 'CHANNEL1_SAMPLER', this.channel1Texture);
+    this.channel2Texture = this.grp0.setRenderingTexture(11, 'CHANNEL2_TEXTURE', gfx3Manager.getChannel2Texture());
+    this.channel2Texture = this.grp0.setRenderingSampler(12, 'CHANNEL2_SAMPLER', this.channel2Texture);
     this.grp0.allocate();
 
     this.grp1 = gfx3Manager.createStaticGroup('POST_PIPELINE', 1);
@@ -280,6 +283,7 @@ class Gfx3PostRenderer extends Gfx3RendererAbstract {
     this.idsTexture = this.grp0.setRenderingTexture(6, 'IDS_TEXTURE', gfx3Manager.getIdsTexture());
     this.depthTexture = this.grp0.setRenderingTexture(8, 'DEPTH_TEXTURE', gfx3Manager.getDepthTexture());
     this.channel1Texture = this.grp0.setRenderingTexture(9, 'CHANNEL1_TEXTURE', gfx3Manager.getChannel1Texture());
+    this.channel2Texture = this.grp0.setRenderingTexture(11, 'CHANNEL2_TEXTURE', gfx3Manager.getChannel2Texture());
     this.grp0.allocate();
 
     this.shadowVolFactorTexture = this.grp1.setRenderingTexture(0, 'SHADOW_VOL_TEXTURE', gfx3ShadowVolumeRenderer.getShadowTexture());

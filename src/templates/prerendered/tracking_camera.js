@@ -19,6 +19,8 @@ class TrackingCamera {
     this.maxClipOffset[1] = data['MaxClipOffsetY'];
     this.view.setCameraMatrix(data['Matrix']);
     this.view.setPerspectiveFovy(UT.DEG_TO_RAD(parseInt(data['Fovy'])));
+    // this.view.setPerspectiveNear(0.1);
+    // this.view.setPerspectiveFar(100);
   }
 
   update(ts) {

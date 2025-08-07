@@ -7,16 +7,16 @@ import { Screen } from '@lib/screen/screen';
 // ---------------------------------------------------------------------------------------
 import { Room } from './room';
 // ---------------------------------------------------------------------------------------
-
+// channel 1 = zbuffer
+// channel 2 = map
 const POST_SHADER_FRAG_END = `
-if(id.r == 1.0 && depth < ch1.r)
+if(id.r == 1.0 && depth > ch1.r)
 {
-  discard;
+  return outputColor;
 }
 
-//ch1 /= 10;
-outputColor = ch1;
-`;
+outputColor = ch2;`;
+// ---------------------------------------------------------------------------------------
 
 class PrerenderedScreen extends Screen {
   constructor(zBuffer = false) {

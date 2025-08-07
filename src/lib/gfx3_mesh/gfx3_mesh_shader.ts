@@ -101,18 +101,6 @@ export const PIPELINE_DESC: any = {
     },
     { format: 'rgba16float' }, // normals
     { format: 'rgba16float',   // ids
-      blend: {
-        color: {
-          srcFactor: 'src-alpha',
-          dstFactor: 'one-minus-src-alpha',
-          operation: 'add'
-        },
-        alpha: {
-          srcFactor: 'one',
-          dstFactor: 'one-minus-src-alpha',
-          operation: 'add'
-        }
-      }
     },
     { format: 'rgba16float', // ch1
       blend: {
@@ -127,7 +115,22 @@ export const PIPELINE_DESC: any = {
           operation: 'add'
         }
       }
-    }]
+    },
+    { format: 'rgba16float', // ch2
+        blend: {
+          color: {
+            srcFactor: 'src-alpha',
+            dstFactor: 'one-minus-src-alpha',
+            operation: 'add'
+          },
+          alpha: {
+            srcFactor: 'one',
+            dstFactor: 'one-minus-src-alpha',
+            operation: 'add'
+          }
+        }
+      }
+    ]
   },
   primitive: {
     topology: 'triangle-list',
@@ -382,7 +385,8 @@ struct FragOutput {
   @location(0) Base: vec4f,
   @location(1) Normal: vec4f,
   @location(2) Id: vec4f,
-  @location(3) Ch1: vec4f
+  @location(3) Ch1: vec4f,
+  @location(4) Ch2: vec4f
 }`;
 
 const STRUCT_MATERIAL_COLORS = `
@@ -668,20 +672,26 @@ fn main(
 
   ${data.FRAG_BEGIN}
   var output: FragOutput;
+  output.Normal = vec4(normalize(fragNormal), 1.0);
+  output.Id = MESH_INFOS.ID;
 
   if ((flags & 64) == 64)
   {
     output.Base = vec4(0.0, 0.0, 0.0, 0.0);
-    output.Normal = vec4(normalize(fragNormal), 1.0);
-    output.Id = MESH_INFOS.ID;
     output.Ch1 = outputColor;
+    output.Ch2 = vec4(0.0, 0.0, 0.0, 0.0);
+  }
+  else if ((flags & 128) == 128)
+  {
+    output.Base = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Ch1 = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Ch2 = outputColor;
   }
   else
   {
     output.Base = outputColor;
-    output.Normal = vec4(normalize(fragNormal), 1.0);
-    output.Id = MESH_INFOS.ID;
     output.Ch1 = vec4(0.0, 0.0, 0.0, 0.0);
+    output.Ch2 = vec4(0.0, 0.0, 0.0, 0.0);
   }
 
   ${data.FRAG_END}

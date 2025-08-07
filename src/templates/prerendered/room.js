@@ -59,6 +59,7 @@ class Room {
     this.description = json['Description'];
 
     this.map = new Gfx3MeshJSM();
+    this.map.setEffects(MeshEffect.CHANNEL2);
     await this.map.loadFromFile(json['MapFile']);
     this.map.mat.setTexture(await gfx3TextureManager.loadTexture(json['MapTextureFile'], {
       minFilter: 'nearest',
@@ -179,8 +180,6 @@ class Room {
       this.mapZBuffer.update(ts);
     }
 
-    // console.log(this.controllerWalker.getPoints());
-
     for (const [motionIndex, modelIndex] of this.motionModelMapping.entries()) {
       let motion = this.motions[motionIndex];
       let model = this.models[modelIndex];
@@ -193,11 +192,14 @@ class Room {
   draw() {
     this.map.draw();
     this.walkmesh.draw();
-    this.controller.draw();
 
     if (this.zBuffer) {
       this.mapZBuffer.draw();
     }
+
+    this.controller.draw();
+
+
 
     for (let spawn of this.spawns) {
       spawn.draw();
